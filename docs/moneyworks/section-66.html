@@ -1,0 +1,793 @@
+<!DOCTYPE html><html><head></head><body><div class="navigation"><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p><hr></div><blockquote>
+<p><a href="#_bookmark1457">XMLParseFile</a>: Parse an XML file to an
+XML document <a href="#xmlparsestring-xmlstring-nslist">XMLParseString</a>: Parse an XML
+string to an XML document</p>
+<p><a href="#xpatheval-xmldocumenthandleorxpathnodehandle-xpathstring-index">XPathEval</a>:
+Extract a node or value from an XML document using <a href="https://www.w3schools.com/xml/xpath_syntax.asp">XPath</a> <a href="https://www.w3schools.com/xml/xpath_syntax.asp">notation</a>.</p>
+</blockquote><h3 id="xmlparsefile-path-nslist">XMLParseFile (path [, nsList])</h3><blockquote>
+<p><strong>Result type:</strong> An XML document handle</p>
+<p><strong>Definition:</strong> Parses the XML file. Call this once to
+parse an entire XML file which</p>
+<p>would normally just append the</p>
+<p>string to a string property that you clear in</p>
+<p>you may then navigate using <a href="#xpatheval-xmldocumenthandleorxpathnodehandle-xpathstring-index">XPathEval</a>.
+When finished with the document,</p>
+<p>the start element handler and use in the end element handler. The
+character data handler may be called multiple times with partial
+character data for a single element.</p>
+<p>Create an expatParserHandle using <a href="#_bookmark1452">XML_ParserCreate</a>.</p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1 and later</p>
+<p>free it with <a href="#_bookmark1455">XMLFree</a>.</p>
+<p>If the XML document uses namespaces, evaluating XPaths on it will
+require the namespaces to be registered. You can provide the namespaces
+in a space separated list in a string with entries in the form ns=uri
+(e.g.</p>
+<p><a href="http://www.w3.org/2000/svg">"svg=http://www.w3.org/2000/svg</a> <a href="http://purl.org/dc/elements/">dc=http://purl.org/dc/elements/</a>
+1.1/" ).</p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1.1 and later</p>
+<p><strong>Suite:</strong> This function is part of the LibXML/Xpath XML
+parsing suite of functions.</p>
+</blockquote><h5 id="see-also-156">See Also:</h5><blockquote>
+<p><a href="#_bookmark1455">XMLFree</a>: Free an XML document</p>
+<p><a href="#xmlparsestring-xmlstring-nslist">XMLParseString</a>: Parse
+an XML string to an XML document</p>
+<p><a href="#xpatheval-xmldocumenthandleorxpathnodehandle-xpathstring-index">XPathEval</a>:
+Extract a node or value from an XML document using <a href="https://www.w3schools.com/xml/xpath_syntax.asp">XPath</a> <a href="https://www.w3schools.com/xml/xpath_syntax.asp">notation</a>.</p>
+</blockquote><h3 id="xmlparsestring-xmlstring-nslist">XMLParseString (xmlstring [,
+nsList])</h3><blockquote>
+<p><strong>Definition:</strong> Evaluates an <a href="https://www.w3schools.com/xml/xpath_syntax.asp">XPath</a> in the
+context of an XML document that has been parsed with <a href="#_bookmark1457">XMLParseFile</a> or <a href="#xmlparsestring-xmlstring-nslist">XMLParseString</a> or relative
+to a node in that document that has been found with a previous call to
+XPathEval. When evaluating against the document, use an XPath anchored
+at the root node</p>
+<p><img src="images/media/image863.png" style="height:0.15421in"><img src="images/media/image148.png" style="width:0.1588in;height:0.15421in">/. When evaluating against a
+previously found node, use an XPath anchored at the "current node" ./
+.</p>
+<p>If the XPath expression identifies an element or set of elements,
+then the function result wil be a node handle that you can use with
+subsequent calls to XPathEval.</p>
+<p>If the XPath expression explicitly requests a string or number (or
+boolean)</p>
+<p>number(...)</p>
+<p><strong>Result type:</strong> An XML document handle</p>
+<p>result (e.g. using string(...) , value will be a string or a
+number.</p>
+<p>or .text() ) then the return</p>
+<p><strong>Definition:</strong> Parses the XML in xmlstring . Call this
+once to parse an entire block</p>
+<p>If the Xpath node handle you provide is actually a set of nodes, you
+should</p>
+<p>of XML which you may then navigate using <a href="#xpatheval-xmldocumenthandleorxpathnodehandle-xpathstring-index">XPathEval</a>.
+When finished with</p>
+<p>index</p>
+<p>provide an</p>
+<p>parameter to indicate which node in the set you want to</p>
+<p>the document, free it with <a href="#_bookmark1455">XMLFree</a>.</p>
+<p>If the XML document uses namespaces, evaluating XPaths on it will
+require</p>
+<p>be the anchor for the relative XPath. Otherwise the first node will
+be assumed. The index is 1-based.</p>
+<p>the namespaces to be registered. You can provide the namespaces in a
+space separated list in a string with entries in the form ns=uri
+(e.g.</p>
+<p><a href="http://www.w3.org/2000/svg">"svg=http://www.w3.org/2000/svg</a> <a href="http://purl.org/dc/elements/">dc=http://purl.org/dc/elements/</a>
+1.1/" ).</p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1.1 and later</p>
+<p><strong>Suite:</strong> This function is part of the LibXML/Xpath XML
+parsing suite of functions.</p>
+</blockquote><h5 id="see-also-157">See Also:</h5><blockquote>
+<p><a href="#_bookmark1455">XMLFree</a>: Free an XML document</p>
+<p><a href="#_bookmark1457">XMLParseFile</a>: Parse an XML file to an
+XML document</p>
+<p><a href="#xpatheval-xmldocumenthandleorxpathnodehandle-xpathstring-index">XPathEval</a>:
+Extract a node or value from an XML document using <a href="https://www.w3schools.com/xml/xpath_syntax.asp">XPath</a> <a href="https://www.w3schools.com/xml/xpath_syntax.asp">notation</a>.</p>
+</blockquote><h3 id="xpatheval-xmldocumenthandleorxpathnodehandle-xpathstring-index">XPathEval
+(XMLDocumentHandleOrXpathNodeHandle, XpathString [, index])</h3><blockquote>
+<p>As a special case you can use number of nodes in a nodeset.</p>
+</blockquote><h5 id="example-49">Example:</h5><blockquote>
+<p>XPathEval(nodeSetHdl, "count")</p>
+<p>Getting indexed elements using the XPath</p>
+<p>let doc = XmlParseFile("transactions.xml") // filename only</p>
+<p>= use safe path (MoneyWorks Automation folder)</p>
+<p>let numTrans = XPathEval(doc, "count(/table/transaction)") // count
+nodes using XPath</p>
+<p>foreach i in (1, numTrans)</p>
+<p>let t = XPathEval(doc, "/table/transaction["+i+"]") // return a
+singleton nodeset handle</p>
+<p>syslog(XPathEval(t, "string(./ourref)")) syslog(XPathEval(t,
+"string(./description)")) syslog(XPathEval(t, "number(./gross)"))
+XmlFree(t)</p>
+<p>endfor XmlFree(doc)</p>
+<p>notation.</p>
+<p>[]</p>
+<p>to get the</p>
+<p><strong>Result type:</strong> An XPath node handle, or a string, or a
+number — depending on the XPath expression</p>
+<p>Getting indexed elements from a nodeset using an index parameter to
+XPathEval</p>
+<p><strong>Definition:</strong> Emit an opening element tag, optionally
+with attributes.</p>
+<p>let doc = XmlParseFile("transactions.xml") // filename only</p>
+<p>= use safe path (MoneyWorks Automation folder)</p>
+<p>let transSet = XPathEval(doc, "//table/transaction") // returns a
+nodeset with multiple elements</p>
+<p>let numTrans = XPathEval(transSet, "count") // special case to get
+nodeset count</p>
+<p>foreach i in (1, numTrans)</p>
+<p>syslog(XPathEval(transSet, "string(./ourref)", i))
+syslog(XPathEval(transSet, "string(./description)", i))
+syslog(XPathEval(transSet, "number(./gross)", i))</p>
+<p>endfor XmlFree(doc)</p>
+</blockquote><h5 id="example-50">Example:</h5><blockquote>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1.1 and later</p>
+<p><strong>Suite:</strong> This function is part of the LibXML/Xpath XML
+parsing suite of functions.</p>
+</blockquote><p><strong>See Also:</strong></p><blockquote>
+<p><a href="#_bookmark1455">XMLFree</a>: Free an XML document</p>
+<p><a href="#_bookmark1457">XMLParseFile</a>: Parse an XML file to an
+XML document <a href="#xmlparsestring-xmlstring-nslist">XMLParseString</a>: Parse an XML
+string to an XML document</p>
+</blockquote><p><span id="_bookmark1460" class="anchor"></span><strong>CreateXMLDoc
+()</strong></p><p><strong>Result type:</strong> An XML document handle</p><p><strong>Definition:</strong> Creates an XML document that you can use
+to generate XML. Use this API to help ensure that the XML you generate
+is properly entity- encoded and cleanly formatted.</p><p><strong>See Also:</strong></p><blockquote>
+<p><a href="#addxmlelement-xml_hndl-element_name-value-attributesarray-boolcdata">AddXMLElement</a>:
+Write an element to an XML document handle <a href="#_bookmark1461">BeginXMLElement</a>: Write an opening tag to an
+XML document handle <a href="#endxmlelement-xml_hndl-element_name">EndXMLElement</a>: Write a
+closing tag to an XML document <a href="#finalisexmldoc-xml_hndl">FinaliseXMLDoc</a>: Get the finished XML
+as a string</p>
+</blockquote><p><span id="_bookmark1461" class="anchor"></span><strong>BeginXMLElement (xml_hndl, element_name [,
+attributesArray])</strong></p><p><strong>Result type:</strong> none</p><blockquote>
+<p>let xml = CreateXMLDoc() // currently no output path, get as string
+via FinaliseXMLDoc</p>
+<p>BeginXMLElement(xml, "import", CreateArray("table",
+"transaction"))</p>
+<p>BeginXMLElement(xml, "transaction") AddXMLElement(xml, "ourref",
+"12345") AddXMLElement(xml, "transdate", Today()) AddXMLElement(xml,
+"lastmodifiedtime", Time()) AddXMLElement(xml, "gross", 12345.67,</p>
+<p>CreateArray("arbitrary_attribute", "decimal"))</p>
+<p>AddXMLElement(xml, "description", "Something with &lt; &amp; &gt; in
+it and also some ctrl characters\n\n\tand formatting.")</p>
+<p>AddXMLElement(xml, "description", "Something with &lt; &amp; &gt; in
+it and also some ctrl characters\n\n\tand formatting.", NULL, true) //
+encapsulate as CDATA</p>
+<p>EndXMLElement(xml, "transaction") EndXMLElement(xml, "import")</p>
+<p>let t = FinaliseXMLDoc(xml)</p>
+<p>xmltext is formatted thus:</p>
+<p>&lt;?xml version="1.0"?&gt;</p>
+<p>&lt;import table="transaction"&gt;</p>
+<p>&lt;transaction&gt;</p>
+<p>&lt;ourref&gt;12345&lt;/ourref&gt;</p>
+<p>&lt;transdate&gt;20250131&lt;/transdate&gt;</p>
+<p>&lt;lastmodifiedtime&gt;20200925145334&lt;/lastmodifiedtime&gt;</p>
+<p>&lt;gross arbitrary_attribute="decimal"&gt;12345.67&lt;/gross&gt;</p>
+<p>&lt;description&gt;Something with &amp;lt; &amp;amp; &amp;gt; in it
+and also some ctrl characters&amp;#10;&amp;#10;&amp;#9;and
+formatting.&lt;/description&gt;</p>
+<p>&lt;description&gt;&lt;![CDATA[Something with &lt; &amp; &gt; in it
+and also some ctrl characters</p>
+<p>and formatting.]]&gt;&lt;/description&gt;</p>
+<p>&lt;/transaction&gt;</p>
+<p>&lt;/import&gt;</p>
+<p>Note that numbers are formatted in POSIX format (decimal point and no
+thousands separators), and times and dates are big-endian.</p>
+</blockquote><h5 id="see-also-158">See Also:</h5><blockquote>
+<p><a href="#addxmlelement-xml_hndl-element_name-value-attributesarray-boolcdata">AddXMLElement</a>:
+Write an element to an XML document handle <a href="#_bookmark1460">CreateXMLDoc</a>: Create an XML document handle <a href="#endxmlelement-xml_hndl-element_name">EndXMLElement</a>: Write a
+closing tag to an XML document</p>
+<p><a href="#finalisexmldoc-xml_hndl">FinaliseXMLDoc</a>: Get the
+finished XML as a string</p>
+</blockquote><h3 id="addxmlelement-xml_hndl-element_name-value-attributesarray-boolcdata">AddXMLElement
+(xml_hndl, element_name, value [, attributesArray] [,boolCDATA])</h3><blockquote>
+<p><strong>Result type:</strong> none</p>
+<p><span id="_bookmark1465" class="anchor"></span><strong>Definition:</strong> Emit a complete XML
+element, with opening tag (with optional attributes, entity-encoded
+value, and closing tag. If the value is empty then this emits a
+self-closing tag. If you pass true for the 5th parameter, the value will
+be enclosed in CDATA delimiters. Value can be text, a number, or a date
+or time. Dates and times are formatted big-endian (as required by
+MoneyWorks when it imports data in XML format).</p>
+</blockquote><h5 id="see-also-159">See Also:</h5><blockquote>
+<p><a href="#_bookmark1461">BeginXMLElement</a>: Write an opening tag to
+an XML document handle <a href="#_bookmark1460">CreateXMLDoc</a>: Create
+an XML document handle</p>
+<p><a href="#endxmlelement-xml_hndl-element_name">EndXMLElement</a>:
+Write a closing tag to an XML document <a href="#finalisexmldoc-xml_hndl">FinaliseXMLDoc</a>: Get the finished XML
+as a string</p>
+</blockquote><h3 id="endxmlelement-xml_hndl-element_name">EndXMLElement (xml_hndl,
+element_name)</h3><blockquote>
+<p><strong>Result type:</strong> none</p>
+<p><strong>Definition:</strong> Emit a closing tag. It is up to you to
+match closing tags to opening tags.</p>
+</blockquote><h5 id="see-also-160">See Also:</h5><blockquote>
+<p><a href="#addxmlelement-xml_hndl-element_name-value-attributesarray-boolcdata">AddXMLElement</a>:
+Write an element to an XML document handle <a href="#_bookmark1461">BeginXMLElement</a>: Write an opening tag to an
+XML document handle <a href="#_bookmark1460">CreateXMLDoc</a>: Create an
+XML document handle</p>
+<p><a href="#finalisexmldoc-xml_hndl">FinaliseXMLDoc</a>: Get the
+finished XML as a string</p>
+</blockquote><h3 id="finalisexmldoc-xml_hndl">FinaliseXMLDoc (xml_hndl)</h3><blockquote>
+<p><strong>Result type:</strong> string</p>
+<p><strong>Definition:</strong> Returns the complete XML document as a
+string, and disposes the document handle.</p>
+<p>1 PlatformDocumentPath returns an empty string if document is not
+local<a href="#_bookmark1155">↩︎</a></p>
+<p>2 Note that a Cheque/Remittance form can only be used with a Payment
+transaction if the form is printed from the open transaction window
+(i.e. one payment at a time).<a href="#_bookmark1158">↩︎</a></p>
+<p>3 If you don't send the selection to Datacentre, the report will need
+to run on your machine, which will be significantly slower because of
+the large number of network requests it will probably need to make.<a href="#_bookmark1170">↩︎</a></p>
+</blockquote><h5 id="see-also-161">See Also:</h5><blockquote>
+<p><a href="#addxmlelement-xml_hndl-element_name-value-attributesarray-boolcdata">AddXMLElement</a>:
+Write an element to an XML document handle <a href="#_bookmark1461">BeginXMLElement</a>: Write an opening tag to an
+XML document handle <a href="#_bookmark1460">CreateXMLDoc</a>: Create an
+XML document handle</p>
+<p><a href="#endxmlelement-xml_hndl-element_name">EndXMLElement</a>:
+Write a closing tag to an XML document</p>
+</blockquote><h1 id="scripts-automation-and-the-rest-of-it">Scripts, Automation and
+the REST <u>of it</u> </h1><blockquote>
+<p>MoneyWorks is an extremely powerful accounting and business
+information system, but, a bit like a politician, it can please some of
+the people all of the time, and all of the people some of the time, but
+it can't please all the of the people all of the time. Scripts and
+Automation allow you, the people, to extend the functionality of
+MoneyWorks, so you can get it to please you all of the time.</p>
+<p><span id="_bookmark1470" class="anchor"></span>Automation is a
+technology that was implemented in MoneyWorks 2 (about 1997), when it
+was realised that MoneyWorks needed to talk to other programs running on
+your computer, or that you wanted to extend the capabilities somehow.
+The first script was the famous “PickleOdeon”, developed for a pickle
+manufacturer to help manage his pickle recipes.</p>
+<p>Automation basically allows other systems to extract information
+from, or submit information to, MoneyWorks. Imagine if your costing
+spreadsheet could get the cost prices direct from MoneyWorks, or your
+CRM system could update customer information in MoneyWorks at the press
+of a button. Both these have been possible since the early 2000s.
+Automation capabilities were substantially increased in MoneyWorks 6.1
+by the implementation of the REST APIs, which allow access to MoneyWorks
+Datacentre from remote devices over the internet.</p>
+<p>Scripts are a new technology, introduced into MoneyWorks Gold in the
+MoneyWorks 7 release (and not available in Express or Cashbook). Scripts
+allow you to automate certain operations in MoneyWorks, and can also
+change the way that MoneyWorks interacts with the user. For example,
+when you enter an item code into a quote, MoneyWorks will normally get
+the price from the item details stored in MoneyWorks. With a script, it
+could get the price from somewhere else, perhaps even look it up on your
+suppliers web site. Similarly you may want to implement your own
+pricebook, with possible separate prices for selected items per
+customer. Scripting makes this possible, without even needing to leave
+the comfort of MoneyWorks.</p>
+<p>Scripts can also be used to manage custom controls for report
+settings, and also provide “library functions” for the report (see the
+Cash Projection Report for an example).</p>
+</blockquote><h2 id="scripts"><br>
+<u>Scripts</u> </h2><blockquote>
+<p>Scripts allow you to automate operations within MoneyWorks. They can
+read external files (either from your local volumes, or from a web
+server), intercept user-interface actions, create and update records and
+more.</p>
+<p>A number of sample scripts are included in the Acme Widgets sample
+file. These are turned off by default, but you can easily turn them on
+to see how scripts work, and to play with the scripting language.</p>
+<p>You can access the scripts by:</p>
+</blockquote><h5 id="choose-showscripts">1. Choose Show&gt;Scripts</h5><blockquote>
+<p>The Scripts Management window will open.</p>
+</blockquote><p><img src="images/media/image1021.png" style="width:2.82344in;height:1.67375in"></p><blockquote>
+<p>The first time you do this the scripts window will be empty. In the
+example above, there are three scripts (listed down the side). The
+“test” and “external” scripts are activated (indicated by the green
+tick), whereas the “Pricebook” script is deactivated, so will not run
+(indicated by the red cross).</p>
+</blockquote><h4 id="to-view-a-particular-script">To view a particular script:</h4><h5 id="click-on-the-script-in-the-sidebar">Click on the script in the
+sidebar</h5><h5 id="section-102"></h5><blockquote>
+<p>The script contents will be displayed in the body of the window,
+where it can be edited. If you do edit a script, you will need to
+activate it again (see below).</p>
+</blockquote><h4 id="to-activate-a-script">To activate a script</h4><h5 id="select-the-script-in-the-sidebar-by-clicking-it-if-it-is-not-already-selected">Select
+the script in the sidebar by clicking it (if it is not already
+selected)</h5><ol start="2" type="1">
+<li><p><strong>Click the <em>Activate</em> toolbar
+icon</strong></p></li>
+</ol><blockquote>
+<p>A green tick will appear next to the script on the sidebar indicating
+that it</p>
+<p>If you want a script to just do one thing, the Load handler is the
+place to do that thing. Having activated the script and had the Load
+handler execute, keep in mind that the script stays loaded, and the Load
+handler will execute the next time you (or anyone else) logs into the
+document. If you don't want this, you should deactivate the script.</p>
+</blockquote><h4 id="run-once">Run Once</h4><blockquote>
+<p>If you are writing a script to just do one thing (e.g. do a one-off
+export of some information to a file), and do not want the script to be
+active for every user of the document when the log in, you can use the
+<strong>Run Once</strong> button to just call the</p>
+<p>Load</p>
+<p>Unload</p>
+<p>has been activated. If there is a syntax error in the script (i.e.
+some invalid text that the script compiler doesn't recognise), the
+script will not activate,</p>
+<p>and</p>
+<p>handlers. The script won't remain active.</p>
+<p><span id="_bookmark1471" class="anchor"></span>and a tooltip will
+alert you to the error and where it occurs (and the part the script at
+and following the error will be coloured orange).</p>
+</blockquote><h4 id="to-deactivate-a-script">To deactivate a script</h4><h5 id="if-the-script-is-not-the-currently-selected-one-click-on-it-in-the-sidebar">If
+the script is not the currently selected one, click on it in the
+sidebar</h5><ol start="2" type="1">
+<li><p><strong>Click the Deactivate toolbar icon</strong></p></li>
+</ol><blockquote>
+<p>If the script has an Unload handler, it will be called.</p>
+<p>After the script is unloaded, a red cross will appear next to the
+script's name in the sidebar indicating that it is no longer active.</p>
+<p><strong>Note:</strong> If the script contains a public handler, any
+other scripts that use that handler will also be deactivated.</p>
+</blockquote><h4 id="running-scripts">"Running" scripts</h4><blockquote>
+<p>Usually, scripts will implement <em>Handlers</em> that allow the
+script to respond to certain user actions (like opening a window for a
+record, clicking a custom toolbar icon, or tabbing out of a particular
+field). The <em>Load</em> handler can be considered the main entry point
+of a script in that <em>Load</em> is called when you activate the script
+or the script is auto-activated when you log in to the document.</p>
+</blockquote><h3 id="sample-scripts"><br>
+Sample Scripts:</h3><blockquote>
+<p>The following sample scripts are included in the Acme Widgets file.
+These are useful, fully functional scripts that extend MoneyWorks
+capabilities. As they may change your data in some form, we strongly
+recommend that you experiment with them in Acme Widgets (or a copy of
+your real data file) before using them in a live document.</p>
+<p><strong>POS Rounding:</strong> Rounds an item receipt or invoice to
+the nearest 5 or 10 cents (or other currency unit, depending on
+settings). Intended for a point of sale environment.</p>
+<p><strong>Utilities:</strong> A set of useful utility scripts.</p>
+<p><strong>Apply Landing Costs:</strong> Apportion the nominated landing
+cost value over a supplier invoice to include the landing cost in any
+stocked items on the invoice.</p>
+<p><strong>Pick List:</strong> Generate a new sales order based on the
+highlighted item records;</p>
+<p><strong>Auto Make Journal:</strong> When a manufactured item is
+entered into the heading of a Make journal, automatically completes the
+journal with the components. Can be modified to go several levels deep
+for components that are themselves made;</p>
+<p><span id="_bookmark1472" class="anchor"></span><strong>Update BOM
+Costs:</strong> Recalculates the bill of materials costs for the
+highlighted built items. By default the maximum depth for components is
+5, but this can be changed in the script;</p>
+<p><strong>Filter Sort:</strong> A script to reorder a nominated list
+filter;</p>
+<p><strong>Make PO Item:</strong> A script that takes an account code
+keyed into a purchase order and automatically makes a corresponding
+“Other” item;</p>
+<p><strong>Update Currency Rates:</strong> A script that, once a week,
+silently gets the exchange rates from Yahoo and updates the rates in
+MoneyWorks.</p>
+<p>See <em><a href="#_bookmark1474">Deploying Scripts</a></em> for
+details on how to move these scripts from one file to another.</p>
+</blockquote><h3 id="to-create-a-new-script">To Create a New Script</h3><h5 id="click-the-plus-icon-at-the-bottom-left-of-the-scripts-window">Click
+the plus icon at the bottom left of the scripts window</h5><blockquote>
+<p>You will be asked to enter the script name.</p>
+<p>Note that the name must be unique (you cannot have two scripts with
+the same name).</p>
+<p>The <em>Add a new UI Form</em> option is used to design and create
+your own windows. This is covered in the <a href="#scripts-automation-and-the-rest-of-it">UI Builder</a>
+section.</p>
+<p>Hello</p>
+<p>Your Load handler will be called and the alert will be displayed. The
+script will then be unloaded. One and done.</p>
+<p>While this is a good way to test things out, it's not useful for
+adding features to MoneyWorks. For that you want the script to remain
+active and respond to events.</p>
+</blockquote><h5 id="now-change-the-script-to-the-following">Now change the script to
+the following:</h5><blockquote>
+<p>constant meta ="My better Hello World"</p>
+<p>on Hello</p>
+<p>Alert("Hello World!")</p>
+<p>end</p>
+<p>on Load</p>
+<p>InstallMenuCommand("Hello World", "Hello")</p>
+<p>end</p>
+<p>If you click <strong>Run Once</strong>, nothing will (apparently)
+happen. The Load handler installs a menu command but then it will be
+removed when the script is auto-unloaded.</p>
+</blockquote><h5 id="instead-click-activate-in-the-toolbar">Instead, click Activate
+in the toolbar</h5><blockquote>
+<p>Your script is compiled and loaded, and remains active. Look in the
+Commands menu and you will find your new command at the bottom called
+"Hello World".</p>
+</blockquote><h5 id="enter-the-script-name-and-click-ok">Enter the script name and
+click OK</h5><blockquote>
+<p>A new script will be created.</p>
+<p>When you select this menu item, MoneyWorks will call your
+Congratulations! you've added a feature to MoneyWorks.</p>
+<p>handler.</p>
+<p>As an example, copy and paste the following script into the editor
+for your new script:</p>
+<p>At this point, with the script activated, if you close the script
+window and log out of the document and then log back in, your Hellow
+World command will still be there, because the script will be reloaded
+when you log in. Furthermore, if you are logged into a document on
+MoneyWorks Datacentre, closing the script window (or Saving) will save
+the scripts to the document and when anyone else logs in, they will also
+get your Hello World command! (if they were already logged in, they will
+get the changes the next time they log in).</p>
+</blockquote><ol start="3" type="1">
+<li><p><strong>Click Run Once.</strong></p></li>
+</ol><blockquote>
+<p>constant meta ="My Hello World"</p>
+<p>on Load</p>
+<p>Alert("Hello World!")</p>
+<p>end</p>
+</blockquote><h4 id="to-delete-an-existing-script">To Delete an Existing Script</h4><h5 id="select-the-script-to-delete-by-clicking-on-its-name-on-the-sidebar">Select
+the script to Delete by clicking on its name on the sidebar</h5><ol start="2" type="1">
+<li><p><span id="_bookmark1474" class="anchor"></span><strong>Click on
+the Cogs icon on the bottom left of the script window and select Delete
+Script</strong></p></li>
+</ol><p><img src="images/media/image1022.png" style="width:2.98958in;height:2.63542in"></p><blockquote>
+<p>You will be asked for confirmation</p>
+</blockquote><ol start="3" type="1">
+<li><p><strong>Click OK to delete the script</strong></p></li>
+</ol><h4 id="to-rename-a-script">To Rename a Script</h4><ol type="1">
+<li><p><strong>Select the script to rename by clicking on its name on
+the sidebar</strong></p></li>
+<li><p><strong>Click on the Cogs icon on the bottom left of the script
+window and select Rename Script</strong></p></li>
+<li><p><strong>Enter the new script name (which must be unique) and
+click OK</strong></p></li>
+</ol><blockquote>
+<p>The script will be renamed and deactivated. You will need to
+reactivate the script if required.</p>
+<p><strong>Note:</strong> If the script contains a public handler, any
+other scripts that use that handler will also be deactivated. You will
+need to alter the handler calls in these other scripts to reflect the
+new script name.</p>
+</blockquote><h3 id="deploying-scripts">Deploying Scripts</h3><blockquote>
+<p>Scripts are (normally) stored within the MoneyWorks document itself.
+When you close the scripts window, any changes you have made are writtin
+to the MoneyWorks document. All of the active scripts will be loaded by
+every user the next time they log in.</p>
+<p>If you want to move them to another MoneyWorks file, you can copy the
+text out of the script window, then create an empty script in the other
+document and paste it in there.</p>
+<p>Alternatively (and easier) scripts can be saved as an xml file. When
+such a file is double-clicked in the FInder or Windows Explorer,
+MoneyWorks will offer to install it into the currently open/connected
+document. This means you can easily send scripts to other MoneyWorks
+users. As of MoneyWorks Gold 9.1.4, you also have the option of just
+activating scripts in a .mwxml on your computer without saving them into
+a document to be loaded by everyone. You will still need to have the
+Scripting privilege for the document you are logged into though. You can
+also do the same for a single script in a .mwscript file which is just a
+plain text file. For the really advanced, it is also possible to "run"
+a</p>
+<p>.mwscript file using the moneyworks command line tool. To save a
+script for transfer to other document:</p>
+</blockquote><h5 id="select-the-script-to-deploy-by-clicking-on-its-name-on-the-sidebar">Select
+the script to deploy by clicking on its name on the sidebar</h5><ol start="2" type="1">
+<li><p><strong>Click on the Cogs icon on the bottom left of the script
+window and select Save Selected Script as XML</strong></p></li>
+</ol><blockquote>
+<p>The standard file dialog will open</p>
+</blockquote><h5 id="choose-the-location-and-name-if-desired-for-the-xml-script-file-and-click-save">Choose
+the location (and name if desired) for the xml script file and click
+Save</h5><blockquote>
+<p>Note that the file extension must be .mwxml. A copy of the script
+will be saved as a file in the nominated location.</p>
+<p><span id="_bookmark1475" class="anchor"></span>Other options in the
+cogs menu:</p>
+</blockquote><ul>
+<li><p><strong>Save all scripts as XML:</strong> All scripts will be
+saved in a single .mwxml file. If such a file is double-clicked (with a
+MoneyWorks document open), you will be prompted to install each script
+separately.</p></li>
+<li><p><strong>Copy Script as XML:</strong> The script will be copied to
+the clipboard as XML (and can be pasted into another MoneyWorks
+file).</p></li>
+<li><p><strong>Copy Script as Styled HTML:</strong> The script will be
+copied as html—handy for documenting your script. The script below was
+copied in this manner:</p></li>
+</ul><p><img src="images/media/image1023.png" style="width:3.07292in;height:2.02083in"></p><blockquote>
+<p>constant meta = "Hello World" on Load</p>
+<p>alert("Hello World")</p>
+<p>end</p>
+</blockquote><h4 id="deploying-selected-scripts">Deploying selected scripts</h4><blockquote>
+<p>You can highlight more than one script (and/or UI Form Layouts, which
+are also displayed in the sidebar) by Cmd/Ctrl clicking on each one in
+the sidebar. The cogs pop-up menu then has the option to save the
+selected scripts. You actually don't need to travel down to the cogs
+menu; you can right-click on a selection of scripts to get the menu
+right under your mouse.</p>
+</blockquote><h2 id="the-mwscript-language"><br>
+<u>The MWScript Language</u> </h2><blockquote>
+<p>The MWScript expression syntax is compatible with the existing
+MoneyWorks expressions that you use in custom forms and reports.
+MWScript simply adds handlers and statements. Flow control is closely
+analogous to that provided by the report writer.</p>
+<p>Normally a newline marks the end of a statement. So one statement per
+line. The only exception to this is that string constants (as of v9.1.8)
+may contain newlines which will result in a statement continuing over
+multiple lines,</p>
+</blockquote><h4 id="types">Types</h4><blockquote>
+<p>MWScript supports the same types as are available in the report
+writer. As in the report writer, the language is very weakly typed
+(values are freely type- promoted as necessary).</p>
+<p>Type Example</p>
+</blockquote><ul>
+<li><p>Number 5.35</p></li>
+<li><p>Date '1/1/13' — note that single quotes are for dates, not text
+strings</p></li>
+<li><p>Text strings "mwscript" or `also a string `. You can embed one
+kind of string delimiter inside a string that begins and ends with the
+other kind of delimiter `string with " inside it `. You can also escape
+a delimiter using a backslash. You can also include newlines and tabs
+using backslash escape codes "\t\n\"" .</p></li>
+</ul><blockquote>
+<p>Finally, as of v9.1.8 Nowdoc-style multiline string constants may
+also be used. A nowdoc string begins with a delimiter that you define
+using &lt;&lt;DELIM and then ends with the delimiter you defined on a
+line by itself: DELIM . You can also have an inline Nowdoc string where
+the closing delimiter is on the same line as the start. In this case,
+the initial delimiter definition ends with a space, which is not part of
+the string. e,g:</p>
+<p>&lt;&lt;NOWDOC inline dowdoc stringNOWDOC</p>
+</blockquote><ul>
+<li><p>Selection — create via CreateSelection(tableName, search)
+function.</p></li>
+<li><p>Table — create via CreateTable() function.</p></li>
+<li><p>Record — created by looping over a selection with
+foreach</p></li>
+<li><p>Associative Array — create with the CreateArray()
+function</p></li>
+</ul><blockquote>
+<p>Associative arrays use the syntax <em>arrayname[key]</em>, where
+<em>key</em> can be any text up to 31 characters, an integer, or a date
+(internally, integers and dates are represented as text formatted so
+that lexical sort order matches numeric/ date sort order). Data values
+can be any other type.</p>
+<p>let myArray = CreateArray() let myArray[0] = "thing"</p>
+<p>let myArray["mykey"] = myArray[0] let myArray['31/1/12'] = 500</p>
+<p>You can declare a simple-type property to be persistent. If you do
+this, MoneyWorks will automatically save and load its value (locally, on
+each client) when your script is Loaded and Unloaded.</p>
+<p>persistent property MyPrefValue = "foo"</p>
+<p>Arrays, like Tables, are always passed by reference, so if you assign
+an array to another variable, or pass it as a parameter to a function,
+you are not copying the array. If you want to copy an array, you must
+allocate a new array with CreateArray and explictly copy all of its
+members.</p>
+</blockquote><ul>
+<li><p>Handle — some objects are referenced by an opaque handle. This
+includes window and list handles that MoneyWorks might pass to your
+script, and also File handles, JSON parser handles, XML parser handles
+etc that are returned by creation functions. Where noted in the
+documentation for a creation funciton, you may need to explicitly free
+such handles when you are finished with them. You do not need to
+explicitly free tables, arrays, or selection.</p></li>
+</ul><h4 id="properties">Properties</h4><blockquote>
+<p>Properties are variables that last for the lifetime of the script.
+They are instantiated each time the script is loaded and discarded on
+unload.</p>
+<p>Properties are defined outside of message handlers.</p>
+<p>property mytextglobal = "qwertyuiopasdfghjklzxcvbnm"</p>
+<p>If you need a property to be persistent across sessions, you can
+store the value in the database (the User2 table is appropriate for
+this, see the <a href="#_bookmark1436">SetPersistent</a> and <a href="section-64.html#example-usage">GetPersistent</a> functions). Load the value in
+the script's Load handler (or lazily load the first time it is needed),
+and store it in the Unload handler if it changed. Keep in mind that
+every user will be executing the script with their own copy of the
+properties, so you may need to take steps to stop one user from
+clobbering values stored by another user, or you might use the user's
+login initials as part of the storage key to store per-user
+settings.</p>
+<p>Note that these persistent values are stored per client machine and
+all scripts for all documents the client might open or connect to are in
+the same namespace. Once the script has been run once on a particular
+computer, keep in mind that the value of the property at load can be
+different from the value that it appears to be initialised to in the
+script. To store persistent values per- document, use the <a href="#_bookmark1436">SetPersistent</a> and <a href="section-64.html#example-usage">GetPersistent</a> functions.</p>
+</blockquote><h4 id="constants-1">Constants</h4><blockquote>
+<p>Constants are named values for use within the script. Constants are
+defined outside of message handlers.</p>
+<p>IMPORTANT: Every script should declare a constant with the name meta
+, which will be used when reporting errors the script might generate.
+The string should therefore provide a way for them to contact you.</p>
+<p>constant meta = "Script for Something by Your Name and your URL"</p>
+<p>The meta contant will be used by MoneyWorks to identify your script
+to the user. It must be a string.</p>
+</blockquote><h4 id="handlers">Handlers</h4><blockquote>
+<p>A <strong>handler</strong> defines a callable function with optional
+named parameters and an optional return value. A handler is a peer of
+the built-in intrinsic functions and can be used in expressions in the
+same way.</p>
+<p><img src="images/media/image1020.png" style="width:0.1588in;height:0.15421in">A handler is defined by the
+keyword on , followed by the handler name and an optional list of
+parameter names. The handler body ends with the keyword on a line by
+itself.</p>
+<p>end</p>
+<p>MoneyWorks will automatically call some specially-named handlers
+automatically to allow you to intercept various UI functions. All you
+need to do is include the handler in your active script, and MoneyWorks
+will call it (see the next section, Standard Handlers).</p>
+<p>If a parameter required by your handler is not supplied by the
+caller, then the value will be NULL. Parameters are untyped, so if
+callers don't provide a value of the correct type, you should convert
+the type yourself to the required type (usually using TextToNum or
+NumToText)</p>
+</blockquote><h4 id="comments">Comments</h4><blockquote>
+<p>elseif anothercondition // can have any number of these</p>
+<p>// do something else else // up to one of these</p>
+<p>// do other thing endif</p>
+<p>The long form effectively provides switch/case functionality.</p>
+</blockquote><h4 id="while-loops">While loops</h4><blockquote>
+<p>General looping can do done with a while loop. Loops can make use of
+the</p>
+<p>and statements for early exit or short circuit (just as in C-like</p>
+<p>break</p>
+<p>continue</p>
+<p>Comments use the C++ form.</p>
+<p>while condition</p>
+<p>if special_condition</p>
+<p>break // exit the loop endif</p>
+<p>if another_condition</p>
+<p>continue // go back to top of loop, skipping do stuff endif</p>
+<p>// do stuff endwhile</p>
+<p>for a to-end-of-line comment;</p>
+<p>and to</p>
+<p>languages, and the report writer).</p>
+<p>begin and end a block comment that can span lines or within a
+line.</p>
+<p>//</p>
+<p>/*</p>
+<p>*/</p>
+</blockquote><h4 id="assignment">Assignment</h4><blockquote>
+<p>The statement assigns the result of an expression to a new or
+existing</p>
+<p>let</p>
+<p>variable. If the variable has not previously been seen in the handler
+and is not a property, then it is implicitly declared as a local
+variable in the handler.</p>
+<p>let myVar = Today() + 7 // adding a number to a date adds that many
+days</p>
+</blockquote><h4 id="for-loops">For loops</h4><blockquote>
+<p>There are several kinds of for loops that operate on different kinds
+of collections</p>
+<p>foreach</p>
+</blockquote><h4 id="conditionals">Conditionals</h4><blockquote>
+<p>Conditional flow control is done with if , elseif , else , and endif
+. Zero or</p>
+<p>or ranges. Each kind starts with the keyword</p>
+<p>The general form is</p>
+<p>and ends with endfor .</p>
+<p>more clauses are allowed for an if , followed by zero or one</p>
+<p>elseif</p>
+<p>else</p>
+<p>clause, followed by an endif . Short form:</p>
+<p>if condition</p>
+<p>// do something endif</p>
+<p>And the long form:</p>
+<p><strong>foreach</strong> <em>loop-control-var</em> <strong>in
+<em>type-keyword </em></strong><em>expression</em></p>
+<p>Foreach declares a local loop control variable whose scope is limited
+to the loop body. Type keywords can be:</p>
+</blockquote><ul>
+<li><p>database table names (defining a loop over a selection of
+records). Available</p></li>
+</ul><p>table names are: account , ledger , general , department , link ,</p><blockquote>
+<p>transaction , detail , log , taxrate , message , name , payments ,
+product</p>
+</blockquote><p>(items), job , build , jobsheet , bankrecs , autosplit , memo , user
+, user2 , offledger , filter , stickies , lists , login , contacts ,
+inventory , assetcat and asset . The expression must yield a selection
+variable for the</p><blockquote>
+<p>if condition</p>
+<p>// do something</p>
+<p>specified table. The loop control variable is a record, whose fields
+can be accessed by suffixing the variable name by a field name (e.g.
+rec.ourref). The variable used on its own will yield a 1-based
+index.</p>
+</blockquote><ul>
+<li><p>the keyword text which will iterate over words or lines in comma
+or newline delimited text. The delimiter is determined automatically—if
+there is at least one newline, then iteration is by line, otherwise
+iteration is by comma. Every line of multiline text should terminate
+with a newline (including the last one!).</p></li>
+<li><p>the keyword textfile that will iterate over lines in a textfile
+loaded from the local filesystem using the "file://" scheme, or from an
+HTTP server using the "http://" or "https://" scheme. You can use the
+http scheme to access data from remote data sources (e.g. REST servers.
+It retrieves data using the GET operation only). If the path is
+supplied, it must be in the temp directory, the custom plugins
+directory, MoneyWorks app support directory, or have a file extension of
+.txt or .csv. If the path is specified by the user, it can be anywhere
+or have any extension (but obviously should be a text file). Anywhere
+outside these locations will need to be specified in a file open dialog
+box by the user (which will be automatically invoked for any invalid or
+empty path).</p></li>
+<li><p>the keyword array which will iterate over key values in an
+associative array variable;</p></li>
+<li><p>and finally no keyword but rather a parenthesis-enclosed pair of
+values defines a simple numeric range (with an optional step value). The
+values can be full expressions but must be numeric. If the finish value
+is less than the start value, no iterations will occur (unless the step
+is negative).</p></li>
+</ul><blockquote>
+<p>Foreach variants:</p>
+<p>endfor</p>
+<p>// note that (100, 1) will iterate 0 times, unless you supply a
+negative step</p>
+<p>// log the numbers 100, 90, 80, ... 0</p>
+<p>foreach i in (100, 0, -10) syslog(i)</p>
+<p>end for</p>
+<p>Array Example:</p>
+<p>// foreach in array iterates over keys; get the value by subscripting
+with the key</p>
+<p>foreach key in array anArray</p>
+<p>syslog(key + " = " + anArray[key]) // key is always text end for</p>
+<p>List Example:</p>
+<p>// comma-delimited text</p>
+<p>foreach w in text "foo, bar, baz" syslog(w)</p>
+<p>endfor</p>
+<p>// newline-delimited text</p>
+<p>foreach line in text "firsttlinensecondtlinenlasttlinen"
+syslog(line)</p>
+<p>end for</p>
+<p>Selection Example:</p>
+</blockquote><h4 id="running-scripts-1">Running Scripts</h4><blockquote>
+<p>foreach rec in transaction CreateSelection("transaction",
+"status=`P`")</p>
+<p>foreach rec in account someSelectionICreatedEarlier foreach word in
+text "foo, bar, baz"</p>
+<p>foreach line in textfile "file://" foreach line in textfile "http://"
+foreach key in array myArrayVar foreach i in (0, 10) // integers</p>
+<p>foreach i in (100, 0, -10) // integers with optional step</p>
+<p>// loop control is of record type; use dot-notation to access
+fields</p>
+<p>// the naked loop contol variable is a 1-based index</p>
+<p>foreach a in account CreateSelection("account", "code=`1@`")
+syslog("record #" + a + ": " + a.code + " " + a.description)</p>
+<p>end for</p>
+<p>Range Example:</p>
+<p>// log the numbers 1...100 foreach i in (1, 100)</p>
+<p>syslog(i)</p>
+<p>You can install multiple scripts in a document and enable or disable
+them individually.</p>
+<p>Use the Show Scripts command to show and edit the scripts installed
+in a document. Note that only one user at a time can make changes to
+scripts.</p>
+<p>You can add, delete, and rename scripts (use the icons at the bottom
+of the sidebar).</p>
+<p><span id="_bookmark1476" class="anchor"></span>Active scripts are
+loaded at login and unloaded at logout, and a script is also
+unloaded/reloaded when you click the Activate button in the script
+editor toolbar (the old version of the script is first unloaded if it
+was loaded, then the modified script is compiled and loaded).</p>
+<p>You can keep inactive scripts in a document. They won't do anything
+until you activate them.</p>
+<p>You can use an inactive script to store boilerplate text for other
+purposes (such as a mail template, html, json etc). See <a href="#_bookmark1385">GetScriptText</a>. As of v9.1.8 you can also store
+such boilerplate text conveniently within your script using a Nowdoc
+string.</p>
+</blockquote><h4 id="stopping-problematic-scripts">Stopping problematic scripts</h4><blockquote>
+<p>If you write a script that gets into an endless loop, you should be
+able to stop it using the Stop button in the script progress window that
+will appear when the script is busy for more than a few seconds. The
+Stop button is available for any user who has the Scripting privilege.
+This will not deactivate the script; it will just terminate execution of
+the current handler.</p>
+<p>If you write a script that gets into an endless loop putting up alert
+windows, you will not get a progress window Stop button. If a script
+presents an alert, any user with Scripting privileges can stop the
+script by holding down the ctrl+shift keys when clicking the alert's
+button. You will get a further alert asking if you want to disable the
+script. Note that if you disable (deactivate) a script, be sure to
+reactivate it before closing the script window because otherwise it will
+be deactivated for all users.</p>
+<p>If you write a script that causes problems in its Load handler,
+thereby preventing you (or anyone) from logging in, you can suppress the
+loading of document scripts by holding down Option+Shift (Mac) /
+Ctrl+Shift (Windows) when logging in. Note that this option is available
+only for users who have the Scripting privilege.</p>
+</blockquote><div class="navigation"><hr><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p></div></body></html>

@@ -1,0 +1,860 @@
+<!DOCTYPE html><html><head></head><body><div class="navigation"><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p><hr></div><blockquote>
+<p><strong>Return type:</strong> a variable patameter list</p>
+<p><strong>Definition:</strong> converts the array values to a variable
+number of parameter values.</p>
+<p>This kind of "var-arg" type may only be passed to functions that take
+a variable number of parameters, such as Count(...) or JSON_Get(obj,
+...). In fact this function is specifically intended for use with
+JSON_Get() where the identifier accessors need to be determined
+programmatically.</p>
+</blockquote><h5 id="example-41">Example:</h5><blockquote>
+<p>see <a href="#_bookmark1403">the JSON_Parse example</a></p>
+<p>let jsonObjectHandle = JSON_Parse(jsontext)</p>
+<p>let a = CreateArray() let a[0] = "transaction" let a[1]= 0</p>
+<p>let a[2] = "description" let a[3] = "original"</p>
+<p>let s = JSON_Get(jsonObjectHandle, ParamsFromArray(a))</p>
+<p><strong>Limitation:</strong> The number of parameters expanded must
+not exceed the stack space for the script. If it's going to be more than
+a few dozen, choose another method.</p>
+</blockquote><h5 id="see-also-130">See Also:</h5><blockquote>
+<p><a href="section-58.html#countelements-array">CountElements</a>: Get the size of an
+associative array <a href="section-62.html#see-also-77">CreateArray</a>: Create an
+empty associative array <a href="section-63.html#deleteelement-array-key">DeleteElement</a>: Remove a key from an
+associative array <a href="section-63.html#elementexists-array-key">ElementExists</a>:
+Check if a key exists in an associative array</p>
+</blockquote><h3 id="posttransactions-selection">PostTransactions (selection)</h3><blockquote>
+<p><strong>Definition:</strong> Posts the transactions in the selection.
+The selection must be a <span id="_bookmark1418" class="anchor"></span>transaction selection.</p>
+</blockquote><h5 id="example-42">Example:</h5><blockquote>
+<p>PostTransactions(CreateSelection("transaction", "status=`U`"))</p>
+<p>This will post all of the currently-unposted transactions.</p>
+<p><strong>Availability:</strong> available within MWScript handlers</p>
+</blockquote><p><span id="_bookmark1419" class="anchor"></span><strong>PutClipboardText (text)</strong></p><p><strong>Result Type:</strong> string</p><p><strong>Definition:</strong> Sets the text on the clipboard.</p><p><strong>Availability:</strong> available within MWScript handlers in
+v9.0.5r1 and later</p><h5 id="see-also-131">See Also:</h5><blockquote>
+<p><a href="#_bookmark1367">GetClipboardText</a>: Get the text on the
+clipboard</p>
+</blockquote><p><strong>PutRecordForListRow (listHandle, rowNumZeroBased,
+array)</strong></p><p><strong>Result type:</strong> none</p><p><strong>Definition:</strong> Updates script-mutable fields in the
+in-memory record associated with an editable list, using values from the
+array.</p><p><strong>Example:</strong></p><blockquote>
+<p>on ExitedCell:F_TRANS:By_Item(w, l, r, c, v)</p>
+<p>// ...</p>
+<p>// store some values in "hidden" fields of the detail line
+PutRecordForListRow(l, r, CreateArray("_tagged1", "foo",</p>
+<p>"Detail.Custom1", "bar")) end</p>
+</blockquote><h5 id="see-also-132">See Also:</h5><blockquote>
+<p><a href="section-64.html#see-also-116">GetRecordForListRow</a>: Get list row record
+as array</p>
+</blockquote><h3 id="readcurrentrecordforwindow-windowref">ReadCurrentRecordForWindow
+(windowRef)</h3><blockquote>
+<p><strong>Result type:</strong> array</p>
+<p><strong>Definition:</strong> This function may only be used in a
+record-editing window. Either a custom window that is automatically
+instantiated via the second parameter of CreateListWindow or one of the
+standard MoneyWorks ones.</p>
+<p>For a custom window, the function loads the current record in the
+selection associated with the window, and locks it to prevent other
+users writing it. It returns an associative array containing the value
+of every field in the record (the keys of the array are the field
+names). If the record has a tags field, each tag is parsed out into a
+separate array element.</p>
+<p>Call this function from the Before handler of your record editing
+window to get the data to populate your window controls with.</p>
+<p>For custom record editing windows only, operating on User, User2,
+OffLedger or Lists, you can use WriteCurrentRecordForWindow to write
+changed values back to the database.</p>
+<p><span id="_bookmark1420" class="anchor"></span>For a standard record
+editing window, such as the transaction entry window, the record is
+already loaded and locked; this function merely copies the original
+loaded field values into the array. The array values do not change if
+the UI field content changes while the window is open.</p>
+</blockquote><p>In v9, ReadCurrentRecordForWindow makes the returned value a window
+property, so multiple scripts operating on the same window will see the
+same result (i.e. get a reference to the exact same array).</p><blockquote>
+<p><strong>Availability:</strong> available within MWScript
+handlers.</p>
+</blockquote><h5 id="see-also-133">See Also:</h5><blockquote>
+<p><span id="_bookmark1421" class="anchor"></span><a href="#_bookmark1388">GetWindowProperty</a>: Retrieve data previously
+stored for a windowHandle <a href="#setwindowproperty-windowref-propertyname-value">SetWindowProperty</a>:
+Store data related to a window <a href="#writecurrentrecordforwindow-windowref-fieldarray">WriteCurrentRecordForWindow</a>:
+Save a record in custom UI, or save tagged</p>
+<p>fields in standard UI</p>
+</blockquote><h3 id="releasemutex-name">ReleaseMutex (name)</h3><blockquote>
+<p><strong>Definition:</strong> Releases the named mutex previously
+obtained by a call to <span id="_bookmark1423" class="anchor"></span>GetMutex . If the client logs out before releasing
+a mutex, the mutex is automatically released.</p>
+<p>Availability: MWScript handlers</p>
+</blockquote><h5 id="see-also-134">See Also:</h5><blockquote>
+<p><a href="section-64.html#getmutex-name">GetMutex</a>: Try to obtain a named
+mutex</p>
+</blockquote><h3 id="savepicture-window-itemid">SavePicture (window, itemID)</h3><blockquote>
+<p><strong>Resulttype:</strong> string (a path)</p>
+<p><strong>Definition:</strong> Saves the image in the Picture control
+identified by itemID, into a new temporary file and returns the path to
+the file.</p>
+<p><strong>Availability:</strong> available within MWScript
+handlers.</p>
+</blockquote><h3 id="say-text">Say (text)</h3><blockquote>
+<p><strong>Return type:</strong> none</p>
+<p><strong>Definition:</strong> Speaks the text using the system voice.
+Can be useful for debugging scripts or user alerts.</p>
+</blockquote><h5 id="example-43"><br>
+Example:</h5><blockquote>
+<p><strong>See Also:</strong></p>
+<p>Say("Mary had a little lamb")</p>
+<p><a href="section-62.html#alert-message1-message2-ok-cancel-other-timeoutsecs">Alert</a>:
+Display an alert with up to 3 buttons <a href="#_bookmark1319">Ask</a>:
+Very simple dialog box with controls <a href="#_bookmark1328">ChooseFromList</a>: Very simple list dialog
+box</p>
+</blockquote><h3 id="selectwindow-windowref">SelectWindow (windowRef)</h3><blockquote>
+<p><strong>Result Type:</strong> none</p>
+<p><strong>Definition:</strong> Brings the window to the front, if
+possible.</p>
+<p><strong>Availability:</strong> available within MWScript
+handlers.</p>
+</blockquote><h3 id="setexchangerate-currency-date-period-newrate">SetExchangeRate
+(currency, date, period, newRate)</h3><blockquote>
+<p><strong>Definition:</strong> Sets the currency rate and creates the
+associated journal entry.</p>
+</blockquote><h5 id="example-44">Example:</h5><blockquote>
+<p>on GetRates</p>
+<p>let url = <a href="http://download.finance.yahoo.com/d/quotes.csv?s">"http://download.finance.yahoo.com/d/quotes.csv?s="</a>
+let currencyCount = 0</p>
+<p>foreach cur in offledger CreateSelection("offledger",
+"kind=`CUR`")</p>
+<p>let url = url + BaseCurrency + cur.Name + "=X+" let currencyCount =
+currencyCount + 1</p>
+<p>endfor</p>
+<p>if currencyCount = 0 return</p>
+<p>endif</p>
+<p>let url = url + "&amp;f=sl1d1t1ba&amp;e=.csv" let rates = ""</p>
+<p>foreach row in textfile url</p>
+<p>let rates = rates + Right(Left(Slice(row, 1, ","), 7), 3) + "\t" +
+Slice(row, 2, ",") + "\n"</p>
+<p>endfor</p>
+<p>foreach rate in text rates</p>
+<p>let cur = Slice(rate, 1, "\t")</p>
+<p>let xr = TextToNum(Slice(rate, 2, "\t")) syslog("setting " + cur + "
+to " + xr) SetExchangeRate(cur, Today(), CurrentPeriod(), xr)</p>
+</blockquote><h5 id="section-98"></h5><p><span id="_bookmark1426" class="anchor"></span>endfor</p><p>end</p><blockquote>
+<p><strong>Availability:</strong> within an MWScript handler</p>
+</blockquote><h5 id="see-also-135">See Also:</h5><blockquote>
+<p><a href="section-58.html#currencyconvert-amount-fromcurrency-tocurrency-periodordate">CurrencyConvert</a>:
+Convert amount between currencies</p>
+</blockquote><h3 id="setfieldenabling-windowref-fieldnameorindex-enabled">SetFieldEnabling
+(windowRef, fieldNameOrIndex, enabled)</h3><blockquote>
+<p>Enable or disable a custom control (in report setup dialog or in a
+custom Ask</p>
+<p>enabled</p>
+</blockquote><h3 id="setfieldvisibility-windowref-itemid-visible"><br>
+SetFieldVisibility (windowRef, itemID, visible)</h3><blockquote>
+<p><strong>Definition:</strong> Sets the visibility of an item in a
+custom window. the item must be a custom control. You cannot control the
+visibility of standard MoneyWorks UI controls.</p>
+<p><strong>Availability:</strong> available within MWScript
+handlers.</p>
+</blockquote><h5 id="see-also-136">See Also:</h5><blockquote>
+<p><a href="#setfieldenabling-windowref-fieldnameorindex-enabled">SetFieldEnabling</a>:
+Enable or disable a custom control</p>
+<p><span id="_bookmark1428" class="anchor"></span>dialog). The</p>
+<p>parameter should be 1 to enable or 0 to disable. This can</p>
+</blockquote><h3 id="setlistcontents-listhandle-data"><br>
+SetListContents (listHandle, data)</h3><h3 id="section-99"></h3><blockquote>
+<p>only be used on custom controls that you have created; not on
+built-in controls. In MoneyWorks 8, this function also applies to any
+control in a custom window.</p>
+</blockquote><h5 id="see-also-137">See Also:</h5><blockquote>
+<p><a href="#_bookmark1426">SetFieldVisibility</a>: Show or hide a
+custom control</p>
+</blockquote><h3 id="setfieldvalue-windowref-fieldnumorname-stringvalue">SetFieldValue
+(windowRef, fieldNumOrName, stringValue)</h3><blockquote>
+<p>Attempts to set the user interface field to the given value. Further
+validation may be invoked. The actual value set in the field is returned
+by the function. Works with check boxes and popups as well.</p>
+<p>For editable text fields, this will set the content of the field to
+stringValue .</p>
+<p>For popup menu controls, it will select the item matching stringValue
+. You can include an @ wildcard at the end of a partial item name.</p>
+<p>Setting a button's value to "1" is equivalent to clicking the
+button.</p>
+<p>For buttons, checkboxes, and radio buttons, you must only set a value
+of "1" or "0". Any other value will set the title of the control.</p>
+<p>Availability: within an MWScript handler</p>
+<p><strong>Definition:</strong> Sets the current contents of a list
+(previously instantiated with InsertListObject or InsertEditListObject).
+Data should be tab and newline- delimited text.</p>
+<p>If you don't otherwise hane the list handle, you can use
+GetListHandle(windowHandle, listID)</p>
+<p><strong>Availability:</strong> available within MWScript
+handlers.</p>
+</blockquote><h5 id="see-also-138">See Also:</h5><blockquote>
+<p><a href="#_bookmark1313">AddListLine</a>: Add a row to an editable
+list <a href="#_bookmark1343">DeleteListLine</a>: Delete a row from an
+editable list <a href="section-67.html#entercell-windowref-listref-rownum-columnnum-cellvaluestring">EnterCell</a>:
+A cell in an editable list has just gained focus <a href="section-63.html#exchangelistrows-listref-rowa-rowb">ExchangeListRows</a>: Swap
+rows in an editable list <a href="section-67.html#exitedcell-windowref-listref-row-column-cellvaluestring">ExitedCell</a>:
+A cell in an editable list has just lost focus</p>
+<p><a href="section-63.html#file_write-filehandle-string">GetActiveListColumn</a>: Get
+the column number of an edit list that has keyboard focus</p>
+<p><a href="section-63.html#getactivelistrow-listref">GetActiveListRow</a>: Get the row
+number of an edit list that has keyboard focus</p>
+<p><a href="#_bookmark1374">GetListContents</a>: Get a tab-delimited
+string with the contents of a simple list <a href="#_bookmark1375">GetListField</a>: Get the text of an editable list
+field</p>
+<p><a href="section-64.html#getlisthandle-windowref-listname">GetListHandle</a>: Get
+list handle from window handle and list ident <a href="#_bookmark1377">GetListLineCount</a>: Get number of rows in a
+list</p>
+<p><a href="#_bookmark1379">GetListName</a>: Selected tab name for
+Transaction entry details list <a href="section-64.html#insertlistobject-windowhandle-itemid-column_definition-optional_initial_data-optional_mode">InsertListObject</a>:
+Initialise selectable list object in a window <a href="section-64.html#mergeorderlines-windowref-linenum">MergeOrderLines</a>: Merge
+order lines (opposite of SplitOrderLines) <a href="#setlistfield-listref-rownum-columnnumorname-value">SetListField</a>:
+Set the text of an editable list field</p>
+<p><a href="#_bookmark1430">SetListSelect</a>: Highlight a row in a list
+<a href="#_bookmark1432">SetOptionsForEditList</a>: Set options for the
+list <a href="#sortlistbycolumn-listref-colnumorname-direction">SortListByColumn</a>:
+Sort an editable list by a column</p>
+<p><span id="_bookmark1430" class="anchor"></span><a href="#_bookmark1440">SplitOrderLine</a>: Duplicate a line item on an
+order, splitting the order qty (for serial entry)</p>
+<p><a href="section-67.html#validatecell-windowref-listref-rownum-columnnum">ValidateCell</a>:
+Control whether the content of a cell is acceptable and the cell can be
+exited</p>
+</blockquote><h3 id="setlistfield-listref-rownum-columnnumorname-value">SetListField
+(listRef, rowNum, columnNumOrName, value)</h3><blockquote>
+<p>Attempts to set the text of a cell in an editable list (such as the
+transaction detail list). Additional validation may cause your text to
+be rejected. You can get a listRef using the GetListHandle function, or
+it will be passed to you as a parameter to certain handlers, such as
+ValidateCell.</p>
+<p>RowNum is zero-based. To reduce fragility of scripts over software
+versions, <span id="_bookmark1432" class="anchor"></span>avoid using
+column numbers. Use column names. Normal validation will be applied to
+whatever value you set, just as if the user had typed it.</p>
+<p><strong>Availability:</strong> within an MWScript handler</p>
+</blockquote><h5 id="see-also-139">See Also:</h5><blockquote>
+<p><a href="#_bookmark1313">AddListLine</a>: Add a row to an editable
+list <a href="#_bookmark1343">DeleteListLine</a>: Delete a row from an
+editable list <a href="section-67.html#entercell-windowref-listref-rownum-columnnum-cellvaluestring">EnterCell</a>:
+A cell in an editable list has just gained focus <a href="section-63.html#exchangelistrows-listref-rowa-rowb">ExchangeListRows</a>: Swap
+rows in an editable list <a href="section-67.html#exitedcell-windowref-listref-row-column-cellvaluestring">ExitedCell</a>:
+A cell in an editable list has just lost focus</p>
+<p><a href="section-63.html#file_write-filehandle-string">GetActiveListColumn</a>: Get
+the column number of an edit list that has keyboard focus</p>
+<p><a href="section-63.html#getactivelistrow-listref">GetActiveListRow</a>: Get the row
+number of an edit list that has keyboard focus</p>
+<p><a href="#_bookmark1375">GetListField</a>: Get the text of an
+editable list field</p>
+<p><a href="section-64.html#getlisthandle-windowref-listname">GetListHandle</a>: Get
+list handle from window handle and list ident <a href="#_bookmark1377">GetListLineCount</a>: Get number of rows in a
+list</p>
+<p><a href="#_bookmark1379">GetListName</a>: Selected tab name for
+Transaction entry details list <a href="section-64.html#mergeorderlines-windowref-linenum">MergeOrderLines</a>: Merge
+order lines (opposite of SplitOrderLines) <a href="#sortlistbycolumn-listref-colnumorname-direction">SortListByColumn</a>:
+Sort an editable list by a column</p>
+<p><a href="#_bookmark1440">SplitOrderLine</a>: Duplicate a line item on
+an order, splitting the order qty (for serial entry)</p>
+<p><a href="section-67.html#validatecell-windowref-listref-rownum-columnnum">ValidateCell</a>:
+Control whether the content of a cell is acceptable and the cell can be
+exited</p>
+</blockquote><p><strong>SetListSelect (listHandle, zeroBasedRowNum,
+bClearOldSel)</strong></p><p><strong>Definition:</strong> Highlights the indicated row in a list.
+if the bClearOldSel is false, then any existing highlight is kept.</p><p><strong>Availability:</strong> available within MWScript handlers in
+v9 and later.</p><p><strong>See Also:</strong></p><blockquote>
+<p><a href="#_bookmark1374">GetListContents</a>: Get a tab-delimited
+string with the contents of a simple list <a href="section-64.html#insertlistobject-windowhandle-itemid-column_definition-optional_initial_data-optional_mode">InsertListObject</a>:
+Initialise selectable list object in a window <a href="#_bookmark1432">SetOptionsForEditList</a>: Set options for the
+list</p>
+</blockquote><p><strong>SetOptionsForEditList (listHandle, optionsArray)</strong></p><p><strong>Definition:</strong> Sets options for an edit list (either
+custom or standard). You can use this to e.g. prevent
+additions/deletions or sorting of the transaction details list (say for
+a partially processed order where the user should not change the order).
+Pass an array of boolean values with key values from "allowSorting",
+"allowAdditions", "allowDeletions". You do not need to supply all
+values. Only the supplied option values will be changed.</p><p><strong>Example:</strong></p><blockquote>
+<p>SetOptionForEditList(listhandle, createArray("allowSorting", false,
+"allowAdditions", false, "allowDeletions", false))</p>
+</blockquote><p><strong>Availability:</strong> available within MWScript handlers in
+v9.1.7 and later.</p><p><strong>See Also:</strong></p><blockquote>
+<p><a href="#_bookmark1374">GetListContents</a>: Get a tab-delimited
+string with the contents of a simple list <a href="section-64.html#insertlistobject-windowhandle-itemid-column_definition-optional_initial_data-optional_mode">InsertListObject</a>:
+Initialise selectable list object in a window</p>
+<p><a href="#_bookmark1430">SetListSelect</a>: Highlight a row in a
+list</p>
+</blockquote><h5 id="see-also-140">See Also:</h5><p><strong>SetProgressMessage (message)</strong></p><p>Sets a progress message that will show in the indeterminate progress
+dialog <em>if</em> it happens to show while executing the handler that
+the function is called from (including in any handlers/functions that
+that handler calls). Otherwise the message is the default "A script is
+running...".</p><p>When the handler exits, the default progress message is restored.</p><p>If the progress window is already visible when this function is
+called, the progress message is changed to the new message.</p><p>Use to indicate to the user what is happening during a time-consuming
+script process.</p><p><strong>Availability:</strong> within an MWScript handler in v9 and
+later</p><blockquote>
+<p><a href="section-61.html#stocktakenewqtyforlocation-location">StocktakeNewQtyForLocation</a>:
+Get the current stocktake quantity for a product for a given
+location</p>
+<p><a href="section-61.html#sohforlocation-location">StocktakeStartQtyForLocation</a>:
+Get the stocktake starting snapshot quantity for a product for a given
+location</p>
+</blockquote><h3 id="setwindowproperty-windowref-propertyname-value">SetWindowProperty
+(windowRef, propertyName, value)</h3><blockquote>
+<p><span id="_bookmark1435" class="anchor"></span><strong>SetStocktakeForLocation (productCode,
+count [, location] [, batchNum])</strong></p>
+<p><strong>Return Type:</strong> Boolean; true on success; false on
+error</p>
+<p><strong>Definition:</strong> Updates the stocktake count for a
+product at a given location, and/ or for a batch number.</p>
+<p>A stocktake must be in progress. Normally you can use the Replace
+command or ReplaceField function to set a stocktake count for a product
+when multi-location inventory and batch numbered inventory is not in
+use. When they are, the stock for a location or batch is stored in a
+separate table from the product table, and new records may need to be
+created in that table. This function does that for you. The function can
+be used to implement a scripted import of stocktake data. It can be used
+for stock that does not have multiple locations or batches as well. The
+3rd and 4th parameters are optional. When no location is supplied, the
+Default location is assumed.</p>
+<p><span id="_bookmark1436" class="anchor"></span>It is an error to pass
+a non-existent or non-inventoried product; to call when a stocktake is
+not active; or for the batchNum parameter to be inconsistent with the
+batch-tracking status of the product.</p>
+<p><strong>Availability:</strong> within an MWScript handler in
+MoneyWorks Gold 8.1.8 and later</p>
+<p><strong>Result Type:</strong> none</p>
+<p><strong>Definition:</strong> Store property data for a window handle
+for later retrieval by GetWindowProperty. This effectively provides
+per-object storage for windows. This is particularly useful for scripts
+that deal with multiple instances of the same class of window (like
+Transaction windows). The property data is automatically released when
+the window closes.</p>
+</blockquote><h5 id="example-45">Example:</h5><blockquote>
+<p>on Before:My_Window(w) SetWindowProperty(w, "my_wind_fields",</p>
+<p>ReadCurrentRecordForWindow(w)) end</p>
+<p>on After:My_Window(w)</p>
+<p>let a = GetWindowProperty(w, "my_wind_fields")</p>
+<p>// .. set values in a WriteCurrentRecordForWindow(w, a)</p>
+<p>end</p>
+<p><strong>Availability:</strong> within an MWScript handler in
+MoneyWorks Gold 8.1.8 and later</p>
+</blockquote><h5 id="see-also-141">See Also:</h5><blockquote>
+<p><a href="#_bookmark1388">GetWindowProperty</a>: Retrieve data
+previously stored for a windowHandle <a href="#_bookmark1418">ReadCurrentRecordForWindow</a>: Load a record in
+custom UI, or tagged fields</p>
+<p>in standard UI</p>
+<p><a href="#writecurrentrecordforwindow-windowref-fieldarray">WriteCurrentRecordForWindow</a>:
+Save a record in custom UI, or save tagged fields in standard UI</p>
+</blockquote><h3 id="setpersistent-table-key1-key2-array">SetPersistent (table, key1,
+key2, array)</h3><blockquote>
+<p><strong>Definition:</strong> Updates a record with values from an
+associative array using the key values as for GetPersistent().</p>
+<p><span id="_bookmark1437" class="anchor"></span>Here is an example of
+using a mutex and persistent storage to execute something at most once a
+week by only one user without risk of a race condition whereby two users
+might look at the user2 persistent storage record at the same time:</p>
+<p>on Load</p>
+<p>if GetMutex("rate_update")</p>
+<p>let values = GetPersistent("user2", kMyDevKey, "last_update")</p>
+<p>if values["date1"] &lt; Today() - 7 GetRates() // do weekly thing let
+values["date1"] = Today()</p>
+<p>SetPersistent("user2", kMyDevKey, "last_update", values) endif</p>
+<p>ReleaseMutex("rate_update") endif</p>
+<p>end</p>
+</blockquote><h3 id="setreportcolumnwidth-colname-points"><br>
+SetReportColumnWidth (ColName, points)</h3><blockquote>
+<p><strong>Definition:</strong> Sets the width of the named report
+column to the number of points specified. This function can only be used
+from an MWScript SetupReport handler.</p>
+</blockquote><h5 id="example-46">Example:</h5><h5 id="section-100"></h5><blockquote>
+<p>on SetupReport</p>
+<p>SetReportColumnWidth("TAXCOL", if(Val("Show_Tax"), 80, 0))</p>
+<p>end</p>
+<p>See the table below for tables and fields supported by GetPersistent
+and <span id="_bookmark1438" class="anchor"></span>SetPersistent.</p>
+<p>table key1 key2 fields</p>
+<p>user 7 character key of your choosing none data</p>
+<p>If the Show_Tax report control is true, the width of column TAXCOL is
+set to 80 points, otherwise it is set to zero (i.e. it is hidden).</p>
+<p><strong>Availability:</strong> Only within a <a href="section-67.html#setupreport">SetupReport</a> handler</p>
+</blockquote><h3 id="setsidebarcolour-colour">SetSidebarColour (colour)</h3><blockquote>
+<p><strong>Result Type:</strong> none</p>
+<p>user2 32 bit numeric developer key. You may use any value from
+#80000000-#8FFFFFFF for internal projects. For projects that you wish to
+distribute to others, please contact Cognito for a key range that you
+can use exclusively.</p>
+<p>lists 15 char listID(may or may not be a listID known to the
+Validation Lists list)</p>
+<p>ofledger must be "USR" (you can Get the "CUR" (currency) records if
+you wish, but you may not Set them)</p>
+<p>27</p>
+<p>character key of your choosing</p>
+<p>15</p>
+<p>character list item 15</p>
+<p>character</p>
+<p>name</p>
+<p>int1, int2, float1, float2, date1, date2, text1, text2, text</p>
+<p>comment</p>
+<p>description, balance91..balance00, budget29..budget00,
+budgetnext01..budgetnext18</p>
+<p><strong>Definition:</strong> Sets the sidebar colour (for all windows
+that have them), to a desaturated version of the supplied colour. The
+colour can either be a number in the range 0..7 in which case it is
+regarded as one of the standard MoneyWorks colours (0 = the default
+sidebar colour, 1 = orange, 2 = red, 3 = magenta, 4 = cyan, 5 = blue, 6
+= green, 7 = brown). If the colour is a number greater than 7 it is
+assumed to be a 24-bit rgb value. The highlight colour in the sidebar
+will be the actual colour value supplied.</p>
+<p><strong>Rationale:</strong> To customise the sidebar colour on a
+document-by-document basis (to make it easier to discern which of
+several companies you are working</p>
+<p>In MoneyWorks 7.1 and later, the fourth parameter may be omitted:
+this will cause the record identified by the key(s) to be deleted. In
+this case the return value is a boolean indicating success or failure.
+If the key parameters contain wildcards, then <em>all</em> matching
+records will be deleted.</p>
+<p><strong>Availability:</strong> MWScript</p>
+<p>in). Just add a simple 3 line script to each document, using a unique
+colour.</p>
+</blockquote><h5 id="example-47">Example:</h5><blockquote>
+<p>on Load</p>
+<p>SetSidebarColour(#ff0000)</p>
+<p>end</p>
+<p><strong>Availability:</strong> available within MWScript
+handlers.</p>
+</blockquote><h3 id="settaggedvalue-taggedtextstring-tag-value">SetTaggedValue
+(taggedTextString, tag, value)</h3><blockquote>
+<p><strong>Result type:</strong> text</p>
+<p><strong>Definition:</strong> Returns a new tagged text string
+containing the given tag and value inserted into the provided
+taggedTextString. The tag must begin with an underscore. If the tag
+already exists in taggedTextString, the value is replaced. If the value
+is an empty string, the tag is removed.</p>
+</blockquote><h5 id="example-48">Example:</h5><blockquote>
+<p>let taggedText = SetTaggedValue("", "_colour", "Bronze")</p>
+<p>let taggedText = SetTaggedValue(taggedText, "_size", "Small")</p>
+<p>Sets taggedText to "_colour: Bronze; _size: Small; ".</p>
+<p><span id="_bookmark1440" class="anchor"></span><strong>Rationale:</strong> The TaggedText field
+is normally used with ReadCurentRecordForWindow and
+WriteCurrentRecordForWindow, but you may need to set values
+programmatically using ReplaceField.</p>
+<p><strong>Availability:</strong> available within MWScript handlers in
+MoneyWorks Gold 8.1.4 and later.</p>
+</blockquote><h5 id="see-also-142">See Also:</h5><blockquote>
+<p><a href="#_bookmark1387">GetTaggedValue</a>: Extract a value from a
+tagged value field</p>
+</blockquote><h3 id="sortlistbycolumn-listref-colnumorname-direction">SortListByColumn
+(listRef, colNumOrName [, direction])</h3><blockquote>
+<p><strong>Definition:</strong> Sorts the editable list as if the user
+had clicked in the column</p>
+<p><a href="section-63.html#file_write-filehandle-string">GetActiveListColumn</a>: Get
+the column number of an edit list that has keyboard focus</p>
+<p><a href="section-63.html#getactivelistrow-listref">GetActiveListRow</a>: Get the row
+number of an edit list that has keyboard focus</p>
+<p><a href="#_bookmark1375">GetListField</a>: Get the text of an
+editable list field</p>
+<p><a href="section-64.html#getlisthandle-windowref-listname">GetListHandle</a>: Get
+list handle from window handle and list ident <a href="#_bookmark1377">GetListLineCount</a>: Get number of rows in a
+list</p>
+<p><a href="#_bookmark1379">GetListName</a>: Selected tab name for
+Transaction entry details list <a href="section-64.html#mergeorderlines-windowref-linenum">MergeOrderLines</a>: Merge
+order lines (opposite of SplitOrderLines) <a href="#setlistfield-listref-rownum-columnnumorname-value">SetListField</a>:
+Set the text of an editable list field</p>
+<p><a href="#_bookmark1440">SplitOrderLine</a>: Duplicate a line item on
+an order, splitting the order qty (for serial entry)</p>
+<p><a href="section-67.html#validatecell-windowref-listref-rownum-columnnum">ValidateCell</a>:
+Control whether the content of a cell is acceptable and the cell can be
+exited</p>
+</blockquote><h3 id="splitorderline-windowref-linenum-qty">SplitOrderLine (windowRef,
+lineNum, qty)</h3><blockquote>
+<p>Splits the transaction detail line into two, setting the first line's
+stockQty to and the second line's stockQty to the original qty minus the
+specified qty.</p>
+<p>qty</p>
+<p>For an order, the orderQty is similarly split (qty must be &lt;=
+orderQty).</p>
+<p>If the line has a prevShipQty, splits that so that prevShipQty &lt;=
+orderQty for both lines.</p>
+<p>You can use this to help automate the assignment of serial numbers in
+an order.</p>
+<p><strong>Availability:</strong> available within MWScript
+handlers.</p>
+<p>heading. number.</p>
+<p>colNumOrName</p>
+<p>may be the column name, or a zero-based column</p>
+</blockquote><h5 id="see-also-143"><br>
+See Also:</h5><blockquote>
+<p><a href="#_bookmark1313">AddListLine</a>: Add a row to an editable
+list <a href="#_bookmark1343">DeleteListLine</a>: Delete a row from an
+editable list</p>
+<p>The default sort direction will be ascending, but you can pass an
+optional third parameter of SortDescending for a descending sort.</p>
+</blockquote><h5 id="see-also-144">See Also:</h5><blockquote>
+<p><a href="#_bookmark1313">AddListLine</a>: Add a row to an editable
+list <a href="#_bookmark1343">DeleteListLine</a>: Delete a row from an
+editable list <a href="section-67.html#entercell-windowref-listref-rownum-columnnum-cellvaluestring">EnterCell</a>:
+A cell in an editable list has just gained focus <a href="section-63.html#exchangelistrows-listref-rowa-rowb">ExchangeListRows</a>: Swap
+rows in an editable list <a href="section-67.html#exitedcell-windowref-listref-row-column-cellvaluestring">ExitedCell</a>:
+A cell in an editable list has just lost focus</p>
+<p><a href="section-67.html#entercell-windowref-listref-rownum-columnnum-cellvaluestring">EnterCell</a>:
+A cell in an editable list has just gained focus <a href="section-63.html#exchangelistrows-listref-rowa-rowb">ExchangeListRows</a>: Swap
+rows in an editable list <a href="section-67.html#exitedcell-windowref-listref-row-column-cellvaluestring">ExitedCell</a>:
+A cell in an editable list has just lost focus</p>
+<p><a href="section-63.html#file_write-filehandle-string">GetActiveListColumn</a>: Get
+the column number of an edit list that has keyboard focus</p>
+<p><a href="section-63.html#getactivelistrow-listref">GetActiveListRow</a>: Get the row
+number of an edit list that has keyboard focus</p>
+<p><a href="#_bookmark1375">GetListField</a>: Get the text of an
+editable list field</p>
+<p><a href="section-64.html#getlisthandle-windowref-listname">GetListHandle</a>: Get
+list handle from window handle and list ident <a href="#_bookmark1377">GetListLineCount</a>: Get number of rows in a
+list</p>
+<p><a href="#_bookmark1379">GetListName</a>: Selected tab name for
+Transaction entry details list <a href="section-64.html#mergeorderlines-windowref-linenum">MergeOrderLines</a>: Merge
+order lines (opposite of SplitOrderLines) <a href="#setlistfield-listref-rownum-columnnumorname-value">SetListField</a>:
+Set the text of an editable list field</p>
+<p><a href="#sortlistbycolumn-listref-colnumorname-direction">SortListByColumn</a>:
+Sort an editable list by a column</p>
+<p><a href="section-67.html#validatecell-windowref-listref-rownum-columnnum">ValidateCell</a>:
+Control whether the content of a cell is acceptable and the cell can be
+exited</p>
+</blockquote><h3 id="synctransactionimage-seqnum">SyncTransactionImage (seqnum)</h3><blockquote>
+<p><strong>Return type:</strong> Boolean</p>
+<p><strong>Definition:</strong> Checks to see if there is an image for
+the transaction with the given sequence number in the
+Pictures/Transactions folder of the Custom Plugins folder (i.e. the
+storage location for all attached images). If there is an image named
+&lt;em&gt;seqnum.ext&lt;/em&gt; (where &lt;em&gt;ext&lt;/em&gt; can be
+.jpg, .png,</p>
+<p>.pdf) the the bit of the transaction's flags field is set and the</p>
+<p>fHasScan</p>
+<p>The parameter passed to syslog will be type-converted to text. You
+can even pass an associative array to log all elements of the array.</p>
+</blockquote><h5 id="see-also-145">See Also:</h5><blockquote>
+<p><a href="section-62.html#typeof-variable">TypeOf</a>: Get the type enumeration of a
+value or variable</p>
+<p><a href="section-64.html#ntdump">_NTDump</a>: Get a textual dump of identifiers and
+values from the MoneyWorks nametable</p>
+</blockquote><h3 id="transferfunds-frombank-tobank-date-period-ref-analysis-description-amount-recamount">TransferFunds
+(fromBank, toBank, date, period, ref, analysis, description, amount [,
+recAmount])</h3><blockquote>
+<p><strong>Return type:</strong> number</p>
+<p><strong>Definition:</strong> Creates a funds transfer payment between
+two bank accounts. <em>recAmount</em> must be supplied if the banks are
+different currencies. Each amount is specified in that bank’s currency.
+The return value is the sequence number of the payment transaction.</p>
+<p>return value is TRUE. If no image is found for the transaction, the
+flag is reset and the return value is FALSE.</p>
+</blockquote><p><strong>See Also:</strong></p><blockquote>
+<p><a href="#_bookmark1380">GetNextReference</a>: Allocate a reference
+number for a transaction type (or job code).</p>
+</blockquote><p><strong>UpdateOrderLines (orderSeq, prod_qty_array [,
+linktoInvSeq])</strong></p><p><strong>Return type:</strong> a status code, and the array is
+modified</p><blockquote>
+<p><span id="_bookmark1444" class="anchor"></span>Will return an error
+if the transaction is currently locked for editing.</p>
+<p>Use this function to sync the flag after you have manually added a
+transaction image to the Pictures/Transactions directory.</p>
+</blockquote><h5 id="see-also-146">See Also:</h5><blockquote>
+<p><a href="section-64.html#importimage-domain-ident-path">ImportImage</a>: Import an
+image from a file</p>
+</blockquote><h3 id="syslog-text">SysLog (text)</h3><blockquote>
+<p><strong>Return type:</strong> none</p>
+<p><strong>Definition:</strong> Writes the text to the log file
+(preceded by a date/time stamp).</p>
+<p>Useful for debugging scripts. Note that MoneyWorks also sometimes
+writes <span id="_bookmark1446" class="anchor"></span>things (error
+messages, typically) to the log file. On Mac, log file output is also
+copied to the system.log.</p>
+<p>You can easily show the log file by clicking the Log File icon in the
+Script Editor toolbar.</p>
+<p><strong>Availability:</strong> available within MWScript handlers in
+MoneyWorks 8.1.5 and later.</p>
+</blockquote><p><strong>TryPutBackReference (transType, refnum [, bank])</strong></p><p><strong>Result Type:</strong> Boolean</p><p><strong>Definition:</strong> If you have allocated a reference number
+with <a href="#_bookmark1380">GetNextReference</a> and for some reason
+will not be using it, you can use this function to try to put it back
+for subsequent allocation. If the reference number sequence has moved
+on, this operation may fail (and return false) or the reference number
+may be queued locally for possible use by the same logged-in client.
+Otherwise it may be discarded and never used.</p><blockquote>
+<p><strong>Definition:</strong> Use this function to programmatically
+process an order for which you have imported or otherwise created a
+corresponding invoice, or to just update intended ship quantities (this
+latter use would only be for Sales Orders where you want to
+programmatically allocate new stock to backorders).</p>
+</blockquote><ul>
+<li><p>Set the linktoInvSeq to -2 to force the order to be
+completed.</p></li>
+</ul><blockquote>
+<p>The function will return 0 on successful completion. If there is an
+error, a non-zero status will be returned. Further information on the
+error can be obtained from GetLastErrorMessage().</p>
+</blockquote><p><strong>Availability:</strong> available within MWScript handlers in
+MoneyWorks 9 and later</p><blockquote>
+<p>Identify the order to be updated by specifying its sequence number in
+orderSeq.</p>
+<p><span id="_bookmark1447" class="anchor"></span>Pass an associative
+array of quantities, where the array keys are product codes.</p>
+<p>Optionally pass the sequence number of a posted invoice that SHOULD
+correspond to the products/quantities being updated (however, agreement
+with the invoice is not enforced).</p>
+<p>If you pass an invoice sequence number, the order lines will have the
+specified quantities transferred from backordered to previously shipped.
+In the event that all lines on the order are completed, the order will
+be marked as complete. The invoice will be updated to link back to the
+order (via the originatingOrderSeq field). See also special cases
+below.</p>
+<p><span id="_bookmark1448" class="anchor"></span>If no invoice sequence
+is specified, the function will just update the Ship Qty column, and the
+order can then be processed manually.</p>
+<p>The prod_qty_array quantities will be adjusted downward by the
+quantity</p>
+</blockquote><h3 id="webviewcontrol-window-item-commandstring">WebViewControl
+(window, item, commandString)</h3><p><strong>WaitMilliseconds (ms)</strong></p><p><strong>Return type:</strong> none</p><p><strong>Definition:</strong> Script execution pauses for the
+specified period (up to 10,000 milliseconds). If the pause is long
+enough (or if you call WaitMilliseconds multiple times) the script will
+put up an indeterminate progress dialog.</p><p>Useful for an unattended or external script that might need to retry
+an operation after a delay.</p><p><strong>Availability:</strong> available within MWScript handlers in
+MoneyWorks 9.0.4 and later</p><blockquote>
+<p>Sets options on a custom web view control in a window.</p>
+<p>commandString</p>
+<p>string consisting of a command followed by parameters in the form</p>
+<p>is a</p>
+<p>"used" by the order. If the quantity specified is greater than the
+backorder quantity for the product on the order, the remaining quantity
+will be left in the array. Otherwise the used element will be deleted
+from the array when its quantity is fully "used". Array elements whose
+key does not match an ordered product on the order will be ignored. Thus
+on exit, the array will contain unprocessed products/quantities. This
+means in the simple case (no invoice sequence) you could pass the same
+array of newly received stock quantities to subsequent invocations for a
+series of orders, and the stock will be allocated in the order the
+orders are processed, until it is depleted.</p>
+</blockquote><h5 id="special-cases-for-linktoinvseq">Special cases for
+linktoInvSeq:</h5><ul>
+<li><p>If the order is completed (i.e. there remain no backordered
+items), and the linktoInvSeq is specified as -1, the order will be
+marked as completed (so will appear in the Bought/Sold list).</p></li>
+</ul><blockquote>
+<p>name='value' . Currently the only command is options and the
+available options are openLinksInExternalBrowser and wantCallbacks which
+take a value of 'true' or 'false' (all case-sensitive).</p>
+<p>Also, on Mac allowBackForward , and on Windows with v9.0.3 and
+leter:</p>
+<p>reportErrors .</p>
+</blockquote><h5 id="examples-94">Examples:</h5><blockquote>
+<p>WebViewControl(w, "L_WEB", "options</p>
+</blockquote><p>openLinksInExternalBrowser='true'")</p><blockquote>
+<p>WebViewControl(w, "L_WEB", "options</p>
+</blockquote><p>openLinksInExternalBrowser='false'")</p><blockquote>
+<p>WebViewControl(w, "L_WEB", "options wantURLCallback='true'")</p>
+<p>WebViewControl(w, "L_WEB", "options wantURLCallback='false'")</p>
+<p>WebViewControl(w, "L_WEB", "options allowBackForward='true'") //
+Mac</p>
+<p>WebViewControl(w, "L_WEB", "options allowBackForward='false'")</p>
+<p>WebViewControl(w, "L_WEB", "options reportErrors='true'") // Win</p>
+<p>WebViewControl(w, "L_WEB", "options reportErrors='false'")</p>
+<p>The openLinksInExternalBrowser setting determines whether opening a
+link will open it in the webview control itself or in an external
+browser. Note that on Windows, this also controls whether iframes open
+inline or externally. If you are displaying a web page that contains
+iframes on Windows, you will need to set the option to false at least
+until the page has been loaded. You may then set the option to true.
+Even better, avoid content with iframes on Windows.</p>
+<p><strong>Availability:</strong> available within MWScript handlers in
+MoneyWorks 8 and later.</p>
+<p>Call this function from the After handler of your record editing
+window to save changes to the data.</p>
+</blockquote><h5 id="updating-usernum-and-usertext-and-tagged-fields-on-other-tables">Updating
+UserNum and UserText and tagged fields on other tables</h5><blockquote>
+<p>An alternative use of this function is in a Validate (or ItemHit)
+handler for a standard entry window. In this case the only fields to be
+updated will be UserNum and UserText. You must call the function before
+MoneyWorks writes the record (the After handler would be too late in
+this case). Calling this function will mark the window as changed and
+force MoneyWorks to save the record in the standard After phase. (Note,
+however, that the Validate handler will only be called if the user
+changed a value in the window).</p>
+<p><strong>Availability:</strong> available within MWScript
+handlers.</p>
+</blockquote><h5 id="see-also-147">See Also:</h5><blockquote>
+<p><a href="#_bookmark1388">GetWindowProperty</a>: Retrieve data
+previously stored for a windowHandle <a href="#_bookmark1418">ReadCurrentRecordForWindow</a>: Load a record in
+custom UI, or tagged fields</p>
+<p>in standard UI</p>
+<p><a href="#setwindowproperty-windowref-propertyname-value">SetWindowProperty</a>:
+Store data related to a window</p>
+<p>The</p>
+<p>wantURLCallback</p>
+</blockquote><h5 id="see-also-148">See Also:</h5><blockquote>
+<p>option requires v8.1</p>
+</blockquote><h3 id="writetotempfile-text-filename"><br>
+WriteToTempFile (text [, filename])</h3><h3 id="section-101"></h3><blockquote>
+<p><a href="section-64.html#loadhtmlinwebview-windowref-itemid-html">LoadHTMLInWebView</a>:
+Load HTML into a custom web view control <a href="#_bookmark1404">LoadURLInWebView</a>: Load a URL into a custom web
+view control</p>
+</blockquote><h3 id="writecurrentrecordforwindow-windowref-fieldarray">WriteCurrentRecordForWindow
+(windowRef, fieldArray)</h3><blockquote>
+<p><strong>Result type:</strong> none</p>
+<p><strong>Definition:</strong> This function is normally used in the
+handler of a custom</p>
+<p>After</p>
+<p><strong>Result type:</strong> string (a filesystem path)</p>
+<p><strong>Definition:</strong> Creates a new text file in the temp
+directory and writes the given text to it. Return value is the path to
+the temp file (filename is automatically generated).</p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v7.1.5 and later</p>
+<p>record editing window, operating on User, User2, OffLedger or Lists.
+The window will have been instantiated automatically via the second
+parameter of CreateListWindow in response to a New or Modify
+command.</p>
+</blockquote><p>In MoneyWorks 9 and later, you may supply an optional second
+parameter to specify the name to use. If you do this, the file will be
+written in the MoneyWorks Automation folder (or the first available safe
+location specified in the app preferences) instead of the system temp
+directory. Additionally, you can prefix the specified name with "TMP/"
+or "CACHE/" to put the file in the temp directory with the given name,
+or in the cache directory.</p><p>Note: On macOS Catalina and later, files written to the system temp
+directory may not be accessible by other processes, so the cache
+directory is recommended if you are passing the path to another process
+for further action.</p><blockquote>
+<p>The function writes the current record in the selection associated
+with the</p>
+<p>window (or creates a new record, as appropriate). is an
+associative</p>
+<p>FieldArray</p>
+<p>array containing the value of every field in the record (the keys of
+the array are the field names). Usually, you will pass back a modified
+version of the array you got from <a href="#_bookmark1418">ReadCurrentRecordForWindow</a>.</p>
+</blockquote><h5 id="see-also-149">See Also:</h5><blockquote>
+<p><a href="#_bookmark1316">AddSafePath</a>: UI to add a safe path to
+the preferences <a href="#_bookmark1334">CreateFolder</a>: Create a new
+folder</p>
+<p><a href="section-63.html#file_close-filehandle">File_Close</a>: File functions for
+creating/reading/writing text files <a href="#_bookmark1355">File_GetLength</a>: File length in bytes</p>
+<p><a href="section-63.html#file_getmark-filehandle">File_GetMark</a>: Get current
+read/write position</p>
+<p>as each element is encountered, your startElement and endElement
+handlers will be called. You specify the names of your handlers using
+the <a href="#xml_setelementhandler-expatparserhandle-starthandlername-endhandlername">XML_SetElementHandler</a>
+and <a href="#xml_setcharacterdatahandler-expatparserhandle-handlername">XML_SetCharacterDataHandler</a>
+functions. Your charData handler will be called with any character data
+contained within element start and end Tags.</p>
+<p><a href="section-63.html#file_move-srcpath-destpath">File_Move</a>: Rename/move a
+file</p>
+<p>You may call</p>
+<p>multiple times with segments of the XML that you wish</p>
+<p><a href="#_bookmark1358">File_Open</a>: Open a file to parse. If
+supplying the complete XML text ir when calling with the final</p>
+<p>XML_Parse</p>
+<p>true</p>
+<p><a href="#_bookmark1360">File_Path</a>: Get the full path of an open
+file</p>
+<p>segment of XML, pass</p>
+<p>for the boolIsFinal parameter, otherwise pass false if</p>
+<p><a href="section-63.html#file_read-filehandle-optionalcount">File_Read</a>: Read
+text from current position <a href="#_bookmark1361">File_ReadLine</a>:
+Read to end of line from current position <a href="section-63.html#file_setmark-filehandle-offset">File_SetMark</a>: Set Current
+read/write position <a href="section-63.html#file_write-filehandle-string">File_Write</a>: Write text at
+current position</p>
+</blockquote><h3 id="xml_free-expatparserhandle">XML_Free (expatParserHandle)</h3><blockquote>
+<p><strong>Result type:</strong> none</p>
+<p><strong>Definition:</strong> Frees an Expat parser object that was
+created with <a href="#_bookmark1452">XML_ParserCreate</a></p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1 and later</p>
+<p><span id="_bookmark1452" class="anchor"></span><strong>Suite:</strong> This function is part of
+the Expat XML parsing suite of functions.</p>
+</blockquote><h5 id="see-also-150">See Also:</h5><blockquote>
+<p><a href="#xml_parse-expatparserhandle-xmltext-boolisfinal">XML_Parse</a>:
+Parse an XML string using an Expat parser <a href="#_bookmark1452">XML_ParserCreate</a>: Create an Expat parser for
+parsing XML</p>
+<p><a href="#xml_setcharacterdatahandler-expatparserhandle-handlername">XML_SetCharacterDataHandler</a>:
+Set a character data Handler (callback) for an Expat parser</p>
+<p><a href="#xml_setelementhandler-expatparserhandle-starthandlername-endhandlername">XML_SetElementHandler</a>:
+Set an element Handler (callback) for an Expat parser</p>
+</blockquote><h3 id="xml_parse-expatparserhandle-xmltext-boolisfinal">XML_Parse
+(expatParserHandle, xmlText, boolIsFinal)</h3><blockquote>
+<p><strong>Result type:</strong> number (0 on error)</p>
+<p><strong>Definition:</strong> Parses the XML in the string ``xmlText`.
+The Expat parser is a non- validating, 'event-based' parser. Event-based
+means it focuses on xml content, not on structure. XML data is analysed
+as a series of elements, and</p>
+<p>there will be more XML data to come.</p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1 and later</p>
+<p><strong>Suite:</strong> This function is part of the Expat XML
+parsing suite of functions.</p>
+</blockquote><h5 id="see-also-151">See Also:</h5><blockquote>
+<p><a href="#xml_free-expatparserhandle">XML_Free</a>: Release an Expat
+parser</p>
+<p><a href="#_bookmark1452">XML_ParserCreate</a>: Create an Expat parser
+for parsing XML <a href="#xml_setcharacterdatahandler-expatparserhandle-handlername">XML_SetCharacterDataHandler</a>:
+Set a character data Handler (callback) for</p>
+<p>an Expat parser</p>
+<p><a href="#xml_setelementhandler-expatparserhandle-starthandlername-endhandlername">XML_SetElementHandler</a>:
+Set an element Handler (callback) for an Expat parser</p>
+</blockquote><h3 id="xml_parsercreate">XML_ParserCreate ()</h3><blockquote>
+<p><strong>Result type:</strong> An Expat parser handle.</p>
+<p><strong>Definition:</strong> Creates a new Expat parser object</p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1 and later</p>
+<p><strong>Suite:</strong> This function is part of the Expat XML
+parsing suite of functions.</p>
+</blockquote><h5 id="see-also-152">See Also:</h5><blockquote>
+<p><a href="#xml_free-expatparserhandle">XML_Free</a>: Release an Expat
+parser</p>
+<p><a href="#xml_parse-expatparserhandle-xmltext-boolisfinal">XML_Parse</a>:
+Parse an XML string using an Expat parser <a href="#xml_setcharacterdatahandler-expatparserhandle-handlername">XML_SetCharacterDataHandler</a>:
+Set a character data Handler (callback) for</p>
+<p>an Expat parser</p>
+<p><a href="#xml_setelementhandler-expatparserhandle-starthandlername-endhandlername">XML_SetElementHandler</a>:
+Set an element Handler (callback) for an Expat parser</p>
+</blockquote><h3 id="xml_setelementhandler-expatparserhandle-starthandlername-endhandlername">XML_SetElementHandler
+(expatParserHandle, startHandlerName, endHandlerName)</h3><blockquote>
+<p><strong>Definition:</strong> Specify handlers to be called when the
+parser encounters start and end tags for elements.</p>
+<p>Your start handler should be written as on MyStartHandler(tagName,
+attrs) . will be the element name and attrs will be an associative
+array</p>
+<p>tagName</p>
+<p><span id="_bookmark1455" class="anchor"></span>containing any
+attributes for the element. You end handler should be decalred</p>
+</blockquote><p>as on MyEndHandler(tagName) .</p><blockquote>
+<p>Create an expatParserHandle using <a href="#_bookmark1452">XML_ParserCreate</a>.</p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1 and later</p>
+<p><strong>Suite:</strong> This function is part of the Expat XML
+parsing suite of functions.</p>
+</blockquote><h5 id="see-also-153">See Also:</h5><blockquote>
+<p><a href="#xml_free-expatparserhandle">XML_Free</a>: Release an Expat
+parser</p>
+<p><a href="#xml_parse-expatparserhandle-xmltext-boolisfinal">XML_Parse</a>:
+Parse an XML string using an Expat parser <a href="#_bookmark1452">XML_ParserCreate</a>: Create an Expat parser for
+parsing XML</p>
+<p><a href="#xml_setcharacterdatahandler-expatparserhandle-handlername">XML_SetCharacterDataHandler</a>:
+Set a character data Handler (callback) for an Expat parser</p>
+</blockquote><h3 id="xml_setcharacterdatahandler-expatparserhandle-handlername">XML_SetCharacterDataHandler
+(expatParserHandle, handlerName)</h3><blockquote>
+<p><span id="_bookmark1457" class="anchor"></span><strong>Definition:</strong> Specify a handler to
+be called when the parser encounters character data in the XML.</p>
+<p>Your character data handler should be written as on
+MyCharHandler(data) . You</p>
+<p>data</p>
+<p><strong>Suite:</strong> This function is part of the Expat XML
+parsing suite of functions.</p>
+</blockquote><h5 id="see-also-154">See Also:</h5><blockquote>
+<p><a href="#xml_free-expatparserhandle">XML_Free</a>: Release an Expat
+parser</p>
+<p><a href="#xml_parse-expatparserhandle-xmltext-boolisfinal">XML_Parse</a>:
+Parse an XML string using an Expat parser <a href="#_bookmark1452">XML_ParserCreate</a>: Create an Expat parser for
+parsing XML <a href="#xml_setelementhandler-expatparserhandle-starthandlername-endhandlername">XML_SetElementHandler</a>:
+Set an element Handler (callback) for an Expat</p>
+<p>parser</p>
+</blockquote><h3 id="xmlfree-libxmldocorxpathnodehandle">XMLFree
+(libXMLDocOrXpathNodeHandle)</h3><blockquote>
+<p><strong>Result type:</strong> none</p>
+<p><strong>Definition:</strong> Frees an XML document that was created
+with <a href="#_bookmark1457">XMLParseFile</a> or <a href="section-66.html#xmlparsestring-xmlstring-nslist">XMLParseString</a> or an XPath
+node or nodeset handle that was returned by <a href="section-66.html#xpatheval-xmldocumenthandleorxpathnodehandle-xpathstring-index">XPathEval</a></p>
+<p><strong>Availability:</strong> MWScript scripts in MoneyWorks Gold
+v8.1.1 and later</p>
+<p><strong>Suite:</strong> This function is part of the LibXML/Xpath XML
+parsing suite of functions.</p>
+</blockquote><h5 id="see-also-155">See Also:</h5><div class="navigation"><hr><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p></div></body></html>

@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BankRecs",
+  "description": "BankRecs table schema (file_num: 19) - Bank reconciliations",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number (indexed)"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "Account": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Account code"
+    },
+    "Opening": {
+      "type": "number",
+      "description": "Opening balance"
+    },
+    "Closing": {
+      "type": "number",
+      "description": "Closing balance"
+    },
+    "Statement": {
+      "type": "integer",
+      "description": "Statement number"
+    },
+    "Date": {
+      "type": "string",
+      "format": "date",
+      "description": "Reconciliation date"
+    },
+    "ReconciledTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Reconciled timestamp"
+    },
+    "Discrepancy": {
+      "type": "number",
+      "description": "Discrepancy amount"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "Account",
+    "Date"
+  ]
+}

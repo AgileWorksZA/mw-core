@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lists",
+  "description": "Lists table schema (file_num: 28) - Custom lookup lists",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "ListID": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "List identifier (indexed)"
+    },
+    "Item": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "List item (indexed)"
+    },
+    "Comment": {
+      "type": "string",
+      "maxLength": 68,
+      "description": "Item comment"
+    },
+    "UserNum": {
+      "type": "number",
+      "description": "User number (mutable: freely, script-only)"
+    },
+    "UserText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User text (mutable: freely, script-only)"
+    },
+    "TaggedText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Tagged text (mutable: freely, script-only)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "ListID",
+    "Item"
+  ]
+}

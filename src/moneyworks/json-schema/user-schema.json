@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User",
+  "description": "User table schema (file_num: 24) - Custom user data",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "Key": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Key (indexed)"
+    },
+    "Data": {
+      "type": "string",
+      "maxLength": 246,
+      "description": "Data (mutable: freely, script-only)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "Key"
+  ]
+}

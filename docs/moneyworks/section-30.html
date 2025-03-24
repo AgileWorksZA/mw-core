@@ -1,0 +1,889 @@
+<!DOCTYPE html><html><head></head><body><div class="navigation"><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p><hr></div><h2 id="fiji-vat-monitoring-system"><u>Fiji VAT Monitoring System</u>
+</h2><blockquote>
+<p><span id="_bookmark651" class="anchor"></span>The <em>VAT Monitoring
+System (VMS)</em> is an initiative by the Government of Fiji that
+requires organisations to calculate the VAT on sales transactions
+correctly by submitting sales to a central electronic system. This
+process is called "Fiscalisation".</p>
+<p>There are two ways that VMS can be implemented:</p>
+<p><strong>V-SDC:</strong> Which sends each sales transaction over the
+internet to a central system;</p>
+<p><strong>E-SDC:</strong> Which sends each transaction to a local
+device so doesn't require a live internet connection. The device can be
+a network device, or plug into a computer's serial port.</p>
+<p>MoneyWorks supports both V-SDC and the networked version of
+E-SDC.</p>
+<p>As of MoneyWorks 8.2, VMS will be automatically loaded for Fijian
+users of MoneyWorks, but not enabled (the latter can only be done when
+you have done the necessary setup). VMS is not available to users
+outside of Fiji.</p>
+<p>Before you can configure MoneyWorks for VMS, you need to arrange with
+FRCS which type you will be using (possibly both), and get and install
+the necessary security certificates for V-SDC, or hardware for E-SDC.
+Note that any supplied security certificates will need to be installed
+on each machine that is running MoneyWorks.</p>
+<p>Having got these preliminaries sorted, you will be ready to set up
+VMS in MoneyWorks.</p>
+</blockquote><h3 id="vms-settings">VMS settings</h3><blockquote>
+<p>To configure VMS in MoneyWorks:</p>
+</blockquote><h5 id="choose-commandfiji-vms-settings">Choose Command&gt;Fiji VMS
+settings</h5><blockquote>
+<p>The VMS Settings window will open:</p>
+<p><img src="images/media/image548.png" style="width:4.63333in;height:3.74667in"></p>
+</blockquote><h5 id="map-your-internal-moneyworks-tax-codes-to-the-vms-standard-codes">Map
+your internal MoneyWorks Tax Codes to the VMS standard codes</h5><blockquote>
+<p>The Tax Code Mappings list displays the VAT codes used in your
+MoneyWorks file. VMS requires standardised codes, which are displayed in
+the list underneath. You need to enter the corresponding VMS code for
+each of your codes (this is done in the right hand column). For example
+the tax code "Z" is used in MoneyWorks for zero rated exports, and the
+corresponding VMS code is "B". You can enter more than one VMS code per
+MoneyWorks tax code, provided they are separated by commas and there are
+no spaces.</p>
+</blockquote><h5 id="if-you-are-using-v-sdc-click-on-the-v-sdc-option-and-enter">If
+you are using V-SDC, click on the V-SDC option and enter:</h5><blockquote>
+<p><strong>Security Certificate Name:</strong> The certificate (along
+with instructions on how to install it) is supplied by FRCS.</p>
+<p><strong>PAC:</strong> A code supplied by FRCS.</p>
+</blockquote><h5 id="if-you-are-using-e-sdc-click-the-e-sdc-option-and-enter"><br>
+If you are using E-SDC, click the E-SDC option and enter:</h5><blockquote>
+<p><strong>IP Address</strong> of E-SDC device on your local network
+(e.g. 192.168.1.30);</p>
+<p><strong>Port Number</strong> of E-SDC device (default is 8888)</p>
+<p><strong>Email address</strong> of administrator (optional). Whenever
+MoneyWorks detects that an E-SDC audit is required an email will be
+prepared to this address.</p>
+<p>Depending on your email settings in MoneyWorks Preferences, this will
+either open in your email client, or (if using SMTP) be sent
+silently.</p>
+</blockquote><h5 id="click-the-e-sdc-status-button-to-display-a-summary-of-the-current-status-of-the-e-sdc-device.-this-will-also-trigger-an-email-if-the-email-address-is-present-and-an-audit-is-required-card-more-than-75-full">Click
+the <em>E-SDC Status</em> button to display a summary of the current
+status of the E-SDC device. This will also trigger an email if the email
+address is present and an audit is required (card more than 75%
+full)</h5><ol start="6" type="1">
+<li><p><strong>If you are using both V-SDC and E-SDC, leave the radio
+button set to your preferred default</strong></p></li>
+</ol><blockquote>
+<p>If you need to change methods later, just change the radio button
+setting.</p>
+<p>Other options:</p>
+<p><strong>Show Tax Code Column on Invoice:</strong> This will display
+the VMS tax code (A, B etc) in a separate column on the supplied VMS
+compliant tax invoice form.</p>
+<p><strong>Show SDC Invoice as Barcode:</strong> The SDC Invoice number
+is a special code returned by VMS which is required to printed on each
+invoice. If this option is set, it will also also print as a barcode so
+can be easily scanned in (if issuing a refund, you need to reference
+this number).</p>
+<p><strong>Training Mode:</strong> Puts the MoneyWorks VMS system into a
+special training mode.</p>
+<p>Invoices submitted to VMS will be marked as "Training" (i.e. not
+real). As these are real posted transactions in MoneyWorks, it is
+important that you reverse these out before the training session is
+complete (you don't want to do it after, as VMS will treat the reversals
+as real transactions).</p>
+<p><strong>Allow VMS Override:</strong> Allows users to bypass VMS
+processing on selected transactions. You would only enable this if you
+are entering transactions from another system, such as a stand alone
+POS, which has already fiscalised the transaction. Transactions that are
+bypassed will be marked as such (with the user initials) for audit
+purposes. Note that the setting and</p>
+<p>resetting of this option will be recorded immutably in MoneyWorks for
+audit purposes.</p>
+<p><strong>Enable VMS:</strong> This turns the VMS system on permanently
+(it cannot be turned off again, but you will get a couple of warnings
+about this). <strong>Do not turn this on until you are ready with
+VMS.</strong></p>
+</blockquote><h3 id="changes-in-moneyworks-operations">Changes in MoneyWorks
+Operations</h3><blockquote>
+<p>The following are the main changes in MoneyWorks operations imposed
+by VMS.</p>
+</blockquote><h4 id="the-vat-column-must-be-displayed-on-item-sales">The VAT column
+must be displayed on item sales</h4><blockquote>
+<p>This is so that MoneyWorks can modify the VAT if it needs to be
+altered by the VMS system. To show the VAT column, choose
+Edit&gt;Document Preferences and turn on the <em>Show Tax Column</em>
+option. When VMS is enabled you will not be able to turn this off.</p>
+<p><img src="images/media/image549.jpeg" style="width:3.04167in;height:3.57292in"></p>
+</blockquote><h4 id="cashier-tins-are-required">Cashier TINs are required</h4><blockquote>
+<p>VMS requires the TIN of the cashier who made the transaction. For
+each login you will need to make a corresponding name record (this can
+be of type <em>Other</em>) with the same code as the cashier's initials
+and their TIN in the <em>VAT Reg No</em> field.</p>
+<p>Thus if Annabell has login initials "AA", her corresponding name
+record would be:</p>
+<p><img src="images/media/image550.jpeg" style="width:4.74375in;height:2.56594in"> <img src="images/media/image551.png" style="width:4.6225in;height:2.30229in"></p>
+</blockquote><h4 id="posting-a-sales-invoice-or-sales-receipts">Posting a Sales
+Invoice or Sales receipts</h4><blockquote>
+<p>You can only post a Sales Invoice or Sales Receipt from an open
+transaction window (by clicking the Post icon, then OK or Next). You can
+no longer batch post from the transaction list if the batch contains a
+sales invoice or receipt. Posting a batch of transactions that does not
+contain a sales transaction is not affected.</p>
+<p>When a sales transaction is posted in this way there will be a</p>
+</blockquote><p><img src="images/media/image552.png" style="width:0.95906in;height:0.48125in"></p><blockquote>
+<p>Use the <em>Post</em> icon in the transaction window to post <u>sales
+transactions.</u></p>
+<p>This is a standard MoneyWorks feature to alert you to possible
+inadvertent changes in the VAT amount. To avoid the warning re-appearing
+in the current session, click <em>Just Beep</em>.</p>
+</blockquote><h4 id="sales-transactions-cannot-have-mixed-signs">Sales transactions
+cannot have mixed signs</h4><blockquote>
+<p>Each line on a sales transaction must have the same sign (i.e. all
+lines are either positive, for a sale, or negative, for a refund/credit
+note). If you attempt to post a sales transaction with mixed signs the
+following will be displayed:</p>
+<p>slight delay while its details are sent to VMS and its VAT is
+recalculated if necessary based on the gross value of each line. Note
+that if the VAT is different this will be replaced in the open
+transaction, and you will get the following warning:</p>
+<p><img src="images/media/image553.jpeg" style="width:4.47917in;height:2.51042in"></p>
+</blockquote><h4 id="refunds-and-credit-notes-need-to-be-fiscalised">Refunds and
+Credit Notes need to be fiscalised</h4><blockquote>
+<p>When you fiscalise a refund (a negative Receipt) or a credit note (a
+negative Sales Invoice) you are required to tie it back to the original
+transaction. A list of previous fiscalised transactions for that
+customer will be displayed:</p>
+<p><img src="images/media/image554.png" style="width:4.62729in;height:5.29541in">Double click the original
+from the list, or key/scan in the Invoice-ID printed on the original. If
+the original predates fiscalisation, leave the field blank. If you
+submit an unrecognised Invoice-ID the request will be rejected by VMS
+with the following message:</p>
+<p><img src="images/media/image555.png" style="width:4.6225in;height:2.30229in"></p>
+</blockquote><h4 id="moneyworks-deposit-feature-is-not-available">MoneyWorks deposit
+feature is not available</h4><blockquote>
+<p>You can no longer receive a deposit as part of processing a sales
+order (using <em>Deposit on Order</em>) or invoice (setting the
+<em>Deposit</em> checkbox). This is in part because the Deposit
+transaction itself needs to be fiscalised, but also deposits on orders
+will generate a negative line, which is no longer permissable.</p>
+<p>Attempting to use the deposit feature will result in an alert:</p>
+</blockquote><p><img src="images/media/image556.png" style="width:4.6225in;height:2.29333in"></p><blockquote>
+<p><strong>Receiving Deposits on Orders:</strong> To lodge a deposit on
+a sales order you will need to create a separate receipt for the
+customer for the deposit amount and an associated credit note as
+described below. Unfortunately these cannot be linked to the original
+order (but you could put a sticky note on the order to remind you).</p>
+</blockquote><ol type="1">
+<li><p><strong>Raise a separate invoice for the customer for the deposit
+(it will presumably be coded to some Deposits in Advance liability
+account). FRCS recommend that you label this something along the lines
+of "40% of an Item".</strong></p></li>
+<li><p><strong>Post the invoice (which will fiscalise
+it)</strong></p></li>
+<li><p><strong>Receipt the deposit amount against the
+invoice</strong></p></li>
+<li><p><strong>Duplicate the invoice using the <em>Duplicate</em>
+toolbar button, then reverse it using <em>Reverse</em> toolbar
+button.</strong></p></li>
+<li><p><strong>Post the invoice, which will fiscalise it. As the invoice
+is a "refund", you will need to identify the original transaction (see
+Refunds and Credit Notes), so choose it from the list of candidates
+displayed.</strong></p></li>
+</ol><blockquote>
+<p>This has the effect of leaving the customer with a credit, which can
+be contra-ed off their final invoice payment.</p>
+</blockquote><ol start="6" type="1">
+<li></li>
+</ol><blockquote>
+<p><strong>Receiving Deposits on Invoices:</strong> For posted sales
+invoices, you can just do a normal receipt against the invoice. If the
+invoice is not posted you need to follow the steps for Deposits on
+Orders above.</p>
+</blockquote><h4 id="cancellations-on-sales-transactions-are-not-permitted">Cancellations
+on sales transactions are not permitted</h4><blockquote>
+<p>Just when you think it couldn't get worse, you can no longer use the
+Cancel command to cancel a posted sales transaction because the
+cancelling transaction itself has to be fiscalised (you can still use it
+to cancel a receipt against invoice).</p>
+<p>Instead of Cancel, use the Duplicate command to duplicate the
+original posted (and hence fiscalised) transaction, click the Reverse
+toolbar icon, then post the transaction, which will cause it to be
+fiscalised as a refund transaction. Then</p>
+<p>contra this negative invoice against the original.</p>
+</blockquote><h4 id="unposted-sales-transactions-will-be-treated-as-pro-forma">Unposted
+sales transactions will be treated as "Pro Forma"</h4><blockquote>
+<p>You can fiscalise an unposted sales transaction (i.e. a sales order,
+or unposted invoice/receipt) if needed. To do this open the transaction
+and click the <em>VMS ProForma</em> toolbar icon. The details will be
+sent to the VMS system and the VAT on the transaction adjusted if
+necessary.</p>
+</blockquote><p><img src="images/media/image557.jpeg" style="width:4.77833in;height:1.35125in"></p><blockquote>
+<p>When a transaction has been fiscalised, the Invoice-ID returned by
+VMS is displayed on the transaction, as shown above.</p>
+</blockquote><h4 id="no-rollback">No Rollback</h4><blockquote>
+<p>Rolling back you file is no longer permitted. This is because it may
+contains fiscalised transactions, and it is not apparent what the
+consequences would be if you re-fiscalised them.</p>
+</blockquote><h3 id="using-e-sdc">Using E-SDC</h3><blockquote>
+<p>E-SDC differs from V-SDC in that the fiscalisation is done on a
+device located on your premises, and not over the internet to central
+server. Whenever you start MoneyWorks and fiscalise a transaction, you
+will need to enter the E-SDC devices PIN number:</p>
+<p><img src="images/media/image558.png" style="width:4.59833in;height:2.50312in"></p>
+<p>MoneyWorks will also check the device's status at this point and if
+there are potential issues will display a warning:</p>
+</blockquote><p><img src="images/media/image559.png" style="width:4.6225in;height:2.29333in"></p><blockquote>
+<p>If an audit is required and there is a valid email address in the
+E-SDC settings, and warning email will be prepared.</p>
+</blockquote><h3 id="bypassing-vms">Bypassing VMS</h3><blockquote>
+<p>If the <em>Allow VMS Override</em> VMS Setting is on, it is possible
+to bypass VMS processing for selected transactions. Only users with the
+"User Privilege 3" privilege turned on will be able to do this.</p>
+<p><strong>Important:</strong> You should only do this if you need to
+enter transactions that have already been fiscalised in a different
+system, such as a stand alone POS. Such transactions when printed will
+show as <strong>This is not a fiscal receipt</strong>.</p>
+<p><span id="_bookmark655" class="anchor"></span>To bypass a
+transaction:</p>
+</blockquote><h5 id="click-the-no-vms-check-box-in-the-top-right-of-the-transaction-screen">Click
+the <em>No VMS</em> check box in the top right of the transaction
+screen</h5><blockquote>
+<p>You might need to widen the transaction slightly if this is not
+visible the first time you try to use it.</p>
+</blockquote><p><img src="images/media/image560.jpeg" style="width:1.21875in;height:1.375in"></p><blockquote>
+<p>A warning will be displayed.</p>
+</blockquote><p><img src="images/media/image561.png" style="width:2.72917in;height:0.71875in"></p><h5 id="turn-on-the-post-icon-and-then-click-ok">Turn on the
+<em>Post</em> icon and then click <em>OK</em></h5><blockquote>
+<p>The transaction will be posted without sending through the VMS
+system.</p>
+<p>When the transaction is re-opened it will display the following,
+instead of the Invoice ID.</p>
+</blockquote><p><img src="images/media/image562.png" style="width:1.44792in;height:0.29167in"></p><blockquote>
+<p>Note that you cannot set the <em>No VMS</em> override and save the
+transaction for later posting. You must set the override and immediately
+post the transaction.</p>
+</blockquote><h3 id="printing-fiscal-invoices">Printing Fiscal invoices</h3><blockquote>
+<p>VMS requires that certain information be included on a printed sales
+docket/ invoice. Two invoice layouts are provided (these need to be
+installed into MoneyWorks Custom Plug-ins/Forms folder, and if using
+Datacentre uploaded to the server).</p>
+<p><strong>VMS Fiji Invoice:</strong> This will print both invoices that
+either "By Item" or "By Account", and is based on the existing forms in
+MoneyWorks.</p>
+<p><strong>VMS Text Invoice:</strong> This will print the "journal"
+received from the VMS system, part of which is shown below:</p>
+<p><img src="images/media/image563.png" style="width:3.71875in;height:4.58333in"></p>
+<p><span id="_bookmark656" class="anchor"></span>Also provided is a form
+"VMS Invoice Elements". This contains the necessary elements, such as
+the QR code, that need to be added to any customised forms you might
+have. You can copy and paste the elements from this form onto your
+custom form using the MoneyWorks Forms Designer. Note that you might
+have to get your resultant form approved as being compliant by FRCS.</p>
+</blockquote><h2 id="sales-tax-and-pst"><u>Sales Tax and PST</u> </h2><blockquote>
+<p>Sales tax is a consumer tax that is charged at the end of the supply
+chain. It is used in many US states, and also in some Canadian
+provinces.</p>
+<p>If you are collecting Sales Tax, you will need to add the tax to any
+sales you make (except where the customer is exempt from sales tax).
+Although purchases may have sales tax added to them, you will not be
+able to reclaim these (instead the sales tax portion needs to be
+included into the purchase price, which MoneyWorks can do automatically
+for you).</p>
+<p>When you first set up MoneyWorks, you therefore need to make sure
+that the tax rates in the tax table — see <em><a href="#refunds-and-sales-tax">Tax Codes</a></em> are set up for your
+location.</p>
+<p>MoneyWorks comes pre-loaded with the sales tax rates for PST in
+Canada, but not for the myriad of possibilities in the US.</p>
+<p>Sales tax on a transaction line is determined by the tax code on the
+line, and this in turn is normally determined by the settings in the
+general ledger (although this can be overridden for specific customers
+and suppliers). Thus your <em>sales</em> general ledger codes will
+normally all have a tax code on them to make them taxable — see <a href="#_bookmark116"><em>Tax Code</em></a>.</p>
+<p>Although you pay sales tax on purchases, you have to include it in
+the cost of the item. In MoneyWorks, if there is a sales tax on a
+purchase/expense transaction, the sales tax portion will automatically
+be allocated to the general ledger code used on the line. It is
+therefore possible to have a sales tax code on purchase/ expense codes,
+which can dramatically streamline the entry of these transactions
+(because each line of the source docket is normally recorded net of tax,
+with the total tax given at the bottom).</p>
+</blockquote><h3 id="the-sales-tax-report">The Sales Tax Report</h3><blockquote>
+<p>The sales tax report is used to itemise and summarise your sales tax
+liability. You will run this at the end of each period for which you
+need to report on sales tax. To run the report:</p>
+</blockquote><h5 id="choose-reportssales-tax">Choose Reports&gt;Sales Tax</h5><blockquote>
+<p>The Sales Tax report settings will open</p>
+<p><img src="images/media/image564.png" style="width:4.63542in;height:4.3851in"></p>
+</blockquote><h5 id="set-the-mode-pop-up-to-sales">Set the Mode pop-up to Sales</h5><blockquote>
+<p>If Mode is set to Documentation, the report (when run) will produce a
+description of the output it would normally produce.</p>
+</blockquote><h5 id="set-the-from-and-to-pop-ups-to-the-periods-that-encompass-your-reporting-cycle">Set
+the From and To pop-ups to the periods that encompass your reporting
+cycle</h5><blockquote>
+<p>If you are reporting on just one period, these will be set to the
+same</p>
+<p><strong>Show Details:</strong> If this option is on, each transaction
+line will also be shown on the report. This will make the report longer,
+but it may be useful if you find that your sales tax figures don’t seem
+to make sense.</p>
+</blockquote><h5 id="click-the-preview-or-print-button-to-view-the-report"><br>
+Click the Preview (or Print) button to view the report</h5><blockquote>
+<p>The report will list every posted Sales transaction (i.e. debtor
+invoice, and receipts that are not paying invoices) in the nominated
+reporting period, along with its sales tax. The report will also list
+any sales transactions from prior periods that were posted in the
+reporting period, allowing prior period adjustments to be automatically
+included.</p>
+<p>At the end of the report, the total sales tax is broken down into its
+component parts (e.g. State and County).</p>
+<p><strong>Note:</strong> Transactions entered prior to MoneyWorks 5.2
+are shown in blue (the sales tax handling was different in older
+versions). The sales tax on these cannot be broken down into its
+component parts, so the total is listed at the end of the report.</p>
+</blockquote><p><img src="images/media/image565.png" style="width:4.70625in;height:1.6in"></p><blockquote>
+<p>Individual sales are listed at the top of the report, and the total
+sales taxes collected are summarised at the bottam (by tax code).</p>
+</blockquote><h4 id="sales-tax-report-and-purchases">Sales Tax Report and
+Purchases</h4><blockquote>
+<p>The Sales Tax report has a Purchases mode. If set to this, the report
+will look at purchase transactions (i.e. creditor invoice and direct
+payments) that were made in nominated time period using versions of
+MoneyWorks prior to 5.2.</p>
+<p>Sales tax on these transactions was not automatically “expensed”, and
+you needed to put through a journal at month end to adjust for this. The
+report will list the transactions, and the required journal.</p>
+</blockquote><h4 id="refunds-and-sales-tax">Refunds and Sales Tax</h4><blockquote>
+<p>Because the Sales Tax report only considers “Sales” transactions
+(i.e. Debtor Invoices and direct Receipts that bypass the Debtors
+system), it will not recognise refunds that you have put through as
+payments.</p>
+<p>Refunds in MoneyWorks should always be done by applying a <em><a href="section-23.html#return-refund-to-debtor">Return Refund to</a> <a href="section-23.html#return-refund-to-debtor">Debtor</a></em> on a previously raised
+credit note (i.e. negative debtor invoice). Apart from ensuring this
+will be picked up correctly for Sales tax purposes, it will also ensure
+that any associated inventoried items on the sale are returned to stock
+at <span id="_bookmark659" class="anchor"></span>the correct valuation<a href="#_bookmark672">9</a>. Refunds can also be achieved by using a
+negative Receipt (although counter-intuitive, this is a sales reversal,
+and the inventory and tax will be handled correctly).</p>
+</blockquote><h3 id="paying-your-sales-tax">Paying your Sales Tax</h3><blockquote>
+<p>Having determined your sales tax liability, you just need to pay
+it.</p>
+<p>This will be a payment coded to the appropriate Tax Received accounts
+(you can have different control accounts for different component taxes
+if you wish). So to pay the tax in the above report, my transaction
+would be something like:</p>
+</blockquote><h2 id="tax-codes"><br>
+<u>Tax Codes</u> </h2><blockquote>
+<p>MoneyWorks has a built-in table of tax codes and rates. These tax
+codes are associated with Accounts or Names, and the corresponding rate
+is used to calculate the GST or sales tax whenever a transaction is
+entered. You can modify the standard codes (except *) if you wish, or
+add new codes for special situations (e.g. special rates for rest homes,
+out of state sales, beverage and accommodation taxes etc). The default
+tax codes are:</p>
+<p><strong>Default Codes (most countries, not USA)</strong></p>
+</blockquote><table>
+<colgroup>
+<col style="width: 6%">
+<col style="width: 79%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr>
+<th>E</th>
+<th><blockquote>
+<p>GST/VAT exempt [not Australia]</p>
+</blockquote></th>
+<th style="text-align: right;">0%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Z</th>
+<td><blockquote>
+<p>Zero-rated items [not Australia].</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>A</th>
+<td><blockquote>
+<p>100% GST/VAT (for customs)</p>
+</blockquote></td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<th>V</th>
+<td><blockquote>
+<p>Standard VAT (UK, Eurozone, South Africa, Nepal, Fiji)</p>
+</blockquote></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<th>G</th>
+<td><blockquote>
+<p>Standard GST (Australia, New Zealand, Singapore, Canada)</p>
+</blockquote></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<th>*</th>
+<td><blockquote>
+<p>MoneyWorks System code for transactions "outside of tax system"</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+</tbody>
+</table><blockquote>
+<p><strong>Additional Canada GST Codes</strong></p>
+<p>H Standard HST (rate varies by province) P PST (rate varies by
+province)</p>
+<p>T GST + PST (rate varies)</p>
+<p>Q QST 9.975%</p>
+<p><strong>Default Australian Codes</strong></p>
+<p><img src="images/media/image566.png" style="width:4.74406in;height:2.85281in"></p>
+</blockquote><table>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 78%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr>
+<th>G</th>
+<th><blockquote>
+<p>Standard GST</p>
+</blockquote></th>
+<th style="text-align: right;">10%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>I</th>
+<td><blockquote>
+<p>Input taxed</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>C</th>
+<td><blockquote>
+<p>Capital acquisitions</p>
+</blockquote></td>
+<td style="text-align: right;">10%</td>
+</tr>
+<tr>
+<th>F</th>
+<td><blockquote>
+<p>GST-free</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>X</th>
+<td><blockquote>
+<p>Exports</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>W</th>
+<td><blockquote>
+<p>Salary and Wage Payments</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>P</th>
+<td><blockquote>
+<p>Amounts withheld from wages</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>U</th>
+<td><blockquote>
+<p>Amounts withheld where no ABN quoted</p>
+</blockquote></td>
+<td style="text-align: right;">48.5%</td>
+</tr>
+<tr>
+<th><strong>Additional UK Codes</strong></th>
+<td></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<th>VR</th>
+<td><blockquote>
+<p>Reduced VAT</p>
+</blockquote></td>
+<td style="text-align: right;">5%</td>
+</tr>
+<tr>
+<th>EU</th>
+<td><blockquote>
+<p>Sales/Purchases made in Northern Ireland from EU Member States</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th><p><strong>Default Singapore Codes</strong></p>
+<p><em>Note: Rates will increase to 8% on 1 Jan 2023 and 9% on 1 Jan
+2024</em></p></th>
+<td></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<th>G</th>
+<td><blockquote>
+<p>GST (SR/TX7)</p>
+</blockquote></td>
+<td style="text-align: right;">7%</td>
+</tr>
+<tr>
+<th>E</th>
+<td><blockquote>
+<p>Exempt (ES33/EP)</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>Z</th>
+<td><blockquote>
+<p>Zero Rated (ZR/ZP)</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>A</th>
+<td><blockquote>
+<p>GST on Imports (IM)</p>
+</blockquote></td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<th>IM</th>
+<td><blockquote>
+<p>Imported Goods</p>
+</blockquote></td>
+<td style="text-align: right;">7%</td>
+</tr>
+<tr>
+<th>ME</th>
+<td><blockquote>
+<p>Major Importes Scheme</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+</tbody>
+</table><blockquote>
+<p><img src="images/media/image567.png" style="width:4.79062in;height:3.13031in"></p>
+<p><strong>USA Sales Taxes</strong></p>
+</blockquote><table>
+<colgroup>
+<col style="width: 9%">
+<col style="width: 78%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr>
+<th>BL</th>
+<th><blockquote>
+<p>Not Claimable</p>
+</blockquote></th>
+<th style="text-align: right;">7%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>NR</th>
+<td><blockquote>
+<p>Non-registered</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>OP</th>
+<td><blockquote>
+<p>Purchases outside GST Scope</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>E33</th>
+<td><blockquote>
+<p>Reg 33 Exempt Purchases</p>
+</blockquote></td>
+<td style="text-align: right;">7%</td>
+</tr>
+<tr>
+<th>EN3</th>
+<td><blockquote>
+<p>Non Reg 33 Exempt Purchases</p>
+</blockquote></td>
+<td style="text-align: right;">7%</td>
+</tr>
+<tr>
+<th>RE</th>
+<td><blockquote>
+<p>Residual Input Tax</p>
+</blockquote></td>
+<td style="text-align: right;">7%</td>
+</tr>
+<tr>
+<th>ESN</th>
+<td><blockquote>
+<p>Non Reg 33 Exempt Sales</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>DS</th>
+<td><blockquote>
+<p>Deemed Supplies</p>
+</blockquote></td>
+<td style="text-align: right;">7%</td>
+</tr>
+<tr>
+<th>OS</th>
+<td><blockquote>
+<p>Sales Outside GST Scope</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>IGD</th>
+<td><blockquote>
+<p>Import Deferment(IGDS)</p>
+</blockquote></td>
+<td style="text-align: right;">7%</td>
+</tr>
+<tr>
+<th>RCM</th>
+<td><blockquote>
+<p>Reg 33 Exempt Sales Financial</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>GPG</th>
+<td><blockquote>
+<p>SRCA-S Customer accounting supply made by the supplier</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>CAA</th>
+<td><blockquote>
+<p>SRCA-C CA supply made by the customer on supplier's behalf</p>
+</blockquote></td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<th>CAG</th>
+<td><blockquote>
+<p>TXCA Std-rated purchase of prescribed gds subject to CA</p>
+</blockquote></td>
+<td style="text-align: right;">7%</td>
+</tr>
+<tr>
+<th>LVRC</th>
+<td><blockquote>
+<p>Claimable portion of low-value services subject to GST under reverse
+charge (Box 14)</p>
+</blockquote></td>
+<td style="text-align: right;">-</td>
+</tr>
+<tr>
+<th>LVRC-</th>
+<td><blockquote>
+<p>Non-claimable portion of low-value services subject to GST under
+reverse charge (Box 14)</p>
+</blockquote></td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<th>EMREM</th>
+<td><blockquote>
+<p>Remote services supplied by electronic marketplace operator (Box
+15)</p>
+</blockquote></td>
+<td style="text-align: right;">8%</td>
+</tr>
+<tr>
+<th>LVRED</th>
+<td><blockquote>
+<p>Imported low-value goods supplied (Box 16)</p>
+</blockquote></td>
+<td style="text-align: right;">8%</td>
+</tr>
+<tr>
+<th>LVOWN</th>
+<td><blockquote>
+<p>Own supply of imported low-value goods (Box 17)</p>
+</blockquote></td>
+<td style="text-align: right;">8%</td>
+</tr>
+</tbody>
+</table><blockquote>
+<p>STA State Tax</p>
+<p>CIT City Tax</p>
+<p>CTY County Tax</p>
+<p>USE Use Tax</p>
+<p>ZER Zero Tax</p>
+<p>EXE Exempt Tax</p>
+<p>TAX Combined Tax (STA+CTY+CIT)</p>
+<p><strong>Note:</strong> The "*" tax code is used for accounts that are
+outside the tax system (such as bank accounts). If you use it on other
+accounts you will not be able to override it when entering a transaction
+involving those accounts.</p>
+</blockquote><h4 id="to-see-the-tax-table">To see the tax table:</h4><h5 id="choose-showtax-rates-1">Choose Show&gt;Tax Rates</h5><blockquote>
+<p>The Tax Rates table will be displayed:</p>
+<p><strong>Note:</strong> You can only modify tax codes if you are the
+only user on the system. If there is more than one user, the
+<em>Modify</em> button will show as <em>View</em>.</p>
+</blockquote><p><strong>Note:</strong> As well as managing the taxes through the Tax
+Rate screen, you can also import taxes to create new ones or update
+existing rates (see <a href="#_bookmark1096">Importing Tax</a> <a href="#_bookmark1096">Rates</a>).</p><h4 id="adding-a-new-tax-code">Adding a New Tax Code</h4><h5 id="click-the-new-toolbar-button-or-press-ctrl-n-n-2">Click the
+<em>New</em> toolbar button or press Ctrl-N/⌘-N</h5><blockquote>
+<p>The Tax Code entry window will be displayed.</p>
+<p><img src="images/media/image568.png" style="width:4.77771in;height:3.40948in"></p>
+</blockquote><p><strong>Note:</strong> If you have multi-currency enabled in
+MoneyWorks Gold/Datacentre, an additional <em>Tax code is for different
+country</em> option is available. Turn this on only if you are setting
+up this code for a different country. See <a href="#_bookmark625">Paying
+GST/</a> <a href="#_bookmark625">VAT in Multiple Countries</a>for more
+information.</p><h5 id="type-the-code-that-will-identify-the-new-rate-into-the-code-field">Type
+the code that will identify the new rate into the <em>Code</em>
+field</h5><blockquote>
+<p>This can be up to five characters long, and must not be already in
+use.</p>
+</blockquote><h5 id="type-a-brief-description-of-the-rate-in-the-name-field">Type a
+brief description of the rate in the Name field</h5><ol start="4" type="1">
+<li><p><strong>Set the Tax Type</strong></p></li>
+</ol><blockquote>
+<p><span id="_bookmark662" class="anchor"><span id="_bookmark663" class="anchor"></span></span>A tax can be either <a href="#_bookmark609"><em>GST or VAT</em></a><a href="#_bookmark673">10</a>, a <a href="#sales-tax-and-pst"><em>Sales
+Tax</em></a>, a <em><a href="#type-a-brief-description-of-the-rate-in-the-name-field">Composite
+Tax</a></em> (a combination of other taxes), or a <em><a href="#enter-the-code-of-the-tax-to-include-in-the-code-field">Reversed
+Tax</a></em> (where the supplier is liable for the tax).</p>
+<p>New tax rates need to be associated with accounts specifically set up
+to deal with the tax. Unless you have set up additional GST/TAX accounts
+in your Chart of Accounts you will only have access to the two standard
+system accounts that MoneyWorks automatically sets up.</p>
+</blockquote><ol start="5" type="1">
+<li><p><strong>Enter the Tax control account codes for the accounts that
+handle incoming and (if required) outgoing Tax into the <em>Tax Paid
+Account</em> and <em>Tax Received Account</em> fields</strong></p></li>
+</ol><blockquote>
+<p>Simply tabbing through the fields will automatically insert the
+default codes. If more than one code is available, tabbing through the
+fields will display the Account Choices list.</p>
+</blockquote><h5 id="enter-the-tax-rate-into-the-rate-2-field">Enter the tax rate
+into the Rate 2 field</h5><blockquote>
+<p>Unless you know details of a change to the tax rate, leave the
+Changeover and Rate 1 fields as they are.</p>
+</blockquote><h4 id="if-the-rate-is-for-100-tax">If the rate is for 100% Tax</h4><blockquote>
+<p>You will normally never come across 100% Tax transactions unless you
+are an importer. In this case you may get a bill for Tax from
+Customs.</p>
+</blockquote><h5 id="set-the-all-gsttax-radio-button-if-this-rate-represents-100-gst">Set
+the <em>All GST/TAX</em> radio button if this rate represents 100%
+GST</h5><ol start="8" type="1">
+<li><p><strong>Click <em>OK</em> to accept these
+entries</strong></p></li>
+</ol><blockquote>
+<p>Clicking Cancel will put the dialog box away without storing any of
+the changes that you have made.</p>
+</blockquote><h4 id="composite-taxes">Composite Taxes</h4><blockquote>
+<p>The Composite Tax option allows you to specify a tax that is
+calculated from other predefined taxes<a href="section-31.html#enter-the-last-day-of-the-calendar-year-for-which-you-are-preparing-the-form-in-the-statement-date-field">11</a>.</p>
+</blockquote><ul>
+<li><p><img src="images/media/image569.png" style="width:3.32173in;height:2.41447in">If a tax is based on a
+GST/VAT tax, these must be the first taxes in the calculation. For
+example, GST + PST is allowed, but PST + GST is not;</p></li>
+<li><p>A maximum of two GST/VAT taxes can be used in a composite
+tax;</p></li>
+<li><p>Composite taxes cannot be modified once they have been used. You
+can change the rate of the components, but not the structure
+itself;</p></li>
+<li><p>Composite taxes are calculated strictly top-down. Thus:</p></li>
+</ul><p><img src="images/media/image570.png" style="width:4.47917in;height:0.70833in"></p><blockquote>
+<p>To include a tax in the calculation:</p>
+</blockquote><h5 id="click-the-new-icon">Click the New icon</h5><p>A new line will be added</p><h5 id="enter-the-code-of-the-tax-to-include-in-the-code-field">Enter
+the code of the tax to include in the Code field</h5><p><img src="images/media/image571.png" style="width:0.33333in;height:0.54167in"></p><blockquote>
+<p>Click the <em>New</em> icon <u>to add a new line</u></p>
+<p>is calculated as (G1 + G2) * CTY, and not as G1 + (G2 * CTY).</p>
+<p><strong>Note:</strong> MoneyWorks Express and MoneyWorks Gold let you
+create your own forms (invoices, statements etc). Special fields are
+available in your invoice design to isolate the GST and PST amounts:</p>
+</blockquote><ul>
+<li><p>For the GST content on a transaction line use
+detail.tax1amt</p></li>
+<li><p>For the balance of the tax content on a transaction line use
+detail.tax2amt</p></li>
+</ul><blockquote>
+<p>The name and rate will be displayed. Note that this must not be the
+code for another composite tax.</p>
+</blockquote><p><strong>Reversed Tax</strong></p><p>A <em>Reversed Tax</em> is where the purchase (or sale) of an item or
+service has no tax levied, but the recipient (or supplier) is required
+to assess and pay the tax.</p><p>Examples of this include:</p><ul>
+<li><p>Singapore: imported services subject to GST under Reverse
+Charge;</p></li>
+<li><p>USA: the <em>Use Tax</em>, where the purchaser calculates and
+pays the tax;</p></li>
+<li><p>UK: the Vat reverse charge.</p></li>
+</ul><p>When you use a reversed tax in MoneyWorks, the transaction will show
+with a tax rate of zero. The reverse tax amount is not stored, but needs
+to be calculated (normally in a report) by multiplying the net amount by
+the reverse tax rate. The latter can be determined using the <a href="section-59.html#gettaxrate-taxcode-date-breversed">GetTaxRate()</a> function.</p><h5 id="if-the-tax-is-multiplicative-i.e.-is-also-levied-on-the-previous-taxes-in-the-composite-tax-calculation-such-as-qst-in-quebec-or-pst-in-pei-set-the-mult-check-box">If
+the tax is multiplicative (i.e. is also levied on the previous taxes in
+the composite tax calculation, such as QST in Quebec, or PST in PEI),
+set the Mult check box</h5><blockquote>
+<p>If this is not set, the taxes will be simply added, i.e. each tax is
+calculated on the Net amount.</p>
+</blockquote><h5 id="to-delete-a-tax-from-the-calculation-click-the-trash-icon">To
+delete a tax from the calculation, click the Trash icon</h5><blockquote>
+<p>When a composite tax is used in a transaction, an additional (hidden)
+detail line is added for each component tax used (unless the tax is a
+Sales Tax and has been “expensed” as part of a purchase).</p>
+<p>There are some rules and restrictions for composite taxes:</p>
+</blockquote><h4 id="changing-a-tax-rate">Changing a Tax Rate</h4><blockquote>
+<p>MoneyWorks allows you to enter the details of a change to the Tax
+rates at any time and uses a specific change-over date to determine
+which rate to apply to particular transactions. Transactions dated
+before the changeover date will attract the Rate 1 rate, while those on
+or after that date will attract the Rate 2 rate.</p>
+<p>If the tax rates change, you will need to alter the tax rate
+table.</p>
+</blockquote><h5 id="choose-showtax-rates-2">Choose Show&gt;Tax Rates</h5><blockquote>
+<p>The Tax Rates dialog box opens.</p>
+</blockquote><ol start="2" type="1">
+<li><p><strong>As the current rate is stored in the Rate 2 field, you
+will need to move the current rate into the Rate 1
+field</strong></p></li>
+<li><p><strong>Enter the date on which the rate changes into the
+Changeover field for the tax code</strong></p></li>
+<li><p><strong>Enter the new rate into the Rate 2
+field</strong></p></li>
+</ol><blockquote>
+<p>Repeat steps 2, 3 and 4 for all of the tax codes that need to be
+changed. If you only have the default tax codes, you only need to change
+the G tax code.</p>
+</blockquote><h5 id="click-ok-to-store-the-changes-and-close-the-dialog-box">Click
+<em>OK</em> to store the changes and close the dialog box</h5><blockquote>
+<p>For example, the GST rate in New Zealand increased from 12.5% to 15%
+on 1st October 2010. This would be represented in the tax table as:</p>
+</blockquote><p><img src="images/media/image572.png" style="width:4.23884in;height:1.2375in"></p><blockquote>
+<p>A subsequent change in the GST rate can be made by putting the
+current GST rate (still in the Rate 2 field after the previous change)
+into the Rate 1 field and adding the new change over details as
+before.</p>
+<p>Note that a composite tax will respect the dates of rate changes in
+its components.</p>
+</blockquote><h4 id="changing-a-tax-code">Changing a Tax code</h4><blockquote>
+<p>In MoneyWorks Gold/Datacentre, you can change an existing tax
+code.</p>
+</blockquote><h5 id="highlight-the-tax-to-change-by-clicking-on-it-once">Highlight
+the tax to change by clicking on it once</h5><ol start="2" type="1">
+<li><p><strong>Click the <em>Change Code</em> toolbar
+icon</strong></p></li>
+</ol><blockquote>
+<p>The Change Tax Code window will open</p>
+</blockquote><p><img src="images/media/image573.png" style="width:4.62375in;height:2.33719in"></p><ol start="3" type="1">
+<li><p><strong>Enter the replacement code and clock <em>Change
+Code</em></strong></p></li>
+</ol><blockquote>
+<p>The code in the tax table will be updated, as well as all occurrences
+of code in the MoneyWorks file (e.g. transactions, tax overrides,
+accounts). This might take a while.</p>
+</blockquote><div class="navigation"><hr><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p></div></body></html>

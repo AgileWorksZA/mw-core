@@ -1,0 +1,589 @@
+<!DOCTYPE html><html><head></head><body><div class="navigation"><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p><hr></div><blockquote>
+<p>A product can be manufactured from other product items. You can build
+the product whenever you require it, or it can be automatically built
+whenever it is sold.</p>
+</blockquote><ol type="1">
+<li><p><strong>Set the <em>Manufacture this Item According to Bill of
+Materials</em> check box</strong></p></li>
+</ol><blockquote>
+<p>The Recipe list will be enabled.</p>
+<p>You need to specify how the item is manufactured. This includes the
+manufacturing batch size and the components or recipe for the item.</p>
+<p><strong>Minimum Build Qty</strong> Use the <em>Minimum Build Qty</em>
+field to specify the number of units that can be physically made at one
+time. For example an injection moulder may always make comedy plastic
+noses ten at a time, using 300g of plastic powder. In this case enter 10
+into the <em>Minimum Build Qty</em> field. This tells MoneyWorks that it
+can’t auto-build just (say) three noses, because the nose injection
+moulder just doesn’t work that way.</p>
+<p><strong>Auto-Build Whenever Necessary</strong> Set this option if you
+want MoneyWorks to automatically build the item if it detects there is
+insufficient in stock to fulfil an order. The item will be built with a
+Make stock journal—this will be created (and posted) provided there are
+sufficient components in stock.</p>
+<p>Note that the margin display on the transaction window is for the old
+stock—the rebuilt items may have a different cost. If you have volatile
+component prices and thin margins, it is probably better to use the
+<em>Build</em> command to create the items so you can better track the
+actual margin.</p>
+<p><strong>Normal Build Qty</strong> The <em>Normal Build Qty</em> field
+contains the normal production run that you would make, and must be a
+multiple of the <em>Minimum Build Qty</em>. This is the quantity that
+MoneyWorks will suggest when you use the Build Product command to create
+a stock transfer to represent a production run. You probably make comedy
+plastic noses in runs of say 6,000, since the nose injection moulding
+machine takes a bit of work to set up, and you want to make the effort
+worthwhile.</p>
+</blockquote><ol start="2" type="1">
+<li><p><strong>Set the <em>Minimum Build Quantity</em> to the smallest
+number that can be manufactured</strong></p></li>
+</ol><blockquote>
+<p><strong>Note:</strong> The <em>Minimum Build Quantity</em> is
+equivalent to the <em>Minimum Order Quantity</em>. You cannot therefore
+both buy and manufacture the item using different minimum
+quantities.</p>
+</blockquote><ol start="3" type="1">
+<li><p><strong>If you want to Auto-Build the item, turn the
+<em>Auto-Build Whenever Necessary</em> option on</strong></p></li>
+</ol><blockquote>
+<p>When you sell the item and do not have sufficient stock, MoneyWorks
+will automatically build the required number based on the bill of
+materials (even if there is insufficient stock of the components, which
+will just go into negative stock).</p>
+<p><strong>Note:</strong> You cannot auto-build items that require a
+serial or batch number (or whose bill of materials includes serialised
+products). This is because you need to specify the serial/batch numbers
+of the items involved at the point the item is manufactured.</p>
+</blockquote><h4 id="specifying-the-bill-of-materials">Specifying the bill of
+materials</h4><blockquote>
+<p><span id="_bookmark772" class="anchor"></span>The bill of materials
+for the manufactured item is specified in the parts list. The parts in
+this list must be purchased or stocked<a href="#_bookmark799">5</a>.
+Thus if you want to include a labour component in your product, that
+component must have the <em>We Buy This</em> option set.</p>
+</blockquote><p><img src="images/media/image652.png" style="width:3.52in;height:1.545in"></p><blockquote>
+<p><span id="_bookmark773" class="anchor"><span id="_bookmark774" class="anchor"></span></span>To add a part to the list:</p>
+</blockquote><h5 id="click-the-add-button-or-press-ctrl-n-n">Click the <em>Add</em>
+button <img src="images/media/image653.png" style="width:0.125in;height:0.14286in"> or press Ctrl-N/⌘-N</h5><blockquote>
+<p>The cursor will be positioned in the next available part row.</p>
+</blockquote><h5 id="enter-the-qty-required-to-build-one-unit-and-the-part-code">Enter
+the qty required to build ONE unit, and the part code</h5><blockquote>
+<p>The cost and sell fields are automatically filled out for you based
+on the information in the part’s product record. The part code must be
+for an existing item that is stocked or purchased.</p>
+</blockquote><h5 id="if-required-enter-a-memo-into-the-memo-field">If required, enter
+a memo into the <em>Memo</em> field</h5><blockquote>
+<p>This is for your own use, and might be some manufacturing
+instruction, such as where to position the part. It can be up to 255
+characters long.</p>
+</blockquote><h5 id="you-can-remove-the-current-part-from-the-list-by-clicking-the-delete-button-or-by-choosing-delete-part-from-the-edit-menu">You
+can remove the current part from the list by clicking the
+<em>delete</em> button <img src="images/media/image654.png" style="width:0.12in;height:0.12in"> , or by choosing Delete Part from
+the Edit menu</h5><blockquote>
+<p>To print the bill of materials:</p>
+</blockquote><h5 id="click-the-print-button-at-the-bottom-right-of-the-list"><br>
+Click the <em>print</em> button <img src="images/media/image655.png" style="width:0.13043in;height:0.13043in"> at the bottom right of the
+list</h5><blockquote>
+<p>The bill of materials is saved when the product record is saved.</p>
+<p><strong>Note:</strong> The <em><a href="#_bookmark776">Bill of
+Materials printout</a></em> provides a listing of the bill of materials
+and current costing for a range of products. You can also use the <em><a href="section-10.html#find-related">Find Related</a> <a href="section-10.html#find-related">command</a></em> to find a product’s components, or
+what products use this item as a component.</p>
+</blockquote><h2 id="modifying-and-deleting-product-items-and-resources">Modifying
+and Deleting Product Items and <u>Resources</u> </h2><blockquote>
+<p>Product items can be modified by double-clicking in the normal
+manner.</p>
+<p>You can delete a item record<a href="#_bookmark800">6</a> regardless
+of whether or not it has been used in transactions or job sheet items.
+However you will not be able to post any existing transactions that use
+it, and nor will you be able to select it for analysis<a href="#_bookmark800">7</a>. Recurring transactions that use the item
+will recur correctly, but you will not be able to post them.</p>
+<p>You cannot delete a product that is stocked (or make it unstocked)
+unless it has zero stock on hand<a href="#_bookmark801">8</a>.</p>
+<p>Use the <em>Class</em> pop-up menu to change the product’s type (e.g.
+<em>Resource</em> to</p>
+<p><em>Time</em>). Stocked items must be a <em>Product</em>.</p>
+</blockquote><h4 id="changing-a-product-code">Changing a Product Code</h4><p><img src="images/media/image656.png" style="width:1.91354in;height:0.87083in"></p><blockquote>
+<p>You can change the code for a product if you wish. What happens then
+is governed by the <em><a href="#_bookmark591">Ask to alter existing
+transaction records</a></em> Preference option. If the option is on, the
+message on the right will be displayed when you click the</p>
+<p><em>OK</em> or <em>Next</em> button:</p>
+<p>If you click <em>Change Codes</em>, MoneyWorks will change the item
+code in all existing transactions to the new code—this means that your
+historical records concerning the transaction will still be linked to
+item record.</p>
+<p>If you click <em>Don’t Change</em> (or the Preference option was not
+set), then the old product ceases to exist, and the new product inherits
+all the attributes (except the code) of the old. Existing transactions
+that use the old product code are not <span id="_bookmark776" class="anchor"></span>changed, as is the case when changing the code for
+an Account or Name.</p>
+<p><strong>Note:</strong> In multi-user mode, you can
+<strong>only</strong> change a product code when no other users are
+connected—see <a href="#_bookmark724"><em>Changing “code”
+fields</em></a>.</p>
+<p>If you change the product code or delete a product that is a
+component of a manufactured item, the item will no longer be included
+when you build the manufactured item. No warning is given to this
+effect.</p>
+<p>If you change the price or description for an item, any recurring
+transactions involving that product will use the new price, description
+and control accounts when they recur provided the appropriate
+preferences are set in the <em><a href="#_bookmark593">Startup</a></em>
+document preferences.</p>
+</blockquote><h2 id="printing-a-product-list-1"><u>Printing a Product List</u> </h2><blockquote>
+<p><img src="images/media/image325.png" style="width:2.8452in;height:1.22825in">The item list window can be
+printed by clicking the <em>Print List</em> tool-bar button, choosing
+Print from the File menu, or pressing Ctrl-P/⌘-P. The list, or
+optionally just the highlighted records in the list, will print as shown
+on screen, including <span id="_bookmark777" class="anchor"></span>any
+customised columns. If the list is sorted, it can be subtotalled by the
+sorted column.<a href="#_bookmark802">9</a></p>
+<p>There are a number of reports in the list sidebar that will also
+print the items showing or highlighted in the list. These include:</p>
+<p><strong>Stock Valuation Report:</strong> This prints each product
+with its purchase price, quantity in stock, purchase valuation, sell
+price and sell valuation.</p>
+<p><strong>Reorder List:</strong> This prints each product with its
+current stock on hand, committed, ordered, effective stock on hand and
+re-order level. Use it to help decide what items and what quantities
+need to be re-ordered.</p>
+<p><strong>Bill of Materials:</strong> Prints the “bill of materials”
+for each highlighted item. The current stock on hand, average value and
+cost price of the components is listed, along with the quantity that can
+be built based on the current stock level of the components (ignoring
+any minimum build quantity restrictions</p>
+<p><strong>Stock History:</strong> Prints a complete history of all
+stock movements back to the start of a nominated date. As well as
+showing the quantities in and out, the report also shows the costings,
+inventory levels and valuation. The report should be printed in
+landscape.</p>
+<p><strong>Note:</strong> You can use this report to reconcile your
+stock levels back to a nominated point in time. However the calculations
+are based on the time the transaction was posted, not on the transaction
+date. If you have entered stock transactions out of order, the results
+will not necessarily be correct.</p>
+<p><strong>Price List:</strong> Prints a list of highlighted products
+with their sell price (either Tax exclusive or inclusive) for the
+nominated price level. The Tax is determined by the tax code of the
+sales account.</p>
+<p><strong>Individual Price List:</strong> This report, which is
+available in the sidebar of the Names list, prepares a separate price
+list for each of the highlighted records in the names list (or all names
+if none highlighted), for each of the highlighted items in the items
+list (or all items if none highlighted).</p>
+<p><strong>Product Catalogue:</strong> Prints the highlighted items as a
+catalogue, with prices for the selected price level, images,
+descriptions and barcodes.</p>
+</blockquote><h2 id="updating-inventory"><u>Updating Inventory</u> </h2><blockquote>
+<p>For items that you stock, the stock information held in the item file
+is only updated when a transaction involving that item is posted.</p>
+<p><strong>Note:</strong> The result of posting a stock item is
+different if the <em>Enable Job Costing and Time Billing</em> preference
+option is set and the job code column is filled in the transaction line.
+These are discussed separately below.</p>
+<p><strong>Note:</strong> When you post any transaction that involves an
+inventoried item, the cost of goods and stock information within the
+transaction is updated to reflect the current stock valuation within
+MoneyWorks <em>at the time of posting</em>. This may be different from
+the valuation when you first entered the transaction.</p>
+<p><strong>Note:</strong> When you purchase a stock item, the normal
+accounting transaction is to debit stock and to credit bank or accounts
+payable. However if you purchase an item that is in negative stock,
+MoneyWorks will also put in a correction to account for any difference
+in the estimated cost of goods when the item was sold, and the actual
+cost of goods when it was subsequently replaced. This is why you will
+see purchase transactions when you do an account enquiry on the cost of
+goods account.</p>
+<p><strong>Note:</strong> All stock values are held in the local
+currency.</p>
+<p><strong>Posting stock transactions without <em>Enable Job Costing
+&amp; </em></strong><span id="_bookmark779" class="anchor"></span><em><strong>Time Billing</strong></em></p>
+<p>When you post a transaction involving a product that you stock:</p>
+</blockquote><ul>
+<li><p>The stock level is adjusted by the quantity in the transaction.
+If you are buying the product, the stock adjustment is the buy quantity
+multiplied by the conversion factor (since stock on hand is maintained
+in sell units).</p></li>
+<li><p>When you purchase stock items, they are treated as assets (they
+will be stored somewhere until used). Their value will not be expensed
+until they are sold. The stock account will increase (be debited) by the
+price of the <span id="_bookmark780" class="anchor"></span>stock items,
+and the stock quantity will increase by the quantity purchased
+multiplied<a href="#_bookmark803">10</a> by the conversion factor. The
+average price of the item will be recalculated.</p></li>
+<li><p>If you purchase a stock item whose current inventory level is
+less than zero,</p></li>
+</ul><blockquote>
+<p>and the cost of that item is different to the nominal cost of the
+items in negative stock, MoneyWorks will automatically adjust the stock
+values to account for the discrepancy.</p>
+</blockquote><ul>
+<li><p>Selling transactions involving stock items will generate
+additional accounting entries within MoneyWorks. Specifically when you
+sell an item your income increases, and so does your bank or accounts
+receivable account (in accounting terms, your income account is credited
+and your bank account or accounts receivable is debited). However at the
+same time the value of your stock has been reduced, and the amount that
+you had invested in the asset (i.e. the item sitting on your shelves)
+can now be treated as an expense (in accounting terms, the stock account
+is credited and the cost of goods account is debited). Thus there are
+actually four components to this transaction, not the normal two.
+However you don’t need to worry about this, as MoneyWorks will look
+after it for you—you can see the extra detail lines when you print a
+transaction listing with the <em><a href="#_bookmark294">Print</a> <a href="#_bookmark294">Details</a></em> toolbar icon. Selling stock items
+will also reduce the number of items in stock.</p></li>
+<li><p>If the stock level falls below the reorder point and the reorder
+warnings check box is set, a warning is given.</p></li>
+</ul><p><img src="images/media/image657.png" style="width:1.92146in;height:0.8625in"></p><blockquote>
+<p>If you click the <em>Reminders</em> button, a message is created to
+remind you to reorder the product. These messages appear automatically
+when you open the file, or you can view them using the Show Today’s
+Messages command.</p>
+<p><strong>Warning:</strong> Never “sell” stock using a negative
+quantity on a creditor invoice (or payment). This will credit your stock
+account, and not your sales account. Also, unless the transaction sell
+value is the same as the average stock value, you will force your stock
+general ledger to be out of balance with the stock total as recorded in
+the product file. This does not apply to cancelled transactions, which
+MoneyWorks will handle correctly for you.</p>
+<p><span id="_bookmark781" class="anchor"></span><strong>Posting stock
+transactions with <em>Enable Job Costing &amp; Time
+Billing</em></strong></p>
+<p>If you have set the <em>Enable Job Costing and Time Billing</em> in
+the Job preferences <span id="_bookmark782" class="anchor"></span><strong>and</strong> you have entered a job code
+into the job column of a transaction detail line involving a stocked
+item, it is assumed that the item is being purchased for direct use in
+the job and is not going into stock. If the item is being sold, it is
+assumed that its use has already been accounted for in the job sheet
+file (where a stock requisition journal was created).</p>
+<p>Therefore when the transaction is posted it is not put into stock.
+Thus:</p>
+</blockquote><ul>
+<li><p>The product file is not updated in any way.</p></li>
+<li><p>If the item is being purchased, the <em>Expense Account when
+buying</em> general ledger account is debited. This expenses (along with
+other job expenses) can be transferred to a current asset by use of the
+<em><a href="section-45.html#the-work-in-progress-journal">Work-In-Progress
+Journal</a></em> command.</p></li>
+<li><p>If the item is being sold, the <em>Income Account when
+Selling</em> general ledger account is credited.</p></li>
+</ul><blockquote>
+<p><strong>Note:</strong> There is one exception to this. When a
+purchase order is made out to a job and the goods are received before
+the invoice, they will be placed into stock and need to be manually
+requisitioned —see <em><a href="section-39.html#set-the-process-order-pop-up-menu-to-receive-goods-after-invoice">The
+goods are received</a> <a href="section-39.html#set-the-process-order-pop-up-menu-to-receive-goods-after-invoice">before
+the invoice</a></em>. A warning is displayed in the Process Order screen
+in this <span id="_bookmark783" class="anchor"></span>situation.</p>
+</blockquote><h3 id="negative-stock">Negative stock</h3><blockquote>
+<p>If you post a transaction involving inventoried items and if there is
+insufficient stock on hand to fulfil the transaction’s stock
+requirements, the stock on hand for the item will become negative, and
+the following will apply:</p>
+</blockquote><ul>
+<li><p>The value of the negative stock will be based on the current
+average value (or the buy price, if the stock level started at
+zero).</p></li>
+<li><p>When the stock is replaced, the transaction that replenishes the
+stock will also automatically adjust the cost (and stock valuation) for
+the out of stock items if the replacement price is different from the
+value used when they went out of stock.</p></li>
+</ul><blockquote>
+<p>The result is that when you once again hold non-negative values of
+the item, the correct accounting entries have been made by
+MoneyWorks.</p>
+<p><strong>Note:</strong> You can control who can put inventory into
+negative stock with a script.</p>
+</blockquote><h3 id="stock-valuation">Stock Valuation</h3><blockquote>
+<p>The value of the items in stock will always be reflected in the
+balance of the stock account. Two “values” are held for each individual
+product: the buy price and the total stock value. Both these figures are
+automatically adjusted whenever you purchase stock. The buy price
+represents the latest price that you paid for the item, and the stock
+value is the total of what was paid for the stock. The average price is
+always the total stock valuation divided by the stock on hand. If you
+start off with no items, the average price will be the same as the buy
+price.</p>
+<p><strong>Example</strong> You buy 5 units of a new stock item for $10
+each. The buy price is $10, the stock value is (5 * 10) = $50, and the
+average cost is 50 / 5 = $10. You then purchase 5 more for $12. The buy
+price is now $12, and the stock value increases by (5 * 12) = $60 to
+$110. The average cost is now 110 / 10</p>
+<p>= $11.</p>
+<p>The average cost is used as the cost of goods when stock is sold. The
+buy price represents replacement cost.</p>
+</blockquote><h2 id="stock-journals"><u>Stock Journals</u> </h2><blockquote>
+<p>A stock system is always difficult to maintain. Unexpected things can
+happen. For example, some stock items may decay or be destroyed, some
+may vanish altogether, while some may spontaneously appear (presumably
+due to miscounting at stocktake time). The accounting for these is done
+by means of stock journals, of which there are five types:</p>
+<p><strong>Make:</strong> This builds the quantity of the nominated
+product from the specified components. If you use the Build command to
+create a product, or if a product is Auto-Built, a <em>Make</em> journal
+is created automatically.</p>
+<p><strong>Break:</strong> This is the opposite of a <em>Make</em>
+journal. The product is “disassembled” into its components.</p>
+<p><strong>Write-Off:</strong> This is used to write off stock. The
+value of the listed items will be written off to the nominated general
+ledger account (usually an expense account). Use this when your stock
+reduces through means other than sales (e.g. shrinkage, obsolescence
+etc.). Stock requisitions made through the job sheet file will
+automatically create a write off journal against the item’s cost- of
+goods account.</p>
+<p><strong>Create:</strong> This is the opposite of a write-off journal.
+It creates the specified products and puts them into stock. The
+nominated general ledger account code is credited—this will normally be
+an income account.</p>
+<p><span id="_bookmark785" class="anchor"></span><strong>Revalue:</strong> This is used when the
+value of a stock item changes. The new value (per unit) is specified,
+and the stock account is debited (or credited if the value is reduced)
+with the difference. The nominated general ledger account is credited
+(or debited) with the difference.</p>
+<p><strong>Transfer:</strong> This is for fixing botch-ups in the
+handling of serial numbers, batches and location (e.g. stock is
+receipted into the wrong location; the serial number on an item is
+wrong). For further information see <a href="#_bookmark812">Stock
+Tranfers</a>.</p>
+</blockquote><h3 id="entering-a-stock-journal">Entering a Stock Journal</h3><h5 id="in-the-transactions-list-select-the-journals-sidebar-tab-and-click-the-new">In
+the Transactions list, select the Journals sidebar tab and click the
+<em>New</em></h5><blockquote>
+<p><strong>toolbar button or press Ctrl-N/⌘-N</strong></p>
+<p><img src="images/media/image658.png" style="width:3.56945in;height:2.15046in">The Journal entry screen is
+displayed.</p>
+</blockquote><h5 id="enter-the-transaction-date-and-description"><br>
+Enter the transaction date and description</h5><ol start="3" type="1">
+<li><p><strong>Click on the tab that represents the type of journal you
+need</strong></p></li>
+</ol><blockquote>
+<p>The entry screen will change depending upon the type of journal.</p>
+<p>The information required for a stock journal depends on the type of
+journal. Each journal type is discussed separately below.</p>
+<p><strong><em>Make</em> Journal</strong></p>
+<p>A <em>Make</em> journal (shown above) manufactures a quantity of a
+stocked item from the specified components. This will increase the stock
+on hand of the product manufactured and decrease the stock of each
+stocked component.</p>
+</blockquote><h5 id="enter-the-product-code-of-the-item-to-make-into-the-product-field">Enter
+the product code of the item to make into the <em>Product</em>
+field</h5><blockquote>
+<p>This must be a stocked item. If you enter an invalid product code the
+choices list will be displayed.</p>
+</blockquote><h5 id="enter-the-quantity-you-wish-to-manufacture-in-the-qty-field">Enter
+the quantity you wish to manufacture in the <em>Qty</em> field</h5><ol start="3" type="1">
+<li><p><strong>In the <em>Item Code</em> field of the detail line enter
+the code of the part that will be used</strong></p></li>
+</ol><blockquote>
+<p>The part must be stocked or purchased. If it is out of stock a
+warning will be displayed (but you will still be able to post the
+journal).</p>
+</blockquote><h5 id="in-the-qty-field-of-the-detail-line-enter-the-quantity-required-of-the-first-component-that-is-used-in-the-product-creation">In
+the <em>Qty</em> field of the detail line, enter the quantity required
+of the first component that is used in the product creation</h5><blockquote>
+<p>You cannot alter the unit value or extension fields—these are
+determined by the value of the components you are using.</p>
+</blockquote><h5 id="if-other-components-are-used-press-return-to-add-another-detail-line-and-enter-the-additional-details.">If
+other components are used, press ↩︎/return to add another detail line and
+enter the additional details.</h5><ol start="6" type="1">
+<li><p><strong>When all the details are correct, click
+<em>OK</em></strong></p></li>
+</ol><blockquote>
+<p>When the <em>Make</em> journal is posted, the stock quantity of the
+item being produced is increased by the amount given, and the quantities
+of the components are decreased. In addition, the stock general ledger
+code for the produced item is debited by the Total Transfer value. If a
+component is stocked, its stock account is credited, otherwise its cost
+of goods account is credited. The average unit value of the manufactured
+item is also recalculated.</p>
+<p><strong>Tip:</strong> The <em>Auto Make Journal</em> script, if
+activated, will automatically fill the journal with the components of a
+built item, potentially to several levels of componentry, if installed
+and activated. See <a href="section-66.html#scripts-automation-and-the-rest-of-it"><em>Scripts</em></a>.</p>
+<p><strong>Note:</strong> If you are using location tracking, the stock
+will be built into , and the components taken out of, the default
+(empty) location. Use a <a href="#_bookmark812">Stock Transfer</a> <a href="#_bookmark812">Journal</a> if you want to specify locations.</p>
+<p><strong>Note:</strong> If the finished item, or any components, are
+serialised, you will need to use a <a href="#_bookmark812">Stock
+Transfer Journal</a>.</p>
+<p><strong><em>Break</em> Journal</strong></p>
+<p>A <em>Break</em> journal is the opposite of a <em>Make</em> journal.
+It disassembles a quantity of a stocked item into specified components.
+This will decrease the quantity of the item being disassembled and
+increase the quantity of each stocked component.</p>
+</blockquote><p><img src="images/media/image659.png" style="width:4.78688in;height:1.31625in"></p><h5 id="enter-the-code-of-the-item-you-are-disassembling-into-the-product-field">Enter
+the code of the item you are disassembling into the <em>Product</em>
+field</h5><blockquote>
+<p>This must be a stocked item. If you enter an invalid product code the
+choices list will be displayed.</p>
+</blockquote><ol start="2" type="1">
+<li><p><strong>Enter the quantity you wish to disassemble in the
+<em>Qty</em> field</strong></p></li>
+<li><p><strong>In the <em>Qty</em> field of the detail line, enter the
+quantity of the first component that will be created</strong></p></li>
+<li><p><strong>In the <em>Item Code</em> field of the detail line enter
+the code of the product that will be created</strong></p></li>
+</ol><blockquote>
+<p>The product must be a stock item, or one that is purchased.</p>
+</blockquote><h5 id="if-other-components-are-created-press-return-to-add-another-detail-line-and-enter-the-additional-details.">If
+other components are created, press ↩︎/return to add another detail line
+and enter the additional details.</h5><ol start="6" type="1">
+<li><p><strong>When all the details are correct, click
+<em>OK</em></strong></p></li>
+</ol><blockquote>
+<p>When the <em>Break</em> journal is posted, the stock quantity of the
+item being disassembled is decreased by the amount given, and the
+quantities of the inventoried components are increased. In addition, the
+stock general ledger account for the disassembled item is credited by
+the Total Transfer value, and the stock accounts for the components are
+debited (or, for unstocked components, the cost-of-goods account). The
+average value of the components will also be recalculated.</p>
+<p><strong>Note:</strong> If any of the items are serialised, or you
+want to use a location different from the default location, you will
+need to use a <a href="#_bookmark812">Stock Transfer Journal</a>.</p>
+<p><strong><em>Write Off</em> Journal</strong></p>
+<p>A <em>Write Off</em> journal removes items from the stock system, so
+they effectively cease to exist. This decreases the stock holdings for
+the items. The loss in the stock value is debited to the nominated
+contra account.</p>
+</blockquote><p><img src="images/media/image660.png" style="width:4.73229in;height:1.27187in"></p><ol type="1">
+<li><p><strong>Enter the account code (normally an expense) to be
+debited by the loss of</strong></p></li>
+</ol><blockquote>
+<p><strong>the items</strong></p>
+</blockquote><ol start="2" type="1">
+<li><p><strong>In the <em>Code</em> field of the detail line enter the
+product code of the product that is being written off</strong></p></li>
+</ol><blockquote>
+<p>The product must be a stock item. The unit value and extension fields
+are determined by the value of the items being written off.</p>
+</blockquote><ol start="3" type="1">
+<li><p><strong>In the <em>Qty</em> field of the detail line, enter the
+quantity of the first item that is to be written off</strong></p></li>
+<li><p><strong>If other products are to be written off, press</strong>
+↩︎<strong>/return to add another detail line and enter the additional
+details.</strong></p></li>
+<li><p><strong>When all the details are correct, click
+<em>OK</em></strong></p></li>
+</ol><blockquote>
+<p>When the <em>Write Off</em> journal is posted, the stock quantity of
+each item being written of is decreased by the amount given (based on
+the average unit value <em>at the time of posting the transaction</em>),
+and the stock general ledger account for the items is credited by the
+value. The nominated contra account is debited by the total amount
+written off.</p>
+<p><strong>Note:</strong> If you have Stock Location Tracking or
+Serial/Batch Number tracking turned on, additional columns will appear
+in the journal for recording serial/batch numbers and/or locations.</p>
+<p><span id="_bookmark787" class="anchor"></span><strong><em>Create</em>
+Journal</strong></p>
+<p><img src="images/media/image661.png" style="width:4.75927in;height:1.3158in">A <em>Creation</em> journal is
+the opposite of a <em>Write Off</em> journal. It creates quantities of
+stock, increasing the stock holdings for the nominated items and
+crediting the increase in stock value to the nominated account.</p>
+</blockquote><h5 id="enter-the-account-code-which-will-be-credited-by-the-increase-in-the-value-of-the-stock-into-the-contra-acct-field"><br>
+Enter the account code which will be credited by the increase in the
+value of the stock into the <em>Contra Acct</em> field</h5><ol start="2" type="1">
+<li><p><strong>In the <em>Code</em> field of the detail line enter the
+product code of the product that is being created</strong></p></li>
+</ol><blockquote>
+<p>The product must be a stock item.</p>
+</blockquote><h5 id="in-the-qty-field-of-the-detail-line-enter-the-quantity-of-the-first-product-that-is-to-be-created">In
+the <em>Qty</em> field of the detail line, enter the quantity of the
+first product that is to be created</h5><ol start="4" type="1">
+<li><p><strong>In the <em>Unit Value</em> field, specify the value of
+the item being created</strong></p></li>
+</ol><blockquote>
+<p>By default, this will be the stored buy price of the item (if
+any).</p>
+</blockquote><h5 id="if-other-products-are-to-be-created-press-return-to-add-another-detail-line-and-enter-the-additional-details">If
+other products are to be created, press ↩︎/return to add another detail
+line and enter the additional details</h5><ol start="6" type="1">
+<li><p><strong>When all the details are correct, click
+<em>OK</em></strong></p></li>
+</ol><blockquote>
+<p>When the <em>Creation</em> journal is posted, the stock quantity of
+the each item being created is increased by the amount given, and the
+stock general ledger account for the items is debited by the value. The
+nominated contra account is credited by the total amount of stock being
+created. The average unit price of the products are also
+recalculated.</p>
+<p><strong>Note:</strong> If you have Stock Location Tracking or
+Serial/Batch Number tracking turned on, additional columns will appear
+in the journal for recording serial/batch numbers and/or locations.</p>
+<p><strong><em>Revalue</em> Journal</strong></p>
+<p>A <em>Revaluation</em> journal revalues the nominated stock items.
+The change in the value of the stock is credited or debited (depending
+on whether it is an increase or a decrease) to the nominated contra
+account.</p>
+<p><img src="images/media/image662.png" style="width:4.73229in;height:1.27187in"></p>
+</blockquote><h5 id="enter-the-account-code-which-will-be-adjusted-by-the-change-in-the-value-of-the-stock-into-the-contra-acct-field">Enter
+the account code which will be adjusted by the change in the value of
+the stock into the <em>Contra Acct</em> field</h5><ol start="2" type="1">
+<li><p><strong>In the <em>Code</em> field of the detail line enter the
+code of the product that is being revalued</strong></p></li>
+</ol><blockquote>
+<p>The product must be a stock item—its description and current unit
+value will be displayed. You cannot alter the current unit value field.
+The net change is the difference (multiplied by the stock quantity on
+hand) between the old current unit price and the new unit value you
+enter.</p>
+</blockquote><ol start="3" type="1">
+<li><p><strong>In the <em>New Unit Val</em> field, enter the revised
+unit cost</strong></p></li>
+</ol><blockquote>
+<p>The change in value in your stock for the item is calculated and
+displayed in the <em>Net Change</em> field. If you have no stock the net
+change is zero. Negative stock can be revalued.</p>
+</blockquote><h5 id="if-other-products-are-to-be-revalued-press-return-to-add-another-detail-line-and-enter-the-additional-details">If
+other products are to be revalued, press ↩︎/return to add another detail
+line and enter the additional details</h5><ol start="5" type="1">
+<li><p><strong>When all the details are correct, click
+<em>OK</em></strong></p></li>
+</ol><blockquote>
+<p>When the <em>Revaluation</em> journal is posted, the average unit
+price of the stock items is altered to the New Unit Val (which is
+recalculated based on the stock valuation at posting time), and the new
+stock value is calculated. The difference in the new stock value is
+debited or credited to the nominated contra account.</p>
+</blockquote><h2 id="building-products"><br>
+<u>Building Products</u> </h2><blockquote>
+<p>You can set up a product that can be manufactured from a set of
+components, known as a recipe or a bill of materials —see <a href="section-36.html#if-you-manufacture-it"><em>If you manufacture it</em></a>. The
+components themselves must be stocked or purchased items. You can then
+manufacture the product either automatically whenever it is sold —see
+<em><a href="section-36.html#bill-of-materials-bom">Auto-</a> <a href="section-36.html#bill-of-materials-bom">Build Whenever Necessary</a></em>, or by
+using the <em>Build Product</em> command.</p>
+<p>When a product is built, the stock level of any inventoried
+components is reduced, and the stock level of the item itself is
+increased. This is accomplished by means of a <em>Make</em> journal,
+which is created automatically.</p>
+</blockquote><p>To build a product using the Build Products command:</p><h5 id="choose-commandbuild-product">Choose Command&gt;Build
+Product</h5><p>The Build Products window will be displayed:</p><p><img src="images/media/image663.png" style="width:2.84375in;height:1.19844in"></p><h5 id="enter-the-code-of-the-item-to-be-built-and-press-tab">Enter the
+code of the item to be built and press tab</h5><blockquote>
+<p>The maximum quantity of the item that can be built without putting
+any of the components out of stock will be calculated and displayed,
+along with the component parts that limit the production to this
+amount.</p>
+<p>If you elect to build more items than the maximum quantity, one or
+more of the components will go into negative inventory.</p>
+</blockquote><h5 id="enter-the-quantity-to-build-and-click-the-build-button">Enter
+the quantity to build, and click the <em>Build</em> button</h5><blockquote>
+<p>The Build Products window will close and a Make journal will be
+created and posted to build the specified quantity of the product.</p>
+<p>If the product or parts are inventoried by location, you need to
+select the location.</p>
+</blockquote><p><strong>Building serial-tracked products or using serial-tracked
+parts</strong></p><p>If the product to be built or its parts are serial/batch tracked, the
+Build Products window will expand to show a list of all of the parts or
+finished products requiring a serial or batch number to be specified.
+For finished products, you allocate the serial number. For parts, you
+choose the serial/or batch number from existing stock (the serial/batch
+number picker will open when you tab out of the <em>Serial/Batch</em>
+column). You can also specify an expiry date if your newly manufactured
+product batch requires it.</p><p>In this case the journal will be a Stock Transfer journal, with the
+contra account set to the cost of sales account of the item being built.
+Normally the journal will be zero valued, but sometimes if you are
+building a number of serialised items there might be slight rounding
+differences. In this case these differences will be put to the cost of
+sales account.</p><div class="navigation"><hr><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p></div></body></html>

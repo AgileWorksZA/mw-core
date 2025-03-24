@@ -1,0 +1,636 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OffLedger",
+  "description": "OffLedger table schema (file_num: 25) - Off-balance sheet ledger items",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "Kind": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Item kind (indexed)"
+    },
+    "Name": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Item name (indexed)"
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Description"
+    },
+    "Flags": {
+      "type": "integer",
+      "description": "Flags"
+    },
+    "Balance91": {
+      "type": "number",
+      "description": "Balance 91 periods ago"
+    },
+    "Balance90": {
+      "type": "number",
+      "description": "Balance 90 periods ago"
+    },
+    "Balance89": {
+      "type": "number",
+      "description": "Balance 89 periods ago"
+    },
+    "Balance88": {
+      "type": "number",
+      "description": "Balance 88 periods ago"
+    },
+    "Balance87": {
+      "type": "number",
+      "description": "Balance 87 periods ago"
+    },
+    "Balance86": {
+      "type": "number",
+      "description": "Balance 86 periods ago"
+    },
+    "Balance85": {
+      "type": "number",
+      "description": "Balance 85 periods ago"
+    },
+    "Balance84": {
+      "type": "number",
+      "description": "Balance 84 periods ago"
+    },
+    "Balance83": {
+      "type": "number",
+      "description": "Balance 83 periods ago"
+    },
+    "Balance82": {
+      "type": "number",
+      "description": "Balance 82 periods ago"
+    },
+    "Balance81": {
+      "type": "number",
+      "description": "Balance 81 periods ago"
+    },
+    "Balance80": {
+      "type": "number",
+      "description": "Balance 80 periods ago"
+    },
+    "Balance79": {
+      "type": "number",
+      "description": "Balance 79 periods ago"
+    },
+    "Balance78": {
+      "type": "number",
+      "description": "Balance 78 periods ago"
+    },
+    "Balance77": {
+      "type": "number",
+      "description": "Balance 77 periods ago"
+    },
+    "Balance76": {
+      "type": "number",
+      "description": "Balance 76 periods ago"
+    },
+    "Balance75": {
+      "type": "number",
+      "description": "Balance 75 periods ago"
+    },
+    "Balance74": {
+      "type": "number",
+      "description": "Balance 74 periods ago"
+    },
+    "Balance73": {
+      "type": "number",
+      "description": "Balance 73 periods ago"
+    },
+    "Balance72": {
+      "type": "number",
+      "description": "Balance 72 periods ago"
+    },
+    "Balance71": {
+      "type": "number",
+      "description": "Balance 71 periods ago"
+    },
+    "Balance70": {
+      "type": "number",
+      "description": "Balance 70 periods ago"
+    },
+    "Balance69": {
+      "type": "number",
+      "description": "Balance 69 periods ago"
+    },
+    "Balance68": {
+      "type": "number",
+      "description": "Balance 68 periods ago"
+    },
+    "Balance67": {
+      "type": "number",
+      "description": "Balance 67 periods ago"
+    },
+    "Balance66": {
+      "type": "number",
+      "description": "Balance 66 periods ago"
+    },
+    "Balance65": {
+      "type": "number",
+      "description": "Balance 65 periods ago"
+    },
+    "Balance64": {
+      "type": "number",
+      "description": "Balance 64 periods ago"
+    },
+    "Balance63": {
+      "type": "number",
+      "description": "Balance 63 periods ago"
+    },
+    "Balance62": {
+      "type": "number",
+      "description": "Balance 62 periods ago"
+    },
+    "Balance61": {
+      "type": "number",
+      "description": "Balance 61 periods ago"
+    },
+    "Balance60": {
+      "type": "number",
+      "description": "Balance 60 periods ago"
+    },
+    "Balance59": {
+      "type": "number",
+      "description": "Balance 59 periods ago"
+    },
+    "Balance58": {
+      "type": "number",
+      "description": "Balance 58 periods ago"
+    },
+    "Balance57": {
+      "type": "number",
+      "description": "Balance 57 periods ago"
+    },
+    "Balance56": {
+      "type": "number",
+      "description": "Balance 56 periods ago"
+    },
+    "Balance55": {
+      "type": "number",
+      "description": "Balance 55 periods ago"
+    },
+    "Balance54": {
+      "type": "number",
+      "description": "Balance 54 periods ago"
+    },
+    "Balance53": {
+      "type": "number",
+      "description": "Balance 53 periods ago"
+    },
+    "Balance52": {
+      "type": "number",
+      "description": "Balance 52 periods ago"
+    },
+    "Balance51": {
+      "type": "number",
+      "description": "Balance 51 periods ago"
+    },
+    "Balance50": {
+      "type": "number",
+      "description": "Balance 50 periods ago"
+    },
+    "Balance49": {
+      "type": "number",
+      "description": "Balance 49 periods ago"
+    },
+    "Balance48": {
+      "type": "number",
+      "description": "Balance 48 periods ago"
+    },
+    "Balance47": {
+      "type": "number",
+      "description": "Balance 47 periods ago"
+    },
+    "Balance46": {
+      "type": "number",
+      "description": "Balance 46 periods ago"
+    },
+    "Balance45": {
+      "type": "number",
+      "description": "Balance 45 periods ago"
+    },
+    "Balance44": {
+      "type": "number",
+      "description": "Balance 44 periods ago"
+    },
+    "Balance43": {
+      "type": "number",
+      "description": "Balance 43 periods ago"
+    },
+    "Balance42": {
+      "type": "number",
+      "description": "Balance 42 periods ago"
+    },
+    "Balance41": {
+      "type": "number",
+      "description": "Balance 41 periods ago"
+    },
+    "Balance40": {
+      "type": "number",
+      "description": "Balance 40 periods ago"
+    },
+    "Balance39": {
+      "type": "number",
+      "description": "Balance 39 periods ago"
+    },
+    "Balance38": {
+      "type": "number",
+      "description": "Balance 38 periods ago"
+    },
+    "Balance37": {
+      "type": "number",
+      "description": "Balance 37 periods ago"
+    },
+    "Balance36": {
+      "type": "number",
+      "description": "Balance 36 periods ago"
+    },
+    "Balance35": {
+      "type": "number",
+      "description": "Balance 35 periods ago"
+    },
+    "Balance34": {
+      "type": "number",
+      "description": "Balance 34 periods ago"
+    },
+    "Balance33": {
+      "type": "number",
+      "description": "Balance 33 periods ago"
+    },
+    "Balance32": {
+      "type": "number",
+      "description": "Balance 32 periods ago"
+    },
+    "Balance31": {
+      "type": "number",
+      "description": "Balance 31 periods ago"
+    },
+    "Balance30": {
+      "type": "number",
+      "description": "Balance 30 periods ago"
+    },
+    "Balance29": {
+      "type": "number",
+      "description": "Balance 29 periods ago"
+    },
+    "Balance28": {
+      "type": "number",
+      "description": "Balance 28 periods ago"
+    },
+    "Balance27": {
+      "type": "number",
+      "description": "Balance 27 periods ago"
+    },
+    "Balance26": {
+      "type": "number",
+      "description": "Balance 26 periods ago"
+    },
+    "Balance25": {
+      "type": "number",
+      "description": "Balance 25 periods ago"
+    },
+    "Balance24": {
+      "type": "number",
+      "description": "Balance 24 periods ago"
+    },
+    "Balance23": {
+      "type": "number",
+      "description": "Balance 23 periods ago"
+    },
+    "Balance22": {
+      "type": "number",
+      "description": "Balance 22 periods ago"
+    },
+    "Balance21": {
+      "type": "number",
+      "description": "Balance 21 periods ago"
+    },
+    "Balance20": {
+      "type": "number",
+      "description": "Balance 20 periods ago"
+    },
+    "Balance19": {
+      "type": "number",
+      "description": "Balance 19 periods ago"
+    },
+    "Balance18": {
+      "type": "number",
+      "description": "Balance 18 periods ago"
+    },
+    "Balance17": {
+      "type": "number",
+      "description": "Balance 17 periods ago"
+    },
+    "Balance16": {
+      "type": "number",
+      "description": "Balance 16 periods ago"
+    },
+    "Balance15": {
+      "type": "number",
+      "description": "Balance 15 periods ago"
+    },
+    "Balance14": {
+      "type": "number",
+      "description": "Balance 14 periods ago"
+    },
+    "Balance13": {
+      "type": "number",
+      "description": "Balance 13 periods ago"
+    },
+    "Balance12": {
+      "type": "number",
+      "description": "Balance 12 periods ago"
+    },
+    "Balance11": {
+      "type": "number",
+      "description": "Balance 11 periods ago"
+    },
+    "Balance10": {
+      "type": "number",
+      "description": "Balance 10 periods ago"
+    },
+    "Balance09": {
+      "type": "number",
+      "description": "Balance 9 periods ago"
+    },
+    "Balance08": {
+      "type": "number",
+      "description": "Balance 8 periods ago"
+    },
+    "Balance07": {
+      "type": "number",
+      "description": "Balance 7 periods ago"
+    },
+    "Balance06": {
+      "type": "number",
+      "description": "Balance 6 periods ago"
+    },
+    "Balance05": {
+      "type": "number",
+      "description": "Balance 5 periods ago"
+    },
+    "Balance04": {
+      "type": "number",
+      "description": "Balance 4 periods ago"
+    },
+    "Balance03": {
+      "type": "number",
+      "description": "Balance 3 periods ago"
+    },
+    "Balance02": {
+      "type": "number",
+      "description": "Balance 2 periods ago"
+    },
+    "Balance01": {
+      "type": "number",
+      "description": "Balance 1 period ago"
+    },
+    "Balance00": {
+      "type": "number",
+      "description": "Current balance"
+    },
+    "Budget29": {
+      "type": "number",
+      "description": "Budget 29 periods ago"
+    },
+    "Budget28": {
+      "type": "number",
+      "description": "Budget 28 periods ago"
+    },
+    "Budget27": {
+      "type": "number",
+      "description": "Budget 27 periods ago"
+    },
+    "Budget26": {
+      "type": "number",
+      "description": "Budget 26 periods ago"
+    },
+    "Budget25": {
+      "type": "number",
+      "description": "Budget 25 periods ago"
+    },
+    "Budget24": {
+      "type": "number",
+      "description": "Budget 24 periods ago"
+    },
+    "Budget23": {
+      "type": "number",
+      "description": "Budget 23 periods ago"
+    },
+    "Budget22": {
+      "type": "number",
+      "description": "Budget 22 periods ago"
+    },
+    "Budget21": {
+      "type": "number",
+      "description": "Budget 21 periods ago"
+    },
+    "Budget20": {
+      "type": "number",
+      "description": "Budget 20 periods ago"
+    },
+    "Budget19": {
+      "type": "number",
+      "description": "Budget 19 periods ago"
+    },
+    "Budget18": {
+      "type": "number",
+      "description": "Budget 18 periods ago"
+    },
+    "Budget17": {
+      "type": "number",
+      "description": "Budget 17 periods ago"
+    },
+    "Budget16": {
+      "type": "number",
+      "description": "Budget 16 periods ago"
+    },
+    "Budget15": {
+      "type": "number",
+      "description": "Budget 15 periods ago"
+    },
+    "Budget14": {
+      "type": "number",
+      "description": "Budget 14 periods ago"
+    },
+    "Budget13": {
+      "type": "number",
+      "description": "Budget 13 periods ago"
+    },
+    "Budget12": {
+      "type": "number",
+      "description": "Budget 12 periods ago"
+    },
+    "Budget11": {
+      "type": "number",
+      "description": "Budget 11 periods ago"
+    },
+    "Budget10": {
+      "type": "number",
+      "description": "Budget 10 periods ago"
+    },
+    "Budget09": {
+      "type": "number",
+      "description": "Budget 9 periods ago"
+    },
+    "Budget08": {
+      "type": "number",
+      "description": "Budget 8 periods ago"
+    },
+    "Budget07": {
+      "type": "number",
+      "description": "Budget 7 periods ago"
+    },
+    "Budget06": {
+      "type": "number",
+      "description": "Budget 6 periods ago"
+    },
+    "Budget05": {
+      "type": "number",
+      "description": "Budget 5 periods ago"
+    },
+    "Budget04": {
+      "type": "number",
+      "description": "Budget 4 periods ago"
+    },
+    "Budget03": {
+      "type": "number",
+      "description": "Budget 3 periods ago"
+    },
+    "Budget02": {
+      "type": "number",
+      "description": "Budget 2 periods ago"
+    },
+    "Budget01": {
+      "type": "number",
+      "description": "Budget 1 period ago"
+    },
+    "Budget00": {
+      "type": "number",
+      "description": "Current budget"
+    },
+    "BudgetNext01": {
+      "type": "number",
+      "description": "Budget 1 period ahead"
+    },
+    "BudgetNext02": {
+      "type": "number",
+      "description": "Budget 2 periods ahead"
+    },
+    "BudgetNext03": {
+      "type": "number",
+      "description": "Budget 3 periods ahead"
+    },
+    "BudgetNext04": {
+      "type": "number",
+      "description": "Budget 4 periods ahead"
+    },
+    "BudgetNext05": {
+      "type": "number",
+      "description": "Budget 5 periods ahead"
+    },
+    "BudgetNext06": {
+      "type": "number",
+      "description": "Budget 6 periods ahead"
+    },
+    "BudgetNext07": {
+      "type": "number",
+      "description": "Budget 7 periods ahead"
+    },
+    "BudgetNext08": {
+      "type": "number",
+      "description": "Budget 8 periods ahead"
+    },
+    "BudgetNext09": {
+      "type": "number",
+      "description": "Budget 9 periods ahead"
+    },
+    "BudgetNext10": {
+      "type": "number",
+      "description": "Budget 10 periods ahead"
+    },
+    "BudgetNext11": {
+      "type": "number",
+      "description": "Budget 11 periods ahead"
+    },
+    "BudgetNext12": {
+      "type": "number",
+      "description": "Budget 12 periods ahead"
+    },
+    "BudgetNext13": {
+      "type": "number",
+      "description": "Budget 13 periods ahead"
+    },
+    "BudgetNext14": {
+      "type": "number",
+      "description": "Budget 14 periods ahead"
+    },
+    "BudgetNext15": {
+      "type": "number",
+      "description": "Budget 15 periods ahead"
+    },
+    "BudgetNext16": {
+      "type": "number",
+      "description": "Budget 16 periods ahead"
+    },
+    "BudgetNext17": {
+      "type": "number",
+      "description": "Budget 17 periods ahead"
+    },
+    "BudgetNext18": {
+      "type": "number",
+      "description": "Budget 18 periods ahead"
+    },
+    "LinkedAccountU": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Linked account (unrealized)"
+    },
+    "LinkedAccountR": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Linked account (realized)"
+    },
+    "PreferredBankCR": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Preferred bank CR"
+    },
+    "PreferredBankCP": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Preferred bank CP"
+    },
+    "UserNum": {
+      "type": "number",
+      "description": "User number (mutable: freely, script-only)"
+    },
+    "UserText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User text (mutable: freely, script-only)"
+    },
+    "TaggedText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Tagged text (mutable: freely, script-only)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "Kind",
+    "Name"
+  ]
+}

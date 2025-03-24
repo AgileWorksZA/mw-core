@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AutoSplit",
+  "description": "AutoSplit table schema (file_num: 22) - Automatic transaction splitting rules",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "MatchFunction": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Matching function"
+    },
+    "SplitMode": {
+      "type": "integer",
+      "description": "Split mode"
+    },
+    "SplitAcct1": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Split account 1"
+    },
+    "SplitAcct2": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Split account 2"
+    },
+    "SplitAmount1": {
+      "type": "number",
+      "description": "Split amount 1"
+    },
+    "SplitAmount2": {
+      "type": "number",
+      "description": "Split amount 2"
+    },
+    "SplitAcct3": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Split account 3"
+    },
+    "SplitAcct4": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Split account 4"
+    },
+    "SplitAmount3": {
+      "type": "number",
+      "description": "Split amount 3"
+    },
+    "MatchName": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Match name"
+    },
+    "Priority": {
+      "type": "integer",
+      "description": "Priority (mutable: freely, script-only)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "MatchFunction"
+  ]
+}

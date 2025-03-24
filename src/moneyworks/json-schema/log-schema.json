@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Log",
+  "description": "Log table schema (file_num: 7) - System log entries",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "Description": {
+      "type": "string",
+      "description": "Log description"
+    },
+    "Who": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "User who created the log entry"
+    },
+    "Info1": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Additional information field 1"
+    },
+    "Info2": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Additional information field 2"
+    },
+    "Info3": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Additional information field 3"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "Description"
+  ]
+}

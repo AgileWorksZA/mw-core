@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Link",
+  "description": "Link table schema (file_num: 4) - Links departments and groups",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "Dept": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Department code (indexed)"
+    },
+    "Group": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Group code (indexed)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "Dept",
+    "Group"
+  ]
+}

@@ -1,0 +1,494 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Name",
+  "description": "Name table schema (file_num: 10) - Represents customers, suppliers, and other contacts",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "Code": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Name code (indexed)"
+    },
+    "Name": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Entity name (mutable: freely, script-only)"
+    },
+    "Contact": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Primary contact name (mutable: freely, script-only)"
+    },
+    "Position": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Contact position (mutable: freely, script-only)"
+    },
+    "Address1": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Address line 1 (mutable: freely, script-only)"
+    },
+    "Address2": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Address line 2 (mutable: freely, script-only)"
+    },
+    "Address3": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Address line 3 (mutable: freely, script-only)"
+    },
+    "Address4": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Address line 4 (mutable: freely, script-only)"
+    },
+    "Delivery1": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Delivery address line 1 (mutable: freely, script-only)"
+    },
+    "Delivery2": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Delivery address line 2 (mutable: freely, script-only)"
+    },
+    "Delivery3": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Delivery address line 3 (mutable: freely, script-only)"
+    },
+    "Delivery4": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Delivery address line 4 (mutable: freely, script-only)"
+    },
+    "Phone": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Phone number (mutable: freely, script-only)"
+    },
+    "Fax": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Fax number (mutable: freely, script-only)"
+    },
+    "Category1": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Category 1 (mutable: freely, script-only)"
+    },
+    "Category2": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Category 2 (mutable: freely, script-only)"
+    },
+    "Category3": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Category 3 (mutable: freely, script-only)"
+    },
+    "Category4": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Category 4 (mutable: freely, script-only)"
+    },
+    "CustomerType": {
+      "type": "integer",
+      "description": "Customer type (indexed)"
+    },
+    "D90Plus": {
+      "type": "number",
+      "description": "90+ days receivables"
+    },
+    "D60Plus": {
+      "type": "number",
+      "description": "60+ days receivables"
+    },
+    "D30Plus": {
+      "type": "number",
+      "description": "30+ days receivables"
+    },
+    "DCurrent": {
+      "type": "number",
+      "description": "Current receivables"
+    },
+    "CCurrent": {
+      "type": "number",
+      "description": "Current payables"
+    },
+    "DebtorTerms": {
+      "type": "integer",
+      "description": "Debtor terms"
+    },
+    "CreditorTerms": {
+      "type": "integer",
+      "description": "Creditor terms"
+    },
+    "Bank": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Bank code (mutable: freely, script-only)"
+    },
+    "AccountName": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "Bank account name (mutable: freely, script-only)"
+    },
+    "BankBranch": {
+      "type": "string",
+      "maxLength": 22,
+      "description": "Bank branch (mutable: freely, script-only)"
+    },
+    "TheirRef": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Their reference (mutable: freely, script-only)"
+    },
+    "Hold": {
+      "type": "boolean",
+      "description": "Hold status (mutable: freely, script-only)"
+    },
+    "RecAccount": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Receivables account"
+    },
+    "PayAccount": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Payables account"
+    },
+    "Kind": {
+      "type": "integer",
+      "description": "Entity kind (indexed)"
+    },
+    "CreditLimit": {
+      "type": "integer",
+      "description": "Credit limit (mutable: freely, script-only)"
+    },
+    "Discount": {
+      "type": "number",
+      "description": "Discount percentage (mutable: freely, script-only)"
+    },
+    "Comment": {
+      "type": "string",
+      "maxLength": 1024,
+      "description": "Comments (mutable: freely, script-only)"
+    },
+    "SupplierType": {
+      "type": "integer",
+      "description": "Supplier type (indexed)"
+    },
+    "Colour": {
+      "type": "integer",
+      "description": "Display color (mutable: conditionally)"
+    },
+    "Salesperson": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Salesperson code (mutable: freely, script-only)"
+    },
+    "TaxCode": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Tax code"
+    },
+    "SplitMode": {
+      "type": "integer",
+      "description": "Split mode"
+    },
+    "PostCode": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Postal code (mutable: freely, script-only)"
+    },
+    "State": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "State/province (mutable: freely, script-only)"
+    },
+    "BankAccountNumber": {
+      "type": "string",
+      "maxLength": 24,
+      "description": "Bank account number (mutable: freely, script-only)"
+    },
+    "Currency": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Currency code"
+    },
+    "PaymentMethod": {
+      "type": "integer",
+      "description": "Payment method (mutable: conditionally)"
+    },
+    "DBalance": {
+      "type": "number",
+      "description": "Debtor balance"
+    },
+    "DDI": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Direct dial-in (mutable: freely, script-only)"
+    },
+    "eMail": {
+      "type": "string",
+      "maxLength": 140,
+      "description": "Email address (mutable: freely, script-only)"
+    },
+    "Mobile": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Mobile number (mutable: freely, script-only)"
+    },
+    "AfterHours": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "After hours contact (mutable: freely, script-only)"
+    },
+    "Contact2": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Secondary contact (mutable: freely, script-only)"
+    },
+    "Position2": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Secondary contact position (mutable: freely, script-only)"
+    },
+    "DDI2": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Secondary contact DDI (mutable: freely, script-only)"
+    },
+    "eMail2": {
+      "type": "string",
+      "maxLength": 140,
+      "description": "Secondary contact email (mutable: freely, script-only)"
+    },
+    "Mobile2": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Secondary contact mobile (mutable: freely, script-only)"
+    },
+    "AfterHours2": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Secondary contact after hours (mutable: freely, script-only)"
+    },
+    "WebURL": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "Website URL (mutable: freely, script-only)"
+    },
+    "ProductPricing": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "Product pricing code (mutable: conditionally)"
+    },
+    "DateOfLastSale": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of last sale"
+    },
+    "SplitAcct1": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Split account 1"
+    },
+    "SplitAcct2": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Split account 2"
+    },
+    "SplitPercent": {
+      "type": "number",
+      "description": "Split percentage"
+    },
+    "SplitAmount": {
+      "type": "number",
+      "description": "Split amount"
+    },
+    "UserNum": {
+      "type": "number",
+      "description": "User number (mutable: freely, script-only)"
+    },
+    "UserText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User text (mutable: freely, script-only)"
+    },
+    "CustPromptPaymentTerms": {
+      "type": "integer",
+      "description": "Customer prompt payment terms (mutable: conditionally)"
+    },
+    "CustPromptPaymentDiscount": {
+      "type": "number",
+      "description": "Customer prompt payment discount (mutable: conditionally)"
+    },
+    "SuppPromptPaymentTerms": {
+      "type": "integer",
+      "description": "Supplier prompt payment terms (mutable: conditionally)"
+    },
+    "SuppPromptPaymentDiscount": {
+      "type": "number",
+      "description": "Supplier prompt payment discount (mutable: conditionally)"
+    },
+    "LastPaymentMethod": {
+      "type": "integer",
+      "description": "Last payment method used"
+    },
+    "CreditCardNum": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Credit card number (mutable: freely, script-only)"
+    },
+    "CreditCardExpiry": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Credit card expiry (mutable: freely, script-only)"
+    },
+    "CreditCardName": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "Credit card name (mutable: freely, script-only)"
+    },
+    "TaxNumber": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Tax identification number (mutable: freely, script-only)"
+    },
+    "Custom1": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Custom field 1 (mutable: freely, script-only)"
+    },
+    "Custom2": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Custom field 2 (mutable: freely, script-only)"
+    },
+    "Custom3": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 3 (mutable: freely, script-only)"
+    },
+    "Custom4": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 4 (mutable: freely, script-only)"
+    },
+    "DeliveryPostcode": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Delivery postal code (mutable: freely, script-only)"
+    },
+    "DeliveryState": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Delivery state/province (mutable: freely, script-only)"
+    },
+    "AddressCountry": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Address country (mutable: freely, script-only)"
+    },
+    "DeliveryCountry": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Delivery country (mutable: freely, script-only)"
+    },
+    "ReceiptMethod": {
+      "type": "integer",
+      "description": "Receipt method (mutable: conditionally)"
+    },
+    "ABUID": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "ABU ID"
+    },
+    "BankParticulars": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Bank particulars (mutable: freely, script-only)"
+    },
+    "Flags": {
+      "type": "integer",
+      "description": "Flags"
+    },
+    "Salutation": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Salutation (mutable: freely, script-only)"
+    },
+    "Salutation2": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Secondary contact salutation (mutable: freely, script-only)"
+    },
+    "Memo": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Memo (mutable: freely, script-only)"
+    },
+    "Memo2": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Secondary memo (mutable: freely, script-only)"
+    },
+    "Role": {
+      "type": "integer",
+      "description": "Primary contact role (mutable: freely, script-only)"
+    },
+    "Role2": {
+      "type": "integer",
+      "description": "Secondary contact role (mutable: freely, script-only)"
+    },
+    "Custom5": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 5 (mutable: freely, script-only)"
+    },
+    "Custom6": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 6 (mutable: freely, script-only)"
+    },
+    "Custom7": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 7 (mutable: freely, script-only)"
+    },
+    "Custom8": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 8 (mutable: freely, script-only)"
+    },
+    "TaggedText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Tagged text (mutable: freely, script-only)"
+    },
+    "EInvoicingID": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "E-Invoicing ID (mutable: freely, script-only)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "Code",
+    "Name"
+  ]
+}

@@ -1,0 +1,169 @@
+/**
+ * OffLedger table interface
+ * file_num: 25
+ */
+export interface OffLedger {
+  SequenceNumber: number;
+  LastModifiedTime: Date;
+  /** @indexed size="4" */
+  Kind: string;
+  /** @indexed size="16" */
+  Name: string;
+  /** size="40" */
+  Description: string;
+  Flags: number;
+  Balance91: number;
+  Balance90: number;
+  Balance89: number;
+  Balance88: number;
+  Balance87: number;
+  Balance86: number;
+  Balance85: number;
+  Balance84: number;
+  Balance83: number;
+  Balance82: number;
+  Balance81: number;
+  Balance80: number;
+  Balance79: number;
+  Balance78: number;
+  Balance77: number;
+  Balance76: number;
+  Balance75: number;
+  Balance74: number;
+  Balance73: number;
+  Balance72: number;
+  Balance71: number;
+  Balance70: number;
+  Balance69: number;
+  Balance68: number;
+  Balance67: number;
+  Balance66: number;
+  Balance65: number;
+  Balance64: number;
+  Balance63: number;
+  Balance62: number;
+  Balance61: number;
+  Balance60: number;
+  Balance59: number;
+  Balance58: number;
+  Balance57: number;
+  Balance56: number;
+  Balance55: number;
+  Balance54: number;
+  Balance53: number;
+  Balance52: number;
+  Balance51: number;
+  Balance50: number;
+  Balance49: number;
+  Balance48: number;
+  Balance47: number;
+  Balance46: number;
+  Balance45: number;
+  Balance44: number;
+  Balance43: number;
+  Balance42: number;
+  Balance41: number;
+  Balance40: number;
+  Balance39: number;
+  Balance38: number;
+  Balance37: number;
+  Balance36: number;
+  Balance35: number;
+  Balance34: number;
+  Balance33: number;
+  Balance32: number;
+  Balance31: number;
+  Balance30: number;
+  Balance29: number;
+  Balance28: number;
+  Balance27: number;
+  Balance26: number;
+  Balance25: number;
+  Balance24: number;
+  Balance23: number;
+  Balance22: number;
+  Balance21: number;
+  Balance20: number;
+  Balance19: number;
+  Balance18: number;
+  Balance17: number;
+  Balance16: number;
+  Balance15: number;
+  Balance14: number;
+  Balance13: number;
+  Balance12: number;
+  Balance11: number;
+  Balance10: number;
+  Balance09: number;
+  Balance08: number;
+  Balance07: number;
+  Balance06: number;
+  Balance05: number;
+  Balance04: number;
+  Balance03: number;
+  Balance02: number;
+  Balance01: number;
+  Balance00: number;
+  Budget29: number;
+  Budget28: number;
+  Budget27: number;
+  Budget26: number;
+  Budget25: number;
+  Budget24: number;
+  Budget23: number;
+  Budget22: number;
+  Budget21: number;
+  Budget20: number;
+  Budget19: number;
+  Budget18: number;
+  Budget17: number;
+  Budget16: number;
+  Budget15: number;
+  Budget14: number;
+  Budget13: number;
+  Budget12: number;
+  Budget11: number;
+  Budget10: number;
+  Budget09: number;
+  Budget08: number;
+  Budget07: number;
+  Budget06: number;
+  Budget05: number;
+  Budget04: number;
+  Budget03: number;
+  Budget02: number;
+  Budget01: number;
+  Budget00: number;
+  BudgetNext01: number;
+  BudgetNext02: number;
+  BudgetNext03: number;
+  BudgetNext04: number;
+  BudgetNext05: number;
+  BudgetNext06: number;
+  BudgetNext07: number;
+  BudgetNext08: number;
+  BudgetNext09: number;
+  BudgetNext10: number;
+  BudgetNext11: number;
+  BudgetNext12: number;
+  BudgetNext13: number;
+  BudgetNext14: number;
+  BudgetNext15: number;
+  BudgetNext16: number;
+  BudgetNext17: number;
+  BudgetNext18: number;
+  /** size="14" */
+  LinkedAccountU: string;
+  /** size="14" */
+  LinkedAccountR: string;
+  /** size="8" */
+  PreferredBankCR: string;
+  /** size="8" */
+  PreferredBankCP: string;
+  /** @mutable="freely, script-only" */
+  UserNum: number;
+  /** @mutable="freely, script-only" size="256" */
+  UserText: string;
+  /** @mutable="freely, script-only" size="256" */
+  TaggedText: string;
+}

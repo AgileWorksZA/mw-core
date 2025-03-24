@@ -6,7 +6,9 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/swagger": "^1.2.2",
+    "elysia": "latest",
+    "jsdom": "^26.0.0"
   },
   "devDependencies": {
     "bun-types": "latest"

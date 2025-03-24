@@ -1,0 +1,745 @@
+<!DOCTYPE html><html><head></head><body><div class="navigation"><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p><hr></div><h2 id="standard-handlers"><br>
+<u>Standard Handlers</u> </h2><blockquote>
+<p>User-interface helper handlers with specific names are called
+automatically for active scripts. Handlers that implement these standard
+messages (and variants thereof) will be called in all active document
+scripts. By implementing these handlers in your script, you can override
+or extend the behaviour of MoneyWorks.</p>
+</blockquote><h4 id="general-event-handlers">General event handlers</h4><blockquote>
+<p>The standard handlers for general events are <a href="#load">Load</a>, <a href="#unload">Unload</a>, <a href="#_bookmark1478">UserLoggedIn</a>, <a href="#userloggingout">UserLoggingOut</a>, <a href="#allowposttransactions-selection">AllowPostTransactions</a>, <a href="#_bookmark1481">PostedTransactions</a>, and <a href="#_bookmark1483">AllowDeleteRecords</a>.</p>
+</blockquote><h4 id="windowui-event-handlers">Window/UI event handlers</h4><blockquote>
+<p>For overriding window behaviour, there are standard window handlers:
+<a href="#_bookmark1484">Before</a>, <a href="#_bookmark1488">ItemHit</a>, <a href="#validate-windowref">Validate</a>, <a href="#_bookmark1487">After</a>, <a href="#cancel-windowref">Cancel</a>,
+<a href="#close-windowref">Close</a>, <a href="#enterfield-windowref-fieldnamestring-fieldvaluestring">EnterField</a>,
+<a href="#_bookmark1490">ValidateField</a>, <a href="#_bookmark1493">ExitedField</a>, <a href="#entercell-windowref-listref-rownum-columnnum-cellvaluestring">EnterCell</a>,
+<a href="#validatecell-windowref-listref-rownum-columnnum">ValidateCell</a>,
+<a href="#exitedcell-windowref-listref-row-column-cellvaluestring">ExitedCell</a>,
+<a href="#urlcallback-window-webviewitemid-url">URLCallback</a>, <a href="#dawdle-windowref">Dawdle</a>, <a href="#_bookmark1500">TweakColumnList</a>.</p>
+</blockquote><p>For adding custom columns to the Transaction entry window or the
+Timesheet window, you can implement a <a href="#_bookmark1500">TweakColumnList</a> handler.</p><h4 id="report-tweaking">Report tweaking</h4><blockquote>
+<p>There is also a <a href="#setupreport">SetupReport</a> handler for
+tweaking reports before they are executed.</p>
+</blockquote><h4 id="mailing">Mailing</h4><blockquote>
+<p>You can implement a custom <a href="#_bookmark1497">SendSMTPMail</a>
+handler to customise the way SMTP emails are sent.</p>
+<p>Standard window handlers are passed a windowRef identifying the
+specific instance of the window from which the message was sent. You can
+use this to access content of the specific window. Each kind of window
+is identified by a class name (or windowID) but this class name is not
+passed to the handler.</p>
+<p>Window handlers will usually be implemented with windowID-specific
+handler names incorporating the windowID (see <a href="#specific-ui-element-handler-names">Specific UI Element Handler
+Names</a>), so its value is usually implicit. If you use a general
+handler, you can get the windowID from the windowRef using the <a href="section-64.html#getwindowid-windowref">GetWindowID</a>(winRef) function.</p>
+</blockquote><h3 id="load">Load</h3><blockquote>
+<p><span id="_bookmark1478" class="anchor"></span>The MWScript main
+entry point.</p>
+<p><strong>Automatically called:</strong> When your script is loaded.
+Scripts in the document are usually loaded when you open or connect to a
+MoneyWorks document.</p>
+<p><strong>Use for:</strong> To do any initialisation you need (such as
+loading persistent values from the database), or, if your script is to
+be manually invoked from the Script Editor, this is the main entry point
+for your script.</p>
+<p><strong>Return value:</strong> ignored</p>
+</blockquote><h5 id="example-51">Example :</h5><blockquote>
+<p><strong>Return value:</strong> ignored</p>
+<p><strong>Example</strong> :</p>
+<p>on Unload</p>
+<p>Say("Goodbye!")</p>
+<p>end</p>
+</blockquote><h3 id="userloggedin">UserLoggedIn</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> The user has just logged in
+(network or local) and also when Switch User is used to switch logins
+when already in a file.</p>
+<p><strong>Use for:</strong> You can use this opportunity to load
+user-specific state. From v7, you get this message even if password
+protection is not turned on. From v7.1 and later, you can also use this
+handler to abort the login by returning 0. Older scripts will still work
+due to the default return value for any handler</p>
+<p>being 1. The user can be identified by the global variables or</p>
+<p>on Load</p>
+<p>Alert("Hello World!")</p>
+<p>end</p>
+<p>Initials</p>
+<p>UserName .</p>
+<p>Note: You should not normally do anything that invokes a modal user
+interface (like Alert) in a Load handler for a script that will load
+every time you log into the document. The exception would be if your are
+just testing something out. In this case, you should use Run Once to
+Load and Unload the script so that it will not be saved as active and
+run for everyone when they log in.</p>
+</blockquote><h3 id="unload">Unload</h3><blockquote>
+<p><strong>Automatically called:</strong> When the script is about to be
+unloaded. Script unloading happens when you deactivate the script in the
+script editor (including the implicit deactivate that happens when you
+change and reactivate the script), or—more usually—when you log out of
+the document.</p>
+<p><strong>Use for:</strong> Use this kiss-off as an opportunity to e.g.
+save persistent values in the database (although note that in MoneyWorks
+8, simple properties can be</p>
+<p>on UserLoggedIn</p>
+<p>// record the login time in the UserText field</p>
+<p>ReplaceField ("Login.UserText", "Initials=`" + Initials+"`", "`Last
+login:" + DateToText(Time(), DateFormShortDateAndTime)+"`") end</p>
+<p><strong>Return value:</strong> Return FALSE to abort the login (i.e.
+to prevent the user from logging in).</p>
+</blockquote><h5 id="example-1-1">Example 1 :</h5><blockquote>
+<p>on UserLoggedIn</p>
+<p>if UserName = "Rowan" and Day(Today()) &gt;= 6 Alert("Login denied",
+"No weekend logins") return FALSE // deny login</p>
+<p>endif</p>
+<p>end</p>
+<p><strong>Example 2</strong> :</p>
+<p>persistent on clients using a declaration.</p>
+<p>persistent property</p>
+</blockquote><h3 id="userloggingout">UserLoggingOut</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><span id="_bookmark1481" class="anchor"></span><strong>Automatically
+called:</strong> When the user is logging out (either disconnecting,
+switching user, or closing a local file).</p>
+<p><strong>Use for:</strong> You can use this opportunity to save
+user-specific state. The current user can be identified by the global
+variables</p>
+<p>Initials</p>
+</blockquote><p>or UserName .</p><blockquote>
+<p><strong>Return value:</strong> ignored</p>
+</blockquote><h3 id="allowposttransactions-selection">AllowPostTransactions
+(selection)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When the user is about to
+(electively) post transactions.</p>
+<p><span id="_bookmark1483" class="anchor"></span><strong>Use
+for:</strong> To implement programmatic control over whether a user is
+allowed to post transactions. Return 0 to abort posting. If you return
+0, none of the transactions in the selection will be posted.</p>
+<p><strong>Notes:</strong> Avoid iterating over the records in the
+selection one at a time, as this may be very time consuming if you are
+connected to a remote server.</p>
+<p>Where possible, make the decision based on a search of the selection
+using IntersectSelection.</p>
+</blockquote><h5 id="example-52">Example:</h5><blockquote>
+<p>on AllowPostTransactions(toPost)</p>
+<p>let notMine = IntersectSelection(toPost, `EnteredBy &lt;&gt;
+Initials`)</p>
+<p>if RecordsSelected(notMine) &gt; 0</p>
+<p>Alert("Can't post", "You can only post transactions that you
+entered")</p>
+<p>return false</p>
+<p>endif return true</p>
+<p>end</p>
+<p><strong>Return value:</strong> Return 1 (or TRUE) if the selection of
+transactions should be allowed to be posted. Return 0 (or FALSE) to
+prevent the user from posting them. If you deny posting in this way, you
+should present some user interface (such as an alert) to explain what is
+happening. The default return value (for all handlers) is 1 (TRUE).</p>
+</blockquote><h3 id="postedtransactions-selection">PostedTransactions
+(selection)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When the user has just posted
+the transactions.</p>
+<p>This will be called for both electively and non-electively posted
+transactions.</p>
+<p><strong>Use for:</strong> To do any post-processing you might want to
+apply after transaction posting. You might, for example, want to
+transfer some data to another database, or tag the transactions in same
+way.</p>
+<p><strong>Return value:</strong> ignored</p>
+</blockquote><h3 id="allowdeleterecordstablename-selection">AllowDeleteRecords(tableName,
+selection)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When the user is about to
+delete records from a list.</p>
+<p><strong>Use for:</strong> To exercise finer control over whether the
+current user is allowed to delete certain records. Return TRUE if all of
+the records in the selection may be deleted. Return FALSE to prevent any
+of the records in the selection being deleted.</p>
+<p><strong>Notes:</strong> Avoid iterating over the records in the
+selection one at a time, as this may be very time consuming if you are
+connected to a remote server.</p>
+<p>Where possible, make the decision based on a search of the selection
+using IntersectSelection.</p>
+</blockquote><h5 id="example-53">Example:</h5><h5 id="section-103"></h5><blockquote>
+<p>end</p>
+<p><span id="_bookmark1484" class="anchor"></span><strong>Return
+value:</strong> boolean</p>
+<p>on AllowDeleteRecords(table, sel) if table = "transaction"</p>
+<p>let no_del = IntersectSelection(sel, `type = "QU@" and analysis =
+"PRICE"`)</p>
+<p>if RecordsSelected(no_del) &gt; 0</p>
+<p>Alert("Cannot delete", "The selection contains quotes used for your
+price book")</p>
+<p>return false endif</p>
+<p>endif</p>
+<p>end</p>
+</blockquote><h3 id="validate-windowref">Validate (windowRef)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When the user clicks OK or
+Next on a record that has had changes made to it (if no fields have been
+changed, the handler may not be called). Use the windowRef to access
+information from the window.</p>
+<p><strong>Use for:</strong> To control whether the data in the window
+can be saved as-is. The handler should return 1 (true) or 0 (false) to
+indicate whether the window content should be accepted. Returning 0 will
+prevent the window from closing. IMPORTANT: If you do this you should
+provide an explanation to the user via an alert or coachtip. Users will
+be very unhappy if they don't know why the OK button is not working!</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement a Validate handler
+that is specific to the particular window ID of interest. In the case of
+the Transaction entry window, the handler can also be specific to the
+2-letter transaction type. If you do not use a window ID-specific name,
+you must test the window ID returned from GetWindowID(windowRef)</p>
+</blockquote><h5 id="example-54">Example:</h5><blockquote>
+<p><strong>Return value:</strong> Boolean. TRUE indicates that the
+contents of the window are valid and acceptable and the record can be
+saved. An After message will follow. FALSE indicates that the contents
+of the window are unacceptable and the record will not be saved and the
+window will not close. An After message will not follow.</p>
+</blockquote><h3 id="before-windowref">Before (windowRef)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When a window opens or when a
+new record is loaded in the window (when the user clicks the Next or
+Prev button). For list windows, this will be called when the user
+changes the view in the sidebar.</p>
+<p><strong>Use for:</strong> To set the initial field values of a custom
+window; To perform any kind of setup your script needs to do for a
+standard window; For a list window, install Toolbar commands.</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement a Before handler that
+is specific to the particular window ID of interest. In the case of the
+Transaction entry window, the handler can also be specific to the
+2-letter transaction type. If you do not use a window ID-specific name,
+you must test the window ID returned from GetWindowID(windowRef). A non-
+specific before handler would be called for every Window.</p>
+<p>e.g. Before:&lt;WindowId&gt;:&lt;TransactionType&gt;</p>
+<p><strong>Example 1:</strong></p>
+<p><strong>Example 2:</strong></p>
+<p>on Validate:F_TRANS:DI(windowRef) // only called to validate Debtor
+Invoice transaction window</p>
+<p>if GetFieldValue(windowRef, "E_DEPT") = "" Alert("Salesperson must be
+specified") return false</p>
+<p>endif</p>
+<p>on Before:F_TRANS:DI(windowRef) // only called when a Debtor Invoice
+is loaded into a transaction window</p>
+<p>if GetFieldValue(windowRef, -2) = 0 Navigator("", "This is a new
+invoice")</p>
+<p>// do something that is actually more useful for new invoices...</p>
+<p>endif</p>
+<p>end</p>
+</blockquote><h3 id="close-windowref">Close (windowRef)</h3><blockquote>
+<p>on MySum</p>
+<p>let s = SumSelection("transaction.Gross - AmtPaid", "*highlight")</p>
+<p>Alert("Outstanding Total = " + s)</p>
+<p>end</p>
+<p>on Before:F_TRANSLIST(windowRef)</p>
+<p>InstallToolbarIcon(windowRef, "MySum") // Install toolbar icon in
+list</p>
+<p>end</p>
+<p><span id="_bookmark1487" class="anchor"></span><strong>After
+(windowRef)</strong></p>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><span id="_bookmark1488" class="anchor"></span><strong>Automatically
+called:</strong> Called when a window is closing or when a new record is
+about to be loaded into it. May not be called if no content was
+modified.</p>
+<p><strong>Use for:</strong> Reacting to the user clicking OK</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement an After handler that
+is specific to the particular window ID of interest. e.g.</p>
+<p>After:&lt;WindowId&gt;:&lt;TransactionType&gt; (the last of these
+applies only when the WindowID is F_TRANS)</p>
+</blockquote><h3 id="cancel-windowref">Cancel (windowRef)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When a window is closed via
+the Cancel button.</p>
+<p><strong>Use for:</strong> Reacting to the user clicking Cancel</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement a Close handler that
+is specific to the particular window ID of interest. e.g.</p>
+<p>Cancel:&lt;WindowId&gt;:&lt;TransactionType&gt; (the last of these
+applies only when the WindowID is F_TRANS)</p>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When a window is closed. Use
+this to dispose any persistent data you may have created for the window
+(to "dispose" an array, assign 0 to it).</p>
+<p><strong>Use for:</strong> Cleaning up regardless of how the user
+closes the window (Cancel, OK, close box)</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement an Close handler that
+is specific to the particular window ID of interest. e.g.
+Close:&lt;WindowId&gt;</p>
+</blockquote><h3 id="itemhit-windowref-fieldnamestring">ItemHit (windowRef,
+fieldNameString)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> Whenever the contents of a
+field changes. This includes typing a a character into an edit field;
+clicking a checkbox; changing a popup menu.</p>
+<p><strong>Use for:</strong> Reacting immediately to a control change or
+as a chance to call AutoFill on a code field</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement an Itemhit handler
+that is specific to the particular window ID and itemID of interest.
+e.g.</p>
+<p>Itemhit:&lt;WindowId&gt;:ItemID:TransactionType (the last of these
+applies only when the WindowID is F_TRANS)</p>
+<p>ItemHit handlers for editable list cells can have more detailed
+specific naming (down to the column name of the active cell) and will
+receive additional parameters (namely the list handle, the current row
+number, and the current column number). e.g. on
+ItemHit:F_TRANS:L_LIST:DI:Location(winRef, listId, listHdl, rownum,
+colnum) for an ItemHit handler that responds only to kepresses in the
+location column of Debtor Invoices. Note that for the transaction entry
+form, you must supply the type specifier. Note also that due to
+backwards compatibility, the list is identified by its underlying
+identifier L_LIST</p>
+<p><span id="_bookmark1490" class="anchor"></span>rather than a tab name
+like By_Item. This does have the benefit that you can respond to, eg,
+the job column in either the By_Item or By_Account tabs using the same
+specific handler (since v9.0.9).</p>
+</blockquote><h3 id="dawdle-windowref">Dawdle (windowRef)</h3><blockquote>
+<p>A script handler you can implement to receive periodic events in a
+custom MWScript window.</p>
+<p><strong>Automatically called:</strong> Approximately every 10 seconds
+while your custom window is frontmost.</p>
+<p><strong>Use for:</strong> Updating information that may change over
+time. Avoid performing any tasks that may take a long time. If you make
+a web request using the Curl API, make sure you set a short connection
+timeout.</p>
+<p><strong>Availability:</strong> MWScript in MoneyWorks Gold 8.1.5 and
+later.</p>
+</blockquote><h3 id="enterfield-windowref-fieldnamestring-fieldvaluestring">EnterField
+(windowRef, fieldNameString, fieldValueString)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><span id="_bookmark1493" class="anchor"></span><strong>Automatically
+called:</strong> When a field becomes active by being tabbed into or
+clicked.</p>
+<p><strong>Use for:</strong> Preflighting a field (maybe to save the
+contents before the user changes them).</p>
+<p><strong>Return value:</strong> ignored</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement an EnterField handler
+that is specific to the particular window ID and itemID of interest.
+e.g.</p>
+<p>EnterField:&lt;WindowId&gt;:ItemID:&lt;TransactionType&gt; (the last
+of these applies only when the WindowID is F_TRANS)</p>
+</blockquote><h3 id="validatefield-windowref-fieldnamestring-fieldvaluestring"><br>
+ValidateField (windowRef, fieldNameString, fieldValueString)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When a field is about to be
+exitted. Return 0 if the field value is not acceptable: this will keep
+the focus in the field. IMPORTANT: If you do this you should provide an
+explanation to the user via an alert or coachtip. Users will be very
+unhappy if they don't know why they can't exit a field!</p>
+<p><strong>Return value:</strong> Boolean</p>
+<p><strong>Use for:</strong> Validating the contents of a field. You can
+also call CheckCodeField to present a code choices dialog box if the
+field is not a valid code for a particular table.</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement an ValidateField
+handler that is specific to the particular window ID and itemID of
+interest. e.g.</p>
+<p>ValidateField:&lt;WindowId&gt;:ItemID:&lt;TransactionType&gt; (the
+last of these applies only when the WindowID is F_TRANS)</p>
+</blockquote><h3 id="exitedfield-windowref-fieldnamestring-fieldvaluestring">ExitedField
+(windowRef, fieldNameString, fieldValueString)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When a field has been
+exitted.</p>
+<p><strong>Use for:</strong> Reacting to the user tabbing out of a
+field</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement an ExitedField handler
+that is specific to the particular window ID and itemID of interest.
+e.g.</p>
+<p>ExitedField:&lt;WindowId&gt;:ItemID:&lt;TransactionType&gt; (the last
+of these applies only when the WindowID is F_TRANS)</p>
+</blockquote><h3 id="entercell-windowref-listref-rownum-columnnum-cellvaluestring">EnterCell
+(windowRef, listRef, rowNum, columnNum, cellValueString)</h3><blockquote>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When a cell in an editable
+list (such as the detail line entry list) is activated by tabbing into
+it or clicking into it.</p>
+<p><strong>Use for:</strong> You can use this opportunity to keep track
+of which cell is active (knowledge you may need in an ItemHit handler,
+for example).</p>
+<p><strong>Return value:</strong> none</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement an EnterCell handler
+that is specific to the particular window ID, itemID and possible column
+name of interest. e.g.
+EnterCell:&lt;WindowId&gt;:ListItemID:ColumnName.</p>
+</blockquote><h5 id="see-also-162">See Also:</h5><blockquote>
+<p><a href="#_bookmark1313">AddListLine</a>: Add a row to an editable
+list <a href="#_bookmark1343">DeleteListLine</a>: Delete a row from an
+editable list <a href="section-63.html#exchangelistrows-listref-rowa-rowb">ExchangeListRows</a>: Swap
+rows in an editable list <a href="#exitedcell-windowref-listref-row-column-cellvaluestring">ExitedCell</a>:
+A cell in an editable list has just lost focus</p>
+<p><a href="section-63.html#file_write-filehandle-string">GetActiveListColumn</a>: Get
+the column number of an edit list that has keyboard focus</p>
+<p><a href="section-63.html#getactivelistrow-listref">GetActiveListRow</a>: Get the row
+number of an edit list that has keyboard focus</p>
+<p><a href="#_bookmark1375">GetListField</a>: Get the text of an
+editable list field</p>
+<p><a href="section-64.html#getlisthandle-windowref-listname">GetListHandle</a>: Get
+list handle from window handle and list ident <a href="#_bookmark1377">GetListLineCount</a>: Get number of rows in a
+list</p>
+<p><a href="#_bookmark1379">GetListName</a>: Selected tab name for
+Transaction entry details list <a href="section-64.html#mergeorderlines-windowref-linenum">MergeOrderLines</a>: Merge
+order lines (opposite of SplitOrderLines) <a href="section-65.html#setlistfield-listref-rownum-columnnumorname-value">SetListField</a>:
+Set the text of an editable list field</p>
+<p><a href="section-65.html#sortlistbycolumn-listref-colnumorname-direction">SortListByColumn</a>:
+Sort an editable list by a column</p>
+<p><a href="#_bookmark1440">SplitOrderLine</a>: Duplicate a line item on
+an order, splitting the order qty (for serial entry)</p>
+<p><a href="#validatecell-windowref-listref-rownum-columnnum">ValidateCell</a>:
+Control whether the content of a cell is acceptable and the cell can be
+exited</p>
+</blockquote><h3 id="validatecell-windowref-listref-rownum-columnnum">ValidateCell
+(windowRef, listRef, rowNum, columnNum,</h3><blockquote>
+<p><strong>cellValueString)</strong></p>
+<p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p>
+<p><strong>Automatically called:</strong> When a cell in an editable
+list (such as the detail line entry list) is about to be exitted. Row
+and column numbers are zero-based. Return 0 if the cell value is not
+acceptable: this will keep the focus in the cell. IMPORTANT: If you do
+this you should provide an explanation to the user via an alert or
+coachtip. Users will be very unhappy if they don't know why they can't
+exit a cell!</p>
+<p><strong>Use for:</strong> Validating the content of a cell.</p>
+<p><strong>Return value:</strong> Boolean</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement a ValidateCell handler
+that is specific to the particular window ID, itemID and column name of
+interest.</p>
+<p>e.g. ValidateCell:&lt;WindowId&gt;:ListItemID:ColumnName.</p>
+</blockquote><h5 id="see-also-163">See Also:</h5><blockquote>
+<p><a href="#_bookmark1313">AddListLine</a>: Add a row to an editable
+list <a href="#_bookmark1343">DeleteListLine</a>: Delete a row from an
+editable list <a href="#entercell-windowref-listref-rownum-columnnum-cellvaluestring">EnterCell</a>:
+A cell in an editable list has just gained focus <a href="section-63.html#exchangelistrows-listref-rowa-rowb">ExchangeListRows</a>: Swap
+rows in an editable list <a href="#exitedcell-windowref-listref-row-column-cellvaluestring">ExitedCell</a>:
+A cell in an editable list has just lost focus</p>
+<p><a href="section-63.html#file_write-filehandle-string">GetActiveListColumn</a>: Get
+the column number of an edit list that has keyboard focus</p>
+<p><a href="section-63.html#getactivelistrow-listref">GetActiveListRow</a>: Get the row
+number of an edit list that has keyboard focus</p>
+<p><a href="#_bookmark1375">GetListField</a>: Get the text of an
+editable list field</p>
+<p><a href="section-64.html#getlisthandle-windowref-listname">GetListHandle</a>: Get
+list handle from window handle and list ident <a href="#_bookmark1377">GetListLineCount</a>: Get number of rows in a
+list</p>
+<p><a href="#_bookmark1379">GetListName</a>: Selected tab name for
+Transaction entry details list <a href="section-64.html#mergeorderlines-windowref-linenum">MergeOrderLines</a>: Merge
+order lines (opposite of SplitOrderLines) <a href="section-65.html#setlistfield-listref-rownum-columnnumorname-value">SetListField</a>:
+Set the text of an editable list field</p>
+<p><a href="section-65.html#sortlistbycolumn-listref-colnumorname-direction">SortListByColumn</a>:
+Sort an editable list by a column</p>
+<p><a href="#_bookmark1440">SplitOrderLine</a>: Duplicate a line item on
+an order, splitting the order qty (for serial entry)</p>
+</blockquote><h3 id="exitedcell-windowref-listref-row-column-cellvaluestring">ExitedCell
+(windowRef, listRef, row, column, cellValueString)</h3><blockquote>
+<p>A script handler you can implement to change/augment standard
+MoneyWorks behaviour.</p>
+<p><strong>Automatically called:</strong> When a cell of an editable
+list view is exited. Analogous to ExitedField for editable list
+cells.</p>
+<p><span id="_bookmark1497" class="anchor"></span><strong>Return
+value:</strong> none</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> You can and should implement an ExitedCell handler
+that is specific to the particular window ID, itemID and possible column
+name of interest. e.g.</p>
+<p>ExitedCell:&lt;WindowId&gt;:ListItemID:ColumnName:&lt;TransactionType&gt;.</p>
+</blockquote><h5 id="see-also-164">See Also:</h5><blockquote>
+<p><a href="#_bookmark1313">AddListLine</a>: Add a row to an editable
+list <a href="#_bookmark1343">DeleteListLine</a>: Delete a row from an
+editable list <a href="#entercell-windowref-listref-rownum-columnnum-cellvaluestring">EnterCell</a>:
+A cell in an editable list has just gained focus <a href="section-63.html#exchangelistrows-listref-rowa-rowb">ExchangeListRows</a>: Swap
+rows in an editable list</p>
+<p><a href="section-63.html#file_write-filehandle-string">GetActiveListColumn</a>: Get
+the column number of an edit list that has keyboard focus</p>
+<p><a href="section-63.html#getactivelistrow-listref">GetActiveListRow</a>: Get the row
+number of an edit list that has keyboard focus</p>
+<p><a href="#_bookmark1375">GetListField</a>: Get the text of an
+editable list field</p>
+<p><a href="section-64.html#getlisthandle-windowref-listname">GetListHandle</a>: Get
+list handle from window handle and list ident <a href="#_bookmark1377">GetListLineCount</a>: Get number of rows in a
+list</p>
+<p><a href="#_bookmark1379">GetListName</a>: Selected tab name for
+Transaction entry details list <a href="section-64.html#mergeorderlines-windowref-linenum">MergeOrderLines</a>: Merge
+order lines (opposite of SplitOrderLines) <a href="section-65.html#setlistfield-listref-rownum-columnnumorname-value">SetListField</a>:
+Set the text of an editable list field</p>
+<p><a href="section-65.html#sortlistbycolumn-listref-colnumorname-direction">SortListByColumn</a>:
+Sort an editable list by a column</p>
+<p><a href="#_bookmark1440">SplitOrderLine</a>: Duplicate a line item on
+an order, splitting the order qty (for serial entry)</p>
+<p><a href="#validatecell-windowref-listref-rownum-columnnum">ValidateCell</a>:
+Control whether the content of a cell is acceptable and the cell can be
+exited</p>
+</blockquote><h3 id="urlcallback-window-webviewitemid-url">URLCallback (window,
+webviewitemID, url)</h3><blockquote>
+<p>A script handler you can implement to act on the URL of a web view
+changing.</p>
+<p><strong>Automatically called:</strong> When the current location in a
+custom Web View that has</p>
+</blockquote><p>requested callbacks changes. The new location is provided in the url
+parameter. To request callbacks, you must call WebViewControl(winRef,
+itemID, "options wantCallbacks='true'") on the web view.</p><blockquote>
+<p><strong>Use for:</strong> Intended to facilitate handling of OAuth
+logins. You can parse the login token from the URL.</p>
+<p><strong>Availability:</strong> MoneyWorks Gold 8.1 and later.</p>
+</blockquote><h3 id="sendsmtpmail-recipients-attachmentpath-subject-message-attachmentfilename">SendSMTPMail
+(recipients, attachmentPath, subject, message, attachmentFileName)</h3><blockquote>
+<p>A script handler that takes over the job of sending SMTP mail.</p>
+<p>When MoneyWorks has an email + attachment to send and the preferences
+are set to send via SMTP, MoneyWorks calls the Built_In: SendSMTPMail
+script to send the email. This is an open-source MWScript that uses the
+CURL library to cummunicate with the SMTP server to get the mail
+delivered.</p>
+<p>In v8.1.7 and later, if there is a script handler named SendSMTPMail,
+then that handler will be called instead (note: if there are multiple
+such handlers, they will all be called, potentially resulting in the
+message being sent multiple times)</p>
+<p><em>recipients</em> may be a single recipient or a comma-delimited
+list <em>attachmentPath</em> is the posix or windows path to the file to
+be attached <em>subject</em> is the email subject</p>
+<p><em>message</em> is the plain text message; may be blank</p>
+<p><em>attachmentFileName</em> is a suggested attachment name which may
+differ from the actual filename of the attachmentPath (e.g. "Invoice
+1234.pdf")</p>
+</blockquote><table>
+<colgroup>
+<col style="width: 81%">
+<col style="width: 12%">
+<col style="width: 3%">
+<col style="width: 2%">
+</colgroup>
+<thead>
+<tr>
+<th>Your SendSMTPMail handler can call internal handlers</th>
+<th colspan="2" rowspan="2"></th>
+<th rowspan="5"></th>
+</tr>
+<tr>
+<th>Built_In: SendSMTPMail(to, path, subject, message_text,</th>
+</tr>
+<tr>
+<th colspan="3">attachmentName) or Built_In:
+SendSMTPMail_WithCredentials(to, path,</th>
+</tr>
+<tr>
+<th colspan="2">subject, message_text, attachmentName, server, replyTo,
+authUser,</th>
+<th></th>
+</tr>
+<tr>
+<th colspan="3">authPass) to do the heavy lifting for you. Note that
+these handlers are open</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table><blockquote>
+<p>SetReportColumnWidth("COLPRICE", 80)</p>
+<p>SetReportColumnWidth("COLUNIT", 0)</p>
+</blockquote><p>else</p><blockquote>
+<p>SetReportColumnWidth("COLPRICE", 80)</p>
+</blockquote><p>SetReportColumnWidth("COLUNIT", 30) endif</p><p>end</p><blockquote>
+<p><strong>Automatically called:</strong> When a message needs to be
+sent via SMTP</p>
+<p>Val(control_name)</p>
+</blockquote><p>source and can be found in the Preload_Built_In.mwscript file in the
+Standard Plugins Scripts/Autoload folder.</p><p>Note that prior to v9, if there was no user defined handler, an
+external executable (sendEmail) was used. SendEmail(.exe) is no longer
+installed with MoneyWorks 9, so if you have scripts that rely on it, you
+may need to update them.</p><blockquote>
+<p><strong>Note:</strong> Although report custom controls are
+automatically instantiated as variables for the report, note that when a
+report script control is compiled, the custom controls are not yet
+available, but they will be available when</p>
+<p><strong>Use for:</strong> Customising SMTP sending behaviour</p>
+<p><strong>Availability:</strong> MoneyWorks Gold 8.1.7 and later.</p>
+</blockquote><p><strong>TweakColumnList (windowRef, listRef)</strong></p><p>A script handler you can implement to override standard MoneyWorks
+behaviour.</p><p>Your handler can call the <a href="#_bookmark1318">AppendColumnToStdEditList</a> function to append
+custom columns to allow entry into additional custom fields or tagged
+fields in the Details or JobSheet table.</p><p><strong>Automatically called:</strong> When instantiating an editable
+column list in the transaction entry window or the timesheet window. Do
+not do anything else in your handler other than appending columns to the
+list. Do not present any UI.</p><p><strong>Example:</strong> The following handlers add columns to the
+transaction and timesheet windows.</p><blockquote>
+<p>on TweakColumnList:F_TRANS(win, list) AppendColumnToStdEditList(list,
+"Detail.Custom1", "Cust1|40|L") AppendColumnToStdEditList(list,
+"Detail.Custom2", "Cust2|60|L") AppendColumnToStdEditList(list,
+"Detail.UserText", "UText|80|L") AppendColumnToStdEditList(list,
+"Detail.UserNum", "UNum|40|R")</p>
+<p>AppendColumnToStdEditList(list, "_foo", "foo|50|L")
+AppendColumnToStdEditList(list, "_bar", "bar|50|L")
+AppendColumnToStdEditList(list, "_baz", "baz|50|L")</p>
+<p>end</p>
+<p>the script runs, hence the use of the radio button controls.</p>
+<p>to get the values of</p>
+</blockquote><h3 id="setupreport">SetupReport</h3><blockquote>
+<p><span id="_bookmark1500" class="anchor"></span>A script handler you
+can implement to override standard MoneyWorks behaviour.</p>
+<p><strong>Automatically called:</strong> Immediately before running a
+report (but after the report settings dialog has been OK'd).</p>
+<p><strong>Use for:</strong> You can use this opportunity to tweak the
+report (in particular, you can use <a href="#_bookmark1437">SetReportColumnWidth</a> to modify tab stops in
+the report to hide or show columns. You can also abort generation of the
+report by returning FALSE from this handler.</p>
+<p><strong>Return value:</strong> Boolean: return FALSE to cancel the
+report.</p>
+<p><strong>Example:</strong> The built-in Details report in Standard
+Plugins/Reports/~Transaction/ uses a SetupReport handler to configure
+the columns of the report according to the user's selection of Debits
+&amp; Credits, Net, Tax, Gross or Items &amp; Qty:</p>
+<p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> None, but this handler will generally only be
+implemented in a script control that is local to the report.</p>
+<p>on SetupReport</p>
+<p>let dc = Val("Debits_and_Credits") let iq = Val("Items_and_Qty")
+SetReportColumnWidth("COL7", 190) if dc</p>
+<p>SetReportColumnWidth("COLPRICE", 0)</p>
+<p>SetReportColumnWidth("COLUNIT", 0) elseif not iq</p>
+<p>on TweakColumnList:F_TIMESHEET(win, list)
+AppendColumnToStdEditList(list, "UserText", "UText|80|L")
+AppendColumnToStdEditList(list, "UserNum", "UNum|40|R")</p>
+<p>end</p>
+</blockquote><p><strong><a href="#specific-ui-element-handler-names">Specific
+Naming</a>:</strong> The handler should be specific to either the
+F_TRANS or F_TIMESHEET window identifier, and may also be specific to
+the selected detail tab in the transaction window and to a specific
+transaction type (e.g. TweakColumnList:F_TRANS:By_Item:DI will only
+apply to the By Item tab for Debtor (Sales) Invoices).</p><h5 id="see-also-165">See Also:</h5><blockquote>
+<p><a href="#_bookmark1318">AppendColumnToStdEditList</a>: Customise a
+standard edit list</p>
+</blockquote><h2 id="specific-ui-element-handler-names"><u>Specific UI Element
+Handler Names</u> </h2><blockquote>
+<p>Since common UI handlers tend to need to be implemented for specific
+window classes or fields, there is an easy way to implement these
+handlers for their specific target.</p>
+<p>For the following handlers, you can write a handler that specifies
+its windowID class and optional additional scope in the handler
+name:</p>
+</blockquote><ul>
+<li><p><strong>Before:</strong>windowID:transtype</p></li>
+<li><p><strong>ItemHit:</strong>windowID:itemIdent:transtype</p></li>
+<li><p><strong>ItemHit:</strong>windowID:listIdent:transtype:columnName
+(alternate form for list cells)</p></li>
+<li><p><strong>Validate:</strong>windowID:transtype</p></li>
+<li><p><strong>After:</strong>windowID:transtype</p></li>
+<li><p><strong>Cancel:</strong>windowID:transtype</p></li>
+<li><p><strong>Close:</strong>windowID:transtype</p></li>
+<li><p><span id="_bookmark1502" class="anchor"></span><strong>ValidateField:</strong>windowID:fieldindent:transtype</p></li>
+<li><p><strong>EnterField:_</strong>windowID:fieldindent:transtype</p></li>
+<li><p><strong>ExitedField:</strong>windowID:fieldindent:transtype</p></li>
+<li><p><strong>EnterCell:</strong>windowID:listname:columnname:transtype</p></li>
+<li><p><strong>ValidateCell:</strong>windowID:listname:columnname:transtype</p></li>
+<li><p><strong>ExitedCell:</strong>windowID:listname:columnname:transtype</p></li>
+</ul><blockquote>
+<p>The transtype specifier only applies to the Transaction entry window
+and the transaction list window and will not be present for any other
+kind of window. Your handler will only be called if all of the
+specifiers match. To have your handler called more generally, simply use
+fewer specifiers (note that the specifiers are necessarily positional,
+so you can only reduce specificity by dropping specifiers from the end).
+If there are multiple handlers for the same message in your script that
+match, they will all be called, beginning with the most specific. E.g.
+if you have ValidateField:f_trans:e_user1:DI and also
+ValidateField:f_trans, they will both be called, in that order (assuming
+the first one does not return false, in which case the call sequence
+would stop at that point).</p>
+<p>Example:</p>
+<p>// will be called for all transaction entry window fields on
+ValidateField:f_trans</p>
+<p>say("validate trans field") return 1</p>
+<p>end</p>
+<p>// will only be called for transaction user1 field for a sales
+invoice</p>
+<p>on ValidateField:f_trans:e_user1:DI say("validate sales invoice
+user1") return 1</p>
+<p>end</p>
+<p><strong>Note:</strong> You SHOULD always return a value (0 or 1) for
+these validation handlers, however, if you fail to do so, 1 is the
+default return value.</p>
+<p><strong>Important:</strong> You should generally never implement a
+non-specific handler (such as Before or Validate, with no window id)
+unless you take great care to limit your functionality appropriately.
+Remember that even the script editor receives these messages.</p>
+</blockquote><h3 id="invoking-handlers-from-menus-toolbars-and-other-places">Invoking
+handlers from menus, toolbars, and other places</h3><blockquote>
+<p>You can install a handler in the Command menu using the
+InstallMenuCommand function. You would normally do this from your
+script's Load handler. The command will be uninstalled automatically
+when the script is unloaded (or you can do so explicitly by calling the
+InstallMenuCommand function again with an empty handler name).</p>
+<p>You can install a handler in the Transaction Entry and list windows
+using the InstallToolbarIcon function. Do this from the Before handler
+for the window. The icon will be automatically uninstalled prior to
+another Before (so you should reinstall it for every Before message).
+This is so that you can easily install a transaction-type-specific
+toolbar icon. Lists will get a Before every time the toolbar changes
+(such as for a change of selected view).</p>
+</blockquote><p><strong>Uses statement for forward declarations</strong></p><p>The compiler will normally only recognise your handlers that have
+already been defined earlier in your script (or for public handlers in
+other scripts, which must be currently loaded). In order to include
+calls to handlers that have not yet been defined, or are in other
+scripts that are not currently loaded, you can use a uses declaration to
+declare the name of a handler. It is up to you to make sure the handler
+is defined/loaded when the calling script code executes, otherwise you
+will get a runtime error.</p><p>This is somewhat like an extern declaration in C, or a forward
+declaration in Pascal, except no parameter list declaration is required
+since MWScript does no compile-time parameter checking.</p><p>e.g.</p><blockquote>
+<p>uses MyHandlerName</p>
+<p>uses OtherScript:PublicHandler</p>
+<p>on Foo</p>
+<p>MyHandlerName() // not yet defined in script</p>
+<p>end</p>
+<p>on MyHandlerName // now it is</p>
+<p>OtherScript:PublicHandler() // might not be loaded at compile</p>
+<p>time end</p>
+</blockquote><h4 id="public-handlers">Public handlers</h4><blockquote>
+<p>To make a handler accessible to reports, forms, the evaluate external
+command, different scripts, or the entry field expression parser, use
+the <em>public</em> attribute in the handler declaration.</p>
+<p>on MyHandlerName(myParam) public</p>
+<p>say("This is the public handler " + myParam)</p>
+<p>end</p>
+<p>External invocations of the message will need to use its public name,
+consisting of the script name, a colon, and the handler name (e.g.</p>
+<p>My_Script:MyHandlerName(x)). If the script is not currently loaded,
+you won't be able to compile a script that calls it.</p>
+</blockquote><h4 id="elevating-privileges">Elevating privileges</h4><blockquote>
+<p>Scripts normally run with the privileges of the logged-in user. You
+can have a <span id="_bookmark1505" class="anchor"></span>handler run
+with admin privileges by adding the <em>elevated</em> attribute to the
+handler declaration. Note that the extra privilege is dropped when the
+handler exits, so the operation requiring the privilege will have to be
+completed in its entirety.</p>
+<p>on MyHandlerName(myParam) elevated</p>
+<p>say("I'm running with admin privileges")</p>
+<p>// hmm what would be useful to do here?</p>
+<p>// • post without elective posting privilege?</p>
+<p>// • override the extension field with a discounted value</p>
+<p>// • replace a value in a selection?</p>
+<p>// • Clear the hold checkbox with SetFieldValue()?</p>
+<p>end</p>
+</blockquote><div class="navigation"><hr><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p></div></body></html>

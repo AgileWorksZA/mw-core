@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Memo",
+  "description": "Memo table schema (file_num: 23) - Memos attached to name records",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "NameSeq": {
+      "type": "integer",
+      "description": "Name sequence reference (indexed)"
+    },
+    "Order": {
+      "type": "integer",
+      "description": "Display order"
+    },
+    "Date": {
+      "type": "string",
+      "format": "date",
+      "description": "Memo date (mutable: freely, script-only)"
+    },
+    "RecallDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Recall date (indexed, mutable: freely, script-only)"
+    },
+    "Flags": {
+      "type": "integer",
+      "description": "Flags"
+    },
+    "Text": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Memo text (mutable: freely, script-only)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "NameSeq",
+    "Text"
+  ]
+}

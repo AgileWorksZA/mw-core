@@ -1,0 +1,721 @@
+<!DOCTYPE html><html><head></head><body><div class="navigation"><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p><hr></div><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the length, in characters, of
+string.</p>
+<p>If <em>boolInBytes</em> is true or IN_BYTES (which is a constant with
+value true), then the return value is a byte count instead of a
+character count. This option should only be used when the string is
+known to be pure ASCII. It is much faster because it does not account
+for multibyte unicode characters. See also <a href="section-58.html#bytelength-text">ByteLength</a></p>
+</blockquote><h5 id="examples-36">Examples:</h5><blockquote>
+<p>Length("Ban Antidisestablishmentarianism!")</p>
+<p>returns 33.</p>
+<p>Length("")</p>
+<p>returns 0.</p>
+</blockquote><h3 id="log10-number">Log10 (number)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the base 10 logarithm of the
+<em>number</em>.</p>
+</blockquote><h5 id="example-14">Example:</h5><blockquote>
+<p>Log10(1000)</p>
+<p>Returns 3</p>
+</blockquote><h3 id="log2-number">Log2 (number)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the base 2 logarithm of the
+<em>number</em>.</p>
+</blockquote><h5 id="example-15">Example:</h5><blockquote>
+<p>Log2(8)</p>
+<p>Returns 3</p>
+</blockquote><h3 id="logn-number">LogN (number)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the natural logarithm of the
+<em>number</em> (i.e. a logarithm to the base <em>e</em>
+(2.71828...).</p>
+</blockquote><h5 id="example-16">Example:</h5><blockquote>
+<p>LogN(2.71828)</p>
+<p>Returns 0.99999933</p>
+</blockquote><h3 id="lookup-code-fieldname">Lookup (code, fieldname)</h3><blockquote>
+<p><span id="_bookmark1242" class="anchor"></span><strong>Result
+Type:</strong> depends on type of field identified by fieldname.</p>
+<p><strong>Definition:</strong> Returns the value of the field
+identified by fieldname, where fieldname is a string of the form
+"file.field" which identifies a field in one of the MoneyWorks database
+files. MoneyWorks finds the record in the file whose code matches the
+code parameter and returns the value of the requested field from that
+record. The files which can be looked-up are: Account, Department,
+Names, Product, Job, Login, User and TaxRate.</p>
+<p>Transaction and BankRecs can also be looked up, but only by
+specifying a sequencenumber for the fieldname. A lookup on the Log file
+will always return the latest entry for a valid key. The fields
+available are those listed in <a href="section-68.html#appendix-afield-descriptions"><em>Appendix A—Field
+Descriptions</em></a>. The <em><a href="section-59.html#find-filename.fieldnametext-searchfntext-limit-delim-sortfieldtext-runonserver">Find</a></em>
+function offers a more flexible form of lookup based on a MoneyWorks
+search expression.</p>
+</blockquote><h5 id="examples-37">Examples:</h5><blockquote>
+<p>Lookup("BANK1", "Account.Description")</p>
+<p>returns “Main Bank Account” (assuming that account exists and has
+that name).</p>
+<p>Lookup(If(PositionInText(Detail.Account, "-"), Left(Detail.Account,
+PositionInText (Detail.Account, "-") - 1), Detail.Account),
+"Account.Description")</p>
+<p>returns the account description of the account code in the current
+detail line. The somewhat complex first argument extracts the basic
+account code, since the Detail.Account field may have a department
+suffix. You could use a similar technique to extract the department code
+and look up the department description.</p>
+</blockquote><p>)</p><blockquote>
+<p>Lookup("N", "TaxRate.Rate2"</p>
+<p>returns 12.5, which is the current GST rate.</p>
+<p>Lookup("CUR/USD", "Offledger.Description")</p>
+<p>Returns the description of the Currency “USD”. Note that for the
+Ofledger file, the key is KIND/NAME. User entered records have a kind of
+“USR”.</p>
+</blockquote><h3 id="lower-string">Lower (string)</h3><blockquote>
+<p><strong>Result Type:</strong> Text</p>
+<p><strong>Definition:</strong> Returns string converted to lower
+case.</p>
+</blockquote><h5 id="examples-38">Examples:</h5><blockquote>
+<p>Lower("BANG!")</p>
+</blockquote><p>returns “bang!”.</p><h5 id="see-also-23">See Also:</h5><blockquote>
+<p><a href="#_bookmark1261">Proper</a>: Uppercase initial letters of
+words in a string <a href="section-62.html#upper-string">Upper</a>: Uppercase a
+string</p>
+</blockquote><h3 id="makeguid">MakeGUID ()</h3><blockquote>
+<p><strong>Result Type:</strong> string</p>
+<p><strong>Definition:</strong> Returns a 36-character Globally Unique
+Identifier.</p>
+<p><strong>Availability:</strong> Version 8.1 and later</p>
+</blockquote><h3 id="match-number-number-...">Match (number, number, ...)</h3><p><strong>Result Type:</strong> Number</p><blockquote>
+<p><strong>Definition:</strong> Returns the position of the parameter
+that matches the first parameter</p>
+</blockquote><h5 id="examples-39">Examples:</h5><blockquote>
+<p>Match(17, 4, 17, 6, 5)</p>
+<p>returns 2.</p>
+</blockquote><h3 id="max-number-...">Max (number, ...)</h3><p><strong>Result Type:</strong> Number</p><blockquote>
+<p><strong>Definition:</strong> Returns the highest of the numbers
+passed as parameters.</p>
+</blockquote><h5 id="examples-40">Examples:</h5><blockquote>
+<p>Max(5, -1000, 10)</p>
+<p>returns 10.</p>
+</blockquote><h3 id="mid-string-start-count-boolinbytes"><br>
+Mid (string, start, count [, boolInBytes])</h3><blockquote>
+<p><strong>Result Type:</strong> Text</p>
+<p><strong>Definition:</strong> Returns a substring of string starting
+at <em>start</em> of length <em>count</em>.</p>
+</blockquote><h5 id="examples-41">Examples:</h5><blockquote>
+<p>Mid("Fish and chips", 6, 3)</p>
+<p>returns “and”.</p>
+<p>If <em>boolInBytes</em> is true or IN_BYTES (which is a constant with
+value true), then the start and count are regarded as byte offsets, not
+characters. This option should only be used when the string is known to
+be pure ASCII. It is much faster because it does not account for
+multibyte unicode characters.</p>
+</blockquote><h5 id="see-also-24">See Also:</h5><blockquote>
+<p><a href="section-59.html#dice-table-rownum-colnum">Dice</a>: Get a subcomponent of a
+delimited tabular string <a href="section-59.html#head-listtext-numberofitems-asciidelimiter">Head</a>: Get some
+elements from the start of a delimited string <a href="section-59.html#left-string-count-boolinbytes">Left</a>: Get characters from the
+start of a string <a href="#_bookmark1266">Regex_GetMatches</a>: Find
+tokens using a regular expression</p>
+<p><a href="#regex_match-string-regex">Regex_Match</a>: Test whether a
+string matches a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Replace</a>:
+Replace text in a string using a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Search</a>: Find
+the first match of a regular expression in a string <a href="#see-also-36">Regex_SearchStr</a>: Find the first match of a
+regular expression in a string and</p>
+<p>return the matching string</p>
+<p><a href="#_bookmark1269">RemoveLeading</a>: Remove characters from
+the start of a string <a href="#_bookmark1272">RemoveTrailing</a>:
+Remove characters from the end of a string <a href="#_bookmark1271">Replace</a>: Replace matching text in a string
+with new text <a href="section-61.html#right-string-count-boolinbytes">Right</a>: Get
+characters from the end of a string</p>
+<p><a href="#_bookmark1277">Slice</a>: Get a component of a delimited
+string</p>
+<p><a href="section-61.html#tail-listtext-numberofitems-asciidelimiter">Tail</a>: Get
+some elements from the end of a delimited string <a href="section-61.html#transpose-table">Trim</a>: Remove whitespace from beginning and
+end of a string</p>
+</blockquote><h3 id="min-number-...">Min (number, ...)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the lowest of the numbers passed
+as parameters.</p>
+</blockquote><h5 id="examples-42">Examples:</h5><blockquote>
+<p>Min(5, -1000, 10)</p>
+</blockquote><h5 id="section-89"></h5><blockquote>
+<p>returns -1000.</p>
+</blockquote><h3 id="mod-dividend-divisor">Mod (dividend, divisor)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the remainder when dividend is
+divided by divisor.</p>
+</blockquote><h5 id="examples-43">Examples:</h5><blockquote>
+<p>Mod(10, 8)</p>
+<p>returns 2.</p>
+</blockquote><h3 id="month-date">Month (date)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the month-of-year of the
+date.</p>
+</blockquote><h5 id="examples-44">Examples:</h5><blockquote>
+<p>Month('8/12/57')</p>
+<p><span id="_bookmark1251" class="anchor"></span>returns 12.</p>
+</blockquote><h5 id="see-also-25">See Also:</h5><blockquote>
+<p><a href="#_bookmark1180">CalcDueDate</a>: Calculate a due date for
+given terms <a href="section-58.html#currentperiod">CurrentPeriod</a>: Get the current
+period number <a href="#_bookmark1199">Date</a>: Convert d,m,y to a
+date</p>
+<p><a href="section-59.html#datetoperiod-date">DateToPeriod</a>: Convert a date to a
+period <a href="#_bookmark1201">DateToText</a>: Format a date as a
+string <a href="section-59.html#examples-16">Day</a>: Get the Day of month of a date <a href="section-59.html#dayofweek-date">DayOfWeek</a>: Get The weekday of a date</p>
+<p><a href="#_bookmark1213">FirstUnlockedPeriod</a>: Get the oldest
+period that is not locked <a href="#_bookmark1254">PeriodName</a>: Get
+the Name of a period</p>
+<p><a href="#periodoffset-period-offset">PeriodOffset</a>: Difference
+between two periods <a href="#_bookmark1255">PeriodToDate</a>: Get the
+end date of a period <a href="section-61.html#examples-75">TextToDate</a>: Parse a
+string to a date</p>
+<p><a href="#_bookmark1298">Time</a>: The current Datetime <a href="section-61.html#timeadd-datetime-secs">TimeAdd</a>: Add seconds to a DateTime</p>
+<p><a href="#_bookmark1299">TimeDiff</a>: The difference, in seconds,
+between two DateTimes <a href="section-61.html#timestamp-zone-format">Timestamp</a>: A
+timestamp string</p>
+<p><a href="section-61.html#today">Today</a>: Today's date</p>
+<p><a href="section-62.html#weekofyear-date">WeekOfYear</a>: Convert a date to a week
+number <a href="section-62.html#year-date">Year</a>: Year of a date</p>
+</blockquote><h3 id="numtoenglish-integer-language">NumToEnglish (integer [,
+language])</h3><blockquote>
+<p><strong>Result Type:</strong> Text</p>
+<p><strong>Definition:</strong> Returns the number (which must be a
+positive integer) expressed in words in the nominated language (by
+default English). The only other language currently supported is
+French.</p>
+</blockquote><h5 id="examples-45">Examples:</h5><blockquote>
+<p>NumToEnglish(1427)</p>
+<p>returns “One thousand, four hundred and twenty seven”.</p>
+<p>NumToEnglish(1427, “Français”)</p>
+<p>returns “Mille quatre cent vingt-sept”, as does</p>
+</blockquote><h3 id="numtoperiod-periodindex">NumToPeriod (PeriodIndex)</h3><blockquote>
+<p>NumToEnglish(1427, “Fr”)</p>
+<p><strong>Result Type:</strong> Period</p>
+<p><strong>Definition:</strong> Returns the internal period number of
+the period indexed by PeriodIndex. The first period has a period index
+of 1 (but will have a period number based on y*100+p, where y is the
+number of the financial year in MoneyWorks, and p is the number of the
+period in that year, with the first period being 1.</p>
+</blockquote><h5 id="examples-46">Examples:</h5><blockquote>
+<p>NumToPeriod(1)</p>
+<p>Returns the first available period.</p>
+<p>PeriodOffset(CurrentPer, -3)</p>
+<p>NumToPeriod(periodtonum(currentper)-3)</p>
+<p>Returns the period number of the period 3 periods before the current
+period. This is equivalent to</p>
+</blockquote><h3 id="numtotext-number-format">NumToText (number [, format])</h3><p><strong>ParseCSV (csvtext [, fieldSeparator] )</strong></p><p><strong>Result Type:</strong> Text</p><p><strong>Definition:</strong> Manually parsing CSV is tricky, because
+it may contain quoted fields that themselves contain commas and possibly
+even quoted quotes. This function converts such CSV to easily sliceable
+tab-delimited text. By default the field separator is assumed to be a
+comma (the C in CSV), but in some locales it is also common to use a
+semicolon to separate fields in case comma is used as a decimal
+separator. You can optionally pass a single ASCII character as the
+second parameter and that will be used as the separator.</p><p><strong>Examples:</strong> ParseCSV(`1, 2.50, "three, four",
+5\n`)</p><blockquote>
+<p>returns “1\t2.50\tthree, four\t5\n”</p>
+</blockquote><p><strong>Availability:</strong> v9.1.6 and later.</p><blockquote>
+<p><strong>Result Type:</strong> Text</p>
+<p><strong>Definition:</strong> Converts the given number to a text
+string using the numeric formatting selected for the calculation box, or
+that specified in the optional <em>format</em> parameter (see <a href="section-49.html#column-format-options"><em>table</em></a>).</p>
+</blockquote><h5 id="examples-47">Examples:</h5><blockquote>
+<p>NumToText(30 + 6, 4)</p>
+<p>returns “36 DB”.</p>
+</blockquote><h3 id="pad-text-width-padchar-justify-lr">Pad (text, width [, padChar]
+[, justify = "L|R"])</h3><blockquote>
+<p><strong>Result Type:</strong> Text</p>
+<p><strong>Definition:</strong> Pads text to the specified width. By
+default, if text is a numeric <span id="_bookmark1254" class="anchor"></span>string, it is padded to the right with leading
+zeroes; otherwise it is left padded with spaces. This can be overridden
+by specifying padChar and justify. If text is longer than width it is
+truncated.</p>
+<p>Maximum pad width is 255.</p>
+</blockquote><h5 id="examples-48">Examples:</h5><blockquote>
+<p>Pad("1", 4)</p>
+<p>returns “0001”</p>
+<p>Pad("1", 4, "0", "L")</p>
+<p>returns “1000”</p>
+<p>Pad("A", 4)</p>
+<p>returns “A ”</p>
+<p>Pad("1", 4, " ", "L")</p>
+<p>returns “ 1”</p>
+</blockquote><h3 id="periodname-period">PeriodName (period)</h3><blockquote>
+<p><strong>Result Type:</strong> String</p>
+<p><strong>Definition:</strong> Returns the name of period (including
+the financial year name).</p>
+</blockquote><h5 id="examples-49">Examples:</h5><blockquote>
+<p>PeriodName(Transaction.Period)</p>
+<p>returns "Apr:2010/11"</p>
+</blockquote><h5 id="see-also-26">See Also:</h5><blockquote>
+<p><a href="#_bookmark1180">CalcDueDate</a>: Calculate a due date for
+given terms <a href="section-58.html#currentperiod">CurrentPeriod</a>: Get the current
+period number <a href="#_bookmark1199">Date</a>: Convert d,m,y to a
+date</p>
+<p><a href="section-59.html#datetoperiod-date">DateToPeriod</a>: Convert a date to a
+period <a href="#_bookmark1201">DateToText</a>: Format a date as a
+string <a href="section-59.html#examples-16">Day</a>: Get the Day of month of a date <a href="section-59.html#dayofweek-date">DayOfWeek</a>: Get The weekday of a date</p>
+<p><a href="#_bookmark1213">FirstUnlockedPeriod</a>: Get the oldest
+period that is not locked <a href="#month-date">Month</a>: Get the month
+of a date</p>
+<p><a href="#periodoffset-period-offset">PeriodOffset</a>: Difference
+between two periods <a href="#_bookmark1255">PeriodToDate</a>: Get the
+end date of a period</p>
+<p><a href="section-61.html#examples-75">TextToDate</a>: Parse a string to a date <a href="#_bookmark1298">Time</a>: The current Datetime <a href="section-61.html#timeadd-datetime-secs">TimeAdd</a>: Add seconds to a DateTime</p>
+<p><a href="#_bookmark1299">TimeDiff</a>: The difference, in seconds,
+between two DateTimes <a href="section-61.html#timestamp-zone-format">Timestamp</a>: A
+timestamp string</p>
+<p><span id="_bookmark1255" class="anchor"></span><a href="section-61.html#today">Today</a>: Today's date</p>
+<p><a href="section-62.html#weekofyear-date">WeekOfYear</a>: Convert a date to a week
+number <a href="section-62.html#year-date">Year</a>: Year of a date</p>
+</blockquote><h3 id="periodoffset-period-offset">PeriodOffset (period, offset)</h3><blockquote>
+<p><strong>Result Type:</strong> period</p>
+<p><strong>Definition:</strong> Returns the period number that is offset
+periods from period.</p>
+<p>Because periods are based on (Year * 100 + period), you can’t just
+subtract 1 from a period number to give you the previous period (e.g. in
+the 12 period financial year the last period for year 5 is 512; the
+following period is 601).</p>
+</blockquote><h5 id="examples-50">Examples:</h5><blockquote>
+<p>PeriodOffset(CurrentPer, -6)</p>
+<p>returns the internal number of the period that is 6 periods before
+the current period.</p>
+</blockquote><h5 id="see-also-27">See Also:</h5><blockquote>
+<p><a href="#_bookmark1180">CalcDueDate</a>: Calculate a due date for
+given terms <a href="section-58.html#currentperiod">CurrentPeriod</a>: Get the current
+period number <a href="#_bookmark1199">Date</a>: Convert d,m,y to a
+date</p>
+<p><a href="section-59.html#datetoperiod-date">DateToPeriod</a>: Convert a date to a
+period <a href="#_bookmark1201">DateToText</a>: Format a date as a
+string <a href="section-59.html#examples-16">Day</a>: Get the Day of month of a date <a href="section-59.html#dayofweek-date">DayOfWeek</a>: Get The weekday of a date</p>
+<p><a href="#_bookmark1213">FirstUnlockedPeriod</a>: Get the oldest
+period that is not locked <a href="#month-date">Month</a>: Get the month
+of a date</p>
+<p><a href="#_bookmark1254">PeriodName</a>: Get the Name of a period <a href="#_bookmark1255">PeriodToDate</a>: Get the end date of a period <a href="section-61.html#examples-75">TextToDate</a>: Parse a string to a date</p>
+<p><a href="#_bookmark1298">Time</a>: The current Datetime <a href="section-61.html#timeadd-datetime-secs">TimeAdd</a>: Add seconds to a DateTime</p>
+<p><a href="#_bookmark1299">TimeDiff</a>: The difference, in seconds,
+between two DateTimes</p>
+<p><a href="section-61.html#timestamp-zone-format">Timestamp</a>: A timestamp string <a href="section-61.html#today">Today</a>: Today's date</p>
+<p><a href="section-62.html#weekofyear-date">WeekOfYear</a>: Convert a date to a week
+number <a href="section-62.html#year-date">Year</a>: Year of a date</p>
+</blockquote><h3 id="periodtodate-period">PeriodToDate (period)</h3><blockquote>
+<p><strong>Result Type:</strong> Date</p>
+<p><strong>Definition:</strong> Returns the last day of the nominated
+period.</p>
+</blockquote><h5 id="examples-51">Examples:</h5><blockquote>
+<p>PeriodtoDate(CurrentPer)</p>
+<p>returns the date of the last day of the current period.</p>
+<p>PeriodtoDate(transaction.period)</p>
+<p>Returns the last date of the period for transaction.</p>
+</blockquote><h5 id="see-also-28">See Also:</h5><blockquote>
+<p><a href="#_bookmark1180">CalcDueDate</a>: Calculate a due date for
+given terms <a href="section-58.html#currentperiod">CurrentPeriod</a>: Get the current
+period number <a href="#_bookmark1199">Date</a>: Convert d,m,y to a
+date</p>
+<p><a href="section-59.html#datetoperiod-date">DateToPeriod</a>: Convert a date to a
+period <a href="#_bookmark1201">DateToText</a>: Format a date as a
+string <a href="section-59.html#examples-16">Day</a>: Get the Day of month of a date <a href="section-59.html#dayofweek-date">DayOfWeek</a>: Get The weekday of a date</p>
+<p><a href="#_bookmark1213">FirstUnlockedPeriod</a>: Get the oldest
+period that is not locked <a href="#month-date">Month</a>: Get the month
+of a date</p>
+<p><a href="#_bookmark1254">PeriodName</a>: Get the Name of a period <a href="#periodoffset-period-offset">PeriodOffset</a>: Difference between
+two periods <a href="section-61.html#examples-75">TextToDate</a>: Parse a string to a
+date</p>
+<p><a href="#_bookmark1298">Time</a>: The current Datetime <a href="section-61.html#timeadd-datetime-secs">TimeAdd</a>: Add seconds to a DateTime</p>
+<p><a href="#_bookmark1299">TimeDiff</a>: The difference, in seconds,
+between two DateTimes <a href="section-61.html#timestamp-zone-format">Timestamp</a>: A
+timestamp string</p>
+<p><a href="section-61.html#today">Today</a>: Today's date</p>
+<p><a href="section-62.html#weekofyear-date">WeekOfYear</a>: Convert a date to a week
+number <a href="section-62.html#year-date">Year</a>: Year of a date</p>
+</blockquote><h3 id="periodtonum-period">PeriodToNum (period)</h3><blockquote>
+<p><strong>Result Type:</strong> Integer</p>
+<p><strong>Definition:</strong> Returns a period index. This is suitable
+for doing ageing calculations, and can also be used to iterate through
+report For loops.</p>
+<p>Given that song contains “Red, red wine”, and colour contains “red”,
+this will return 6, which is the position of the second occurrence of
+“red” in “Red, red wine”.</p>
+<p><strong>Note:</strong> When searching for a text constant, the
+equality operator can be used with the pattern enclosed in “@” symbols,
+e.g. "@day@". For example, if myString = "MoneyWorks rocks!", then the
+comparison:</p>
+</blockquote><p><strong>Examples:</strong> PeriodtoNum(CurrentPeriod) -
+PeriodtoNum(transaction.period)</p><blockquote>
+<p>myString = "@works@"</p>
+<p>returns 1 if transaction.period is equivalent to Jun:2006 and the
+current <span id="_bookmark1258" class="anchor"></span>period is
+equivalent to Jul:2006; returns 2 if the current period is Aug:2006, and
+so on.</p>
+<p>In a report For loop, the following:</p>
+<p>Per ="1..." +periodtonum(currentper)</p>
+<p>will step through each period. Within the loop you can then get the
+internal period number by NumToPeriod(Per).</p>
+</blockquote><h3 id="positionintext-string-pattern-startchar-boolinbytes">PositionInText
+(string, pattern [, startChar] [, boolInBytes])</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><span id="_bookmark1260" class="anchor"></span><strong>Definition:</strong> Returns the (1-based)
+character position of the first occurrence of <em>pattern</em> in
+<em>string</em>. If <em>startChar</em> is specified, the characters in
+string up to <em>startChar</em> are not tested for pattern. If the text
+is not found, returns 0.</p>
+<p>If <em>boolInBytes</em> is true or IN_BYTES (which is a constant with
+value true), then the startChar and the return value are in bytes, not
+characters. This option should only be used when the string is known to
+be pure ASCII. It is much faster because it does not account for
+multibyte unicode characters.</p>
+</blockquote><h5 id="examples-52">Examples:</h5><blockquote>
+<p>PositionInText("Birthday", "day")</p>
+<p><span id="_bookmark1261" class="anchor"></span>returns 6.</p>
+<p>PositionInText(song, colour, PositionInText(song, colour) + 1)</p>
+<p>would return 1 (true).</p>
+</blockquote><h3 id="pow-value-exponent">Pow (value, exponent)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the result of value raised to
+the exponent power.</p>
+</blockquote><h5 id="examples-53">Examples:</h5><blockquote>
+<p>Pow (10, 3)</p>
+<p>returns 1000.</p>
+<p>Pow (10, -2)</p>
+<p>returns 0.01.</p>
+</blockquote><p><strong>ProductSOHForLocation(prodcode [, loc])</strong></p><p><strong>Result Type:</strong> number</p><p><strong>Definition:</strong> Get the current SOH for the product at
+the specified location. An empty string for location denotes the Default
+Location. For all locations, you can pass "@" or omit the location
+parameter (but this is the same as Product.SOHCurrent so you should use
+that instead if you want total SOH).</p><h3 id="proper-string">Proper (string)</h3><blockquote>
+<p><strong>Result Type:</strong> Text</p>
+<p><strong>Definition:</strong> Returns string with the first letter of
+every word capitalised, and all other characters in lower case.</p>
+</blockquote><h5 id="examples-54">Examples:</h5><blockquote>
+<p>Proper("JOSEPH SMITH")</p>
+<p><span id="_bookmark1262" class="anchor"></span>returns “Joseph
+Smith”.</p>
+</blockquote><h5 id="see-also-29">See Also:</h5><blockquote>
+<p><a href="#_bookmark1242">Lower</a>: Lowercase a string <a href="section-62.html#upper-string">Upper</a>: Uppercase a string</p>
+</blockquote><h3 id="quarter-dateorperiod-numquarters4-prefixq">Quarter (DateOrPeriod
+[, numQuarters=4] [, prefix="Q"])</h3><blockquote>
+<p><strong>Result Type:</strong> Text</p>
+<p><strong>Definition:</strong> Returns a "quarter label" corresponding
+to the given period or date. For dates the quarter is based on the
+calendar year; for periods it is based on the financial year. It can
+also be used for half-years etc. using the optional parameters. These
+labels make useful calculated breakdown values in the Analyse function
+or Analysis reports.</p>
+<p><strong>Examples:</strong> (note: dates are d/m/y)</p>
+</blockquote><p>— returns "2005:Q1", .</p><blockquote>
+<p>Quarter('1/4/05')</p>
+<p>— returns "2005:Q3"</p>
+<p>Quarter('23/7/05’)</p>
+<p>— returns "2005:H2"</p>
+<p>Quarter('1/11/05', 2, "H")</p>
+<p>— returns the financial year quarter into which the transaction
+was/will be posted.</p>
+<p>Quarter(Transaction.Period)</p>
+<p>— returns the calendar year quarter</p>
+<p>Quarter(Transaction.TransDate)</p>
+</blockquote><h3 id="random-modulus">Random (modulus)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns a random integer uniformly
+distributed between 0 and modulus - 1. Modulus must be in the range
+1..32767.</p>
+</blockquote><h5 id="examples-55"><br>
+Examples:</h5><blockquote>
+<p>will return a random number between 0 and 4.</p>
+<p>Random(5)</p>
+</blockquote><h3 id="recordsselected-selection">RecordsSelected (selection)</h3><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the number of records found in
+named selection.</p>
+</blockquote><h5 id="examples-56">Examples:</h5><blockquote>
+<p>RecordsSelected(tSel)</p>
+<p>returns the number of records in the selection tSel, which would have
+previously been created using the <em>createSelection</em> or
+<em>intersectSelection</em> function, as in the following:</p>
+<p>tSel = createSelection("Transaction", "type = 'DII' and</p>
+</blockquote><p>status='P'")</p><blockquote>
+<p>which creates a selection of the outstanding (posted) sales
+invoices.</p>
+<p><em>Variant of RecordsSelected that duplicates the functionality of
+the variant of Find()</em></p>
+</blockquote><h4 id="recordsselected-file-metasearch">RecordsSelected (file,
+metaSearch)</h4><blockquote>
+<p><strong>Result Type:</strong> Number</p>
+<p><strong>Definition:</strong> Returns the number of records found in
+the file that match metaSearch (see <a href="#_bookmark1169"><em>metasearch mnemonics</em></a>). MetaSearch is
+one of “*” or “**”, whose function is explained in the two examples
+below. See also the first form of <a href="section-59.html#find-filename.fieldnametext-searchfntext-limit-delim-sortfieldtext-runonserver">Find()</a>.</p>
+</blockquote><h5 id="examples-57">Examples:</h5><blockquote>
+<p>RecordsSelected("Transaction", "**")</p>
+<p>returns the number of highlighted transactions (or 0 if none are
+highlighted).</p>
+<p>RecordsSelected("Name", "*")</p>
+<p>returns the number of highlighted records in the Names file, or, if
+none are highlighted, the number of name records in the found set, or,
+if the names list window is not open, the total number of name records
+in the file.</p>
+<p>This is exactly the same behaviour as Find(filename, search) — a case
+of convergent evolution where two functions have expanded their
+functionality until they end up doing the same thing.</p>
+</blockquote><h5 id="see-also-30">See Also:</h5><blockquote>
+<p><a href="section-58.html#createselection-tablename-searchexpr-sortexpr-descending">CreateSelection</a>:
+Create a selection of records</p>
+<p><a href="section-63.html#displayselection-sel-viewname">DisplaySelection</a>:
+Display standard list window for a given selection of records</p>
+<p><a href="section-59.html#intersectselection-sel1-sel2orexprtext-sortexpr-descending">IntersectSelection</a>:
+Intersect a selection with the result of another search <a href="section-61.html#sumdetail-expression-detail.searchexpr-transaction.searchexpr">SumDetail</a>:
+Add up a field for details matching a search</p>
+<p><a href="#_bookmark1288">SumSelection</a>: Add up a field for records
+matching a search <a href="section-62.html#unionselection-sel1-sel2-searchxexprtext-sortexpr-descending">UnionSelection</a>:
+Add the result of another search to a selection</p>
+</blockquote><h3 id="regex_match-string-regex">Regex_Match (string, regex)</h3><blockquote>
+<p><strong>Result Type:</strong> Boolean</p>
+<p><span id="_bookmark1266" class="anchor"></span><strong>Definition:</strong> Returns 1 if the
+string matches the regular expression <em>regex</em>. This function
+calls through to the standard C++ regex_match function using the default
+regex mode. Matching is case-sensitive, and the regular expression must
+match the entire string.</p>
+<p>If you just want a simple, case-insensitive text match, use the = or
+== operators (the former may have an @ wildcard at the end, or start and
+end; the latter ignores @ wildcards).</p>
+</blockquote><h5 id="see-also-31">See Also:</h5><blockquote>
+<p><a href="section-59.html#dice-table-rownum-colnum">Dice</a>: Get a subcomponent of a
+delimited tabular string <a href="section-59.html#head-listtext-numberofitems-asciidelimiter">Head</a>: Get some
+elements from the start of a delimited string <a href="section-59.html#left-string-count-boolinbytes">Left</a>: Get characters from the
+start of a string</p>
+<p><a href="#examples-38">Mid</a>: Get characters from the middle of a
+string <a href="#_bookmark1266">Regex_GetMatches</a>: Find tokens using
+a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Replace</a>:
+Replace text in a string using a regular expression</p>
+<p><a href="#regex_replace-string-regex-replacementex">Regex_Search</a>:
+Find the first match of a regular expression in a string <a href="#see-also-36">Regex_SearchStr</a>: Find the first match of a
+regular expression in a string and</p>
+<p>return the matching string</p>
+<p><a href="#_bookmark1269">RemoveLeading</a>: Remove characters from
+the start of a string <a href="#_bookmark1272">RemoveTrailing</a>:
+Remove characters from the end of a string <a href="#_bookmark1271">Replace</a>: Replace matching text in a string
+with new text <a href="section-61.html#right-string-count-boolinbytes">Right</a>: Get
+characters from the end of a string</p>
+<p><a href="#_bookmark1277">Slice</a>: Get a component of a delimited
+string</p>
+<p><a href="section-61.html#tail-listtext-numberofitems-asciidelimiter">Tail</a>: Get
+some elements from the end of a delimited string <a href="section-61.html#transpose-table">Trim</a>: Remove whitespace from beginning and
+end of a string</p>
+</blockquote><p><strong>Regex_GetMatches (string, regex)</strong></p><p><strong>Result Type:</strong> Array</p><p><strong>Definition:</strong> Returns an array of tokens that match
+the parenthesised subexpressions in the regular expression</p><p><strong>Examples:</strong></p><blockquote>
+<p>on Parse_File(f)</p>
+<p>foreach line in textfile f</p>
+<p>let a = Regex_GetMatches(line,</p>
+<p>"([0-9]+)\t([^\t]*).*\t([^\t]*)") // get first, second, and last
+tab-delimited fields from line, only when first field is numeric</p>
+<p>if CountElements(a)</p>
+<p>// a[0] is the full match</p>
+<p>syslog(a[1] + " : " + a[2] + " : " + a[3]) endif</p>
+<p>endfor</p>
+<p>end</p>
+<p>In v9.1.3 and later, you can put request case-insensitive
+matching.</p>
+<p>(?i)</p>
+</blockquote><h5 id="examples-58">Examples:</h5><blockquote>
+<p>Regex_Match("foo.txt", ".*\.(txt|TXT)")</p>
+<p>returns 1.</p>
+<p><strong>Availability:</strong> v8.1.7 and later.</p>
+<p>at the start of your regular expression to</p>
+<p><strong>Warning:</strong> <em>Some people, when confronted with a
+problem, think "I know, I'll use regular expressions". Now they have two
+problems</em> —Jamie Zawinski (attributed)</p>
+</blockquote><p>parsing this file:</p><blockquote>
+<p>heading</p>
+<p>-----------</p>
+</blockquote><ol type="1">
+<li><p>foo bar baz this</p></li>
+<li><p>foo bar baz is</p></li>
+<li><p>foo bar baz the ignore this line</p></li>
+<li><p>foo bar last</p></li>
+<li><p>foo token</p></li>
+</ol><p>outputs</p><ol type="1">
+<li><p>: foo : this</p></li>
+<li><p>: foo : is</p></li>
+<li><p>: foo : the</p></li>
+<li><p>: foo : last</p></li>
+<li><p>: foo : token</p></li>
+</ol><p><strong>Availability:</strong> In MWScript in v9.1 and later.</p><h5 id="see-also-32">See Also:</h5><blockquote>
+<p><a href="section-59.html#dice-table-rownum-colnum">Dice</a>: Get a subcomponent of a
+delimited tabular string <a href="section-59.html#head-listtext-numberofitems-asciidelimiter">Head</a>: Get some
+elements from the start of a delimited string <a href="section-59.html#left-string-count-boolinbytes">Left</a>: Get characters from the
+start of a string</p>
+<p><a href="#examples-38">Mid</a>: Get characters from the middle of a
+string</p>
+<p><a href="#regex_match-string-regex">Regex_Match</a>: Test whether a
+string matches a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Replace</a>:
+Replace text in a string using a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Search</a>: Find
+the first match of a regular expression in a string <a href="#see-also-36">Regex_SearchStr</a>: Find the first match of a
+regular expression in a string and</p>
+<p>return the matching string</p>
+<p><a href="#_bookmark1269">RemoveLeading</a>: Remove characters from
+the start of a string <a href="#_bookmark1272">RemoveTrailing</a>:
+Remove characters from the end of a string <a href="#_bookmark1271">Replace</a>: Replace matching text in a string
+with new text <a href="section-61.html#right-string-count-boolinbytes">Right</a>: Get
+characters from the end of a string</p>
+<p><a href="#_bookmark1277">Slice</a>: Get a component of a delimited
+string</p>
+<p><a href="section-61.html#tail-listtext-numberofitems-asciidelimiter">Tail</a>: Get
+some elements from the end of a delimited string <a href="section-61.html#transpose-table">Trim</a>: Remove whitespace from beginning and
+end of a string</p>
+</blockquote><h3 id="regex_replace-string-regex-replacementex">Regex_Replace (string,
+regex, replacementex)</h3><blockquote>
+<p><strong>Result Type:</strong> Text</p>
+<p><strong>Definition:</strong> Returns <em>string</em> with every
+occurrence of <em>regex</em> replaced with <em>replacementex</em>.
+<em>Regex</em> is a regular expression. <em>Replacementex</em> is an
+expression whihc can contain metacharacters referring to the sequences
+matched in the regualr expression. This function calls through to the
+standard C++ regex_replace function using the default regex mode.</p>
+</blockquote><h5 id="examples-59">Examples:</h5><blockquote>
+<p>Regex_Replace("Quick brown fox", "a|e|i|o|u", "[$0]")</p>
+<p>returns “Q[u][i]ck br[o]wn f[o]x”.</p>
+<p><strong>Availability:</strong> v8.1.7 and later.</p>
+<p><strong>Warning:</strong> <em>Some people, when confronted with a
+problem, think "I know, I'll use regular expressions". Now they have two
+problems</em> —Jamie Zawinski (attributed)</p>
+<p>If you just want a simple (non-regex) text replacement, see <a href="#_bookmark1271">Replace</a></p>
+</blockquote><h5 id="see-also-33">See Also:</h5><blockquote>
+<p><a href="section-59.html#dice-table-rownum-colnum">Dice</a>: Get a subcomponent of a
+delimited tabular string <a href="section-59.html#head-listtext-numberofitems-asciidelimiter">Head</a>: Get some
+elements from the start of a delimited string <a href="section-59.html#left-string-count-boolinbytes">Left</a>: Get characters from the
+start of a string</p>
+<p><a href="#examples-38">Mid</a>: Get characters from the middle of a
+string <a href="#_bookmark1266">Regex_GetMatches</a>: Find tokens using
+a regular expression <a href="#regex_match-string-regex">Regex_Match</a>: Test whether a string
+matches a regular expression</p>
+<p><a href="#regex_replace-string-regex-replacementex">Regex_Search</a>:
+Find the first match of a regular expression in a string <a href="#see-also-36">Regex_SearchStr</a>: Find the first match of a
+regular expression in a string and</p>
+<p>return the matching string</p>
+<p><a href="#_bookmark1269">RemoveLeading</a>: Remove characters from
+the start of a string <a href="#_bookmark1272">RemoveTrailing</a>:
+Remove characters from the end of a string <a href="#_bookmark1271">Replace</a>: Replace matching text in a string
+with new text <a href="section-61.html#right-string-count-boolinbytes">Right</a>: Get
+characters from the end of a string</p>
+<p><a href="#_bookmark1277">Slice</a>: Get a component of a delimited
+string</p>
+<p><a href="section-61.html#tail-listtext-numberofitems-asciidelimiter">Tail</a>: Get
+some elements from the end of a delimited string <a href="section-61.html#transpose-table">Trim</a>: Remove whitespace from beginning and
+end of a string</p>
+</blockquote><p><strong>Regex_Search (string, regex [, startOffset])</strong></p><p><strong>Result Type:</strong> Number</p><p><strong>Definition:</strong> Returns the 1-based position in the
+string where the first match for the given regular expression is found,
+or 0 if there is no match. To find additional matches, you can specify a
+1-based offset specifying which character to start searching from. The
+result will still be an offset from the start of the string.</p><p><strong>Examples:</strong> Regex_Search("Some 45 text 876335 more
+text", " [0-9]{5}")</p><blockquote>
+<p>returns 13 (the regex matches a space followed by at least 5
+digits).</p>
+</blockquote><p><strong>Availability:</strong> v9 and later.</p><h5 id="see-also-34">See Also:</h5><blockquote>
+<p><a href="section-59.html#dice-table-rownum-colnum">Dice</a>: Get a subcomponent of a
+delimited tabular string <a href="section-59.html#head-listtext-numberofitems-asciidelimiter">Head</a>: Get some
+elements from the start of a delimited string <a href="section-59.html#left-string-count-boolinbytes">Left</a>: Get characters from the
+start of a string</p>
+<p><a href="#examples-38">Mid</a>: Get characters from the middle of a
+string <a href="#_bookmark1266">Regex_GetMatches</a>: Find tokens using
+a regular expression <a href="#regex_match-string-regex">Regex_Match</a>: Test whether a string
+matches a regular expression <span id="_bookmark1269" class="anchor"></span><a href="#regex_replace-string-regex-replacementex">Regex_Replace</a>:
+Replace text in a string using a regular expression</p>
+<p><a href="#see-also-36">Regex_SearchStr</a>: Find the first match of a
+regular expression in a string and return the matching string</p>
+<p><a href="#_bookmark1269">RemoveLeading</a>: Remove characters from
+the start of a string <a href="#_bookmark1272">RemoveTrailing</a>:
+Remove characters from the end of a string <a href="#_bookmark1271">Replace</a>: Replace matching text in a string
+with new text <a href="section-61.html#right-string-count-boolinbytes">Right</a>: Get
+characters from the end of a string</p>
+<p><a href="#_bookmark1277">Slice</a>: Get a component of a delimited
+string</p>
+<p><a href="section-61.html#tail-listtext-numberofitems-asciidelimiter">Tail</a>: Get
+some elements from the end of a delimited string <a href="section-61.html#transpose-table">Trim</a>: Remove whitespace from beginning and
+end of a string</p>
+<p><strong>Availability:</strong> v9.1 and later.</p>
+</blockquote><h5 id="see-also-35">See Also:</h5><blockquote>
+<p><a href="section-59.html#dice-table-rownum-colnum">Dice</a>: Get a subcomponent of a
+delimited tabular string <a href="section-59.html#head-listtext-numberofitems-asciidelimiter">Head</a>: Get some
+elements from the start of a delimited string <a href="section-59.html#left-string-count-boolinbytes">Left</a>: Get characters from the
+start of a string</p>
+<p><a href="#examples-38">Mid</a>: Get characters from the middle of a
+string <a href="#_bookmark1266">Regex_GetMatches</a>: Find tokens using
+a regular expression <a href="#regex_match-string-regex">Regex_Match</a>: Test whether a string
+matches a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Replace</a>:
+Replace text in a string using a regular expression</p>
+<p><a href="#regex_replace-string-regex-replacementex">Regex_Search</a>:
+Find the first match of a regular expression in a string <a href="#_bookmark1269">RemoveLeading</a>: Remove characters from the
+start of a string <a href="#_bookmark1272">RemoveTrailing</a>: Remove
+characters from the end of a string <a href="#_bookmark1271">Replace</a>: Replace matching text in a string
+with new text</p>
+<p><a href="section-61.html#right-string-count-boolinbytes">Right</a>: Get characters
+from the end of a string <a href="#_bookmark1277">Slice</a>: Get a
+component of a delimited string</p>
+<p><a href="section-61.html#tail-listtext-numberofitems-asciidelimiter">Tail</a>: Get
+some elements from the end of a delimited string <a href="section-61.html#transpose-table">Trim</a>: Remove whitespace from beginning and
+end of a string</p>
+</blockquote><h5 id="see-also-36">See Also:</h5><p><strong>Regex_SearchStr (string, regex)</strong></p><p><strong>Result Type:</strong> String</p><p><strong>Definition:</strong> Returns the matching text in the string
+for the first match for the given regular expression, or an empty string
+if there is no match.</p><p><strong>Examples:</strong> Regex_SearchStr("Some 45 text 876335 more
+text", " [0-9]{5}")</p><blockquote>
+<p>returns " 87633"(the regex matches a space followed by at least 5
+digits).</p>
+</blockquote><p><strong>RemoveLeading (string, count [, boolInBytes])</strong></p><p><strong>Result Type:</strong> Text</p><p><strong>Definition:</strong> Returns the remainder of the string
+after removing the specified number of characters from the
+beginning.</p><p><strong>Examples:</strong> RemoveLeading("nybble", 3) — returns
+“ble”.</p><p>If <em>boolInBytes</em> is true or IN_BYTES (which is a constant with
+value true), then the count is regarded as bytes, not characters. This
+option should only be used when the string is known to be pure ASCII. It
+is much faster because it does not account for multibyte unicode
+characters.</p><p><strong>Availability:</strong> v9.0.8 and later</p><blockquote>
+<p><a href="section-59.html#dice-table-rownum-colnum">Dice</a>: Get a subcomponent of a
+delimited tabular string <a href="section-59.html#head-listtext-numberofitems-asciidelimiter">Head</a>: Get some
+elements from the start of a delimited string <a href="section-59.html#left-string-count-boolinbytes">Left</a>: Get characters from the
+start of a string</p>
+<p><a href="#examples-38">Mid</a>: Get characters from the middle of a
+string</p>
+<p><a href="#_bookmark1266">Regex_GetMatches</a>: Find tokens using a
+regular expression <a href="#regex_match-string-regex">Regex_Match</a>:
+Test whether a string matches a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Replace</a>:
+Replace text in a string using a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Search</a>: Find
+the first match of a regular expression in a string</p>
+<p><a href="#see-also-36">Regex_SearchStr</a>: Find the first match of a
+regular expression in a string and return the matching string</p>
+<p><a href="#_bookmark1272">RemoveTrailing</a>: Remove characters from
+the end of a string <span id="_bookmark1271" class="anchor"></span><a href="#_bookmark1271">Replace</a>: Replace matching text in a string
+with new text <a href="section-61.html#right-string-count-boolinbytes">Right</a>: Get
+characters from the end of a string</p>
+<p><a href="#_bookmark1277">Slice</a>: Get a component of a delimited
+string</p>
+<p><a href="section-61.html#tail-listtext-numberofitems-asciidelimiter">Tail</a>: Get
+some elements from the end of a delimited string <a href="section-61.html#transpose-table">Trim</a>: Remove whitespace from beginning and
+end of a string</p>
+</blockquote><p><span id="_bookmark1272" class="anchor"></span><strong>RemoveTrailing
+(string, count [, boolInBytes])</strong></p><p><strong>Result Type:</strong> Text</p><p><strong>Definition:</strong> Truncates a string, removing the
+rightmost count characters</p><p><strong>Examples:</strong> RemoveTrailing("nybble is half a byte", 3)
+— returns “nybble is half a b”.</p><p>If <em>boolInBytes</em> is true or IN_BYTES (which is a constant with
+value true), then the count is regarded as bytes, not characters. This
+option should only be used when the string is known to be pure ASCII. It
+is much faster because it does not account for multibyte unicode
+characters.</p><p><strong>Availability:</strong> v9.0.8 and later</p><h5 id="see-also-37">See Also:</h5><blockquote>
+<p><a href="section-59.html#dice-table-rownum-colnum">Dice</a>: Get a subcomponent of a
+delimited tabular string <a href="section-59.html#head-listtext-numberofitems-asciidelimiter">Head</a>: Get some
+elements from the start of a delimited string <a href="section-59.html#left-string-count-boolinbytes">Left</a>: Get characters from the
+start of a string</p>
+<p><a href="#examples-38">Mid</a>: Get characters from the middle of a
+string <a href="#_bookmark1266">Regex_GetMatches</a>: Find tokens using
+a regular expression <span id="_bookmark1273" class="anchor"></span><a href="#regex_match-string-regex">Regex_Match</a>: Test whether a string
+matches a regular expression <a href="#regex_replace-string-regex-replacementex">Regex_Replace</a>:
+Replace text in a string using a regular expression</p>
+<p><a href="#regex_replace-string-regex-replacementex">Regex_Search</a>:
+Find the first match of a regular expression in a string <a href="#see-also-36">Regex_SearchStr</a>: Find the first match of a
+regular expression in a string and</p>
+<p>return the matching string</p>
+<p><a href="#_bookmark1269">RemoveLeading</a>: Remove characters from
+the start of a string <a href="#_bookmark1271">Replace</a>: Replace
+matching text in a string with new text <a href="section-61.html#right-string-count-boolinbytes">Right</a>: Get characters from
+the end of a string</p>
+<p><a href="#_bookmark1277">Slice</a>: Get a component of a delimited
+string</p>
+<p><a href="section-61.html#tail-listtext-numberofitems-asciidelimiter">Tail</a>: Get
+some elements from the end of a delimited string <a href="section-61.html#transpose-table">Trim</a>: Remove whitespace from beginning and
+end of a string</p>
+</blockquote><h3 id="replace-string-pattern-txt">Replace (string, pattern, txt)</h3><div class="navigation"><hr><p><a href="section-1.html">MoneyWorks - Page 1</a> | <a href="section-2.html">MoneyWorks - Page 2</a> | <a href="section-3.html">MoneyWorks - Page 3</a> | <a href="section-4.html">MoneyWorks - Page 4</a> | <a href="section-5.html">MoneyWorks - Page 5</a> | <a href="section-6.html">MoneyWorks - Page 6</a> | <a href="section-7.html">MoneyWorks - Page 7</a> | <a href="section-8.html">MoneyWorks - Page 8</a> | <a href="section-9.html">MoneyWorks - Page 9</a> | <a href="section-10.html">MoneyWorks - Page 10</a> | <a href="section-11.html">MoneyWorks - Page 11</a> | <a href="section-12.html">MoneyWorks - Page 12</a> | <a href="section-13.html">MoneyWorks - Page 13</a> | <a href="section-14.html">MoneyWorks - Page 14</a> | <a href="section-15.html">MoneyWorks - Page 15</a> | <a href="section-16.html">MoneyWorks - Page 16</a> | <a href="section-17.html">MoneyWorks - Page 17</a> | <a href="section-18.html">MoneyWorks - Page 18</a> | <a href="section-19.html">MoneyWorks - Page 19</a> | <a href="section-20.html">MoneyWorks - Page 20</a> | <a href="section-21.html">MoneyWorks - Page 21</a> | <a href="section-22.html">MoneyWorks - Page 22</a> | <a href="section-23.html">MoneyWorks - Page 23</a> | <a href="section-24.html">MoneyWorks - Page 24</a> | <a href="section-25.html">MoneyWorks - Page 25</a> | <a href="section-26.html">MoneyWorks - Page 26</a> | <a href="section-27.html">MoneyWorks - Page 27</a> | <a href="section-28.html">MoneyWorks - Page 28</a> | <a href="section-29.html">MoneyWorks - Page 29</a> | <a href="section-30.html">MoneyWorks - Page 30</a> | <a href="section-31.html">MoneyWorks - Page 31</a> | <a href="section-32.html">MoneyWorks - Page 32</a> | <a href="section-33.html">MoneyWorks - Page 33</a> | <a href="section-34.html">MoneyWorks - Page 34</a> | <a href="section-35.html">MoneyWorks - Page 35</a> | <a href="section-36.html">MoneyWorks - Page 36</a> | <a href="section-37.html">MoneyWorks - Page 37</a> | <a href="section-38.html">MoneyWorks - Page 38</a> | <a href="section-39.html">MoneyWorks - Page 39</a> | <a href="section-40.html">MoneyWorks - Page 40</a> | <a href="section-41.html">MoneyWorks - Page 41</a> | <a href="section-42.html">MoneyWorks - Page 42</a> | <a href="section-43.html">MoneyWorks - Page 43</a> | <a href="section-44.html">MoneyWorks - Page 44</a> | <a href="section-45.html">MoneyWorks - Page 45</a> | <a href="section-46.html">MoneyWorks - Page 46</a> | <a href="section-47.html">MoneyWorks - Page 47</a> | <a href="section-48.html">MoneyWorks - Page 48</a> | <a href="section-49.html">MoneyWorks - Page 49</a> | <a href="section-50.html">MoneyWorks - Page 50</a> | <a href="section-51.html">MoneyWorks - Page 51</a> | <a href="section-52.html">MoneyWorks - Page 52</a> | <a href="section-53.html">MoneyWorks - Page 53</a> | <a href="section-54.html">MoneyWorks - Page 54</a> | <a href="section-55.html">MoneyWorks - Page 55</a> | <a href="section-56.html">MoneyWorks - Page 56</a> | <a href="section-57.html">MoneyWorks - Page 57</a> | <a href="section-58.html">MoneyWorks - Page 58</a> | <a href="section-59.html">MoneyWorks - Page 59</a> | <a href="section-60.html">MoneyWorks - Page 60</a> | <a href="section-61.html">MoneyWorks - Page 61</a> | <a href="section-62.html">MoneyWorks - Page 62</a> | <a href="section-63.html">MoneyWorks - Page 63</a> | <a href="section-64.html">MoneyWorks - Page 64</a> | <a href="section-65.html">MoneyWorks - Page 65</a> | <a href="section-66.html">MoneyWorks - Page 66</a> | <a href="section-67.html">MoneyWorks - Page 67</a> | <a href="section-68.html">MoneyWorks - Page 68</a> | <a href="section-69.html">MoneyWorks - Page 69</a></p></div></body></html>

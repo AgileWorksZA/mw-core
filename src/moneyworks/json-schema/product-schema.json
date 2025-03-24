@@ -1,0 +1,344 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Product",
+  "description": "Product table schema (file_num: 13)",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "Code": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Product code (indexed)"
+    },
+    "SuppliersCode": {
+      "type": "string",
+      "maxLength": 40,
+      "description": "Supplier's product code (mutable: freely, script-only)"
+    },
+    "Supplier": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Supplier code (mutable: conditionally)"
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Product description (mutable: freely, script-only)"
+    },
+    "Comment": {
+      "type": "string",
+      "maxLength": 1024,
+      "description": "Product comments (mutable: freely, script-only)"
+    },
+    "Category1": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Primary category (mutable: freely, script-only)"
+    },
+    "Category2": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Secondary category (mutable: freely, script-only)"
+    },
+    "Category3": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Tertiary category (mutable: freely, script-only)"
+    },
+    "Category4": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Quaternary category (mutable: freely, script-only)"
+    },
+    "SalesAcct": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Sales account"
+    },
+    "COGAcct": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Cost of goods account"
+    },
+    "StockAcct": {
+      "type": "string",
+      "maxLength": 14,
+      "description": "Stock account"
+    },
+    "UserNum": {
+      "type": "number",
+      "description": "User number (mutable: freely, script-only)"
+    },
+    "SellUnit": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Selling unit (mutable: freely, script-only)"
+    },
+    "SellPrice": {
+      "type": "number",
+      "description": "Selling price (mutable: conditionally)"
+    },
+    "Plussage": {
+      "type": "number",
+      "description": "Price markup percentage (mutable: conditionally)"
+    },
+    "BuyWeight": {
+      "type": "number",
+      "description": "Buy weight (mutable: conditionally)"
+    },
+    "BuyUnit": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Buying unit (mutable: freely, script-only)"
+    },
+    "CostPrice": {
+      "type": "number",
+      "description": "Cost price"
+    },
+    "ConversionFactor": {
+      "type": "number",
+      "description": "Unit conversion factor"
+    },
+    "MarginWarning": {
+      "type": "number",
+      "description": "Margin warning level (mutable: freely, script-only)"
+    },
+    "SellDiscount": {
+      "type": "number",
+      "description": "Selling discount (mutable: conditionally)"
+    },
+    "SellDiscountMode": {
+      "type": "integer",
+      "description": "Selling discount mode (mutable: conditionally)"
+    },
+    "UserText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User text (mutable: freely, script-only)"
+    },
+    "StockOnHand": {
+      "type": "number",
+      "description": "Stock on hand quantity"
+    },
+    "StockValue": {
+      "type": "number",
+      "description": "Stock value"
+    },
+    "MinBuildQty": {
+      "type": "number",
+      "description": "Minimum build quantity"
+    },
+    "NormalBuildQty": {
+      "type": "number",
+      "description": "Normal build quantity"
+    },
+    "ReorderLevel": {
+      "type": "number",
+      "description": "Reorder level (mutable: freely, script-only)"
+    },
+    "JobPricingMode": {
+      "type": "integer",
+      "description": "Job pricing mode (mutable: conditionally)"
+    },
+    "Flags": {
+      "type": "integer",
+      "description": "Flags (mutable: freely, script-only)"
+    },
+    "Colour": {
+      "type": "integer",
+      "description": "Display color (mutable: conditionally)"
+    },
+    "UseMultiplePrices": {
+      "type": "boolean",
+      "description": "Use multiple prices flag (mutable: freely, script-only)"
+    },
+    "SellPriceB": {
+      "type": "number",
+      "description": "Selling price B (mutable: conditionally)"
+    },
+    "SellPriceC": {
+      "type": "number",
+      "description": "Selling price C (mutable: conditionally)"
+    },
+    "SellPriceD": {
+      "type": "number",
+      "description": "Selling price D (mutable: conditionally)"
+    },
+    "SellPriceE": {
+      "type": "number",
+      "description": "Selling price E (mutable: conditionally)"
+    },
+    "SellPriceF": {
+      "type": "number",
+      "description": "Selling price F (mutable: conditionally)"
+    },
+    "QtyBreak1": {
+      "type": "number",
+      "description": "Quantity break 1 (mutable: conditionally)"
+    },
+    "QtyBreak2": {
+      "type": "number",
+      "description": "Quantity break 2 (mutable: conditionally)"
+    },
+    "QtyBreak3": {
+      "type": "number",
+      "description": "Quantity break 3 (mutable: conditionally)"
+    },
+    "QtyBreak4": {
+      "type": "number",
+      "description": "Quantity break 4 (mutable: conditionally)"
+    },
+    "QtyBrkSellPriceA1": {
+      "type": "number",
+      "description": "Quantity break selling price A1 (mutable: conditionally)"
+    },
+    "QtyBrkSellPriceA2": {
+      "type": "number",
+      "description": "Quantity break selling price A2 (mutable: conditionally)"
+    },
+    "QtyBrkSellPriceA3": {
+      "type": "number",
+      "description": "Quantity break selling price A3 (mutable: conditionally)"
+    },
+    "QtyBrkSellPriceA4": {
+      "type": "number",
+      "description": "Quantity break selling price A4 (mutable: conditionally)"
+    },
+    "QtyBrkSellPriceB1": {
+      "type": "number",
+      "description": "Quantity break selling price B1 (mutable: conditionally)"
+    },
+    "QtyBrkSellPriceB2": {
+      "type": "number",
+      "description": "Quantity break selling price B2 (mutable: conditionally)"
+    },
+    "QtyBrkSellPriceB3": {
+      "type": "number",
+      "description": "Quantity break selling price B3 (mutable: conditionally)"
+    },
+    "QtyBrkSellPriceB4": {
+      "type": "number",
+      "description": "Quantity break selling price B4 (mutable: conditionally)"
+    },
+    "Type": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "Product type (indexed, mutable: conditionally)"
+    },
+    "Count": {
+      "type": "number",
+      "description": "Count (mutable: conditionally)"
+    },
+    "OnOrder": {
+      "type": "number",
+      "description": "Quantity on order"
+    },
+    "StockTakeStartQty": {
+      "type": "number",
+      "description": "Stock take starting quantity"
+    },
+    "StockTakeValue": {
+      "type": "number",
+      "description": "Stock take value"
+    },
+    "StockTakeNewQty": {
+      "type": "number",
+      "description": "Stock take new quantity (mutable: freely, script-only)"
+    },
+    "BarCode": {
+      "type": "string",
+      "maxLength": 20,
+      "description": "Barcode (indexed, mutable: freely, script-only)"
+    },
+    "BuyPriceCurrency": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Buy price currency"
+    },
+    "BuyPrice": {
+      "type": "number",
+      "description": "Buy price (mutable: conditionally)"
+    },
+    "Custom1": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Custom field 1 (mutable: freely, script-only)"
+    },
+    "Custom2": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Custom field 2 (mutable: freely, script-only)"
+    },
+    "Custom3": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 3 (mutable: freely, script-only)"
+    },
+    "Custom4": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 4 (mutable: freely, script-only)"
+    },
+    "BuyTaxCodeOverride": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Buy tax code override (mutable: conditionally)"
+    },
+    "SellTaxCodeOverride": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Sell tax code override (mutable: conditionally)"
+    },
+    "LeadTimeDays": {
+      "type": "integer",
+      "description": "Lead time in days (mutable: freely, script-only)"
+    },
+    "Hash": {
+      "type": "integer",
+      "description": "Hash value (indexed)"
+    },
+    "SellWeight": {
+      "type": "number",
+      "description": "Sell weight (mutable: conditionally)"
+    },
+    "Custom5": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 5 (mutable: freely, script-only)"
+    },
+    "Custom6": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 6 (mutable: freely, script-only)"
+    },
+    "Custom7": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 7 (mutable: freely, script-only)"
+    },
+    "Custom8": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Custom field 8 (mutable: freely, script-only)"
+    },
+    "TaggedText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Tagged text (mutable: freely, script-only)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "Code",
+    "Description"
+  ]
+}

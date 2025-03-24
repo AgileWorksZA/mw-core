@@ -1,0 +1,343 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Transaction",
+  "description": "Transaction table schema (file_num: 5)",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number (indexed)"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "OurRef": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Our reference (indexed, mutable: conditionally)"
+    },
+    "TransDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Transaction date (indexed, mutable: conditionally)"
+    },
+    "EnterDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date entered (indexed)"
+    },
+    "DueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Due date (mutable: conditionally)"
+    },
+    "Period": {
+      "type": "integer",
+      "description": "Period (indexed)"
+    },
+    "Type": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Transaction type (indexed)"
+    },
+    "TheirRef": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Their reference (mutable: freely, script-only)"
+    },
+    "NameCode": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Name code (indexed)"
+    },
+    "Flag": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Flag (mutable: freely, script-only)"
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 1024,
+      "description": "Description (mutable: conditionally)"
+    },
+    "Gross": {
+      "type": "number",
+      "description": "Gross amount"
+    },
+    "Analysis": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Analysis code (mutable: freely, script-only)"
+    },
+    "Contra": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Contra account"
+    },
+    "ToFrom": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "To/From details (mutable: conditionally)"
+    },
+    "Status": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "Status (indexed)"
+    },
+    "Hold": {
+      "type": "boolean",
+      "description": "Hold status (mutable: conditionally)"
+    },
+    "DatePaid": {
+      "type": "string",
+      "format": "date",
+      "description": "Date paid"
+    },
+    "AmtPaid": {
+      "type": "number",
+      "description": "Amount paid"
+    },
+    "PayAmount": {
+      "type": "number",
+      "description": "Payment amount"
+    },
+    "Aging": {
+      "type": "integer",
+      "description": "Aging period"
+    },
+    "TaxAmount": {
+      "type": "number",
+      "description": "Tax amount"
+    },
+    "TaxCycle": {
+      "type": "integer",
+      "description": "Tax cycle"
+    },
+    "Recurring": {
+      "type": "boolean",
+      "description": "Recurring transaction flag"
+    },
+    "Printed": {
+      "type": "integer",
+      "description": "Print status (mutable: freely, script-only)"
+    },
+    "Flags": {
+      "type": "integer",
+      "description": "Flags"
+    },
+    "TaxProcessed": {
+      "type": "number",
+      "description": "Tax processed amount"
+    },
+    "Salesperson": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Salesperson code (mutable: conditionally)"
+    },
+    "Colour": {
+      "type": "integer",
+      "description": "Display color (mutable: conditionally)"
+    },
+    "BankJNSeq": {
+      "type": "integer",
+      "description": "Bank journal sequence"
+    },
+    "PaymentMethod": {
+      "type": "integer",
+      "description": "Payment method"
+    },
+    "TimePosted": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time posted"
+    },
+    "SecurityLevel": {
+      "type": "integer",
+      "description": "Security level (indexed)"
+    },
+    "User1": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User field 1 (mutable: freely, script-only)"
+    },
+    "User2": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User field 2 (mutable: freely, script-only)"
+    },
+    "User3": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User field 3 (mutable: freely, script-only)"
+    },
+    "PromptPaymentDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Prompt payment date (mutable: freely, script-only)"
+    },
+    "PromptPaymentAmt": {
+      "type": "number",
+      "description": "Prompt payment amount"
+    },
+    "ProdPriceCode": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "Product price code"
+    },
+    "MailingAddress": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Mailing address (mutable: conditionally)"
+    },
+    "DeliveryAddress": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Delivery address (mutable: conditionally)"
+    },
+    "FreightCode": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Freight code"
+    },
+    "FreightAmount": {
+      "type": "number",
+      "description": "Freight amount"
+    },
+    "FreightDetails": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Freight details (mutable: freely, script-only)"
+    },
+    "SpecialBank": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Special bank (mutable: freely, script-only)"
+    },
+    "SpecialBranch": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Special branch (mutable: freely, script-only)"
+    },
+    "SpecialAccount": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Special account (mutable: freely, script-only)"
+    },
+    "Currency": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Currency"
+    },
+    "ExchangeRate": {
+      "type": "number",
+      "description": "Exchange rate"
+    },
+    "EnteredBy": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Entered by user"
+    },
+    "PostedBy": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Posted by user"
+    },
+    "AmtWrittenOff": {
+      "type": "number",
+      "description": "Amount written off"
+    },
+    "OrderTotal": {
+      "type": "number",
+      "description": "Order total"
+    },
+    "OrderShipped": {
+      "type": "number",
+      "description": "Order shipped amount"
+    },
+    "OrderDeposit": {
+      "type": "number",
+      "description": "Order deposit"
+    },
+    "OriginatingOrderSeq": {
+      "type": "integer",
+      "description": "Originating order sequence"
+    },
+    "CurrencyTransferSeq": {
+      "type": "integer",
+      "description": "Currency transfer sequence"
+    },
+    "PromptPaymentTerms": {
+      "type": "integer",
+      "description": "Prompt payment terms"
+    },
+    "PromptPaymentDisc": {
+      "type": "number",
+      "description": "Prompt payment discount"
+    },
+    "ApprovedBy1": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "First approval user (mutable: conditionally, script-only)"
+    },
+    "ApprovedBy2": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Second approval user (mutable: conditionally, script-only)"
+    },
+    "UserNum": {
+      "type": "number",
+      "description": "User number (mutable: freely, script-only)"
+    },
+    "UserText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User text (mutable: freely, script-only)"
+    },
+    "User4": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "User field 4 (mutable: freely, script-only)"
+    },
+    "User5": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "User field 5 (mutable: freely, script-only)"
+    },
+    "User6": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "User field 6 (mutable: freely, script-only)"
+    },
+    "User7": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "User field 7 (mutable: freely, script-only)"
+    },
+    "User8": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "User field 8 (mutable: freely, script-only)"
+    },
+    "TaggedText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Tagged text (mutable: freely, script-only)"
+    },
+    "Emailed": {
+      "type": "integer",
+      "description": "Email status (mutable: freely, script-only)"
+    },
+    "Transferred": {
+      "type": "integer",
+      "description": "Transfer status (mutable: freely, script-only)"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "TransDate",
+    "Type"
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Account",
+  "description": "Account table schema (file_num: 0)",
+  "type": "object",
+  "properties": {
+    "SequenceNumber": {
+      "type": "integer",
+      "description": "Unsigned long sequence number"
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified timestamp"
+    },
+    "Code": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Account code (indexed)"
+    },
+    "Type": {
+      "type": "string",
+      "maxLength": 1,
+      "description": "Account type (indexed)"
+    },
+    "Group": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Account group (indexed)"
+    },
+    "Category": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Account category (indexed)"
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "Account description (mutable: freely, script-only)"
+    },
+    "PandL": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Profit and Loss reference (indexed)"
+    },
+    "TaxCode": {
+      "type": "string",
+      "maxLength": 6,
+      "description": "Tax code (mutable: conditionally)"
+    },
+    "Flags": {
+      "type": "integer",
+      "description": "Flags"
+    },
+    "System": {
+      "type": "string",
+      "maxLength": 1,
+      "description": "System indicator (indexed)"
+    },
+    "Created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp"
+    },
+    "Category2": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Secondary category (mutable: freely, script-only)"
+    },
+    "Category3": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Tertiary category (mutable: freely, script-only)"
+    },
+    "Category4": {
+      "type": "string",
+      "maxLength": 16,
+      "description": "Quaternary category (mutable: freely, script-only)"
+    },
+    "AccountantCode": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Accountant code (mutable: freely, script-only)"
+    },
+    "Colour": {
+      "type": "integer",
+      "description": "Display color (mutable: conditionally)"
+    },
+    "Currency": {
+      "type": "string",
+      "maxLength": 4,
+      "description": "Account currency"
+    },
+    "SecurityLevel": {
+      "type": "integer",
+      "description": "Security level (indexed)"
+    },
+    "BankAccountNumber": {
+      "type": "string",
+      "maxLength": 24,
+      "description": "Bank account number (mutable: freely, script-only)"
+    },
+    "BalanceLimit": {
+      "type": "number",
+      "description": "Balance limit"
+    },
+    "ManualChequeNumber": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Manual cheque number"
+    },
+    "PrintedChequeNumber": {
+      "type": "string",
+      "maxLength": 12,
+      "description": "Printed cheque number"
+    },
+    "LastStatementImport": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last statement import timestamp"
+    },
+    "Comments": {
+      "type": "string",
+      "maxLength": 1024,
+      "description": "Comments (mutable: freely, script-only)"
+    },
+    "ManualChequeNumDigits": {
+      "type": "integer",
+      "description": "Number of digits in manual cheque number"
+    },
+    "PrintedChequeNumDigits": {
+      "type": "integer",
+      "description": "Number of digits in printed cheque number"
+    },
+    "UserNum": {
+      "type": "number",
+      "description": "User number (mutable: freely, script-only)"
+    },
+    "UserText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "User text (mutable: freely, script-only)"
+    },
+    "TaggedText": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Tagged text (mutable: freely, script-only)"
+    },
+    "FeedID": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Feed ID (mutable: freely, script-only)"
+    },
+    "Cashflow": {
+      "type": "string",
+      "maxLength": 8,
+      "description": "Cashflow (mutable: freely, script-only)"
+    },
+    "Cashforecast": {
+      "type": "string",
+      "maxLength": 32,
+      "description": "Cash forecast (mutable: freely, script-only)"
+    },
+    "EBITDA": {
+      "type": "string",
+      "maxLength": 2,
+      "description": "EBITDA (mutable: conditionally)"
+    },
+    "ImportFormat": {
+      "type": "string",
+      "maxLength": 10,
+      "description": "Import format"
+    }
+  },
+  "required": [
+    "SequenceNumber",
+    "LastModifiedTime",
+    "Code"
+  ]
+}
