@@ -41,9 +41,9 @@ export class NameService {
       // Call MoneyWorks API
       const response = await this.api.export("name", mwParams);
 
-      console.log("API Response:", JSON.stringify(response, null, 2));
+      console.log("API Response:", JSON.stringify(response, null, 2), !response?.table?.n);
 
-      if (!response?.table?.n) {
+      if (!response?.table?.name) {
         return { data: [], pagination: this.createPagination(0, params) };
       }
 
@@ -123,13 +123,14 @@ export class NameService {
    * Parse XML name response into structured data
    */
   private parseNameResponse(tableData: any): Partial<Name>[] {
+    console.log({tableData})
     // Handle case when only one name is returned
-    if (!Array.isArray(tableData.n)) {
-      return [this.parseNameRecord(tableData.n)];
+    if (!Array.isArray(tableData.name)) {
+      return [this.parseNameRecord(tableData.name)];
     }
 
     // Handle multiple names
-    return tableData.n.map((record: any) => this.parseNameRecord(record));
+    return tableData.name.map((record: any) => this.parseNameRecord(record));
   }
 
   /**
