@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { MoneyWorksConfig, MoneyWorksQueryParams } from '../types/moneyworks';
-import { parseStringPromise } from 'xml2js';
+import { XMLParser } from 'fast-xml-parser';
 
 /**
  * MoneyWorks API service
@@ -8,9 +8,15 @@ import { parseStringPromise } from 'xml2js';
  */
 export class MoneyWorksApiService {
   private config: MoneyWorksConfig;
+  private parser: XMLParser;
 
   constructor(config: MoneyWorksConfig) {
     this.config = config;
+    this.parser = new XMLParser({
+      ignoreAttributes: false,
+      attributeNamePrefix: "_",
+      isArray: (name) => ['n', 't', 'a', 'detail'].includes(name),
+    });
   }
 
   /**
@@ -43,18 +49,7 @@ export class MoneyWorksApiService {
    * Build the base URL for MoneyWorks REST API
    */
   private getBaseUrl() {
-    let path = this.config.dataFile;
-
-    // If folder authentication is enabled, include the folder path
-    if (this.config.folderAuth) {
-      const { folderName } = this.config.folderAuth;
-      // Only prepend folder if not already included in dataFile
-      if (!path.includes('/') && !path.includes('\\')) {
-        path = `${folderName}/${path}`;
-      }
-    }
-
-    return `http://${this.config.host}:${this.config.port}/REST/${encodeURIComponent(path)}`;
+    return `http://${this.config.host}:${this.config.port}/REST/${encodeURIComponent(this.config.dataFile)}`;
   }
 
   /**
@@ -115,18 +110,12 @@ export class MoneyWorksApiService {
       console.log(`Response: ${response.status} - ${response.statusText}`);
 
       if (queryParams.format.startsWith('xml')) {
-        const parsedXml = await parseStringPromise(response.data, {
-          explicitArray: false,
-          attrkey: '_',
-          charkey: 'text',
-          explicitCharkey: true
-        });
-        console.log({ parsedXml });
-        return parsedXml;
+        return this.parser.parse(response.data);
       }
 
       return response.data;
     } catch (error) {
+      console.error(error);
       this.handleError(error);
     }
   }
