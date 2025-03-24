@@ -1,0 +1,256 @@
+import axios from 'axios';
+import { MoneyWorksConfig, MoneyWorksQueryParams } from '../types/moneyworks';
+import { parseStringPromise } from 'xml2js';
+
+/**
+ * MoneyWorks API service
+ * Handles direct communication with MoneyWorks Datacentre REST API
+ */
+export class MoneyWorksApiService {
+  private config: MoneyWorksConfig;
+
+  constructor(config: MoneyWorksConfig) {
+    this.config = config;
+  }
+
+  /**
+   * Create authentication headers for MoneyWorks REST API
+   */
+  private createAuthHeaders() {
+    // Document auth (always required)
+    const documentCredentials = `${this.config.username}:Document:${this.config.password}`;
+    const documentAuth = `Basic ${Buffer.from(documentCredentials).toString('base64')}`;
+
+    // Folder auth (only if configured)
+    if (this.config.folderAuth) {
+      const { folderName, password } = this.config.folderAuth;
+      const folderCredentials = `${folderName}:Datacentre:${password}`;
+      const folderAuth = `Basic ${Buffer.from(folderCredentials).toString('base64')}`;
+
+      // Return combined auth headers
+      return {
+        'Authorization': `${documentAuth}, ${folderAuth}`
+      };
+    }
+
+    // Return document auth only
+    return {
+      'Authorization': documentAuth
+    };
+  }
+
+  /**
+   * Build the base URL for MoneyWorks REST API
+   */
+  private getBaseUrl() {
+    let path = this.config.dataFile;
+
+    // If folder authentication is enabled, include the folder path
+    if (this.config.folderAuth) {
+      const { folderName } = this.config.folderAuth;
+      // Only prepend folder if not already included in dataFile
+      if (!path.includes('/') && !path.includes('\\')) {
+        path = `${folderName}/${path}`;
+      }
+    }
+
+    return `http://${this.config.host}:${this.config.port}/REST/${encodeURIComponent(path)}`;
+  }
+
+  /**
+   * Build query parameters string
+   */
+  private buildQueryParams(params: MoneyWorksQueryParams): string {
+    const queryParts: string[] = [];
+
+    if (params.limit !== undefined) {
+      queryParts.push(`limit=${params.limit}`);
+    }
+
+    if (params.start !== undefined) {
+      queryParts.push(`start=${params.start}`);
+    }
+
+    if (params.search) {
+      queryParts.push(`search=${encodeURIComponent(params.search)}`);
+    }
+
+    if (params.sort) {
+      queryParts.push(`sort=${encodeURIComponent(params.sort)}`);
+    }
+
+    if (params.direction) {
+      queryParts.push(`direction=${params.direction}`);
+    }
+
+    if (params.format) {
+      queryParts.push(`format=${encodeURIComponent(params.format)}`);
+    }
+
+    return queryParts.join('&');
+  }
+
+  /**
+   * Export data from MoneyWorks
+   *
+   * @param table The table to export (name, transaction, account, etc.)
+   * @param params Query parameters (limit, start, search, sort, etc.)
+   * @returns Parsed response data
+   */
+  async export(table: string, params: MoneyWorksQueryParams = {}) {
+    try {
+      // Default to XML verbose format if not specified
+      const queryParams = {
+        ...params,
+        format: params.format || 'xml-verbose'
+      };
+
+      const url = `${this.getBaseUrl()}/export/table=${table}&${this.buildQueryParams(queryParams)}`;
+      const headers = this.createAuthHeaders();
+
+      console.log(`Fetching data from: ${url}`);
+
+      const response = await axios.get(url, { headers });
+
+      console.log(`Response: ${response.status} - ${response.statusText}`);
+
+      if (queryParams.format.startsWith('xml')) {
+        const parsedXml = await parseStringPromise(response.data, { 
+          explicitArray: false,
+          attrkey: '_',
+          charkey: 'text',
+          explicitCharkey: true
+        });
+        return parsedXml;
+      }
+
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Import data into MoneyWorks
+   *
+   * @param table The table to import into
+   * @param data XML data to import
+   * @param returnSeq Whether to return the sequence number
+   * @returns Response data
+   */
+  async import(table: string, data: string, returnSeq: boolean = false) {
+    try {
+      const url = `${this.getBaseUrl()}/import${returnSeq ? '/return_seq=true' : ''}`;
+      const headers = {
+        ...this.createAuthHeaders(),
+        'Content-Type': 'text/xml'
+      };
+
+      // Wrap data in table element if not already wrapped
+      const xmlData = data.startsWith('<?xml') ? data : `<?xml version="1.0"?>
+<table name="${table}">
+${data}
+</table>`;
+
+      const response = await axios.post(url, xmlData, { headers });
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Evaluate expression in MoneyWorks
+   *
+   * @param expression The expression to evaluate
+   * @returns Evaluation result
+   */
+  async evaluate(expression: string) {
+    try {
+      const url = `${this.getBaseUrl()}/evaluate/expr=${encodeURIComponent(expression)}`;
+      const headers = this.createAuthHeaders();
+
+      const response = await axios.get(url, { headers });
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Post a transaction in MoneyWorks
+   *
+   * @param seqnum Sequence number of the transaction to post
+   * @returns Response data
+   */
+  async post(seqnum: number) {
+    try {
+      const url = `${this.getBaseUrl()}/post/seqnum=${seqnum}`;
+      const headers = this.createAuthHeaders();
+
+      const response = await axios.post(url, '', { headers });
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Generate a form in MoneyWorks
+   *
+   * @param form Form name
+   * @param search Search expression to identify record
+   * @returns PDF data as Buffer
+   */
+  async doForm(form: string, search: string) {
+    try {
+      const url = `${this.getBaseUrl()}/doform/form=${encodeURIComponent(form)}&search=${encodeURIComponent(search)}`;
+      const headers = this.createAuthHeaders();
+
+      const response = await axios.get(url, {
+        headers,
+        responseType: 'arraybuffer'
+      });
+
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Get server version
+   *
+   * @returns Server version
+   */
+  async getVersion() {
+    try {
+      // Note: version endpoint is on server, not document
+      const baseUrl = `http://${this.config.host}:${this.config.port}/REST`;
+      const url = `${baseUrl}/server/version`;
+      const headers = this.createAuthHeaders();
+
+      const response = await axios.get(url, { headers });
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Handle error from API request
+   */
+  private handleError(error: any) {
+    console.error('MoneyWorks API Error:', error);
+
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        throw new Error(`MoneyWorks API Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
+      } else if (error.request) {
+        throw new Error(`MoneyWorks API Error: No response received - ${error.message}`);
+      }
+    }
+
+    throw new Error(`MoneyWorks API Error: ${error.message}`);
+  }
+}

@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
-import { moneyworksRoutes } from "./routes/moneyworks.routes";
+import { nameRoutes } from "./routes/name.routes";
 
 const app = new Elysia()
   // Add Swagger documentation
@@ -16,7 +16,7 @@ const app = new Elysia()
       ]
     }
   }))
-  .use(moneyworksRoutes)
+  .use(nameRoutes)
   .listen(3131);
 
 console.log(

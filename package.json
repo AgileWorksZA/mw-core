@@ -3,12 +3,18 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build ./src/index.ts --outdir ./dist --target bun",
+    "start": "bun ./dist/index.js"
   },
   "dependencies": {
     "@elysiajs/swagger": "^1.2.2",
+    "@types/xml2js": "^0.4.14",
+    "axios": "^1.6.8",
     "elysia": "latest",
-    "jsdom": "^26.0.0"
+    "fast-xml-parser": "^4.3.6",
+    "jsdom": "^26.0.0",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "bun-types": "latest"
