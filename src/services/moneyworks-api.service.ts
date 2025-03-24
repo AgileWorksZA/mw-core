@@ -115,12 +115,13 @@ export class MoneyWorksApiService {
       console.log(`Response: ${response.status} - ${response.statusText}`);
 
       if (queryParams.format.startsWith('xml')) {
-        const parsedXml = await parseStringPromise(response.data, { 
+        const parsedXml = await parseStringPromise(response.data, {
           explicitArray: false,
           attrkey: '_',
           charkey: 'text',
           explicitCharkey: true
         });
+        console.log({ parsedXml });
         return parsedXml;
       }
 

@@ -1,27 +1,12 @@
 import { Elysia, t } from 'elysia';
 import { NameService } from '../services/name.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import {createTransformMiddleware} from "../moneyworks/transformers/xml-transform";
-import {Name} from "../moneyworks/types/name";
-import nameSchema from "../moneyworks/json-schema/name-schema.json";
 
 // Initialize the name service with configuration
 const config = loadMoneyWorksConfig();
 const nameService = new NameService(config);
 
-// Create the transformation middleware
-const nameTransformMiddleware = createTransformMiddleware<Name>('Name', {
-  schema: nameSchema,
-  fieldNameCase: 'camel',
-  // Define fields that should be converted to Date objects
-  dateFields: [
-    'lastModifiedTime',
-    'dateOfLastSale'
-  ]
-});
-
 export const nameRoutes = new Elysia({ prefix: '/api' })
-  .use(nameTransformMiddleware)
   .get('/names',
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
