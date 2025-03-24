@@ -123,7 +123,6 @@ export class NameService {
    * Parse XML name response into structured data
    */
   private parseNameResponse(tableData: any): Partial<Name>[] {
-    console.log({tableData})
     // Handle case when only one name is returned
     if (!Array.isArray(tableData.name)) {
       return [this.parseNameRecord(tableData.name)];
