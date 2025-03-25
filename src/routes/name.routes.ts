@@ -38,29 +38,51 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
       }
     }
   )
-  .get('/names/:id',
+  .get('/names/:code',
     async ({ params }) => {
       try {
-        const id = params.id;
+        const code = params.code;
 
         // Try to parse as number for sequence number lookup
-        if (!isNaN(Number(id)) && !isNaN(parseFloat(id))) {
-          return await nameService.getNameBySequenceNumber(Number(id));
+        if (!isNaN(Number(code)) && !isNaN(parseFloat(code))) {
+          return await nameService.getNameBySequenceNumber(Number(code));
         }
 
         // Otherwise treat as code
-        return await nameService.getNameByCode(id);
+        return await nameService.getNameByCode(code);
       } catch (error) {
-        console.error(`Error in GET /names/${params.id}:`, error);
+        console.error(`Error in GET /names/${params.code}:`, error);
         throw error;
       }
     },
     {
       params: t.Object({
-        id: t.String()
+        code: t.String()
       }),
       detail: {
-        summary: 'Get name by ID or code',
+        summary: 'Get name by code',
+        tags: ['MoneyWorks']
+      }
+    }
+  )
+  .get('/names/by-sequence/:sequence',
+    async ({ params }) => {
+      try {
+        const sequence = params.sequence;
+
+        // Otherwise treat as code
+        return await nameService.getNameBySequenceNumber(sequence);
+      } catch (error) {
+        console.error(`Error in GET /names/${params.sequence}:`, error);
+        throw error;
+      }
+    },
+    {
+      params: t.Object({
+        sequence: t.Numeric()
+      }),
+      detail: {
+        summary: 'Get name by sequence number',
         tags: ['MoneyWorks']
       }
     }

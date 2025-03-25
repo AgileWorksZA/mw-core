@@ -1,3 +1,6 @@
+import schema from "../json-schema/optimized/name-schema";
+import {enforceType} from "./helpers";
+
 /**
  * Name table interface
  * file_num: 10
@@ -191,4 +194,122 @@ export interface Name {
   TaggedText: string;
   /** @mutable="freely, script-only" size="32" */
   EInvoicingID: string;
+}
+
+export type NameField = keyof Name;
+
+export const NameFields: NameField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Code",
+  "Name",
+  "Contact",
+  "Position",
+  "Address1",
+  "Address2",
+  "Address3",
+  "Address4",
+  "Delivery1",
+  "Delivery2",
+  "Delivery3",
+  "Delivery4",
+  "Phone",
+  "Fax",
+  "Category1",
+  "Category2",
+  "Category3",
+  "Category4",
+  "CustomerType",
+  "D90Plus",
+  "D60Plus",
+  "D30Plus",
+  "DCurrent",
+  "CCurrent",
+  "DebtorTerms",
+  "CreditorTerms",
+  "Bank",
+  "AccountName",
+  "BankBranch",
+  "TheirRef",
+  "Hold",
+  "RecAccount",
+  "PayAccount",
+  "Kind",
+  "CreditLimit",
+  "Discount",
+  "Comment",
+  "SupplierType",
+  "Colour",
+  "Salesperson",
+  "TaxCode",
+  "SplitMode",
+  "PostCode",
+  "State",
+  "BankAccountNumber",
+  "Currency",
+  "PaymentMethod",
+  "DBalance",
+  "DDI",
+  "eMail",
+  "Mobile",
+  "AfterHours",
+  "Contact2",
+  "Position2",
+  "DDI2",
+  "eMail2",
+  "Mobile2",
+  "AfterHours2",
+  "WebURL",
+  "ProductPricing",
+  "DateOfLastSale",
+  "SplitAcct1",
+  "SplitAcct2",
+  "SplitPercent",
+  "SplitAmount",
+  "UserNum",
+  "UserText",
+  "CustPromptPaymentTerms",
+  "CustPromptPaymentDiscount",
+  "SuppPromptPaymentTerms",
+  "SuppPromptPaymentDiscount",
+  "LastPaymentMethod",
+  "CreditCardNum",
+  "CreditCardExpiry",
+  "CreditCardName",
+  "TaxNumber",
+  "Custom1",
+  "Custom2",
+  "Custom3",
+  "Custom4",
+  "DeliveryPostcode",
+  "DeliveryState",
+  "AddressCountry",
+  "DeliveryCountry",
+  "ReceiptMethod",
+  "ABUID",
+  "BankParticulars",
+  "Flags",
+  "Salutation",
+  "Salutation2",
+  "Memo",
+  "Memo2",
+  "Role",
+  "Role2",
+  "Custom5",
+  "Custom6",
+  "Custom7",
+  "Custom8",
+  "TaggedText",
+  "EInvoicingID",
+];
+
+// data will be a json object with lowercase keys
+export function dataCenterJsonToName(data: any): Name {
+  return NameFields.reduce((acc, key) => {
+    if (data[key.toLowerCase()] === undefined) {
+      console.error(`Missing key ${key} in data center json for Name record`);
+    }
+    (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+    return acc;
+  }, {} as Name);
 }

@@ -1,6 +1,22 @@
 import axios from 'axios';
-import { MoneyWorksConfig, MoneyWorksQueryParams } from '../types/moneyworks';
-import { XMLParser } from 'fast-xml-parser';
+import {MoneyWorksConfig, MoneyWorksQueryParams} from '../types/moneyworks';
+import {XMLParser} from 'fast-xml-parser';
+import {tableNames} from "../moneyworks/constants";
+
+function yyyyMmDdToDate(yyyyMmDd_?: number | string | Date): Date {
+  const yyyyMmDd = String(yyyyMmDd_)
+  if (!yyyyMmDd) return new Date(-1);
+
+  if (/^\d{8}$/.test((yyyyMmDd))) {
+    const year = parseInt(yyyyMmDd.slice(0, 4), 10);
+    const month = parseInt(yyyyMmDd.slice(4, 6), 10) - 1; // JS months are 0-based
+    const day = parseInt(yyyyMmDd.slice(6, 8), 10);
+    return new Date(year, month, day);
+  }
+
+  // Try standard date parsing
+  return new Date((yyyyMmDd));
+}
 
 /**
  * MoneyWorks API service
@@ -15,7 +31,9 @@ export class MoneyWorksApiService {
     this.parser = new XMLParser({
       ignoreAttributes: false,
       attributeNamePrefix: "_",
-      isArray: (name) => ['n', 't', 'a', 'detail'].includes(name),
+      isArray: (name) => tableNames.includes(name),
+      parseAttributeValue: true,
+      processEntities: true,
     });
   }
 
@@ -29,7 +47,7 @@ export class MoneyWorksApiService {
 
     // Folder auth (only if configured)
     if (this.config.folderAuth) {
-      const { folderName, password } = this.config.folderAuth;
+      const {folderName, password} = this.config.folderAuth;
       const folderCredentials = `${folderName}:Datacentre:${password}`;
       const folderAuth = `Basic ${Buffer.from(folderCredentials).toString('base64')}`;
 
@@ -92,7 +110,10 @@ export class MoneyWorksApiService {
    * @param params Query parameters (limit, start, search, sort, etc.)
    * @returns Parsed response data
    */
-  async export(table: string, params: MoneyWorksQueryParams = {}) {
+  async export<T>(table: string, params: MoneyWorksQueryParams = {}): Promise<{
+    data: T[],
+    pagination: { total: number, limit: number, offset: number, next?: number | null, prev?: number | null }
+  }> {
     try {
       // Default to XML verbose format if not specified
       const queryParams = {
@@ -103,21 +124,74 @@ export class MoneyWorksApiService {
       const url = `${this.getBaseUrl()}/export/table=${table}&${this.buildQueryParams(queryParams)}`;
       const headers = this.createAuthHeaders();
 
-      console.log(`Fetching data from: ${url}`);
-
-      const response = await axios.get(url, { headers });
-
-      console.log(`Response: ${response.status} - ${response.statusText}`);
+      const response = await axios.get(url, {headers});
 
       if (queryParams.format.startsWith('xml')) {
-        return this.parser.parse(response.data);
+        const res = this.parser.parse(response.data);
+        const data: T[] = res.table[res.table._name.toLowerCase()];
+        const limit: number = res.table._count;
+        const total: number = res.table._found;
+        const offset: number = res.table._start;
+        return {
+          data: data,
+          pagination: {
+            total,
+            limit,
+            offset,
+            next: offset + limit,
+            prev: offset - limit,
+          }
+        }
       }
 
-      return response.data;
+      return response as unknown as {
+        data: T[],
+        pagination: { total: number, limit: number, offset: number, next?: number | null, prev?: number | null }
+      };
     } catch (error) {
       console.error(error);
       this.handleError(error);
     }
+    return {data: [], pagination: {total: 0, limit: 0, offset: 0}};
+  }
+
+  /**
+   * Parse response data
+   */
+  parseResponse<T extends Record<string, any>>(data: T[]): T[] {
+    return data.map((record) => {
+      const result: any = {};
+
+      // Loop through all properties in the record
+      for (const [key, value] of Object.entries(record)) {
+        // Skip attributes and nested objects
+        if (key === "$" || key === "_") continue;
+
+        if (typeof value === "object" && value !== null) {
+          if (value['#text'] !== undefined) {
+            // console.log(key, value, value['#text']);
+            if (key.toLowerCase().includes('date')) {
+              result[key as keyof T] = yyyyMmDdToDate(value['#text']);
+            } else {
+              result[key as keyof T] = value['#text'];
+            }
+          }
+        } else if (key.toLowerCase().includes('date')) {
+          console.log(key, value);
+          // Date will have format of yyyymmdd
+          result[key as keyof T] = yyyyMmDdToDate(value);
+        } else {
+          console.log(key, value, "?");
+          result[key as keyof T] = value;
+        }
+
+        // For everything else, just copy the value
+
+      }
+
+      // console.log(result);
+      return result as T;
+    });
   }
 
   /**
@@ -142,7 +216,7 @@ export class MoneyWorksApiService {
 ${data}
 </table>`;
 
-      const response = await axios.post(url, xmlData, { headers });
+      const response = await axios.post(url, xmlData, {headers});
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -160,7 +234,7 @@ ${data}
       const url = `${this.getBaseUrl()}/evaluate/expr=${encodeURIComponent(expression)}`;
       const headers = this.createAuthHeaders();
 
-      const response = await axios.get(url, { headers });
+      const response = await axios.get(url, {headers});
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -178,7 +252,7 @@ ${data}
       const url = `${this.getBaseUrl()}/post/seqnum=${seqnum}`;
       const headers = this.createAuthHeaders();
 
-      const response = await axios.post(url, '', { headers });
+      const response = await axios.post(url, '', {headers});
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -220,7 +294,7 @@ ${data}
       const url = `${baseUrl}/server/version`;
       const headers = this.createAuthHeaders();
 
-      const response = await axios.get(url, { headers });
+      const response = await axios.get(url, {headers});
       return response.data;
     } catch (error) {
       this.handleError(error);

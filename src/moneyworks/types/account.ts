@@ -66,3 +66,43 @@ export interface Account {
   /** size="10" */
   ImportFormat: string;
 }
+
+export type AccountField = keyof Account;
+
+export const AccountFields: AccountField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Code",
+  "Type",
+  "Group",
+  "Category",
+  "Description",
+  "PandL",
+  "TaxCode",
+  "Flags",
+  "System",
+  "Created",
+  "Category2",
+  "Category3",
+  "Category4",
+  "AccountantCode",
+  "Colour",
+  "Currency",
+  "SecurityLevel",
+  "BankAccountNumber",
+  "BalanceLimit",
+  "ManualChequeNumber",
+  "PrintedChequeNumber",
+  "LastStatementImport",
+  "Comments",
+  "ManualChequeNumDigits",
+  "PrintedChequeNumDigits",
+  "UserNum",
+  "UserText",
+  "TaggedText",
+  "FeedID",
+  "Cashflow",
+  "Cashforecast",
+  "EBITDA",
+  "ImportFormat",
+];
