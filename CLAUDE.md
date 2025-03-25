@@ -1,41 +1,31 @@
-# CLAUDE.md - mw-core development guidelines
+# CLAUDE.md - mw-core Development Guidelines
 
 ## Commands
 - `bun run dev` - Start development server with hot reloading
 - `bun run build` - Build project for production (outputs to ./dist)
 - `bun build2` - Alternative build with additional minification options
 - `bun start` - Run built application from dist folder
-- `bun test` - Run tests (currently returns error - needs implementation)
-- `bun run lint` - Run linter (currently needs implementation)
-
-## API Structure
-- Built on Elysia.js with TypeScript
-- Routes organized by domain (name.routes.ts, transaction.routes.ts)
-- Services handle business logic and API communication
-- MoneyWorks API service manages REST communications
+- `bun test` - Run tests (implementation pending)
 
 ## Code Style
-- **TypeScript**: Use strict type checking with explicit return types
-- **Imports**: Group by type (internal/external), sort alphabetically
+- **TypeScript**: Use strict typing with explicit return types and interfaces
+- **Imports**: External packages first, then internal; sort alphabetically
 - **Formatting**: 2-space indentation, semicolons, max 100 chars per line
-- **Naming**: camelCase for variables/functions, PascalCase for classes/types
-- **Error Handling**: Use typed errors with try/catch blocks
-- **Validation**: Use Elysia's type system (`t.Object()`, `t.String()`, etc.)
-- **XML Parsing**: Use fast-xml-parser with appropriate configuration
-- **Date Handling**: Use standardized date conversion utilities
+- **Naming**: camelCase for variables/functions, PascalCase for classes/interfaces
+- **Error Handling**: Try/catch blocks with specific messages, log via console.error
+- **Comments**: JSDoc for public methods and complex logic
+- **Validation**: Use Elysia's type system (`t.Object()`, `t.String()`)
 
 ## Elysia Best Practices
 - Group related routes with `.group()` for better organization
-- Define schemas with Elysia's type system for validation
-- Implement detailed Swagger documentation for all endpoints
-- Use consistent error handling patterns
-- Create reusable services for business logic
-- Manage configuration via structured config files
+- Document endpoints with descriptive tags and examples
+- Use service classes for business logic and API interactions
+- Validate request/response with schema definitions
+- Use consistent error handling patterns across routes
 
-## MoneyWorks API Integration
-- Use MoneyWorksApiService for direct API communication
-- Handle authentication credentials securely
-- Properly encode query parameters
-- Parse XML responses consistently
-- Implement proper error handling for API responses
+## MoneyWorks API
+- Use `MoneyWorksApiService` for direct API communication
+- Encode query parameters and parse XML responses consistently
+- Handle authentication securely via configuration
 - Convert date values from YYYYMMDD format to JavaScript Date objects
+- Implement proper error handling for all API responses

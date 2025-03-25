@@ -39,13 +39,13 @@ const app = new Elysia()
       tags: [
         { name: "MoneyWorks", description: "MoneyWorks endpoints" }
       ]
-    }
+    },
   }))
   // Register all routes
   .use(nameRoutes)
   .use(accountRoutes)
   .use(transactionRoutes)
-  .use(departmentRoutes) 
+  .use(departmentRoutes)
   .use(jobRoutes)
   .use(productRoutes)
   .use(memoRoutes)
