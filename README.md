@@ -9,7 +9,7 @@ This project provides a REST API for interacting with MoneyWorks Datacentre usin
 - Automatic conversion between MoneyWorks and JSON formats
 - Support for both folder and document authentication
 - Pagination, sorting, and filtering
-- Swagger documentation
+- Comprehensive Swagger documentation with fully-typed request/response schemas
 
 ## Setup
 
@@ -72,24 +72,60 @@ The API will be available at http://localhost:3131, with Swagger documentation a
 
 ## API Endpoints
 
-### Names (Customers/Suppliers)
+Most endpoints follow a similar RESTful pattern for CRUD operations on MoneyWorks entities:
 
-- `GET /api/names` - List names with pagination and filtering
-- `GET /api/names/:id` - Get a specific name by code or sequence number
+### Common Patterns
 
-Query parameters:
+- `GET /api/{entity}` - List entities with pagination and filtering
+- `GET /api/{entity}/:id` - Get a specific entity by code or sequence number
+- `GET /api/{entity}/by-sequence/:sequence` - Get a specific entity by sequence number
+- `GET /api/{entity}/for-{related}/:id` - Get entities related to another entity
+
+### Common Query Parameters
+
+For all list endpoints:
 - `limit` - Number of records to return (default: 10)
 - `offset` - Number of records to skip (default: 0)
 - `sort` - Field to sort by (e.g., "Code")
 - `order` - Sort order ("asc" or "desc", default: "asc")
-- `search` - MoneyWorks search expression (e.g., "Code=`ACME`") 
+- `search` - MoneyWorks search expression (e.g., "Code=`ACME`")
 
-### Other Endpoints (coming soon)
+### Swagger Documentation
+
+The complete API documentation with request/response schemas is available at the `/swagger` endpoint.
+
+### Available Entity Endpoints
 
 - Accounts
-- Transactions
-- Products
+- Auto Splits
+- Bank Reconciliations
+- Builds
+- Departments
+- Details
+- Filters
+- General Settings
 - Jobs
+- Job Sheets
+- Ledger
+- Links
+- Lists
+- Logs
+- Logins
+- Memos
+- Messages
+- Names (Customers/Suppliers)
+- Off-Ledger Entries
+- Payments
+- Products
+- Sticky Notes
+- Tax Rates
+- Transactions
+- Users
+
+All endpoints follow consistent patterns for:
+- Listing entities with pagination and filtering
+- Retrieving single entities by code or sequence number
+- Related entity lookups (e.g., transactions for an account)
 
 ## Build and Deploy
 
