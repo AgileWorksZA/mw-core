@@ -16,3 +16,16 @@ export interface Stickies {
   Message: string;
   Flags: number;
 }
+
+export type StickiesField = keyof Stickies;
+
+export const StickiesFields: StickiesField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "FileNum",
+  "Colour",
+  "User",
+  "OwnerSeq",
+  "Message",
+  "Flags",
+];

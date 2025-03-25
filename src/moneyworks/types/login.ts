@@ -30,3 +30,23 @@ export interface Login {
   /** @mutable="freely, script-only" size="4" */
   SettingsDonor: string;
 }
+
+export type LoginField = keyof Login;
+
+export const LoginFields: LoginField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Initials",
+  "Name",
+  "Password",
+  "SecurityLevel",
+  "Privileges",
+  "Email",
+  "Flags",
+  "Category",
+  "Role",
+  "UserNum",
+  "UserText",
+  "TaggedText",
+  "SettingsDonor",
+];

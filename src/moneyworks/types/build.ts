@@ -15,3 +15,16 @@ export interface Build {
   /** @mutable="freely, script-only" size="256" */
   Memo: string;
 }
+
+export type BuildField = keyof Build;
+
+export const BuildFields: BuildField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "ProductSeq",
+  "Order",
+  "Qty",
+  "PartCode",
+  "Flags",
+  "Memo",
+];

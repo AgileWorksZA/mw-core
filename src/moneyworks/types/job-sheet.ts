@@ -60,3 +60,37 @@ export interface JobSheet {
   TaggedText: string;
   TimeProcessed: Date;
 }
+
+export type JobSheetField = keyof JobSheet;
+
+export const JobSheetFields: JobSheetField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Job",
+  "Qty",
+  "Resource",
+  "Date",
+  "CostCentre",
+  "Account",
+  "Period",
+  "Memo",
+  "DestTransSeq",
+  "SourceTransSeq",
+  "DateEntered",
+  "Flags",
+  "Colour",
+  "Status",
+  "Type",
+  "Analysis",
+  "BillValue",
+  "ActivityCode",
+  "Comments",
+  "Batch",
+  "EnteredBy",
+  "SerialNumber",
+  "StockLocation",
+  "UserNum",
+  "UserText",
+  "TaggedText",
+  "TimeProcessed",
+];

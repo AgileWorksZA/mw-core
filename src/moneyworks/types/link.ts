@@ -10,3 +10,13 @@ export interface Link {
   /** @indexed size="6" */
   Group: string;
 }
+
+export type LinkField = keyof Link;
+
+export const LinkFields: LinkField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Dept",
+  "Group"
+];
+

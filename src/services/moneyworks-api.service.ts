@@ -126,9 +126,11 @@ export class MoneyWorksApiService {
 
       const response = await axios.get(url, {headers});
 
+      console.log(response.data);
       if (queryParams.format.startsWith('xml')) {
         const res = this.parser.parse(response.data);
-        const data: T[] = res.table[res.table._name.toLowerCase()];
+        console.log(res);
+        const data: T[] = res.table[res.table._name.toLowerCase()] ?? [];
         const limit: number = res.table._count;
         const total: number = res.table._found;
         const offset: number = res.table._start;

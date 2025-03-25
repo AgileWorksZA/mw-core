@@ -34,7 +34,7 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
       }),
       detail: {
         summary: 'Get all names (customers/suppliers)',
-        tags: ['MoneyWorks']
+        tags: ['MoneyWorks Data']
       }
     }
   )
@@ -61,7 +61,7 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
       }),
       detail: {
         summary: 'Get name by code',
-        tags: ['MoneyWorks']
+        tags: ['MoneyWorks Data']
       }
     }
   )
@@ -83,7 +83,7 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
       }),
       detail: {
         summary: 'Get name by sequence number',
-        tags: ['MoneyWorks']
+        tags: ['MoneyWorks Data']
       }
     }
   );

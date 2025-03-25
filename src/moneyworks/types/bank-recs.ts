@@ -15,3 +15,17 @@ export interface BankRecs {
   ReconciledTime: Date;
   Discrepancy: number;
 }
+
+export type BankRecsField = keyof BankRecs;
+
+export const BankRecsFields: BankRecsField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Account",
+  "Opening",
+  "Closing",
+  "Statement",
+  "Date",
+  "ReconciledTime",
+  "Discrepancy",
+];

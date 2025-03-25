@@ -48,3 +48,31 @@ export interface User2 {
   /** @mutable="freely, script-only" */
   Colour: number;
 }
+
+export type User2Field = keyof User2;
+
+export const User2Fields: User2Field[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "DevKey",
+  "Key",
+  "Int1",
+  "Int2",
+  "Float1",
+  "Float2",
+  "Date1",
+  "Date2",
+  "Text1",
+  "Text2",
+  "Text",
+  "Int3",
+  "Int4",
+  "Float3",
+  "Float4",
+  "Date3",
+  "Date4",
+  "Text3",
+  "Text4",
+  "TaggedText",
+  "Colour",
+];

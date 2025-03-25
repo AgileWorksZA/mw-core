@@ -13,3 +13,15 @@ export interface Payments {
   GSTCycle: number;
   Amount: number;
 }
+
+export type PaymentsField = keyof Payments;
+
+export const PaymentsFields: PaymentsField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "InvoiceID",
+  "CashTrans",
+  "Date",
+  "GSTCycle",
+  "Amount",
+];

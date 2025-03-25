@@ -64,3 +64,52 @@ export interface Detail {
   Custom2: string;
   OriginalUnitCost: number;
 }
+
+export type DetailField = keyof Detail;
+
+export const DetailFields: DetailField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "ParentSeq",
+  "Sort",
+  "Account",
+  "Dept",
+  "PostedQty",
+  "TaxCode",
+  "Gross",
+  "Tax",
+  "Debit",
+  "Credit",
+  "Description",
+  "StockQty",
+  "StockCode",
+  "CostPrice",
+  "UnitPrice",
+  "Statement",
+  "JobCode",
+  "SaleUnit",
+  "Discount",
+  "Flags",
+  "OrderQty",
+  "BackorderQty",
+  "PrevShipQty",
+  "BaseCurrencyNet",
+  "SerialNumber",
+  "Period",
+  "TransactionType",
+  "SecurityLevel",
+  "RevalueQty",
+  "StockLocation",
+  "OrderStatus",
+  "ExpensedTax",
+  "Date",
+  "MoreFlags",
+  "UserNum",
+  "UserText",
+  "TaggedText",
+  "NonInvRcvdNotInvoicedQty",
+  "Custom1",
+  "Custom2",
+  "OriginalUnitCost"
+];
+

@@ -18,3 +18,18 @@ export interface Filter {
   /** @mutable="freely, script-only" */
   Order: number;
 }
+
+export type FilterField = keyof Filter;
+
+export const FilterFields: FilterField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "File",
+  "TabSet",
+  "Tab",
+  "Type",
+  "User",
+  "Name",
+  "FilterFunction",
+  "Order",
+];

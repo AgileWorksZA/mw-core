@@ -44,3 +44,38 @@ export interface TaxRate {
   ReversedRate1: number;
   ReversedRate2: number;
 }
+
+export type TaxRateField = keyof TaxRate;
+
+export const TaxRateFields: TaxRateField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "TaxCode",
+  "PaidAccount",
+  "RecAccount",
+  "Rate1",
+  "Date",
+  "Rate2",
+  "Combine",
+  "CombineRate1",
+  "CombineRate2",
+  "GSTReceived",
+  "NetReceived",
+  "GSTPaid",
+  "NetPaid",
+  "RateName",
+  "ReportCycleStart",
+  "ReportCycleEnd",
+  "ReportDate",
+  "PSTReceived",
+  "PSTPaid",
+  "Type",
+  "Combination",
+  "UserNum",
+  "UserText",
+  "TaggedText",
+  "AliasCode",
+  "AliasCountry",
+  "ReversedRate1",
+  "ReversedRate2",
+];

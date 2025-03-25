@@ -16,3 +16,17 @@ export interface Memo {
   /** @mutable="freely, script-only" size="256" */
   Text: string;
 }
+
+export type MemoField = keyof Memo;
+
+export const MemoFields: MemoField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "NameSeq",
+  "Order",
+  "Date",
+  "RecallDate",
+  "Flags",
+  "Text",
+];
+

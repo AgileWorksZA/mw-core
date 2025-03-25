@@ -23,3 +23,20 @@ export interface Department {
   /** @mutable="freely, script-only" size="256" */
   TaggedText: string;
 }
+
+export type DepartmentField = keyof Department;
+
+export const DepartmentFields: DepartmentField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Code",
+  "Description",
+  "Classification",
+  "Custom1",
+  "Custom2",
+  "Flags",
+  "UserNum",
+  "UserText",
+  "TaggedText"
+];
+

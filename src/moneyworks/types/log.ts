@@ -15,3 +15,16 @@ export interface Log {
   /** size="16" */
   Info3: string;
 }
+
+export type LogField = keyof Log;
+
+export const LogFields: LogField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Description",
+  "Who",
+  "Info1",
+  "Info2",
+  "Info3"
+];
+

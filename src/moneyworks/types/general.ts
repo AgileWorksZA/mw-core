@@ -12,3 +12,15 @@ export interface General {
   Date: Date;
   Long: number;
 }
+
+export type GeneralField = keyof General;
+
+export const GeneralFields: GeneralField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "Code",
+  "Description",
+  "Date",
+  "Long"
+];
+

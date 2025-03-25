@@ -18,3 +18,16 @@ export interface Lists {
   /** @mutable="freely, script-only" size="256" */
   TaggedText: string;
 }
+
+export type ListsField = keyof Lists;
+
+export const ListsFields: ListsField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "ListID",
+  "Item",
+  "Comment",
+  "UserNum",
+  "UserText",
+  "TaggedText",
+];

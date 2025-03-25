@@ -39,3 +39,35 @@ export interface Message {
   /** @mutable="freely, script-only" size="256" */
   TaggedText: string;
 }
+
+export type MessageField = keyof Message;
+
+export const MessageFields: MessageField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "StartDate",
+  "EndDate",
+  "NextDate",
+  "Keep",
+  "Ref",
+  "LastDay",
+  "NDaily",
+  "NWeekly",
+  "NMonthly",
+  "Once",
+  "XTimes",
+  "Forever",
+  "Day",
+  "Type",
+  "DayOfWeek",
+  "N",
+  "X",
+  "AvoidWeekends",
+  "Reverse",
+  "kill_next_time",
+  "Message",
+  "User",
+  "UserNum",
+  "UserText",
+  "TaggedText",
+];

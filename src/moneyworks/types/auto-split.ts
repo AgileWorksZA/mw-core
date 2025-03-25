@@ -24,3 +24,21 @@ export interface AutoSplit {
   /** @mutable="freely, script-only" */
   Priority: number;
 }
+
+export type AutoSplitField = keyof AutoSplit;
+
+export const AutoSplitFields: AutoSplitField[] = [
+  "SequenceNumber",
+  "LastModifiedTime",
+  "MatchFunction",
+  "SplitMode",
+  "SplitAcct1",
+  "SplitAcct2",
+  "SplitAmount1",
+  "SplitAmount2",
+  "SplitAcct3",
+  "SplitAcct4",
+  "SplitAmount3",
+  "MatchName",
+  "Priority",
+];
