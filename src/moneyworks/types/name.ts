@@ -1,6 +1,3 @@
-import schema from "../json-schema/optimized/name-schema";
-import {enforceType} from "./helpers";
-
 /**
  * Name table interface
  * file_num: 10
@@ -302,14 +299,3 @@ export const NameFields: NameField[] = [
   "TaggedText",
   "EInvoicingID",
 ];
-
-// data will be a json object with lowercase keys
-export function dataCenterJsonToName(data: any): Name {
-  return NameFields.reduce((acc, key) => {
-    if (data[key.toLowerCase()] === undefined) {
-      console.error(`Missing key ${key} in data center json for Name record`);
-    }
-    (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
-    return acc;
-  }, {} as Name);
-}

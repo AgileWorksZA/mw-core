@@ -1,8 +1,8 @@
 import {MoneyWorksApiService} from "./moneyworks-api.service";
 import {Name, NameFields} from "../moneyworks/types/name";
 import {MoneyWorksConfig, MoneyWorksQueryParams} from "../types/moneyworks";
-import {enforceType} from "../moneyworks/types/helpers";
-import schema from "../moneyworks/json-schema/optimized/name-schema";
+import {enforceType} from "../moneyworks/helpers";
+import schema from "../moneyworks/optimized/name-schema";
 
 /**
  * Service for interacting with MoneyWorks Name table
