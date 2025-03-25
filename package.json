@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@elysiajs/swagger": "^1.2.2",
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "@smithery/sdk": "^1.0.2",
     "@types/xml2js": "^0.4.14",
     "axios": "^1.6.8",
     "elysia": "latest",

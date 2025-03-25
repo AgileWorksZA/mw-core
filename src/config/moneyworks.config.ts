@@ -29,7 +29,6 @@ export function loadMoneyWorksConfig(): MoneyWorksConfig {
 
   // Fallback to config file
   const configPath = process.env.MW_CONFIG_PATH || path.join(process.cwd(), 'mw-config.json');
-  console.log(`Loading MoneyWorks config from ${configPath}`);
 
   if (!fs.existsSync(configPath)) {
     throw new Error(`MoneyWorks config file not found at ${configPath}. Please create the file or set environment variables.`);

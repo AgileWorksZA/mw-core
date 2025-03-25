@@ -1,7 +1,7 @@
 import fs from "fs";
 
 // list of all json files in the schemas folder
-const files = fs.readdirSync("./").filter(file => file.endsWith(".json"));
+const files = fs.readdirSync("./json-schema").filter(file => file.endsWith(".json"));
 
 for (const file of files) {
   const data = JSON.parse(fs.readFileSync(`./${file}`, "utf-8"));

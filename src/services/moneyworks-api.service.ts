@@ -112,7 +112,7 @@ export class MoneyWorksApiService {
    */
   async export<T>(table: string, params: MoneyWorksQueryParams = {}): Promise<{
     data: T[],
-    pagination: { total: number, limit: number, offset: number, next?: number | null, prev?: number | null }
+    pagination: { total: number, limit: number, offset: number, next: number, prev: number }
   }> {
     try {
       // Default to XML verbose format if not specified
@@ -148,13 +148,13 @@ export class MoneyWorksApiService {
 
       return response as unknown as {
         data: T[],
-        pagination: { total: number, limit: number, offset: number, next?: number | null, prev?: number | null }
+        pagination: { total: number, limit: number, offset: number, next: number, prev: number }
       };
     } catch (error) {
       console.error(error);
       this.handleError(error);
     }
-    return {data: [], pagination: {total: 0, limit: 0, offset: 0}};
+    return {data: [], pagination: {total: 0, limit: 0, offset: 0, next: 0, prev: 0}};
   }
 
   /**
