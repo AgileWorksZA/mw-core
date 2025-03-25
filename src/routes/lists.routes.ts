@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { ListsService } from '../services/lists.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { ListMany, ListOne } from "../moneyworks/responses/List";
 
 // Initialize the lists service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const listsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all list entries',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: ListMany
     }
   )
   .get('/lists/names',
@@ -51,7 +53,10 @@ export const listsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get unique list names',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: t.Object({
+        listNames: t.Array(t.String())
+      })
     }
   )
   .get('/lists/:sequenceNumber',
@@ -71,7 +76,8 @@ export const listsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get list entry by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: ListOne
     }
   )
   .get('/lists/by-name/:listName',
@@ -90,6 +96,7 @@ export const listsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get list entries by list name',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: ListMany
     }
   );

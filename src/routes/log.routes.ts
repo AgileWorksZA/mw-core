@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { LogService } from '../services/log.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { LogMany, LogOne } from "../moneyworks/responses/Log";
 
 // Initialize the log service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const logRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all log entries',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LogMany
     }
   )
   .get('/logs/:sequenceNumber',
@@ -55,7 +57,8 @@ export const logRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get log entry by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LogOne
     }
   )
   .get('/logs/by-user/:username',
@@ -74,6 +77,7 @@ export const logRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get log entries by user',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LogMany
     }
   );

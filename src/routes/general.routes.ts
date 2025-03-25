@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 import { GeneralService } from '../services/general.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { GeneralOne } from "../moneyworks/responses/General";
 
 // Initialize the general service with configuration
 const config = loadMoneyWorksConfig();
@@ -20,6 +21,7 @@ export const generalRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get general settings',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: GeneralOne
     }
   );

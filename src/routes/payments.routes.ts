@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { PaymentsService } from '../services/payments.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { PaymentsMany, PaymentsOne } from "../moneyworks/responses/Payments";
 
 // Initialize the payments service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const paymentsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all payments',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: PaymentsMany
     }
   )
   .get('/payments/:sequenceNumber',
@@ -55,7 +57,8 @@ export const paymentsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get payment by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: PaymentsOne
     }
   )
   .get('/payments/for-name/:nameCode',
@@ -74,6 +77,7 @@ export const paymentsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get payments for a specific name',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: PaymentsMany
     }
   );

@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { MessageService } from '../services/message.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { MessageMany, MessageOne } from "../moneyworks/responses/Message";
 
 // Initialize the message service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const messageRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all messages',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: MessageMany
     }
   )
   .get('/messages/:sequenceNumber',
@@ -55,7 +57,8 @@ export const messageRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get message by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: MessageOne
     }
   )
   .get('/messages/by-user/:username',
@@ -74,6 +77,7 @@ export const messageRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get messages by user',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: MessageMany
     }
   );

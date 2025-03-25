@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { BankRecsService } from '../services/bank-recs.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { BankRecsMany, BankRecsOne } from "../moneyworks/responses/BankRecs";
 
 // Initialize the bank-recs service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const bankRecsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all bank reconciliation entries',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: BankRecsMany
     }
   )
   .get('/bank-recs/:sequenceNumber',
@@ -55,7 +57,8 @@ export const bankRecsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get bank reconciliation entry by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: BankRecsOne
     }
   )
   .get('/bank-recs/for-account/:accountCode',
@@ -74,6 +77,7 @@ export const bankRecsRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get bank reconciliation entries for a specific account',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: BankRecsMany
     }
   );

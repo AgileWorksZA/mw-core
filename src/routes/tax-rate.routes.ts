@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { TaxRateService } from '../services/tax-rate.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { TaxRateMany, TaxRateOne } from "../moneyworks/responses/TaxRate";
 
 // Initialize the tax rate service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const taxRateRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all tax rates',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: TaxRateMany
     }
   )
   .get('/tax-rates/:code',
@@ -62,7 +64,8 @@ export const taxRateRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get tax rate by code',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: TaxRateOne
     }
   )
   .get('/tax-rates/by-sequence/:sequence',
@@ -82,6 +85,7 @@ export const taxRateRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get tax rate by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: TaxRateOne
     }
   );

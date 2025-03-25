@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { UserService } from '../services/user.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { UserMany, UserOne } from "../moneyworks/responses/User";
 
 // Initialize the user service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all users',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: UserMany
     }
   )
   .get('/users/:id',
@@ -62,7 +64,8 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get user by username or sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: UserOne
     }
   )
   .get('/users/by-sequence/:sequence',
@@ -82,6 +85,7 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get user by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: UserOne
     }
   );

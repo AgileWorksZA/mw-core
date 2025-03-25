@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { MemoService } from '../services/memo.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { MemoMany, MemoOne } from "../moneyworks/responses/Memo";
 
 // Initialize the memo service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const memoRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all memos',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: MemoMany
     }
   )
   .get('/memos/:sequenceNumber',
@@ -55,7 +57,8 @@ export const memoRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get memo by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: MemoOne
     }
   )
   .get('/memos/for/:recordType/:recordId',
@@ -76,6 +79,7 @@ export const memoRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get memos for a specific record',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: MemoMany
     }
   );

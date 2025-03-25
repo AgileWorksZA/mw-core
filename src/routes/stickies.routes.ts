@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { StickiesService } from '../services/stickies.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { StickiesMany, StickiesOne } from "../moneyworks/responses/Stickies";
 
 // Initialize the stickies service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const stickiesRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all sticky notes',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: StickiesMany
     }
   )
   .get('/stickies/:sequenceNumber',
@@ -55,7 +57,8 @@ export const stickiesRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get sticky note by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: StickiesOne
     }
   )
   .get('/stickies/for-record/:recordType/:recordId',
@@ -76,6 +79,7 @@ export const stickiesRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get sticky notes for a specific record',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: StickiesMany
     }
   );

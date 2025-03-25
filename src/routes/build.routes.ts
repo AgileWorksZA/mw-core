@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { BuildService } from '../services/build.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { BuildMany, BuildOne } from "../moneyworks/responses/Build";
 
 // Initialize the build service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const buildRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all builds',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: BuildMany
     }
   )
   .get('/builds/:sequenceNumber',
@@ -55,6 +57,7 @@ export const buildRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get build by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: BuildOne
     }
   );

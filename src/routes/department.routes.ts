@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { DepartmentService } from '../services/department.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { DepartmentMany, DepartmentOne } from "../moneyworks/responses/Department";
 
 // Initialize the department service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const departmentRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all departments',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: DepartmentMany
     }
   )
   .get('/departments/:code',
@@ -62,7 +64,8 @@ export const departmentRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get department by code',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: DepartmentOne
     }
   )
   .get('/departments/by-sequence/:sequence',
@@ -82,6 +85,7 @@ export const departmentRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get department by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: DepartmentOne
     }
   );

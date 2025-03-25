@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { TransactionService } from '../services/transaction.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { TransactionMany, TransactionOne } from "../moneyworks/responses/Transaction";
 
 // Initialize the transaction service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const transactionRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all transactions',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: TransactionMany
     }
   )
   .get('/transactions/:sequenceNumber',
@@ -55,6 +57,7 @@ export const transactionRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get transaction by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: TransactionOne
     }
   );

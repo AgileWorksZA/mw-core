@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { LedgerService } from '../services/ledger.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { LedgerMany, LedgerOne } from "../moneyworks/responses/Ledger";
 
 // Initialize the ledger service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const ledgerRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all ledger entries',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LedgerMany
     }
   )
   .get('/ledger/:sequenceNumber',
@@ -55,7 +57,8 @@ export const ledgerRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get ledger entry by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LedgerOne
     }
   )
   .get('/ledger/for-account/:accountCode',
@@ -75,7 +78,8 @@ export const ledgerRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get ledger entries for a specific account',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LedgerMany
     }
   )
   .get('/ledger/for-transaction/:transactionId',
@@ -95,6 +99,7 @@ export const ledgerRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get ledger entries for a specific transaction',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LedgerMany
     }
   );

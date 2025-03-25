@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { LinkService } from '../services/link.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { LinkMany, LinkOne } from "../moneyworks/responses/Link";
 
 // Initialize the link service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const linkRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all links',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LinkMany
     }
   )
   .get('/links/:sequenceNumber',
@@ -55,7 +57,8 @@ export const linkRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get link by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LinkOne
     }
   )
   .get('/links/for-record/:recordType/:recordId',
@@ -76,6 +79,7 @@ export const linkRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get links for a specific record',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LinkMany
     }
   );

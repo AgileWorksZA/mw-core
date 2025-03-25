@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { FilterService } from '../services/filter.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { FilterMany, FilterOne } from "../moneyworks/responses/Filter";
 
 // Initialize the filter service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const filterRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all saved filters',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: FilterMany
     }
   )
   .get('/filters/:idOrName',
@@ -62,6 +64,7 @@ export const filterRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get filter by name or sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: FilterOne
     }
   );

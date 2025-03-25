@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { JobService } from '../services/job.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { JobMany, JobOne } from "../moneyworks/responses/Job";
 
 // Initialize the job service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const jobRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all jobs',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: JobMany
     }
   )
   .get('/jobs/:code',
@@ -62,7 +64,8 @@ export const jobRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get job by code',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: JobOne
     }
   )
   .get('/jobs/by-sequence/:sequence',
@@ -82,6 +85,7 @@ export const jobRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get job by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: JobOne
     }
   );

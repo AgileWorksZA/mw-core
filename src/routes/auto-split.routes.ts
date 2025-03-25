@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { AutoSplitService } from '../services/auto-split.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { AutoSplitMany, AutoSplitOne } from "../moneyworks/responses/AutoSplit";
 
 // Initialize the auto-split service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const autoSplitRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all auto splits',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: AutoSplitMany
     }
   )
   .get('/auto-splits/:sequenceNumber',
@@ -55,6 +57,7 @@ export const autoSplitRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get auto split by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: AutoSplitOne
     }
   );

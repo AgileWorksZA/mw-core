@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { NameService } from '../services/name.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { NameMany, NameOne } from "../moneyworks/responses/Name";
 
 // Initialize the name service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all names (customers/suppliers)',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: NameMany
     }
   )
   .get('/names/:code',
@@ -62,7 +64,8 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get name by code',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: NameOne
     }
   )
   .get('/names/by-sequence/:sequence',
@@ -84,6 +87,7 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get name by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: NameOne
     }
   );

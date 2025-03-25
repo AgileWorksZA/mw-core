@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { LoginService } from '../services/login.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { LoginMany, LoginOne } from "../moneyworks/responses/Login";
 
 // Initialize the login service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const loginRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all login entries',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LoginMany
     }
   )
   .get('/logins/:sequenceNumber',
@@ -55,7 +57,8 @@ export const loginRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get login entry by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LoginOne
     }
   )
   .get('/logins/by-user/:username',
@@ -74,6 +77,7 @@ export const loginRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get login entries by user',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: LoginMany
     }
   );

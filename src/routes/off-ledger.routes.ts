@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { OffLedgerService } from '../services/off-ledger.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { OffLedgerMany, OffLedgerOne } from "../moneyworks/responses/OffLedger";
 
 // Initialize the off-ledger service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const offLedgerRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all off-ledger entries',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: OffLedgerMany
     }
   )
   .get('/off-ledger/:sequenceNumber',
@@ -55,7 +57,8 @@ export const offLedgerRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get off-ledger entry by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: OffLedgerOne
     }
   )
   .get('/off-ledger/for-account/:accountCode',
@@ -74,6 +77,7 @@ export const offLedgerRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get off-ledger entries for a specific account',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: OffLedgerMany
     }
   );

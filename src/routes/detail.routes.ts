@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { DetailService } from '../services/detail.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { DetailMany, DetailOne } from "../moneyworks/responses/Detail";
 
 // Initialize the detail service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const detailRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all transaction details',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: DetailMany
     }
   )
   .get('/details/:sequenceNumber',
@@ -55,7 +57,8 @@ export const detailRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get detail by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: DetailOne
     }
   )
   .get('/details/for-transaction/:transactionId',
@@ -75,6 +78,7 @@ export const detailRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get details for a specific transaction',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: DetailMany
     }
   );

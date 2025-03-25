@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { ProductService } from '../services/product.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { ProductMany, ProductOne } from "../moneyworks/responses/Product";
 
 // Initialize the product service with configuration
 const config = loadMoneyWorksConfig();
@@ -35,7 +36,8 @@ export const productRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get all products',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: ProductMany
     }
   )
   .get('/products/:code',
@@ -62,7 +64,8 @@ export const productRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get product by code',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: ProductOne
     }
   )
   .get('/products/by-sequence/:sequence',
@@ -82,6 +85,7 @@ export const productRoutes = new Elysia({ prefix: '/api' })
       detail: {
         summary: 'Get product by sequence number',
         tags: ['MoneyWorks Data']
-      }
+      },
+      response: ProductOne
     }
   );
