@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { User2Service } from '../services/user2.service';
+import { User2Service } from '../services/tables/user2.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { User2Many, User2One } from "../moneyworks/responses/User2";
 

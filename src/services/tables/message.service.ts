@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Message, MessageFields } from "../moneyworks/types/message";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/message-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Message, MessageFields } from "../../moneyworks/types/message";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/message-schema";
 
 /**
  * Service for interacting with MoneyWorks Message table

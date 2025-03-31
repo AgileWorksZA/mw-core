@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Build, BuildFields } from "../moneyworks/types/build";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/build-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Build, BuildFields } from "../../moneyworks/types/build";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/build-schema";
 
 /**
  * Service for interacting with MoneyWorks Build table

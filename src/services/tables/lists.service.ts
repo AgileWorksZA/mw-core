@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Lists, ListsFields } from "../moneyworks/types/lists";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/lists-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Lists, ListsFields } from "../../moneyworks/types/lists";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/lists-schema";
 
 /**
  * Service for interacting with MoneyWorks Lists table

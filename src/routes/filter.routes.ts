@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { FilterService } from '../services/filter.service';
+import { FilterService } from '../services/tables/filter.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { FilterMany, FilterOne } from "../moneyworks/responses/Filter";
 

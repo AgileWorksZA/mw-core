@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { ListsService } from '../services/lists.service';
+import { ListsService } from '../services/tables/lists.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { ListMany, ListOne } from "../moneyworks/responses/List";
 

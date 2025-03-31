@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { JobSheet, JobSheetFields } from "../moneyworks/types/job-sheet";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/jobsheet-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { JobSheet, JobSheetFields } from "../../moneyworks/types/job-sheet";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/jobsheet-schema";
 
 /**
  * Service for interacting with MoneyWorks JobSheet table

@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Link, LinkFields } from "../moneyworks/types/link";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/link-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Link, LinkFields } from "../../moneyworks/types/link";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/link-schema";
 
 /**
  * Service for interacting with MoneyWorks Link table

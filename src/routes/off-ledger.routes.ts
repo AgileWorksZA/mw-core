@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { OffLedgerService } from '../services/off-ledger.service';
+import { OffLedgerService } from '../services/tables/off-ledger.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { OffLedgerMany, OffLedgerOne } from "../moneyworks/responses/OffLedger";
 

@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { StickiesService } from '../services/stickies.service';
+import { StickiesService } from '../services/tables/stickies.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { StickiesMany, StickiesOne } from "../moneyworks/responses/Stickies";
 

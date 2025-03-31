@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { BankRecsService } from '../services/bank-recs.service';
+import { BankRecsService } from '../services/tables/bank-recs.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { BankRecsMany, BankRecsOne } from "../moneyworks/responses/BankRecs";
 

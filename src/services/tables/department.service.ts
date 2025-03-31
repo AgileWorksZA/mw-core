@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Department, DepartmentFields } from "../moneyworks/types/department";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/department-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Department, DepartmentFields } from "../../moneyworks/types/department";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/department-schema";
 
 /**
  * Service for interacting with MoneyWorks Department table

@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { BuildService } from '../services/build.service';
+import { BuildService } from '../services/tables/build.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { BuildMany, BuildOne } from "../moneyworks/responses/Build";
 

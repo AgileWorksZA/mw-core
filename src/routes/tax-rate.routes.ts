@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { TaxRateService } from '../services/tax-rate.service';
+import { TaxRateService } from '../services/tables/tax-rate.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { TaxRateMany, TaxRateOne } from "../moneyworks/responses/TaxRate";
 

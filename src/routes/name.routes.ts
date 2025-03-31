@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { NameService } from '../services/name.service';
+import { NameService } from '../services/tables/name.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { NameMany, NameOne } from "../moneyworks/responses/Name";
 

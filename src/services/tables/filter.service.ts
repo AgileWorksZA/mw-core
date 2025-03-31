@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Filter, FilterFields } from "../moneyworks/types/filter";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/filter-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Filter, FilterFields } from "../../moneyworks/types/filter";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/filter-schema";
 
 /**
  * Service for interacting with MoneyWorks Filter table

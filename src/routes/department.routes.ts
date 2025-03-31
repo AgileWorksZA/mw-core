@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { DepartmentService } from '../services/department.service';
+import { DepartmentService } from '../services/tables/department.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { DepartmentMany, DepartmentOne } from "../moneyworks/responses/Department";
 

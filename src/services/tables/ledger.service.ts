@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Ledger, LedgerFields } from "../moneyworks/types/ledger";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/ledger-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Ledger, LedgerFields } from "../../moneyworks/types/ledger";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/ledger-schema";
 
 /**
  * Service for interacting with MoneyWorks Ledger table

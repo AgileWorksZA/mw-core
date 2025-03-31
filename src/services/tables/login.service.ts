@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Login, LoginFields } from "../moneyworks/types/login";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/login-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Login, LoginFields } from "../../moneyworks/types/login";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/login-schema";
 
 /**
  * Service for interacting with MoneyWorks Login table

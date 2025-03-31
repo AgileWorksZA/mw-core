@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Detail, DetailFields } from "../moneyworks/types/detail";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/detail-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Detail, DetailFields } from "../../moneyworks/types/detail";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/detail-schema";
 
 /**
  * Service for interacting with MoneyWorks Detail table

@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { BankRecs, BankRecsFields } from "../moneyworks/types/bank-recs";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/bankrecs-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { BankRecs, BankRecsFields } from "../../moneyworks/types/bank-recs";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/bankrecs-schema";
 
 /**
  * Service for interacting with MoneyWorks BankRecs table

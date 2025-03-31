@@ -4,7 +4,7 @@ import { z } from "zod";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { accountZodKeys } from "../constants";
 import { pagingSchema } from "../moneyworks/types/zod/paging";
-import { AccountService } from "../services/account.service";
+import { AccountService } from "../services/tables/account.service";
 
 // Create an MCP server
 const server = new McpServer({

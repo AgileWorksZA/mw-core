@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { MemoService } from '../services/memo.service';
+import { MemoService } from '../services/tables/memo.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { MemoMany, MemoOne } from "../moneyworks/responses/Memo";
 

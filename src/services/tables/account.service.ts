@@ -1,31 +1,28 @@
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/autosplit-schema";
-import {
-  type AutoSplit,
-  AutoSplitFields,
-} from "../moneyworks/types/auto-split";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/account-schema";
+import { type Account, AccountFields } from "../../moneyworks/types/account";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
-} from "../types/moneyworks";
-import { MoneyWorksApiService } from "./moneyworks-api.service";
+} from "../../types/moneyworks";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
- * Service for interacting with MoneyWorks AutoSplit table
- * AutoSplits define rules for automatically splitting transaction amounts
+ * Service for interacting with MoneyWorks Account table
+ * Accounts represent GL accounts in the chart of accounts
  */
-export class AutoSplitService {
+export class AccountService {
   private api: MoneyWorksApiService;
 
   constructor(config: MoneyWorksConfig) {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToAutoSplit(data: any): AutoSplit {
-    return AutoSplitFields.reduce((acc, key) => {
+  dataCenterJsonToAccount(data: any): Account {
+    return AccountFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
-          `Missing key ${key} in data center json for AutoSplit record`,
+          `Missing key ${key} in data center json for Account record`,
         );
       }
       (acc as any)[key] = enforceType(
@@ -33,16 +30,16 @@ export class AutoSplitService {
         schema[key] as "string",
       );
       return acc;
-    }, {} as AutoSplit);
+    }, {} as Account);
   }
 
   /**
-   * Get autoSplits from MoneyWorks with pagination and filtering
+   * Get accounts from MoneyWorks with pagination and filtering
    *
    * @param params Query parameters
-   * @returns Parsed autoSplit data with pagination metadata
+   * @returns Parsed account data with pagination metadata
    */
-  async getAutoSplits(params: {
+  async getAccounts(params: {
     limit?: number;
     offset?: number;
     search?: string;
@@ -61,17 +58,17 @@ export class AutoSplitService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("autosplit", mwParams);
+      const { data, pagination } = await this.api.export("account", mwParams);
 
       // Parse the response
-      const autoSplits = data.map(this.dataCenterJsonToAutoSplit);
+      const accounts = data.map(this.dataCenterJsonToAccount);
 
       return {
-        data: autoSplits,
+        data: accounts,
         pagination,
       };
     } catch (error) {
-      console.error("Error fetching autoSplits:", error);
+      console.error("Error fetching accounts:", error);
       throw error;
     }
   }
@@ -79,13 +76,12 @@ export class AutoSplitService {
   /**
    * Get a single account by code
    *
-   * @param key
    * @param code The account code to look up
    * @returns Account details
    */
-  async getAutoSplitBy(key: string, code: string) {
+  async getAccountBy(key: string, code: string) {
     try {
-      const response = await this.api.export("autosplit", {
+      const response = await this.api.export("account", {
         search: `${key}=\`${code}\``,
         format: "xml-verbose",
       });
@@ -94,7 +90,7 @@ export class AutoSplitService {
         throw new Error(`Account with code "${code}" not found`);
       }
 
-      return this.dataCenterJsonToAutoSplit(response.data[0]);
+      return this.dataCenterJsonToAccount(response.data[0]);
     } catch (error) {
       console.error(`Error fetching account with code ${code}:`, error);
       throw error;

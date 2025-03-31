@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { User, UserFields } from "../moneyworks/types/user";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/user-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { User, UserFields } from "../../moneyworks/types/user";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/user-schema";
 
 /**
  * Service for interacting with MoneyWorks User table

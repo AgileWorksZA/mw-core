@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { LinkService } from '../services/link.service';
+import { LinkService } from '../services/tables/link.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { LinkMany, LinkOne } from "../moneyworks/responses/Link";
 

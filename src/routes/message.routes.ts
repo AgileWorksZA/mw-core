@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { MessageService } from '../services/message.service';
+import { MessageService } from '../services/tables/message.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { MessageMany, MessageOne } from "../moneyworks/responses/Message";
 

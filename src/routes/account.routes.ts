@@ -1,5 +1,5 @@
 import {Elysia, t} from 'elysia';
-import {AccountService} from '../services/account.service';
+import {AccountService} from '../services/tables/account.service';
 import {loadMoneyWorksConfig} from '../config/moneyworks.config';
 import {AccountMany, AccountOne} from "../moneyworks/responses/Account";
 import {AccountFields} from "../moneyworks/types/account";

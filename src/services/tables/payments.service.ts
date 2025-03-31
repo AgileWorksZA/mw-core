@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Payments, PaymentsFields } from "../moneyworks/types/payments";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/payments-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Payments, PaymentsFields } from "../../moneyworks/types/payments";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/payments-schema";
 
 /**
  * Service for interacting with MoneyWorks Payments table

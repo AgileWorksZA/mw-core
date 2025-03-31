@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { JobService } from '../services/job.service';
+import { JobService } from '../services/tables/job.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { JobMany, JobOne } from "../moneyworks/responses/Job";
 

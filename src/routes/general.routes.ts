@@ -1,5 +1,5 @@
 import { Elysia } from 'elysia';
-import { GeneralService } from '../services/general.service';
+import { GeneralService } from '../services/tables/general.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { GeneralOne } from "../moneyworks/responses/General";
 

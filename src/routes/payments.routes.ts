@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { PaymentsService } from '../services/payments.service';
+import { PaymentsService } from '../services/tables/payments.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { PaymentsMany, PaymentsOne } from "../moneyworks/responses/Payments";
 

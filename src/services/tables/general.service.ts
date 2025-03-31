@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { General, GeneralFields } from "../moneyworks/types/general";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/general-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { General, GeneralFields } from "../../moneyworks/types/general";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/general-schema";
 
 /**
  * Service for interacting with MoneyWorks General table

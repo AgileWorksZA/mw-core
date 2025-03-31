@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { TransactionService } from '../services/transaction.service';
+import { TransactionService } from '../services/tables/transaction.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { TransactionMany, TransactionOne } from "../moneyworks/responses/Transaction";
 

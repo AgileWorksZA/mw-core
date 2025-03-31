@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { TaxRate, TaxRateFields } from "../moneyworks/types/tax-rate";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/tax-rate-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { TaxRate, TaxRateFields } from "../../moneyworks/types/tax-rate";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/tax-rate-schema";
 
 /**
  * Service for interacting with MoneyWorks TaxRate table

@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Memo, MemoFields } from "../moneyworks/types/memo";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/memo-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Memo, MemoFields } from "../../moneyworks/types/memo";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/memo-schema";
 
 /**
  * Service for interacting with MoneyWorks Memo table

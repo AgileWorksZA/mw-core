@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { LedgerService } from '../services/ledger.service';
+import { LedgerService } from '../services/tables/ledger.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { LedgerMany, LedgerOne } from "../moneyworks/responses/Ledger";
 

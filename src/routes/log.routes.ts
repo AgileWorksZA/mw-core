@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { LogService } from '../services/log.service';
+import { LogService } from '../services/tables/log.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { LogMany, LogOne } from "../moneyworks/responses/Log";
 

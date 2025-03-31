@@ -1,5 +1,5 @@
 import { Elysia, t } from 'elysia';
-import { DetailService } from '../services/detail.service';
+import { DetailService } from '../services/tables/detail.service';
 import { loadMoneyWorksConfig } from '../config/moneyworks.config';
 import { DetailMany, DetailOne } from "../moneyworks/responses/Detail";
 

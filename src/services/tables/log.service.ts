@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Log, LogFields } from "../moneyworks/types/log";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/log-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Log, LogFields } from "../../moneyworks/types/log";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/log-schema";
 
 /**
  * Service for interacting with MoneyWorks Log table

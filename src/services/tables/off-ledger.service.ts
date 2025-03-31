@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { OffLedger, OffLedgerFields } from "../moneyworks/types/off-ledger";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/offledger-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { OffLedger, OffLedgerFields } from "../../moneyworks/types/off-ledger";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/offledger-schema";
 
 /**
  * Service for interacting with MoneyWorks OffLedger table

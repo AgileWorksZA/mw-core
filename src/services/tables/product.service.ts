@@ -1,8 +1,8 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { Product, ProductFields } from "../moneyworks/types/product";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
-import { enforceType } from "../moneyworks/helpers";
-import schema from "../moneyworks/optimized/product-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
+import { Product, ProductFields } from "../../moneyworks/types/product";
+import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
+import { enforceType } from "../../moneyworks/helpers";
+import schema from "../../moneyworks/optimized/product-schema";
 
 /**
  * Service for interacting with MoneyWorks Product table
