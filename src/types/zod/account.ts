@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const accountSchema = z.object({
+export const accountZod = z.object({
   SequenceNumber: z.number(),
   LastModifiedTime: z.date(),
   Code: z.string(),
@@ -38,4 +38,4 @@ export const accountSchema = z.object({
   ImportFormat: z.string(),
 });
 
-export type AccountSchema = z.infer<typeof accountSchema>;
+export type AccountZod = z.infer<typeof accountZod>;

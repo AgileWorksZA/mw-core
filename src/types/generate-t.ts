@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import type { ANY } from "./hack";
 
 /**
  * Generates TypeScript code for an Elysia TObject based on a JSON Schema.
@@ -6,11 +7,11 @@ import fs from "node:fs";
  * @param indent The indentation level (default is 0).
  * @returns A string of TypeScript code representing the Elysia type.
  */
-function generateElysiaTypeCode(schema: any, indent = 0): string {
+function generateElysiaTypeCode(schema: ANY, indent = 0): string {
   const indentStr = " ".repeat(indent * 2); // 2 spaces per indent level
 
   // Helper to generate code recursively with increased indent
-  const gen = (s: any, i: number) => generateElysiaTypeCode(s, i);
+  const gen = (s: ANY, i: number) => generateElysiaTypeCode(s, i);
 
   if (schema.type === "object") {
     const properties = schema.properties || {};
