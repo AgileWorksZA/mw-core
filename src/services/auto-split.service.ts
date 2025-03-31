@@ -1,8 +1,14 @@
-import { MoneyWorksApiService } from "./moneyworks-api.service";
-import { AutoSplit, AutoSplitFields } from "../moneyworks/types/auto-split";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../types/moneyworks";
 import { enforceType } from "../moneyworks/helpers";
 import schema from "../moneyworks/optimized/autosplit-schema";
+import {
+  type AutoSplit,
+  AutoSplitFields,
+} from "../moneyworks/types/auto-split";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../types/moneyworks";
+import { MoneyWorksApiService } from "./moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks AutoSplit table
@@ -18,9 +24,14 @@ export class AutoSplitService {
   dataCenterJsonToAutoSplit(data: any): AutoSplit {
     return AutoSplitFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for AutoSplit record`);
+        console.error(
+          `Missing key ${key} in data center json for AutoSplit record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as AutoSplit);
   }
@@ -46,7 +57,7 @@ export class AutoSplitService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +68,7 @@ export class AutoSplitService {
 
       return {
         data: autoSplits,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching autoSplits:", error);
@@ -66,27 +77,26 @@ export class AutoSplitService {
   }
 
   /**
-   * Get a single autoSplit by sequence number
+   * Get a single account by code
    *
-   * @param seqNumber The sequence number to look up
-   * @returns AutoSplit details
+   * @param key
+   * @param code The account code to look up
+   * @returns Account details
    */
-  async getAutoSplitBySequenceNumber(seqNumber: number) {
+  async getAutoSplitBy(key: string, code: string) {
     try {
       const response = await this.api.export("autosplit", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        search: `${key}=\`${code}\``,
+        format: "xml-verbose",
       });
 
-      if (!response?.data) {
-        throw new Error(`AutoSplit with sequence number "${seqNumber}" not found`);
+      if (!response.data[0]) {
+        throw new Error(`Account with code "${code}" not found`);
       }
 
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const autoSplitData = Array.isArray(response.data) ? response.data[0] : response.data;
-      return this.dataCenterJsonToAutoSplit(autoSplitData);
+      return this.dataCenterJsonToAutoSplit(response.data[0]);
     } catch (error) {
-      console.error(`Error fetching autoSplit with sequence number ${seqNumber}:`, error);
+      console.error(`Error fetching account with code ${code}:`, error);
       throw error;
     }
   }

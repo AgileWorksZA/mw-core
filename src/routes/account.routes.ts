@@ -2,6 +2,8 @@ import {Elysia, t} from 'elysia';
 import {AccountService} from '../services/account.service';
 import {loadMoneyWorksConfig} from '../config/moneyworks.config';
 import {AccountMany, AccountOne} from "../moneyworks/responses/Account";
+import {AccountFields} from "../moneyworks/types/account";
+import {accountZodKeys} from "../constants";
 
 
 // Initialize the account service with configuration
@@ -41,50 +43,25 @@ export const accountRoutes = new Elysia({prefix: '/api'})
     response: AccountMany
   }
 )
-.get('/accounts/:code',
+.get('/accounts/:by/:value',
   async ({params}) => {
     try {
-      const code = params.code;
+      const by = params.by;
+      const value = params.value;
 
-      // Try to parse as number for sequence number lookup
-      if (!isNaN(Number(code)) && !isNaN(parseFloat(code))) {
-        return await accountService.getAccountBySequenceNumber(Number(code));
-      }
-
-      // Otherwise treat as code
-      return await accountService.getAccountByCode(code);
+      return await accountService.getAccountBy(by, value);
     } catch (error) {
-      console.error(`Error in GET /accounts/${params.code}:`, error);
+      console.error(`Error in GET /accounts/${params.by}/${params.value}:`, error);
       throw error;
     }
   },
   {
     params: t.Object({
-      code: t.String()
+      by: t.String({enum: accountZodKeys}),
+      value: t.String()
     }),
     detail: {
-      summary: 'Get account by code',
-      tags: ['MoneyWorks Data']
-    },
-    response: AccountOne
-  }
-)
-.get('/accounts/by-sequence/:sequence',
-  async ({params}) => {
-    try {
-      const sequence = params.sequence;
-      return await accountService.getAccountBySequenceNumber(sequence);
-    } catch (error) {
-      console.error(`Error in GET /accounts/${params.sequence}:`, error);
-      throw error;
-    }
-  },
-  {
-    params: t.Object({
-      sequence: t.Numeric()
-    }),
-    detail: {
-      summary: 'Get account by sequence number',
+      summary: `Get account by field: ${AccountFields.join(', ')}`,
       tags: ['MoneyWorks Data']
     },
     response: AccountOne

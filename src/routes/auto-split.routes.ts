@@ -1,14 +1,17 @@
-import { Elysia, t } from 'elysia';
-import { AutoSplitService } from '../services/auto-split.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { autoSplitZodKeys } from "../constants";
 import { AutoSplitMany, AutoSplitOne } from "../moneyworks/responses/AutoSplit";
+import { AutoSplitFields } from "../moneyworks/types/auto-split";
+import { AutoSplitService } from "../services/auto-split.service";
 
 // Initialize the auto-split service with configuration
 const config = loadMoneyWorksConfig();
 const autoSplitService = new AutoSplitService(config);
 
-export const autoSplitRoutes = new Elysia({ prefix: '/api' })
-  .get('/auto-splits',
+export const autoSplitRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/auto-splits",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +20,11 @@ export const autoSplitRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /auto-splits:', error);
+        console.error("Error in GET /auto-splits:", error);
         throw error;
       }
     },
@@ -31,33 +34,40 @@ export const autoSplitRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all auto splits',
-        tags: ['MoneyWorks Data']
+        summary: "Get all auto splits",
+        tags: ["MoneyWorks Data"],
       },
-      response: AutoSplitMany
-    }
+      response: AutoSplitMany,
+    },
   )
-  .get('/auto-splits/:sequenceNumber',
+  .get(
+    "/auto-splits/:by/:value",
     async ({ params }) => {
       try {
-        const sequenceNumber = Number(params.sequenceNumber);
-        return await autoSplitService.getAutoSplitBySequenceNumber(sequenceNumber);
+        const by = params.by;
+        const value = params.value;
+
+        return await autoSplitService.getAutoSplitBy(by, value);
       } catch (error) {
-        console.error(`Error in GET /auto-splits/${params.sequenceNumber}:`, error);
+        console.error(
+          `Error in GET /auto-splits/${params.by}/${params.value}:`,
+          error,
+        );
         throw error;
       }
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        by: t.String({ enum: autoSplitZodKeys }),
+        value: t.String(),
       }),
       detail: {
-        summary: 'Get auto split by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: `Get auto-splits by field: ${AutoSplitFields.join(", ")}`,
+        tags: ["MoneyWorks Data"],
       },
-      response: AutoSplitOne
-    }
+      response: AutoSplitOne,
+    },
   );

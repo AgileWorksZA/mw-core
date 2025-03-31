@@ -1,21 +1,24 @@
-import axios from 'axios';
-import {MoneyWorksConfig, MoneyWorksQueryParams} from '../types/moneyworks';
-import {XMLParser} from 'fast-xml-parser';
-import {tableNames} from "../moneyworks/constants";
+import axios from "axios";
+import { XMLParser } from "fast-xml-parser";
+import { tableNames } from "../moneyworks/constants";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../types/moneyworks";
 
 function yyyyMmDdToDate(yyyyMmDd_?: number | string | Date): Date {
-  const yyyyMmDd = String(yyyyMmDd_)
+  const yyyyMmDd = String(yyyyMmDd_);
   if (!yyyyMmDd) return new Date(-1);
 
-  if (/^\d{8}$/.test((yyyyMmDd))) {
-    const year = parseInt(yyyyMmDd.slice(0, 4), 10);
-    const month = parseInt(yyyyMmDd.slice(4, 6), 10) - 1; // JS months are 0-based
-    const day = parseInt(yyyyMmDd.slice(6, 8), 10);
+  if (/^\d{8}$/.test(yyyyMmDd)) {
+    const year = Number.parseInt(yyyyMmDd.slice(0, 4), 10);
+    const month = Number.parseInt(yyyyMmDd.slice(4, 6), 10) - 1; // JS months are 0-based
+    const day = Number.parseInt(yyyyMmDd.slice(6, 8), 10);
     return new Date(year, month, day);
   }
 
   // Try standard date parsing
-  return new Date((yyyyMmDd));
+  return new Date(yyyyMmDd);
 }
 
 /**
@@ -43,23 +46,23 @@ export class MoneyWorksApiService {
   private createAuthHeaders() {
     // Document auth (always required)
     const documentCredentials = `${this.config.username}:Document:${this.config.password}`;
-    const documentAuth = `Basic ${Buffer.from(documentCredentials).toString('base64')}`;
+    const documentAuth = `Basic ${Buffer.from(documentCredentials).toString("base64")}`;
 
     // Folder auth (only if configured)
     if (this.config.folderAuth) {
-      const {folderName, password} = this.config.folderAuth;
+      const { folderName, password } = this.config.folderAuth;
       const folderCredentials = `${folderName}:Datacentre:${password}`;
-      const folderAuth = `Basic ${Buffer.from(folderCredentials).toString('base64')}`;
+      const folderAuth = `Basic ${Buffer.from(folderCredentials).toString("base64")}`;
 
       // Return combined auth headers
       return {
-        'Authorization': `${documentAuth}, ${folderAuth}`
+        Authorization: `${documentAuth}, ${folderAuth}`,
       };
     }
 
     // Return document auth only
     return {
-      'Authorization': documentAuth
+      Authorization: documentAuth,
     };
   }
 
@@ -100,7 +103,7 @@ export class MoneyWorksApiService {
       queryParts.push(`format=${encodeURIComponent(params.format)}`);
     }
 
-    return queryParts.join('&');
+    return queryParts.join("&");
   }
 
   /**
@@ -110,24 +113,34 @@ export class MoneyWorksApiService {
    * @param params Query parameters (limit, start, search, sort, etc.)
    * @returns Parsed response data
    */
-  async export<T>(table: string, params: MoneyWorksQueryParams = {}): Promise<{
-    data: T[],
-    pagination: { total: number, limit: number, offset: number, next: number, prev: number }
+  async export<T>(
+    table: string,
+    params: MoneyWorksQueryParams = {},
+  ): Promise<{
+    data: T[];
+    pagination: {
+      total: number;
+      limit: number;
+      offset: number;
+      next: number;
+      prev: number;
+    };
   }> {
     try {
       // Default to XML verbose format if not specified
       const queryParams = {
         ...params,
-        format: params.format || 'xml-verbose'
+        format: params.format || "xml-verbose",
       };
 
       const url = `${this.getBaseUrl()}/export/table=${table}&${this.buildQueryParams(queryParams)}`;
+      console.log({ url });
       const headers = this.createAuthHeaders();
 
-      const response = await axios.get(url, {headers});
+      const response = await axios.get(url, { headers });
 
       console.log(response.data);
-      if (queryParams.format.startsWith('xml')) {
+      if (queryParams.format.startsWith("xml")) {
         const res = this.parser.parse(response.data);
         console.log(res);
         const data: T[] = res.table[res.table._name.toLowerCase()] ?? [];
@@ -142,19 +155,28 @@ export class MoneyWorksApiService {
             offset,
             next: offset + limit,
             prev: offset - limit,
-          }
-        }
+          },
+        };
       }
 
       return response as unknown as {
-        data: T[],
-        pagination: { total: number, limit: number, offset: number, next: number, prev: number }
+        data: T[];
+        pagination: {
+          total: number;
+          limit: number;
+          offset: number;
+          next: number;
+          prev: number;
+        };
       };
     } catch (error) {
       console.error(error);
       this.handleError(error);
     }
-    return {data: [], pagination: {total: 0, limit: 0, offset: 0, next: 0, prev: 0}};
+    return {
+      data: [],
+      pagination: { total: 0, limit: 0, offset: 0, next: 0, prev: 0 },
+    };
   }
 
   /**
@@ -170,15 +192,15 @@ export class MoneyWorksApiService {
         if (key === "$" || key === "_") continue;
 
         if (typeof value === "object" && value !== null) {
-          if (value['#text'] !== undefined) {
+          if (value["#text"] !== undefined) {
             // console.log(key, value, value['#text']);
-            if (key.toLowerCase().includes('date')) {
-              result[key as keyof T] = yyyyMmDdToDate(value['#text']);
+            if (key.toLowerCase().includes("date")) {
+              result[key as keyof T] = yyyyMmDdToDate(value["#text"]);
             } else {
-              result[key as keyof T] = value['#text'];
+              result[key as keyof T] = value["#text"];
             }
           }
-        } else if (key.toLowerCase().includes('date')) {
+        } else if (key.toLowerCase().includes("date")) {
           console.log(key, value);
           // Date will have format of yyyymmdd
           result[key as keyof T] = yyyyMmDdToDate(value);
@@ -188,7 +210,6 @@ export class MoneyWorksApiService {
         }
 
         // For everything else, just copy the value
-
       }
 
       // console.log(result);
@@ -204,21 +225,23 @@ export class MoneyWorksApiService {
    * @param returnSeq Whether to return the sequence number
    * @returns Response data
    */
-  async import(table: string, data: string, returnSeq: boolean = false) {
+  async import(table: string, data: string, returnSeq = false) {
     try {
-      const url = `${this.getBaseUrl()}/import${returnSeq ? '/return_seq=true' : ''}`;
+      const url = `${this.getBaseUrl()}/import${returnSeq ? "/return_seq=true" : ""}`;
       const headers = {
         ...this.createAuthHeaders(),
-        'Content-Type': 'text/xml'
+        "Content-Type": "text/xml",
       };
 
       // Wrap data in table element if not already wrapped
-      const xmlData = data.startsWith('<?xml') ? data : `<?xml version="1.0"?>
+      const xmlData = data.startsWith("<?xml")
+        ? data
+        : `<?xml version="1.0"?>
 <table name="${table}">
 ${data}
 </table>`;
 
-      const response = await axios.post(url, xmlData, {headers});
+      const response = await axios.post(url, xmlData, { headers });
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -236,7 +259,7 @@ ${data}
       const url = `${this.getBaseUrl()}/evaluate/expr=${encodeURIComponent(expression)}`;
       const headers = this.createAuthHeaders();
 
-      const response = await axios.get(url, {headers});
+      const response = await axios.get(url, { headers });
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -254,7 +277,7 @@ ${data}
       const url = `${this.getBaseUrl()}/post/seqnum=${seqnum}`;
       const headers = this.createAuthHeaders();
 
-      const response = await axios.post(url, '', {headers});
+      const response = await axios.post(url, "", { headers });
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -275,7 +298,7 @@ ${data}
 
       const response = await axios.get(url, {
         headers,
-        responseType: 'arraybuffer'
+        responseType: "arraybuffer",
       });
 
       return response.data;
@@ -296,7 +319,7 @@ ${data}
       const url = `${baseUrl}/server/version`;
       const headers = this.createAuthHeaders();
 
-      const response = await axios.get(url, {headers});
+      const response = await axios.get(url, { headers });
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -307,13 +330,18 @@ ${data}
    * Handle error from API request
    */
   private handleError(error: any) {
-    console.error('MoneyWorks API Error:', error);
+    console.error("MoneyWorks API Error:", error);
 
     if (axios.isAxiosError(error)) {
       if (error.response) {
-        throw new Error(`MoneyWorks API Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
-      } else if (error.request) {
-        throw new Error(`MoneyWorks API Error: No response received - ${error.message}`);
+        throw new Error(
+          `MoneyWorks API Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`,
+        );
+      }
+      if (error.request) {
+        throw new Error(
+          `MoneyWorks API Error: No response received - ${error.message}`,
+        );
       }
     }
 
