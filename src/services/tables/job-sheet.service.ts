@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type JobSheet, JobSheetFields } from "../../types/interface/job-sheet";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/jobsheet-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { JobSheet, JobSheetFields } from "../../moneyworks/types/job-sheet";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/jobsheet-schema";
 
 /**
  * Service for interacting with MoneyWorks JobSheet table
@@ -18,9 +21,14 @@ export class JobSheetService {
   dataCenterJsonToJobSheet(data: any): JobSheet {
     return JobSheetFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for JobSheet record`);
+        console.error(
+          `Missing key ${key} in data center json for JobSheet record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as JobSheet);
   }
@@ -46,7 +54,7 @@ export class JobSheetService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class JobSheetService {
 
       return {
         data: jobSheets,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching jobSheets:", error);
@@ -75,7 +83,7 @@ export class JobSheetService {
     try {
       const response = await this.api.export("jobsheet", {
         search: `jobcode=\`${jobCode}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data?.length) {
@@ -83,13 +91,13 @@ export class JobSheetService {
       }
 
       // Parse the response
-      const jobSheets = Array.isArray(response.data) 
+      const jobSheets = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToJobSheet)
         : [this.dataCenterJsonToJobSheet(response.data)];
 
       return {
         data: jobSheets,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
       console.error(`Error fetching jobSheets for job ${jobCode}:`, error);
@@ -107,18 +115,25 @@ export class JobSheetService {
     try {
       const response = await this.api.export("jobsheet", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`JobSheet with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `JobSheet with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const jobSheetData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const jobSheetData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToJobSheet(jobSheetData);
     } catch (error) {
-      console.error(`Error fetching jobSheet with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching jobSheet with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

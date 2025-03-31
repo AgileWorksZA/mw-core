@@ -1,9 +1,9 @@
 import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
-import { autoSplitZodKeys } from "../constants";
-import { AutoSplitMany, AutoSplitOne } from "../moneyworks/responses/AutoSplit";
-import { AutoSplitFields } from "../moneyworks/types/auto-split";
 import { AutoSplitService } from "../services/tables/auto-split.service";
+import { AutoSplitMany, AutoSplitOne } from "../types/eden/AutoSplit";
+import { autoSplitZodKeys } from "../types/enums";
+import { AutoSplitFields } from "../types/interface/auto-split";
 
 // Initialize the auto-split service with configuration
 const config = loadMoneyWorksConfig();

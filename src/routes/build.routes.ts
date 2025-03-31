@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { BuildService } from '../services/tables/build.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { BuildMany, BuildOne } from "../moneyworks/responses/Build";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { BuildService } from "../services/tables/build.service";
+import { BuildMany, BuildOne } from "../types/eden/Build";
 
 // Initialize the build service with configuration
 const config = loadMoneyWorksConfig();
 const buildService = new BuildService(config);
 
-export const buildRoutes = new Elysia({ prefix: '/api' })
-  .get('/builds',
+export const buildRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/builds",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const buildRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /builds:', error);
+        console.error("Error in GET /builds:", error);
         throw error;
       }
     },
@@ -31,16 +32,17 @@ export const buildRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all builds',
-        tags: ['MoneyWorks Data']
+        summary: "Get all builds",
+        tags: ["MoneyWorks Data"],
       },
-      response: BuildMany
-    }
+      response: BuildMany,
+    },
   )
-  .get('/builds/:sequenceNumber',
+  .get(
+    "/builds/:sequenceNumber",
     async ({ params }) => {
       try {
         const sequenceNumber = Number(params.sequenceNumber);
@@ -52,12 +54,12 @@ export const buildRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        sequenceNumber: t.Numeric(),
       }),
       detail: {
-        summary: 'Get build by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get build by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: BuildOne
-    }
+      response: BuildOne,
+    },
   );

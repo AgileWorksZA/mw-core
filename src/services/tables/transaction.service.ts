@@ -1,8 +1,14 @@
+import { enforceType } from "../../types/helpers";
+import {
+  type Transaction,
+  TransactionFields,
+} from "../../types/interface/transaction";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/transaction-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Transaction, TransactionFields } from "../../moneyworks/types/transaction";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/transaction-schema";
 
 /**
  * Service for interacting with MoneyWorks Transaction table
@@ -18,9 +24,14 @@ export class TransactionService {
   dataCenterJsonToTransaction(data: any): Transaction {
     return TransactionFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Transaction record`);
+        console.error(
+          `Missing key ${key} in data center json for Transaction record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Transaction);
   }
@@ -46,18 +57,21 @@ export class TransactionService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("transaction", mwParams);
+      const { data, pagination } = await this.api.export(
+        "transaction",
+        mwParams,
+      );
 
       // Parse the response
       const transactions = data.map(this.dataCenterJsonToTransaction);
 
       return {
         data: transactions,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -75,18 +89,25 @@ export class TransactionService {
     try {
       const response = await this.api.export("transaction", {
         search: `sequencenumber=${sequenceNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`Transaction with sequence number "${sequenceNumber}" not found`);
+        throw new Error(
+          `Transaction with sequence number "${sequenceNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const transactionData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const transactionData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToTransaction(transactionData);
     } catch (error) {
-      console.error(`Error fetching transaction with sequence number ${sequenceNumber}:`, error);
+      console.error(
+        `Error fetching transaction with sequence number ${sequenceNumber}:`,
+        error,
+      );
       throw error;
     }
   }

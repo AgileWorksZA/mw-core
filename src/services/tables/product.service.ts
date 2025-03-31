@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Product, ProductFields } from "../../types/interface/product";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/product-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Product, ProductFields } from "../../moneyworks/types/product";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/product-schema";
 
 /**
  * Service for interacting with MoneyWorks Product table
@@ -18,9 +21,14 @@ export class ProductService {
   dataCenterJsonToProduct(data: any): Product {
     return ProductFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Product record`);
+        console.error(
+          `Missing key ${key} in data center json for Product record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Product);
   }
@@ -46,7 +54,7 @@ export class ProductService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class ProductService {
 
       return {
         data: products,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -75,7 +83,7 @@ export class ProductService {
     try {
       const response = await this.api.export("product", {
         search: `code=\`${code}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -99,18 +107,25 @@ export class ProductService {
     try {
       const response = await this.api.export("product", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`Product with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `Product with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const productData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const productData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToProduct(productData);
     } catch (error) {
-      console.error(`Error fetching product with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching product with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

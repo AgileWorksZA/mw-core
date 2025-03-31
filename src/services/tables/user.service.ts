@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type User, UserFields } from "../../types/interface/user";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/user-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { User, UserFields } from "../../moneyworks/types/user";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/user-schema";
 
 /**
  * Service for interacting with MoneyWorks User table
@@ -20,7 +23,10 @@ export class UserService {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for User record`);
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as User);
   }
@@ -46,7 +52,7 @@ export class UserService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +63,7 @@ export class UserService {
 
       return {
         data: users,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -75,7 +81,7 @@ export class UserService {
     try {
       const response = await this.api.export("user", {
         search: `username=\`${username}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -99,7 +105,7 @@ export class UserService {
     try {
       const response = await this.api.export("user", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
@@ -107,10 +113,15 @@ export class UserService {
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const userData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const userData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToUser(userData);
     } catch (error) {
-      console.error(`Error fetching user with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching user with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

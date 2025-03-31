@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { MessageService } from '../services/tables/message.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { MessageMany, MessageOne } from "../moneyworks/responses/Message";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { MessageService } from "../services/tables/message.service";
+import { MessageMany, MessageOne } from "../types/eden/Message";
 
 // Initialize the message service with configuration
 const config = loadMoneyWorksConfig();
 const messageService = new MessageService(config);
 
-export const messageRoutes = new Elysia({ prefix: '/api' })
-  .get('/messages',
+export const messageRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/messages",
     async ({ query }) => {
       const { limit = 50, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const messageRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /messages:', error);
+        console.error("Error in GET /messages:", error);
         throw error;
       }
     },
@@ -31,53 +32,61 @@ export const messageRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all messages',
-        tags: ['MoneyWorks Data']
+        summary: "Get all messages",
+        tags: ["MoneyWorks Data"],
       },
-      response: MessageMany
-    }
+      response: MessageMany,
+    },
   )
-  .get('/messages/:sequenceNumber',
+  .get(
+    "/messages/:sequenceNumber",
     async ({ params }) => {
       try {
         const sequenceNumber = Number(params.sequenceNumber);
         return await messageService.getMessageBySequenceNumber(sequenceNumber);
       } catch (error) {
-        console.error(`Error in GET /messages/${params.sequenceNumber}:`, error);
+        console.error(
+          `Error in GET /messages/${params.sequenceNumber}:`,
+          error,
+        );
         throw error;
       }
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        sequenceNumber: t.Numeric(),
       }),
       detail: {
-        summary: 'Get message by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get message by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: MessageOne
-    }
+      response: MessageOne,
+    },
   )
-  .get('/messages/by-user/:username',
+  .get(
+    "/messages/by-user/:username",
     async ({ params }) => {
       try {
         return await messageService.getMessagesByUser(params.username);
       } catch (error) {
-        console.error(`Error in GET /messages/by-user/${params.username}:`, error);
+        console.error(
+          `Error in GET /messages/by-user/${params.username}:`,
+          error,
+        );
         throw error;
       }
     },
     {
       params: t.Object({
-        username: t.String()
+        username: t.String(),
       }),
       detail: {
-        summary: 'Get messages by user',
-        tags: ['MoneyWorks Data']
+        summary: "Get messages by user",
+        tags: ["MoneyWorks Data"],
       },
-      response: MessageMany
-    }
+      response: MessageMany,
+    },
   );

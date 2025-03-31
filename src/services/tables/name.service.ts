@@ -1,8 +1,11 @@
-import {MoneyWorksApiService} from "../moneyworks-api.service";
-import {Name, NameFields} from "../../moneyworks/types/name";
-import {MoneyWorksConfig, MoneyWorksQueryParams} from "../../types/moneyworks";
-import {enforceType} from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/name-schema";
+import { enforceType } from "../../types/helpers";
+import { type Name, NameFields } from "../../types/interface/name";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/name-schema";
+import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks Name table
@@ -20,11 +23,13 @@ export class NameService {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for Name record`);
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Name);
   }
-
 
   /**
    * Get names from MoneyWorks with pagination and filtering
@@ -39,7 +44,6 @@ export class NameService {
     sort?: string;
     order?: "asc" | "desc";
   }) {
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams = {
@@ -48,18 +52,18 @@ export class NameService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
-      const {data, pagination} = await this.api.export("name", mwParams);
+      const { data, pagination } = await this.api.export("name", mwParams);
 
       // Parse the response
       const names = data.map(this.dataCenterJsonToName);
 
       return {
         data: names,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching names:", error);
@@ -77,7 +81,7 @@ export class NameService {
     try {
       const response = await this.api.export("name", {
         search: `code=\`${code}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -101,7 +105,7 @@ export class NameService {
     try {
       const response = await this.api.export("name", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
@@ -109,12 +113,16 @@ export class NameService {
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const nameData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const nameData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToName(nameData);
     } catch (error) {
-      console.error(`Error fetching name with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching name with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }
 }
-

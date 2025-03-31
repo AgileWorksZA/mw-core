@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { NameService } from '../services/tables/name.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { NameMany, NameOne } from "../moneyworks/responses/Name";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { NameService } from "../services/tables/name.service";
+import { NameMany, NameOne } from "../types/eden/Name";
 
 // Initialize the name service with configuration
 const config = loadMoneyWorksConfig();
 const nameService = new NameService(config);
 
-export const nameRoutes = new Elysia({ prefix: '/api' })
-  .get('/names',
+export const nameRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/names",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /names:', error);
+        console.error("Error in GET /names:", error);
         throw error;
       }
     },
@@ -31,22 +32,23 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all names (customers/suppliers)',
-        tags: ['MoneyWorks Data']
+        summary: "Get all names (customers/suppliers)",
+        tags: ["MoneyWorks Data"],
       },
-      response: NameMany
-    }
+      response: NameMany,
+    },
   )
-  .get('/names/:code',
+  .get(
+    "/names/:code",
     async ({ params }) => {
       try {
         const code = params.code;
 
         // Try to parse as number for sequence number lookup
-        if (!isNaN(Number(code)) && !isNaN(parseFloat(code))) {
+        if (!isNaN(Number(code)) && !isNaN(Number.parseFloat(code))) {
           return await nameService.getNameBySequenceNumber(Number(code));
         }
 
@@ -59,16 +61,17 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        code: t.String()
+        code: t.String(),
       }),
       detail: {
-        summary: 'Get name by code',
-        tags: ['MoneyWorks Data']
+        summary: "Get name by code",
+        tags: ["MoneyWorks Data"],
       },
-      response: NameOne
-    }
+      response: NameOne,
+    },
   )
-  .get('/names/by-sequence/:sequence',
+  .get(
+    "/names/by-sequence/:sequence",
     async ({ params }) => {
       try {
         const sequence = params.sequence;
@@ -82,12 +85,12 @@ export const nameRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequence: t.Numeric()
+        sequence: t.Numeric(),
       }),
       detail: {
-        summary: 'Get name by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get name by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: NameOne
-    }
+      response: NameOne,
+    },
   );

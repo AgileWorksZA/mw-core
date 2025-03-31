@@ -1,8 +1,14 @@
+import { enforceType } from "../../types/helpers";
+import {
+  type OffLedger,
+  OffLedgerFields,
+} from "../../types/interface/off-ledger";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/offledger-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { OffLedger, OffLedgerFields } from "../../moneyworks/types/off-ledger";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/offledger-schema";
 
 /**
  * Service for interacting with MoneyWorks OffLedger table
@@ -18,9 +24,14 @@ export class OffLedgerService {
   dataCenterJsonToOffLedger(data: any): OffLedger {
     return OffLedgerFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for OffLedger record`);
+        console.error(
+          `Missing key ${key} in data center json for OffLedger record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as OffLedger);
   }
@@ -46,7 +57,7 @@ export class OffLedgerService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +68,7 @@ export class OffLedgerService {
 
       return {
         data: offLedgerEntries,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching offLedger entries:", error);
@@ -75,7 +86,7 @@ export class OffLedgerService {
     try {
       const response = await this.api.export("offledger", {
         search: `account=\`${accountCode}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data?.length) {
@@ -83,16 +94,19 @@ export class OffLedgerService {
       }
 
       // Parse the response
-      const offLedgerEntries = Array.isArray(response.data) 
+      const offLedgerEntries = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToOffLedger)
         : [this.dataCenterJsonToOffLedger(response.data)];
 
       return {
         data: offLedgerEntries,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
-      console.error(`Error fetching offLedger entries for account ${accountCode}:`, error);
+      console.error(
+        `Error fetching offLedger entries for account ${accountCode}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -107,18 +121,25 @@ export class OffLedgerService {
     try {
       const response = await this.api.export("offledger", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`OffLedger entry with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `OffLedger entry with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const offLedgerData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const offLedgerData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToOffLedger(offLedgerData);
     } catch (error) {
-      console.error(`Error fetching offLedger entry with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching offLedger entry with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

@@ -1,30 +1,29 @@
-import {Elysia, t} from 'elysia';
-import {AccountService} from '../services/tables/account.service';
-import {loadMoneyWorksConfig} from '../config/moneyworks.config';
-import {AccountMany, AccountOne} from "../moneyworks/responses/Account";
-import {AccountFields} from "../moneyworks/types/account";
-import {accountZodKeys} from "../constants";
-
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { AccountService } from "../services/tables/account.service";
+import { accountObject } from "../types/constants.eden";
+import { AccountMany } from "../types/eden/Account";
+import { type Account, AccountFields } from "../types/interface/account";
 
 // Initialize the account service with configuration
 const config = loadMoneyWorksConfig();
 const accountService = new AccountService(config);
 
-export const accountRoutes = new Elysia({prefix: '/api'})
-.get('/accounts',
-  async ({query}) => {
-    const {limit = 10, offset = 0, sort, order, search} = query;
+export const accountRoutes = new Elysia({ prefix: "/api" }).get(
+  "/accounts",
+  async ({ query }) => {
+    const { limit = 10, offset = 0, sort, order, search } = query;
 
     try {
       return await accountService.getAccounts({
         limit: Number(limit),
         offset: Number(offset),
         sort,
-        order: order as 'asc' | 'desc',
-        search
+        order: order as "asc" | "desc",
+        search: search as unknown as Account,
       });
     } catch (error) {
-      console.error('Error in GET /accounts:', error);
+      console.error("Error in GET /accounts:", error);
       throw error;
     }
   },
@@ -34,36 +33,13 @@ export const accountRoutes = new Elysia({prefix: '/api'})
       offset: t.Optional(t.Numeric()),
       sort: t.Optional(t.String()),
       order: t.Optional(t.String()),
-      search: t.Optional(t.String())
+      search: t.Optional(accountObject),
     }),
     detail: {
-      summary: 'Get all accounts',
-      tags: ['MoneyWorks Data'],
+      summary: "Get accounts.",
+      description: `Get all accounts. Search by: ${AccountFields.join(", ")}`,
+      tags: ["MoneyWorks Data"],
     },
-    response: AccountMany
-  }
-)
-.get('/accounts/:by/:value',
-  async ({params}) => {
-    try {
-      const by = params.by;
-      const value = params.value;
-
-      return await accountService.getAccountBy(by, value);
-    } catch (error) {
-      console.error(`Error in GET /accounts/${params.by}/${params.value}:`, error);
-      throw error;
-    }
+    response: AccountMany,
   },
-  {
-    params: t.Object({
-      by: t.String({enum: accountZodKeys}),
-      value: t.String()
-    }),
-    detail: {
-      summary: `Get account by field: ${AccountFields.join(', ')}`,
-      tags: ['MoneyWorks Data']
-    },
-    response: AccountOne
-  }
 );

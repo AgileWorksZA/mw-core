@@ -1,10 +1,10 @@
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/account-schema";
-import { type Account, AccountFields } from "../../moneyworks/types/account";
+import { enforceType } from "../../types/helpers";
+import { type Account, AccountFields } from "../../types/interface/account";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
+import schema from "../../types/optimized/account-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
@@ -42,13 +42,13 @@ export class AccountService {
   async getAccounts(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Account>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Account> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -69,30 +69,6 @@ export class AccountService {
       };
     } catch (error) {
       console.error("Error fetching accounts:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single account by code
-   *
-   * @param code The account code to look up
-   * @returns Account details
-   */
-  async getAccountBy(key: string, code: string) {
-    try {
-      const response = await this.api.export("account", {
-        search: `${key}=\`${code}\``,
-        format: "xml-verbose",
-      });
-
-      if (!response.data[0]) {
-        throw new Error(`Account with code "${code}" not found`);
-      }
-
-      return this.dataCenterJsonToAccount(response.data[0]);
-    } catch (error) {
-      console.error(`Error fetching account with code ${code}:`, error);
       throw error;
     }
   }

@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { ListsService } from '../services/tables/lists.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { ListMany, ListOne } from "../moneyworks/responses/List";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { ListsService } from "../services/tables/lists.service";
+import { ListMany, ListOne } from "../types/eden/List";
 
 // Initialize the lists service with configuration
 const config = loadMoneyWorksConfig();
 const listsService = new ListsService(config);
 
-export const listsRoutes = new Elysia({ prefix: '/api' })
-  .get('/lists',
+export const listsRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/lists",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const listsRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /lists:', error);
+        console.error("Error in GET /lists:", error);
         throw error;
       }
     },
@@ -31,35 +32,37 @@ export const listsRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all list entries',
-        tags: ['MoneyWorks Data']
+        summary: "Get all list entries",
+        tags: ["MoneyWorks Data"],
       },
-      response: ListMany
-    }
+      response: ListMany,
+    },
   )
-  .get('/lists/names',
+  .get(
+    "/lists/names",
     async () => {
       try {
         return await listsService.getListNames();
       } catch (error) {
-        console.error('Error in GET /lists/names:', error);
+        console.error("Error in GET /lists/names:", error);
         throw error;
       }
     },
     {
       detail: {
-        summary: 'Get unique list names',
-        tags: ['MoneyWorks Data']
+        summary: "Get unique list names",
+        tags: ["MoneyWorks Data"],
       },
       response: t.Object({
-        listNames: t.Array(t.String())
-      })
-    }
+        listNames: t.Array(t.String()),
+      }),
+    },
   )
-  .get('/lists/:sequenceNumber',
+  .get(
+    "/lists/:sequenceNumber",
     async ({ params }) => {
       try {
         const sequenceNumber = Number(params.sequenceNumber);
@@ -71,16 +74,17 @@ export const listsRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        sequenceNumber: t.Numeric(),
       }),
       detail: {
-        summary: 'Get list entry by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get list entry by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: ListOne
-    }
+      response: ListOne,
+    },
   )
-  .get('/lists/by-name/:listName',
+  .get(
+    "/lists/by-name/:listName",
     async ({ params }) => {
       try {
         return await listsService.getListsByName(params.listName);
@@ -91,12 +95,12 @@ export const listsRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        listName: t.String()
+        listName: t.String(),
       }),
       detail: {
-        summary: 'Get list entries by list name',
-        tags: ['MoneyWorks Data']
+        summary: "Get list entries by list name",
+        tags: ["MoneyWorks Data"],
       },
-      response: ListMany
-    }
+      response: ListMany,
+    },
   );

@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Log, LogFields } from "../../types/interface/log";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/log-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Log, LogFields } from "../../moneyworks/types/log";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/log-schema";
 
 /**
  * Service for interacting with MoneyWorks Log table
@@ -20,7 +23,10 @@ export class LogService {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for Log record`);
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Log);
   }
@@ -44,9 +50,9 @@ export class LogService {
         limit: params.limit,
         start: params.offset,
         search: params.search,
-        sort: params.sort || 'when',
+        sort: params.sort || "when",
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +63,7 @@ export class LogService {
 
       return {
         data: logs,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching logs:", error);
@@ -75,9 +81,9 @@ export class LogService {
     try {
       const response = await this.api.export("log", {
         search: `user=\`${username}\``,
-        sort: 'when',
-        direction: 'descending',
-        format: "xml-verbose"
+        sort: "when",
+        direction: "descending",
+        format: "xml-verbose",
       });
 
       if (!response?.data?.length) {
@@ -85,13 +91,13 @@ export class LogService {
       }
 
       // Parse the response
-      const logs = Array.isArray(response.data) 
+      const logs = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToLog)
         : [this.dataCenterJsonToLog(response.data)];
 
       return {
         data: logs,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
       console.error(`Error fetching logs for user ${username}:`, error);
@@ -109,18 +115,25 @@ export class LogService {
     try {
       const response = await this.api.export("log", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`Log entry with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `Log entry with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const logData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const logData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToLog(logData);
     } catch (error) {
-      console.error(`Error fetching log with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching log with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

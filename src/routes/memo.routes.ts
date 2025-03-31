@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { MemoService } from '../services/tables/memo.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { MemoMany, MemoOne } from "../moneyworks/responses/Memo";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { MemoService } from "../services/tables/memo.service";
+import { MemoMany, MemoOne } from "../types/eden/Memo";
 
 // Initialize the memo service with configuration
 const config = loadMoneyWorksConfig();
 const memoService = new MemoService(config);
 
-export const memoRoutes = new Elysia({ prefix: '/api' })
-  .get('/memos',
+export const memoRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/memos",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const memoRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /memos:', error);
+        console.error("Error in GET /memos:", error);
         throw error;
       }
     },
@@ -31,16 +32,17 @@ export const memoRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all memos',
-        tags: ['MoneyWorks Data']
+        summary: "Get all memos",
+        tags: ["MoneyWorks Data"],
       },
-      response: MemoMany
-    }
+      response: MemoMany,
+    },
   )
-  .get('/memos/:sequenceNumber',
+  .get(
+    "/memos/:sequenceNumber",
     async ({ params }) => {
       try {
         const sequenceNumber = Number(params.sequenceNumber);
@@ -52,34 +54,38 @@ export const memoRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        sequenceNumber: t.Numeric(),
       }),
       detail: {
-        summary: 'Get memo by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get memo by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: MemoOne
-    }
+      response: MemoOne,
+    },
   )
-  .get('/memos/for/:recordType/:recordId',
+  .get(
+    "/memos/for/:recordType/:recordId",
     async ({ params }) => {
       try {
         const { recordType, recordId } = params;
         return await memoService.getMemosByRecord(recordType, recordId);
       } catch (error) {
-        console.error(`Error in GET /memos/for/${params.recordType}/${params.recordId}:`, error);
+        console.error(
+          `Error in GET /memos/for/${params.recordType}/${params.recordId}:`,
+          error,
+        );
         throw error;
       }
     },
     {
       params: t.Object({
         recordType: t.String(),
-        recordId: t.String()
+        recordId: t.String(),
       }),
       detail: {
-        summary: 'Get memos for a specific record',
-        tags: ['MoneyWorks Data']
+        summary: "Get memos for a specific record",
+        tags: ["MoneyWorks Data"],
       },
-      response: MemoMany
-    }
+      response: MemoMany,
+    },
   );

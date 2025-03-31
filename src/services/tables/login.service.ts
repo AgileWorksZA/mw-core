@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Login, LoginFields } from "../../types/interface/login";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/login-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Login, LoginFields } from "../../moneyworks/types/login";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/login-schema";
 
 /**
  * Service for interacting with MoneyWorks Login table
@@ -18,9 +21,14 @@ export class LoginService {
   dataCenterJsonToLogin(data: any): Login {
     return LoginFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Login record`);
+        console.error(
+          `Missing key ${key} in data center json for Login record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Login);
   }
@@ -44,9 +52,9 @@ export class LoginService {
         limit: params.limit,
         start: params.offset,
         search: params.search,
-        sort: params.sort || 'when',
+        sort: params.sort || "when",
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class LoginService {
 
       return {
         data: logins,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching logins:", error);
@@ -75,9 +83,9 @@ export class LoginService {
     try {
       const response = await this.api.export("login", {
         search: `user=\`${username}\``,
-        sort: 'when',
-        direction: 'descending',
-        format: "xml-verbose"
+        sort: "when",
+        direction: "descending",
+        format: "xml-verbose",
       });
 
       if (!response?.data?.length) {
@@ -85,13 +93,13 @@ export class LoginService {
       }
 
       // Parse the response
-      const logins = Array.isArray(response.data) 
+      const logins = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToLogin)
         : [this.dataCenterJsonToLogin(response.data)];
 
       return {
         data: logins,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
       console.error(`Error fetching logins for user ${username}:`, error);
@@ -109,18 +117,25 @@ export class LoginService {
     try {
       const response = await this.api.export("login", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`Login entry with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `Login entry with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const loginData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const loginData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToLogin(loginData);
     } catch (error) {
-      console.error(`Error fetching login with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching login with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

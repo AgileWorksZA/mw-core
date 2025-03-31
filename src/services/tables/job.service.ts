@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Job, JobFields } from "../../types/interface/job";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/job-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Job, JobFields } from "../../moneyworks/types/job";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/job-schema";
 
 /**
  * Service for interacting with MoneyWorks Job table
@@ -20,7 +23,10 @@ export class JobService {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for Job record`);
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Job);
   }
@@ -46,7 +52,7 @@ export class JobService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +63,7 @@ export class JobService {
 
       return {
         data: jobs,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching jobs:", error);
@@ -75,7 +81,7 @@ export class JobService {
     try {
       const response = await this.api.export("job", {
         search: `code=\`${code}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -99,7 +105,7 @@ export class JobService {
     try {
       const response = await this.api.export("job", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
@@ -107,10 +113,15 @@ export class JobService {
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const jobData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const jobData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToJob(jobData);
     } catch (error) {
-      console.error(`Error fetching job with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching job with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

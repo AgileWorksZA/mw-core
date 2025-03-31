@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Detail, DetailFields } from "../../types/interface/detail";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/detail-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Detail, DetailFields } from "../../moneyworks/types/detail";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/detail-schema";
 
 /**
  * Service for interacting with MoneyWorks Detail table
@@ -18,9 +21,14 @@ export class DetailService {
   dataCenterJsonToDetail(data: any): Detail {
     return DetailFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Detail record`);
+        console.error(
+          `Missing key ${key} in data center json for Detail record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Detail);
   }
@@ -46,7 +54,7 @@ export class DetailService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class DetailService {
 
       return {
         data: details,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching details:", error);
@@ -75,7 +83,7 @@ export class DetailService {
     try {
       const response = await this.api.export("detail", {
         search: `transactionreference=${transactionId}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data?.length) {
@@ -83,16 +91,19 @@ export class DetailService {
       }
 
       // Parse the response
-      const details = Array.isArray(response.data) 
+      const details = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToDetail)
         : [this.dataCenterJsonToDetail(response.data)];
 
       return {
         data: details,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
-      console.error(`Error fetching details for transaction ${transactionId}:`, error);
+      console.error(
+        `Error fetching details for transaction ${transactionId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -107,7 +118,7 @@ export class DetailService {
     try {
       const response = await this.api.export("detail", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
@@ -115,10 +126,15 @@ export class DetailService {
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const detailData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const detailData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToDetail(detailData);
     } catch (error) {
-      console.error(`Error fetching detail with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching detail with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

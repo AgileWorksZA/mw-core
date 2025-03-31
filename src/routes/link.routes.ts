@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { LinkService } from '../services/tables/link.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { LinkMany, LinkOne } from "../moneyworks/responses/Link";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { LinkService } from "../services/tables/link.service";
+import { LinkMany, LinkOne } from "../types/eden/Link";
 
 // Initialize the link service with configuration
 const config = loadMoneyWorksConfig();
 const linkService = new LinkService(config);
 
-export const linkRoutes = new Elysia({ prefix: '/api' })
-  .get('/links',
+export const linkRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/links",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const linkRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /links:', error);
+        console.error("Error in GET /links:", error);
         throw error;
       }
     },
@@ -31,16 +32,17 @@ export const linkRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all links',
-        tags: ['MoneyWorks Data']
+        summary: "Get all links",
+        tags: ["MoneyWorks Data"],
       },
-      response: LinkMany
-    }
+      response: LinkMany,
+    },
   )
-  .get('/links/:sequenceNumber',
+  .get(
+    "/links/:sequenceNumber",
     async ({ params }) => {
       try {
         const sequenceNumber = Number(params.sequenceNumber);
@@ -52,34 +54,38 @@ export const linkRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        sequenceNumber: t.Numeric(),
       }),
       detail: {
-        summary: 'Get link by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get link by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: LinkOne
-    }
+      response: LinkOne,
+    },
   )
-  .get('/links/for-record/:recordType/:recordId',
+  .get(
+    "/links/for-record/:recordType/:recordId",
     async ({ params }) => {
       try {
         const { recordType, recordId } = params;
         return await linkService.getLinksByRecord(recordType, recordId);
       } catch (error) {
-        console.error(`Error in GET /links/for-record/${params.recordType}/${params.recordId}:`, error);
+        console.error(
+          `Error in GET /links/for-record/${params.recordType}/${params.recordId}:`,
+          error,
+        );
         throw error;
       }
     },
     {
       params: t.Object({
         recordType: t.String(),
-        recordId: t.String()
+        recordId: t.String(),
       }),
       detail: {
-        summary: 'Get links for a specific record',
-        tags: ['MoneyWorks Data']
+        summary: "Get links for a specific record",
+        tags: ["MoneyWorks Data"],
       },
-      response: LinkMany
-    }
+      response: LinkMany,
+    },
   );

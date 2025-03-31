@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Link, LinkFields } from "../../types/interface/link";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/link-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Link, LinkFields } from "../../moneyworks/types/link";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/link-schema";
 
 /**
  * Service for interacting with MoneyWorks Link table
@@ -20,7 +23,10 @@ export class LinkService {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for Link record`);
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Link);
   }
@@ -46,7 +52,7 @@ export class LinkService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +63,7 @@ export class LinkService {
 
       return {
         data: links,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching links:", error);
@@ -67,7 +73,7 @@ export class LinkService {
 
   /**
    * Get links for a specific record type and ID
-   * 
+   *
    * @param recordType The record type (e.g., "name", "transaction")
    * @param recordId The record ID
    * @returns Links for the record
@@ -76,7 +82,7 @@ export class LinkService {
     try {
       const response = await this.api.export("link", {
         search: `source=\`${recordType}\` AND sourceid=\`${recordId}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data?.length) {
@@ -84,16 +90,19 @@ export class LinkService {
       }
 
       // Parse the response
-      const links = Array.isArray(response.data) 
+      const links = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToLink)
         : [this.dataCenterJsonToLink(response.data)];
 
       return {
         data: links,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
-      console.error(`Error fetching links for ${recordType} ${recordId}:`, error);
+      console.error(
+        `Error fetching links for ${recordType} ${recordId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -108,7 +117,7 @@ export class LinkService {
     try {
       const response = await this.api.export("link", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
@@ -116,10 +125,15 @@ export class LinkService {
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const linkData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const linkData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToLink(linkData);
     } catch (error) {
-      console.error(`Error fetching link with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching link with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

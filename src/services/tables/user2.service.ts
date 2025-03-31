@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type User2, User2Fields } from "../../types/interface/user2";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/user2-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { User2, User2Fields } from "../../moneyworks/types/user2";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/user2-schema";
 
 /**
  * Service for interacting with MoneyWorks User2 table
@@ -18,9 +21,14 @@ export class User2Service {
   dataCenterJsonToUser2(data: any): User2 {
     return User2Fields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for User2 record`);
+        console.error(
+          `Missing key ${key} in data center json for User2 record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as User2);
   }
@@ -46,7 +54,7 @@ export class User2Service {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class User2Service {
 
       return {
         data: user2Records,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching user2 records:", error);
@@ -75,7 +83,7 @@ export class User2Service {
     try {
       const response = await this.api.export("user2", {
         search: `username=\`${username}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -84,7 +92,10 @@ export class User2Service {
 
       return this.dataCenterJsonToUser2(response.data[0]);
     } catch (error) {
-      console.error(`Error fetching user2 record with username ${username}:`, error);
+      console.error(
+        `Error fetching user2 record with username ${username}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -99,18 +110,25 @@ export class User2Service {
     try {
       const response = await this.api.export("user2", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`User2 record with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `User2 record with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const user2Data = Array.isArray(response.data) ? response.data[0] : response.data;
+      const user2Data = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToUser2(user2Data);
     } catch (error) {
-      console.error(`Error fetching user2 record with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching user2 record with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

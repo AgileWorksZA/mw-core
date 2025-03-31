@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Build, BuildFields } from "../../types/interface/build";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/build-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Build, BuildFields } from "../../moneyworks/types/build";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/build-schema";
 
 /**
  * Service for interacting with MoneyWorks Build table
@@ -18,9 +21,14 @@ export class BuildService {
   dataCenterJsonToBuild(data: any): Build {
     return BuildFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Build record`);
+        console.error(
+          `Missing key ${key} in data center json for Build record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Build);
   }
@@ -46,7 +54,7 @@ export class BuildService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class BuildService {
 
       return {
         data: builds,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching builds:", error);
@@ -75,7 +83,7 @@ export class BuildService {
     try {
       const response = await this.api.export("build", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
@@ -83,10 +91,15 @@ export class BuildService {
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const buildData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const buildData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToBuild(buildData);
     } catch (error) {
-      console.error(`Error fetching build with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching build with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

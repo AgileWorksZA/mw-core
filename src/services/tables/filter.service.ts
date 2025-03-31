@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Filter, FilterFields } from "../../types/interface/filter";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/filter-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Filter, FilterFields } from "../../moneyworks/types/filter";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/filter-schema";
 
 /**
  * Service for interacting with MoneyWorks Filter table
@@ -18,9 +21,14 @@ export class FilterService {
   dataCenterJsonToFilter(data: any): Filter {
     return FilterFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Filter record`);
+        console.error(
+          `Missing key ${key} in data center json for Filter record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Filter);
   }
@@ -46,7 +54,7 @@ export class FilterService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class FilterService {
 
       return {
         data: filters,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching filters:", error);
@@ -75,7 +83,7 @@ export class FilterService {
     try {
       const response = await this.api.export("filter", {
         search: `name=\`${name}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -99,7 +107,7 @@ export class FilterService {
     try {
       const response = await this.api.export("filter", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
@@ -107,10 +115,15 @@ export class FilterService {
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const filterData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const filterData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToFilter(filterData);
     } catch (error) {
-      console.error(`Error fetching filter with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching filter with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

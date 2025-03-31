@@ -106,3 +106,5 @@ export const AccountFields: AccountField[] = [
   "EBITDA",
   "ImportFormat",
 ];
+
+export type AccountObject = Record<AccountField, string>;

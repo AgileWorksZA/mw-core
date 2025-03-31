@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { LogService } from '../services/tables/log.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { LogMany, LogOne } from "../moneyworks/responses/Log";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { LogService } from "../services/tables/log.service";
+import { LogMany, LogOne } from "../types/eden/Log";
 
 // Initialize the log service with configuration
 const config = loadMoneyWorksConfig();
 const logService = new LogService(config);
 
-export const logRoutes = new Elysia({ prefix: '/api' })
-  .get('/logs',
+export const logRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/logs",
     async ({ query }) => {
       const { limit = 50, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const logRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /logs:', error);
+        console.error("Error in GET /logs:", error);
         throw error;
       }
     },
@@ -31,16 +32,17 @@ export const logRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all log entries',
-        tags: ['MoneyWorks Data']
+        summary: "Get all log entries",
+        tags: ["MoneyWorks Data"],
       },
-      response: LogMany
-    }
+      response: LogMany,
+    },
   )
-  .get('/logs/:sequenceNumber',
+  .get(
+    "/logs/:sequenceNumber",
     async ({ params }) => {
       try {
         const sequenceNumber = Number(params.sequenceNumber);
@@ -52,16 +54,17 @@ export const logRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        sequenceNumber: t.Numeric(),
       }),
       detail: {
-        summary: 'Get log entry by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get log entry by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: LogOne
-    }
+      response: LogOne,
+    },
   )
-  .get('/logs/by-user/:username',
+  .get(
+    "/logs/by-user/:username",
     async ({ params }) => {
       try {
         return await logService.getLogsByUser(params.username);
@@ -72,12 +75,12 @@ export const logRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        username: t.String()
+        username: t.String(),
       }),
       detail: {
-        summary: 'Get log entries by user',
-        tags: ['MoneyWorks Data']
+        summary: "Get log entries by user",
+        tags: ["MoneyWorks Data"],
       },
-      response: LogMany
-    }
+      response: LogMany,
+    },
   );

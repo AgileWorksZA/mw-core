@@ -10,11 +10,11 @@ export interface MoneyWorksConfig {
   };
 }
 
-export interface MoneyWorksQueryParams {
+export interface MoneyWorksQueryParams<T extends object = object> {
   limit?: number;
   start?: number;
-  search?: string;
+  search?: Partial<T>;
   sort?: string;
-  direction?: 'ascending' | 'descending';
-  format?: 'xml' | 'xml-terse' | 'xml-verbose' | string;
+  direction?: "ascending" | "descending";
+  format?: "xml" | "xml-terse" | "xml-verbose" | string;
 }

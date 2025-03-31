@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 
 /**
  * Generates TypeScript code for an Elysia TObject based on a JSON Schema.
@@ -6,13 +6,13 @@ import fs from "fs";
  * @param indent The indentation level (default is 0).
  * @returns A string of TypeScript code representing the Elysia type.
  */
-function generateElysiaTypeCode(schema: any, indent: number = 0): string {
-  const indentStr = ' '.repeat(indent * 2); // 2 spaces per indent level
+function generateElysiaTypeCode(schema: any, indent = 0): string {
+  const indentStr = " ".repeat(indent * 2); // 2 spaces per indent level
 
   // Helper to generate code recursively with increased indent
   const gen = (s: any, i: number) => generateElysiaTypeCode(s, i);
 
-  if (schema.type === 'object') {
+  if (schema.type === "object") {
     const properties = schema.properties || {};
     const required = new Set<string>(schema.required || []);
     const propLines: string[] = [];
@@ -24,11 +24,12 @@ function generateElysiaTypeCode(schema: any, indent: number = 0): string {
       propLines.push(`${indentStr}  ${key}: ${propType},`);
     }
 
-    const propStr = propLines.length > 0 ? `\n${propLines.join('\n')}\n${indentStr}` : '';
+    const propStr =
+      propLines.length > 0 ? `\n${propLines.join("\n")}\n${indentStr}` : "";
     return `t.Object({${propStr}})`;
   }
 
-  else if (schema.type === 'array') {
+  if (schema.type === "array") {
     if (!schema.items) {
       throw new Error('Array schema must have an "items" definition');
     }
@@ -36,22 +37,20 @@ function generateElysiaTypeCode(schema: any, indent: number = 0): string {
     return `t.Array(${itemCode})`;
   }
 
-  else if (schema.type === 'string') {
-    if (schema.format === 'date' || schema.format === 'date-time') {
-      return 't.Date()';
+  if (schema.type === "string") {
+    if (schema.format === "date" || schema.format === "date-time") {
+      return "t.Date()";
     }
-    return 't.String()';
+    return "t.String()";
   }
-  else if (schema.type === 'number' || schema.type === 'integer') {
-    return 't.Number()';
+  if (schema.type === "number" || schema.type === "integer") {
+    return "t.Number()";
   }
-  else if (schema.type === 'boolean') {
-    return 't.Boolean()';
+  if (schema.type === "boolean") {
+    return "t.Boolean()";
   }
 
-  else {
-    throw new Error(`Unsupported schema type: ${schema.type}`);
-  }
+  throw new Error(`Unsupported schema type: ${schema.type}`);
 }
 
 export const Tables = [
@@ -83,11 +82,10 @@ export const Tables = [
   "User2",
 ];
 
-
 // Data is the type generated, but I also need to supply pagination data
 // { total: number, limit: number, offset: number, next?: number | null, prev?: number | null }
 function writeFile(name: string) {
-  const path = `./json-schema/${name.toLowerCase()}-schema.json`
+  const path = `./json-schema/${name.toLowerCase()}-schema.json`;
   console.log(`Writing ${name} response file`);
   const data = JSON.parse(fs.readFileSync(path, "utf-8"));
   const typeCode = generateElysiaTypeCode(data);

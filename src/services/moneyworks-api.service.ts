@@ -1,6 +1,6 @@
 import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
-import { tableNames } from "../moneyworks/constants";
+import { tableNames } from "../types/constants";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -88,7 +88,16 @@ export class MoneyWorksApiService {
     }
 
     if (params.search) {
-      queryParts.push(`search=${encodeURIComponent(params.search)}`);
+      const search = Object.entries(params.search).reduce(
+        (acc, [key, value]) => {
+          if (value) {
+            acc.push(`${key}=${value}`);
+          }
+          return acc;
+        },
+        [] as string[],
+      );
+      queryParts.push(`search=${encodeURIComponent(search.join("&"))}`);
     }
 
     if (params.sort) {
@@ -113,9 +122,9 @@ export class MoneyWorksApiService {
    * @param params Query parameters (limit, start, search, sort, etc.)
    * @returns Parsed response data
    */
-  async export<T>(
+  async export<T extends object = object>(
     table: string,
-    params: MoneyWorksQueryParams = {},
+    params: MoneyWorksQueryParams<T> = {},
   ): Promise<{
     data: T[];
     pagination: {
@@ -242,84 +251,6 @@ ${data}
 </table>`;
 
       const response = await axios.post(url, xmlData, { headers });
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-    }
-  }
-
-  /**
-   * Evaluate expression in MoneyWorks
-   *
-   * @param expression The expression to evaluate
-   * @returns Evaluation result
-   */
-  async evaluate(expression: string) {
-    try {
-      const url = `${this.getBaseUrl()}/evaluate/expr=${encodeURIComponent(expression)}`;
-      const headers = this.createAuthHeaders();
-
-      const response = await axios.get(url, { headers });
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-    }
-  }
-
-  /**
-   * Post a transaction in MoneyWorks
-   *
-   * @param seqnum Sequence number of the transaction to post
-   * @returns Response data
-   */
-  async post(seqnum: number) {
-    try {
-      const url = `${this.getBaseUrl()}/post/seqnum=${seqnum}`;
-      const headers = this.createAuthHeaders();
-
-      const response = await axios.post(url, "", { headers });
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-    }
-  }
-
-  /**
-   * Generate a form in MoneyWorks
-   *
-   * @param form Form name
-   * @param search Search expression to identify record
-   * @returns PDF data as Buffer
-   */
-  async doForm(form: string, search: string) {
-    try {
-      const url = `${this.getBaseUrl()}/doform/form=${encodeURIComponent(form)}&search=${encodeURIComponent(search)}`;
-      const headers = this.createAuthHeaders();
-
-      const response = await axios.get(url, {
-        headers,
-        responseType: "arraybuffer",
-      });
-
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-    }
-  }
-
-  /**
-   * Get server version
-   *
-   * @returns Server version
-   */
-  async getVersion() {
-    try {
-      // Note: version endpoint is on server, not document
-      const baseUrl = `http://${this.config.host}:${this.config.port}/REST`;
-      const url = `${baseUrl}/server/version`;
-      const headers = this.createAuthHeaders();
-
-      const response = await axios.get(url, { headers });
       return response.data;
     } catch (error) {
       this.handleError(error);

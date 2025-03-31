@@ -2,9 +2,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
 import { z } from "zod";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
-import { accountZodKeys } from "../constants";
-import { pagingSchema } from "../moneyworks/types/zod/paging";
 import { AccountService } from "../services/tables/account.service";
+import { accountZodKeys } from "../types/enums";
+import { pagingSchema } from "../types/zod/paging";
 
 // Create an MCP server
 const server = new McpServer({

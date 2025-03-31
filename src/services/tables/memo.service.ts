@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Memo, MemoFields } from "../../types/interface/memo";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/memo-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Memo, MemoFields } from "../../moneyworks/types/memo";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/memo-schema";
 
 /**
  * Service for interacting with MoneyWorks Memo table
@@ -20,7 +23,10 @@ export class MemoService {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for Memo record`);
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Memo);
   }
@@ -46,7 +52,7 @@ export class MemoService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +63,7 @@ export class MemoService {
 
       return {
         data: memos,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching memos:", error);
@@ -76,7 +82,7 @@ export class MemoService {
     try {
       const response = await this.api.export("memo", {
         search: `recordtype=\`${recordType}\` AND recordid=\`${recordId}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data?.length) {
@@ -84,16 +90,19 @@ export class MemoService {
       }
 
       // Parse the response
-      const memos = Array.isArray(response.data) 
+      const memos = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToMemo)
         : [this.dataCenterJsonToMemo(response.data)];
 
       return {
         data: memos,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
-      console.error(`Error fetching memos for ${recordType} ${recordId}:`, error);
+      console.error(
+        `Error fetching memos for ${recordType} ${recordId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -108,7 +117,7 @@ export class MemoService {
     try {
       const response = await this.api.export("memo", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
@@ -116,10 +125,15 @@ export class MemoService {
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const memoData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const memoData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToMemo(memoData);
     } catch (error) {
-      console.error(`Error fetching memo with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching memo with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

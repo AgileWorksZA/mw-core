@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type BankRecs, BankRecsFields } from "../../types/interface/bank-recs";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/bankrecs-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { BankRecs, BankRecsFields } from "../../moneyworks/types/bank-recs";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/bankrecs-schema";
 
 /**
  * Service for interacting with MoneyWorks BankRecs table
@@ -18,9 +21,14 @@ export class BankRecsService {
   dataCenterJsonToBankRecs(data: any): BankRecs {
     return BankRecsFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for BankRecs record`);
+        console.error(
+          `Missing key ${key} in data center json for BankRecs record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as BankRecs);
   }
@@ -46,7 +54,7 @@ export class BankRecsService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class BankRecsService {
 
       return {
         data: bankRecs,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching bankRecs:", error);
@@ -75,7 +83,7 @@ export class BankRecsService {
     try {
       const response = await this.api.export("bankrecs", {
         search: `account=\`${accountCode}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -83,16 +91,19 @@ export class BankRecsService {
       }
 
       // Parse the response
-      const bankRecs = Array.isArray(response.data) 
+      const bankRecs = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToBankRecs)
         : [this.dataCenterJsonToBankRecs(response.data)];
 
       return {
         data: bankRecs,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
-      console.error(`Error fetching bankRecs for account ${accountCode}:`, error);
+      console.error(
+        `Error fetching bankRecs for account ${accountCode}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -107,18 +118,25 @@ export class BankRecsService {
     try {
       const response = await this.api.export("bankrecs", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`BankRecs with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `BankRecs with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const bankRecsData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const bankRecsData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToBankRecs(bankRecsData);
     } catch (error) {
-      console.error(`Error fetching bankRecs with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching bankRecs with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

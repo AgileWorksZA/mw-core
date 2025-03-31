@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { FilterService } from '../services/tables/filter.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { FilterMany, FilterOne } from "../moneyworks/responses/Filter";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { FilterService } from "../services/tables/filter.service";
+import { FilterMany, FilterOne } from "../types/eden/Filter";
 
 // Initialize the filter service with configuration
 const config = loadMoneyWorksConfig();
 const filterService = new FilterService(config);
 
-export const filterRoutes = new Elysia({ prefix: '/api' })
-  .get('/filters',
+export const filterRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/filters",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const filterRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /filters:', error);
+        console.error("Error in GET /filters:", error);
         throw error;
       }
     },
@@ -31,23 +32,26 @@ export const filterRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all saved filters',
-        tags: ['MoneyWorks Data']
+        summary: "Get all saved filters",
+        tags: ["MoneyWorks Data"],
       },
-      response: FilterMany
-    }
+      response: FilterMany,
+    },
   )
-  .get('/filters/:idOrName',
+  .get(
+    "/filters/:idOrName",
     async ({ params }) => {
       try {
         const idOrName = params.idOrName;
 
         // Try to parse as number for sequence number lookup
-        if (!isNaN(Number(idOrName)) && !isNaN(parseFloat(idOrName))) {
-          return await filterService.getFilterBySequenceNumber(Number(idOrName));
+        if (!isNaN(Number(idOrName)) && !isNaN(Number.parseFloat(idOrName))) {
+          return await filterService.getFilterBySequenceNumber(
+            Number(idOrName),
+          );
         }
 
         // Otherwise treat as name
@@ -59,12 +63,12 @@ export const filterRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        idOrName: t.String()
+        idOrName: t.String(),
       }),
       detail: {
-        summary: 'Get filter by name or sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get filter by name or sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: FilterOne
-    }
+      response: FilterOne,
+    },
   );

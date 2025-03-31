@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { ProductService } from '../services/tables/product.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { ProductMany, ProductOne } from "../moneyworks/responses/Product";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { ProductService } from "../services/tables/product.service";
+import { ProductMany, ProductOne } from "../types/eden/Product";
 
 // Initialize the product service with configuration
 const config = loadMoneyWorksConfig();
 const productService = new ProductService(config);
 
-export const productRoutes = new Elysia({ prefix: '/api' })
-  .get('/products',
+export const productRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/products",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const productRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /products:', error);
+        console.error("Error in GET /products:", error);
         throw error;
       }
     },
@@ -31,22 +32,23 @@ export const productRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all products',
-        tags: ['MoneyWorks Data']
+        summary: "Get all products",
+        tags: ["MoneyWorks Data"],
       },
-      response: ProductMany
-    }
+      response: ProductMany,
+    },
   )
-  .get('/products/:code',
+  .get(
+    "/products/:code",
     async ({ params }) => {
       try {
         const code = params.code;
 
         // Try to parse as number for sequence number lookup
-        if (!isNaN(Number(code)) && !isNaN(parseFloat(code))) {
+        if (!isNaN(Number(code)) && !isNaN(Number.parseFloat(code))) {
           return await productService.getProductBySequenceNumber(Number(code));
         }
 
@@ -59,16 +61,17 @@ export const productRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        code: t.String()
+        code: t.String(),
       }),
       detail: {
-        summary: 'Get product by code',
-        tags: ['MoneyWorks Data']
+        summary: "Get product by code",
+        tags: ["MoneyWorks Data"],
       },
-      response: ProductOne
-    }
+      response: ProductOne,
+    },
   )
-  .get('/products/by-sequence/:sequence',
+  .get(
+    "/products/by-sequence/:sequence",
     async ({ params }) => {
       try {
         const sequence = params.sequence;
@@ -80,12 +83,12 @@ export const productRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequence: t.Numeric()
+        sequence: t.Numeric(),
       }),
       detail: {
-        summary: 'Get product by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get product by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: ProductOne
-    }
+      response: ProductOne,
+    },
   );

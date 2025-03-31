@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { DepartmentService } from '../services/tables/department.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { DepartmentMany, DepartmentOne } from "../moneyworks/responses/Department";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { DepartmentService } from "../services/tables/department.service";
+import { DepartmentMany, DepartmentOne } from "../types/eden/Department";
 
 // Initialize the department service with configuration
 const config = loadMoneyWorksConfig();
 const departmentService = new DepartmentService(config);
 
-export const departmentRoutes = new Elysia({ prefix: '/api' })
-  .get('/departments',
+export const departmentRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/departments",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const departmentRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /departments:', error);
+        console.error("Error in GET /departments:", error);
         throw error;
       }
     },
@@ -31,23 +32,26 @@ export const departmentRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all departments',
-        tags: ['MoneyWorks Data']
+        summary: "Get all departments",
+        tags: ["MoneyWorks Data"],
       },
-      response: DepartmentMany
-    }
+      response: DepartmentMany,
+    },
   )
-  .get('/departments/:code',
+  .get(
+    "/departments/:code",
     async ({ params }) => {
       try {
         const code = params.code;
 
         // Try to parse as number for sequence number lookup
-        if (!isNaN(Number(code)) && !isNaN(parseFloat(code))) {
-          return await departmentService.getDepartmentBySequenceNumber(Number(code));
+        if (!isNaN(Number(code)) && !isNaN(Number.parseFloat(code))) {
+          return await departmentService.getDepartmentBySequenceNumber(
+            Number(code),
+          );
         }
 
         // Otherwise treat as code
@@ -59,16 +63,17 @@ export const departmentRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        code: t.String()
+        code: t.String(),
       }),
       detail: {
-        summary: 'Get department by code',
-        tags: ['MoneyWorks Data']
+        summary: "Get department by code",
+        tags: ["MoneyWorks Data"],
       },
-      response: DepartmentOne
-    }
+      response: DepartmentOne,
+    },
   )
-  .get('/departments/by-sequence/:sequence',
+  .get(
+    "/departments/by-sequence/:sequence",
     async ({ params }) => {
       try {
         const sequence = params.sequence;
@@ -80,12 +85,12 @@ export const departmentRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequence: t.Numeric()
+        sequence: t.Numeric(),
       }),
       detail: {
-        summary: 'Get department by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get department by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: DepartmentOne
-    }
+      response: DepartmentOne,
+    },
   );

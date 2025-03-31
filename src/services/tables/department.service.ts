@@ -1,8 +1,14 @@
+import { enforceType } from "../../types/helpers";
+import {
+  type Department,
+  DepartmentFields,
+} from "../../types/interface/department";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/department-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Department, DepartmentFields } from "../../moneyworks/types/department";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/department-schema";
 
 /**
  * Service for interacting with MoneyWorks Department table
@@ -18,9 +24,14 @@ export class DepartmentService {
   dataCenterJsonToDepartment(data: any): Department {
     return DepartmentFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Department record`);
+        console.error(
+          `Missing key ${key} in data center json for Department record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Department);
   }
@@ -46,18 +57,21 @@ export class DepartmentService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("department", mwParams);
+      const { data, pagination } = await this.api.export(
+        "department",
+        mwParams,
+      );
 
       // Parse the response
       const departments = data.map(this.dataCenterJsonToDepartment);
 
       return {
         data: departments,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -75,7 +89,7 @@ export class DepartmentService {
     try {
       const response = await this.api.export("department", {
         search: `code=\`${code}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -99,18 +113,25 @@ export class DepartmentService {
     try {
       const response = await this.api.export("department", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`Department with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `Department with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const departmentData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const departmentData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToDepartment(departmentData);
     } catch (error) {
-      console.error(`Error fetching department with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching department with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

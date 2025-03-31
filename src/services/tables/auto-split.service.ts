@@ -1,13 +1,13 @@
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/autosplit-schema";
+import { enforceType } from "../../types/helpers";
 import {
   type AutoSplit,
   AutoSplitFields,
-} from "../../moneyworks/types/auto-split";
+} from "../../types/interface/auto-split";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
+import schema from "../../types/optimized/autosplit-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { DetailService } from '../services/tables/detail.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { DetailMany, DetailOne } from "../moneyworks/responses/Detail";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { DetailService } from "../services/tables/detail.service";
+import { DetailMany, DetailOne } from "../types/eden/Detail";
 
 // Initialize the detail service with configuration
 const config = loadMoneyWorksConfig();
 const detailService = new DetailService(config);
 
-export const detailRoutes = new Elysia({ prefix: '/api' })
-  .get('/details',
+export const detailRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/details",
     async ({ query }) => {
       const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const detailRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /details:', error);
+        console.error("Error in GET /details:", error);
         throw error;
       }
     },
@@ -31,16 +32,17 @@ export const detailRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all transaction details',
-        tags: ['MoneyWorks Data']
+        summary: "Get all transaction details",
+        tags: ["MoneyWorks Data"],
       },
-      response: DetailMany
-    }
+      response: DetailMany,
+    },
   )
-  .get('/details/:sequenceNumber',
+  .get(
+    "/details/:sequenceNumber",
     async ({ params }) => {
       try {
         const sequenceNumber = Number(params.sequenceNumber);
@@ -52,33 +54,37 @@ export const detailRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        sequenceNumber: t.Numeric(),
       }),
       detail: {
-        summary: 'Get detail by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get detail by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: DetailOne
-    }
+      response: DetailOne,
+    },
   )
-  .get('/details/for-transaction/:transactionId',
+  .get(
+    "/details/for-transaction/:transactionId",
     async ({ params }) => {
       try {
         const transactionId = Number(params.transactionId);
         return await detailService.getDetailsByTransaction(transactionId);
       } catch (error) {
-        console.error(`Error in GET /details/for-transaction/${params.transactionId}:`, error);
+        console.error(
+          `Error in GET /details/for-transaction/${params.transactionId}:`,
+          error,
+        );
         throw error;
       }
     },
     {
       params: t.Object({
-        transactionId: t.Numeric()
+        transactionId: t.Numeric(),
       }),
       detail: {
-        summary: 'Get details for a specific transaction',
-        tags: ['MoneyWorks Data']
+        summary: "Get details for a specific transaction",
+        tags: ["MoneyWorks Data"],
       },
-      response: DetailMany
-    }
+      response: DetailMany,
+    },
   );

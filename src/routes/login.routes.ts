@@ -1,14 +1,15 @@
-import { Elysia, t } from 'elysia';
-import { LoginService } from '../services/tables/login.service';
-import { loadMoneyWorksConfig } from '../config/moneyworks.config';
-import { LoginMany, LoginOne } from "../moneyworks/responses/Login";
+import { Elysia, t } from "elysia";
+import { loadMoneyWorksConfig } from "../config/moneyworks.config";
+import { LoginService } from "../services/tables/login.service";
+import { LoginMany, LoginOne } from "../types/eden/Login";
 
 // Initialize the login service with configuration
 const config = loadMoneyWorksConfig();
 const loginService = new LoginService(config);
 
-export const loginRoutes = new Elysia({ prefix: '/api' })
-  .get('/logins',
+export const loginRoutes = new Elysia({ prefix: "/api" })
+  .get(
+    "/logins",
     async ({ query }) => {
       const { limit = 50, offset = 0, sort, order, search } = query;
 
@@ -17,11 +18,11 @@ export const loginRoutes = new Elysia({ prefix: '/api' })
           limit: Number(limit),
           offset: Number(offset),
           sort,
-          order: order as 'asc' | 'desc',
-          search
+          order: order as "asc" | "desc",
+          search,
         });
       } catch (error) {
-        console.error('Error in GET /logins:', error);
+        console.error("Error in GET /logins:", error);
         throw error;
       }
     },
@@ -31,16 +32,17 @@ export const loginRoutes = new Elysia({ prefix: '/api' })
         offset: t.Optional(t.Numeric()),
         sort: t.Optional(t.String()),
         order: t.Optional(t.String()),
-        search: t.Optional(t.String())
+        search: t.Optional(t.String()),
       }),
       detail: {
-        summary: 'Get all login entries',
-        tags: ['MoneyWorks Data']
+        summary: "Get all login entries",
+        tags: ["MoneyWorks Data"],
       },
-      response: LoginMany
-    }
+      response: LoginMany,
+    },
   )
-  .get('/logins/:sequenceNumber',
+  .get(
+    "/logins/:sequenceNumber",
     async ({ params }) => {
       try {
         const sequenceNumber = Number(params.sequenceNumber);
@@ -52,32 +54,36 @@ export const loginRoutes = new Elysia({ prefix: '/api' })
     },
     {
       params: t.Object({
-        sequenceNumber: t.Numeric()
+        sequenceNumber: t.Numeric(),
       }),
       detail: {
-        summary: 'Get login entry by sequence number',
-        tags: ['MoneyWorks Data']
+        summary: "Get login entry by sequence number",
+        tags: ["MoneyWorks Data"],
       },
-      response: LoginOne
-    }
+      response: LoginOne,
+    },
   )
-  .get('/logins/by-user/:username',
+  .get(
+    "/logins/by-user/:username",
     async ({ params }) => {
       try {
         return await loginService.getLoginsByUser(params.username);
       } catch (error) {
-        console.error(`Error in GET /logins/by-user/${params.username}:`, error);
+        console.error(
+          `Error in GET /logins/by-user/${params.username}:`,
+          error,
+        );
         throw error;
       }
     },
     {
       params: t.Object({
-        username: t.String()
+        username: t.String(),
       }),
       detail: {
-        summary: 'Get login entries by user',
-        tags: ['MoneyWorks Data']
+        summary: "Get login entries by user",
+        tags: ["MoneyWorks Data"],
       },
-      response: LoginMany
-    }
+      response: LoginMany,
+    },
   );

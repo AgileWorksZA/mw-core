@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type TaxRate, TaxRateFields } from "../../types/interface/tax-rate";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/tax-rate-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { TaxRate, TaxRateFields } from "../../moneyworks/types/tax-rate";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/tax-rate-schema";
 
 /**
  * Service for interacting with MoneyWorks TaxRate table
@@ -18,9 +21,14 @@ export class TaxRateService {
   dataCenterJsonToTaxRate(data: any): TaxRate {
     return TaxRateFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for TaxRate record`);
+        console.error(
+          `Missing key ${key} in data center json for TaxRate record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as TaxRate);
   }
@@ -46,7 +54,7 @@ export class TaxRateService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class TaxRateService {
 
       return {
         data: taxRates,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching tax rates:", error);
@@ -75,7 +83,7 @@ export class TaxRateService {
     try {
       const response = await this.api.export("taxrate", {
         search: `code=\`${code}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response.data[0]) {
@@ -99,18 +107,25 @@ export class TaxRateService {
     try {
       const response = await this.api.export("taxrate", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`Tax rate with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `Tax rate with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const taxRateData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const taxRateData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToTaxRate(taxRateData);
     } catch (error) {
-      console.error(`Error fetching tax rate with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching tax rate with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }

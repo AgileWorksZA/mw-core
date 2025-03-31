@@ -1,8 +1,11 @@
+import { enforceType } from "../../types/helpers";
+import { type Lists, ListsFields } from "../../types/interface/lists";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../types/moneyworks";
+import schema from "../../types/optimized/lists-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
-import { Lists, ListsFields } from "../../moneyworks/types/lists";
-import { MoneyWorksConfig, MoneyWorksQueryParams } from "../../types/moneyworks";
-import { enforceType } from "../../moneyworks/helpers";
-import schema from "../../moneyworks/optimized/lists-schema";
 
 /**
  * Service for interacting with MoneyWorks Lists table
@@ -18,9 +21,14 @@ export class ListsService {
   dataCenterJsonToLists(data: any): Lists {
     return ListsFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Lists record`);
+        console.error(
+          `Missing key ${key} in data center json for Lists record`,
+        );
       }
-      (acc as any)[key] = enforceType(data[key.toLowerCase()], schema[key] as "string")
+      (acc as any)[key] = enforceType(
+        data[key.toLowerCase()],
+        schema[key] as "string",
+      );
       return acc;
     }, {} as Lists);
   }
@@ -46,7 +54,7 @@ export class ListsService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose"
+        format: "xml-verbose",
       };
 
       // Call MoneyWorks API
@@ -57,7 +65,7 @@ export class ListsService {
 
       return {
         data: lists,
-        pagination
+        pagination,
       };
     } catch (error) {
       console.error("Error fetching lists:", error);
@@ -75,7 +83,7 @@ export class ListsService {
     try {
       const response = await this.api.export("lists", {
         search: `listname=\`${listName}\``,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data?.length) {
@@ -83,13 +91,13 @@ export class ListsService {
       }
 
       // Parse the response
-      const lists = Array.isArray(response.data) 
+      const lists = Array.isArray(response.data)
         ? response.data.map(this.dataCenterJsonToLists)
         : [this.dataCenterJsonToLists(response.data)];
 
       return {
         data: lists,
-        pagination: response.pagination
+        pagination: response.pagination,
       };
     } catch (error) {
       console.error(`Error fetching lists for list name ${listName}:`, error);
@@ -107,37 +115,44 @@ export class ListsService {
     try {
       const response = await this.api.export("lists", {
         search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose"
+        format: "xml-verbose",
       });
 
       if (!response?.data) {
-        throw new Error(`Lists entry with sequence number "${seqNumber}" not found`);
+        throw new Error(
+          `Lists entry with sequence number "${seqNumber}" not found`,
+        );
       }
 
       // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const listsData = Array.isArray(response.data) ? response.data[0] : response.data;
+      const listsData = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data;
       return this.dataCenterJsonToLists(listsData);
     } catch (error) {
-      console.error(`Error fetching list entry with sequence number ${seqNumber}:`, error);
+      console.error(
+        `Error fetching list entry with sequence number ${seqNumber}:`,
+        error,
+      );
       throw error;
     }
   }
 
   /**
    * Get unique list names
-   * 
+   *
    * @returns Array of unique list names
    */
   async getListNames() {
     try {
       // First get all lists
       const { data } = await this.getLists({ limit: 1000 });
-      
+
       // Extract unique list names
-      const uniqueNames = [...new Set(data.map(list => list.ListName))];
-      
+      const uniqueNames = [...new Set(data.map((list) => list.ListName))];
+
       return {
-        data: uniqueNames.map(name => ({ name }))
+        data: uniqueNames.map((name) => ({ name })),
       };
     } catch (error) {
       console.error("Error fetching list names:", error);
