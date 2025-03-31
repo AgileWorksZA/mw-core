@@ -1,0 +1,36 @@
+import { z } from "zod";
+
+export const taxRateZod = z.object({
+  SequenceNumber: z.number(),
+  LastModifiedTime: z.date(),
+  TaxCode: z.string(),
+  PaidAccount: z.string(),
+  RecAccount: z.string(),
+  Rate1: z.number(),
+  Date: z.date(),
+  Rate2: z.number(),
+  Combine: z.number(),
+  CombineRate1: z.number(),
+  CombineRate2: z.number(),
+  GSTReceived: z.number(),
+  NetReceived: z.number(),
+  GSTPaid: z.number(),
+  NetPaid: z.number(),
+  RateName: z.string(),
+  ReportCycleStart: z.number(),
+  ReportCycleEnd: z.number(),
+  ReportDate: z.date(),
+  PSTReceived: z.number(),
+  PSTPaid: z.number(),
+  Type: z.number(),
+  Combination: z.string(),
+  UserNum: z.number(),
+  UserText: z.string(),
+  TaggedText: z.string(),
+  AliasCode: z.string(),
+  AliasCountry: z.string(),
+  ReversedRate1: z.number(),
+  ReversedRate2: z.number(),
+});
+
+export type TaxRateZod = z.infer<typeof taxRateZod>;

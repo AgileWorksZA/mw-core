@@ -1,0 +1,38 @@
+import { z } from "zod";
+
+export const jobSheetZod = z.object({
+  SequenceNumber: z.number(),
+  LastModifiedTime: z.date(),
+  Job: z.string(),
+  Qty: z.number(),
+  Resource: z.string(),
+  Date: z.date(),
+  CostCentre: z.string(),
+  Account: z.string(),
+  Period: z.number(),
+  Units: z.string(),
+  CostPrice: z.number(),
+  SellPrice: z.number(),
+  Memo: z.string(),
+  DestTransSeq: z.number(),
+  SourceTransSeq: z.number(),
+  DateEntered: z.date(),
+  Flags: z.number(),
+  Colour: z.number(),
+  Status: z.string(),
+  Type: z.string(),
+  Analysis: z.string(),
+  BillValue: z.number(),
+  ActivityCode: z.string(),
+  Comments: z.string(),
+  Batch: z.number(),
+  EnteredBy: z.string(),
+  SerialNumber: z.string(),
+  StockLocation: z.string(),
+  UserNum: z.number(),
+  UserText: z.string(),
+  TaggedText: z.string(),
+  TimeProcessed: z.date(),
+});
+
+export type JobSheetZod = z.infer<typeof jobSheetZod>;
