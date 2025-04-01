@@ -39,7 +39,7 @@ export interface Account {
   SecurityLevel: number;
   /** @mutable="freely, script-only" size="24" */
   BankAccountNumber: string;
-  BalanceLimit: number;
+  BalanceLimit: number | null;
   /** size="12" */
   ManualChequeNumber: string;
   /** size="12" */
@@ -47,8 +47,8 @@ export interface Account {
   LastStatementImport: Date;
   /** @mutable="freely, script-only" size="1024" */
   Comments: string;
-  ManualChequeNumDigits: number;
-  PrintedChequeNumDigits: number;
+  ManualChequeNumDigits: number | null;
+  PrintedChequeNumDigits: number | null;
   /** @mutable="freely, script-only" */
   UserNum: number;
   /** @mutable="freely, script-only" size="256" */

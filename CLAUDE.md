@@ -34,3 +34,4 @@
 - Handle authentication securely via configuration
 - Convert date values from YYYYMMDD format to JavaScript Date objects
 - Implement proper error handling for all API responses
+- When I ask a MoneyWorks question, first try the MoneyWorks MCP

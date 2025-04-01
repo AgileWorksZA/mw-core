@@ -1,25 +1,27 @@
+import fs from "node:fs";
 import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
 import { tableNames } from "../types/constants";
+import type { ANY } from "../types/hack";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../types/moneyworks";
 
-function yyyyMmDdToDate(yyyyMmDd_?: number | string | Date): Date {
-  const yyyyMmDd = String(yyyyMmDd_);
-  if (!yyyyMmDd) return new Date(-1);
-
-  if (/^\d{8}$/.test(yyyyMmDd)) {
-    const year = Number.parseInt(yyyyMmDd.slice(0, 4), 10);
-    const month = Number.parseInt(yyyyMmDd.slice(4, 6), 10) - 1; // JS months are 0-based
-    const day = Number.parseInt(yyyyMmDd.slice(6, 8), 10);
-    return new Date(year, month, day);
-  }
-
-  // Try standard date parsing
-  return new Date(yyyyMmDd);
-}
+// function yyyyMmDdToDate(yyyyMmDd_?: number | string | Date): Date {
+//   const yyyyMmDd = String(yyyyMmDd_);
+//   if (!yyyyMmDd) return new Date(-1);
+//
+//   if (/^\d{8}$/.test(yyyyMmDd)) {
+//     const year = Number.parseInt(yyyyMmDd.slice(0, 4), 10);
+//     const month = Number.parseInt(yyyyMmDd.slice(4, 6), 10) - 1; // JS months are 0-based
+//     const day = Number.parseInt(yyyyMmDd.slice(6, 8), 10);
+//     return new Date(year, month, day);
+//   }
+//
+//   // Try standard date parsing
+//   return new Date(yyyyMmDd);
+// }
 
 /**
  * MoneyWorks API service
@@ -91,7 +93,7 @@ export class MoneyWorksApiService {
       const search = Object.entries(params.search).reduce(
         (acc, [key, value]) => {
           if (value) {
-            acc.push(`${key}=${value}`);
+            acc.push(`${key}="${value}"`);
           }
           return acc;
         },
@@ -143,7 +145,7 @@ export class MoneyWorksApiService {
       };
 
       const url = `${this.getBaseUrl()}/export/table=${table}&${this.buildQueryParams(queryParams)}`;
-      console.log({ url });
+      fs.writeFileSync("url.txt", url);
       const headers = this.createAuthHeaders();
 
       const response = await axios.get(url, { headers });
@@ -189,44 +191,6 @@ export class MoneyWorksApiService {
   }
 
   /**
-   * Parse response data
-   */
-  parseResponse<T extends Record<string, any>>(data: T[]): T[] {
-    return data.map((record) => {
-      const result: any = {};
-
-      // Loop through all properties in the record
-      for (const [key, value] of Object.entries(record)) {
-        // Skip attributes and nested objects
-        if (key === "$" || key === "_") continue;
-
-        if (typeof value === "object" && value !== null) {
-          if (value["#text"] !== undefined) {
-            // console.log(key, value, value['#text']);
-            if (key.toLowerCase().includes("date")) {
-              result[key as keyof T] = yyyyMmDdToDate(value["#text"]);
-            } else {
-              result[key as keyof T] = value["#text"];
-            }
-          }
-        } else if (key.toLowerCase().includes("date")) {
-          console.log(key, value);
-          // Date will have format of yyyymmdd
-          result[key as keyof T] = yyyyMmDdToDate(value);
-        } else {
-          console.log(key, value, "?");
-          result[key as keyof T] = value;
-        }
-
-        // For everything else, just copy the value
-      }
-
-      // console.log(result);
-      return result as T;
-    });
-  }
-
-  /**
    * Import data into MoneyWorks
    *
    * @param table The table to import into
@@ -260,7 +224,8 @@ ${data}
   /**
    * Handle error from API request
    */
-  private handleError(error: any) {
+  private handleError(error: ANY) {
+    fs.writeFileSync("error.json", JSON.stringify(error, null, 2));
     console.error("MoneyWorks API Error:", error);
 
     if (axios.isAxiosError(error)) {

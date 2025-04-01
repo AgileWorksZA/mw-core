@@ -1,4 +1,4 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const AccountOne = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.Date(),
@@ -20,13 +20,13 @@ export const AccountOne = t.Object({
   Currency: t.Optional(t.String()),
   SecurityLevel: t.Optional(t.Number()),
   BankAccountNumber: t.Optional(t.String()),
-  BalanceLimit: t.Optional(t.Number()),
+  BalanceLimit: t.Nullable(t.Optional(t.Number())),
   ManualChequeNumber: t.Optional(t.String()),
   PrintedChequeNumber: t.Optional(t.String()),
   LastStatementImport: t.Optional(t.Date()),
   Comments: t.Optional(t.String()),
-  ManualChequeNumDigits: t.Optional(t.Number()),
-  PrintedChequeNumDigits: t.Optional(t.Number()),
+  ManualChequeNumDigits: t.Nullable(t.Optional(t.Number())),
+  PrintedChequeNumDigits: t.Nullable(t.Optional(t.Number())),
   UserNum: t.Optional(t.Number()),
   UserText: t.Optional(t.String()),
   TaggedText: t.Optional(t.String()),
@@ -44,5 +44,5 @@ export const AccountMany = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });
