@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type Account, AccountFields } from "../../types/interface/account";
 import type {
@@ -18,14 +19,14 @@ export class AccountService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToAccount(data: any): Account {
+  dataCenterJsonToAccount(data: ANY): Account {
     return AccountFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
           `Missing key ${key} in data center json for Account record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
