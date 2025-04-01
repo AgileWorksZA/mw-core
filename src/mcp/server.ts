@@ -14,7 +14,7 @@ server.tool(
   { paging: pagingSchema, search: z.optional(accountZod.partial()) },
   async ({ paging, search }) => {
     const result = await accountingService.getAccounts({ ...paging, search });
-    fs.writeFileSync("accounts.json", JSON.stringify(result, null, 2));
+
     return {
       content: [
         {

@@ -145,15 +145,12 @@ export class MoneyWorksApiService {
       };
 
       const url = `${this.getBaseUrl()}/export/table=${table}&${this.buildQueryParams(queryParams)}`;
-      fs.writeFileSync("url.txt", url);
       const headers = this.createAuthHeaders();
 
       const response = await axios.get(url, { headers });
 
-      console.log(response.data);
       if (queryParams.format.startsWith("xml")) {
         const res = this.parser.parse(response.data);
-        console.log(res);
         const data: T[] = res.table[res.table._name.toLowerCase()] ?? [];
         const limit: number = res.table._count;
         const total: number = res.table._found;
@@ -225,9 +222,6 @@ ${data}
    * Handle error from API request
    */
   private handleError(error: ANY) {
-    fs.writeFileSync("error.json", JSON.stringify(error, null, 2));
-    console.error("MoneyWorks API Error:", error);
-
     if (axios.isAxiosError(error)) {
       if (error.response) {
         throw new Error(
