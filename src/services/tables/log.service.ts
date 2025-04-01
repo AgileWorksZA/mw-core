@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type Log, LogFields } from "../../types/interface/log";
 import type {
@@ -9,7 +10,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks Log table
- * Logs record system activities and events
+ * Log entries in MoneyWorks
  */
 export class LogService {
   private api: MoneyWorksApiService;
@@ -18,12 +19,12 @@ export class LogService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToLog(data: any): Log {
+  dataCenterJsonToLog(data: ANY): Log {
     return LogFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for Log record`);
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -40,17 +41,17 @@ export class LogService {
   async getLogs(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Log>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Log> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
-        sort: params.sort || "when",
+        sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
         format: "xml-verbose",
       };
@@ -67,73 +68,6 @@ export class LogService {
       };
     } catch (error) {
       console.error("Error fetching logs:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get logs for a specific user
-   *
-   * @param username The username to look up
-   * @returns Log entries for that user
-   */
-  async getLogsByUser(username: string) {
-    try {
-      const response = await this.api.export("log", {
-        search: `user=\`${username}\``,
-        sort: "when",
-        direction: "descending",
-        format: "xml-verbose",
-      });
-
-      if (!response?.data?.length) {
-        return { data: [], pagination: { total: 0, limit: 0, offset: 0 } };
-      }
-
-      // Parse the response
-      const logs = Array.isArray(response.data)
-        ? response.data.map(this.dataCenterJsonToLog)
-        : [this.dataCenterJsonToLog(response.data)];
-
-      return {
-        data: logs,
-        pagination: response.pagination,
-      };
-    } catch (error) {
-      console.error(`Error fetching logs for user ${username}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single log entry by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns Log details
-   */
-  async getLogBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("log", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(
-          `Log entry with sequence number "${seqNumber}" not found`,
-        );
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const logData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToLog(logData);
-    } catch (error) {
-      console.error(
-        `Error fetching log with sequence number ${seqNumber}:`,
-        error,
-      );
       throw error;
     }
   }

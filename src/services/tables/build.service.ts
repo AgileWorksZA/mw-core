@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type Build, BuildFields } from "../../types/interface/build";
 import type {
@@ -8,8 +9,8 @@ import schema from "../../types/optimized/build-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
- * Service for interacting with MoneyWorks Build table
- * Builds represent item assembly operations
+ * Service for interacting with MoneyWorks Ubuild table
+ * Ubuild entries in MoneyWorks
  */
 export class BuildService {
   private api: MoneyWorksApiService;
@@ -18,14 +19,14 @@ export class BuildService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToBuild(data: any): Build {
+  dataCenterJsonToUbuild(data: ANY): Build {
     return BuildFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
-          `Missing key ${key} in data center json for Build record`,
+          `Missing key ${key} in data center json for Ubuild record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -42,13 +43,13 @@ export class BuildService {
   async getBuilds(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Build>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Build> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -61,7 +62,7 @@ export class BuildService {
       const { data, pagination } = await this.api.export("build", mwParams);
 
       // Parse the response
-      const builds = data.map(this.dataCenterJsonToBuild);
+      const builds = data.map(this.dataCenterJsonToUbuild);
 
       return {
         data: builds,
@@ -69,37 +70,6 @@ export class BuildService {
       };
     } catch (error) {
       console.error("Error fetching builds:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single build by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns Build details
-   */
-  async getBuildBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("build", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(`Build with sequence number "${seqNumber}" not found`);
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const buildData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToBuild(buildData);
-    } catch (error) {
-      console.error(
-        `Error fetching build with sequence number ${seqNumber}:`,
-        error,
-      );
       throw error;
     }
   }

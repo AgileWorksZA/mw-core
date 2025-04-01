@@ -1,7 +1,8 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type General, GeneralFields } from "../../types/interface/general";
-import {
-  type MoneyWorksConfig,
+import type {
+  MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
 import schema from "../../types/optimized/general-schema";
@@ -9,7 +10,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks General table
- * General contains system-wide preferences and settings
+ * General entries in MoneyWorks
  */
 export class GeneralService {
   private api: MoneyWorksApiService;
@@ -18,14 +19,14 @@ export class GeneralService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToGeneral(data: any): General {
+  dataCenterJsonToGeneral(data: ANY): General {
     return GeneralFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
           `Missing key ${key} in data center json for General record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -34,28 +35,41 @@ export class GeneralService {
   }
 
   /**
-   * Get general settings from MoneyWorks
+   * Get generals from MoneyWorks with pagination and filtering
    *
-   * @returns Parsed general settings data
+   * @param params Query parameters
+   * @returns Parsed general data with pagination metadata
    */
-  async getGeneralSettings() {
+  async getGenerals(params: {
+    limit?: number;
+    offset?: number;
+    search?: Partial<General>;
+    sort?: string;
+    order?: "asc" | "desc";
+  }) {
     try {
-      // Call MoneyWorks API
-      const response = await this.api.export("general", {
+      // Convert from our API params to MoneyWorks params
+      const mwParams: MoneyWorksQueryParams<General> = {
+        limit: params.limit,
+        start: params.offset,
+        search: params.search,
+        sort: params.sort,
+        direction: params.order === "desc" ? "descending" : "ascending",
         format: "xml-verbose",
-      });
+      };
 
-      if (!response?.data) {
-        throw new Error("General settings not found");
-      }
+      // Call MoneyWorks API
+      const { data, pagination } = await this.api.export("general", mwParams);
 
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const generalData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToGeneral(generalData);
+      // Parse the response
+      const generals = data.map(this.dataCenterJsonToGeneral);
+
+      return {
+        data: generals,
+        pagination,
+      };
     } catch (error) {
-      console.error("Error fetching general settings:", error);
+      console.error("Error fetching generals:", error);
       throw error;
     }
   }

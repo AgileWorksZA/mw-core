@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type Memo, MemoFields } from "../../types/interface/memo";
 import type {
@@ -9,7 +10,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks Memo table
- * Memos are notes attached to other records
+ * Memo entries in MoneyWorks
  */
 export class MemoService {
   private api: MoneyWorksApiService;
@@ -18,12 +19,12 @@ export class MemoService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToMemo(data: any): Memo {
+  dataCenterJsonToMemo(data: ANY): Memo {
     return MemoFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for Memo record`);
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -40,13 +41,13 @@ export class MemoService {
   async getMemos(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Memo>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Memo> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -67,73 +68,6 @@ export class MemoService {
       };
     } catch (error) {
       console.error("Error fetching memos:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get memos for a specific record type and ID
-   *
-   * @param recordType The type of record (e.g., "name", "transaction")
-   * @param recordId The ID of the record
-   * @returns Memo details
-   */
-  async getMemosByRecord(recordType: string, recordId: string) {
-    try {
-      const response = await this.api.export("memo", {
-        search: `recordtype=\`${recordType}\` AND recordid=\`${recordId}\``,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data?.length) {
-        return { data: [], pagination: { total: 0, limit: 0, offset: 0 } };
-      }
-
-      // Parse the response
-      const memos = Array.isArray(response.data)
-        ? response.data.map(this.dataCenterJsonToMemo)
-        : [this.dataCenterJsonToMemo(response.data)];
-
-      return {
-        data: memos,
-        pagination: response.pagination,
-      };
-    } catch (error) {
-      console.error(
-        `Error fetching memos for ${recordType} ${recordId}:`,
-        error,
-      );
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single memo by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns Memo details
-   */
-  async getMemoBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("memo", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(`Memo with sequence number "${seqNumber}" not found`);
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const memoData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToMemo(memoData);
-    } catch (error) {
-      console.error(
-        `Error fetching memo with sequence number ${seqNumber}:`,
-        error,
-      );
       throw error;
     }
   }

@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type Message, MessageFields } from "../../types/interface/message";
 import type {
@@ -18,14 +19,12 @@ export class MessageService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToMessage(data: any): Message {
+  dataCenterJsonToMessage(data: ANY): Message {
     return MessageFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(
-          `Missing key ${key} in data center json for Message record`,
-        );
+        console.error(`Missing key ${key} in data center json for record`);
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -42,17 +41,17 @@ export class MessageService {
   async getMessages(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Message>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Message> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
-        sort: params.sort || "when",
+        sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
         format: "xml-verbose",
       };
@@ -69,73 +68,6 @@ export class MessageService {
       };
     } catch (error) {
       console.error("Error fetching messages:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get messages for a specific user
-   *
-   * @param username The username to look up
-   * @returns Message entries for that user
-   */
-  async getMessagesByUser(username: string) {
-    try {
-      const response = await this.api.export("message", {
-        search: `user=\`${username}\``,
-        sort: "when",
-        direction: "descending",
-        format: "xml-verbose",
-      });
-
-      if (!response?.data?.length) {
-        return { data: [], pagination: { total: 0, limit: 0, offset: 0 } };
-      }
-
-      // Parse the response
-      const messages = Array.isArray(response.data)
-        ? response.data.map(this.dataCenterJsonToMessage)
-        : [this.dataCenterJsonToMessage(response.data)];
-
-      return {
-        data: messages,
-        pagination: response.pagination,
-      };
-    } catch (error) {
-      console.error(`Error fetching messages for user ${username}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single message by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns Message details
-   */
-  async getMessageBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("message", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(
-          `Message with sequence number "${seqNumber}" not found`,
-        );
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const messageData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToMessage(messageData);
-    } catch (error) {
-      console.error(
-        `Error fetching message with sequence number ${seqNumber}:`,
-        error,
-      );
       throw error;
     }
   }

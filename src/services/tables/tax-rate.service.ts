@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type TaxRate, TaxRateFields } from "../../types/interface/tax-rate";
 import type {
@@ -9,7 +10,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks TaxRate table
- * Tax rates define different tax codes and rates
+ * Tax rates represent tax codes and rates
  */
 export class TaxRateService {
   private api: MoneyWorksApiService;
@@ -18,14 +19,14 @@ export class TaxRateService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToTaxRate(data: any): TaxRate {
+  dataCenterJsonToTaxRate(data: ANY): TaxRate {
     return TaxRateFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
           `Missing key ${key} in data center json for TaxRate record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -34,21 +35,21 @@ export class TaxRateService {
   }
 
   /**
-   * Get tax rates from MoneyWorks with pagination and filtering
+   * Get taxRates from MoneyWorks with pagination and filtering
    *
    * @param params Query parameters
-   * @returns Parsed tax rate data with pagination metadata
+   * @returns Parsed tax-rate data with pagination metadata
    */
   async getTaxRates(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<TaxRate>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<TaxRate> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -58,7 +59,7 @@ export class TaxRateService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("taxrate", mwParams);
+      const { data, pagination } = await this.api.export("tax-rate", mwParams);
 
       // Parse the response
       const taxRates = data.map(this.dataCenterJsonToTaxRate);
@@ -68,64 +69,7 @@ export class TaxRateService {
         pagination,
       };
     } catch (error) {
-      console.error("Error fetching tax rates:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single tax rate by code
-   *
-   * @param code The tax rate code to look up
-   * @returns TaxRate details
-   */
-  async getTaxRateByCode(code: string) {
-    try {
-      const response = await this.api.export("taxrate", {
-        search: `code=\`${code}\``,
-        format: "xml-verbose",
-      });
-
-      if (!response.data[0]) {
-        throw new Error(`Tax rate with code "${code}" not found`);
-      }
-
-      return this.dataCenterJsonToTaxRate(response.data[0]);
-    } catch (error) {
-      console.error(`Error fetching tax rate with code ${code}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single tax rate by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns TaxRate details
-   */
-  async getTaxRateBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("taxrate", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(
-          `Tax rate with sequence number "${seqNumber}" not found`,
-        );
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const taxRateData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToTaxRate(taxRateData);
-    } catch (error) {
-      console.error(
-        `Error fetching tax rate with sequence number ${seqNumber}:`,
-        error,
-      );
+      console.error("Error fetching taxRates:", error);
       throw error;
     }
   }

@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type AutoSplit,
@@ -12,7 +13,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks AutoSplit table
- * AutoSplits define rules for automatically splitting transaction amounts
+ * Auto splits represent automatic transaction splits
  */
 export class AutoSplitService {
   private api: MoneyWorksApiService;
@@ -21,14 +22,14 @@ export class AutoSplitService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToAutoSplit(data: any): AutoSplit {
+  dataCenterJsonToAutoSplit(data: ANY): AutoSplit {
     return AutoSplitFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
           `Missing key ${key} in data center json for AutoSplit record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -40,18 +41,18 @@ export class AutoSplitService {
    * Get autoSplits from MoneyWorks with pagination and filtering
    *
    * @param params Query parameters
-   * @returns Parsed autoSplit data with pagination metadata
+   * @returns Parsed auto-split data with pagination metadata
    */
   async getAutoSplits(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<AutoSplit>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<AutoSplit> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -61,7 +62,10 @@ export class AutoSplitService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("autosplit", mwParams);
+      const { data, pagination } = await this.api.export(
+        "auto-split",
+        mwParams,
+      );
 
       // Parse the response
       const autoSplits = data.map(this.dataCenterJsonToAutoSplit);
@@ -72,31 +76,6 @@ export class AutoSplitService {
       };
     } catch (error) {
       console.error("Error fetching autoSplits:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single account by code
-   *
-   * @param key
-   * @param code The account code to look up
-   * @returns Account details
-   */
-  async getAutoSplitBy(key: string, code: string) {
-    try {
-      const response = await this.api.export("autosplit", {
-        search: `${key}=\`${code}\``,
-        format: "xml-verbose",
-      });
-
-      if (!response.data[0]) {
-        throw new Error(`Account with code "${code}" not found`);
-      }
-
-      return this.dataCenterJsonToAutoSplit(response.data[0]);
-    } catch (error) {
-      console.error(`Error fetching account with code ${code}:`, error);
       throw error;
     }
   }

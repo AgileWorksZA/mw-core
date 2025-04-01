@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type Transaction,
@@ -21,14 +22,12 @@ export class TransactionService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToTransaction(data: any): Transaction {
+  dataCenterJsonToTransaction(data: ANY): Transaction {
     return TransactionFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(
-          `Missing key ${key} in data center json for Transaction record`,
-        );
+        console.error(`Missing key ${key} in data center json for record`);
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -45,13 +44,13 @@ export class TransactionService {
   async getTransactions(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Transaction>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Transaction> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -75,39 +74,6 @@ export class TransactionService {
       };
     } catch (error) {
       console.error("Error fetching transactions:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single transaction by ID (sequence number)
-   *
-   * @param sequenceNumber The transaction sequence number to look up
-   * @returns Transaction details
-   */
-  async getTransactionBySequenceNumber(sequenceNumber: number) {
-    try {
-      const response = await this.api.export("transaction", {
-        search: `sequencenumber=${sequenceNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(
-          `Transaction with sequence number "${sequenceNumber}" not found`,
-        );
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const transactionData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToTransaction(transactionData);
-    } catch (error) {
-      console.error(
-        `Error fetching transaction with sequence number ${sequenceNumber}:`,
-        error,
-      );
       throw error;
     }
   }

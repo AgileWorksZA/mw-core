@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type Department,
@@ -12,7 +13,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks Department table
- * Departments represent cost centers or profit centers
+ * Department entries in MoneyWorks
  */
 export class DepartmentService {
   private api: MoneyWorksApiService;
@@ -21,14 +22,14 @@ export class DepartmentService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToDepartment(data: any): Department {
+  dataCenterJsonToDepartment(data: ANY): Department {
     return DepartmentFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
           `Missing key ${key} in data center json for Department record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -45,13 +46,13 @@ export class DepartmentService {
   async getDepartments(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Department>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Department> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -75,63 +76,6 @@ export class DepartmentService {
       };
     } catch (error) {
       console.error("Error fetching departments:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single department by code
-   *
-   * @param code The department code to look up
-   * @returns Department details
-   */
-  async getDepartmentByCode(code: string) {
-    try {
-      const response = await this.api.export("department", {
-        search: `code=\`${code}\``,
-        format: "xml-verbose",
-      });
-
-      if (!response.data[0]) {
-        throw new Error(`Department with code "${code}" not found`);
-      }
-
-      return this.dataCenterJsonToDepartment(response.data[0]);
-    } catch (error) {
-      console.error(`Error fetching department with code ${code}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single department by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns Department details
-   */
-  async getDepartmentBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("department", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(
-          `Department with sequence number "${seqNumber}" not found`,
-        );
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const departmentData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToDepartment(departmentData);
-    } catch (error) {
-      console.error(
-        `Error fetching department with sequence number ${seqNumber}:`,
-        error,
-      );
       throw error;
     }
   }

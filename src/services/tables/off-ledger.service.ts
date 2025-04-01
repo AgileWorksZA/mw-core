@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type OffLedger,
@@ -12,7 +13,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks OffLedger table
- * OffLedger entries represent transactions outside the main ledger
+ * Off ledger items represent items not in the general ledger
  */
 export class OffLedgerService {
   private api: MoneyWorksApiService;
@@ -21,14 +22,14 @@ export class OffLedgerService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToOffLedger(data: any): OffLedger {
+  dataCenterJsonToOffLedger(data: ANY): OffLedger {
     return OffLedgerFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
           `Missing key ${key} in data center json for OffLedger record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -37,21 +38,21 @@ export class OffLedgerService {
   }
 
   /**
-   * Get offLedger entries from MoneyWorks with pagination and filtering
+   * Get offLedgerItems from MoneyWorks with pagination and filtering
    *
    * @param params Query parameters
-   * @returns Parsed offLedger data with pagination metadata
+   * @returns Parsed off-ledger data with pagination metadata
    */
-  async getOffLedgerEntries(params: {
+  async getOffLedgerItems(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<OffLedger>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<OffLedger> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -61,85 +62,20 @@ export class OffLedgerService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("offledger", mwParams);
+      const { data, pagination } = await this.api.export(
+        "off-ledger",
+        mwParams,
+      );
 
       // Parse the response
-      const offLedgerEntries = data.map(this.dataCenterJsonToOffLedger);
+      const offLedgerItems = data.map(this.dataCenterJsonToOffLedger);
 
       return {
-        data: offLedgerEntries,
+        data: offLedgerItems,
         pagination,
       };
     } catch (error) {
-      console.error("Error fetching offLedger entries:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get offLedger entries for a specific account
-   *
-   * @param accountCode The account code
-   * @returns OffLedger entries for the account
-   */
-  async getOffLedgerEntriesByAccount(accountCode: string) {
-    try {
-      const response = await this.api.export("offledger", {
-        search: `account=\`${accountCode}\``,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data?.length) {
-        return { data: [], pagination: { total: 0, limit: 0, offset: 0 } };
-      }
-
-      // Parse the response
-      const offLedgerEntries = Array.isArray(response.data)
-        ? response.data.map(this.dataCenterJsonToOffLedger)
-        : [this.dataCenterJsonToOffLedger(response.data)];
-
-      return {
-        data: offLedgerEntries,
-        pagination: response.pagination,
-      };
-    } catch (error) {
-      console.error(
-        `Error fetching offLedger entries for account ${accountCode}:`,
-        error,
-      );
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single offLedger entry by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns OffLedger entry
-   */
-  async getOffLedgerEntryBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("offledger", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(
-          `OffLedger entry with sequence number "${seqNumber}" not found`,
-        );
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const offLedgerData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToOffLedger(offLedgerData);
-    } catch (error) {
-      console.error(
-        `Error fetching offLedger entry with sequence number ${seqNumber}:`,
-        error,
-      );
+      console.error("Error fetching offLedgerItems:", error);
       throw error;
     }
   }

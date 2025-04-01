@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type Stickies, StickiesFields } from "../../types/interface/stickies";
 import type {
@@ -9,7 +10,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks Stickies table
- * Stickies are sticky notes attached to records
+ * Stickies entries in MoneyWorks
  */
 export class StickiesService {
   private api: MoneyWorksApiService;
@@ -18,14 +19,14 @@ export class StickiesService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToStickies(data: any): Stickies {
+  dataCenterJsonToStickies(data: ANY): Stickies {
     return StickiesFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
           `Missing key ${key} in data center json for Stickies record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -34,7 +35,7 @@ export class StickiesService {
   }
 
   /**
-   * Get stickies from MoneyWorks with pagination and filtering
+   * Get stickiess from MoneyWorks with pagination and filtering
    *
    * @param params Query parameters
    * @returns Parsed stickies data with pagination metadata
@@ -42,13 +43,13 @@ export class StickiesService {
   async getStickies(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Stickies>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Stickies> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -69,75 +70,6 @@ export class StickiesService {
       };
     } catch (error) {
       console.error("Error fetching stickies:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get stickies for a specific record type and ID
-   *
-   * @param recordType The record type (e.g., "name", "transaction")
-   * @param recordId The record ID
-   * @returns Stickies for the record
-   */
-  async getStickiesByRecord(recordType: string, recordId: string) {
-    try {
-      const response = await this.api.export("stickies", {
-        search: `recordtype=\`${recordType}\` AND recordid=\`${recordId}\``,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data?.length) {
-        return { data: [], pagination: { total: 0, limit: 0, offset: 0 } };
-      }
-
-      // Parse the response
-      const stickies = Array.isArray(response.data)
-        ? response.data.map(this.dataCenterJsonToStickies)
-        : [this.dataCenterJsonToStickies(response.data)];
-
-      return {
-        data: stickies,
-        pagination: response.pagination,
-      };
-    } catch (error) {
-      console.error(
-        `Error fetching stickies for ${recordType} ${recordId}:`,
-        error,
-      );
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single sticky by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns Stickies details
-   */
-  async getStickyBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("stickies", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(
-          `Sticky note with sequence number "${seqNumber}" not found`,
-        );
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const stickyData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToStickies(stickyData);
-    } catch (error) {
-      console.error(
-        `Error fetching sticky note with sequence number ${seqNumber}:`,
-        error,
-      );
       throw error;
     }
   }

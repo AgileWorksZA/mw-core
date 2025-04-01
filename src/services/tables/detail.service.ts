@@ -1,3 +1,4 @@
+import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import { type Detail, DetailFields } from "../../types/interface/detail";
 import type {
@@ -9,7 +10,7 @@ import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks Detail table
- * Details are line items in transactions
+ * Detail entries in MoneyWorks
  */
 export class DetailService {
   private api: MoneyWorksApiService;
@@ -18,14 +19,14 @@ export class DetailService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToDetail(data: any): Detail {
+  dataCenterJsonToDetail(data: ANY): Detail {
     return DetailFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(
           `Missing key ${key} in data center json for Detail record`,
         );
       }
-      (acc as any)[key] = enforceType(
+      (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
@@ -34,7 +35,7 @@ export class DetailService {
   }
 
   /**
-   * Get detail records from MoneyWorks with pagination and filtering
+   * Get details from MoneyWorks with pagination and filtering
    *
    * @param params Query parameters
    * @returns Parsed detail data with pagination metadata
@@ -42,13 +43,13 @@ export class DetailService {
   async getDetails(params: {
     limit?: number;
     offset?: number;
-    search?: string;
+    search?: Partial<Detail>;
     sort?: string;
     order?: "asc" | "desc";
   }) {
     try {
       // Convert from our API params to MoneyWorks params
-      const mwParams: MoneyWorksQueryParams = {
+      const mwParams: MoneyWorksQueryParams<Detail> = {
         limit: params.limit,
         start: params.offset,
         search: params.search,
@@ -69,72 +70,6 @@ export class DetailService {
       };
     } catch (error) {
       console.error("Error fetching details:", error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get detail records for a specific transaction
-   *
-   * @param transactionId The transaction sequence number
-   * @returns Detail records for the transaction
-   */
-  async getDetailsByTransaction(transactionId: number) {
-    try {
-      const response = await this.api.export("detail", {
-        search: `transactionreference=${transactionId}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data?.length) {
-        return { data: [], pagination: { total: 0, limit: 0, offset: 0 } };
-      }
-
-      // Parse the response
-      const details = Array.isArray(response.data)
-        ? response.data.map(this.dataCenterJsonToDetail)
-        : [this.dataCenterJsonToDetail(response.data)];
-
-      return {
-        data: details,
-        pagination: response.pagination,
-      };
-    } catch (error) {
-      console.error(
-        `Error fetching details for transaction ${transactionId}:`,
-        error,
-      );
-      throw error;
-    }
-  }
-
-  /**
-   * Get a single detail by sequence number
-   *
-   * @param seqNumber The sequence number to look up
-   * @returns Detail record
-   */
-  async getDetailBySequenceNumber(seqNumber: number) {
-    try {
-      const response = await this.api.export("detail", {
-        search: `sequencenumber=${seqNumber}`,
-        format: "xml-verbose",
-      });
-
-      if (!response?.data) {
-        throw new Error(`Detail with sequence number "${seqNumber}" not found`);
-      }
-
-      // With xml2js and explicitArray: false, we may get a single object instead of an array
-      const detailData = Array.isArray(response.data)
-        ? response.data[0]
-        : response.data;
-      return this.dataCenterJsonToDetail(detailData);
-    } catch (error) {
-      console.error(
-        `Error fetching detail with sequence number ${seqNumber}:`,
-        error,
-      );
       throw error;
     }
   }
