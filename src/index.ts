@@ -28,6 +28,7 @@ import { transactionRoutes } from "./routes/transaction.routes";
 import { userRoutes } from "./routes/user.routes";
 import { user2Routes } from "./routes/user2.routes";
 
+import { schema } from "./mcp/resource/schema";
 import Account from "./types/json-schema/account-schema.json";
 import AutoSplit from "./types/json-schema/autosplit-schema.json";
 import BankRecs from "./types/json-schema/bankrecs-schema.json";
@@ -137,3 +138,4 @@ console.log(
 console.log(
   `📚 Swagger documentation available at http://${app.server?.hostname}:${app.server?.port}/swagger\``,
 );
+schema;

@@ -7,5 +7,9 @@ export const pagingSchema = z.object({
   next: z.number(),
   prev: z.number(),
 });
+export const pagingSelectionSchema = z.object({
+  limit: z.number(),
+  offset: z.number(),
+});
 
 export type PagingSchema = z.infer<typeof pagingSchema>;

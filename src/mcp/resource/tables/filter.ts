@@ -3,7 +3,7 @@ import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { FilterService } from "../../../services/tables/filter.service";
 import { filterZod } from "../../../types/zod/filter";
-import { pagingSchema } from "../../../types/zod/paging";
+import { pagingSelectionSchema } from "../../../types/zod/paging";
 
 const filterService = new FilterService(loadMoneyWorksConfig());
 
@@ -11,7 +11,7 @@ export function registerFilterTools(server: McpServer) {
   server.tool(
     "searchFilters",
     "Search for filters",
-    { paging: pagingSchema, search: z.optional(filterZod.partial()) },
+    { paging: pagingSelectionSchema, search: z.optional(filterZod.partial()) },
     async ({ paging, search }) => {
       const result = await filterService.getFilters({ ...paging, search });
 

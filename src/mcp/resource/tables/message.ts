@@ -3,7 +3,7 @@ import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { MessageService } from "../../../services/tables/message.service";
 import { messageZod } from "../../../types/zod/message";
-import { pagingSchema } from "../../../types/zod/paging";
+import { pagingSelectionSchema } from "../../../types/zod/paging";
 
 const messageService = new MessageService(loadMoneyWorksConfig());
 
@@ -11,7 +11,7 @@ export function registerMessageTools(server: McpServer) {
   server.tool(
     "searchMessages",
     "Search for messages",
-    { paging: pagingSchema, search: z.optional(messageZod.partial()) },
+    { paging: pagingSelectionSchema, search: z.optional(messageZod.partial()) },
     async ({ paging, search }) => {
       const result = await messageService.getMessages({ ...paging, search });
 

@@ -1,5 +1,6 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
 import { server } from "./config";
+import { registerSchemaTools } from "./resource/schema";
 import { registerAccountTools } from "./resource/tables/account";
 import { registerAutoSplitTools } from "./resource/tables/auto-split";
 import { registerBankRecsTools } from "./resource/tables/bank-recs";
@@ -53,6 +54,7 @@ registerTaxRateTools(server);
 registerTransactionTools(server);
 registerUserTools(server);
 registerUser2Tools(server);
+registerSchemaTools(server);
 
 const transport = new StdioServerTransport();
 (async () => {

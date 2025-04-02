@@ -3,7 +3,7 @@ import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { ListsService } from "../../../services/tables/lists.service";
 import { listsZod } from "../../../types/zod/lists";
-import { pagingSchema } from "../../../types/zod/paging";
+import { pagingSelectionSchema } from "../../../types/zod/paging";
 
 const listsService = new ListsService(loadMoneyWorksConfig());
 
@@ -11,7 +11,7 @@ export function registerListTools(server: McpServer) {
   server.tool(
     "searchLists",
     "Search for lists",
-    { paging: pagingSchema, search: z.optional(listsZod.partial()) },
+    { paging: pagingSelectionSchema, search: z.optional(listsZod.partial()) },
     async ({ paging, search }) => {
       const result = await listsService.getLists({ ...paging, search });
 

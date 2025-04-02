@@ -3,7 +3,7 @@ import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { GeneralService } from "../../../services/tables/general.service";
 import { generalZod } from "../../../types/zod/general";
-import { pagingSchema } from "../../../types/zod/paging";
+import { pagingSelectionSchema } from "../../../types/zod/paging";
 
 const generalService = new GeneralService(loadMoneyWorksConfig());
 
@@ -11,7 +11,7 @@ export function registerGeneralTools(server: McpServer) {
   server.tool(
     "searchGeneral",
     "Search for general settings",
-    { paging: pagingSchema, search: z.optional(generalZod.partial()) },
+    { paging: pagingSelectionSchema, search: z.optional(generalZod.partial()) },
     async ({ paging, search }) => {
       const result = await generalService.getGenerals({ ...paging, search });
 

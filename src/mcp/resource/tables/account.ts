@@ -3,7 +3,7 @@ import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { AccountService } from "../../../services/tables/account.service";
 import { accountZod } from "../../../types/zod/account";
-import { pagingSchema } from "../../../types/zod/paging";
+import { pagingSelectionSchema } from "../../../types/zod/paging";
 
 const accountingService = new AccountService(loadMoneyWorksConfig());
 
@@ -11,7 +11,7 @@ export function registerAccountTools(server: McpServer) {
   server.tool(
     "searchAccounts",
     "Search for accounts",
-    { paging: pagingSchema, search: z.optional(accountZod.partial()) },
+    { paging: pagingSelectionSchema, search: z.optional(accountZod.partial()) },
     async ({ paging, search }) => {
       const result = await accountingService.getAccounts({ ...paging, search });
 

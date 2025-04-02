@@ -3,7 +3,7 @@ import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { DepartmentService } from "../../../services/tables/department.service";
 import { departmentZod } from "../../../types/zod/department";
-import { pagingSchema } from "../../../types/zod/paging";
+import { pagingSelectionSchema } from "../../../types/zod/paging";
 
 const departmentService = new DepartmentService(loadMoneyWorksConfig());
 
@@ -11,7 +11,7 @@ export function registerDepartmentTools(server: McpServer) {
   server.tool(
     "searchDepartments",
     "Search for departments",
-    { paging: pagingSchema, search: z.optional(departmentZod.partial()) },
+    { paging: pagingSelectionSchema, search: z.optional(departmentZod.partial()) },
     async ({ paging, search }) => {
       const result = await departmentService.getDepartments({
         ...paging,
