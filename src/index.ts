@@ -1,6 +1,7 @@
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import type { OpenAPIV3 } from "openapi-types";
+
 import { accountRoutes } from "./routes/account.routes";
 import { autoSplitRoutes } from "./routes/auto-split.routes";
 import { bankRecsRoutes } from "./routes/bank-recs.routes";
