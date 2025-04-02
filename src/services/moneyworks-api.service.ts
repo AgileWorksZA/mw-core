@@ -78,7 +78,10 @@ export class MoneyWorksApiService {
   /**
    * Build query parameters string
    */
-  private buildQueryParams(params: MoneyWorksQueryParams): string {
+  private buildQueryParams(
+    params: MoneyWorksQueryParams,
+    parent?: string,
+  ): string {
     const queryParts: string[] = [];
 
     if (params.limit !== undefined) {
@@ -93,7 +96,11 @@ export class MoneyWorksApiService {
       const search = Object.entries(params.search).reduce(
         (acc, [key, value]) => {
           if (value) {
-            acc.push(`${key}="${value}"`);
+            if (parent) {
+              acc.push(`${parent}.${key}="${value}"`);
+            } else {
+              acc.push(`${key}="${value}"`);
+            }
           }
           return acc;
         },
@@ -144,7 +151,11 @@ export class MoneyWorksApiService {
         format: params.format || "xml-verbose",
       };
 
-      const url = `${this.getBaseUrl()}/export/table=${table}&${this.buildQueryParams(queryParams)}`;
+      const exportTable =
+        table.toLowerCase() === "detail" ? "transaction" : table;
+      const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
+
+      const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
       const headers = this.createAuthHeaders();
 
       const response = await axios.get(url, { headers });

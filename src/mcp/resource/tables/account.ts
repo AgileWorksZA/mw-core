@@ -1,9 +1,9 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
 import { z } from "zod";
-import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
-import { AccountService } from "../../services/tables/account.service";
-import { accountZod } from "../../types/zod/account";
-import { pagingSchema } from "../../types/zod/paging";
+import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
+import { AccountService } from "../../../services/tables/account.service";
+import { accountZod } from "../../../types/zod/account";
+import { pagingSchema } from "../../../types/zod/paging";
 
 const accountingService = new AccountService(loadMoneyWorksConfig());
 
@@ -19,7 +19,7 @@ export function registerAccountTools(server: McpServer) {
         content: [
           {
             type: "text",
-            text: JSON.stringify(result, null, 2),
+            text: JSON.stringify(result),
           },
         ],
       };
