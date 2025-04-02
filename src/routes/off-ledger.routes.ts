@@ -1,14 +1,16 @@
 import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { OffLedgerService } from "../services/tables/off-ledger.service";
-import { OffLedgerMany, OffLedgerOne } from "../types/eden/OffLedger";
+import { offLedgerObject } from "../types/constants.eden";
+import { OffLedgerMany } from "../types/eden/OffLedger";
+import { type OffLedger, OffLedgerFields } from "../types/interface/off-ledger";
 
 // Initialize the off-ledger service with configuration
 const config = loadMoneyWorksConfig();
 const offLedgerService = new OffLedgerService(config);
 
 export const offLedgerRoutes = new Elysia({ prefix: "/api" }).get(
-  "/off-ledger",
+  "/off-ledgers",
   async ({ query }) => {
     const { limit = 10, offset = 0, sort, order, search } = query;
 
@@ -18,10 +20,10 @@ export const offLedgerRoutes = new Elysia({ prefix: "/api" }).get(
         offset: Number(offset),
         sort,
         order: order as "asc" | "desc",
-        search,
+        search: search as unknown as OffLedger,
       });
     } catch (error) {
-      console.error("Error in GET /off-ledger:", error);
+      console.error("Error in GET /off-ledgers:", error);
       throw error;
     }
   },
@@ -31,10 +33,11 @@ export const offLedgerRoutes = new Elysia({ prefix: "/api" }).get(
       offset: t.Optional(t.Numeric()),
       sort: t.Optional(t.String()),
       order: t.Optional(t.String()),
-      search: t.Optional(t.String()),
+      search: t.Optional(offLedgerObject),
     }),
     detail: {
-      summary: "Get all off-ledger entries",
+      summary: "Get off-ledgers.",
+      description: `Get all off-ledgers. Search by: ${OffLedgerFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
     response: OffLedgerMany,

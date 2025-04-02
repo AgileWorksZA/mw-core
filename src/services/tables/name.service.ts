@@ -22,7 +22,7 @@ export class NameService {
   dataCenterJsonToName(data: ANY): Name {
     return NameFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for record`);
+        console.error(`Missing key ${key} in data center json for Name record`);
       }
       (acc as ANY)[key] = enforceType(
         data[key.toLowerCase()],

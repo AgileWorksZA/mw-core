@@ -1,70 +1,47 @@
 import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { TransactionService } from "../services/tables/transaction.service";
-import { TransactionMany, TransactionOne } from "../types/eden/Transaction";
+import { transactionObject } from "../types/constants.eden";
+import {
+  type Transaction,
+  TransactionFields,
+} from "../types/interface/transaction";
 
 // Initialize the transaction service with configuration
 const config = loadMoneyWorksConfig();
 const transactionService = new TransactionService(config);
 
-export const transactionRoutes = new Elysia({ prefix: "/api" })
-  .get(
-    "/transactions",
-    async ({ query }) => {
-      const { limit = 10, offset = 0, sort, order, search } = query;
+export const transactionRoutes = new Elysia({ prefix: "/api" }).get(
+  "/transactions",
+  async ({ query }) => {
+    const { limit = 10, offset = 0, sort, order, search } = query;
 
-      try {
-        return await transactionService.getTransactions({
-          limit: Number(limit),
-          offset: Number(offset),
-          sort,
-          order: order as "asc" | "desc",
-          search,
-        });
-      } catch (error) {
-        console.error("Error in GET /transactions:", error);
-        throw error;
-      }
+    try {
+      return await transactionService.getTransactions({
+        limit: Number(limit),
+        offset: Number(offset),
+        sort,
+        order: order as "asc" | "desc",
+        search: search as unknown as Transaction,
+      });
+    } catch (error) {
+      console.error("Error in GET /transactions:", error);
+      throw error;
+    }
+  },
+  {
+    query: t.Object({
+      limit: t.Optional(t.Numeric()),
+      offset: t.Optional(t.Numeric()),
+      sort: t.Optional(t.String()),
+      order: t.Optional(t.String()),
+      search: t.Optional(transactionObject),
+    }),
+    detail: {
+      summary: "Get transactions.",
+      description: `Get all transactions. Search by: ${TransactionFields.join(", ")}`,
+      tags: ["MoneyWorks Data"],
     },
-    {
-      query: t.Object({
-        limit: t.Optional(t.Numeric()),
-        offset: t.Optional(t.Numeric()),
-        sort: t.Optional(t.String()),
-        order: t.Optional(t.String()),
-        search: t.Optional(t.String()),
-      }),
-      detail: {
-        summary: "Get all transactions",
-        tags: ["MoneyWorks Data"],
-      },
-      response: TransactionMany,
-    },
-  )
-  .get(
-    "/transactions/:sequenceNumber",
-    async ({ params }) => {
-      try {
-        const sequenceNumber = Number(params.sequenceNumber);
-        return await transactionService.getTransactionBySequenceNumber(
-          sequenceNumber,
-        );
-      } catch (error) {
-        console.error(
-          `Error in GET /transactions/${params.sequenceNumber}:`,
-          error,
-        );
-        throw error;
-      }
-    },
-    {
-      params: t.Object({
-        sequenceNumber: t.Numeric(),
-      }),
-      detail: {
-        summary: "Get transaction by sequence number",
-        tags: ["MoneyWorks Data"],
-      },
-      response: TransactionOne,
-    },
-  );
+    // response: TransactionMany,
+  },
+);

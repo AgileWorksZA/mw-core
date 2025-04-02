@@ -2,7 +2,6 @@ import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { BankRecsService } from "../services/tables/bank-recs.service";
 import { bankRecsObject } from "../types/constants.eden";
-import { BankRecsMany } from "../types/eden/BankRecs";
 
 // Initialize the bank-recs service with configuration
 const config = loadMoneyWorksConfig();
@@ -38,6 +37,6 @@ export const bankRecsRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Get all bank reconciliation entries",
       tags: ["MoneyWorks Data"],
     },
-    response: BankRecsMany,
+    // response: BankRecsMany,
   },
 );

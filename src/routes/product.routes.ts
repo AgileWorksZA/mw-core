@@ -1,94 +1,45 @@
 import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { ProductService } from "../services/tables/product.service";
-import { ProductMany, ProductOne } from "../types/eden/Product";
+import { productObject } from "../types/constants.eden";
+import { ProductMany } from "../types/eden/Product";
+import { type Product, ProductFields } from "../types/interface/product";
 
 // Initialize the product service with configuration
 const config = loadMoneyWorksConfig();
 const productService = new ProductService(config);
 
-export const productRoutes = new Elysia({ prefix: "/api" })
-  .get(
-    "/products",
-    async ({ query }) => {
-      const { limit = 10, offset = 0, sort, order, search } = query;
+export const productRoutes = new Elysia({ prefix: "/api" }).get(
+  "/products",
+  async ({ query }) => {
+    const { limit = 10, offset = 0, sort, order, search } = query;
 
-      try {
-        return await productService.getProducts({
-          limit: Number(limit),
-          offset: Number(offset),
-          sort,
-          order: order as "asc" | "desc",
-          search,
-        });
-      } catch (error) {
-        console.error("Error in GET /products:", error);
-        throw error;
-      }
+    try {
+      return await productService.getProducts({
+        limit: Number(limit),
+        offset: Number(offset),
+        sort,
+        order: order as "asc" | "desc",
+        search: search as unknown as Product,
+      });
+    } catch (error) {
+      console.error("Error in GET /products:", error);
+      throw error;
+    }
+  },
+  {
+    query: t.Object({
+      limit: t.Optional(t.Numeric()),
+      offset: t.Optional(t.Numeric()),
+      sort: t.Optional(t.String()),
+      order: t.Optional(t.String()),
+      search: t.Optional(productObject),
+    }),
+    detail: {
+      summary: "Get products.",
+      description: `Get all products. Search by: ${ProductFields.join(", ")}`,
+      tags: ["MoneyWorks Data"],
     },
-    {
-      query: t.Object({
-        limit: t.Optional(t.Numeric()),
-        offset: t.Optional(t.Numeric()),
-        sort: t.Optional(t.String()),
-        order: t.Optional(t.String()),
-        search: t.Optional(t.String()),
-      }),
-      detail: {
-        summary: "Get all products",
-        tags: ["MoneyWorks Data"],
-      },
-      response: ProductMany,
-    },
-  )
-  .get(
-    "/products/:code",
-    async ({ params }) => {
-      try {
-        const code = params.code;
-
-        // Try to parse as number for sequence number lookup
-        if (!isNaN(Number(code)) && !isNaN(Number.parseFloat(code))) {
-          return await productService.getProductBySequenceNumber(Number(code));
-        }
-
-        // Otherwise treat as code
-        return await productService.getProductByCode(code);
-      } catch (error) {
-        console.error(`Error in GET /products/${params.code}:`, error);
-        throw error;
-      }
-    },
-    {
-      params: t.Object({
-        code: t.String(),
-      }),
-      detail: {
-        summary: "Get product by code",
-        tags: ["MoneyWorks Data"],
-      },
-      response: ProductOne,
-    },
-  )
-  .get(
-    "/products/by-sequence/:sequence",
-    async ({ params }) => {
-      try {
-        const sequence = params.sequence;
-        return await productService.getProductBySequenceNumber(sequence);
-      } catch (error) {
-        console.error(`Error in GET /products/${params.sequence}:`, error);
-        throw error;
-      }
-    },
-    {
-      params: t.Object({
-        sequence: t.Numeric(),
-      }),
-      detail: {
-        summary: "Get product by sequence number",
-        tags: ["MoneyWorks Data"],
-      },
-      response: ProductOne,
-    },
-  );
+    response: ProductMany,
+  },
+);

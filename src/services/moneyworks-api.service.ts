@@ -162,7 +162,7 @@ export class MoneyWorksApiService {
             limit,
             offset,
             next: offset + limit,
-            prev: offset - limit,
+            prev: offset - limit > 0 ? offset - limit : 0,
           },
         };
       }

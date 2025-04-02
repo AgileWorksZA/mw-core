@@ -1,92 +1,45 @@
 import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { PaymentsService } from "../services/tables/payments.service";
-import { PaymentsMany, PaymentsOne } from "../types/eden/Payments";
+import { paymentsObject } from "../types/constants.eden";
+import { PaymentsMany } from "../types/eden/Payments";
+import { type Payments, PaymentsFields } from "../types/interface/payments";
 
 // Initialize the payments service with configuration
 const config = loadMoneyWorksConfig();
 const paymentsService = new PaymentsService(config);
 
-export const paymentsRoutes = new Elysia({ prefix: "/api" })
-  .get(
-    "/payments",
-    async ({ query }) => {
-      const { limit = 10, offset = 0, sort, order, search } = query;
+export const paymentsRoutes = new Elysia({ prefix: "/api" }).get(
+  "/payments",
+  async ({ query }) => {
+    const { limit = 10, offset = 0, sort, order, search } = query;
 
-      try {
-        return await paymentsService.getPayments({
-          limit: Number(limit),
-          offset: Number(offset),
-          sort,
-          order: order as "asc" | "desc",
-          search,
-        });
-      } catch (error) {
-        console.error("Error in GET /payments:", error);
-        throw error;
-      }
+    try {
+      return await paymentsService.getPayments({
+        limit: Number(limit),
+        offset: Number(offset),
+        sort,
+        order: order as "asc" | "desc",
+        search: search as unknown as Payments,
+      });
+    } catch (error) {
+      console.error("Error in GET /payments:", error);
+      throw error;
+    }
+  },
+  {
+    query: t.Object({
+      limit: t.Optional(t.Numeric()),
+      offset: t.Optional(t.Numeric()),
+      sort: t.Optional(t.String()),
+      order: t.Optional(t.String()),
+      search: t.Optional(paymentsObject),
+    }),
+    detail: {
+      summary: "Get payments.",
+      description: `Get all payments. Search by: ${PaymentsFields.join(", ")}`,
+      tags: ["MoneyWorks Data"],
     },
-    {
-      query: t.Object({
-        limit: t.Optional(t.Numeric()),
-        offset: t.Optional(t.Numeric()),
-        sort: t.Optional(t.String()),
-        order: t.Optional(t.String()),
-        search: t.Optional(t.String()),
-      }),
-      detail: {
-        summary: "Get all payments",
-        tags: ["MoneyWorks Data"],
-      },
-      response: PaymentsMany,
-    },
-  )
-  .get(
-    "/payments/:sequenceNumber",
-    async ({ params }) => {
-      try {
-        const sequenceNumber = Number(params.sequenceNumber);
-        return await paymentsService.getPaymentBySequenceNumber(sequenceNumber);
-      } catch (error) {
-        console.error(
-          `Error in GET /payments/${params.sequenceNumber}:`,
-          error,
-        );
-        throw error;
-      }
-    },
-    {
-      params: t.Object({
-        sequenceNumber: t.Numeric(),
-      }),
-      detail: {
-        summary: "Get payment by sequence number",
-        tags: ["MoneyWorks Data"],
-      },
-      response: PaymentsOne,
-    },
-  )
-  .get(
-    "/payments/for-name/:nameCode",
-    async ({ params }) => {
-      try {
-        return await paymentsService.getPaymentsByName(params.nameCode);
-      } catch (error) {
-        console.error(
-          `Error in GET /payments/for-name/${params.nameCode}:`,
-          error,
-        );
-        throw error;
-      }
-    },
-    {
-      params: t.Object({
-        nameCode: t.String(),
-      }),
-      detail: {
-        summary: "Get payments for a specific name",
-        tags: ["MoneyWorks Data"],
-      },
-      response: PaymentsMany,
-    },
-  );
+    response: PaymentsMany,
+  },
+);

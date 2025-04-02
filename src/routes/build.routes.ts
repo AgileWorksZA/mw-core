@@ -2,7 +2,6 @@ import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { BuildService } from "../services/tables/build.service";
 import { buildObject } from "../types/constants.eden";
-import { BuildMany } from "../types/eden/Build";
 
 // Initialize the build service with configuration
 const config = loadMoneyWorksConfig();
@@ -38,6 +37,6 @@ export const buildRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Get all builds",
       tags: ["MoneyWorks Data"],
     },
-    response: BuildMany,
+    // response: BuildMany,
   },
 );

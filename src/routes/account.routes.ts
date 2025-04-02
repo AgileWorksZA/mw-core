@@ -2,7 +2,6 @@ import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { AccountService } from "../services/tables/account.service";
 import { accountObject } from "../types/constants.eden";
-import { AccountMany } from "../types/eden/Account";
 import { type Account, AccountFields } from "../types/interface/account";
 
 // Initialize the account service with configuration

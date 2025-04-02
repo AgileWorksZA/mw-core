@@ -1,30 +1,8 @@
-import fs from "node:fs";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
-import { z } from "zod";
-import { loadMoneyWorksConfig } from "../config/moneyworks.config";
-import { AccountService } from "../services/tables/account.service";
-import { accountZod } from "../types/zod/account";
-import { pagingSchema } from "../types/zod/paging";
 import { server } from "./config";
+import { registerAccountTTools } from "./resource/account";
 
-const accountingService = new AccountService(loadMoneyWorksConfig());
-
-server.tool(
-  "searchAccounts",
-  { paging: pagingSchema, search: z.optional(accountZod.partial()) },
-  async ({ paging, search }) => {
-    const result = await accountingService.getAccounts({ ...paging, search });
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(result, null, 2),
-        },
-      ],
-    };
-  },
-);
+registerAccountTTools(server);
 
 const transport = new StdioServerTransport();
 (async () => {
