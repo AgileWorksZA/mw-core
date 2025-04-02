@@ -25,9 +25,3 @@ export function registerSchemaTools(server: McpServer) {
     },
   );
 }
-const root = process.cwd();
-export const schema = require(
-  `${root}/src/types/json-schema/${"Transaction".toLowerCase()}-schema.json`,
-);
-console.log(schema);
-//"../../types/json-schema/transaction-schema.json"
