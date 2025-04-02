@@ -7,7 +7,7 @@ import { pagingSchema } from "../../types/zod/paging";
 
 const accountingService = new AccountService(loadMoneyWorksConfig());
 
-export function registerAccountTTools(server: McpServer) {
+export function registerAccountTools(server: McpServer) {
   server.tool(
     "searchAccounts",
     "Search for accounts",

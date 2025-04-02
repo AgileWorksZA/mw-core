@@ -1,8 +1,33 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
 import { server } from "./config";
-import { registerAccountTTools } from "./resource/account";
+import { registerAccountTools } from "./resource/account";
 
-registerAccountTTools(server);
+registerAccountTools(server);
+registerAutoSplitTools(server);
+registerBankRecsTools(server);
+registerBuildTools(server);
+registerDepartmentTools(server);
+registerDetailTools(server);
+registerFilterTools(server);
+registerGeneralTools(server);
+registerJobTools(server);
+registerJobSheetTools(server);
+registerLedgerTools(server);
+registerLinkTools(server);
+registerListTools(server);
+registerLogTools(server);
+registerLoginTools(server);
+registerMemoTools(server);
+registerMessageTools(server);
+registerNameTools(server);
+registerOffLedgerTools(server);
+registerPaymentsTools(server);
+registerProductTools(server);
+registerStickiesTools(server);
+registerTaxRateTools(server);
+registerTransactionTools(server);
+registerUserTools(server);
+registerUser2Tools(server);
 
 const transport = new StdioServerTransport();
 (async () => {
