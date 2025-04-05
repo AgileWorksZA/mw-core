@@ -40,6 +40,7 @@ export const nameRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all names. Search by: ${NameFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["CRM"],
     // response: NameMany,
   },
 );

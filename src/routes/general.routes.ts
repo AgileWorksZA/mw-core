@@ -39,6 +39,7 @@ export const generalRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all saved generals. Search by: ${GeneralFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["System"],
     // response: GeneralMany,
   },
 );

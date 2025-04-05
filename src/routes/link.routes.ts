@@ -39,6 +39,7 @@ export const linkRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all links. Search by: ${LinkFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["CRM"],
     // response: LinkMany,
   },
 );

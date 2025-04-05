@@ -39,6 +39,7 @@ export const detailRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all transaction details. Search by: ${DetailFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["Financial"],
     // response: DetailMany,
   },
 );

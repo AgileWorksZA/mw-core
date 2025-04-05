@@ -37,6 +37,7 @@ export const bankRecsRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Get all bank reconciliation entries",
       tags: ["MoneyWorks Data"],
     },
+    tags: ["Banking"],
     // response: BankRecsMany,
   },
 );

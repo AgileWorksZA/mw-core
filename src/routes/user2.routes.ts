@@ -40,6 +40,7 @@ export const user2Routes = new Elysia({ prefix: "/api" }).get(
       description: `Get all user2s. Search by: ${User2Fields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["System"],
     response: User2Many,
   },
 );

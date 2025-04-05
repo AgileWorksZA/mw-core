@@ -40,6 +40,7 @@ export const paymentsRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all payments. Search by: ${PaymentsFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["Financial"],
     // response: PaymentsMany,
   },
 );

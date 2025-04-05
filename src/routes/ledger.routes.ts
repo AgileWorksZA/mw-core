@@ -39,6 +39,7 @@ export const ledgerRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all ledgers. Search by: ${LedgerFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["Financial"],
     // response: LedgerMany,
   },
 );

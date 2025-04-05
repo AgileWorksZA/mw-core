@@ -40,6 +40,7 @@ export const loginRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all logins. Search by: ${LoginFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["System"],
     response: LoginMany,
   },
 );

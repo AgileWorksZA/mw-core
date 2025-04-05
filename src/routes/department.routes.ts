@@ -42,6 +42,7 @@ export const departmentRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all departments. Search by: ${DepartmentFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["CRM"],
     // response: DepartmentMany,
   },
 );

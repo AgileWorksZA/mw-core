@@ -40,6 +40,7 @@ export const productRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all products. Search by: ${ProductFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["Inventory"],
     // response: ProductMany,
   },
 );

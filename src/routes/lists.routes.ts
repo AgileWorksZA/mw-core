@@ -39,6 +39,7 @@ export const listsRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all lists. Search by: ${ListsFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["CRM"],
     // response: ListMany,
   },
 );

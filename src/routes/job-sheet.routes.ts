@@ -39,6 +39,7 @@ export const jobSheetRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all job-sheets. Search by: ${JobSheetFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["Jobs"],
     // response: JobSheetMany,
   },
 );

@@ -39,6 +39,7 @@ export const logRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all logs. Search by: ${LogFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["System"],
     // response: LogMany,
   },
 );

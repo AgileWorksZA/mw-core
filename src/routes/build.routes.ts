@@ -37,6 +37,7 @@ export const buildRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Get all builds",
       tags: ["MoneyWorks Data"],
     },
+    tags: ["System"],
     // response: BuildMany,
   },
 );

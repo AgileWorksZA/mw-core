@@ -39,6 +39,7 @@ export const accountRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all accounts. Search by: ${AccountFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["CRM"],
     // response: t.Partial(AccountMany),
   },
 );

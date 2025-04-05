@@ -40,6 +40,7 @@ export const messageRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all messages. Search by: ${MessageFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["System"],
     response: MessageMany,
   },
 );

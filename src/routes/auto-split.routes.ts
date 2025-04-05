@@ -37,6 +37,7 @@ export const autoSplitRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Get all auto splits",
       tags: ["MoneyWorks Data"],
     },
+    tags: ["Financial"],
     // response: AutoSplitMany,
   },
 );

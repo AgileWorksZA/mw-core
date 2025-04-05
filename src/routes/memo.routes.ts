@@ -40,6 +40,7 @@ export const memoRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all memos. Search by: ${MemoFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["CRM"],
     // response: MemoMany,
   },
 );

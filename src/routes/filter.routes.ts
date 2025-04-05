@@ -39,6 +39,7 @@ export const filterRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all saved filters. Search by: ${FilterFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["System"],
     // response: FilterMany,
   },
 );

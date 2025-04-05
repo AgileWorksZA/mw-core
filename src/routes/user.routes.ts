@@ -40,6 +40,7 @@ export const userRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all users. Search by: ${UserFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["System"],
     response: UserMany,
   },
 );

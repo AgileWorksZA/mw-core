@@ -40,6 +40,7 @@ export const taxRateRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all tax-rates. Search by: ${TaxRateFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
+    tags: ["Tax"],
     // response: TaxRateMany,
   },
 );
