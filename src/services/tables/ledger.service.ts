@@ -1,11 +1,11 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Ledger, LedgerFields } from "../../types/interface/ledger";
+import { type Ledger, LedgerFields } from "../../types/interface/tables/ledger";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/ledger-schema";
+import schema from "../../types/optimized/table/ledger-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

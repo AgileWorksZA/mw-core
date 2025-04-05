@@ -3,12 +3,12 @@ import { enforceType } from "../../types/helpers";
 import {
   type Transaction,
   TransactionFields,
-} from "../../types/interface/transaction";
+} from "../../types/interface/tables/transaction";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/transaction-schema";
+import schema from "../../types/optimized/table/transaction-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

@@ -2,8 +2,8 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
 import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { User2Service } from "../../../services/tables/user2.service";
-import { pagingSelectionSchema } from "../../../types/zod/paging";
-import { user2Zod } from "../../../types/zod/user2";
+import { pagingSelectionSchema } from "../../../types/zod/tables/paging";
+import { user2Zod } from "../../../types/zod/tables/user2";
 
 const user2Service = new User2Service(loadMoneyWorksConfig());
 

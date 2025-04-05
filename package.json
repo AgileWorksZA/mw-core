@@ -17,6 +17,7 @@
     "elysia": "latest",
     "fast-xml-parser": "^4.3.6",
     "jsdom": "^26.0.0",
+    "translate": "^3.0.1",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {

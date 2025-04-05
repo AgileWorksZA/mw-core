@@ -1,11 +1,14 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type TaxRate, TaxRateFields } from "../../types/interface/tax-rate";
+import {
+  type TaxRate,
+  TaxRateFields,
+} from "../../types/interface/tables/tax-rate";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/tax-rate-schema";
+import schema from "../../types/optimized/table/tax-rate-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

@@ -1,11 +1,11 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type User2, User2Fields } from "../../types/interface/user2";
+import { type User2, User2Fields } from "../../types/interface/tables/user2";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/user2-schema";
+import schema from "../../types/optimized/table/user2-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

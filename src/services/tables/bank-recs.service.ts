@@ -1,11 +1,14 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type BankRecs, BankRecsFields } from "../../types/interface/bank-recs";
+import {
+  type BankRecs,
+  BankRecsFields,
+} from "../../types/interface/tables/bank-recs";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/bankrecs-schema";
+import schema from "../../types/optimized/table/bankrecs-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

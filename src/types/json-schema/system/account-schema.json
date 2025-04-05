@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CompanyInformation",
+  "description": "Company Information",
+  "type": "object",
+  "properties": {
+    "CompanyName": {
+      "type": "string",
+      "maxLength": 64,
+      "description": "Company Name"
+    },
+    "PostalAddressLine1": {
+      "description": "Postal Address Line 1",
+      "maxLength": 60,
+      "type": "string"
+    },
+    "PostalAddressLine2": {
+      "description": "Postal Address Line 2",
+      "maxLength": 60,
+      "type": "string"
+    },
+    "PostalAddressLine3": {
+      "description": "Postal Address Line 3",
+      "maxLength": 60,
+      "type": "string"
+    },
+    "PostalAddressLine4": {
+      "description": "Postal Address Line 4",
+      "maxLength": 60,
+      "type": "string"
+    },
+    "State": {
+      "description": "State",
+      "maxLength": 8,
+      "type": "string"
+    },
+    "PostalCode": {
+      "description": "Postal Code",
+      "maxLength": 12,
+      "type": "string"
+    },
+    "DeliveryAddressLine1": {
+      "description": "Delivery Address Line 1",
+      "maxLength": 60,
+      "type": "string"
+    },
+    "DeliveryAddressLine2": {
+      "description": "Delivery Address Line 2",
+      "maxLength": 60,
+      "type": "string"
+    },
+    "DeliveryAddressLine3": {
+      "description": "Delivery Address Line 3",
+      "maxLength": 60,
+      "type": "string"
+    },
+    "DeliveryAddressLine4": {
+      "description": "Delivery Address Line 4",
+      "maxLength": 60,
+      "type": "string"
+    },
+    "DeliveryState": {
+      "description": "Delivery State",
+      "maxLength": 8,
+      "type": "string"
+    },
+    "DeliveryPostalCode": {
+      "description": "Delivery Postal Code",
+      "maxLength": 12,
+      "type": "string"
+    },
+    "Phone": {
+      "description": "Phone",
+      "maxLength": 20,
+      "type": "string"
+    },
+    "Fax": {
+      "description": "Fax",
+      "maxLength": 20,
+      "type": "string"
+    },
+    "Email": {
+      "description": "Email",
+      "maxLength": 140,
+      "type": "string"
+    },
+    "WebURL": {
+      "description": "Web URL",
+      "maxLength": 64,
+      "type": "string"
+    },
+    "TaxName": {
+      "description": "Tax Name",
+      "maxLength": 64,
+      "type": "string"
+    },
+    "GSTNumber": {
+      "description": "GST Number",
+      "maxLength": 32,
+      "type": "string"
+    },
+    "RegistrationNumber": {
+      "description": "Registration Number",
+      "maxLength": 32,
+      "type": "string"
+    },
+    "RemittanceMessage": {
+      "description": "Remittance Message",
+      "maxLength": 256,
+      "type": "string"
+    },
+    "Have_Logo": {
+      "description": "Have Logo",
+      "type": "boolean"
+    }
+  },
+  "required": []
+}

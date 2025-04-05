@@ -1,11 +1,11 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Link, LinkFields } from "../../types/interface/link";
+import { type Link, LinkFields } from "../../types/interface/tables/link";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/link-schema";
+import schema from "../../types/optimized/table/link-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

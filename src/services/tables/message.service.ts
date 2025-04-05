@@ -1,11 +1,14 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Message, MessageFields } from "../../types/interface/message";
+import {
+  type Message,
+  MessageFields,
+} from "../../types/interface/tables/message";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/message-schema";
+import schema from "../../types/optimized/table/message-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

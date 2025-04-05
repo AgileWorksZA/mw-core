@@ -2,8 +2,8 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
 import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { JobService } from "../../../services/tables/job.service";
-import { jobZod } from "../../../types/zod/job";
-import { pagingSelectionSchema } from "../../../types/zod/paging";
+import { jobZod } from "../../../types/zod/tables/job";
+import { pagingSelectionSchema } from "../../../types/zod/tables/paging";
 
 const jobService = new JobService(loadMoneyWorksConfig());
 

@@ -1,11 +1,11 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Build, BuildFields } from "../../types/interface/build";
+import { type Build, BuildFields } from "../../types/interface/tables/build";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/build-schema";
+import schema from "../../types/optimized/table/build-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

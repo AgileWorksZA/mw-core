@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
 import { tableNames } from "../types/constants";
@@ -122,6 +121,23 @@ export class MoneyWorksApiService {
     }
 
     return queryParts.join("&");
+  }
+
+  /**
+   * Evaluate a search expression
+   * @param expression
+   */
+  async evaluate(expression: string) {
+    try {
+      const url = `${this.getBaseUrl()}/evaluate?expr=${encodeURIComponent(expression)}`;
+      const headers = this.createAuthHeaders();
+
+      const response = await axios.get(url, { headers });
+      console.log(response.data, url);
+      return response.data as string;
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   /**

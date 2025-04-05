@@ -1,11 +1,11 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Memo, MemoFields } from "../../types/interface/memo";
+import { type Memo, MemoFields } from "../../types/interface/tables/memo";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/memo-schema";
+import schema from "../../types/optimized/table/memo-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
@@ -62,8 +62,9 @@ export class MemoService {
       // Parse the response
       const memos = data.map(this.dataCenterJsonToMemo);
 
+      // ToDo: Figure out why null values need to be filtered out
       return {
-        data: memos,
+        data: memos.filter((m) => m.SequenceNumber),
         pagination,
       };
     } catch (error) {

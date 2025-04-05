@@ -2,8 +2,8 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
 import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { TaxRateService } from "../../../services/tables/tax-rate.service";
-import { pagingSelectionSchema } from "../../../types/zod/paging";
-import { taxRateZod } from "../../../types/zod/tax-rate";
+import { pagingSelectionSchema } from "../../../types/zod/tables/paging";
+import { taxRateZod } from "../../../types/zod/tables/tax-rate";
 
 const taxRateService = new TaxRateService(loadMoneyWorksConfig());
 

@@ -3,12 +3,12 @@ import { enforceType } from "../../types/helpers";
 import {
   type AutoSplit,
   AutoSplitFields,
-} from "../../types/interface/auto-split";
+} from "../../types/interface/tables/auto-split";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/autosplit-schema";
+import schema from "../../types/optimized/table/autosplit-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

@@ -2,8 +2,8 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
 import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { MemoService } from "../../../services/tables/memo.service";
-import { memoZod } from "../../../types/zod/memo";
-import { pagingSelectionSchema } from "../../../types/zod/paging";
+import { memoZod } from "../../../types/zod/tables/memo";
+import { pagingSelectionSchema } from "../../../types/zod/tables/paging";
 
 const memoService = new MemoService(loadMoneyWorksConfig());
 

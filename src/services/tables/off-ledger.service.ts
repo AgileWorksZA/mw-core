@@ -3,12 +3,12 @@ import { enforceType } from "../../types/helpers";
 import {
   type OffLedger,
   OffLedgerFields,
-} from "../../types/interface/off-ledger";
+} from "../../types/interface/tables/off-ledger";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/offledger-schema";
+import schema from "../../types/optimized/table/offledger-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

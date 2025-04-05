@@ -1,11 +1,14 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Stickies, StickiesFields } from "../../types/interface/stickies";
+import {
+  type Stickies,
+  StickiesFields,
+} from "../../types/interface/tables/stickies";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/stickies-schema";
+import schema from "../../types/optimized/table/stickies-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

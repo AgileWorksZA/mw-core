@@ -2,8 +2,8 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
 import { z } from "zod";
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import { LedgerService } from "../../../services/tables/ledger.service";
-import { ledgerZod } from "../../../types/zod/ledger";
-import { pagingSelectionSchema } from "../../../types/zod/paging";
+import { ledgerZod } from "../../../types/zod/tables/ledger";
+import { pagingSelectionSchema } from "../../../types/zod/tables/paging";
 
 const ledgerService = new LedgerService(loadMoneyWorksConfig());
 

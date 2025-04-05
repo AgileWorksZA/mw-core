@@ -1,11 +1,11 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Name, NameFields } from "../../types/interface/name";
+import { type Name, NameFields } from "../../types/interface/tables/name";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/name-schema";
+import schema from "../../types/optimized/table/name-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**

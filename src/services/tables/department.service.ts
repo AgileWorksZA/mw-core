@@ -3,12 +3,12 @@ import { enforceType } from "../../types/helpers";
 import {
   type Department,
   DepartmentFields,
-} from "../../types/interface/department";
+} from "../../types/interface/tables/department";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
 } from "../../types/moneyworks";
-import schema from "../../types/optimized/department-schema";
+import schema from "../../types/optimized/table/department-schema";
 import { MoneyWorksApiService } from "../moneyworks-api.service";
 
 /**
