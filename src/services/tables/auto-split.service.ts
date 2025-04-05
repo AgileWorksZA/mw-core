@@ -62,10 +62,7 @@ export class AutoSplitService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export(
-        "auto-split",
-        mwParams,
-      );
+      const { data, pagination } = await this.api.export("autosplit", mwParams);
 
       // Parse the response
       const autoSplits = data.map(this.dataCenterJsonToAutoSplit);

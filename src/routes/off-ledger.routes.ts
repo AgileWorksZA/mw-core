@@ -40,6 +40,6 @@ export const offLedgerRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all off-ledgers. Search by: ${OffLedgerFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
-    response: OffLedgerMany,
+    // response: OffLedgerMany,
   },
 );

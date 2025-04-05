@@ -62,10 +62,7 @@ export class OffLedgerService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export(
-        "off-ledger",
-        mwParams,
-      );
+      const { data, pagination } = await this.api.export("offledger", mwParams);
 
       // Parse the response
       const offLedgerItems = data.map(this.dataCenterJsonToOffLedger);

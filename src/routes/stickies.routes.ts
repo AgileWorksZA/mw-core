@@ -40,6 +40,6 @@ export const stickiesRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all stickies. Search by: ${StickiesFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
-    response: StickiesMany,
+    // response: StickiesMany,
   },
 );

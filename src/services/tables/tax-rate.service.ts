@@ -59,7 +59,7 @@ export class TaxRateService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("tax-rate", mwParams);
+      const { data, pagination } = await this.api.export("taxrate", mwParams);
 
       // Parse the response
       const taxRates = data.map(this.dataCenterJsonToTaxRate);

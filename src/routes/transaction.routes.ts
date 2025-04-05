@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../config/moneyworks.config";
 import { TransactionService } from "../services/tables/transaction.service";
 import { transactionObject } from "../types/constants.eden";
+import { TransactionMany } from "../types/eden/Transaction";
 import {
   type Transaction,
   TransactionFields,
@@ -42,6 +43,7 @@ export const transactionRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all transactions. Search by: ${TransactionFields.join(", ")}`,
       tags: ["MoneyWorks Data"],
     },
-    // response: TransactionMany,
+    response: TransactionMany,
+    tags: ["Financial"],
   },
 );

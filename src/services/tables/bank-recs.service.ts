@@ -59,7 +59,7 @@ export class BankRecsService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("bank-recs", mwParams);
+      const { data, pagination } = await this.api.export("bankrecs", mwParams);
 
       // Parse the response
       const bankRecs = data.map(this.dataCenterJsonToBankRecs);

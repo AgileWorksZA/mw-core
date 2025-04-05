@@ -59,7 +59,7 @@ export class JobSheetService {
       };
 
       // Call MoneyWorks API
-      const { data, pagination } = await this.api.export("job-sheet", mwParams);
+      const { data, pagination } = await this.api.export("jobsheet", mwParams);
 
       // Parse the response
       const jobSheets = data.map(this.dataCenterJsonToJobSheet);
