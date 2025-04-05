@@ -1,0 +1,43 @@
+{
+  "title": "Inventory",
+  "description": "Stores stock on hand quantities for specific serial numbers, batches, and/or locations, linking back to the Product table. Internal Name: Inventory.",
+  "type": "object",
+  "properties": {
+    "Identifier": {
+      "type": "string",
+      "maxLength": 31,
+      "description": "The serial or batch number identifier for this specific stock item instance."
+    },
+    "LastModifiedTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time the record was last altered."
+    },
+    "Location": {
+      "type": ["string", "null"],
+      "maxLength": 15,
+      "description": "The stock location code. An empty string or null typically represents the default location if location tracking is enabled."
+    },
+    "ProductSeq": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The sequence number of the parent product master record (links to Product.SequenceNumber)."
+    },
+    "Qty": {
+      "type": "number",
+      "description": "The quantity (stock on hand) of the item with this specific Identifier at this specific Location."
+    },
+    "Expiry": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "The expiry date, if applicable (for batch-tracked items marked as expiring)."
+    }
+  },
+  "required": [
+    "Identifier",
+    "LastModifiedTime",
+    "Location", // Even the default location needs representation (empty string or null)
+    "ProductSeq",
+    "Qty"
+  ]
+}

@@ -30,6 +30,7 @@ import { userRoutes } from "./routes/tables/user.routes";
 import { user2Routes } from "./routes/tables/user2.routes";
 
 import { companyInformationRoutes } from "./routes/system/company-information.routes";
+import { systemLabelsRoutes } from "./routes/system/system-labels.routes";
 import Account from "./types/json-schema/table/account-schema.json";
 import AutoSplit from "./types/json-schema/table/autosplit-schema.json";
 import BankRecs from "./types/json-schema/table/bankrecs-schema.json";
@@ -130,6 +131,7 @@ const app = new Elysia()
   .use(user2Routes)
   // Register all system routes
   .use(companyInformationRoutes)
+  .use(systemLabelsRoutes)
 
   .listen(3131);
 

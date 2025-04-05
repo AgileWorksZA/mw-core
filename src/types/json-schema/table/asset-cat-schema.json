@@ -1,0 +1,115 @@
+{
+  "type": "object",
+  "title": "Asset",
+  "description": "Defines categories for assets, holding default depreciation settings and GL account linkages. Internal Name: assetcat.",
+  "properties": {
+    "Code": {
+      "type": "string",
+      "maxLength": 7,
+      "description": "Unique code for the category."
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 63,
+      "description": "Description of category."
+    },
+    "AssetAccount": {
+      "type": "string",
+      "maxLength": 13,
+      "description": "The fixed asset account code (FA Type)."
+    },
+    "DepExpense": {
+      "type": "string",
+      "maxLength": 13,
+      "description": "Depreciation expense account code (EX Type)."
+    },
+    "AccumDep": {
+      "type": "string",
+      "maxLength": 13,
+      "description": "Accumulated depreciation account code (FA Type)."
+    },
+    "GainLoss": {
+      "type": "string",
+      "maxLength": 13,
+      "description": "Account code for gain/loss on asset disposal (IN or EX Type)."
+    },
+    "Custom": {
+      "type": ["string", "null"],
+      "maxLength": 39,
+      "description": "For user's own use."
+    },
+    "Group": {
+      "type": ["string", "null"],
+      "maxLength": 7,
+      "description": "For user's own grouping/reporting use."
+    },
+    "Type": {
+      "type": "string",
+      "maxLength": 3,
+      "enum": ["SL", "DV"],
+      "description": "Default depreciation type: SL (Straight Line) or DV (Diminishing Value)."
+    },
+    "Impairment": {
+      "type": ["string", "null"],
+      "maxLength": 13,
+      "description": "An expense account code for asset impairment loss (EX Type)."
+    },
+    "Rate": {
+      "type": "number",
+      "description": "Default depreciation rate (%)."
+    },
+    "RevalSurplus": {
+      "type": ["string", "null"],
+      "maxLength": 13,
+      "description": "An equity account code for revaluation surplus (SF Type)."
+    },
+    "GainLossPrivate": {
+      "type": ["string", "null"],
+      "maxLength": 13,
+      "description": "Account code for private portion gain/loss on sale (IN or EX Type)."
+    },
+    "DepExpensePrivate": {
+      "type": ["string", "null"],
+      "maxLength": 13,
+      "description": "Account code for private portion depreciation (EX Type)."
+    },
+    "UserNum": {
+      "type": ["number", "null"],
+      "description": "Scriptable number storage."
+    },
+    "UserText": {
+      "type": ["string", "null"],
+      "maxLength": 255,
+      "description": "Scriptable text storage."
+    },
+    "LastDepreciatedDate": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "Date of last depreciation run for category."
+    },
+    "LastModifiedTime": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Date and time the category record was last changed."
+    },
+    "TaggedText": {
+      "type": ["string", "null"],
+      "maxLength": 255,
+      "description": "Scriptable tag storage."
+    },
+    "Flags": {
+      "type": "integer",
+      "description": "Bitmask for category flags. Includes Private Use Allowed, Calculate Daily Depreciation."
+    }
+  },
+  "required": [
+    "Code",
+    "Description",
+    "AssetAccount",
+    "DepExpense",
+    "AccumDep",
+    "GainLoss",
+    "Type",
+    "Rate"
+  ]
+}

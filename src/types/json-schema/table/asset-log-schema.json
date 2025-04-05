@@ -1,0 +1,74 @@
+{
+  "type": "object",
+  "title": "Asset Log",
+  "description": "Stores the historical actions for an asset. Internal Name: AssetLog.",
+  "properties": {
+    "ParentSeq": {
+      "type": "integer",
+      "description": "Sequence number of the parent Asset record."
+    },
+    "Action": {
+      "type": "string",
+      "maxLength": 3,
+      "enum": ["AA", "AD", "AP", "DS", "DD", "ME", "RV"],
+      "description": "Type of action: AA=Acquisition, AD=Disposal, AP=Part Disposal, DS=Straight Line Depreciation, DD=Diminishing Value Depreciation, ME=Memo, RV=Revaluation."
+    },
+    "Date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the action."
+    },
+    "Qty": {
+      "type": ["number", "null"],
+      "description": "Quantity involved in the action (e.g., for partial disposal)."
+    },
+    "Depreciation": {
+      "type": ["number", "null"],
+      "description": "Depreciation amount due to the action."
+    },
+    "Adjustment1": {
+      "type": ["number", "null"],
+      "description": "Adjustments (e.g., related to revaluation/disposal)."
+    },
+    "Adjustment2": {
+      "type": ["number", "null"],
+      "description": "Adjustments (e.g., related to revaluation/disposal)."
+    },
+    "Rate": {
+      "type": ["number", "null"],
+      "description": "Depreciation rate (%) used for the action."
+    },
+    "PrivateUsePercent": {
+      "type": ["number", "null"],
+      "description": "Private use percentage at the time of the action."
+    },
+    "AccumDepreciation": {
+      "type": "number",
+      "description": "Accumulated depreciation balance *after* the action."
+    },
+    "AccumReval": {
+      "type": ["number", "null"],
+      "description": "Accumulated revaluation amount *after* the action."
+    },
+    "ClosingValue": {
+      "type": "number",
+      "description": "Book value *after* the action."
+    },
+    "TransactionSeq": {
+      "type": ["integer", "null"],
+      "description": "Sequence number of the GL transaction associated with action (if any)."
+    },
+    "Memo": {
+      "type": ["string", "null"],
+      "maxLength": 255,
+      "description": "User memo associated with the action."
+    }
+  },
+  "required": [
+    "ParentSeq",
+    "Action",
+    "Date",
+    "AccumDepreciation",
+    "ClosingValue"
+  ]
+}

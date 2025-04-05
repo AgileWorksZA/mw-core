@@ -30,6 +30,7 @@ The cache is read locally from `cache/TableName-labels-lang.json`.
 
 ## Purpose
 
+## Cache Format
 Cache all the display labels for all MoneyWorks tables in the MoneyWorks API via the evaluate endpoint, similar to company-information.
 
 Loop through all the fields of all the tables and cache the display labels for each field in a local file in english.
@@ -138,7 +139,7 @@ These are generic fields available in various tables that users can rename.
 *   `Name.Colour`
 *   `Product.Colour`
 *   `Job.Colour`
-*   `Account.Colour`
+  *   `Account.Colour`
 *   `Asset.Colour`
     *   *Example:* `FieldLabel("Name.Colour", 2)`
 
