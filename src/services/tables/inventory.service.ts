@@ -2,6 +2,7 @@ import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type Inventory,
+  type InventoryField,
   InventoryFields,
 } from "../../types/interface/tables/inventory";
 import type {
@@ -29,10 +30,30 @@ export class InventoryService {
           `Missing key ${key} in data center json for Inventory record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Inventory);
+  }
+
+  dataCenterJsonToInventoryUsingFields(
+    fields: InventoryField[],
+    data: ANY,
+  ): Inventory {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Inventory record`,
+        );
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Inventory);
   }
@@ -49,8 +70,20 @@ export class InventoryService {
     search?: Partial<Inventory>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!InventoryFields.includes(field as InventoryField)) {
+            throw new Error(
+              `Invalid field '${field}' for Inventory table. Valid fields are: ${InventoryFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Inventory> = {
         limit: params.limit,
@@ -58,14 +91,22 @@ export class InventoryService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("inventory", mwParams);
 
       // Parse the response
-      const inventory = data.map(this.dataCenterJsonToInventory);
+      const inventory = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToInventoryUsingFields(
+              params.fields as InventoryField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToInventory);
 
       return {
         data: inventory,

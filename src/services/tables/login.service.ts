@@ -26,10 +26,27 @@ export class LoginService {
           `Missing key ${key} in data center json for Login record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Login);
+  }
+
+  dataCenterJsonToLoginUsingFields(fields: string[], data: ANY): Login {
+    return fields.reduce((acc, key) => {
+      if (data[key.toLowerCase()] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Login record`,
+        );
+      }
+      const value = enforceType(
+        data[key.toLowerCase()],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Login);
   }
@@ -46,8 +63,20 @@ export class LoginService {
     search?: Partial<Login>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!LoginFields.includes(field as keyof typeof schema)) {
+            throw new Error(
+              `Invalid field '${field}' for Login table. Valid fields are: ${LoginFields.join(", ")}`
+            );
+          }
+        }
+      }
+      
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Login> = {
         limit: params.limit,
@@ -55,14 +84,17 @@ export class LoginService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("login", mwParams);
 
       // Parse the response
-      const logins = data.map(this.dataCenterJsonToLogin);
+      const logins = params.fields
+        ? data.map((d) => this.dataCenterJsonToLoginUsingFields(params.fields as string[], d))
+        : data.map(this.dataCenterJsonToLogin);
 
       return {
         data: logins,

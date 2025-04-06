@@ -1,6 +1,6 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Filter, FilterFields } from "../../types/interface/tables/filter";
+import { type Filter, type FilterField, FilterFields } from "../../types/interface/tables/filter";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -26,10 +26,30 @@ export class FilterService {
           `Missing key ${key} in data center json for Filter record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Filter);
+  }
+
+  dataCenterJsonToFilterUsingFields(
+    fields: FilterField[],
+    data: ANY,
+  ): Filter {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Filter record`,
+        );
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Filter);
   }
@@ -46,8 +66,20 @@ export class FilterService {
     search?: Partial<Filter>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!FilterFields.includes(field as FilterField)) {
+            throw new Error(
+              `Invalid field '${field}' for Filter table. Valid fields are: ${FilterFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Filter> = {
         limit: params.limit,
@@ -55,14 +87,22 @@ export class FilterService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("filter", mwParams);
 
       // Parse the response
-      const filters = data.map(this.dataCenterJsonToFilter);
+      const filters = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToFilterUsingFields(
+              params.fields as FilterField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToFilter);
 
       return {
         data: filters,

@@ -1,6 +1,6 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Ledger, LedgerFields } from "../../types/interface/tables/ledger";
+import { type Ledger, type LedgerField, LedgerFields } from "../../types/interface/tables/ledger";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -26,10 +26,30 @@ export class LedgerService {
           `Missing key ${key} in data center json for Ledger record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Ledger);
+  }
+
+  dataCenterJsonToLedgerUsingFields(
+    fields: LedgerField[],
+    data: ANY,
+  ): Ledger {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Ledger record`,
+        );
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Ledger);
   }
@@ -46,8 +66,20 @@ export class LedgerService {
     search?: Partial<Ledger>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!LedgerFields.includes(field as LedgerField)) {
+            throw new Error(
+              `Invalid field '${field}' for Ledger table. Valid fields are: ${LedgerFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Ledger> = {
         limit: params.limit,
@@ -55,14 +87,22 @@ export class LedgerService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("ledger", mwParams);
 
       // Parse the response
-      const ledgers = data.map(this.dataCenterJsonToLedger);
+      const ledgers = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToLedgerUsingFields(
+              params.fields as LedgerField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToLedger);
 
       return {
         data: ledgers,

@@ -1,6 +1,6 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Lists, ListsFields } from "../../types/interface/tables/lists";
+import { type Lists, type ListsField, ListsFields } from "../../types/interface/tables/lists";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -26,10 +26,30 @@ export class ListsService {
           `Missing key ${key} in data center json for Lists record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Lists);
+  }
+
+  dataCenterJsonToListsUsingFields(
+    fields: ListsField[],
+    data: ANY,
+  ): Lists {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Lists record`,
+        );
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Lists);
   }
@@ -46,8 +66,20 @@ export class ListsService {
     search?: Partial<Lists>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!ListsFields.includes(field as ListsField)) {
+            throw new Error(
+              `Invalid field '${field}' for Lists table. Valid fields are: ${ListsFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Lists> = {
         limit: params.limit,
@@ -55,14 +87,22 @@ export class ListsService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("lists", mwParams);
 
       // Parse the response
-      const lists = data.map(this.dataCenterJsonToLists);
+      const lists = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToListsUsingFields(
+              params.fields as ListsField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToLists);
 
       return {
         data: lists,

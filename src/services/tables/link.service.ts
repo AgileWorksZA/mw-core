@@ -1,6 +1,6 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Link, LinkFields } from "../../types/interface/tables/link";
+import { type Link, type LinkField, LinkFields } from "../../types/interface/tables/link";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -24,10 +24,28 @@ export class LinkService {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for Link record`);
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Link);
+  }
+
+  dataCenterJsonToLinkUsingFields(
+    fields: LinkField[],
+    data: ANY,
+  ): Link {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(`Missing key ${key} in data center json for Link record`);
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Link);
   }
@@ -44,8 +62,20 @@ export class LinkService {
     search?: Partial<Link>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!LinkFields.includes(field as LinkField)) {
+            throw new Error(
+              `Invalid field '${field}' for Link table. Valid fields are: ${LinkFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Link> = {
         limit: params.limit,
@@ -53,14 +83,22 @@ export class LinkService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("link", mwParams);
 
       // Parse the response
-      const links = data.map(this.dataCenterJsonToLink);
+      const links = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToLinkUsingFields(
+              params.fields as LinkField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToLink);
 
       return {
         data: links,

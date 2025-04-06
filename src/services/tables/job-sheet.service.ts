@@ -2,6 +2,7 @@ import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type JobSheet,
+  type JobSheetField,
   JobSheetFields,
 } from "../../types/interface/tables/jobsheet";
 import type {
@@ -29,10 +30,30 @@ export class JobSheetService {
           `Missing key ${key} in data center json for JobSheet record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as JobSheet);
+  }
+
+  dataCenterJsonToJobSheetUsingFields(
+    fields: JobSheetField[],
+    data: ANY,
+  ): JobSheet {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for JobSheet record`,
+        );
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as JobSheet);
   }
@@ -49,8 +70,20 @@ export class JobSheetService {
     search?: Partial<JobSheet>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!JobSheetFields.includes(field as JobSheetField)) {
+            throw new Error(
+              `Invalid field '${field}' for JobSheet table. Valid fields are: ${JobSheetFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<JobSheet> = {
         limit: params.limit,
@@ -58,14 +91,22 @@ export class JobSheetService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("jobsheet", mwParams);
 
       // Parse the response
-      const jobSheets = data.map(this.dataCenterJsonToJobSheet);
+      const jobSheets = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToJobSheetUsingFields(
+              params.fields as JobSheetField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToJobSheet);
 
       return {
         data: jobSheets,

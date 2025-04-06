@@ -12,7 +12,8 @@ const logService = new LogService(config);
 export const logRoutes = new Elysia({ prefix: "/api" }).get(
   "/logs",
   async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search } = query;
+    const { limit = 10, offset = 0, sort, order, search, format } = query;
+    const fields = format ? format.split(",") : undefined;
 
     try {
       return await logService.getLogs({
@@ -21,6 +22,7 @@ export const logRoutes = new Elysia({ prefix: "/api" }).get(
         sort,
         order: order as "asc" | "desc",
         search: search as unknown as Partial<Log>,
+        fields,
       });
     } catch (error) {
       console.error("Error in GET /logs:", error);
@@ -34,10 +36,13 @@ export const logRoutes = new Elysia({ prefix: "/api" }).get(
       sort: t.Optional(t.String()),
       order: t.Optional(t.String()),
       search: t.Optional(logObject),
+      format: t.Optional(t.String()),
     }),
     detail: {
       summary: "Logs",
-      description: `Get all logs. Search by: ${LogFields.join(", ")}`,
+      description: `Get all logs. Search by: ${LogFields.join(", ")}.
+      Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
+      Example: /api/logs?format=SequenceNumber,Description,Who`,
     },
     tags: ["System"],
     response: LogMany,
