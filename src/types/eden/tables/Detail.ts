@@ -1,10 +1,10 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const DetailOne = t.Object({
-  SequenceNumber: t.Number(),
-  LastModifiedTime: t.String(),
-  ParentSeq: t.Number(),
+  SequenceNumber: t.Nullable(t.Number()),
+  LastModifiedTime: t.Nullable(t.String()),
+  ParentSeq: t.Nullable(t.Number()),
   Sort: t.Nullable(t.Number()),
-  Account: t.String(),
+  Account: t.Nullable(t.String()),
   Dept: t.Nullable(t.String()),
   PostedQty: t.Nullable(t.Number()),
   TaxCode: t.Nullable(t.String()),
@@ -34,7 +34,7 @@ export const DetailOne = t.Object({
   StockLocation: t.Nullable(t.String()),
   OrderStatus: t.Nullable(t.Boolean()),
   ExpensedTax: t.Nullable(t.Number()),
-  Date: t.Nullable(t.Date()),
+  Date: t.Nullable(t.String()),
   MoreFlags: t.Nullable(t.Number()),
   UserNum: t.Nullable(t.Number()),
   UserText: t.Nullable(t.String()),
@@ -52,5 +52,5 @@ export const DetailMany = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });

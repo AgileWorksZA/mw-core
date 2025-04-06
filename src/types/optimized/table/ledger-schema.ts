@@ -1,6 +1,6 @@
 export default {
   "SequenceNumber": "integer",
-  "LastModifiedTime": "date-time",
+  "LastModifiedTime": "string",
   "AccountCode": "string",
   "Department": "string",
   "Category": "string",

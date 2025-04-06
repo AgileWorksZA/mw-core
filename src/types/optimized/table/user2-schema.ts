@@ -1,6 +1,6 @@
 export default {
   "SequenceNumber": "integer",
-  "LastModifiedTime": "date-time",
+  "LastModifiedTime": "string",
   "DevKey": "integer",
   "Key": "string",
   "Int1": "integer",

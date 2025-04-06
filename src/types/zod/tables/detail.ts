@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const detailZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
-  ParentSeq: z.number(),
+  LastModifiedTime: z.string(),
+  ParentSeq: z.number().optional().nullable(),
   Sort: z.number(),
   Account: z.string(),
   Dept: z.string(),
@@ -35,7 +35,7 @@ export const detailZod = z.object({
   StockLocation: z.string(),
   OrderStatus: z.boolean(),
   ExpensedTax: z.number(),
-  Date: z.date(),
+  Date: z.string(),
   MoreFlags: z.number(),
   UserNum: z.number(),
   UserText: z.string(),

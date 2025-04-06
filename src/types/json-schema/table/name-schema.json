@@ -1,494 +1,551 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Name",
-  "description": "Name table schema (file_num: 10) - Represents customers, suppliers, and other contacts",
+  "description": "Represents customers, suppliers, employees, and other contacts or entities interacted with by the business. Internal Name: Name (file_num: 10).",
   "type": "object",
   "properties": {
     "SequenceNumber": {
       "type": "integer",
-      "description": "Unsigned long sequence number"
+      "description": "Internal unique identifier for the Name record."
     },
     "LastModifiedTime": {
       "type": "string",
       "format": "date-time",
-      "description": "Last modified timestamp"
+      "description": "Timestamp indicating the last time the Name record was modified."
     },
     "Code": {
       "type": "string",
       "maxLength": 12,
-      "description": "Name code (indexed)"
+      "description": "The unique code used to identify this Name record (customer, supplier, etc.). Indexed."
     },
     "Name": {
       "type": "string",
       "maxLength": 256,
-      "description": "Entity name (mutable: freely, script-only)"
+      "description": "The full name of the person or organisation. (Mutable: freely, script-only)"
     },
     "Contact": {
       "type": "string",
       "maxLength": 40,
-      "description": "Primary contact name (mutable: freely, script-only)"
+      "description": "The primary contact person's name for this entity. (Mutable: freely, script-only)"
     },
     "Position": {
       "type": "string",
       "maxLength": 40,
-      "description": "Contact position (mutable: freely, script-only)"
+      "description": "The job title or position of the primary contact person. (Mutable: freely, script-only)"
     },
     "Address1": {
       "type": "string",
       "maxLength": 60,
-      "description": "Address line 1 (mutable: freely, script-only)"
+      "description": "First line of the mailing/postal address. (Mutable: freely, script-only)"
     },
     "Address2": {
       "type": "string",
       "maxLength": 60,
-      "description": "Address line 2 (mutable: freely, script-only)"
+      "description": "Second line of the mailing/postal address. (Mutable: freely, script-only)"
     },
     "Address3": {
       "type": "string",
       "maxLength": 60,
-      "description": "Address line 3 (mutable: freely, script-only)"
+      "description": "Third line of the mailing/postal address (often Suburb). (Mutable: freely, script-only)"
     },
     "Address4": {
       "type": "string",
       "maxLength": 60,
-      "description": "Address line 4 (mutable: freely, script-only)"
+      "description": "Fourth line of the mailing/postal address (often City/State/Region). (Mutable: freely, script-only)"
     },
     "Delivery1": {
       "type": "string",
       "maxLength": 60,
-      "description": "Delivery address line 1 (mutable: freely, script-only)"
+      "description": "First line of the delivery/shipping address. (Mutable: freely, script-only)"
     },
     "Delivery2": {
       "type": "string",
       "maxLength": 60,
-      "description": "Delivery address line 2 (mutable: freely, script-only)"
+      "description": "Second line of the delivery/shipping address. (Mutable: freely, script-only)"
     },
     "Delivery3": {
       "type": "string",
       "maxLength": 60,
-      "description": "Delivery address line 3 (mutable: freely, script-only)"
+      "description": "Third line of the delivery/shipping address (often Suburb). (Mutable: freely, script-only)"
     },
     "Delivery4": {
       "type": "string",
       "maxLength": 60,
-      "description": "Delivery address line 4 (mutable: freely, script-only)"
+      "description": "Fourth line of the delivery/shipping address (often City/State/Region). (Mutable: freely, script-only)"
     },
     "Phone": {
       "type": "string",
       "maxLength": 20,
-      "description": "Phone number (mutable: freely, script-only)"
+      "description": "Primary phone number. (Mutable: freely, script-only)"
     },
     "Fax": {
       "type": "string",
       "maxLength": 20,
-      "description": "Fax number (mutable: freely, script-only)"
+      "description": "Primary fax number. (Mutable: freely, script-only)"
     },
     "Category1": {
       "type": "string",
       "maxLength": 16,
-      "description": "Category 1 (mutable: freely, script-only)"
+      "description": "User-defined category 1 for grouping and analysis. (Mutable: freely, script-only)"
     },
     "Category2": {
       "type": "string",
       "maxLength": 16,
-      "description": "Category 2 (mutable: freely, script-only)"
+      "description": "User-defined category 2 for grouping and analysis. (Mutable: freely, script-only)"
     },
     "Category3": {
       "type": "string",
       "maxLength": 16,
-      "description": "Category 3 (mutable: freely, script-only)"
+      "description": "User-defined category 3 for grouping and analysis. (Mutable: freely, script-only)"
     },
     "Category4": {
       "type": "string",
       "maxLength": 16,
-      "description": "Category 4 (mutable: freely, script-only)"
+      "description": "User-defined category 4 for grouping and analysis. (Mutable: freely, script-only)"
     },
     "CustomerType": {
       "type": "integer",
-      "description": "Customer type (indexed)"
+      "description": "Indicates the customer status. Indexed.",
+      "enum": [0, 1, 2],
+      "enumDescriptions": {
+        "0": "Not a customer",
+        "1": "Customer (cash sales only)",
+        "2": "Debtor (can receive invoices on credit)"
+      }
     },
     "D90Plus": {
       "type": "number",
-      "description": "90+ days receivables"
+      "description": "Aged receivables balance for invoices 90+ days overdue (based on manual ageing)."
     },
     "D60Plus": {
       "type": "number",
-      "description": "60+ days receivables"
+      "description": "Aged receivables balance for invoices 60-89 days overdue (based on manual ageing)."
     },
     "D30Plus": {
       "type": "number",
-      "description": "30+ days receivables"
+      "description": "Aged receivables balance for invoices 30-59 days overdue (based on manual ageing)."
     },
     "DCurrent": {
       "type": "number",
-      "description": "Current receivables"
+      "description": "Current receivables balance (invoices not yet overdue based on manual ageing)."
     },
     "CCurrent": {
       "type": "number",
-      "description": "Current payables"
+      "description": "Current accounts payable balance (amount owed to this supplier)."
     },
     "DebtorTerms": {
       "type": "integer",
-      "description": "Debtor terms"
+      "description": "Default payment terms granted to this debtor (positive N = days, negative N = Nth day of following month)."
     },
     "CreditorTerms": {
       "type": "integer",
-      "description": "Creditor terms"
+      "description": "Default payment terms received from this creditor (positive N = days, negative N = Nth day of following month)."
     },
     "Bank": {
       "type": "string",
       "maxLength": 8,
-      "description": "Bank code (mutable: freely, script-only)"
+      "description": "Customer's bank name or code (used for deposit slips). (Mutable: freely, script-only)"
     },
     "AccountName": {
       "type": "string",
       "maxLength": 64,
-      "description": "Bank account name (mutable: freely, script-only)"
+      "description": "The name on the bank account (customer's or supplier's). (Mutable: freely, script-only)"
     },
     "BankBranch": {
       "type": "string",
       "maxLength": 22,
-      "description": "Bank branch (mutable: freely, script-only)"
+      "description": "The customer's bank branch details. (Mutable: freely, script-only)"
     },
     "TheirRef": {
       "type": "string",
       "maxLength": 16,
-      "description": "Their reference (mutable: freely, script-only)"
+      "description": "The reference code used by this entity to identify your organisation. (Mutable: freely, script-only)"
     },
     "Hold": {
       "type": "boolean",
-      "description": "Hold status (mutable: freely, script-only)"
+      "description": "If true, transactions for this Name are automatically put on hold. (Mutable: freely, script-only)"
     },
     "RecAccount": {
       "type": "string",
       "maxLength": 8,
-      "description": "Receivables account"
+      "description": "The default Accounts Receivable control account code for this debtor."
     },
     "PayAccount": {
       "type": "string",
       "maxLength": 8,
-      "description": "Payables account"
+      "description": "The default Accounts Payable control account code for this creditor."
     },
     "Kind": {
       "type": "integer",
-      "description": "Entity kind (indexed)"
+      "description": "Indicates the kind of Name record (e.g., template or normal). Indexed.",
+      "enum": [0, 1],
+      "enumDescriptions": {
+        "0": "Template (used for creating new Names)",
+        "1": "Normal Name record"
+      }
     },
     "CreditLimit": {
       "type": "integer",
-      "description": "Credit limit (mutable: freely, script-only)"
+      "description": "The credit limit extended to this debtor (0 = unlimited). (Mutable: freely, script-only)"
     },
     "Discount": {
       "type": "number",
-      "description": "Discount percentage (mutable: freely, script-only)"
+      "description": "Default percentage discount given to this customer. (Mutable: freely, script-only)"
     },
     "Comment": {
       "type": "string",
       "maxLength": 1024,
-      "description": "Comments (mutable: freely, script-only)"
+      "description": "General comments or notes about this Name record. (Mutable: freely, script-only)"
     },
     "SupplierType": {
       "type": "integer",
-      "description": "Supplier type (indexed)"
+      "description": "Indicates the supplier status. Indexed.",
+      "enum": [0, 1, 2],
+      "enumDescriptions": {
+        "0": "Not a supplier",
+        "1": "Supplier (cash purchases only)",
+        "2": "Creditor (can receive purchase orders on credit)"
+      }
     },
     "Colour": {
       "type": "integer",
-      "description": "Display color (mutable: conditionally)"
+      "minimum": 0,
+      "maximum": 7,
+      "description": "A user-assigned colour index (0-7) for visual identification in lists. Labels are user-defined in preferences. (Mutable: conditionally)"
     },
     "Salesperson": {
       "type": "string",
       "maxLength": 6,
-      "description": "Salesperson code (mutable: freely, script-only)"
+      "description": "The default salesperson code associated with this customer/debtor. (Mutable: freely, script-only)"
     },
     "TaxCode": {
       "type": "string",
       "maxLength": 6,
-      "description": "Tax code"
+      "description": "Overrides the default tax code for transactions with this Name."
     },
     "SplitMode": {
       "type": "integer",
-      "description": "Split mode"
+      "description": "Default auto-allocation mode used for transactions with this Name."
     },
     "PostCode": {
       "type": "string",
       "maxLength": 12,
-      "description": "Postal code (mutable: freely, script-only)"
+      "description": "Postal/Zip code for the mailing address. (Mutable: freely, script-only)"
     },
     "State": {
       "type": "string",
       "maxLength": 8,
-      "description": "State/province (mutable: freely, script-only)"
+      "description": "State/Province/Region for the mailing address. (Mutable: freely, script-only)"
     },
     "BankAccountNumber": {
       "type": "string",
       "maxLength": 24,
-      "description": "Bank account number (mutable: freely, script-only)"
+      "description": "The supplier's bank account number (used for electronic payments). (Mutable: freely, script-only)"
     },
     "Currency": {
       "type": "string",
       "maxLength": 4,
-      "description": "Currency code"
+      "description": "The default currency code for transactions with this Name (Gold only). Empty for base currency."
     },
     "PaymentMethod": {
       "type": "integer",
-      "description": "Payment method (mutable: conditionally)"
+      "description": "The default method used to pay this creditor. (Mutable: conditionally)",
+      "enum": [0, 1, 2, 3, 4, 5, 6, 7],
+      "enumDescriptions": {
+        "0": "None/Unspecified",
+        "1": "Cash",
+        "2": "Cheque",
+        "3": "Electronic/Direct Credit",
+        "4": "Credit Card",
+        "5": "User Defined 1",
+        "6": "User Defined 2",
+        "7": "User Defined 3"
+      }
     },
     "DBalance": {
       "type": "number",
-      "description": "Debtor balance"
+      "description": "Total debtor balance (sum of D90Plus, D60Plus, D30Plus, DCurrent)."
     },
     "DDI": {
       "type": "string",
       "maxLength": 20,
-      "description": "Direct dial-in (mutable: freely, script-only)"
+      "description": "Direct Dial-In number for the primary contact. (Mutable: freely, script-only)"
     },
     "eMail": {
       "type": "string",
       "maxLength": 140,
-      "description": "Email address (mutable: freely, script-only)"
+      "description": "Email address for the primary contact. (Mutable: freely, script-only)"
     },
     "Mobile": {
       "type": "string",
       "maxLength": 20,
-      "description": "Mobile number (mutable: freely, script-only)"
+      "description": "Mobile phone number for the primary contact. (Mutable: freely, script-only)"
     },
     "AfterHours": {
       "type": "string",
       "maxLength": 20,
-      "description": "After hours contact (mutable: freely, script-only)"
+      "description": "After-hours contact number for the primary contact. (Mutable: freely, script-only)"
     },
     "Contact2": {
       "type": "string",
       "maxLength": 40,
-      "description": "Secondary contact (mutable: freely, script-only)"
+      "description": "The name of the secondary contact person. (Mutable: freely, script-only)"
     },
     "Position2": {
       "type": "string",
       "maxLength": 40,
-      "description": "Secondary contact position (mutable: freely, script-only)"
+      "description": "The job title or position of the secondary contact person. (Mutable: freely, script-only)"
     },
     "DDI2": {
       "type": "string",
       "maxLength": 20,
-      "description": "Secondary contact DDI (mutable: freely, script-only)"
+      "description": "Direct Dial-In number for the secondary contact. (Mutable: freely, script-only)"
     },
     "eMail2": {
       "type": "string",
       "maxLength": 140,
-      "description": "Secondary contact email (mutable: freely, script-only)"
+      "description": "Email address for the secondary contact. (Mutable: freely, script-only)"
     },
     "Mobile2": {
       "type": "string",
       "maxLength": 20,
-      "description": "Secondary contact mobile (mutable: freely, script-only)"
+      "description": "Mobile phone number for the secondary contact. (Mutable: freely, script-only)"
     },
     "AfterHours2": {
       "type": "string",
       "maxLength": 20,
-      "description": "Secondary contact after hours (mutable: freely, script-only)"
+      "description": "After-hours contact number for the secondary contact. (Mutable: freely, script-only)"
     },
     "WebURL": {
       "type": "string",
       "maxLength": 64,
-      "description": "Website URL (mutable: freely, script-only)"
+      "description": "The website URL for the entity. (Mutable: freely, script-only)"
     },
     "ProductPricing": {
       "type": "string",
       "maxLength": 2,
-      "description": "Product pricing code (mutable: conditionally)"
+      "description": "The default product pricing level (A-F) assigned to this customer. (Mutable: conditionally)",
+      "enum": ["A", "B", "C", "D", "E", "F", ""],
+      "enumDescriptions": {
+        "A": "Price Level A",
+        "B": "Price Level B",
+        "C": "Price Level C",
+        "D": "Price Level D",
+        "E": "Price Level E",
+        "F": "Price Level F",
+        "": "Default/Not Specified"
+      }
     },
     "DateOfLastSale": {
-      "type": "string",
+      "type": ["string", "null"],
       "format": "date",
-      "description": "Date of last sale"
+      "description": "The date of the last recorded sale (invoice or cash receipt) to this customer."
     },
     "SplitAcct1": {
       "type": "string",
       "maxLength": 14,
-      "description": "Split account 1"
+      "description": "Account code (potentially including dept) for the first part of an auto-allocation split."
     },
     "SplitAcct2": {
       "type": "string",
       "maxLength": 14,
-      "description": "Split account 2"
+      "description": "Account code (potentially including dept) for the second part (often remainder) of an auto-allocation split."
     },
     "SplitPercent": {
       "type": "number",
-      "description": "Split percentage"
+      "description": "The percentage to allocate to SplitAcct1 in an auto-allocation split."
     },
     "SplitAmount": {
       "type": "number",
-      "description": "Split amount"
+      "description": "The fixed amount to allocate to SplitAcct1 in an auto-allocation split."
     },
     "UserNum": {
       "type": "number",
-      "description": "User number (mutable: freely, script-only)"
+      "description": "A user-defined number field for custom data storage, often used by scripts. (Mutable: freely, script-only)"
     },
     "UserText": {
       "type": "string",
       "maxLength": 256,
-      "description": "User text (mutable: freely, script-only)"
+      "description": "A user-defined text field for custom data storage, often used by scripts. (Mutable: freely, script-only)"
     },
     "CustPromptPaymentTerms": {
       "type": "integer",
-      "description": "Customer prompt payment terms (mutable: conditionally)"
+      "description": "Default prompt payment terms offered TO this customer (days or day-of-month code). (Mutable: conditionally)"
     },
     "CustPromptPaymentDiscount": {
       "type": "number",
-      "description": "Customer prompt payment discount (mutable: conditionally)"
+      "description": "Default prompt payment discount percentage offered TO this customer. (Mutable: conditionally)"
     },
     "SuppPromptPaymentTerms": {
       "type": "integer",
-      "description": "Supplier prompt payment terms (mutable: conditionally)"
+      "description": "Default prompt payment terms offered BY this supplier (days or day-of-month code). (Mutable: conditionally)"
     },
     "SuppPromptPaymentDiscount": {
       "type": "number",
-      "description": "Supplier prompt payment discount (mutable: conditionally)"
+      "description": "Default prompt payment discount percentage offered BY this supplier. (Mutable: conditionally)"
     },
     "LastPaymentMethod": {
       "type": "integer",
-      "description": "Last payment method used"
+      "description": "The payment method code used in the last payment transaction involving this Name.",
+      "enum": [0, 1, 2, 3, 4, 5, 6, 7],
+      "enumDescriptions": {
+        "0": "None/Unspecified",
+        "1": "Cash",
+        "2": "Cheque",
+        "3": "Electronic/Direct Credit",
+        "4": "Credit Card",
+        "5": "User Defined 1",
+        "6": "User Defined 2",
+        "7": "User Defined 3"
+      }
     },
     "CreditCardNum": {
       "type": "string",
       "maxLength": 20,
-      "description": "Credit card number (mutable: freely, script-only)"
+      "description": "Customer's credit card number (store securely!). (Mutable: freely, script-only)"
     },
     "CreditCardExpiry": {
       "type": "string",
       "maxLength": 6,
-      "description": "Credit card expiry (mutable: freely, script-only)"
+      "description": "Customer's credit card expiry date (e.g., MMYY). (Mutable: freely, script-only)"
     },
     "CreditCardName": {
       "type": "string",
       "maxLength": 64,
-      "description": "Credit card name (mutable: freely, script-only)"
+      "description": "Name as it appears on the customer's credit card. (Mutable: freely, script-only)"
     },
     "TaxNumber": {
       "type": "string",
       "maxLength": 32,
-      "description": "Tax identification number (mutable: freely, script-only)"
+      "description": "The entity's tax identification number (e.g., GST#, VAT Reg No, ABN, EIN). (Mutable: freely, script-only)"
     },
     "Custom1": {
       "type": "string",
       "maxLength": 256,
-      "description": "Custom field 1 (mutable: freely, script-only)"
+      "description": "User-defined custom field 1. (Mutable: freely, script-only)"
     },
     "Custom2": {
       "type": "string",
       "maxLength": 256,
-      "description": "Custom field 2 (mutable: freely, script-only)"
+      "description": "User-defined custom field 2. (Mutable: freely, script-only)"
     },
     "Custom3": {
       "type": "string",
       "maxLength": 16,
-      "description": "Custom field 3 (mutable: freely, script-only)"
+      "description": "User-defined custom field 3. (Mutable: freely, script-only)"
     },
     "Custom4": {
       "type": "string",
       "maxLength": 16,
-      "description": "Custom field 4 (mutable: freely, script-only)"
+      "description": "User-defined custom field 4. (Mutable: freely, script-only)"
     },
     "DeliveryPostcode": {
       "type": "string",
       "maxLength": 12,
-      "description": "Delivery postal code (mutable: freely, script-only)"
+      "description": "Postal/Zip code for the delivery address. (Mutable: freely, script-only)"
     },
     "DeliveryState": {
       "type": "string",
       "maxLength": 8,
-      "description": "Delivery state/province (mutable: freely, script-only)"
+      "description": "State/Province/Region for the delivery address. (Mutable: freely, script-only)"
     },
     "AddressCountry": {
       "type": "string",
       "maxLength": 60,
-      "description": "Address country (mutable: freely, script-only)"
+      "description": "Country for the mailing/postal address. (Mutable: freely, script-only)"
     },
     "DeliveryCountry": {
       "type": "string",
       "maxLength": 60,
-      "description": "Delivery country (mutable: freely, script-only)"
+      "description": "Country for the delivery/shipping address. (Mutable: freely, script-only)"
     },
     "ReceiptMethod": {
       "type": "integer",
-      "description": "Receipt method (mutable: conditionally)"
+      "description": "The default method this customer uses to pay. (Mutable: conditionally)",
+      "enum": [0, 1, 2, 3, 4, 5, 6, 7],
+      "enumDescriptions": {
+        "0": "None/Unspecified",
+        "1": "Cash",
+        "2": "Cheque",
+        "3": "Electronic/Direct Credit",
+        "4": "Credit Card",
+        "5": "User Defined 1",
+        "6": "User Defined 2",
+        "7": "User Defined 3"
+      }
     },
     "ABUID": {
       "type": "string",
       "maxLength": 32,
-      "description": "ABU ID"
+      "description": "Address Book Unique Identifier (macOS Address Book integration)."
     },
     "BankParticulars": {
       "type": "string",
       "maxLength": 32,
-      "description": "Bank particulars (mutable: freely, script-only)"
+      "description": "Specific particulars to include on electronic payments to this supplier. (Mutable: freely, script-only)"
     },
     "Flags": {
       "type": "integer",
-      "description": "Flags"
+      "description": "A bitmask field storing various boolean settings/attributes for the Name record (e.g., Requires Order Number)."
     },
     "Salutation": {
       "type": "string",
       "maxLength": 40,
-      "description": "Salutation (mutable: freely, script-only)"
+      "description": "Salutation for the primary contact (e.g., Mr., Ms., Dr.). (Mutable: freely, script-only)"
     },
     "Salutation2": {
       "type": "string",
       "maxLength": 40,
-      "description": "Secondary contact salutation (mutable: freely, script-only)"
+      "description": "Salutation for the secondary contact. (Mutable: freely, script-only)"
     },
     "Memo": {
       "type": "string",
       "maxLength": 256,
-      "description": "Memo (mutable: freely, script-only)"
+      "description": "Memo/notes associated with the primary contact. (Mutable: freely, script-only)"
     },
     "Memo2": {
       "type": "string",
       "maxLength": 256,
-      "description": "Secondary memo (mutable: freely, script-only)"
+      "description": "Memo/notes associated with the secondary contact. (Mutable: freely, script-only)"
     },
     "Role": {
       "type": "integer",
-      "description": "Primary contact role (mutable: freely, script-only)"
+      "description": "Bitmask representing the role(s) assigned to the primary contact (defined in Preferences). (Mutable: freely, script-only)"
     },
     "Role2": {
       "type": "integer",
-      "description": "Secondary contact role (mutable: freely, script-only)"
+      "description": "Bitmask representing the role(s) assigned to the secondary contact. (Mutable: freely, script-only)"
     },
     "Custom5": {
       "type": "string",
       "maxLength": 16,
-      "description": "Custom field 5 (mutable: freely, script-only)"
+      "description": "User-defined custom field 5. (Mutable: freely, script-only)"
     },
     "Custom6": {
       "type": "string",
       "maxLength": 16,
-      "description": "Custom field 6 (mutable: freely, script-only)"
+      "description": "User-defined custom field 6. (Mutable: freely, script-only)"
     },
     "Custom7": {
       "type": "string",
       "maxLength": 16,
-      "description": "Custom field 7 (mutable: freely, script-only)"
+      "description": "User-defined custom field 7. (Mutable: freely, script-only)"
     },
     "Custom8": {
       "type": "string",
       "maxLength": 16,
-      "description": "Custom field 8 (mutable: freely, script-only)"
+      "description": "User-defined custom field 8. (Mutable: freely, script-only)"
     },
     "TaggedText": {
       "type": "string",
       "maxLength": 256,
-      "description": "Tagged text (mutable: freely, script-only)"
+      "description": "Stores key-value pairs for custom data, primarily accessed via scripting functions GetTaggedValue/SetTaggedValue. (Mutable: freely, script-only)"
     },
     "EInvoicingID": {
       "type": "string",
       "maxLength": 32,
-      "description": "E-Invoicing ID (mutable: freely, script-only)"
+      "description": "The unique identifier (e.g., ABN, NZBN, UEN) used for sending/receiving electronic invoices via PEPPOL network. (Mutable: freely, script-only)"
     }
   },
-  "required": [
-    "SequenceNumber",
-    "LastModifiedTime",
-    "Code",
-    "Name"
-  ]
+  "required": ["SequenceNumber", "LastModifiedTime", "Code", "Name"]
 }

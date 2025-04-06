@@ -1,11 +1,11 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const TransactionOne = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.String(),
   OurRef: t.Nullable(t.String()),
-  TransDate: t.Date(),
-  EnterDate: t.Nullable(t.Date()),
-  DueDate: t.Nullable(t.Date()),
+  TransDate: t.String(),
+  EnterDate: t.Nullable(t.String()),
+  DueDate: t.Nullable(t.String()),
   Period: t.Nullable(t.Number()),
   Type: t.String(),
   TheirRef: t.Nullable(t.String()),
@@ -18,7 +18,7 @@ export const TransactionOne = t.Object({
   ToFrom: t.Nullable(t.String()),
   Status: t.Nullable(t.String()),
   Hold: t.Nullable(t.Boolean()),
-  DatePaid: t.Nullable(t.Date()),
+  DatePaid: t.Nullable(t.String()),
   AmtPaid: t.Nullable(t.Number()),
   PayAmount: t.Nullable(t.Number()),
   Aging: t.Nullable(t.Number()),
@@ -32,12 +32,12 @@ export const TransactionOne = t.Object({
   Colour: t.Nullable(t.Number()),
   BankJNSeq: t.Nullable(t.Number()),
   PaymentMethod: t.Nullable(t.Number()),
-  TimePosted: t.Nullable(t.Date()),
+  TimePosted: t.Nullable(t.String()),
   SecurityLevel: t.Nullable(t.Number()),
   User1: t.Nullable(t.String()),
   User2: t.Nullable(t.String()),
   User3: t.Nullable(t.String()),
-  PromptPaymentDate: t.Nullable(t.Date()),
+  PromptPaymentDate: t.Nullable(t.String()),
   PromptPaymentAmt: t.Nullable(t.Number()),
   ProdPriceCode: t.Nullable(t.String()),
   MailingAddress: t.Nullable(t.String()),
@@ -81,5 +81,5 @@ export const TransactionMany = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });
