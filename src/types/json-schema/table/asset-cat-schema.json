@@ -1,4 +1,5 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "title": "Asset",
   "description": "Defines categories for assets, holding default depreciation settings and GL account linkages. Internal Name: assetcat.",
@@ -34,12 +35,12 @@
       "description": "Account code for gain/loss on asset disposal (IN or EX Type)."
     },
     "Custom": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 39,
       "description": "For user's own use."
     },
     "Group": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 7,
       "description": "For user's own grouping/reporting use."
     },
@@ -50,7 +51,7 @@
       "description": "Default depreciation type: SL (Straight Line) or DV (Diminishing Value)."
     },
     "Impairment": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 13,
       "description": "An expense account code for asset impairment loss (EX Type)."
     },
@@ -59,41 +60,41 @@
       "description": "Default depreciation rate (%)."
     },
     "RevalSurplus": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 13,
       "description": "An equity account code for revaluation surplus (SF Type)."
     },
     "GainLossPrivate": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 13,
       "description": "Account code for private portion gain/loss on sale (IN or EX Type)."
     },
     "DepExpensePrivate": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 13,
       "description": "Account code for private portion depreciation (EX Type)."
     },
     "UserNum": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Scriptable number storage."
     },
     "UserText": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "Scriptable text storage."
     },
     "LastDepreciatedDate": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date",
       "description": "Date of last depreciation run for category."
     },
     "LastModifiedTime": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date-time",
       "description": "Date and time the category record was last changed."
     },
     "TaggedText": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "Scriptable tag storage."
     },

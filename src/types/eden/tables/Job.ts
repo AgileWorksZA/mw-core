@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const JobOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Code: t.String(),
   Description: t.String(),
   Client: t.String(),

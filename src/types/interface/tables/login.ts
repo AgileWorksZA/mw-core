@@ -4,7 +4,7 @@
  */
 export interface Login {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="4" */
   Initials: string;
   /** size="32" */

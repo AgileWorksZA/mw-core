@@ -4,7 +4,7 @@
  */
 export interface User {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="10" */
   Key: string;
   /** @mutable="freely, script-only" size="246" */

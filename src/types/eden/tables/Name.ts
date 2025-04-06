@@ -1,7 +1,7 @@
 import { t } from "elysia";
 export const NameOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Code: t.String(),
   Name: t.String(),
   Contact: t.Nullable(t.String()),

@@ -4,7 +4,7 @@
  */
 export interface JobSheet {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="10" */
   Job: string;
   /** @mutable="conditionally" */

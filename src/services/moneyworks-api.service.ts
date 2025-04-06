@@ -133,7 +133,7 @@ export class MoneyWorksApiService {
       const headers = this.createAuthHeaders();
 
       const response = await axios.get(url, { headers });
-      console.log(response.data, url);
+
       return response.data as string;
     } catch (error) {
       this.handleError(error);

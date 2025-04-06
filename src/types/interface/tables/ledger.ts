@@ -4,7 +4,7 @@
  */
 export interface Ledger {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** size="8" */
   AccountCode: string;
   /** @indexed size="6" */

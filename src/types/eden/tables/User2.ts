@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const User2One = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   DevKey: t.Number(),
   Key: t.String(),
   Int1: t.Nullable(t.Number()),

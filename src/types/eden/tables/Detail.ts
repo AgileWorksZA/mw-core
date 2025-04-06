@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const DetailOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   ParentSeq: t.Number(),
   Sort: t.Nullable(t.Number()),
   Account: t.String(),

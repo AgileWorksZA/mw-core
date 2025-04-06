@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const ProductOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Code: t.String(),
   SuppliersCode: t.Nullable(t.String()),
   Supplier: t.Nullable(t.String()),

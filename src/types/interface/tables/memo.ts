@@ -4,7 +4,7 @@
  */
 export interface Memo {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed */
   NameSeq: number;
   Order: number;

@@ -1,4 +1,5 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "title": "Asset Log",
   "description": "Stores the historical actions for an asset. Internal Name: AssetLog.",
@@ -19,27 +20,27 @@
       "description": "Date of the action."
     },
     "Qty": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Quantity involved in the action (e.g., for partial disposal)."
     },
     "Depreciation": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Depreciation amount due to the action."
     },
     "Adjustment1": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Adjustments (e.g., related to revaluation/disposal)."
     },
     "Adjustment2": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Adjustments (e.g., related to revaluation/disposal)."
     },
     "Rate": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Depreciation rate (%) used for the action."
     },
     "PrivateUsePercent": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Private use percentage at the time of the action."
     },
     "AccumDepreciation": {
@@ -47,7 +48,7 @@
       "description": "Accumulated depreciation balance *after* the action."
     },
     "AccumReval": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Accumulated revaluation amount *after* the action."
     },
     "ClosingValue": {
@@ -55,11 +56,11 @@
       "description": "Book value *after* the action."
     },
     "TransactionSeq": {
-      "type": ["integer", "null"],
+      "type": "integer",
       "description": "Sequence number of the GL transaction associated with action (if any)."
     },
     "Memo": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "User memo associated with the action."
     }

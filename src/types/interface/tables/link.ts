@@ -4,7 +4,7 @@
  */
 export interface Link {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="6" */
   Dept: string;
   /** @indexed size="6" */

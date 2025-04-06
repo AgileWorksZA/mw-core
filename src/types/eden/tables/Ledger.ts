@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const LedgerOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   AccountCode: t.String(),
   Department: t.Nullable(t.String()),
   Category: t.Nullable(t.String()),

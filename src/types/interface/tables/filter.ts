@@ -4,7 +4,7 @@
  */
 export interface Filter {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   File: number;
   TabSet: number;
   Tab: number;

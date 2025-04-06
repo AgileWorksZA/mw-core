@@ -5,7 +5,7 @@
 export interface BankRecs {
   /** @indexed */
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** size="14" */
   Account: string;
   Opening: number;

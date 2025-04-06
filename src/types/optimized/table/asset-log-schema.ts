@@ -1,0 +1,18 @@
+export default {
+  SequenceNumber: "number",
+  LastModifiedTime: "date",
+  ParentSeq: "number",
+  Action: "string",
+  Date: "date",
+  Qty: "number",
+  Depreciation: "number",
+  Adjustment1: "number",
+  Adjustment2: "number",
+  Rate: "number",
+  PrivateUsePercent: "number",
+  AccumDepreciation: "number",
+  AccumReval: "number",
+  ClosingValue: "number",
+  TransactionSeq: "number",
+  Memo: "string",
+};

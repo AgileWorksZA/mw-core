@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const TransactionOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   OurRef: t.Nullable(t.String()),
   TransDate: t.Date(),
   EnterDate: t.Nullable(t.Date()),

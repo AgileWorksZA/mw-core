@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const GeneralOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Code: t.String(),
   Description: t.Nullable(t.String()),
   Date: t.Nullable(t.Date()),

@@ -4,7 +4,7 @@
  */
 export interface Log {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   Description: string;
   /** size="4" */
   Who: string;

@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const FilterOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   File: t.Number(),
   TabSet: t.Nullable(t.Number()),
   Tab: t.Nullable(t.Number()),

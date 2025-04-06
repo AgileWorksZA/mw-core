@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const BankRecsOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Account: t.String(),
   Opening: t.Nullable(t.Number()),
   Closing: t.Nullable(t.Number()),

@@ -4,7 +4,7 @@
  */
 export interface Payments {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed */
   InvoiceID: number;
   /** @indexed */

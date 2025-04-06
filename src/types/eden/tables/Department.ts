@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const DepartmentOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Code: t.String(),
   Description: t.String(),
   Classification: t.Nullable(t.String()),

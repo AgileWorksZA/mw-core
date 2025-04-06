@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const StickiesOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   FileNum: t.Number(),
   Colour: t.Nullable(t.Number()),
   User: t.Nullable(t.String()),

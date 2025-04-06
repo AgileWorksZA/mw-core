@@ -4,7 +4,7 @@
  */
 export interface Lists {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="16" */
   ListID: string;
   /** @indexed size="16" */

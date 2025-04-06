@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const LoginOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Initials: t.String(),
   Name: t.String(),
   Password: t.Nullable(t.String()),

@@ -38,7 +38,6 @@ export class CompanyInformationService {
       this.parseCompanyInformation(companyInformation, select);
 
       // Parse the response
-      console.log(companyInformation);
       return companyInformation as CompanyInformation;
     } catch (error) {
       console.error("Error fetching company-information:", error);

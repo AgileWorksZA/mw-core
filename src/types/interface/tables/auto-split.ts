@@ -4,7 +4,7 @@
  */
 export interface AutoSplit {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** size="256" */
   MatchFunction: string;
   SplitMode: number;

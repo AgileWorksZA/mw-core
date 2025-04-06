@@ -4,7 +4,7 @@
  */
 export interface Product {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="32" */
   Code: string;
   /** @mutable="freely, script-only" size="40" */

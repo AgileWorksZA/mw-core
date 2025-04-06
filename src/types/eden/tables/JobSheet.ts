@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const JobSheetOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Job: t.String(),
   Qty: t.Nullable(t.Number()),
   Resource: t.Nullable(t.String()),

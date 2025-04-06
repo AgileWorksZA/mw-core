@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const ListOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   ListID: t.String(),
   Item: t.String(),
   Comment: t.Nullable(t.String()),

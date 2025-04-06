@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const OffLedgerOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Kind: t.String(),
   Name: t.String(),
   Description: t.Nullable(t.String()),

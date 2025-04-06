@@ -4,7 +4,7 @@
  */
 export interface OffLedger {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="4" */
   Kind: string;
   /** @indexed size="16" */

@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const LogOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Description: t.String(),
   Who: t.Nullable(t.String()),
   Info1: t.Nullable(t.String()),

@@ -4,7 +4,7 @@
  */
 export interface Detail {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed */
   ParentSeq: number;
   Sort: number;

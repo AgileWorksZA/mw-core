@@ -4,7 +4,7 @@
  */
 export interface Message {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @mutable="freely, script-only" */
   StartDate: Date;
   /** @mutable="freely, script-only" */

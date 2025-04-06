@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const MessageOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   StartDate: t.Nullable(t.Date()),
   EndDate: t.Nullable(t.Date()),
   NextDate: t.Nullable(t.Date()),

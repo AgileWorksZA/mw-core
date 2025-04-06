@@ -4,7 +4,7 @@
  */
 export interface General {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="10" */
   Code: string;
   /** size="32" */

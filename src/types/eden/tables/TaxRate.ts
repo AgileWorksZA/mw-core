@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const TaxRateOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   TaxCode: t.String(),
   PaidAccount: t.Nullable(t.String()),
   RecAccount: t.Nullable(t.String()),

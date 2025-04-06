@@ -4,7 +4,7 @@
  */
 export interface Build {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed */
   ProductSeq: number;
   Order: number;

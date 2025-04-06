@@ -1,7 +1,7 @@
 import { t } from 'elysia';
 export const BuildOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   ProductSeq: t.Number(),
   Order: t.Nullable(t.Number()),
   Qty: t.Number(),

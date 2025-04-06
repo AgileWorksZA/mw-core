@@ -4,7 +4,7 @@
  */
 export interface TaxRate {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** size="6" */
   TaxCode: string;
   /** size="8" */

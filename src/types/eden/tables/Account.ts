@@ -1,7 +1,7 @@
 import { t } from "elysia";
 export const AccountOne = t.Object({
   SequenceNumber: t.Number(),
-  LastModifiedTime: t.Date(),
+  LastModifiedTime: t.String(),
   Code: t.String(),
   Type: t.Nullable(t.String()),
   Group: t.Nullable(t.String()),

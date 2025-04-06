@@ -1,4 +1,5 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "title": "Asset",
   "description": "Represents an individual fixed asset. Internal Name: Asset.",
@@ -19,7 +20,7 @@
       "description": "The Asset Category code of the asset (links to AssetCat)."
     },
     "SerialNum": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 31,
       "description": "A serial number for the asset."
     },
@@ -28,7 +29,7 @@
       "description": "The quantity of the asset (normally 1)."
     },
     "ExpectedLife": {
-      "type": ["number", "null"],
+      "type": "number",
       "minimum": 0,
       "description": "The expected life in years of the asset."
     },
@@ -46,30 +47,30 @@
       "description": "Date on which the asset was acquired."
     },
     "LastDepreciatedDate": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date",
       "description": "Date on which the asset was last depreciated."
     },
     "AcquisitionSeq": {
-      "type": ["integer", "null"],
+      "type": "integer",
       "description": "The sequence number of the purchase transaction for the asset."
     },
     "DisposalSeq": {
-      "type": ["integer", "null"],
+      "type": "integer",
       "description": "The sequence number of the last disposal transaction for the asset."
     },
     "Location": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 15,
       "description": "Where the asset is kept."
     },
     "Dept": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 5,
       "description": "The asset department (must be a MoneyWorks Department code)."
     },
     "PrivateUsePercent": {
-      "type": ["number", "null"],
+      "type": "number",
       "minimum": 0,
       "maximum": 100,
       "description": "The percent of the asset used privately."
@@ -81,35 +82,35 @@
       "description": "Asset status: NEW=New, ACT=Active, NDP=Non-depreciable, OTH=Other, DSP=Disposed."
     },
     "LastModifiedBy": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 3,
       "description": "User initials who last modified the asset record."
     },
     "LastRevaluedDate": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date",
       "description": "Date of last revaluation (blank if none)."
     },
     "ExpectedResidualValue": {
-      "type": ["number", "null"],
+      "type": "number",
       "minimum": 0,
       "description": "Expected residual value."
     },
     "RevalSurplusImpairAmt": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Total revalued amount (positive if surplus)."
     },
     "UserNum": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Scriptable number storage."
     },
     "UserText": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "Scriptable text storage."
     },
     "AccumDepnAdj": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "Total adjustments to accumulated depreciation due to revaluations."
     },
     "BookValue": {
@@ -117,22 +118,22 @@
       "description": "The current book value."
     },
     "DisposalDate": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date",
       "description": "Date last disposed."
     },
     "GainLossOnDisposal": {
-      "type": ["number", "null"],
+      "type": "number",
       "description": "The gain or loss on asset disposal."
     },
     "Colour": {
-      "type": ["integer", "null"],
+      "type": "integer",
       "minimum": 0,
       "maximum": 7,
       "description": "Colour index (0-7)."
     },
     "TaggedText": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "Scriptable tag storage."
     },
@@ -146,27 +147,27 @@
       "description": "Depreciation rate (%)."
     },
     "Comment": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "Comments on asset."
     },
     "Custom1": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "User defined"
     },
     "Custom2": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "User defined"
     },
     "Custom3": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "User defined"
     },
     "Custom4": {
-      "type": ["string", "null"],
+      "type": "string",
       "maxLength": 255,
       "description": "User defined"
     }

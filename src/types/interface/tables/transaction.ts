@@ -5,7 +5,7 @@
 export interface Transaction {
   /** @indexed */
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed @mutable="conditionally" size="12" */
   OurRef: string;
   /** @indexed @mutable="conditionally" */

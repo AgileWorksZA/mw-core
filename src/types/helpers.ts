@@ -34,12 +34,15 @@ export function enforceType(
     | Date
     | {
         "#text": number | string | boolean;
+        _system?: boolean;
       },
   type: "string" | "integer" | "boolean" | "number" | "date" | "date-time",
 ): string | number | boolean | Date | null {
   const value =
-    typeof input === "object" && input !== null && "#text" in input
-      ? input["#text"]
+    typeof input === "object" && input !== null && "_system" in input
+      ? input._system
+        ? input["#text"]
+        : null
       : input;
 
   if (value === undefined) return null;

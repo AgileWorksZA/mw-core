@@ -4,7 +4,7 @@
  */
 export interface Stickies {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed */
   FileNum: number;
   Colour: number;

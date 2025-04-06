@@ -3,6 +3,9 @@ import { Elysia } from "elysia";
 import type { OpenAPIV3 } from "openapi-types";
 
 import { accountRoutes } from "./routes/tables/account.routes";
+import { assetCatRoutes } from "./routes/tables/asset-cat.routes";
+import { assetLogRoutes } from "./routes/tables/asset-log.routes";
+import { assetRoutes } from "./routes/tables/asset.routes";
 import { autoSplitRoutes } from "./routes/tables/auto-split.routes";
 import { bankRecsRoutes } from "./routes/tables/bank-recs.routes";
 import { buildRoutes } from "./routes/tables/build.routes";
@@ -10,6 +13,7 @@ import { departmentRoutes } from "./routes/tables/department.routes";
 import { detailRoutes } from "./routes/tables/detail.routes";
 import { filterRoutes } from "./routes/tables/filter.routes";
 import { generalRoutes } from "./routes/tables/general.routes";
+import { inventoryRoutes } from "./routes/tables/inventory.routes";
 import { jobSheetRoutes } from "./routes/tables/job-sheet.routes";
 import { jobRoutes } from "./routes/tables/job.routes";
 import { ledgerRoutes } from "./routes/tables/ledger.routes";
@@ -31,7 +35,11 @@ import { user2Routes } from "./routes/tables/user2.routes";
 
 import { companyInformationRoutes } from "./routes/system/company-information.routes";
 import { systemLabelsRoutes } from "./routes/system/system-labels.routes";
+
 import Account from "./types/json-schema/table/account-schema.json";
+import AssetCat from "./types/json-schema/table/asset-cat-schema.json";
+import AssetLog from "./types/json-schema/table/asset-log-schema.json";
+import Asset from "./types/json-schema/table/asset-schema.json";
 import AutoSplit from "./types/json-schema/table/autosplit-schema.json";
 import BankRecs from "./types/json-schema/table/bankrecs-schema.json";
 import Build from "./types/json-schema/table/build-schema.json";
@@ -39,6 +47,7 @@ import Department from "./types/json-schema/table/department-schema.json";
 import Detail from "./types/json-schema/table/detail-schema.json";
 import Filter from "./types/json-schema/table/filter-schema.json";
 import General from "./types/json-schema/table/general-schema.json";
+import Inventory from "./types/json-schema/table/inventory-schema.json";
 import Job from "./types/json-schema/table/job-schema.json";
 import JobSheet from "./types/json-schema/table/jobsheet-schema.json";
 import Ledger from "./types/json-schema/table/ledger-schema.json";
@@ -72,6 +81,9 @@ const app = new Elysia()
         components: {
           schemas: {
             Account: Account as OpenAPIV3.SchemaObject,
+            Asset: Asset as OpenAPIV3.SchemaObject,
+            AssetCat: AssetCat as OpenAPIV3.SchemaObject,
+            AssetLog: AssetLog as OpenAPIV3.SchemaObject,
             AutoSplit: AutoSplit as OpenAPIV3.SchemaObject,
             BankRecs: BankRecs as OpenAPIV3.SchemaObject,
             Build: Build as OpenAPIV3.SchemaObject,
@@ -79,6 +91,7 @@ const app = new Elysia()
             Detail: Detail as OpenAPIV3.SchemaObject,
             Filter: Filter as OpenAPIV3.SchemaObject,
             General: General as OpenAPIV3.SchemaObject,
+            // Inventory: Inventory as OpenAPIV3.SchemaObject,
             Job: Job as OpenAPIV3.SchemaObject,
             JobSheet: JobSheet as OpenAPIV3.SchemaObject,
             Ledger: Ledger as OpenAPIV3.SchemaObject,
@@ -104,6 +117,9 @@ const app = new Elysia()
   )
   // Register all table routes
   .use(accountRoutes)
+  .use(assetRoutes)
+  .use(assetCatRoutes)
+  .use(assetLogRoutes)
   .use(autoSplitRoutes)
   .use(bankRecsRoutes)
   .use(buildRoutes)
@@ -111,6 +127,7 @@ const app = new Elysia()
   .use(detailRoutes)
   .use(filterRoutes)
   .use(generalRoutes)
+  .use(inventoryRoutes)
   .use(jobRoutes)
   .use(jobSheetRoutes)
   .use(ledgerRoutes)

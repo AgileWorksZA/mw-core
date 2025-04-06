@@ -4,7 +4,7 @@
  */
 export interface Department {
   SequenceNumber: number;
-  LastModifiedTime: Date;
+  LastModifiedTime: string;
   /** @indexed size="6" */
   Code: string;
   /** @mutable="freely, script-only" size="36" */
