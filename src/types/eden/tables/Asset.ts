@@ -41,7 +41,7 @@ export const AssetOne = t.Object({
 });
 
 export const AssetMany = t.Object({
-  data: t.Array(AssetOne),
+  data: t.Array(t.Partial(AssetOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

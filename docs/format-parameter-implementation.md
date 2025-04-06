@@ -120,7 +120,7 @@ export class AssetService {
           `Missing key ${key} in data center json for Asset record`,
         );
       }
-      const value = enforceType(data[key], schema[key] as "string");
+      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
       (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Asset);
@@ -238,6 +238,11 @@ export type AssetField = keyof Asset;
    - The response will contain only the requested fields in the order specified
    - Empty or null fields will be represented as `null` in the response
 
+4. **Eden schema updates:**
+   - Change the response schema definition to use `t.Partial(TableOne)` instead of `TableOne`
+   - Example: `data: t.Array(t.Partial(AssetOne))` instead of `data: t.Array(AssetOne)`
+   - This is necessary to validate partial objects when only specific fields are requested
+
 ## Testing
 
 For each implemented table, test the following scenarios:
@@ -271,8 +276,13 @@ To implement the format parameter, the following changes were made to the Accoun
    - Updated mwParams to include fields and set format conditionally
    - Updated the data mapping to use the appropriate mapper based on whether fields were specified
    - Added proper handling of empty string values as null
+   - Fixed type safety by using `schema[key as keyof typeof schema]` instead of `schema[key]` when indexing into the schema object
 
-3. **Fixed Issues:**
+3. **Schema Changes:**
+   - Updated the Eden schema to use `t.Partial(TableOne)` instead of `TableOne`
+   - This allows validation to succeed when only a subset of fields is returned
+
+4. **Fixed Issues:**
    - Added support for special parsing of single-field results like SequenceNumber and Code
    - Enhanced MoneyWorksApiService to parse custom field format responses
    - Added handling for various field types (numeric, text, code)
