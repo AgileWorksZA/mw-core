@@ -139,6 +139,126 @@ export class MoneyWorksApiService {
       this.handleError(error);
     }
   }
+  
+  /**
+   * Get list of all tables in the database
+   * @returns Array of table names
+   */
+  async getDatabaseTables(): Promise<string[]> {
+    try {
+      const response = await this.evaluate("GetDatabaseFiles()");
+      
+      if (typeof response === 'string') {
+        // Split by newline and filter out empty strings
+        return response.split('\n').filter(table => table.trim() !== '');
+      }
+      
+      return [];
+    } catch (error) {
+      console.error("Error fetching database tables:", error);
+      this.handleError(error);
+      return [];
+    }
+  }
+  
+  /**
+   * Get list of all fields in a specific table
+   * @param tableName The name of the table to get fields from
+   * @returns Array of field names
+   */
+  async getDatabaseFields(tableName: string): Promise<string[]> {
+    try {
+      const expression = `GetDatabaseFields("${tableName}")`;
+      const response = await this.evaluate(expression);
+      
+      if (typeof response === 'string') {
+        // Split by newline and filter out empty strings
+        return response.split('\n').filter(field => field.trim() !== '');
+      }
+      
+      return [];
+    } catch (error) {
+      console.error(`Error fetching fields for table ${tableName}:`, error);
+      this.handleError(error);
+      return [];
+    }
+  }
+  
+  /**
+   * Get the size/type of a specific field in a table
+   * @param tableName The name of the table
+   * @param fieldName The name of the field
+   * @returns Field type information: 'SHORT' for number, 'BOOLEAN' for boolean, or a number for string length
+   */
+  async getDatabaseFieldSize(tableName: string, fieldName: string): Promise<string> {
+    try {
+      const expression = `GetDatabaseFieldSize("${tableName}", "${fieldName}")`;
+      const response = await this.evaluate(expression);
+      
+      return response || '';
+    } catch (error) {
+      console.error(`Error fetching field size for ${tableName}.${fieldName}:`, error);
+      this.handleError(error);
+      return '';
+    }
+  }
+  
+  /**
+   * Get detailed information about fields in a table, including their types
+   * @param tableName The name of the table to get fields from
+   * @returns Array of field information objects
+   */
+  async getDatabaseFieldsWithTypes(tableName: string): Promise<Array<{name: string, type: string, jsType?: string}>> {
+    try {
+      // Get all field names first
+      const fields = await this.getDatabaseFields(tableName);
+      const fieldInfos = [];
+      
+      // For each field, get its size/type
+      for (const field of fields) {
+        const sizeType = await this.getDatabaseFieldSize(tableName, field);
+        let jsType: string | undefined;
+        
+        // Map MoneyWorks types to JavaScript types
+        switch (sizeType) {
+          case 'SHORT':
+          case 'LONG':
+          case 'INT48':
+          case 'FLOAT':
+          case 'DOUBLE':
+            jsType = 'number';
+            break;
+          case 'BOOLEAN':
+            jsType = 'boolean';
+            break;
+          case 'DATE':
+          case 'TIME':
+            jsType = 'Date';
+            break;
+          default:
+            // Check if it's a string length (numeric)
+            if (!isNaN(Number(sizeType))) {
+              jsType = 'string';
+            } else {
+              // Unknown type - throw an error
+              throw new Error(`Unknown field type "${sizeType}" for field "${field}" in table "${tableName}"`);
+            }
+        }
+        
+        fieldInfos.push({
+          name: field,
+          type: sizeType,
+          jsType
+        });
+      }
+      
+      return fieldInfos;
+    } catch (error) {
+      console.error(`Error fetching fields with types for table ${tableName}:`, error);
+      this.handleError(error);
+      return [];
+    }
+  }
 
   /**
    * Export data from MoneyWorks

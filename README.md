@@ -139,6 +139,16 @@ To run in production:
 bun run start
 ```
 
+## CLI Tools
+
+The project includes several command-line tools for working with MoneyWorks data:
+
+- `align-export` - Align TSV exports with XML-verbose exports
+- `list-tables` - List all tables in the MoneyWorks database
+- `list-fields` - List all fields in a specific MoneyWorks table (with optional type information)
+
+For detailed documentation on using the CLI tools, see [mw-cli.md](docs/mw-cli.md).
+
 ## License
 
 [MIT](LICENSE)
