@@ -28,7 +28,9 @@ export const systemLabelsRoutes = new Elysia({ prefix: "/api" })
       }),
       query: t.Optional(
         t.Object({
-          language: t.Optional(t.Enum(SupportedLanguages)),
+          language: t.Optional(
+            t.Enum({ ...SupportedLanguages, English: "en" }),
+          ),
         }),
       ),
       detail: {

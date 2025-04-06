@@ -37,7 +37,7 @@
   "required": [
     "Identifier",
     "LastModifiedTime",
-    "Location", // Even the default location needs representation (empty string or null)
+    "Location",
     "ProductSeq",
     "Qty"
   ]

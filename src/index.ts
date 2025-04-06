@@ -9,6 +9,7 @@ import { assetRoutes } from "./routes/tables/asset.routes";
 import { autoSplitRoutes } from "./routes/tables/auto-split.routes";
 import { bankRecsRoutes } from "./routes/tables/bank-recs.routes";
 import { buildRoutes } from "./routes/tables/build.routes";
+import { contactsRoutes } from "./routes/tables/contacts.routes";
 import { departmentRoutes } from "./routes/tables/department.routes";
 import { detailRoutes } from "./routes/tables/detail.routes";
 import { filterRoutes } from "./routes/tables/filter.routes";
@@ -43,6 +44,7 @@ import Asset from "./types/json-schema/table/asset-schema.json";
 import AutoSplit from "./types/json-schema/table/autosplit-schema.json";
 import BankRecs from "./types/json-schema/table/bankrecs-schema.json";
 import Build from "./types/json-schema/table/build-schema.json";
+import Contacts from "./types/json-schema/table/contacts-schema.json";
 import Department from "./types/json-schema/table/department-schema.json";
 import Detail from "./types/json-schema/table/detail-schema.json";
 import Filter from "./types/json-schema/table/filter-schema.json";
@@ -67,7 +69,11 @@ import Transaction from "./types/json-schema/table/transaction-schema.json";
 import User from "./types/json-schema/table/user-schema.json";
 import User2 from "./types/json-schema/table/user2-schema.json";
 
-const app = new Elysia()
+const app = new Elysia({
+  serve: {
+    idleTimeout: 30,
+  },
+})
   // Add Swagger documentation
   .use(
     swagger({
@@ -87,11 +93,12 @@ const app = new Elysia()
             AutoSplit: AutoSplit as OpenAPIV3.SchemaObject,
             BankRecs: BankRecs as OpenAPIV3.SchemaObject,
             Build: Build as OpenAPIV3.SchemaObject,
+            Contacts: Contacts as OpenAPIV3.SchemaObject,
             Department: Department as OpenAPIV3.SchemaObject,
             Detail: Detail as OpenAPIV3.SchemaObject,
             Filter: Filter as OpenAPIV3.SchemaObject,
             General: General as OpenAPIV3.SchemaObject,
-            // Inventory: Inventory as OpenAPIV3.SchemaObject,
+            Inventory: Inventory as OpenAPIV3.SchemaObject,
             Job: Job as OpenAPIV3.SchemaObject,
             JobSheet: JobSheet as OpenAPIV3.SchemaObject,
             Ledger: Ledger as OpenAPIV3.SchemaObject,
@@ -123,6 +130,7 @@ const app = new Elysia()
   .use(autoSplitRoutes)
   .use(bankRecsRoutes)
   .use(buildRoutes)
+  .use(contactsRoutes)
   .use(departmentRoutes)
   .use(detailRoutes)
   .use(filterRoutes)

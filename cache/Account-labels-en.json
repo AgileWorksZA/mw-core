@@ -34,12 +34,12 @@
   "Cashforecast": "Cashforecast",
   "EBITDA": "EBITDA",
   "ImportFormat": "ImportFormat",
-  "Colour_0": "None",
-  "Colour_1": "Orange",
-  "Colour_2": "Red",
-  "Colour_3": "Magenta",
-  "Colour_4": "Cyan",
-  "Colour_5": "Blue",
-  "Colour_6": "Green",
-  "Colour_7": "Poo"
+  "Colour.0": "None",
+  "Colour.1": "Orange",
+  "Colour.2": "Red",
+  "Colour.3": "Magenta",
+  "Colour.4": "Cyan",
+  "Colour.5": "Blue",
+  "Colour.6": "Green",
+  "Colour.7": "Poo"
 }

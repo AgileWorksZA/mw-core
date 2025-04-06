@@ -14,7 +14,6 @@ export interface TableLabels {
  * Languages supported for table labels
  */
 export enum SupportedLanguages {
-  English = "en",
   French = "fr",
   German = "de",
   Spanish = "es",

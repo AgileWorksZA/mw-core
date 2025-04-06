@@ -1,0 +1,18 @@
+export default {
+  SequenceNumber: "number",
+  LastModifiedTime: "string",
+  ParentSeq: "number",
+  Order: "number",
+  ContactName: "string",
+  Salutation: "string",
+  Position: "string",
+  Phone: "string",
+  Mobile: "string",
+  AfterHours: "string",
+  eMail: "string",
+  Memo: "string",
+  Role: "number",
+  UserNum: "number",
+  UserText: "string",
+  TaggedText: "string",
+};

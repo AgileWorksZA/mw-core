@@ -42,7 +42,10 @@ export class SystemLabelsService {
       }
 
       // Validate language
-      if (!this.supportedLanguages.includes(language as SupportedLanguages)) {
+      if (
+        language !== "en" &&
+        !this.supportedLanguages.includes(language as SupportedLanguages)
+      ) {
         throw new Error(`Unsupported language: ${language}`);
       }
 
@@ -57,10 +60,7 @@ export class SystemLabelsService {
       );
 
       if (fs.existsSync(cacheFilePath)) {
-        const cachedLabels = JSON.parse(
-          fs.readFileSync(cacheFilePath, "utf-8"),
-        );
-        return cachedLabels;
+        return JSON.parse(fs.readFileSync(cacheFilePath, "utf-8"));
       }
 
       // If English labels are requested but not cached, generate them
@@ -195,7 +195,7 @@ export class SystemLabelsService {
         const expression = `FieldLabel("${tableName}.Colour", ${i})`;
         const response = await this.api.evaluate(expression);
         if (response) {
-          labels[`Colour_${i}`] = response;
+          labels[`Colour.${i}`] = response;
         }
       }
     }
@@ -206,7 +206,7 @@ export class SystemLabelsService {
         const expression = `FieldLabel("Transaction.PaymentMethod", ${i})`;
         const response = await this.api.evaluate(expression);
         if (response) {
-          labels[`PaymentMethod_${i}`] = response;
+          labels[`PaymentMethod.${i}`] = response;
         }
       }
     }
@@ -219,7 +219,7 @@ export class SystemLabelsService {
         const expression = `FieldLabel("Contacts.Role", ${bitValue})`;
         const response = await this.api.evaluate(expression);
         if (response) {
-          labels[`Role_${bitValue}`] = response;
+          labels[`Role.${bitValue}`] = response;
         }
       }
     }
