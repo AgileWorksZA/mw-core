@@ -6,7 +6,8 @@
     "dev": "bun run --watch src/index.ts",
     "build": "bun build ./src/index.ts --outdir ./dist --target bun",
     "build2": "bun build \\\n\t--compile \\\n\t--minify-whitespace \\\n\t--minify-syntax \\\n\t--target bun \\\n\t--outfile server \\\n\t./src/index.ts",
-    "start": "bun ./dist/index.js"
+    "start": "bun ./dist/index.js",
+    "cli": "bun src/cli/mw-cli.ts"
   },
   "dependencies": {
     "@elysiajs/swagger": "^1.2.2",
@@ -14,6 +15,7 @@
     "@smithery/sdk": "^1.0.2",
     "@types/xml2js": "^0.4.14",
     "axios": "^1.6.8",
+    "commander": "^13.1.0",
     "elysia": "latest",
     "fast-xml-parser": "^4.3.6",
     "jsdom": "^26.0.0",
@@ -24,5 +26,8 @@
     "@biomejs/biome": "^1.9.4",
     "bun-types": "latest"
   },
-  "module": "src/index.js"
+  "module": "src/index.js",
+  "bin": {
+    "mw-cli": "./src/cli/mw-cli.ts"
+  }
 }

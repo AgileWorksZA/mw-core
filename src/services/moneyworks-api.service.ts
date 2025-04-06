@@ -176,7 +176,7 @@ export class MoneyWorksApiService {
 
       const response = await axios.get(url, { headers });
 
-      if (queryParams.format.startsWith("xml")) {
+      if (queryParams.format && queryParams.format.startsWith("xml")) {
         const res = this.parser.parse(response.data);
         const data: T[] = res.table[res.table._name.toLowerCase()] ?? [];
         const limit: number = res.table._count;
@@ -190,6 +190,45 @@ export class MoneyWorksApiService {
             offset,
             next: offset + limit,
             prev: offset - limit > 0 ? offset - limit : 0,
+          },
+        };
+      }
+
+      // For TSV format (when format is empty or not xml)
+      // We need to parse the TSV data
+      if (!queryParams.format || !queryParams.format.startsWith("xml")) {
+        const lines = response.data.split("\n");
+        if (lines.length < 2) {
+          return {
+            data: [],
+            pagination: { total: 0, limit: 0, offset: 0, next: 0, prev: 0 },
+          };
+        }
+
+        const headers = lines[0].split("\t");
+        const data: T[] = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          if (!lines[i].trim()) continue; // Skip empty lines
+          
+          const values = lines[i].split("\t");
+          const record: Record<string, any> = {};
+          
+          for (let j = 0; j < headers.length; j++) {
+            record[headers[j]] = values[j] || "";
+          }
+          
+          data.push(record as T);
+        }
+
+        return {
+          data,
+          pagination: {
+            total: data.length,
+            limit: data.length,
+            offset: 0,
+            next: 0,
+            prev: 0,
           },
         };
       }
@@ -212,6 +251,39 @@ export class MoneyWorksApiService {
       data: [],
       pagination: { total: 0, limit: 0, offset: 0, next: 0, prev: 0 },
     };
+  }
+  
+  /**
+   * Export data from MoneyWorks and return the raw response
+   * This is useful for comparing different export formats
+   *
+   * @param table The table to export (name, transaction, account, etc.)
+   * @param params Query parameters (limit, start, search, sort, etc.)
+   * @returns Raw response as string
+   */
+  async exportRaw(
+    table: string,
+    params: MoneyWorksQueryParams = {},
+  ): Promise<string> {
+    try {
+      const exportTable =
+        table.toLowerCase() === "detail" ? "transaction" : table;
+      const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
+
+      const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(params, parent)}`;
+      const headers = this.createAuthHeaders();
+
+      const response = await axios.get(url, { 
+        headers,
+        responseType: 'text' 
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      this.handleError(error);
+      return "";
+    }
   }
 
   /**
