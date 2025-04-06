@@ -66,8 +66,8 @@ program
       });
       console.log(result);
     } catch (error) {
-      if (error.message?.includes("Unknown field type")) {
-        console.error(`Error: ${error.message}`);
+      if ((error as Error).message?.includes("Unknown field type")) {
+        console.error(`Error: ${(error as Error).message}`);
         console.error(
           "This is likely a new field type that needs to be added to the type mapping.",
         );
@@ -77,7 +77,7 @@ program
       } else {
         console.error(
           `Failed to list fields for table ${tableName}:`,
-          error.message,
+          (error as Error).message,
         );
       }
       process.exit(1);
