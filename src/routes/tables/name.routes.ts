@@ -12,7 +12,8 @@ const nameService = new NameService(config);
 export const nameRoutes = new Elysia({ prefix: "/api" }).get(
   "/names",
   async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search } = query;
+    const { limit = 10, offset = 0, sort, order, search, format } = query;
+    const fields = format ? format.split(",") : undefined;
 
     try {
       return await nameService.getNames({
@@ -21,6 +22,7 @@ export const nameRoutes = new Elysia({ prefix: "/api" }).get(
         sort,
         order: order as "asc" | "desc",
         search: search as unknown as Partial<Name>,
+        fields,
       });
     } catch (error) {
       console.error("Error in GET /names:", error);
@@ -34,10 +36,13 @@ export const nameRoutes = new Elysia({ prefix: "/api" }).get(
       sort: t.Optional(t.String()),
       order: t.Optional(t.String()),
       search: t.Optional(nameObject),
+      format: t.Optional(t.String()),
     }),
     detail: {
       summary: "Names",
-      description: `Get all names. Search by: ${NameFields.join(", ")}`,
+      description: `Get all names. Search by: ${NameFields.join(", ")}.
+      Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
+      Example: /api/names?format=SequenceNumber,Code,Name,Phone`,
     },
     tags: ["CRM"],
     response: NameMany,

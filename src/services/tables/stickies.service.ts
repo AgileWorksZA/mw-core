@@ -2,6 +2,7 @@ import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type Stickies,
+  type StickiesField,
   StickiesFields,
 } from "../../types/interface/tables/stickies";
 import type {
@@ -22,6 +23,22 @@ export class StickiesService {
     this.api = new MoneyWorksApiService(config);
   }
 
+  dataCenterJsonToStickiesUsingFields(
+    fields: StickiesField[],
+    data: ANY,
+  ): Stickies {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Stickies record`,
+        );
+      }
+      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Stickies);
+  }
+
   dataCenterJsonToStickies(data: ANY): Stickies {
     return StickiesFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
@@ -29,16 +46,17 @@ export class StickiesService {
           `Missing key ${key} in data center json for Stickies record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Stickies);
   }
 
   /**
-   * Get stickiess from MoneyWorks with pagination and filtering
+   * Get stickies from MoneyWorks with pagination and filtering
    *
    * @param params Query parameters
    * @returns Parsed stickies data with pagination metadata
@@ -49,7 +67,19 @@ export class StickiesService {
     search?: Partial<Stickies>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
+    // Validate fields against StickiesFields if provided
+    if (params.fields && params.fields.length > 0) {
+      for (const field of params.fields) {
+        if (!StickiesFields.includes(field as StickiesField)) {
+          throw new Error(
+            `Invalid field '${field}' for Stickies table. Valid fields are: ${StickiesFields.join(", ")}`,
+          );
+        }
+      }
+    }
+
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Stickies> = {
@@ -58,14 +88,24 @@ export class StickiesService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("stickies", mwParams);
 
       // Parse the response
-      const stickies = data.map(this.dataCenterJsonToStickies);
+      // If we're using custom fields, use the fields-specific mapper
+      // Otherwise, map the full data to stickies objects
+      const stickies = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToStickiesUsingFields(
+              params.fields as StickiesField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToStickies);
 
       return {
         data: stickies,

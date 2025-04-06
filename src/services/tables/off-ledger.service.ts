@@ -2,6 +2,7 @@ import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type OffLedger,
+  type OffLedgerField,
   OffLedgerFields,
 } from "../../types/interface/tables/offledger";
 import type {
@@ -22,6 +23,22 @@ export class OffLedgerService {
     this.api = new MoneyWorksApiService(config);
   }
 
+  dataCenterJsonToOffLedgerUsingFields(
+    fields: OffLedgerField[],
+    data: ANY,
+  ): OffLedger {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for OffLedger record`,
+        );
+      }
+      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as OffLedger);
+  }
+
   dataCenterJsonToOffLedger(data: ANY): OffLedger {
     return OffLedgerFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
@@ -29,10 +46,11 @@ export class OffLedgerService {
           `Missing key ${key} in data center json for OffLedger record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as OffLedger);
   }
@@ -49,7 +67,19 @@ export class OffLedgerService {
     search?: Partial<OffLedger>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
+    // Validate fields against OffLedgerFields if provided
+    if (params.fields && params.fields.length > 0) {
+      for (const field of params.fields) {
+        if (!OffLedgerFields.includes(field as OffLedgerField)) {
+          throw new Error(
+            `Invalid field '${field}' for OffLedger table. Valid fields are: ${OffLedgerFields.join(", ")}`,
+          );
+        }
+      }
+    }
+
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<OffLedger> = {
@@ -58,14 +88,24 @@ export class OffLedgerService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("offledger", mwParams);
 
       // Parse the response
-      const offLedgerItems = data.map(this.dataCenterJsonToOffLedger);
+      // If we're using custom fields, use the fields-specific mapper
+      // Otherwise, map the full data to offLedger objects
+      const offLedgerItems = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToOffLedgerUsingFields(
+              params.fields as OffLedgerField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToOffLedger);
 
       return {
         data: offLedgerItems,

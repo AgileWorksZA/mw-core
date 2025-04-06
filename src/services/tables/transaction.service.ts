@@ -2,6 +2,7 @@ import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type Transaction,
+  type TransactionField,
   TransactionFields,
 } from "../../types/interface/tables/transaction";
 import type {
@@ -22,15 +23,32 @@ export class TransactionService {
     this.api = new MoneyWorksApiService(config);
   }
 
+  dataCenterJsonToTransactionUsingFields(
+    fields: TransactionField[],
+    data: ANY,
+  ): Transaction {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Transaction record`,
+        );
+      }
+      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Transaction);
+  }
+
   dataCenterJsonToTransaction(data: ANY): Transaction {
     return TransactionFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for record`);
+        console.error(`Missing key ${key} in data center json for Transaction record`);
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Transaction);
   }
@@ -47,7 +65,19 @@ export class TransactionService {
     search?: Partial<Transaction>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
+    // Validate fields against TransactionFields if provided
+    if (params.fields && params.fields.length > 0) {
+      for (const field of params.fields) {
+        if (!TransactionFields.includes(field as TransactionField)) {
+          throw new Error(
+            `Invalid field '${field}' for Transaction table. Valid fields are: ${TransactionFields.join(", ")}`,
+          );
+        }
+      }
+    }
+
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Transaction> = {
@@ -56,7 +86,8 @@ export class TransactionService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
@@ -66,7 +97,16 @@ export class TransactionService {
       );
 
       // Parse the response
-      const transactions = data.map(this.dataCenterJsonToTransaction);
+      // If we're using custom fields, use the fields-specific mapper
+      // Otherwise, map the full data to transaction objects
+      const transactions = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToTransactionUsingFields(
+              params.fields as TransactionField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToTransaction);
 
       return {
         data: transactions,

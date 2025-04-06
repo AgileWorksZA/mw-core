@@ -286,3 +286,71 @@ To implement the format parameter, the following changes were made to the Accoun
    - Added support for special parsing of single-field results like SequenceNumber and Code
    - Enhanced MoneyWorksApiService to parse custom field format responses
    - Added handling for various field types (numeric, text, code)
+
+## Implementation for Remaining Services
+
+The following implementation steps must be completed for the remaining services:
+
+### OffLedger Service
+
+1. Add `dataCenterJsonToOffLedgerUsingFields` method to handle custom field selection
+2. Add `fields` parameter to `getOffLedgerItems` method signature
+3. Add field validation against `OffLedgerFields`
+4. Update `mwParams` to include fields and set format conditionally
+5. Update the data mapping to use the appropriate mapper based on fields
+
+### Payments Service
+
+1. Add `dataCenterJsonToPaymentsUsingFields` method to handle custom field selection
+2. Add `fields` parameter to `getPayments` method signature
+3. Add field validation against `PaymentsFields`
+4. Update `mwParams` to include fields and set format conditionally
+5. Update the data mapping to use the appropriate mapper based on fields
+
+### Product Service
+
+1. Add `dataCenterJsonToProductUsingFields` method to handle custom field selection
+2. Add `fields` parameter to `getProducts` method signature
+3. Add field validation against `ProductFields`
+4. Update `mwParams` to include fields and set format conditionally
+5. Update the data mapping to use the appropriate mapper based on fields
+
+### Stickies Service
+
+1. Add `dataCenterJsonToStickiesUsingFields` method to handle custom field selection
+2. Add `fields` parameter to `getStickies` method signature
+3. Add field validation against `StickiesFields`
+4. Update `mwParams` to include fields and set format conditionally
+5. Update the data mapping to use the appropriate mapper based on fields
+
+### TaxRate Service
+
+1. Add `dataCenterJsonToTaxRateUsingFields` method to handle custom field selection
+2. Add `fields` parameter to `getTaxRates` method signature
+3. Add field validation against `TaxRateFields`
+4. Update `mwParams` to include fields and set format conditionally
+5. Update the data mapping to use the appropriate mapper based on fields
+
+### Transaction Service
+
+1. Add `dataCenterJsonToTransactionUsingFields` method to handle custom field selection
+2. Add `fields` parameter to `getTransactions` method signature
+3. Add field validation against `TransactionFields`
+4. Update `mwParams` to include fields and set format conditionally
+5. Update the data mapping to use the appropriate mapper based on fields
+
+### User Service
+
+1. Add `dataCenterJsonToUserUsingFields` method to handle custom field selection
+2. Add `fields` parameter to `getUsers` method signature
+3. Add field validation against `UserFields`
+4. Update `mwParams` to include fields and set format conditionally
+5. Update the data mapping to use the appropriate mapper based on fields
+
+### User2 Service
+
+1. Add `dataCenterJsonToUser2UsingFields` method to handle custom field selection
+2. Add `fields` parameter to `getUser2s` method signature
+3. Add field validation against `User2Fields`
+4. Update `mwParams` to include fields and set format conditionally
+5. Update the data mapping to use the appropriate mapper based on fields

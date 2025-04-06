@@ -1,6 +1,6 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type User, UserFields } from "../../types/interface/tables/user";
+import { type User, type UserField, UserFields } from "../../types/interface/tables/user";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -19,15 +19,32 @@ export class UserService {
     this.api = new MoneyWorksApiService(config);
   }
 
+  dataCenterJsonToUserUsingFields(
+    fields: UserField[],
+    data: ANY,
+  ): User {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for User record`,
+        );
+      }
+      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as User);
+  }
+
   dataCenterJsonToUser(data: ANY): User {
     return UserFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
         console.error(`Missing key ${key} in data center json for User record`);
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as User);
   }
@@ -44,7 +61,19 @@ export class UserService {
     search?: Partial<User>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
+    // Validate fields against UserFields if provided
+    if (params.fields && params.fields.length > 0) {
+      for (const field of params.fields) {
+        if (!UserFields.includes(field as UserField)) {
+          throw new Error(
+            `Invalid field '${field}' for User table. Valid fields are: ${UserFields.join(", ")}`,
+          );
+        }
+      }
+    }
+
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<User> = {
@@ -53,14 +82,24 @@ export class UserService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("user", mwParams);
 
       // Parse the response
-      const users = data.map(this.dataCenterJsonToUser);
+      // If we're using custom fields, use the fields-specific mapper
+      // Otherwise, map the full data to user objects
+      const users = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToUserUsingFields(
+              params.fields as UserField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToUser);
 
       return {
         data: users,

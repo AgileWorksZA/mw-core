@@ -25,12 +25,27 @@ export class MessageService {
   dataCenterJsonToMessage(data: ANY): Message {
     return MessageFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for record`);
+        console.error(`Missing key ${key} in data center json for Message record`);
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Message);
+  }
+
+  dataCenterJsonToMessageUsingFields(fields: string[], data: ANY): Message {
+    return fields.reduce((acc, key) => {
+      if (data[key.toLowerCase()] === undefined) {
+        console.error(`Missing key ${key} in data center json for Message record`);
+      }
+      const value = enforceType(
+        data[key.toLowerCase()],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Message);
   }
@@ -47,8 +62,20 @@ export class MessageService {
     search?: Partial<Message>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!MessageFields.includes(field as keyof typeof schema)) {
+            throw new Error(
+              `Invalid field '${field}' for Message table. Valid fields are: ${MessageFields.join(", ")}`
+            );
+          }
+        }
+      }
+      
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Message> = {
         limit: params.limit,
@@ -56,14 +83,17 @@ export class MessageService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("message", mwParams);
 
       // Parse the response
-      const messages = data.map(this.dataCenterJsonToMessage);
+      const messages = params.fields
+        ? data.map((d) => this.dataCenterJsonToMessageUsingFields(params.fields as string[], d))
+        : data.map(this.dataCenterJsonToMessage);
 
       return {
         data: messages,
