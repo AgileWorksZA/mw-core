@@ -1,4 +1,4 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const BankRecsOne = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.String(),
@@ -6,8 +6,8 @@ export const BankRecsOne = t.Object({
   Opening: t.Nullable(t.Number()),
   Closing: t.Nullable(t.Number()),
   Statement: t.Nullable(t.Number()),
-  Date: t.Date(),
-  ReconciledTime: t.Nullable(t.Date()),
+  Date: t.String(),
+  ReconciledTime: t.Nullable(t.String()),
   Discrepancy: t.Nullable(t.Number()),
 });
 export const BankRecsMany = t.Object({
@@ -18,5 +18,5 @@ export const BankRecsMany = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });

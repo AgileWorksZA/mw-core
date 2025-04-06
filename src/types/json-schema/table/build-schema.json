@@ -6,38 +6,38 @@
   "properties": {
     "SequenceNumber": {
       "type": "integer",
-      "description": "Unsigned long sequence number"
+      "description": "Internal unique identifier for this specific BOM component record."
     },
     "LastModifiedTime": {
       "type": "string",
       "format": "date-time",
-      "description": "Last modified timestamp"
+      "description": "Timestamp indicating the last time this BOM component record was modified."
     },
     "ProductSeq": {
       "type": "integer",
-      "description": "Parent product sequence number (indexed)"
+      "description": "Foreign key (SequenceNumber) linking to the parent Product record (the item being manufactured). Indexed."
     },
     "Order": {
       "type": "integer",
-      "description": "Component order"
+      "description": "Specifies the display order of this component within the Bill of Materials list for the parent product."
     },
     "Qty": {
       "type": "number",
-      "description": "Component quantity"
+      "description": "The quantity of this component part required to build ONE unit of the parent product."
     },
     "PartCode": {
       "type": "string",
       "maxLength": 32,
-      "description": "Component part code"
+      "description": "The product code of the component item used in the build. Links back to the Product table."
     },
     "Flags": {
       "type": "integer",
-      "description": "Flags"
+      "description": "A bitmask field storing various boolean settings/attributes related to this component in the BOM (e.g., optional component)."
     },
     "Memo": {
       "type": "string",
       "maxLength": 256,
-      "description": "Memo (mutable: freely, script-only)"
+      "description": "User-entered notes or instructions specific to this component within this particular Bill of Materials. (Mutable: freely, script-only)"
     }
   },
   "required": [

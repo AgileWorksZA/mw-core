@@ -11,8 +11,8 @@ export interface BankRecs {
   Opening: number;
   Closing: number;
   Statement: number;
-  Date: Date;
-  ReconciledTime: Date;
+  Date: string;
+  ReconciledTime: string;
   Discrepancy: number;
 }
 
