@@ -17,4 +17,5 @@ export interface MoneyWorksQueryParams<T extends object = object> {
   sort?: string;
   direction?: "ascending" | "descending";
   format?: "xml" | "xml-terse" | "xml-verbose" | string;
+  fields?: string[]; // Array of field names for custom formatting
 }

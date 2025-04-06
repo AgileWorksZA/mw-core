@@ -2,6 +2,7 @@ import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type Account,
+  type AccountField,
   AccountFields,
 } from "../../types/interface/tables/account";
 import type {
@@ -22,6 +23,21 @@ export class AccountService {
     this.api = new MoneyWorksApiService(config);
   }
 
+  dataCenterJsonToAccountUsingFields(
+    fields: AccountField[],
+    data: ANY,
+  ): Account {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Account record`,
+        );
+      }
+      const value = enforceType(data[key], schema[key] as "string");
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Account);
+  }
   dataCenterJsonToAccount(data: ANY): Account {
     return AccountFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
@@ -29,10 +45,11 @@ export class AccountService {
           `Missing key ${key} in data center json for Account record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Account);
   }
@@ -49,7 +66,18 @@ export class AccountService {
     search?: Partial<Account>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[]; // Array of field names to include in the response
   }) {
+    // Validate fields against AccountFields if provided
+    if (params.fields && params.fields.length > 0) {
+      for (const field of params.fields) {
+        if (!AccountFields.includes(field as AccountField)) {
+          throw new Error(
+            `Invalid field '${field}' for Account table. Valid fields are: ${AccountFields.join(", ")}`,
+          );
+        }
+      }
+    }
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Account> = {
@@ -58,14 +86,26 @@ export class AccountService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("account", mwParams);
+      console.log("Data:", data, data.map(this.dataCenterJsonToAccount));
+      console.log("params.fields:", params.fields);
 
       // Parse the response
-      const accounts = data.map(this.dataCenterJsonToAccount);
+      // If we're using custom fields, the data is already in the correct format
+      // Otherwise, map the full data to account objects
+      const accounts = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToAccountUsingFields(
+              params.fields as AccountField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToAccount);
 
       return {
         data: accounts,

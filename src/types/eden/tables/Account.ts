@@ -37,7 +37,7 @@ export const AccountOne = t.Object({
   ImportFormat: t.Nullable(t.String()),
 });
 export const AccountMany = t.Object({
-  data: t.Array(AccountOne),
+  data: t.Array(t.Partial(AccountOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

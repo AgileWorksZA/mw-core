@@ -116,7 +116,27 @@ export class MoneyWorksApiService {
       queryParts.push(`direction=${params.direction}`);
     }
 
-    if (params.format) {
+    // Handle custom field format (array of field names)
+    if (
+      params.fields &&
+      Array.isArray(params.fields) &&
+      params.fields.length > 0
+    ) {
+      // Convert the array of field names to MoneyWorks format specification
+      // Each field will be wrapped in square brackets and joined with tabs
+      const formatStr = params.fields
+        .map((field) => {
+          if (parent) {
+            return `[${parent}:${field}]`;
+          }
+          return `[${field}]`;
+        })
+        .join("\\t"); // Use actual tab character, not the escaped string '\t'
+
+      queryParts.push(`format=${encodeURIComponent(formatStr)}%5Cn`);
+    }
+    // If fields is not provided but format is, use the provided format
+    else if (params.format) {
       queryParts.push(`format=${encodeURIComponent(params.format)}`);
     }
 
@@ -139,7 +159,7 @@ export class MoneyWorksApiService {
       this.handleError(error);
     }
   }
-  
+
   /**
    * Get list of all tables in the database
    * @returns Array of table names
@@ -147,12 +167,12 @@ export class MoneyWorksApiService {
   async getDatabaseTables(): Promise<string[]> {
     try {
       const response = await this.evaluate("GetDatabaseFiles()");
-      
-      if (typeof response === 'string') {
+
+      if (response !== undefined) {
         // Split by newline and filter out empty strings
-        return response.split('\n').filter(table => table.trim() !== '');
+        return response.split("\n").filter((table) => table.trim() !== "");
       }
-      
+
       return [];
     } catch (error) {
       console.error("Error fetching database tables:", error);
@@ -160,7 +180,7 @@ export class MoneyWorksApiService {
       return [];
     }
   }
-  
+
   /**
    * Get list of all fields in a specific table
    * @param tableName The name of the table to get fields from
@@ -170,12 +190,12 @@ export class MoneyWorksApiService {
     try {
       const expression = `GetDatabaseFields("${tableName}")`;
       const response = await this.evaluate(expression);
-      
-      if (typeof response === 'string') {
+
+      if (response !== undefined) {
         // Split by newline and filter out empty strings
-        return response.split('\n').filter(field => field.trim() !== '');
+        return response.split("\n").filter((field) => field.trim() !== "");
       }
-      
+
       return [];
     } catch (error) {
       console.error(`Error fetching fields for table ${tableName}:`, error);
@@ -183,78 +203,91 @@ export class MoneyWorksApiService {
       return [];
     }
   }
-  
+
   /**
    * Get the size/type of a specific field in a table
    * @param tableName The name of the table
    * @param fieldName The name of the field
    * @returns Field type information: 'SHORT' for number, 'BOOLEAN' for boolean, or a number for string length
    */
-  async getDatabaseFieldSize(tableName: string, fieldName: string): Promise<string> {
+  async getDatabaseFieldSize(
+    tableName: string,
+    fieldName: string,
+  ): Promise<string> {
     try {
       const expression = `GetDatabaseFieldSize("${tableName}", "${fieldName}")`;
       const response = await this.evaluate(expression);
-      
-      return response || '';
+
+      return response || "";
     } catch (error) {
-      console.error(`Error fetching field size for ${tableName}.${fieldName}:`, error);
+      console.error(
+        `Error fetching field size for ${tableName}.${fieldName}:`,
+        error,
+      );
       this.handleError(error);
-      return '';
+      return "";
     }
   }
-  
+
   /**
    * Get detailed information about fields in a table, including their types
    * @param tableName The name of the table to get fields from
    * @returns Array of field information objects
    */
-  async getDatabaseFieldsWithTypes(tableName: string): Promise<Array<{name: string, type: string, jsType?: string}>> {
+  async getDatabaseFieldsWithTypes(
+    tableName: string,
+  ): Promise<Array<{ name: string; type: string; jsType?: string }>> {
     try {
       // Get all field names first
       const fields = await this.getDatabaseFields(tableName);
       const fieldInfos = [];
-      
+
       // For each field, get its size/type
       for (const field of fields) {
         const sizeType = await this.getDatabaseFieldSize(tableName, field);
         let jsType: string | undefined;
-        
+
         // Map MoneyWorks types to JavaScript types
         switch (sizeType) {
-          case 'SHORT':
-          case 'LONG':
-          case 'INT48':
-          case 'FLOAT':
-          case 'DOUBLE':
-            jsType = 'number';
+          case "SHORT":
+          case "LONG":
+          case "INT48":
+          case "FLOAT":
+          case "DOUBLE":
+            jsType = "number";
             break;
-          case 'BOOLEAN':
-            jsType = 'boolean';
+          case "BOOLEAN":
+            jsType = "boolean";
             break;
-          case 'DATE':
-          case 'TIME':
-            jsType = 'Date';
+          case "DATE":
+          case "TIME":
+            jsType = "Date";
             break;
           default:
             // Check if it's a string length (numeric)
-            if (!isNaN(Number(sizeType))) {
-              jsType = 'string';
+            if (!Number.isNaN(Number(sizeType))) {
+              jsType = "string";
             } else {
               // Unknown type - throw an error
-              throw new Error(`Unknown field type "${sizeType}" for field "${field}" in table "${tableName}"`);
+              throw new Error(
+                `Unknown field type "${sizeType}" for field "${field}" in table "${tableName}"`,
+              );
             }
         }
-        
+
         fieldInfos.push({
           name: field,
           type: sizeType,
-          jsType
+          jsType,
         });
       }
-      
+
       return fieldInfos;
     } catch (error) {
-      console.error(`Error fetching fields with types for table ${tableName}:`, error);
+      console.error(
+        `Error fetching fields with types for table ${tableName}:`,
+        error,
+      );
       this.handleError(error);
       return [];
     }
@@ -281,22 +314,44 @@ export class MoneyWorksApiService {
     };
   }> {
     try {
-      // Default to XML verbose format if not specified
+      // If fields were provided, we'll use custom format (TSV with specific fields)
+      // otherwise default to XML verbose format
       const queryParams = {
         ...params,
-        format: params.format || "xml-verbose",
+        format: params.fields ? undefined : params.format || "xml-verbose",
       };
 
       const exportTable =
         table.toLowerCase() === "detail" ? "transaction" : table;
       const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
 
+      console.log(
+        "this.buildQueryParams(queryParams, parent)",
+        `"${decodeURIComponent(this.buildQueryParams(queryParams, parent))}"`,
+      );
       const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
-      const headers = this.createAuthHeaders();
+      const authHeaders = this.createAuthHeaders();
 
-      const response = await axios.get(url, { headers });
+      console.log("URL:", url);
+      // When using fields or non-XML format, we need to ensure the response is text
+      const responseType =
+        params.fields ||
+        (queryParams.format && !queryParams.format.startsWith("xml"))
+          ? "text"
+          : undefined;
 
-      if (queryParams.format && queryParams.format.startsWith("xml")) {
+      const response = await axios.get(url, {
+        headers: authHeaders,
+        responseType,
+      });
+      console.log("Response:", response.data);
+
+      // For XML format
+      if (
+        !params.fields &&
+        queryParams.format &&
+        queryParams.format.startsWith("xml")
+      ) {
         const res = this.parser.parse(response.data);
         const data: T[] = res.table[res.table._name.toLowerCase()] ?? [];
         const limit: number = res.table._count;
@@ -314,54 +369,40 @@ export class MoneyWorksApiService {
         };
       }
 
-      // For TSV format (when format is empty or not xml)
-      // We need to parse the TSV data
-      if (!queryParams.format || !queryParams.format.startsWith("xml")) {
-        const lines = response.data.split("\n");
-        if (lines.length < 2) {
-          return {
-            data: [],
-            pagination: { total: 0, limit: 0, offset: 0, next: 0, prev: 0 },
-          };
+      // If we're using custom fields with specific fields array or tsv format
+      if (!params.fields) {
+        throw new Error("Custom fields not supported for XML format");
+      }
+      const fields = params.fields;
+      const data: T[] = [];
+      const rawData = response.data;
+
+      console.log({ fields });
+
+      // Start parsing
+      for (const line of rawData.split("\n")) {
+        if (!line.trim()) continue; // Skip empty lines
+        console.log("Line:", line);
+        const record: Record<string, string | number | boolean | null> = {};
+        const values = line.split("\t");
+        for (let i = 0; i < fields.length; i++) {
+          record[fields[i]] = values[i];
         }
-
-        const headers = lines[0].split("\t");
-        const data: T[] = [];
-
-        for (let i = 1; i < lines.length; i++) {
-          if (!lines[i].trim()) continue; // Skip empty lines
-          
-          const values = lines[i].split("\t");
-          const record: Record<string, any> = {};
-          
-          for (let j = 0; j < headers.length; j++) {
-            record[headers[j]] = values[j] || "";
-          }
-          
-          data.push(record as T);
-        }
-
-        return {
-          data,
-          pagination: {
-            total: data.length,
-            limit: data.length,
-            offset: 0,
-            next: 0,
-            prev: 0,
-          },
-        };
+        data.push(record as T);
       }
 
-      return response as unknown as {
-        data: T[];
+      return {
+        data,
         pagination: {
-          total: number;
-          limit: number;
-          offset: number;
-          next: number;
-          prev: number;
-        };
+          total: data.length,
+          limit: params.limit || data.length,
+          offset: params.start || 0,
+          next: (params.start || 0) + (params.limit || data.length),
+          prev:
+            (params.start || 0) - (params.limit || data.length) > 0
+              ? (params.start || 0) - (params.limit || data.length)
+              : 0,
+        },
       };
     } catch (error) {
       console.error(error);
@@ -372,7 +413,7 @@ export class MoneyWorksApiService {
       pagination: { total: 0, limit: 0, offset: 0, next: 0, prev: 0 },
     };
   }
-  
+
   /**
    * Export data from MoneyWorks and return the raw response
    * This is useful for comparing different export formats
@@ -386,16 +427,23 @@ export class MoneyWorksApiService {
     params: MoneyWorksQueryParams = {},
   ): Promise<string> {
     try {
+      // If fields were provided, we'll use custom format (fields with square brackets)
+      // otherwise use the specified format
+      const queryParams = {
+        ...params,
+        format: params.fields ? undefined : params.format,
+      };
+
       const exportTable =
         table.toLowerCase() === "detail" ? "transaction" : table;
       const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
 
-      const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(params, parent)}`;
-      const headers = this.createAuthHeaders();
+      const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
+      const authHeaders = this.createAuthHeaders();
 
-      const response = await axios.get(url, { 
-        headers,
-        responseType: 'text' 
+      const response = await axios.get(url, {
+        headers: authHeaders,
+        responseType: "text",
       });
 
       return response.data;
