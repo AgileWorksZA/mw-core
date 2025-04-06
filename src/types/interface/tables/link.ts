@@ -17,6 +17,5 @@ export const LinkFields: LinkField[] = [
   "SequenceNumber",
   "LastModifiedTime",
   "Dept",
-  "Group"
+  "Group",
 ];
-

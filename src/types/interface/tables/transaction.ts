@@ -200,4 +200,3 @@ export const TransactionFields: TransactionField[] = [
   "Emailed",
   "Transferred",
 ];
-

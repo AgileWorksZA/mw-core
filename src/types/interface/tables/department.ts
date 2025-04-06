@@ -37,6 +37,5 @@ export const DepartmentFields: DepartmentField[] = [
   "Flags",
   "UserNum",
   "UserText",
-  "TaggedText"
+  "TaggedText",
 ];
-

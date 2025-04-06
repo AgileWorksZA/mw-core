@@ -15,7 +15,7 @@ export const systemLabelsRoutes = new Elysia({ prefix: "/api" })
       try {
         return await systemLabelsService.getTableLabels(
           params.table,
-          query.language || "en"
+          query.language || "en",
         );
       } catch (error) {
         console.error(`Error in GET /system-labels/${params.table}:`, error);
@@ -29,15 +29,16 @@ export const systemLabelsRoutes = new Elysia({ prefix: "/api" })
       query: t.Optional(
         t.Object({
           language: t.Optional(t.Enum(SupportedLanguages)),
-        })
+        }),
       ),
       detail: {
         summary: "Get field labels for a specific table",
-        description: "Returns field labels for the specified table in the requested language (default: English)",
+        description:
+          "Returns field labels for the specified table in the requested language (default: English)",
       },
       tags: ["System"],
       response: t.Record(t.String(), t.String()),
-    }
+    },
   )
   .post(
     "/system-labels",
@@ -53,10 +54,10 @@ export const systemLabelsRoutes = new Elysia({ prefix: "/api" })
       detail: {
         summary: "Generate and cache labels for all tables",
         description: `Generates and caches field labels for all MoneyWorks tables: ${TableNames.join(
-          ", "
+          ", ",
         )}`,
       },
       tags: ["System"],
       response: t.Record(t.String(), t.Number()),
-    }
+    },
   );

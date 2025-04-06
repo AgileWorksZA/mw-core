@@ -110,6 +110,5 @@ export const DetailFields: DetailField[] = [
   "NonInvRcvdNotInvoicedQty",
   "Custom1",
   "Custom2",
-  "OriginalUnitCost"
+  "OriginalUnitCost",
 ];
-

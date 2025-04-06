@@ -21,6 +21,5 @@ export const GeneralFields: GeneralField[] = [
   "Code",
   "Description",
   "Date",
-  "Long"
+  "Long",
 ];
-

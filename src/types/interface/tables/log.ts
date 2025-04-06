@@ -25,6 +25,5 @@ export const LogFields: LogField[] = [
   "Who",
   "Info1",
   "Info2",
-  "Info3"
+  "Info3",
 ];
-

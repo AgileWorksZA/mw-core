@@ -29,4 +29,3 @@ export const MemoFields: MemoField[] = [
   "Flags",
   "Text",
 ];
-

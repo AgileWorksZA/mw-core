@@ -417,6 +417,5 @@ export const LedgerFields: LedgerField[] = [
   "System",
   "UserNum",
   "UserText",
-  "TaggedText"
+  "TaggedText",
 ];
-

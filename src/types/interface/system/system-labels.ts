@@ -27,7 +27,7 @@ export enum SupportedLanguages {
   Finnish = "fi",
   Russian = "ru",
   Afrikaans = "af",
-  Arabic = "ar"
+  Arabic = "ar",
 }
 
 /**
