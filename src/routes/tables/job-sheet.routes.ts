@@ -6,7 +6,7 @@ import { JobSheetMany } from "../../types/eden/tables/JobSheet";
 import {
   type JobSheet,
   JobSheetFields,
-} from "../../types/interface/tables/job-sheet";
+} from "../../types/interface/tables/jobsheet";
 
 // Initialize the job-sheet service with configuration
 const config = loadMoneyWorksConfig();

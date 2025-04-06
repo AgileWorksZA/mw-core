@@ -3,7 +3,7 @@ import { enforceType } from "../../types/helpers";
 import {
   type AssetLog,
   AssetLogFields,
-} from "../../types/interface/tables/asset-log";
+} from "../../types/interface/tables/assetlog";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,

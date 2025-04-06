@@ -3,7 +3,7 @@ import { enforceType } from "../../types/helpers";
 import {
   type OffLedger,
   OffLedgerFields,
-} from "../../types/interface/tables/off-ledger";
+} from "../../types/interface/tables/offledger";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,

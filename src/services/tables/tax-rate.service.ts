@@ -3,7 +3,7 @@ import { enforceType } from "../../types/helpers";
 import {
   type TaxRate,
   TaxRateFields,
-} from "../../types/interface/tables/tax-rate";
+} from "../../types/interface/tables/taxrate";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,

@@ -6,7 +6,7 @@ import { AutoSplitMany } from "../../types/eden/tables/AutoSplit";
 import {
   type AutoSplit,
   AutoSplitFields,
-} from "../../types/interface/tables/auto-split";
+} from "../../types/interface/tables/autosplit";
 
 // Initialize the auto-split service with configuration
 const config = loadMoneyWorksConfig();

@@ -6,7 +6,7 @@ import { OffLedgerMany } from "../../types/eden/tables/OffLedger";
 import {
   type OffLedger,
   OffLedgerFields,
-} from "../../types/interface/tables/off-ledger";
+} from "../../types/interface/tables/offledger";
 
 // Initialize the off-ledger service with configuration
 const config = loadMoneyWorksConfig();

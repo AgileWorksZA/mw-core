@@ -6,7 +6,7 @@ import { AssetLogMany } from "../../types/eden/tables/AssetLog";
 import {
   type AssetLog,
   AssetLogFields,
-} from "../../types/interface/tables/asset-log";
+} from "../../types/interface/tables/assetlog";
 
 // Initialize the asset log service with configuration
 const config = loadMoneyWorksConfig();

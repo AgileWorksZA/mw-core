@@ -3,7 +3,7 @@ import { enforceType } from "../../types/helpers";
 import {
   type JobSheet,
   JobSheetFields,
-} from "../../types/interface/tables/job-sheet";
+} from "../../types/interface/tables/jobsheet";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,

@@ -6,7 +6,7 @@ import { BankRecsMany } from "../../types/eden/tables/BankRecs";
 import {
   type BankRecs,
   BankRecsFields,
-} from "../../types/interface/tables/bank-recs";
+} from "../../types/interface/tables/bankrecs";
 
 // Initialize the bank-recs service with configuration
 const config = loadMoneyWorksConfig();

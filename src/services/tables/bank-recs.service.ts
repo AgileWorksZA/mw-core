@@ -3,7 +3,7 @@ import { enforceType } from "../../types/helpers";
 import {
   type BankRecs,
   BankRecsFields,
-} from "../../types/interface/tables/bank-recs";
+} from "../../types/interface/tables/bankrecs";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,

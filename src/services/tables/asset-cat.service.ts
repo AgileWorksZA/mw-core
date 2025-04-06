@@ -3,7 +3,7 @@ import { enforceType } from "../../types/helpers";
 import {
   type AssetCat,
   AssetCatFields,
-} from "../../types/interface/tables/asset-cat";
+} from "../../types/interface/tables/assetcat";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,

@@ -6,7 +6,7 @@ import { AssetCatMany } from "../../types/eden/tables/AssetCat";
 import {
   type AssetCat,
   AssetCatFields,
-} from "../../types/interface/tables/asset-cat";
+} from "../../types/interface/tables/assetcat";
 
 // Initialize the asset category service with configuration
 const config = loadMoneyWorksConfig();

@@ -6,7 +6,7 @@ import { TaxRateMany } from "../../types/eden/tables/TaxRate";
 import {
   type TaxRate,
   TaxRateFields,
-} from "../../types/interface/tables/tax-rate";
+} from "../../types/interface/tables/taxrate";
 
 // Initialize the tax-rate service with configuration
 const config = loadMoneyWorksConfig();

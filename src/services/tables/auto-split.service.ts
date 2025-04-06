@@ -3,7 +3,7 @@ import { enforceType } from "../../types/helpers";
 import {
   type AutoSplit,
   AutoSplitFields,
-} from "../../types/interface/tables/auto-split";
+} from "../../types/interface/tables/autosplit";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
