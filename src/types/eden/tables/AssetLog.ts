@@ -1,11 +1,11 @@
 import { t } from "elysia";
 
 export const AssetLogOne = t.Object({
-  SequenceNumber: t.Number(),
-  LastModifiedTime: t.String(),
-  ParentSeq: t.Number(),
-  Action: t.String(),
-  Date: t.String(),
+  SequenceNumber: t.Optional(t.Nullable(t.Number())),
+  LastModifiedTime: t.Nullable(t.String()),
+  ParentSeq: t.Optional(t.Nullable(t.Number())),
+  Action: t.Optional(t.Nullable(t.String())),
+  Date: t.Optional(t.Nullable(t.String())),
   Qty: t.Optional(t.Nullable(t.Number())),
   Depreciation: t.Optional(t.Nullable(t.Number())),
   Adjustment1: t.Optional(t.Nullable(t.Number())),

@@ -10,7 +10,7 @@ export interface AssetLog {
   /** @mutable="conditionally" char_short */
   Action: string;
   /** @mutable="conditionally" */
-  Date: Date;
+  Date: string;
   /** @mutable="conditionally" */
   Qty: number | null;
   /** @mutable="conditionally" */
