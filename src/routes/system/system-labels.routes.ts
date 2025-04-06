@@ -34,11 +34,11 @@ export const systemLabelsRoutes = new Elysia({ prefix: "/api" })
         }),
       ),
       detail: {
-        summary: "Get field labels for a specific table",
+        summary: "Field Labels (GET)",
         description:
           "Returns field labels for the specified table in the requested language (default: English)",
       },
-      tags: ["System"],
+      tags: ["Labels"],
       response: t.Record(t.String(), t.String()),
     },
   )
@@ -54,12 +54,12 @@ export const systemLabelsRoutes = new Elysia({ prefix: "/api" })
     },
     {
       detail: {
-        summary: "Generate and cache labels for all tables",
+        summary: "Field Labels (POST)",
         description: `Generates and caches field labels for all MoneyWorks tables: ${TableNames.join(
           ", ",
         )}`,
       },
-      tags: ["System"],
+      tags: ["Labels"],
       response: t.Record(t.String(), t.Number()),
     },
   );

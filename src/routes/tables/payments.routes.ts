@@ -42,7 +42,7 @@ export const paymentsRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Payments",
       description: `Get all payments. Search by: ${PaymentsFields.join(", ")}`,
     },
-    tags: ["Financial"],
+    tags: ["Transaction"],
     response: PaymentsMany,
   },
 );

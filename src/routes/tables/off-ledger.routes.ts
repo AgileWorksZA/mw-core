@@ -42,7 +42,7 @@ export const offLedgerRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Off-Ledgers",
       description: `Get all off-ledgers. Search by: ${OffLedgerFields.join(", ")}`,
     },
-    tags: ["Financial"],
+    tags: ["Transaction"],
     response: OffLedgerMany,
   },
 );

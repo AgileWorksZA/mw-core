@@ -39,7 +39,7 @@ export const detailRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Details",
       description: `Get all transaction details. Search by: ${DetailFields.join(", ")}. Note: This endpoint is deprecated and will be removed in a future release.`,
     },
-    tags: ["Financial"],
+    tags: ["Transaction"],
     response: DetailMany,
   },
 );

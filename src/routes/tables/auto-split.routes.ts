@@ -42,7 +42,7 @@ export const autoSplitRoutes = new Elysia({ prefix: "/api" }).get(
       summary: "Auto Splits",
       description: `Get all auto splits. Search by: ${AutoSplitFields.join(", ")}`,
     },
-    tags: ["Financial"],
+    tags: ["Transaction"],
     response: AutoSplitMany,
   },
 );
