@@ -15,7 +15,9 @@ const assetLogService = new AssetLogService(config);
 export const assetLogRoutes = new Elysia({ prefix: "/api" }).get(
   "/asset-logs",
   async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search } = query;
+    const { limit = 10, offset = 0, sort, order, search, format } = query;
+    // Parse the format parameter as a comma-separated list of field names
+    const fields = format ? format.split(",") : undefined;
 
     try {
       return await assetLogService.getAssetLogs({
@@ -24,6 +26,7 @@ export const assetLogRoutes = new Elysia({ prefix: "/api" }).get(
         sort,
         order: order as "asc" | "desc",
         search: search as unknown as Partial<AssetLog>,
+        fields,
       });
     } catch (error) {
       console.error("Error in GET /asset-logs:", error);
@@ -37,10 +40,13 @@ export const assetLogRoutes = new Elysia({ prefix: "/api" }).get(
       sort: t.Optional(t.String()),
       order: t.Optional(t.String()),
       search: t.Optional(assetLogObject),
+      format: t.Optional(t.String()),
     }),
     detail: {
       summary: "Asset Logs",
-      description: `Get all asset logs. Search by: ${AssetLogFields.join(", ")}`,
+      description: `Get all asset logs. Search by: ${AssetLogFields.join(", ")}.
+      Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
+      Example: /api/asset-logs?format=SequenceNumber,Date,Memo`,
     },
     tags: ["Assets"],
     response: AssetLogMany,

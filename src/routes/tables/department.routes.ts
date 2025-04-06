@@ -15,7 +15,9 @@ const departmentService = new DepartmentService(config);
 export const departmentRoutes = new Elysia({ prefix: "/api" }).get(
   "/departments",
   async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search } = query;
+    const { limit = 10, offset = 0, sort, order, search, format } = query;
+    // Parse the format parameter as a comma-separated list of field names
+    const fields = format ? format.split(",") : undefined;
 
     try {
       return await departmentService.getDepartments({
@@ -24,6 +26,7 @@ export const departmentRoutes = new Elysia({ prefix: "/api" }).get(
         sort,
         order: order as "asc" | "desc",
         search: search as unknown as Partial<Department>,
+        fields,
       });
     } catch (error) {
       console.error("Error in GET /departments:", error);
@@ -37,10 +40,13 @@ export const departmentRoutes = new Elysia({ prefix: "/api" }).get(
       sort: t.Optional(t.String()),
       order: t.Optional(t.String()),
       search: t.Optional(departmentObject),
+      format: t.Optional(t.String()),
     }),
     detail: {
       summary: "Departments",
-      description: `Get all departments. Search by: ${DepartmentFields.join(", ")}`,
+      description: `Get all departments. Search by: ${DepartmentFields.join(", ")}.
+      Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
+      Example: /api/departments?format=SequenceNumber,Code,Description`,
     },
     tags: ["CRM"],
     response: DepartmentMany,

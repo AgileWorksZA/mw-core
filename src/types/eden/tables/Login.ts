@@ -17,7 +17,7 @@ export const LoginOne = t.Object({
   SettingsDonor: t.Nullable(t.String()),
 });
 export const LoginMany = t.Object({
-  data: t.Array(LoginOne),
+  data: t.Array(t.Partial(LoginOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

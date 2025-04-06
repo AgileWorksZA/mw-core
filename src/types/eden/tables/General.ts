@@ -8,7 +8,7 @@ export const GeneralOne = t.Object({
   Long: t.Nullable(t.Number()),
 });
 export const GeneralMany = t.Object({
-  data: t.Array(GeneralOne),
+  data: t.Array(t.Partial(GeneralOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

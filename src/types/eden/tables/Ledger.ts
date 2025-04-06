@@ -202,7 +202,7 @@ export const LedgerOne = t.Object({
   TaggedText: t.Nullable(t.String()),
 });
 export const LedgerMany = t.Object({
-  data: t.Array(LedgerOne),
+  data: t.Array(t.Partial(LedgerOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

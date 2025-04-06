@@ -17,7 +17,7 @@ export const AutoSplitOne = t.Object({
   Priority: t.Nullable(t.Number()),
 });
 export const AutoSplitMany = t.Object({
-  data: t.Array(AutoSplitOne),
+  data: t.Array(t.Partial(AutoSplitOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

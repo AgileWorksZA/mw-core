@@ -45,7 +45,7 @@ export const DetailOne = t.Object({
   OriginalUnitCost: t.Nullable(t.Number()),
 });
 export const DetailMany = t.Object({
-  data: t.Array(DetailOne),
+  data: t.Array(t.Partial(DetailOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

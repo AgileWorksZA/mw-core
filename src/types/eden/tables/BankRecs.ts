@@ -11,7 +11,7 @@ export const BankRecsOne = t.Object({
   Discrepancy: t.Nullable(t.Number()),
 });
 export const BankRecsMany = t.Object({
-  data: t.Array(BankRecsOne),
+  data: t.Array(t.Partial(BankRecsOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

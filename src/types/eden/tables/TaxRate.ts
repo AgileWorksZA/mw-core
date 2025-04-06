@@ -32,7 +32,7 @@ export const TaxRateOne = t.Object({
   ReversedRate2: t.Nullable(t.Number()),
 });
 export const TaxRateMany = t.Object({
-  data: t.Array(TaxRateOne),
+  data: t.Array(t.Partial(TaxRateOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

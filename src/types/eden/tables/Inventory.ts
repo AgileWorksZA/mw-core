@@ -11,7 +11,7 @@ export const InventoryOne = t.Object({
 });
 
 export const InventoryMany = t.Object({
-  data: t.Array(InventoryOne),
+  data: t.Array(t.Partial(InventoryOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

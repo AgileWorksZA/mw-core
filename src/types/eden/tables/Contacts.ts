@@ -18,7 +18,7 @@ export const ContactsOne = t.Object({
   TaggedText: t.Nullable(t.String()),
 });
 export const ContactsMany = t.Object({
-  data: t.Array(ContactsOne),
+  data: t.Array(t.Partial(ContactsOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

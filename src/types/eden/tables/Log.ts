@@ -9,7 +9,7 @@ export const LogOne = t.Object({
   Info3: t.Nullable(t.String()),
 });
 export const LogMany = t.Object({
-  data: t.Array(LogOne),
+  data: t.Array(t.Partial(LogOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

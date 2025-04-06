@@ -29,7 +29,7 @@ export const MessageOne = t.Object({
   TaggedText: t.Nullable(t.String()),
 });
 export const MessageMany = t.Object({
-  data: t.Array(MessageOne),
+  data: t.Array(t.Partial(MessageOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

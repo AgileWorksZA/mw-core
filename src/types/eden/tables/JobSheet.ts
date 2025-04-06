@@ -34,7 +34,7 @@ export const JobSheetOne = t.Object({
   TimeProcessed: t.Nullable(t.Date()),
 });
 export const JobSheetMany = t.Object({
-  data: t.Array(JobSheetOne),
+  data: t.Array(t.Partial(JobSheetOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

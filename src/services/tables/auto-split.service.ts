@@ -2,6 +2,7 @@ import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type AutoSplit,
+  type AutoSplitField,
   AutoSplitFields,
 } from "../../types/interface/tables/autosplit";
 import type {
@@ -29,10 +30,30 @@ export class AutoSplitService {
           `Missing key ${key} in data center json for AutoSplit record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as AutoSplit);
+  }
+
+  dataCenterJsonToAutoSplitUsingFields(
+    fields: AutoSplitField[],
+    data: ANY,
+  ): AutoSplit {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for AutoSplit record`,
+        );
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as AutoSplit);
   }
@@ -49,8 +70,20 @@ export class AutoSplitService {
     search?: Partial<AutoSplit>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!AutoSplitFields.includes(field as AutoSplitField)) {
+            throw new Error(
+              `Invalid field '${field}' for AutoSplit table. Valid fields are: ${AutoSplitFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<AutoSplit> = {
         limit: params.limit,
@@ -58,14 +91,22 @@ export class AutoSplitService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("autosplit", mwParams);
 
       // Parse the response
-      const autoSplits = data.map(this.dataCenterJsonToAutoSplit);
+      const autoSplits = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToAutoSplitUsingFields(
+              params.fields as AutoSplitField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToAutoSplit);
 
       return {
         data: autoSplits,

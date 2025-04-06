@@ -15,7 +15,10 @@ const assetCatService = new AssetCatService(config);
 export const assetCatRoutes = new Elysia({ prefix: "/api" }).get(
   "/asset-categories",
   async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search } = query;
+    const { limit = 10, offset = 0, sort, order, search, format } = query;
+
+    // Parse the format parameter as a comma-separated list of field names
+    const fields = format ? format.split(",") : undefined;
 
     try {
       return await assetCatService.getAssetCats({
@@ -24,6 +27,7 @@ export const assetCatRoutes = new Elysia({ prefix: "/api" }).get(
         sort,
         order: order as "asc" | "desc",
         search: search as unknown as Partial<AssetCat>,
+        fields,
       });
     } catch (error) {
       console.error("Error in GET /asset-categories:", error);
@@ -37,10 +41,13 @@ export const assetCatRoutes = new Elysia({ prefix: "/api" }).get(
       sort: t.Optional(t.String()),
       order: t.Optional(t.String()),
       search: t.Optional(assetCatObject),
+      format: t.Optional(t.String()),
     }),
     detail: {
       summary: "Asset Categories",
-      description: `Get all asset categories. Search by: ${AssetCatFields.join(", ")}`,
+      description: `Get all asset categories. Search by: ${AssetCatFields.join(", ")}.
+      Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
+      Example: /api/asset-categories?format=SequenceNumber,Code,Description`,
     },
     tags: ["Assets"],
     response: AssetCatMany,

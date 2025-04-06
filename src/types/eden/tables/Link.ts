@@ -6,7 +6,7 @@ export const LinkOne = t.Object({
   Group: t.String(),
 });
 export const LinkMany = t.Object({
-  data: t.Array(LinkOne),
+  data: t.Array(t.Partial(LinkOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

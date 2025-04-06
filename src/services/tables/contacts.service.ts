@@ -2,6 +2,7 @@ import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
 import {
   type Contacts,
+  type ContactsField,
   ContactsFields,
 } from "../../types/interface/tables/contacts";
 import type {
@@ -29,10 +30,30 @@ export class ContactsService {
           `Missing key ${key} in data center json for Contacts record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Contacts);
+  }
+
+  dataCenterJsonToContactsUsingFields(
+    fields: ContactsField[],
+    data: ANY,
+  ): Contacts {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Contacts record`,
+        );
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Contacts);
   }
@@ -49,8 +70,20 @@ export class ContactsService {
     search?: Partial<Contacts>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!ContactsFields.includes(field as ContactsField)) {
+            throw new Error(
+              `Invalid field '${field}' for Contacts table. Valid fields are: ${ContactsFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Contacts> = {
         limit: params.limit,
@@ -58,14 +91,22 @@ export class ContactsService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("contacts", mwParams);
 
       // Parse the response
-      const contacts = data.map(this.dataCenterJsonToContacts);
+      const contacts = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToContactsUsingFields(
+              params.fields as ContactsField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToContacts);
 
       return {
         data: contacts,

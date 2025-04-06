@@ -155,7 +155,7 @@ export const OffLedgerOne = t.Object({
   TaggedText: t.Nullable(t.String()),
 });
 export const OffLedgerMany = t.Object({
-  data: t.Array(OffLedgerOne),
+  data: t.Array(t.Partial(OffLedgerOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

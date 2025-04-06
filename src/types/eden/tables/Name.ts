@@ -104,7 +104,7 @@ export const NameOne = t.Object({
   EInvoicingID: t.Nullable(t.String()),
 });
 export const NameMany = t.Object({
-  data: t.Array(NameOne),
+  data: t.Array(t.Partial(NameOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

@@ -9,7 +9,7 @@ export const PaymentsOne = t.Object({
   Amount: t.Number(),
 });
 export const PaymentsMany = t.Object({
-  data: t.Array(PaymentsOne),
+  data: t.Array(t.Partial(PaymentsOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

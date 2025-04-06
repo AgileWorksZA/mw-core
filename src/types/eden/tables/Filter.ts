@@ -12,7 +12,7 @@ export const FilterOne = t.Object({
   Order: t.Nullable(t.Number()),
 });
 export const FilterMany = t.Object({
-  data: t.Array(FilterOne),
+  data: t.Array(t.Partial(FilterOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

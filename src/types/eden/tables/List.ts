@@ -10,7 +10,7 @@ export const ListOne = t.Object({
   TaggedText: t.Nullable(t.String()),
 });
 export const ListMany = t.Object({
-  data: t.Array(ListOne),
+  data: t.Array(t.Partial(ListOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

@@ -13,7 +13,7 @@ export const DepartmentOne = t.Object({
   TaggedText: t.Nullable(t.String()),
 });
 export const DepartmentMany = t.Object({
-  data: t.Array(DepartmentOne),
+  data: t.Array(t.Partial(DepartmentOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

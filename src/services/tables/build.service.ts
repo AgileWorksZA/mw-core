@@ -1,6 +1,6 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Build, BuildFields } from "../../types/interface/tables/build";
+import { type Build, type BuildField, BuildFields } from "../../types/interface/tables/build";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -26,10 +26,30 @@ export class BuildService {
           `Missing key ${key} in data center json for Ubuild record`,
         );
       }
-      (acc as ANY)[key] = enforceType(
+      const value = enforceType(
         data[key.toLowerCase()],
         schema[key] as "string",
       );
+      (acc as ANY)[key] = value === "" ? null : value;
+      return acc;
+    }, {} as Build);
+  }
+
+  dataCenterJsonToUbuildUsingFields(
+    fields: BuildField[],
+    data: ANY,
+  ): Build {
+    return fields.reduce((acc, key) => {
+      if (data[key] === undefined) {
+        console.error(
+          `Missing key ${key} in data center json for Ubuild record`,
+        );
+      }
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
+      (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Build);
   }
@@ -46,8 +66,20 @@ export class BuildService {
     search?: Partial<Build>;
     sort?: string;
     order?: "asc" | "desc";
+    fields?: string[];
   }) {
     try {
+      // Validate fields if provided
+      if (params.fields && params.fields.length > 0) {
+        for (const field of params.fields) {
+          if (!BuildFields.includes(field as BuildField)) {
+            throw new Error(
+              `Invalid field '${field}' for Build table. Valid fields are: ${BuildFields.join(", ")}`,
+            );
+          }
+        }
+      }
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Build> = {
         limit: params.limit,
@@ -55,14 +87,22 @@ export class BuildService {
         search: params.search,
         sort: params.sort,
         direction: params.order === "desc" ? "descending" : "ascending",
-        format: "xml-verbose",
+        format: params.fields ? undefined : "xml-verbose",
+        fields: params.fields,
       };
 
       // Call MoneyWorks API
       const { data, pagination } = await this.api.export("build", mwParams);
 
       // Parse the response
-      const builds = data.map(this.dataCenterJsonToUbuild);
+      const builds = params.fields
+        ? data.map((d) =>
+            this.dataCenterJsonToUbuildUsingFields(
+              params.fields as BuildField[],
+              d,
+            ),
+          )
+        : data.map(this.dataCenterJsonToUbuild);
 
       return {
         data: builds,

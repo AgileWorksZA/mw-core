@@ -10,7 +10,7 @@ export const MemoOne = t.Object({
   Text: t.String(),
 });
 export const MemoMany = t.Object({
-  data: t.Array(MemoOne),
+  data: t.Array(t.Partial(MemoOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

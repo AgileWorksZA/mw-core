@@ -74,7 +74,7 @@ export const TransactionOne = t.Object({
   Transferred: t.Nullable(t.Number()),
 });
 export const TransactionMany = t.Object({
-  data: t.Array(TransactionOne),
+  data: t.Array(t.Partial(TransactionOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

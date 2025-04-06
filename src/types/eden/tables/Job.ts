@@ -44,7 +44,7 @@ export const JobOne = t.Object({
   Custom8: t.Nullable(t.String()),
 });
 export const JobMany = t.Object({
-  data: t.Array(JobOne),
+  data: t.Array(t.Partial(JobOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

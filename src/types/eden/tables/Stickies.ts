@@ -10,7 +10,7 @@ export const StickiesOne = t.Object({
   Flags: t.Nullable(t.Number()),
 });
 export const StickiesMany = t.Object({
-  data: t.Array(StickiesOne),
+  data: t.Array(t.Partial(StickiesOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

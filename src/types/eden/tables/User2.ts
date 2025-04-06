@@ -25,7 +25,7 @@ export const User2One = t.Object({
   Colour: t.Nullable(t.Number()),
 });
 export const User2Many = t.Object({
-  data: t.Array(User2One),
+  data: t.Array(t.Partial(User2One)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

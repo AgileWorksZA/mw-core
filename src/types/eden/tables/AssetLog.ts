@@ -20,7 +20,7 @@ export const AssetLogOne = t.Object({
 });
 
 export const AssetLogMany = t.Object({
-  data: t.Array(AssetLogOne),
+  data: t.Array(t.Partial(AssetLogOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

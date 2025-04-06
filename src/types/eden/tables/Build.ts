@@ -10,7 +10,7 @@ export const BuildOne = t.Object({
   Memo: t.Nullable(t.String()),
 });
 export const BuildMany = t.Object({
-  data: t.Array(BuildOne),
+  data: t.Array(t.Partial(BuildOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),

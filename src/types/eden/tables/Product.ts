@@ -77,7 +77,7 @@ export const ProductOne = t.Object({
   TaggedText: t.Nullable(t.String()),
 });
 export const ProductMany = t.Object({
-  data: t.Array(ProductOne),
+  data: t.Array(t.Partial(ProductOne)),
   pagination: t.Object({
     total: t.Number(),
     limit: t.Number(),
