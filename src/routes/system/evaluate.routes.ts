@@ -41,15 +41,10 @@ export const evaluateRoutes = new Elysia({ prefix: "/api" })
     "/eval/:table",
     async ({ body, params }) => {
       try {
-        const results = await evaluateService.evaluateTemplate(
+        return await evaluateService.evaluateTemplate(
           params.table,
-          body.template
+          body.template,
         );
-        
-        return {
-          results,
-          count: results.length
-        };
       } catch (error) {
         console.error(`Error in POST /eval/${params.table}:`, error);
         throw error;
@@ -59,8 +54,8 @@ export const evaluateRoutes = new Elysia({ prefix: "/api" })
       params: t.Object({
         table: t.String({
           description: "MoneyWorks table name",
-          examples: ["name", "account", "transaction", "product"]
-        })
+          examples: ["name", "account", "transaction", "product"],
+        }),
       }),
       body: t.Object({
         template: t.String({
@@ -68,9 +63,9 @@ export const evaluateRoutes = new Elysia({ prefix: "/api" })
           examples: [
             "[Code] - [Description]",
             "[TransDate] [Description] @[Gross]",
-            "[Code]: [Name] Phone: [Phone]"
-          ]
-        })
+            "[Code]: [Name] Phone: [Phone]",
+          ],
+        }),
       }),
       detail: {
         summary: "Evaluate a custom template against a MoneyWorks table",
@@ -82,7 +77,7 @@ Results are returned split on double-newline characters.
 Example: 
 POST /api/eval/account
 Body: { "template": "[Code] - [Description]" }
-Returns: { "results": ["1000 - Sales", "2000 - Expenses", ...], "count": 2 }`
+Returns: { "results": ["1000 - Sales", "2000 - Expenses", ...], "count": 2 }`,
       },
       tags: ["System"],
     },

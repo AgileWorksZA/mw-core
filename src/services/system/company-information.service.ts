@@ -21,19 +21,12 @@ export class CompanyInformationService {
     try {
       // Call MoneyWorks API
       const companyInformation: Partial<CompanyInformation> = {};
-      // The maximum number of args Concat can take is 30.
-      // So we need to split the query into multiple queries.
       const fields = [...select];
-      while (fields.length > 0) {
-        const query = fields.splice(0, 30);
-        const expression = `Concat(${query.map((field) => `${field}, "\\t"`).join(",")})`;
-        const values = ((await this.api.evaluate(expression)) ?? "").split(
-          "\t",
-        );
-        for (let i = 0; i < query.length; i++) {
-          (companyInformation as unknown as Record<string, string>)[query[i]] =
-            values[i];
-        }
+      const expression = `ConcatAllWith("\\t",${fields.join(",")})`;
+      const values = ((await this.api.evaluate(expression)) ?? "").split("\t");
+      for (let i = 0; i < fields.length; i++) {
+        (companyInformation as unknown as Record<string, string>)[fields[i]] =
+          values[i];
       }
       this.parseCompanyInformation(companyInformation, select);
 

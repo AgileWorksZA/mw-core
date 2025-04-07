@@ -37,6 +37,7 @@ import { user2Routes } from "./routes/tables/user2.routes";
 
 import { companyInformationRoutes } from "./routes/system/company-information.routes";
 import { evaluateRoutes } from "./routes/system/evaluate.routes";
+import { reportRoutes } from "./routes/system/report.routes";
 import { systemLabelsRoutes } from "./routes/system/system-labels.routes";
 
 import Account from "./types/json-schema/table/account-schema.json";
@@ -160,6 +161,7 @@ const app = new Elysia({
   // Register all system routes
   .use(companyInformationRoutes)
   .use(evaluateRoutes)
+  .use(reportRoutes)
   .use(systemLabelsRoutes)
 
   .listen(3131);
