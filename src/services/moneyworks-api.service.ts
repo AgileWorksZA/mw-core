@@ -445,6 +445,8 @@ export class MoneyWorksApiService {
         headers: authHeaders,
         responseType: "text",
       });
+      console.log("Response:", response.data);
+      console.log("url:", url);
 
       return response.data;
     } catch (error) {
