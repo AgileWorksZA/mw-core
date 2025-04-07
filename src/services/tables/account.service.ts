@@ -67,9 +67,10 @@ export class AccountService {
     sort?: string;
     order?: "asc" | "desc";
     fields?: string[]; // Array of field names to include in the response
+    skip_validation?: boolean; // Skip validation of fields
   }) {
-    // Validate fields against AccountFields if provided
-    if (params.fields && params.fields.length > 0) {
+    // Validate fields against AccountFields if provided and skip_validation is not true
+    if (params.fields && params.fields.length > 0 && !params.skip_validation) {
       for (const field of params.fields) {
         if (!AccountFields.includes(field as AccountField)) {
           throw new Error(

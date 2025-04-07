@@ -337,7 +337,7 @@
       }
     },
     "DateOfLastSale": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date",
       "description": "The date of the last recorded sale (invoice or cash receipt) to this customer."
     },

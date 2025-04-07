@@ -152,7 +152,7 @@
       "description": "If true, the transaction cannot be posted. (Mutable: conditionally)"
     },
     "DatePaid": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date",
       "description": "For invoices, the date the last payment was received/made."
     },
@@ -204,7 +204,7 @@
       "description": "A user-assigned colour index (0-7) for visual identification in lists. Labels are user-defined in preferences. (Mutable: conditionally)"
     },
     "BankJNSeq": {
-      "type": ["integer", "null"],
+      "type": "integer",
       "description": "The sequence number of the Banking Journal transaction if this receipt was banked using the Banking command."
     },
     "PaymentMethod": {
@@ -223,7 +223,7 @@
       }
     },
     "TimePosted": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date-time",
       "description": "Timestamp indicating when the transaction was posted."
     },
@@ -247,7 +247,7 @@
       "description": "User-defined text field 3. (Mutable: freely, script-only)"
     },
     "PromptPaymentDate": {
-      "type": ["string", "null"],
+      "type": "string",
       "format": "date",
       "description": "The date by which payment must be made to receive a prompt payment discount. (Mutable: freely, script-only)"
     },
@@ -345,11 +345,11 @@
       "description": "The amount of deposit recorded against the associated order."
     },
     "OriginatingOrderSeq": {
-      "type": ["integer", "null"],
+      "type": "integer",
       "description": "The SequenceNumber of the Sales Order or Purchase Order from which this invoice was generated."
     },
     "CurrencyTransferSeq": {
-      "type": ["integer", "null"],
+      "type": "integer",
       "description": "The SequenceNumber of the related transaction in a currency transfer pair."
     },
     "PromptPaymentTerms": {

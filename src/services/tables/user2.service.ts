@@ -64,9 +64,10 @@ export class User2Service {
     sort?: string;
     order?: "asc" | "desc";
     fields?: string[];
+    skip_validation?: boolean;
   }) {
-    // Validate fields against User2Fields if provided
-    if (params.fields && params.fields.length > 0) {
+    // Validate fields against User2Fields if provided and skip_validation is not true
+    if (params.fields && params.fields.length > 0 && !params.skip_validation) {
       for (const field of params.fields) {
         if (!User2Fields.includes(field as User2Field)) {
           throw new Error(

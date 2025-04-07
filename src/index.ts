@@ -1,3 +1,4 @@
+import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import type { OpenAPIV3 } from "openapi-types";
@@ -35,6 +36,7 @@ import { userRoutes } from "./routes/tables/user.routes";
 import { user2Routes } from "./routes/tables/user2.routes";
 
 import { companyInformationRoutes } from "./routes/system/company-information.routes";
+import { evaluateRoutes } from "./routes/system/evaluate.routes";
 import { systemLabelsRoutes } from "./routes/system/system-labels.routes";
 
 import Account from "./types/json-schema/table/account-schema.json";
@@ -74,6 +76,7 @@ const app = new Elysia({
     idleTimeout: 30,
   },
 })
+  .use(cors())
   // Add Swagger documentation
   .use(
     swagger({
@@ -156,6 +159,7 @@ const app = new Elysia({
   .use(user2Routes)
   // Register all system routes
   .use(companyInformationRoutes)
+  .use(evaluateRoutes)
   .use(systemLabelsRoutes)
 
   .listen(3131);

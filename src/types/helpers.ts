@@ -65,5 +65,5 @@ export function enforceType(
   if (type === "date-time") {
     return yyyyMmDdHhMmSsToDate(String(value));
   }
-  throw new Error(`Unknown type: ${type}`);
+  return String(value);
 }
