@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export const assetLogSchema = z.object({
+export const assetLogZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.string().or(z.date()),
+  LastModifiedTime: z.string(),
   ParentSeq: z.number(),
   Action: z.string(),
-  Date: z.string().or(z.date()),
+  Date: z.string(),
   Qty: z.number().nullable().optional(),
   Depreciation: z.number().nullable().optional(),
   Adjustment1: z.number().nullable().optional(),
@@ -19,8 +19,8 @@ export const assetLogSchema = z.object({
   Memo: z.string().nullable().optional(),
 });
 
-export type AssetLogZod = z.infer<typeof assetLogSchema>;
+export type AssetLogZod = z.infer<typeof assetLogZod>;
 
-export const assetLogPartialSchema = assetLogSchema.partial();
+export const assetLogPartialSchema = assetLogZod.partial();
 
 export type AssetLogPartialZod = z.infer<typeof assetLogPartialSchema>;

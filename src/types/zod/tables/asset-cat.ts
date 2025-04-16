@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const assetCatSchema = z.object({
+export const assetCatZod = z.object({
   SequenceNumber: z.number(),
   LastModifiedTime: z.string().nullable().optional(),
   Code: z.string(),
@@ -19,13 +19,13 @@ export const assetCatSchema = z.object({
   DepExpensePrivate: z.string().nullable().optional(),
   UserNum: z.number().nullable().optional(),
   UserText: z.string().nullable().optional(),
-  LastDepreciatedDate: z.string().or(z.date()).nullable().optional(),
+  LastDepreciatedDate: z.string().nullable().optional(),
   TaggedText: z.string().nullable().optional(),
   Flags: z.number(),
 });
 
-export type AssetCatZod = z.infer<typeof assetCatSchema>;
+export type AssetCatZod = z.infer<typeof assetCatZod>;
 
-export const assetCatPartialSchema = assetCatSchema.partial();
+export const assetCatPartialSchema = assetCatZod.partial();
 
 export type AssetCatPartialZod = z.infer<typeof assetCatPartialSchema>;

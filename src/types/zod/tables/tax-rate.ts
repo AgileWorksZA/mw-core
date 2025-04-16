@@ -2,12 +2,12 @@ import { z } from "zod";
 
 export const taxRateZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   TaxCode: z.string(),
   PaidAccount: z.string(),
   RecAccount: z.string(),
   Rate1: z.number(),
-  Date: z.date(),
+  Date: z.string(),
   Rate2: z.number(),
   Combine: z.number(),
   CombineRate1: z.number(),
@@ -19,7 +19,7 @@ export const taxRateZod = z.object({
   RateName: z.string(),
   ReportCycleStart: z.number(),
   ReportCycleEnd: z.number(),
-  ReportDate: z.date(),
+  ReportDate: z.string(),
   PSTReceived: z.number(),
   PSTPaid: z.number(),
   Type: z.number(),

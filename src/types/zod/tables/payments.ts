@@ -2,10 +2,10 @@ import { z } from "zod";
 
 export const paymentsZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   InvoiceID: z.number(),
   CashTrans: z.number(),
-  Date: z.date(),
+  Date: z.string(),
   GSTCycle: z.number(),
   Amount: z.number(),
 });

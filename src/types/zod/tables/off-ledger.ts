@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const offLedgerZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   Kind: z.string(),
   Name: z.string(),
   Description: z.string(),

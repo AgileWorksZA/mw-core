@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const assetSchema = z.object({
+export const assetZod = z.object({
   SequenceNumber: z.number(),
   LastModifiedTime: z.string().or(z.string()),
   Code: z.string(),
@@ -40,8 +40,8 @@ export const assetSchema = z.object({
   Custom4: z.string().nullable().optional(),
 });
 
-export type AssetZod = z.infer<typeof assetSchema>;
+export type AssetZod = z.infer<typeof assetZod>;
 
-export const assetPartialSchema = assetSchema.partial();
+export const assetPartialSchema = assetZod.partial();
 
 export type AssetPartialZod = z.infer<typeof assetPartialSchema>;

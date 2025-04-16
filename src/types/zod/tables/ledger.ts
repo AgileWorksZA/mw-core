@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const ledgerZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   AccountCode: z.string(),
   Department: z.string(),
   Category: z.string(),

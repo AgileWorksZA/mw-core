@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const departmentZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   Code: z.string(),
   Description: z.string(),
   Classification: z.string(),

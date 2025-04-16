@@ -2,10 +2,10 @@ import { z } from "zod";
 
 export const messageZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
-  StartDate: z.date(),
-  EndDate: z.date(),
-  NextDate: z.date(),
+  LastModifiedTime: z.string(),
+  StartDate: z.string(),
+  EndDate: z.string(),
+  NextDate: z.string(),
   Keep: z.boolean(),
   Ref: z.number(),
   LastDay: z.number(),

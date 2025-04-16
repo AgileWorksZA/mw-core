@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const autoSplitZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   MatchFunction: z.string(),
   SplitMode: z.number(),
   SplitAcct1: z.string(),

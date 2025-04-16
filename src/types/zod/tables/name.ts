@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const nameZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   Code: z.string(),
   Name: z.string(),
   Contact: z.string(),
@@ -63,7 +63,7 @@ export const nameZod = z.object({
   AfterHours2: z.string(),
   WebURL: z.string(),
   ProductPricing: z.string(),
-  DateOfLastSale: z.date(),
+  DateOfLastSale: z.string(),
   SplitAcct1: z.string(),
   SplitAcct2: z.string(),
   SplitPercent: z.number(),

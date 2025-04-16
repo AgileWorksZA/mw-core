@@ -15,7 +15,15 @@ const accountService = new AccountService(config);
 export const accountRoutes = new Elysia({ prefix: "/api" }).get(
   "/accounts",
   async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search, format, skip_validation } = query;
+    const {
+      limit = 10,
+      offset = 0,
+      sort,
+      order,
+      search,
+      format,
+      skip_validation,
+    } = query;
 
     // Parse the format parameter as an array of field names if provided
     const fields = format ? format.split(",") : undefined;
@@ -29,7 +37,7 @@ export const accountRoutes = new Elysia({ prefix: "/api" }).get(
         order: order as "asc" | "desc",
         search: search as unknown as Partial<Account>,
         fields,
-        skip_validation: skip_validation === "true" || skip_validation === true,
+        skip_validation,
       });
     } catch (error) {
       console.error("Error in GET /accounts:", error);

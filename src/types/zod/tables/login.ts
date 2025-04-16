@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const loginZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   Initials: z.string(),
   Name: z.string(),
   Password: z.string(),

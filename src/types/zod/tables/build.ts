@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const buildZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   ProductSeq: z.number(),
   Order: z.number(),
   Qty: z.number(),

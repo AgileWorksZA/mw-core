@@ -2,11 +2,11 @@ import { z } from "zod";
 
 export const memoZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   NameSeq: z.number(),
   Order: z.number(),
-  Date: z.date(),
-  RecallDate: z.date(),
+  Date: z.string(),
+  RecallDate: z.string(),
   Flags: z.number(),
   Text: z.string(),
 });

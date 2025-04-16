@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const listsZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   ListID: z.string(),
   Item: z.string(),
   Comment: z.string(),

@@ -2,11 +2,11 @@ import { z } from "zod";
 
 export const jobSheetZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   Job: z.string(),
   Qty: z.number(),
   Resource: z.string(),
-  Date: z.date(),
+  Date: z.string(),
   CostCentre: z.string(),
   Account: z.string(),
   Period: z.number(),
@@ -16,7 +16,7 @@ export const jobSheetZod = z.object({
   Memo: z.string(),
   DestTransSeq: z.number(),
   SourceTransSeq: z.number(),
-  DateEntered: z.date(),
+  DateEntered: z.string(),
   Flags: z.number(),
   Colour: z.number(),
   Status: z.string(),
@@ -32,7 +32,7 @@ export const jobSheetZod = z.object({
   UserNum: z.number(),
   UserText: z.string(),
   TaggedText: z.string(),
-  TimeProcessed: z.date(),
+  TimeProcessed: z.string(),
 });
 
 export type JobSheetZod = z.infer<typeof jobSheetZod>;

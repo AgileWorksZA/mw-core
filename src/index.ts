@@ -41,38 +41,37 @@ import { reportRoutes } from "./routes/system/report.routes";
 import { systemLabelsRoutes } from "./routes/system/system-labels.routes";
 
 import { z } from "zod";
-import Account from "./types/json-schema/table/account-schema.json";
-import AssetCat from "./types/json-schema/table/asset-cat-schema.json";
-import AssetLog from "./types/json-schema/table/asset-log-schema.json";
-import Asset from "./types/json-schema/table/asset-schema.json";
-import AutoSplit from "./types/json-schema/table/autosplit-schema.json";
-import BankRecs from "./types/json-schema/table/bankrecs-schema.json";
-import Build from "./types/json-schema/table/build-schema.json";
-import Contacts from "./types/json-schema/table/contacts-schema.json";
-import Department from "./types/json-schema/table/department-schema.json";
-import Detail from "./types/json-schema/table/detail-schema.json";
-import Filter from "./types/json-schema/table/filter-schema.json";
-import General from "./types/json-schema/table/general-schema.json";
-import Inventory from "./types/json-schema/table/inventory-schema.json";
-import Job from "./types/json-schema/table/job-schema.json";
-import JobSheet from "./types/json-schema/table/jobsheet-schema.json";
-import Ledger from "./types/json-schema/table/ledger-schema.json";
-import Link from "./types/json-schema/table/link-schema.json";
-import List from "./types/json-schema/table/list-schema.json";
-import Log from "./types/json-schema/table/log-schema.json";
-import Login from "./types/json-schema/table/login-schema.json";
-import Memo from "./types/json-schema/table/memo-schema.json";
-import Message from "./types/json-schema/table/message-schema.json";
-import Name from "./types/json-schema/table/name-schema.json";
-import OffLedger from "./types/json-schema/table/offledger-schema.json";
-import Payments from "./types/json-schema/table/payments-schema.json";
-import Product from "./types/json-schema/table/product-schema.json";
-import Stickies from "./types/json-schema/table/stickies-schema.json";
-import TaxRate from "./types/json-schema/table/taxrate-schema.json";
-import Transaction from "./types/json-schema/table/transaction-schema.json";
-import User from "./types/json-schema/table/user-schema.json";
-import User2 from "./types/json-schema/table/user2-schema.json";
 import { accountZod } from "./types/zod/tables/account";
+import { assetZod } from "./types/zod/tables/asset";
+import { assetCatZod } from "./types/zod/tables/asset-cat";
+import { assetLogZod } from "./types/zod/tables/asset-log";
+import { autoSplitZod } from "./types/zod/tables/auto-split";
+import { bankRecsZod } from "./types/zod/tables/bank-recs";
+import { buildZod } from "./types/zod/tables/build";
+import { contactsZod } from "./types/zod/tables/contacts";
+import { departmentZod } from "./types/zod/tables/department";
+import { detailZod } from "./types/zod/tables/detail";
+import { filterZod } from "./types/zod/tables/filter";
+import { generalZod } from "./types/zod/tables/general";
+import { inventoryZod } from "./types/zod/tables/inventory";
+import { jobZod } from "./types/zod/tables/job";
+import { jobSheetZod } from "./types/zod/tables/job-sheet";
+import { ledgerZod } from "./types/zod/tables/ledger";
+import { linkZod } from "./types/zod/tables/link";
+import { listsZod } from "./types/zod/tables/lists";
+import { logZod } from "./types/zod/tables/log";
+import { loginZod } from "./types/zod/tables/login";
+import { memoZod } from "./types/zod/tables/memo";
+import { messageZod } from "./types/zod/tables/message";
+import { nameZod } from "./types/zod/tables/name";
+import { offLedgerZod } from "./types/zod/tables/off-ledger";
+import { paymentsZod } from "./types/zod/tables/payments";
+import { productZod } from "./types/zod/tables/product";
+import { stickiesZod } from "./types/zod/tables/stickies";
+import { taxRateZod } from "./types/zod/tables/tax-rate";
+import { transactionZod } from "./types/zod/tables/transaction";
+import { userZod } from "./types/zod/tables/user";
+import { user2Zod } from "./types/zod/tables/user2";
 
 const app = new Elysia({
   serve: {
@@ -92,37 +91,39 @@ const app = new Elysia({
         tags: [{ name: "MoneyWorks", description: "MoneyWorks endpoints" }],
         components: {
           schemas: {
-            Account: Account as OpenAPIV3.SchemaObject,
-            Asset: Asset as OpenAPIV3.SchemaObject,
-            AssetCat: AssetCat as OpenAPIV3.SchemaObject,
-            AssetLog: AssetLog as OpenAPIV3.SchemaObject,
-            AutoSplit: AutoSplit as OpenAPIV3.SchemaObject,
-            BankRecs: BankRecs as OpenAPIV3.SchemaObject,
-            Build: Build as OpenAPIV3.SchemaObject,
-            Contacts: Contacts as OpenAPIV3.SchemaObject,
-            Department: Department as OpenAPIV3.SchemaObject,
-            Detail: Detail as OpenAPIV3.SchemaObject,
-            Filter: Filter as OpenAPIV3.SchemaObject,
-            General: General as OpenAPIV3.SchemaObject,
-            Inventory: Inventory as OpenAPIV3.SchemaObject,
-            Job: Job as OpenAPIV3.SchemaObject,
-            JobSheet: JobSheet as OpenAPIV3.SchemaObject,
-            Ledger: Ledger as OpenAPIV3.SchemaObject,
-            Link: Link as OpenAPIV3.SchemaObject,
-            List: List as OpenAPIV3.SchemaObject,
-            Log: Log as OpenAPIV3.SchemaObject,
-            Login: Login as OpenAPIV3.SchemaObject,
-            Memo: Memo as OpenAPIV3.SchemaObject,
-            Message: Message as OpenAPIV3.SchemaObject,
-            Name: Name as OpenAPIV3.SchemaObject,
-            OffLedger: OffLedger as OpenAPIV3.SchemaObject,
-            Payments: Payments as OpenAPIV3.SchemaObject,
-            Product: Product as OpenAPIV3.SchemaObject,
-            Stickies: Stickies as OpenAPIV3.SchemaObject,
-            TaxRate: TaxRate as OpenAPIV3.SchemaObject,
-            Transaction: Transaction as OpenAPIV3.SchemaObject,
-            User: User as OpenAPIV3.SchemaObject,
-            User2: User2 as OpenAPIV3.SchemaObject,
+            Account: z.toJSONSchema(accountZod) as OpenAPIV3.SchemaObject,
+            Asset: z.toJSONSchema(assetZod) as OpenAPIV3.SchemaObject,
+            AssetCat: z.toJSONSchema(assetCatZod) as OpenAPIV3.SchemaObject,
+            AssetLog: z.toJSONSchema(assetLogZod) as OpenAPIV3.SchemaObject,
+            AutoSplit: z.toJSONSchema(autoSplitZod) as OpenAPIV3.SchemaObject,
+            BankRecs: z.toJSONSchema(bankRecsZod) as OpenAPIV3.SchemaObject,
+            Build: z.toJSONSchema(buildZod) as OpenAPIV3.SchemaObject,
+            Contacts: z.toJSONSchema(contactsZod) as OpenAPIV3.SchemaObject,
+            Department: z.toJSONSchema(departmentZod) as OpenAPIV3.SchemaObject,
+            Detail: z.toJSONSchema(detailZod) as OpenAPIV3.SchemaObject,
+            Filter: z.toJSONSchema(filterZod) as OpenAPIV3.SchemaObject,
+            General: z.toJSONSchema(generalZod) as OpenAPIV3.SchemaObject,
+            Inventory: z.toJSONSchema(inventoryZod) as OpenAPIV3.SchemaObject,
+            Job: z.toJSONSchema(jobZod) as OpenAPIV3.SchemaObject,
+            JobSheet: z.toJSONSchema(jobSheetZod) as OpenAPIV3.SchemaObject,
+            Ledger: z.toJSONSchema(ledgerZod) as OpenAPIV3.SchemaObject,
+            Link: z.toJSONSchema(linkZod) as OpenAPIV3.SchemaObject,
+            List: z.toJSONSchema(listsZod) as OpenAPIV3.SchemaObject,
+            Log: z.toJSONSchema(logZod) as OpenAPIV3.SchemaObject,
+            Login: z.toJSONSchema(loginZod) as OpenAPIV3.SchemaObject,
+            Memo: z.toJSONSchema(memoZod) as OpenAPIV3.SchemaObject,
+            Message: z.toJSONSchema(messageZod) as OpenAPIV3.SchemaObject,
+            Name: z.toJSONSchema(nameZod) as OpenAPIV3.SchemaObject,
+            OffLedger: z.toJSONSchema(offLedgerZod) as OpenAPIV3.SchemaObject,
+            Payments: z.toJSONSchema(paymentsZod) as OpenAPIV3.SchemaObject,
+            Product: z.toJSONSchema(productZod) as OpenAPIV3.SchemaObject,
+            Stickies: z.toJSONSchema(stickiesZod) as OpenAPIV3.SchemaObject,
+            TaxRate: z.toJSONSchema(taxRateZod) as OpenAPIV3.SchemaObject,
+            Transaction: z.toJSONSchema(
+              transactionZod,
+            ) as OpenAPIV3.SchemaObject,
+            User: z.toJSONSchema(userZod) as OpenAPIV3.SchemaObject,
+            User2: z.toJSONSchema(user2Zod) as OpenAPIV3.SchemaObject,
           },
         },
       },
@@ -174,5 +175,3 @@ console.log(
 console.log(
   `📚 Swagger documentation available at http://${app.server?.hostname}:${app.server?.port}/swagger\``,
 );
-
-console.log(z.toJSONSchema(accountZod, { target: "draft-2020-12" }));

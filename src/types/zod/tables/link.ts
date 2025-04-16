@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const linkZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   Dept: z.string(),
   Group: z.string(),
 });

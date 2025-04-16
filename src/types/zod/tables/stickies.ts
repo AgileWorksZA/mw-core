@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const stickiesZod = z.object({
   SequenceNumber: z.number(),
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   FileNum: z.number(),
   Colour: z.number(),
   User: z.string(),
