@@ -174,3 +174,5 @@ console.log(
 console.log(
   `📚 Swagger documentation available at http://${app.server?.hostname}:${app.server?.port}/swagger\``,
 );
+
+console.log(z.toJSONSchema(accountZod, { target: "draft-2020-12" }));
