@@ -60,9 +60,9 @@ const AccountEBITDAEnum = z
 
 export const accountZod = z.object({
   /** Internal unique identifier for the account record. */
-  SequenceNumber: z.number().int().positive(),
+  SequenceNumber: z.number().positive(),
   /** Timestamp indicating the last time the account record was modified. */
-  LastModifiedTime: z.date(),
+  LastModifiedTime: z.string(),
   /** The unique code used to identify the account (up to 7 characters, plus potentially a hyphen and department code). */
   Code: z
     .string()
@@ -117,7 +117,7 @@ export const accountZod = z.object({
   /** Indicates if the account is a system control account. Indexed. */
   System: AccountSystemEnum,
   /** Timestamp indicating when the account record was created. */
-  Created: z.date(),
+  Created: z.string(),
   /** A secondary user-defined category code for reporting and analysis. May be empty. (Mutable: freely, script-only) */
   Category2: z
     .string()
@@ -198,7 +198,7 @@ export const accountZod = z.object({
       "The next sequence number for cheques printed by MoneyWorks drawn on this bank account.",
     ),
   /** Timestamp of the last imported bank statement for this account. */
-  LastStatementImport: z.date(),
+  LastStatementImport: z.string(),
   /** User-entered notes or comments about the account. May be empty. (Mutable: freely, script-only) */
   Comments: z
     .string()

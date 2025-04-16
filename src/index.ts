@@ -40,6 +40,7 @@ import { evaluateRoutes } from "./routes/system/evaluate.routes";
 import { reportRoutes } from "./routes/system/report.routes";
 import { systemLabelsRoutes } from "./routes/system/system-labels.routes";
 
+import { z } from "zod";
 import Account from "./types/json-schema/table/account-schema.json";
 import AssetCat from "./types/json-schema/table/asset-cat-schema.json";
 import AssetLog from "./types/json-schema/table/asset-log-schema.json";
@@ -71,6 +72,7 @@ import TaxRate from "./types/json-schema/table/taxrate-schema.json";
 import Transaction from "./types/json-schema/table/transaction-schema.json";
 import User from "./types/json-schema/table/user-schema.json";
 import User2 from "./types/json-schema/table/user2-schema.json";
+import { accountZod } from "./types/zod/tables/account";
 
 const app = new Elysia({
   serve: {
