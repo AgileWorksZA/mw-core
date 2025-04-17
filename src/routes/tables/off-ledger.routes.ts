@@ -40,7 +40,9 @@ export const offLedgerRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Off-Ledgers",
-      description: `Get all off-ledgers. Search by: ${OffLedgerFields.join(", ")}`,
+      description: `Stores non-financial periodic data (e.g., KPIs, statistical units) and associated budgets, identified by Kind and Name. Also used internally for currency data.
+
+      Search by: ${OffLedgerFields.join(", ")}`,
     },
     tags: ["Transaction"],
     response: { $schema: { $ref: "#/components/schemas/OffLedgers" } },

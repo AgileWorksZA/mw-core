@@ -41,7 +41,9 @@ export const buildRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Builds",
-      description: `Get all builds. Search by: ${BuildFields.join(", ")}.
+      description: `Defines the Bill of Materials (BOM) components required to manufacture a specific parent product.
+
+      Search by: ${BuildFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/builds?format=SequenceNumber,ProductSeq,PartCode`,
     },

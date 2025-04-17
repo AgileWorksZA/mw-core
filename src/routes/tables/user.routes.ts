@@ -37,7 +37,9 @@ export const userRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Users",
-      description: `Get all users. Search by: ${UserFields.join(", ")}`,
+      description: `Provides a simple key-value storage table (string key, string data) for use by scripts or plug-ins.
+
+      Search by: ${UserFields.join(", ")}`,
     },
     tags: ["System"],
     response: { $schema: { $ref: "#/components/schemas/Users" } },

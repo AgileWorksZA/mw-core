@@ -44,7 +44,9 @@ export const contactsRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Contacts",
-      description: `Get all contacts. Search by: ${ContactsFields.join(", ")}.
+      description: `Stores additional contact persons and their details associated with a primary Name record, beyond the first two contacts.
+
+      Search by: ${ContactsFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/contacts?format=SequenceNumber,ContactName,eMail`,
     },

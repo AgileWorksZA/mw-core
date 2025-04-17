@@ -44,7 +44,9 @@ export const departmentRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Departments",
-      description: `Get all departments. Search by: ${DepartmentFields.join(", ")}.
+      description: `Defines Departments or cost centres used for sub-ledger accounting and reporting (Gold/Datacentre only).
+
+      Search by: ${DepartmentFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/departments?format=SequenceNumber,Code,Description`,
     },

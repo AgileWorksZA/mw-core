@@ -41,7 +41,9 @@ export const detailRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Details",
-      description: `Get all transaction details. Search by: ${DetailFields.join(", ")}.
+      description: `Stores individual line items (details) for each transaction, linking back to the parent Transaction record.
+
+      Search by: ${DetailFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/details?format=SequenceNumber,Description,Credit,Debit,Account
       Note: This endpoint is deprecated and will be removed in a future release.`,

@@ -41,7 +41,9 @@ export const filterRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Filters",
-      description: `Get all saved filters. Search by: ${FilterFields.join(", ")}.
+      description: `Stores user-defined filters (saved searches) for various list views within MoneyWorks.
+
+      Search by: ${FilterFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/filters?format=SequenceNumber,Name,FilterFunction
       Note: This endpoint is deprecated and will be removed in a future release.`,

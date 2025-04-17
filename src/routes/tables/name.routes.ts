@@ -40,7 +40,9 @@ export const nameRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Names",
-      description: `Get all names. Search by: ${NameFields.join(", ")}.
+      description: `Stores information about entities (customers, suppliers, contacts, employees) the business interacts with, including addresses and terms.
+
+      Search by: ${NameFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/names?format=SequenceNumber,Code,Name,Phone`,
     },

@@ -40,7 +40,9 @@ export const paymentsRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Payments",
-      description: `Get all payments. Search by: ${PaymentsFields.join(", ")}`,
+      description: `Records the allocation details linking specific payments/receipts to the invoices they pay (many-to-many link).
+
+      Search by: ${PaymentsFields.join(", ")}`,
     },
     tags: ["Transaction"],
     response: { $schema: { $ref: "#/components/schemas/Payments" } },

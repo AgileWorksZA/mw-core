@@ -44,7 +44,9 @@ export const generalRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "General",
-      description: `Get all saved generals. Search by: ${GeneralFields.join(", ")}.
+      description: `Stores lookup definitions such as Account Categories, Department Classifications, and Department Groups, used for organizing accounts and departments.
+
+      Search by: ${GeneralFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/generals?format=SequenceNumber,Code,Description
       Note: This endpoint is deprecated and will be removed in a future release.`,

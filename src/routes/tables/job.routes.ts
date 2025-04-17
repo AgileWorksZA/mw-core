@@ -41,7 +41,9 @@ export const jobRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Jobs",
-      description: `Get all jobs. Search by: ${JobFields.join(", ")}.
+      description: `Stores information about specific jobs or projects undertaken by the business, including client, status, and budget details.
+
+      Search by: ${JobFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/jobs?format=SequenceNumber,Code,Description,Status`,
     },

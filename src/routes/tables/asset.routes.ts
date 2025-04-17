@@ -41,7 +41,9 @@ export const assetRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Assets",
-      description: `Get all assets. Search by: ${AssetFields.join(", ")}.
+      description: `Stores details of individual fixed assets, including acquisition cost, depreciation settings, and current book value.
+
+      Search by: ${AssetFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/assets?format=SequenceNumber,Code,Description`,
     },

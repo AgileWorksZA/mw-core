@@ -40,7 +40,9 @@ export const memoRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Memos",
-      description: `Get all memos. Search by: ${MemoFields.join(", ")}.
+      description: `Stores dated memo entries and recall reminders associated with specific Name records (contacts/entities).
+
+      Search by: ${MemoFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/memos?format=SequenceNumber,Text,Date`,
     },

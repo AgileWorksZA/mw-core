@@ -44,7 +44,9 @@ export const assetLogRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Asset Logs",
-      description: `Get all asset logs. Search by: ${AssetLogFields.join(", ")}.
+      description: `Records the history of actions performed on fixed assets, such as depreciation runs, revaluations, and disposals.
+
+      Search by: ${AssetLogFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/asset-logs?format=SequenceNumber,Date,Memo`,
     },

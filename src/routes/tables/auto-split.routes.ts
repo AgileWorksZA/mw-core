@@ -44,7 +44,9 @@ export const autoSplitRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Auto Splits",
-      description: `Get all auto splits. Search by: ${AutoSplitFields.join(", ")}.
+      description: `Defines rules for automatically allocating or splitting transactions based on matching criteria, used during bank statement imports.
+
+      Search by: ${AutoSplitFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/auto-splits?format=SequenceNumber,MatchName,SplitAcct1`,
     },

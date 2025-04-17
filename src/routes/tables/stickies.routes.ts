@@ -40,7 +40,9 @@ export const stickiesRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Stickies",
-      description: `Get all stickies. Search by: ${StickiesFields.join(", ")}`,
+      description: `Manages 'sticky notes' - contextual reminders or comments attached to specific records across different tables.
+
+      Search by: ${StickiesFields.join(", ")}`,
     },
     tags: ["CRM"],
     response: { $schema: { $ref: "#/components/schemas/Stickies" } },

@@ -40,7 +40,9 @@ export const loginRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Logins",
-      description: `Get all logins. Search by: ${LoginFields.join(", ")}.
+      description: `Manages user login accounts, including initials, names, encrypted passwords, security levels, and assigned privileges (Gold/Datacentre only).
+
+      Search by: ${LoginFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/logins?format=SequenceNumber,Name,Email`,
     },

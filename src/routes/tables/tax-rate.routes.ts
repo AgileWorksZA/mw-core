@@ -40,7 +40,9 @@ export const taxRateRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Tax Rates",
-      description: `Get all tax-rates. Search by: ${TaxRateFields.join(", ")}`,
+      description: `Defines tax codes, their rates (including historical rates), associated control accounts, and calculation methods (simple, composite).
+
+      Search by: ${TaxRateFields.join(", ")}`,
     },
     tags: ["Tax"],
     response: { $schema: { $ref: "#/components/schemas/TaxRates" } },

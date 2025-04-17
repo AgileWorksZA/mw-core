@@ -41,7 +41,9 @@ export const linkRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Links",
-      description: `Get all links. Search by: ${LinkFields.join(", ")}.
+      description: `Establishes the many-to-many relationship between Departments and Department Groups (Gold/Datacentre only).
+
+      Search by: ${LinkFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/links?format=SequenceNumber,Dept,Group`,
     },

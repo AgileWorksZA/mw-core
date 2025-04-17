@@ -55,7 +55,9 @@ export const productRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Products",
-      description: `Get all products. Search by: ${ProductFields.join(", ")}.
+      description: `Defines product items and services, including descriptions, pricing, costing, inventory status, and associated GL accounts.
+
+      Search by: ${ProductFields.join(", ")}.
       Optionally specify field names with "format" parameter to retrieve only specific fields.
       Example: /api/products?format=Code,Description
       

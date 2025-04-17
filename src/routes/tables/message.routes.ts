@@ -43,7 +43,9 @@ export const messageRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Messages",
-      description: `Get all messages. Search by: ${MessageFields.join(", ")}.
+      description: `Manages recurring messages, reminders, and scheduled tasks within MoneyWorks.
+
+      Search by: ${MessageFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/messages?format=SequenceNumber,Message,User`,
     },

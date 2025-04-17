@@ -55,7 +55,9 @@ export const transactionRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Transactions",
-      description: `Get all transactions. Search by: ${TransactionFields.join(", ")}. 
+      description: `Stores header information for all financial transactions (invoices, payments, receipts, journals, orders, quotes).
+
+      Search by: ${TransactionFields.join(", ")}. 
       Optionally specify field names with "format" parameter to retrieve only specific fields.
       Example: /api/transactions?format=Type,Status,Gross
       

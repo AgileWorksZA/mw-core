@@ -44,7 +44,9 @@ export const jobSheetRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Job Sheets",
-      description: `Get all job-sheets. Search by: ${JobSheetFields.join(", ")}.
+      description: `Records time, materials, and disbursements allocated to specific jobs, used for job costing and billing.
+
+      Search by: ${JobSheetFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/job-sheets?format=SequenceNumber,Job,Resource,Qty`,
     },

@@ -41,7 +41,9 @@ export const listsRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Lists",
-      description: `Get all lists. Search by: ${ListsFields.join(", ")}.
+      description: `Stores items for user-defined drop-down validation lists used for data validation in entry fields.
+
+      Search by: ${ListsFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/lists?format=SequenceNumber,ListID,Item,Comment`,
     },

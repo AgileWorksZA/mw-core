@@ -44,7 +44,9 @@ export const inventoryRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Inventory",
-      description: `Get inventory records. Search by: ${InventoryFields.join(", ")}.
+      description: `Tracks stock levels, values, locations, serial numbers, and batch details for inventoried product items.
+
+      Search by: ${InventoryFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/inventory?format=SequenceNumber,Identifier,ProductSeq,Qty`,
     },

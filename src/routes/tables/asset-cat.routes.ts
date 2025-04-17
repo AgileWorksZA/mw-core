@@ -44,7 +44,9 @@ export const assetCatRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Asset Categories",
-      description: `Get all asset categories. Search by: ${AssetCatFields.join(", ")}.
+      description: `Defines categories for grouping fixed assets, holding default depreciation methods, rates, and related GL accounts.
+
+      Search by: ${AssetCatFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/asset-categories?format=SequenceNumber,Code,Description`,
     },

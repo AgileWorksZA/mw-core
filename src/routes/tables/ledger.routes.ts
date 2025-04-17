@@ -41,7 +41,9 @@ export const ledgerRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Ledgers",
-      description: `Get all ledgers. Search by: ${LedgerFields.join(", ")}.
+      description: `Stores periodic balances (actuals and budgets) for General Ledger accounts, potentially including departmental breakdowns.
+
+      Search by: ${LedgerFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/ledgers?format=SequenceNumber,AccountCode,Balance,Type`,
     },

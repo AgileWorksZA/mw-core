@@ -45,7 +45,9 @@ export const bankRecsRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Bank Reconciliations",
-      description: `Get all bank reconciliations. Search by: ${BankRecsFields.join(", ")}.
+      description: `Stores historical records of completed bank reconciliations, including statement details and balances.
+
+      Search by: ${BankRecsFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/bank-recs?format=SequenceNumber,Account,Date`,
     },

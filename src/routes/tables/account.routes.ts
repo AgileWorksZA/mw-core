@@ -54,7 +54,9 @@ export const accountRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Accounts",
-      description: `Get all accounts. Search by: ${AccountFields.join(", ")}. 
+      description: `Defines the Chart of Accounts (CoA), storing all General Ledger accounts used for financial classification and reporting.
+
+      Search by: ${AccountFields.join(", ")}. 
       Optionally specify field names with "format" parameter to retrieve only specific fields.
       Example: /api/accounts?format=Code&format=Description
       

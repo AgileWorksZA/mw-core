@@ -52,7 +52,9 @@ export const user2Routes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "User2s",
-      description: `Get all user2s. Search by: ${User2Fields.join(", ")}.
+      description: `Provides extended key-value storage with multiple key fields and varied data types (integers, floats, dates, text) for scripts/plug-ins.
+
+      Search by: ${User2Fields.join(", ")}.
       Optionally specify field names with "format" parameter to retrieve only specific fields.
       Example: /api/user2s?format=Key,Text
       

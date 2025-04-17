@@ -40,7 +40,9 @@ export const logRoutes = new Elysia({ prefix: "/api" }).get(
     }),
     detail: {
       summary: "Logs",
-      description: `Get all logs. Search by: ${LogFields.join(", ")}.
+      description: `Records an audit trail of significant system events, user actions, and structural changes within the MoneyWorks document.
+
+      Search by: ${LogFields.join(", ")}.
       Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
       Example: /api/logs?format=SequenceNumber,Description,Who`,
     },
