@@ -2,7 +2,6 @@ import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
 import { AccountService } from "../../services/tables/account.service";
 import { accountObject } from "../../types/constants.eden";
-import { AccountMany } from "../../types/eden/tables/Account";
 import {
   type Account,
   AccountFields,
@@ -65,7 +64,7 @@ export const accountRoutes = new Elysia({ prefix: "/api" }).get(
     tags: ["CRM"],
     response: {
       $schema: {
-        $ref: "#/components/schemas/Account",
+        $ref: "#/components/schemas/Accounts",
       },
     },
   },

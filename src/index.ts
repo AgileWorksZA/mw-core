@@ -92,6 +92,18 @@ const app = new Elysia({
         components: {
           schemas: {
             Account: z.toJSONSchema(accountZod) as OpenAPIV3.SchemaObject,
+            Accounts: z.toJSONSchema(
+              z.object({
+                data: z.array(accountZod),
+                pagination: z.object({
+                  total: z.number(),
+                  limit: z.number(),
+                  offset: z.number(),
+                  next: z.number(),
+                  prev: z.number(),
+                }),
+              }),
+            ) as OpenAPIV3.SchemaObject,
             Asset: z.toJSONSchema(assetZod) as OpenAPIV3.SchemaObject,
             AssetCat: z.toJSONSchema(assetCatZod) as OpenAPIV3.SchemaObject,
             AssetLog: z.toJSONSchema(assetLogZod) as OpenAPIV3.SchemaObject,
