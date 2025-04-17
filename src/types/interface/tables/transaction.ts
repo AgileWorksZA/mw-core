@@ -9,11 +9,11 @@ export interface Transaction {
   /** @indexed @mutable="conditionally" size="12" */
   OurRef: string;
   /** @indexed @mutable="conditionally" */
-  TransDate: Date;
+  TransDate: string;
   /** @indexed */
-  EnterDate: Date;
+  EnterDate: string;
   /** @mutable="conditionally" */
-  DueDate: Date;
+  DueDate: string;
   /** @indexed */
   Period: number;
   /** @indexed size="4" */
@@ -37,7 +37,7 @@ export interface Transaction {
   Status: string;
   /** @mutable="conditionally" */
   Hold: boolean;
-  DatePaid: Date;
+  DatePaid: string;
   AmtPaid: number;
   PayAmount: number;
   Aging: number;
@@ -54,7 +54,7 @@ export interface Transaction {
   Colour: number;
   BankJNSeq: number;
   PaymentMethod: number;
-  TimePosted: Date;
+  TimePosted: string;
   /** @indexed */
   SecurityLevel: number;
   /** @mutable="freely, script-only" size="256" */
@@ -64,7 +64,7 @@ export interface Transaction {
   /** @mutable="freely, script-only" size="256" */
   User3: string;
   /** @mutable="freely, script-only" */
-  PromptPaymentDate: Date;
+  PromptPaymentDate: string;
   PromptPaymentAmt: number;
   /** size="2" */
   ProdPriceCode: string;

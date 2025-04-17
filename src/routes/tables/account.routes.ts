@@ -63,6 +63,10 @@ export const accountRoutes = new Elysia({ prefix: "/api" }).get(
       Use skip_validation=true to bypass field validation when using custom fields.`,
     },
     tags: ["CRM"],
-    response: AccountMany,
+    response: {
+      $schema: {
+        $ref: "#/components/schemas/Account",
+      },
+    },
   },
 );

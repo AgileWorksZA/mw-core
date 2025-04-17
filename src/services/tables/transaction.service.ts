@@ -65,10 +65,11 @@ export class TransactionService {
     search?: Partial<Transaction>;
     sort?: string;
     order?: "asc" | "desc";
-    fields?: string[];
+    fields?: string[]; // Array of field names to include in the response
+    skip_validation?: boolean; // Skip validation of fields
   }) {
-    // Validate fields against TransactionFields if provided
-    if (params.fields && params.fields.length > 0) {
+    // Validate fields against TransactionFields if provided and skip_validation is not true
+    if (params.fields && params.fields.length > 0 && !params.skip_validation) {
       for (const field of params.fields) {
         if (!TransactionFields.includes(field as TransactionField)) {
           throw new Error(

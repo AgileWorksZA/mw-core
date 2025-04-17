@@ -15,7 +15,18 @@ const transactionService = new TransactionService(config);
 export const transactionRoutes = new Elysia({ prefix: "/api" }).get(
   "/transactions",
   async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search } = query;
+    const {
+      limit = 10,
+      offset = 0,
+      sort,
+      order,
+      search,
+      format,
+      skip_validation,
+    } = query;
+
+    // Parse the format parameter as an array of field names if provided
+    const fields = format ? format.split(",") : undefined;
 
     try {
       return await transactionService.getTransactions({
@@ -24,6 +35,8 @@ export const transactionRoutes = new Elysia({ prefix: "/api" }).get(
         sort,
         order: order as "asc" | "desc",
         search: search as unknown as Partial<Transaction>,
+        fields,
+        skip_validation,
       });
     } catch (error) {
       console.error("Error in GET /transactions:", error);
@@ -37,10 +50,16 @@ export const transactionRoutes = new Elysia({ prefix: "/api" }).get(
       sort: t.Optional(t.String()),
       order: t.Optional(t.String()),
       search: t.Optional(transactionObject),
+      format: t.Optional(t.String()),
+      skip_validation: t.Optional(t.Boolean()),
     }),
     detail: {
       summary: "Transactions",
-      description: `Get all transactions. Search by: ${TransactionFields.join(", ")}`,
+      description: `Get all transactions. Search by: ${TransactionFields.join(", ")}. 
+      Optionally specify field names with "format" parameter to retrieve only specific fields.
+      Example: /api/transactions?format=Type,Status,Gross
+      
+      Use skip_validation=true to bypass field validation when using custom fields.`,
     },
     tags: ["Transaction"],
     response: TransactionMany,
