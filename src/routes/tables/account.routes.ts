@@ -26,7 +26,6 @@ export const accountRoutes = new Elysia({ prefix: "/api" }).get(
 
     // Parse the format parameter as an array of field names if provided
     const fields = format ? format.split(",") : undefined;
-    console.log("Format:", format, fields);
 
     try {
       return await accountService.getAccounts({

@@ -91,19 +91,30 @@ const app = new Elysia({
         tags: [{ name: "MoneyWorks", description: "MoneyWorks endpoints" }],
         components: {
           schemas: {
-            Account: z.toJSONSchema(accountZod) as OpenAPIV3.SchemaObject,
-            Accounts: z.toJSONSchema(
+            pagination: z.toJSONSchema(
               z.object({
-                data: z.array(accountZod),
-                pagination: z.object({
-                  total: z.number(),
-                  limit: z.number(),
-                  offset: z.number(),
-                  next: z.number(),
-                  prev: z.number(),
-                }),
+                total: z.number(),
+                limit: z.number(),
+                offset: z.number(),
+                next: z.number(),
+                prev: z.number(),
               }),
             ) as OpenAPIV3.SchemaObject,
+            Account: z.toJSONSchema(accountZod) as OpenAPIV3.SchemaObject,
+            Accounts: {
+              type: "object",
+              properties: {
+                data: {
+                  type: "array",
+                  items: {
+                    $ref: "#/components/schemas/Account",
+                  },
+                },
+                pagination: {
+                  $ref: "#/components/schemas/pagination",
+                },
+              },
+            },
             Asset: z.toJSONSchema(assetZod) as OpenAPIV3.SchemaObject,
             AssetCat: z.toJSONSchema(assetCatZod) as OpenAPIV3.SchemaObject,
             AssetLog: z.toJSONSchema(assetLogZod) as OpenAPIV3.SchemaObject,
