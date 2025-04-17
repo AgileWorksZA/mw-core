@@ -1,4 +1,4 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const LedgerOne = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.String(),
@@ -209,5 +209,5 @@ export const LedgerMany = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });

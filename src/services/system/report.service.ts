@@ -51,7 +51,7 @@ export class ReportService {
 
   /**
    * Generate a MoneyWorks report with the specified name
-   * 
+   *
    * @param reportName The name of the report to generate
    * @returns The HTML report content
    */
@@ -59,20 +59,20 @@ export class ReportService {
     try {
       // Create the URL with hardcoded params
       const url = `${this.getBaseUrl()}/doreport/report=${encodeURIComponent(reportName)}&format=html&leading=8&font=Verdana&size=10`;
-      
+
       // Add auth headers
       const headers = this.createAuthHeaders();
 
       // Make the request
-      const response = await axios.get(url, { 
+      const response = await axios.get(url, {
         headers,
-        responseType: 'text'
+        responseType: "text",
       });
 
       return response.data;
     } catch (error) {
       console.error(`Error generating report "${reportName}":`, error);
-      
+
       // Re-throw the error after logging
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -86,7 +86,7 @@ export class ReportService {
           );
         }
       }
-      
+
       throw new Error(`MoneyWorks Report Error: ${(error as Error).message}`);
     }
   }

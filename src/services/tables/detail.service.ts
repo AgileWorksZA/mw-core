@@ -1,6 +1,10 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Detail, type DetailField, DetailFields } from "../../types/interface/tables/detail";
+import {
+  type Detail,
+  type DetailField,
+  DetailFields,
+} from "../../types/interface/tables/detail";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -35,10 +39,7 @@ export class DetailService {
     }, {} as Detail);
   }
 
-  dataCenterJsonToDetailUsingFields(
-    fields: DetailField[],
-    data: ANY,
-  ): Detail {
+  dataCenterJsonToDetailUsingFields(fields: DetailField[], data: ANY): Detail {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
         console.error(

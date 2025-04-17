@@ -71,12 +71,12 @@ export class LoginService {
         for (const field of params.fields) {
           if (!LoginFields.includes(field as keyof typeof schema)) {
             throw new Error(
-              `Invalid field '${field}' for Login table. Valid fields are: ${LoginFields.join(", ")}`
+              `Invalid field '${field}' for Login table. Valid fields are: ${LoginFields.join(", ")}`,
             );
           }
         }
       }
-      
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Login> = {
         limit: params.limit,
@@ -93,7 +93,9 @@ export class LoginService {
 
       // Parse the response
       const logins = params.fields
-        ? data.map((d) => this.dataCenterJsonToLoginUsingFields(params.fields as string[], d))
+        ? data.map((d) =>
+            this.dataCenterJsonToLoginUsingFields(params.fields as string[], d),
+          )
         : data.map(this.dataCenterJsonToLogin);
 
       return {

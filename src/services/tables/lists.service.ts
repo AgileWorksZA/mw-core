@@ -1,6 +1,10 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Lists, type ListsField, ListsFields } from "../../types/interface/tables/lists";
+import {
+  type Lists,
+  type ListsField,
+  ListsFields,
+} from "../../types/interface/tables/lists";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -35,10 +39,7 @@ export class ListsService {
     }, {} as Lists);
   }
 
-  dataCenterJsonToListsUsingFields(
-    fields: ListsField[],
-    data: ANY,
-  ): Lists {
+  dataCenterJsonToListsUsingFields(fields: ListsField[], data: ANY): Lists {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
         console.error(

@@ -1,4 +1,4 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const FilterOne = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.String(),
@@ -19,5 +19,5 @@ export const FilterMany = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });

@@ -33,7 +33,10 @@ export class TransactionService {
           `Missing key ${key} in data center json for Transaction record`,
         );
       }
-      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
       (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Transaction);
@@ -42,7 +45,9 @@ export class TransactionService {
   dataCenterJsonToTransaction(data: ANY): Transaction {
     return TransactionFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Transaction record`);
+        console.error(
+          `Missing key ${key} in data center json for Transaction record`,
+        );
       }
       const value = enforceType(
         data[key.toLowerCase()],

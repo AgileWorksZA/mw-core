@@ -1,4 +1,4 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const User2One = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.String(),
@@ -32,5 +32,5 @@ export const User2Many = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });

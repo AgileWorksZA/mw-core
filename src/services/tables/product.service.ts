@@ -33,7 +33,10 @@ export class ProductService {
           `Missing key ${key} in data center json for Product record`,
         );
       }
-      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
       (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as Product);
@@ -42,7 +45,9 @@ export class ProductService {
   dataCenterJsonToProduct(data: ANY): Product {
     return ProductFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Product record`);
+        console.error(
+          `Missing key ${key} in data center json for Product record`,
+        );
       }
       const value = enforceType(
         data[key.toLowerCase()],

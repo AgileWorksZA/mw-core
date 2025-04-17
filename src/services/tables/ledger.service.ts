@@ -1,6 +1,10 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Ledger, type LedgerField, LedgerFields } from "../../types/interface/tables/ledger";
+import {
+  type Ledger,
+  type LedgerField,
+  LedgerFields,
+} from "../../types/interface/tables/ledger";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -35,10 +39,7 @@ export class LedgerService {
     }, {} as Ledger);
   }
 
-  dataCenterJsonToLedgerUsingFields(
-    fields: LedgerField[],
-    data: ANY,
-  ): Ledger {
+  dataCenterJsonToLedgerUsingFields(fields: LedgerField[], data: ANY): Ledger {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
         console.error(

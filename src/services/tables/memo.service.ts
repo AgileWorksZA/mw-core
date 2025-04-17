@@ -67,12 +67,12 @@ export class MemoService {
         for (const field of params.fields) {
           if (!MemoFields.includes(field as keyof typeof schema)) {
             throw new Error(
-              `Invalid field '${field}' for Memo table. Valid fields are: ${MemoFields.join(", ")}`
+              `Invalid field '${field}' for Memo table. Valid fields are: ${MemoFields.join(", ")}`,
             );
           }
         }
       }
-      
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Memo> = {
         limit: params.limit,
@@ -89,7 +89,9 @@ export class MemoService {
 
       // Parse the response
       const memos = params.fields
-        ? data.map((d) => this.dataCenterJsonToMemoUsingFields(params.fields as string[], d))
+        ? data.map((d) =>
+            this.dataCenterJsonToMemoUsingFields(params.fields as string[], d),
+          )
         : data.map(this.dataCenterJsonToMemo);
 
       // ToDo: Figure out why null values need to be filtered out

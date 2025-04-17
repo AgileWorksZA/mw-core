@@ -67,12 +67,12 @@ export class NameService {
         for (const field of params.fields) {
           if (!NameFields.includes(field as keyof typeof schema)) {
             throw new Error(
-              `Invalid field '${field}' for Name table. Valid fields are: ${NameFields.join(", ")}`
+              `Invalid field '${field}' for Name table. Valid fields are: ${NameFields.join(", ")}`,
             );
           }
         }
       }
-      
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Name> = {
         limit: params.limit,
@@ -89,7 +89,9 @@ export class NameService {
 
       // Parse the response
       const names = params.fields
-        ? data.map((d) => this.dataCenterJsonToNameUsingFields(params.fields as string[], d))
+        ? data.map((d) =>
+            this.dataCenterJsonToNameUsingFields(params.fields as string[], d),
+          )
         : data.map(this.dataCenterJsonToName);
 
       return {

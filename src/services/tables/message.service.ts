@@ -25,7 +25,9 @@ export class MessageService {
   dataCenterJsonToMessage(data: ANY): Message {
     return MessageFields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Message record`);
+        console.error(
+          `Missing key ${key} in data center json for Message record`,
+        );
       }
       const value = enforceType(
         data[key.toLowerCase()],
@@ -39,7 +41,9 @@ export class MessageService {
   dataCenterJsonToMessageUsingFields(fields: string[], data: ANY): Message {
     return fields.reduce((acc, key) => {
       if (data[key.toLowerCase()] === undefined) {
-        console.error(`Missing key ${key} in data center json for Message record`);
+        console.error(
+          `Missing key ${key} in data center json for Message record`,
+        );
       }
       const value = enforceType(
         data[key.toLowerCase()],
@@ -70,12 +74,12 @@ export class MessageService {
         for (const field of params.fields) {
           if (!MessageFields.includes(field as keyof typeof schema)) {
             throw new Error(
-              `Invalid field '${field}' for Message table. Valid fields are: ${MessageFields.join(", ")}`
+              `Invalid field '${field}' for Message table. Valid fields are: ${MessageFields.join(", ")}`,
             );
           }
         }
       }
-      
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Message> = {
         limit: params.limit,
@@ -92,7 +96,12 @@ export class MessageService {
 
       // Parse the response
       const messages = params.fields
-        ? data.map((d) => this.dataCenterJsonToMessageUsingFields(params.fields as string[], d))
+        ? data.map((d) =>
+            this.dataCenterJsonToMessageUsingFields(
+              params.fields as string[],
+              d,
+            ),
+          )
         : data.map(this.dataCenterJsonToMessage);
 
       return {

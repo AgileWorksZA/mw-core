@@ -1,6 +1,10 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Filter, type FilterField, FilterFields } from "../../types/interface/tables/filter";
+import {
+  type Filter,
+  type FilterField,
+  FilterFields,
+} from "../../types/interface/tables/filter";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -35,10 +39,7 @@ export class FilterService {
     }, {} as Filter);
   }
 
-  dataCenterJsonToFilterUsingFields(
-    fields: FilterField[],
-    data: ANY,
-  ): Filter {
+  dataCenterJsonToFilterUsingFields(fields: FilterField[], data: ANY): Filter {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
         console.error(

@@ -1,6 +1,10 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Job, type JobField, JobFields } from "../../types/interface/tables/job";
+import {
+  type Job,
+  type JobField,
+  JobFields,
+} from "../../types/interface/tables/job";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -33,10 +37,7 @@ export class JobService {
     }, {} as Job);
   }
 
-  dataCenterJsonToJobUsingFields(
-    fields: JobField[],
-    data: ANY,
-  ): Job {
+  dataCenterJsonToJobUsingFields(fields: JobField[], data: ANY): Job {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
         console.error(`Missing key ${key} in data center json for Job record`);
@@ -93,10 +94,7 @@ export class JobService {
       // Parse the response
       const jobs = params.fields
         ? data.map((d) =>
-            this.dataCenterJsonToJobUsingFields(
-              params.fields as JobField[],
-              d,
-            ),
+            this.dataCenterJsonToJobUsingFields(params.fields as JobField[], d),
           )
         : data.map(this.dataCenterJsonToJob);
 

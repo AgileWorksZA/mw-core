@@ -33,7 +33,10 @@ export class OffLedgerService {
           `Missing key ${key} in data center json for OffLedger record`,
         );
       }
-      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
       (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as OffLedger);

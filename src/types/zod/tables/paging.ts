@@ -1,4 +1,4 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const pagingSchema = z.object({
   total: z.number(),

@@ -67,12 +67,12 @@ export class LogService {
         for (const field of params.fields) {
           if (!LogFields.includes(field as keyof typeof schema)) {
             throw new Error(
-              `Invalid field '${field}' for Log table. Valid fields are: ${LogFields.join(", ")}`
+              `Invalid field '${field}' for Log table. Valid fields are: ${LogFields.join(", ")}`,
             );
           }
         }
       }
-      
+
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Log> = {
         limit: params.limit,
@@ -89,7 +89,9 @@ export class LogService {
 
       // Parse the response
       const logs = params.fields
-        ? data.map((d) => this.dataCenterJsonToLogUsingFields(params.fields as string[], d))
+        ? data.map((d) =>
+            this.dataCenterJsonToLogUsingFields(params.fields as string[], d),
+          )
         : data.map(this.dataCenterJsonToLog);
 
       return {

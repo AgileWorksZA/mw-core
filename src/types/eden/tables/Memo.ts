@@ -1,4 +1,4 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const MemoOne = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.String(),
@@ -17,5 +17,5 @@ export const MemoMany = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });

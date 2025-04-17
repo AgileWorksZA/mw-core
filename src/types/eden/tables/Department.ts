@@ -1,4 +1,4 @@
-import { t } from 'elysia';
+import { t } from "elysia";
 export const DepartmentOne = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.String(),
@@ -20,5 +20,5 @@ export const DepartmentMany = t.Object({
     offset: t.Number(),
     next: t.Number(),
     prev: t.Number(),
-  })
+  }),
 });

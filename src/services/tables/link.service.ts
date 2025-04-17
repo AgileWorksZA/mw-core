@@ -1,6 +1,10 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Link, type LinkField, LinkFields } from "../../types/interface/tables/link";
+import {
+  type Link,
+  type LinkField,
+  LinkFields,
+} from "../../types/interface/tables/link";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -33,10 +37,7 @@ export class LinkService {
     }, {} as Link);
   }
 
-  dataCenterJsonToLinkUsingFields(
-    fields: LinkField[],
-    data: ANY,
-  ): Link {
+  dataCenterJsonToLinkUsingFields(fields: LinkField[], data: ANY): Link {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
         console.error(`Missing key ${key} in data center json for Link record`);

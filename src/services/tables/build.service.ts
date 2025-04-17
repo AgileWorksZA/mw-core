@@ -1,6 +1,10 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type Build, type BuildField, BuildFields } from "../../types/interface/tables/build";
+import {
+  type Build,
+  type BuildField,
+  BuildFields,
+} from "../../types/interface/tables/build";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -35,10 +39,7 @@ export class BuildService {
     }, {} as Build);
   }
 
-  dataCenterJsonToUbuildUsingFields(
-    fields: BuildField[],
-    data: ANY,
-  ): Build {
+  dataCenterJsonToUbuildUsingFields(fields: BuildField[], data: ANY): Build {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
         console.error(

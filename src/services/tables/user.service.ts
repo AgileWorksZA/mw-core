@@ -1,6 +1,10 @@
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
-import { type User, type UserField, UserFields } from "../../types/interface/tables/user";
+import {
+  type User,
+  type UserField,
+  UserFields,
+} from "../../types/interface/tables/user";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -19,17 +23,15 @@ export class UserService {
     this.api = new MoneyWorksApiService(config);
   }
 
-  dataCenterJsonToUserUsingFields(
-    fields: UserField[],
-    data: ANY,
-  ): User {
+  dataCenterJsonToUserUsingFields(fields: UserField[], data: ANY): User {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
-        console.error(
-          `Missing key ${key} in data center json for User record`,
-        );
+        console.error(`Missing key ${key} in data center json for User record`);
       }
-      const value = enforceType(data[key], schema[key as keyof typeof schema] as "string");
+      const value = enforceType(
+        data[key],
+        schema[key as keyof typeof schema] as "string",
+      );
       (acc as ANY)[key] = value === "" ? null : value;
       return acc;
     }, {} as User);
