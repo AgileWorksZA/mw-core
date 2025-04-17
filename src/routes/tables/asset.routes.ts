@@ -2,7 +2,6 @@ import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
 import { AssetService } from "../../services/tables/asset.service";
 import { assetObject } from "../../types/constants.eden";
-import { AssetMany } from "../../types/eden/tables/Asset";
 import { type Asset, AssetFields } from "../../types/interface/tables/asset";
 
 // Initialize the asset service with configuration

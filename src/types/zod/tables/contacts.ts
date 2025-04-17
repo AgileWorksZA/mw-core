@@ -4,7 +4,6 @@ export const contactsZod = z.object({
   /** Internal unique identifier for the contact record itself. */
   SequenceNumber: z
     .number()
-    .int()
     .positive()
     .describe("Internal unique identifier for the contact record itself."),
   /** Timestamp indicating the last time the contact record was modified. */
@@ -16,7 +15,6 @@ export const contactsZod = z.object({
   /** Foreign key linking to the SequenceNumber of the parent Name record. */
   ParentSeq: z
     .number()
-    .int()
     .positive()
     .describe(
       "Foreign key linking to the SequenceNumber of the parent Name record. Indexed.",
@@ -24,7 +22,6 @@ export const contactsZod = z.object({
   /** The display order of this contact within the parent Name record's contact list. */
   Order: z
     .number()
-    .int()
     .describe(
       "The display order of this contact within the parent Name record's contact list.",
     ),
@@ -85,7 +82,6 @@ export const contactsZod = z.object({
   /** Represents the roles assigned to the contact (e.g., Payables, CEO). Stored as a bitmask. Corresponds to Name.Role and Name.Role2. Bitmask field where each bit corresponds to one of the 16 possible roles defined in Preferences. */
   Role: z
     .number()
-    .int()
     .describe(
       "Represents the roles assigned to the contact (e.g., Payables, CEO). Stored as a bitmask. Corresponds to Name.Role and Name.Role2. Bitmask field where each bit corresponds to one of the 16 possible roles defined in Preferences.",
     ),

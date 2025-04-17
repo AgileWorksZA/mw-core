@@ -215,7 +215,6 @@ export const transactionZod = z.object({
   /** Time posted */
   TimePosted: z
     .string()
-    .datetime({ offset: true })
     .describe("Time posted. Date and time transaction is posted."),
   /** Security level (indexed) */
   SecurityLevel: z

@@ -2,7 +2,6 @@ import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
 import { AssetCatService } from "../../services/tables/asset-cat.service";
 import { assetCatObject } from "../../types/constants.eden";
-import { AssetCatMany } from "../../types/eden/tables/AssetCat";
 import {
   type AssetCat,
   AssetCatFields,

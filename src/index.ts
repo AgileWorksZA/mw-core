@@ -87,7 +87,7 @@ function pagedSchema(schema: string) {
         $ref: "#/components/schemas/pagination",
       },
     },
-    title: `${schema} Paged Response`,
+    title: `${schema}`,
   } as OpenAPIV3.SchemaObject;
 }
 

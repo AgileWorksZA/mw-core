@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Define Zod enums for specific fields
-const AccountTypeEnum = z
+export const AccountTypeEnum = z
   .enum([
     "I", // IN - Income
     "S", // SA - Sales
@@ -26,7 +26,7 @@ const AccountTypeEnum = z
   M: TL - Term Liability (Longer-term obligations like mortgages)
   H: SF - Shareholders Funds / Equity (Owner's equity in the company)`);
 
-const AccountSystemEnum = z
+export const AccountSystemEnum = z
   .enum([
     "P", // GP - GST/VAT/TAX Paid control account
     "R", // GR - GST/VAT/TAX Received control account

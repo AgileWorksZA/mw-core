@@ -1,206 +1,804 @@
 import { z } from "zod";
+import { AccountSystemEnum, AccountTypeEnum } from "./account";
 
+// --- Ledger Enums ---
+// Re-using AccountTypeEnum and AccountSystemTypeEnum as Ledger inherits these properties.
+
+// --- Ledger Schema ---
+
+/**
+ * Zod schema for the Ledger record.
+ * Internal file name: Ledger
+ * Represents the individual general ledger accounts, including subledgers for departmentalised accounts.
+ * This table holds the actual balances and budgets for reporting. There is one record per
+ * unique AccountCode-Department combination. Non-departmentalised accounts have an empty Department field.
+ */
 export const ledgerZod = z.object({
-  SequenceNumber: z.number(),
-  LastModifiedTime: z.string(),
-  AccountCode: z.string(),
-  Department: z.string(),
-  Category: z.string(),
-  Classification: z.string(),
-  Type: z.string(),
-  BalanceLast91: z.number(),
-  BalanceLast90: z.number(),
-  BalanceLast89: z.number(),
-  BalanceLast88: z.number(),
-  BalanceLast87: z.number(),
-  BalanceLast86: z.number(),
-  BalanceLast85: z.number(),
-  BalanceLast84: z.number(),
-  BalanceLast83: z.number(),
-  BalanceLast82: z.number(),
-  BalanceLast81: z.number(),
-  BalanceLast80: z.number(),
-  BalanceLast79: z.number(),
-  BalanceLast78: z.number(),
-  BalanceLast77: z.number(),
-  BalanceLast76: z.number(),
-  BalanceLast75: z.number(),
-  BalanceLast74: z.number(),
-  BalanceLast73: z.number(),
-  BalanceLast72: z.number(),
-  BalanceLast71: z.number(),
-  BalanceLast70: z.number(),
-  BalanceLast69: z.number(),
-  BalanceLast68: z.number(),
-  BalanceLast67: z.number(),
-  BalanceLast66: z.number(),
-  BalanceLast65: z.number(),
-  BalanceLast64: z.number(),
-  BalanceLast63: z.number(),
-  BalanceLast62: z.number(),
-  BalanceLast61: z.number(),
-  BalanceLast60: z.number(),
-  BalanceLast59: z.number(),
-  BalanceLast58: z.number(),
-  BalanceLast57: z.number(),
-  BalanceLast56: z.number(),
-  BalanceLast55: z.number(),
-  BalanceLast54: z.number(),
-  BalanceLast53: z.number(),
-  BalanceLast52: z.number(),
-  BalanceLast51: z.number(),
-  BalanceLast50: z.number(),
-  BalanceLast49: z.number(),
-  BalanceLast48: z.number(),
-  BalanceLast47: z.number(),
-  BalanceLast46: z.number(),
-  BalanceLast45: z.number(),
-  BalanceLast44: z.number(),
-  BalanceLast43: z.number(),
-  BalanceLast42: z.number(),
-  BalanceLast41: z.number(),
-  BalanceLast40: z.number(),
-  BalanceLast39: z.number(),
-  BalanceLast38: z.number(),
-  BalanceLast37: z.number(),
-  BalanceLast36: z.number(),
-  BalanceLast35: z.number(),
-  BalanceLast34: z.number(),
-  BalanceLast33: z.number(),
-  BalanceLast32: z.number(),
-  BalanceLast31: z.number(),
-  BalanceLast30: z.number(),
-  BalanceLast29: z.number(),
-  BalanceLast28: z.number(),
-  BalanceLast27: z.number(),
-  BalanceLast26: z.number(),
-  BalanceLast25: z.number(),
-  BalanceLast24: z.number(),
-  BalanceLast23: z.number(),
-  BalanceLast22: z.number(),
-  BalanceLast21: z.number(),
-  BalanceLast20: z.number(),
-  BalanceLast19: z.number(),
-  BalanceLast18: z.number(),
-  BalanceLast17: z.number(),
-  BalanceLast16: z.number(),
-  BalanceLast15: z.number(),
-  BalanceLast14: z.number(),
-  BalanceLast13: z.number(),
-  BalanceLast12: z.number(),
-  BalanceLast11: z.number(),
-  BalanceLast10: z.number(),
-  BalanceLast09: z.number(),
-  BalanceLast08: z.number(),
-  BalanceLast07: z.number(),
-  BalanceLast06: z.number(),
-  BalanceLast05: z.number(),
-  BalanceLast04: z.number(),
-  BalanceLast03: z.number(),
-  BalanceLast02: z.number(),
-  BalanceLast01: z.number(),
-  Balance: z.number(),
-  BudgetALast29: z.number(),
-  BudgetALast28: z.number(),
-  BudgetALast27: z.number(),
-  BudgetALast26: z.number(),
-  BudgetALast25: z.number(),
-  BudgetALast24: z.number(),
-  BudgetALast23: z.number(),
-  BudgetALast22: z.number(),
-  BudgetALast21: z.number(),
-  BudgetALast20: z.number(),
-  BudgetALast19: z.number(),
-  BudgetALast18: z.number(),
-  BudgetALast17: z.number(),
-  BudgetALast16: z.number(),
-  BudgetALast15: z.number(),
-  BudgetALast14: z.number(),
-  BudgetALast13: z.number(),
-  BudgetALast12: z.number(),
-  BudgetALast11: z.number(),
-  BudgetALast10: z.number(),
-  BudgetALast09: z.number(),
-  BudgetALast08: z.number(),
-  BudgetALast07: z.number(),
-  BudgetALast06: z.number(),
-  BudgetALast05: z.number(),
-  BudgetALast04: z.number(),
-  BudgetALast03: z.number(),
-  BudgetALast02: z.number(),
-  BudgetALast01: z.number(),
-  BudgetA: z.number(),
-  BudgetANext01: z.number(),
-  BudgetANext02: z.number(),
-  BudgetANext03: z.number(),
-  BudgetANext04: z.number(),
-  BudgetANext05: z.number(),
-  BudgetANext06: z.number(),
-  BudgetANext07: z.number(),
-  BudgetANext08: z.number(),
-  BudgetANext09: z.number(),
-  BudgetANext10: z.number(),
-  BudgetANext11: z.number(),
-  BudgetANext12: z.number(),
-  BudgetANext13: z.number(),
-  BudgetANext14: z.number(),
-  BudgetANext15: z.number(),
-  BudgetANext16: z.number(),
-  BudgetANext17: z.number(),
-  BudgetANext18: z.number(),
-  BudgetBLast29: z.number(),
-  BudgetBLast28: z.number(),
-  BudgetBLast27: z.number(),
-  BudgetBLast26: z.number(),
-  BudgetBLast25: z.number(),
-  BudgetBLast24: z.number(),
-  BudgetBLast23: z.number(),
-  BudgetBLast22: z.number(),
-  BudgetBLast21: z.number(),
-  BudgetBLast20: z.number(),
-  BudgetBLast19: z.number(),
-  BudgetBLast18: z.number(),
-  BudgetBLast17: z.number(),
-  BudgetBLast16: z.number(),
-  BudgetBLast15: z.number(),
-  BudgetBLast14: z.number(),
-  BudgetBLast13: z.number(),
-  BudgetBLast12: z.number(),
-  BudgetBLast11: z.number(),
-  BudgetBLast10: z.number(),
-  BudgetBLast09: z.number(),
-  BudgetBLast08: z.number(),
-  BudgetBLast07: z.number(),
-  BudgetBLast06: z.number(),
-  BudgetBLast05: z.number(),
-  BudgetBLast04: z.number(),
-  BudgetBLast03: z.number(),
-  BudgetBLast02: z.number(),
-  BudgetBLast01: z.number(),
-  BudgetB: z.number(),
-  BudgetBNext01: z.number(),
-  BudgetBNext02: z.number(),
-  BudgetBNext03: z.number(),
-  BudgetBNext04: z.number(),
-  BudgetBNext05: z.number(),
-  BudgetBNext06: z.number(),
-  BudgetBNext07: z.number(),
-  BudgetBNext08: z.number(),
-  BudgetBNext09: z.number(),
-  BudgetBNext10: z.number(),
-  BudgetBNext11: z.number(),
-  BudgetBNext12: z.number(),
-  BudgetBNext13: z.number(),
-  BudgetBNext14: z.number(),
-  BudgetBNext15: z.number(),
-  BudgetBNext16: z.number(),
-  BudgetBNext17: z.number(),
-  BudgetBNext18: z.number(),
-  Concat: z.string(),
-  System: z.string(),
-  UserNum: z.number(),
-  UserText: z.string(),
-  TaggedText: z.string(),
+  /** Unsigned long sequence number (indexed). Unique internal identifier for this ledger record. */
+  SequenceNumber: z
+    .number()
+    .positive()
+    .describe(
+      "Unsigned long sequence number (indexed). Unique internal identifier for this ledger record.",
+    ),
+  /** Last modified timestamp. The date and time that this record's balance/budget was last changed. */
+  LastModifiedTime: z
+    .string()
+    .datetime({ offset: true })
+    .describe(
+      "Last modified timestamp. The date and time that this record's balance/budget was last changed.",
+    ),
+  /** The base general ledger account code (without department suffix). Indexed. Max 7 chars. */
+  AccountCode: z
+    .string()
+    .max(7)
+    .describe(
+      "The base general ledger account code (without department suffix). Indexed. Max 7 chars.",
+    ),
+  /** The department code associated with this ledger record (empty if not departmentalised). Indexed. Max 5 chars. */
+  Department: z
+    .string()
+    .max(5)
+    .nullable() // Department can be empty for non-departmental accounts
+    .optional()
+    .describe(
+      "The department code associated with this ledger record (empty if not departmentalised). Indexed. Max 5 chars.",
+    ),
+  /** The primary category code inherited from the base Account record. Indexed. Max 7 chars. */
+  Category: z
+    .string()
+    .max(7) // Matches Account.Category size
+    .nullable()
+    .optional()
+    .describe(
+      "The primary category code inherited from the base Account record (Account.Category1). Indexed. Max 7 chars.",
+    ),
+  /** The classification code inherited from the Department record (empty if no department or department has no classification). Indexed. Max 5 chars. */
+  Classification: z
+    .string()
+    .max(5) // Matches Department.Classification size
+    .nullable()
+    .optional()
+    .describe(
+      "The classification code inherited from the Department record (empty if no department or department has no classification). Indexed. Max 5 chars.",
+    ),
+  /** The fundamental account type code inherited from the base Account record. Indexed. */
+  Type: AccountTypeEnum.describe(
+    "The fundamental account type code inherited from the base Account record. Indexed.",
+  ),
+  /** Closing balance for the 91st period prior to the current period. */
+  BalanceLast91: z
+    .number()
+    .describe(
+      "Closing balance for the 91st period prior to the current period.",
+    ),
+  /** Closing balance for the 90th period prior to the current period. */
+  BalanceLast90: z
+    .number()
+    .describe(
+      "Closing balance for the 90th period prior to the current period.",
+    ),
+  // ... Balances for periods 89 down to 01 ...
+  /** Closing balance for the 89th period prior to the current period. */
+  BalanceLast89: z
+    .number()
+    .describe(
+      "Closing balance for the 89th period prior to the current period.",
+    ),
+  BalanceLast88: z
+    .number()
+    .describe(
+      "Closing balance for the 88th period prior to the current period.",
+    ),
+  BalanceLast87: z
+    .number()
+    .describe(
+      "Closing balance for the 87th period prior to the current period.",
+    ),
+  BalanceLast86: z
+    .number()
+    .describe(
+      "Closing balance for the 86th period prior to the current period.",
+    ),
+  BalanceLast85: z
+    .number()
+    .describe(
+      "Closing balance for the 85th period prior to the current period.",
+    ),
+  BalanceLast84: z
+    .number()
+    .describe(
+      "Closing balance for the 84th period prior to the current period.",
+    ),
+  BalanceLast83: z
+    .number()
+    .describe(
+      "Closing balance for the 83rd period prior to the current period.",
+    ),
+  BalanceLast82: z
+    .number()
+    .describe(
+      "Closing balance for the 82nd period prior to the current period.",
+    ),
+  BalanceLast81: z
+    .number()
+    .describe(
+      "Closing balance for the 81st period prior to the current period.",
+    ),
+  BalanceLast80: z
+    .number()
+    .describe(
+      "Closing balance for the 80th period prior to the current period.",
+    ),
+  BalanceLast79: z
+    .number()
+    .describe(
+      "Closing balance for the 79th period prior to the current period.",
+    ),
+  BalanceLast78: z
+    .number()
+    .describe(
+      "Closing balance for the 78th period prior to the current period.",
+    ),
+  BalanceLast77: z
+    .number()
+    .describe(
+      "Closing balance for the 77th period prior to the current period.",
+    ),
+  BalanceLast76: z
+    .number()
+    .describe(
+      "Closing balance for the 76th period prior to the current period.",
+    ),
+  BalanceLast75: z
+    .number()
+    .describe(
+      "Closing balance for the 75th period prior to the current period.",
+    ),
+  BalanceLast74: z
+    .number()
+    .describe(
+      "Closing balance for the 74th period prior to the current period.",
+    ),
+  BalanceLast73: z
+    .number()
+    .describe(
+      "Closing balance for the 73rd period prior to the current period.",
+    ),
+  BalanceLast72: z
+    .number()
+    .describe(
+      "Closing balance for the 72nd period prior to the current period.",
+    ),
+  BalanceLast71: z
+    .number()
+    .describe(
+      "Closing balance for the 71st period prior to the current period.",
+    ),
+  BalanceLast70: z
+    .number()
+    .describe(
+      "Closing balance for the 70th period prior to the current period.",
+    ),
+  BalanceLast69: z
+    .number()
+    .describe(
+      "Closing balance for the 69th period prior to the current period.",
+    ),
+  BalanceLast68: z
+    .number()
+    .describe(
+      "Closing balance for the 68th period prior to the current period.",
+    ),
+  BalanceLast67: z
+    .number()
+    .describe(
+      "Closing balance for the 67th period prior to the current period.",
+    ),
+  BalanceLast66: z
+    .number()
+    .describe(
+      "Closing balance for the 66th period prior to the current period.",
+    ),
+  BalanceLast65: z
+    .number()
+    .describe(
+      "Closing balance for the 65th period prior to the current period.",
+    ),
+  BalanceLast64: z
+    .number()
+    .describe(
+      "Closing balance for the 64th period prior to the current period.",
+    ),
+  BalanceLast63: z
+    .number()
+    .describe(
+      "Closing balance for the 63rd period prior to the current period.",
+    ),
+  BalanceLast62: z
+    .number()
+    .describe(
+      "Closing balance for the 62nd period prior to the current period.",
+    ),
+  BalanceLast61: z
+    .number()
+    .describe(
+      "Closing balance for the 61st period prior to the current period.",
+    ),
+  BalanceLast60: z
+    .number()
+    .describe(
+      "Closing balance for the 60th period prior to the current period.",
+    ),
+  BalanceLast59: z
+    .number()
+    .describe(
+      "Closing balance for the 59th period prior to the current period.",
+    ),
+  BalanceLast58: z
+    .number()
+    .describe(
+      "Closing balance for the 58th period prior to the current period.",
+    ),
+  BalanceLast57: z
+    .number()
+    .describe(
+      "Closing balance for the 57th period prior to the current period.",
+    ),
+  BalanceLast56: z
+    .number()
+    .describe(
+      "Closing balance for the 56th period prior to the current period.",
+    ),
+  BalanceLast55: z
+    .number()
+    .describe(
+      "Closing balance for the 55th period prior to the current period.",
+    ),
+  BalanceLast54: z
+    .number()
+    .describe(
+      "Closing balance for the 54th period prior to the current period.",
+    ),
+  BalanceLast53: z
+    .number()
+    .describe(
+      "Closing balance for the 53rd period prior to the current period.",
+    ),
+  BalanceLast52: z
+    .number()
+    .describe(
+      "Closing balance for the 52nd period prior to the current period.",
+    ),
+  BalanceLast51: z
+    .number()
+    .describe(
+      "Closing balance for the 51st period prior to the current period.",
+    ),
+  BalanceLast50: z
+    .number()
+    .describe(
+      "Closing balance for the 50th period prior to the current period.",
+    ),
+  BalanceLast49: z
+    .number()
+    .describe(
+      "Closing balance for the 49th period prior to the current period.",
+    ),
+  BalanceLast48: z
+    .number()
+    .describe(
+      "Closing balance for the 48th period prior to the current period.",
+    ),
+  BalanceLast47: z
+    .number()
+    .describe(
+      "Closing balance for the 47th period prior to the current period.",
+    ),
+  BalanceLast46: z
+    .number()
+    .describe(
+      "Closing balance for the 46th period prior to the current period.",
+    ),
+  BalanceLast45: z
+    .number()
+    .describe(
+      "Closing balance for the 45th period prior to the current period.",
+    ),
+  BalanceLast44: z
+    .number()
+    .describe(
+      "Closing balance for the 44th period prior to the current period.",
+    ),
+  BalanceLast43: z
+    .number()
+    .describe(
+      "Closing balance for the 43rd period prior to the current period.",
+    ),
+  BalanceLast42: z
+    .number()
+    .describe(
+      "Closing balance for the 42nd period prior to the current period.",
+    ),
+  BalanceLast41: z
+    .number()
+    .describe(
+      "Closing balance for the 41st period prior to the current period.",
+    ),
+  BalanceLast40: z
+    .number()
+    .describe(
+      "Closing balance for the 40th period prior to the current period.",
+    ),
+  BalanceLast39: z
+    .number()
+    .describe(
+      "Closing balance for the 39th period prior to the current period.",
+    ),
+  BalanceLast38: z
+    .number()
+    .describe(
+      "Closing balance for the 38th period prior to the current period.",
+    ),
+  BalanceLast37: z
+    .number()
+    .describe(
+      "Closing balance for the 37th period prior to the current period.",
+    ),
+  BalanceLast36: z
+    .number()
+    .describe(
+      "Closing balance for the 36th period prior to the current period.",
+    ),
+  BalanceLast35: z
+    .number()
+    .describe(
+      "Closing balance for the 35th period prior to the current period.",
+    ),
+  BalanceLast34: z
+    .number()
+    .describe(
+      "Closing balance for the 34th period prior to the current period.",
+    ),
+  BalanceLast33: z
+    .number()
+    .describe(
+      "Closing balance for the 33rd period prior to the current period.",
+    ),
+  BalanceLast32: z
+    .number()
+    .describe(
+      "Closing balance for the 32nd period prior to the current period.",
+    ),
+  BalanceLast31: z
+    .number()
+    .describe(
+      "Closing balance for the 31st period prior to the current period.",
+    ),
+  BalanceLast30: z
+    .number()
+    .describe(
+      "Closing balance for the 30th period prior to the current period.",
+    ),
+  BalanceLast29: z
+    .number()
+    .describe(
+      "Closing balance for the 29th period prior to the current period.",
+    ),
+  BalanceLast28: z
+    .number()
+    .describe(
+      "Closing balance for the 28th period prior to the current period.",
+    ),
+  BalanceLast27: z
+    .number()
+    .describe(
+      "Closing balance for the 27th period prior to the current period.",
+    ),
+  BalanceLast26: z
+    .number()
+    .describe(
+      "Closing balance for the 26th period prior to the current period.",
+    ),
+  BalanceLast25: z
+    .number()
+    .describe(
+      "Closing balance for the 25th period prior to the current period.",
+    ),
+  BalanceLast24: z
+    .number()
+    .describe(
+      "Closing balance for the 24th period prior to the current period.",
+    ),
+  BalanceLast23: z
+    .number()
+    .describe(
+      "Closing balance for the 23rd period prior to the current period.",
+    ),
+  BalanceLast22: z
+    .number()
+    .describe(
+      "Closing balance for the 22nd period prior to the current period.",
+    ),
+  BalanceLast21: z
+    .number()
+    .describe(
+      "Closing balance for the 21st period prior to the current period.",
+    ),
+  BalanceLast20: z
+    .number()
+    .describe(
+      "Closing balance for the 20th period prior to the current period.",
+    ),
+  BalanceLast19: z
+    .number()
+    .describe(
+      "Closing balance for the 19th period prior to the current period.",
+    ),
+  BalanceLast18: z
+    .number()
+    .describe(
+      "Closing balance for the 18th period prior to the current period.",
+    ),
+  BalanceLast17: z
+    .number()
+    .describe(
+      "Closing balance for the 17th period prior to the current period.",
+    ),
+  BalanceLast16: z
+    .number()
+    .describe(
+      "Closing balance for the 16th period prior to the current period.",
+    ),
+  BalanceLast15: z
+    .number()
+    .describe(
+      "Closing balance for the 15th period prior to the current period.",
+    ),
+  BalanceLast14: z
+    .number()
+    .describe(
+      "Closing balance for the 14th period prior to the current period.",
+    ),
+  BalanceLast13: z
+    .number()
+    .describe(
+      "Closing balance for the 13th period prior to the current period.",
+    ),
+  BalanceLast12: z
+    .number()
+    .describe(
+      "Closing balance for the 12th period prior to the current period.",
+    ),
+  BalanceLast11: z
+    .number()
+    .describe(
+      "Closing balance for the 11th period prior to the current period.",
+    ),
+  BalanceLast10: z
+    .number()
+    .describe(
+      "Closing balance for the 10th period prior to the current period.",
+    ),
+  BalanceLast09: z
+    .number()
+    .describe(
+      "Closing balance for the 9th period prior to the current period.",
+    ),
+  BalanceLast08: z
+    .number()
+    .describe(
+      "Closing balance for the 8th period prior to the current period.",
+    ),
+  BalanceLast07: z
+    .number()
+    .describe(
+      "Closing balance for the 7th period prior to the current period.",
+    ),
+  BalanceLast06: z
+    .number()
+    .describe(
+      "Closing balance for the 6th period prior to the current period.",
+    ),
+  BalanceLast05: z
+    .number()
+    .describe(
+      "Closing balance for the 5th period prior to the current period.",
+    ),
+  BalanceLast04: z
+    .number()
+    .describe(
+      "Closing balance for the 4th period prior to the current period.",
+    ),
+  BalanceLast03: z
+    .number()
+    .describe(
+      "Closing balance for the 3rd period prior to the current period.",
+    ),
+  BalanceLast02: z
+    .number()
+    .describe(
+      "Closing balance for the 2nd period prior to the current period.",
+    ),
+  BalanceLast01: z
+    .number()
+    .describe(
+      "Closing balance for the 1st period prior to the current period (previous period).",
+    ),
+  /** Closing balance for the current period. */
+  Balance: z.number().describe("Closing balance for the current period."),
+  /** Budget A for the 29th period prior to the current period. */
+  BudgetALast29: z
+    .number()
+    .describe("Budget A for the 29th period prior to the current period."),
+  // ... Budget A Last 28 down to 01 ...
+  BudgetALast28: z
+    .number()
+    .describe("Budget A for the 28th period prior to the current period."),
+  BudgetALast27: z
+    .number()
+    .describe("Budget A for the 27th period prior to the current period."),
+  BudgetALast26: z
+    .number()
+    .describe("Budget A for the 26th period prior to the current period."),
+  BudgetALast25: z
+    .number()
+    .describe("Budget A for the 25th period prior to the current period."),
+  BudgetALast24: z
+    .number()
+    .describe("Budget A for the 24th period prior to the current period."),
+  BudgetALast23: z
+    .number()
+    .describe("Budget A for the 23rd period prior to the current period."),
+  BudgetALast22: z
+    .number()
+    .describe("Budget A for the 22nd period prior to the current period."),
+  BudgetALast21: z
+    .number()
+    .describe("Budget A for the 21st period prior to the current period."),
+  BudgetALast20: z
+    .number()
+    .describe("Budget A for the 20th period prior to the current period."),
+  BudgetALast19: z
+    .number()
+    .describe("Budget A for the 19th period prior to the current period."),
+  BudgetALast18: z
+    .number()
+    .describe("Budget A for the 18th period prior to the current period."),
+  BudgetALast17: z
+    .number()
+    .describe("Budget A for the 17th period prior to the current period."),
+  BudgetALast16: z
+    .number()
+    .describe("Budget A for the 16th period prior to the current period."),
+  BudgetALast15: z
+    .number()
+    .describe("Budget A for the 15th period prior to the current period."),
+  BudgetALast14: z
+    .number()
+    .describe("Budget A for the 14th period prior to the current period."),
+  BudgetALast13: z
+    .number()
+    .describe("Budget A for the 13th period prior to the current period."),
+  BudgetALast12: z
+    .number()
+    .describe("Budget A for the 12th period prior to the current period."),
+  BudgetALast11: z
+    .number()
+    .describe("Budget A for the 11th period prior to the current period."),
+  BudgetALast10: z
+    .number()
+    .describe("Budget A for the 10th period prior to the current period."),
+  BudgetALast09: z
+    .number()
+    .describe("Budget A for the 9th period prior to the current period."),
+  BudgetALast08: z
+    .number()
+    .describe("Budget A for the 8th period prior to the current period."),
+  BudgetALast07: z
+    .number()
+    .describe("Budget A for the 7th period prior to the current period."),
+  BudgetALast06: z
+    .number()
+    .describe("Budget A for the 6th period prior to the current period."),
+  BudgetALast05: z
+    .number()
+    .describe("Budget A for the 5th period prior to the current period."),
+  BudgetALast04: z
+    .number()
+    .describe("Budget A for the 4th period prior to the current period."),
+  BudgetALast03: z
+    .number()
+    .describe("Budget A for the 3rd period prior to the current period."),
+  BudgetALast02: z
+    .number()
+    .describe("Budget A for the 2nd period prior to the current period."),
+  BudgetALast01: z
+    .number()
+    .describe(
+      "Budget A for the 1st period prior to the current period (previous period).",
+    ),
+  /** Budget A for the current period. */
+  BudgetA: z.number().describe("Budget A for the current period."),
+  /** Budget A for the 1st future period. */
+  BudgetANext01: z.number().describe("Budget A for the 1st future period."),
+  // ... Budget A Next 02 to 18 ...
+  BudgetANext02: z.number().describe("Budget A for the 2nd future period."),
+  BudgetANext03: z.number().describe("Budget A for the 3rd future period."),
+  BudgetANext04: z.number().describe("Budget A for the 4th future period."),
+  BudgetANext05: z.number().describe("Budget A for the 5th future period."),
+  BudgetANext06: z.number().describe("Budget A for the 6th future period."),
+  BudgetANext07: z.number().describe("Budget A for the 7th future period."),
+  BudgetANext08: z.number().describe("Budget A for the 8th future period."),
+  BudgetANext09: z.number().describe("Budget A for the 9th future period."),
+  BudgetANext10: z.number().describe("Budget A for the 10th future period."),
+  BudgetANext11: z.number().describe("Budget A for the 11th future period."),
+  BudgetANext12: z.number().describe("Budget A for the 12th future period."),
+  BudgetANext13: z.number().describe("Budget A for the 13th future period."),
+  BudgetANext14: z.number().describe("Budget A for the 14th future period."),
+  BudgetANext15: z.number().describe("Budget A for the 15th future period."),
+  BudgetANext16: z.number().describe("Budget A for the 16th future period."),
+  BudgetANext17: z.number().describe("Budget A for the 17th future period."),
+  BudgetANext18: z.number().describe("Budget A for the 18th future period."),
+  /** Budget B for the 29th period prior to the current period. */
+  BudgetBLast29: z
+    .number()
+    .describe("Budget B for the 29th period prior to the current period."),
+  // ... Budget B Last 28 down to 01 ...
+  BudgetBLast28: z
+    .number()
+    .describe("Budget B for the 28th period prior to the current period."),
+  BudgetBLast27: z
+    .number()
+    .describe("Budget B for the 27th period prior to the current period."),
+  BudgetBLast26: z
+    .number()
+    .describe("Budget B for the 26th period prior to the current period."),
+  BudgetBLast25: z
+    .number()
+    .describe("Budget B for the 25th period prior to the current period."),
+  BudgetBLast24: z
+    .number()
+    .describe("Budget B for the 24th period prior to the current period."),
+  BudgetBLast23: z
+    .number()
+    .describe("Budget B for the 23rd period prior to the current period."),
+  BudgetBLast22: z
+    .number()
+    .describe("Budget B for the 22nd period prior to the current period."),
+  BudgetBLast21: z
+    .number()
+    .describe("Budget B for the 21st period prior to the current period."),
+  BudgetBLast20: z
+    .number()
+    .describe("Budget B for the 20th period prior to the current period."),
+  BudgetBLast19: z
+    .number()
+    .describe("Budget B for the 19th period prior to the current period."),
+  BudgetBLast18: z
+    .number()
+    .describe("Budget B for the 18th period prior to the current period."),
+  BudgetBLast17: z
+    .number()
+    .describe("Budget B for the 17th period prior to the current period."),
+  BudgetBLast16: z
+    .number()
+    .describe("Budget B for the 16th period prior to the current period."),
+  BudgetBLast15: z
+    .number()
+    .describe("Budget B for the 15th period prior to the current period."),
+  BudgetBLast14: z
+    .number()
+    .describe("Budget B for the 14th period prior to the current period."),
+  BudgetBLast13: z
+    .number()
+    .describe("Budget B for the 13th period prior to the current period."),
+  BudgetBLast12: z
+    .number()
+    .describe("Budget B for the 12th period prior to the current period."),
+  BudgetBLast11: z
+    .number()
+    .describe("Budget B for the 11th period prior to the current period."),
+  BudgetBLast10: z
+    .number()
+    .describe("Budget B for the 10th period prior to the current period."),
+  BudgetBLast09: z
+    .number()
+    .describe("Budget B for the 9th period prior to the current period."),
+  BudgetBLast08: z
+    .number()
+    .describe("Budget B for the 8th period prior to the current period."),
+  BudgetBLast07: z
+    .number()
+    .describe("Budget B for the 7th period prior to the current period."),
+  BudgetBLast06: z
+    .number()
+    .describe("Budget B for the 6th period prior to the current period."),
+  BudgetBLast05: z
+    .number()
+    .describe("Budget B for the 5th period prior to the current period."),
+  BudgetBLast04: z
+    .number()
+    .describe("Budget B for the 4th period prior to the current period."),
+  BudgetBLast03: z
+    .number()
+    .describe("Budget B for the 3rd period prior to the current period."),
+  BudgetBLast02: z
+    .number()
+    .describe("Budget B for the 2nd period prior to the current period."),
+  BudgetBLast01: z
+    .number()
+    .describe(
+      "Budget B for the 1st period prior to the current period (previous period).",
+    ),
+  /** Budget B for the current period. */
+  BudgetB: z.number().describe("Budget B for the current period."),
+  /** Budget B for the 1st future period. */
+  BudgetBNext01: z.number().describe("Budget B for the 1st future period."),
+  // ... Budget B Next 02 to 18 ...
+  BudgetBNext02: z.number().describe("Budget B for the 2nd future period."),
+  BudgetBNext03: z.number().describe("Budget B for the 3rd future period."),
+  BudgetBNext04: z.number().describe("Budget B for the 4th future period."),
+  BudgetBNext05: z.number().describe("Budget B for the 5th future period."),
+  BudgetBNext06: z.number().describe("Budget B for the 6th future period."),
+  BudgetBNext07: z.number().describe("Budget B for the 7th future period."),
+  BudgetBNext08: z.number().describe("Budget B for the 8th future period."),
+  BudgetBNext09: z.number().describe("Budget B for the 9th future period."),
+  BudgetBNext10: z.number().describe("Budget B for the 10th future period."),
+  BudgetBNext11: z.number().describe("Budget B for the 11th future period."),
+  BudgetBNext12: z.number().describe("Budget B for the 12th future period."),
+  BudgetBNext13: z.number().describe("Budget B for the 13th future period."),
+  BudgetBNext14: z.number().describe("Budget B for the 14th future period."),
+  BudgetBNext15: z.number().describe("Budget B for the 15th future period."),
+  BudgetBNext16: z.number().describe("Budget B for the 16th future period."),
+  BudgetBNext17: z.number().describe("Budget B for the 17th future period."),
+  BudgetBNext18: z.number().describe("Budget B for the 18th future period."),
+  /** Concatenated AccountCode and Department (e.g., 'CODE-DEPT'). Indexed. Max 13 chars. */
+  Concat: z
+    .string()
+    .max(13)
+    .describe(
+      "Concatenated AccountCode and Department (e.g., 'CODE-DEPT'). Indexed. Max 13 chars.",
+    ),
+  /** The system account type code (e.g., BK, AR, AP) or spaces if not a system account. Indexed. Max 2 chars. */
+  System: AccountSystemEnum.nullable()
+    .optional()
+    .describe(
+      "The system account type code (e.g., BK, AR, AP) or spaces if not a system account. Indexed.",
+    ), // Allow null/optional as non-system accounts have spaces
+  /** User-defined numeric field (scriptable). */
+  UserNum: z
+    .number()
+    .nullable()
+    .optional()
+    .describe("User-defined numeric field (scriptable)."),
+  /** User-defined text field (scriptable). Max 255 chars. */
+  UserText: z
+    .string()
+    .max(255)
+    .nullable()
+    .optional()
+    .describe("User-defined text field (scriptable). Max 255 chars."),
+  /** Scriptable tag storage for key-value pairs. Max 255 chars. */
+  TaggedText: z
+    .string()
+    .max(255)
+    .nullable()
+    .optional()
+    .describe("Scriptable tag storage for key-value pairs. Max 255 chars."),
 });
 
+/**
+ * Inferred TypeScript type from the ledgerZod schema.
+ * Represents a fully validated Ledger record.
+ */
 export type LedgerZod = z.infer<typeof ledgerZod>;
+
+// Partial schema - unlikely to be updated directly often
+export const ledgerPartialSchema = ledgerZod.partial();
+
+/**
+ * Inferred TypeScript type from the ledgerPartialSchema.
+ * Represents a Ledger record where all fields are optional.
+ */
+export type LedgerPartialZod = z.infer<typeof ledgerPartialSchema>;
