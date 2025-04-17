@@ -73,6 +73,24 @@ import { transactionZod } from "./types/zod/tables/transaction";
 import { userZod } from "./types/zod/tables/user";
 import { user2Zod } from "./types/zod/tables/user2";
 
+function pagedSchema(schema: string) {
+  return {
+    type: "object",
+    properties: {
+      data: {
+        type: "array",
+        items: {
+          $ref: `#/components/schemas/${schema}`,
+        },
+      },
+      pagination: {
+        $ref: "#/components/schemas/pagination",
+      },
+    },
+    title: `${schema} Paged Response`,
+  } as OpenAPIV3.SchemaObject;
+}
+
 const app = new Elysia({
   serve: {
     idleTimeout: 30,
@@ -101,27 +119,13 @@ const app = new Elysia({
               }),
             ) as OpenAPIV3.SchemaObject,
             Account: z.toJSONSchema(accountZod) as OpenAPIV3.SchemaObject,
-            Accounts: {
-              type: "object",
-              properties: {
-                data: {
-                  type: "array",
-                  items: {
-                    $ref: "#/components/schemas/Account",
-                  },
-                },
-                pagination: {
-                  $ref: "#/components/schemas/pagination",
-                },
-              },
-            },
             Asset: z.toJSONSchema(assetZod) as OpenAPIV3.SchemaObject,
             AssetCat: z.toJSONSchema(assetCatZod) as OpenAPIV3.SchemaObject,
             AssetLog: z.toJSONSchema(assetLogZod) as OpenAPIV3.SchemaObject,
             AutoSplit: z.toJSONSchema(autoSplitZod) as OpenAPIV3.SchemaObject,
-            BankRecs: z.toJSONSchema(bankRecsZod) as OpenAPIV3.SchemaObject,
+            BankRec: z.toJSONSchema(bankRecsZod) as OpenAPIV3.SchemaObject,
             Build: z.toJSONSchema(buildZod) as OpenAPIV3.SchemaObject,
-            Contacts: z.toJSONSchema(contactsZod) as OpenAPIV3.SchemaObject,
+            Contact: z.toJSONSchema(contactsZod) as OpenAPIV3.SchemaObject,
             Department: z.toJSONSchema(departmentZod) as OpenAPIV3.SchemaObject,
             Detail: z.toJSONSchema(detailZod) as OpenAPIV3.SchemaObject,
             Filter: z.toJSONSchema(filterZod) as OpenAPIV3.SchemaObject,
@@ -138,15 +142,46 @@ const app = new Elysia({
             Message: z.toJSONSchema(messageZod) as OpenAPIV3.SchemaObject,
             Name: z.toJSONSchema(nameZod) as OpenAPIV3.SchemaObject,
             OffLedger: z.toJSONSchema(offLedgerZod) as OpenAPIV3.SchemaObject,
-            Payments: z.toJSONSchema(paymentsZod) as OpenAPIV3.SchemaObject,
+            Payment: z.toJSONSchema(paymentsZod) as OpenAPIV3.SchemaObject,
             Product: z.toJSONSchema(productZod) as OpenAPIV3.SchemaObject,
-            Stickies: z.toJSONSchema(stickiesZod) as OpenAPIV3.SchemaObject,
+            Sticky: z.toJSONSchema(stickiesZod) as OpenAPIV3.SchemaObject,
             TaxRate: z.toJSONSchema(taxRateZod) as OpenAPIV3.SchemaObject,
             Transaction: z.toJSONSchema(
               transactionZod,
             ) as OpenAPIV3.SchemaObject,
             User: z.toJSONSchema(userZod) as OpenAPIV3.SchemaObject,
             User2: z.toJSONSchema(user2Zod) as OpenAPIV3.SchemaObject,
+            Accounts: pagedSchema("Account"),
+            Assets: pagedSchema("Asset"),
+            AssetCats: pagedSchema("AssetCat"),
+            AssetLogs: pagedSchema("AssetLog"),
+            AutoSplits: pagedSchema("AutoSplit"),
+            BankRecs: pagedSchema("BankRec"),
+            Builds: pagedSchema("Build"),
+            Contacts: pagedSchema("Contact"),
+            Departments: pagedSchema("Department"),
+            Details: pagedSchema("Detail"),
+            Filters: pagedSchema("Filter"),
+            Generals: pagedSchema("General"),
+            Inventories: pagedSchema("Inventory"),
+            Jobs: pagedSchema("Job"),
+            JobSheets: pagedSchema("JobSheet"),
+            Ledgers: pagedSchema("Ledger"),
+            Links: pagedSchema("Link"),
+            Lists: pagedSchema("List"),
+            Logs: pagedSchema("Log"),
+            Logins: pagedSchema("Login"),
+            Memos: pagedSchema("Memo"),
+            Messages: pagedSchema("Message"),
+            Names: pagedSchema("Name"),
+            OffLedgers: pagedSchema("OffLedger"),
+            Payments: pagedSchema("Payment"),
+            Products: pagedSchema("Product"),
+            Stickies: pagedSchema("Sticky"),
+            TaxRates: pagedSchema("TaxRate"),
+            Transactions: pagedSchema("Transaction"),
+            Users: pagedSchema("User"),
+            User2s: pagedSchema("User2"),
           },
         },
       },
