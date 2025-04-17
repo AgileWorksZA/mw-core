@@ -49,6 +49,6 @@ export const autoSplitRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/auto-splits?format=SequenceNumber,MatchName,SplitAcct1`,
     },
     tags: ["Transaction"],
-    response: AutoSplitMany,
+    response: { $schema: { $ref: "#/components/schemas/AutoSplits" } },
   },
 );

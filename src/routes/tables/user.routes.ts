@@ -40,6 +40,6 @@ export const userRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all users. Search by: ${UserFields.join(", ")}`,
     },
     tags: ["System"],
-    response: UserMany,
+    response: { $schema: { $ref: "#/components/schemas/Users" } },
   },
 );

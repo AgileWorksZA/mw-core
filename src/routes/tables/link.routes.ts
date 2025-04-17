@@ -46,6 +46,6 @@ export const linkRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/links?format=SequenceNumber,Dept,Group`,
     },
     tags: ["CRM"],
-    response: LinkMany,
+    response: { $schema: { $ref: "#/components/schemas/Links" } },
   },
 );

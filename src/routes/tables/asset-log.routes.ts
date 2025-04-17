@@ -49,6 +49,6 @@ export const assetLogRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/asset-logs?format=SequenceNumber,Date,Memo`,
     },
     tags: ["Assets"],
-    response: AssetLogMany,
+    response: { $schema: { $ref: "#/components/schemas/AssetLogs" } },
   },
 );

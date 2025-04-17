@@ -49,6 +49,6 @@ export const contactsRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/contacts?format=SequenceNumber,ContactName,eMail`,
     },
     tags: ["CRM"],
-    response: ContactsMany,
+    response: { $schema: { $ref: "#/components/schemas/Contacts" } },
   },
 );

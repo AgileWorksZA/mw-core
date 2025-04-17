@@ -47,6 +47,6 @@ export const filterRoutes = new Elysia({ prefix: "/api" }).get(
       Note: This endpoint is deprecated and will be removed in a future release.`,
     },
     tags: ["System"],
-    response: FilterMany,
+    response: { $schema: { $ref: "#/components/schemas/Filters" } },
   },
 );

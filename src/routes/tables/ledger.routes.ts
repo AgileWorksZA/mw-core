@@ -46,6 +46,6 @@ export const ledgerRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/ledgers?format=SequenceNumber,AccountCode,Balance,Type`,
     },
     tags: ["Transaction"],
-    response: LedgerMany,
+    response: { $schema: { $ref: "#/components/schemas/Ledgers" } },
   },
 );

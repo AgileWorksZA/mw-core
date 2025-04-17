@@ -12,7 +12,15 @@ const user2Service = new User2Service(config);
 export const user2Routes = new Elysia({ prefix: "/api" }).get(
   "/user2s",
   async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search, format, skip_validation } = query;
+    const {
+      limit = 10,
+      offset = 0,
+      sort,
+      order,
+      search,
+      format,
+      skip_validation,
+    } = query;
 
     // Parse the format parameter as an array of field names if provided
     const fields = format ? format.split(",") : undefined;
@@ -51,6 +59,6 @@ export const user2Routes = new Elysia({ prefix: "/api" }).get(
       Use skip_validation=true to bypass field validation when using custom fields.`,
     },
     tags: ["System"],
-    response: User2Many,
+    response: { $schema: { $ref: "#/components/schemas/User2s" } },
   },
 );

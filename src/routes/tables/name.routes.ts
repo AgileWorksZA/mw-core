@@ -45,6 +45,6 @@ export const nameRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/names?format=SequenceNumber,Code,Name,Phone`,
     },
     tags: ["CRM"],
-    response: NameMany,
+    response: { $schema: { $ref: "#/components/schemas/Names" } },
   },
 );

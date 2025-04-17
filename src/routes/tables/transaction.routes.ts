@@ -62,6 +62,10 @@ export const transactionRoutes = new Elysia({ prefix: "/api" }).get(
       Use skip_validation=true to bypass field validation when using custom fields.`,
     },
     tags: ["Transaction"],
-    response: TransactionMany,
+    response: {
+      $schema: {
+        $ref: "#/components/schemas/Transactions",
+      },
+    },
   },
 );

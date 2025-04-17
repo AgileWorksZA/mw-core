@@ -47,6 +47,6 @@ export const assetRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/assets?format=SequenceNumber,Code,Description`,
     },
     tags: ["Assets"],
-    response: AssetMany,
+    response: { $schema: { $ref: "#/components/schemas/Assets" } },
   },
 );

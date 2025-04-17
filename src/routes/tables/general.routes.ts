@@ -50,6 +50,6 @@ export const generalRoutes = new Elysia({ prefix: "/api" }).get(
       Note: This endpoint is deprecated and will be removed in a future release.`,
     },
     tags: ["System"],
-    response: GeneralMany,
+    response: { $schema: { $ref: "#/components/schemas/Generals" } },
   },
 );

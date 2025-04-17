@@ -45,6 +45,6 @@ export const memoRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/memos?format=SequenceNumber,Text,Date`,
     },
     tags: ["CRM"],
-    response: MemoMany,
+    response: { $schema: { $ref: "#/components/schemas/Memos" } },
   },
 );

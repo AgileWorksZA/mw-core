@@ -45,6 +45,6 @@ export const loginRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/logins?format=SequenceNumber,Name,Email`,
     },
     tags: ["System"],
-    response: LoginMany,
+    response: { $schema: { $ref: "#/components/schemas/Logins" } },
   },
 );

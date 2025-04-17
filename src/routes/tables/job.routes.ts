@@ -46,6 +46,6 @@ export const jobRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/jobs?format=SequenceNumber,Code,Description,Status`,
     },
     tags: ["Jobs"],
-    response: JobMany,
+    response: { $schema: { $ref: "#/components/schemas/Jobs" } },
   },
 );

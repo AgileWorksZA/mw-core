@@ -49,6 +49,6 @@ export const departmentRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/departments?format=SequenceNumber,Code,Description`,
     },
     tags: ["CRM"],
-    response: DepartmentMany,
+    response: { $schema: { $ref: "#/components/schemas/Departments" } },
   },
 );

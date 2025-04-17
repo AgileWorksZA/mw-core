@@ -43,6 +43,6 @@ export const stickiesRoutes = new Elysia({ prefix: "/api" }).get(
       description: `Get all stickies. Search by: ${StickiesFields.join(", ")}`,
     },
     tags: ["CRM"],
-    response: StickiesMany,
+    response: { $schema: { $ref: "#/components/schemas/Stickies" } },
   },
 );

@@ -48,6 +48,6 @@ export const messageRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/messages?format=SequenceNumber,Message,User`,
     },
     tags: ["System"],
-    response: MessageMany,
+    response: { $schema: { $ref: "#/components/schemas/Messages" } },
   },
 );

@@ -49,6 +49,6 @@ export const inventoryRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/inventory?format=SequenceNumber,Identifier,ProductSeq,Qty`,
     },
     tags: ["Inventory"],
-    response: InventoryMany,
+    response: { $schema: { $ref: "#/components/schemas/Inventories" } },
   },
 );

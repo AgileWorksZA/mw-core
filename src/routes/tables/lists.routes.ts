@@ -46,6 +46,6 @@ export const listsRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/lists?format=SequenceNumber,ListID,Item,Comment`,
     },
     tags: ["CRM"],
-    response: ListMany,
+    response: { $schema: { $ref: "#/components/schemas/Lists" } },
   },
 );

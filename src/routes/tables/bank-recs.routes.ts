@@ -50,6 +50,6 @@ export const bankRecsRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/bank-recs?format=SequenceNumber,Account,Date`,
     },
     tags: ["Banking"],
-    response: BankRecsMany,
+    response: { $schema: { $ref: "#/components/schemas/BankRecs" } },
   },
 );

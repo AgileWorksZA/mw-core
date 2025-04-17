@@ -47,6 +47,6 @@ export const detailRoutes = new Elysia({ prefix: "/api" }).get(
       Note: This endpoint is deprecated and will be removed in a future release.`,
     },
     tags: ["Transaction"],
-    response: DetailMany,
+    response: { $schema: { $ref: "#/components/schemas/Details" } },
   },
 );

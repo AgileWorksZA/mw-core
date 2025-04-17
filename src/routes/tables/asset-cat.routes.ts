@@ -50,6 +50,6 @@ export const assetCatRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/asset-categories?format=SequenceNumber,Code,Description`,
     },
     tags: ["Assets"],
-    response: AssetCatMany,
+    response: { $schema: { $ref: "#/components/schemas/AssetCats" } },
   },
 );

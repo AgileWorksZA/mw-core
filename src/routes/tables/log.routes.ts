@@ -45,6 +45,6 @@ export const logRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/logs?format=SequenceNumber,Description,Who`,
     },
     tags: ["System"],
-    response: LogMany,
+    response: { $schema: { $ref: "#/components/schemas/Logs" } },
   },
 );

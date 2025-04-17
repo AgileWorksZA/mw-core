@@ -46,6 +46,6 @@ export const buildRoutes = new Elysia({ prefix: "/api" }).get(
       Example: /api/builds?format=SequenceNumber,ProductSeq,PartCode`,
     },
     tags: ["System"],
-    response: BuildMany,
+    response: { $schema: { $ref: "#/components/schemas/Builds" } },
   },
 );
