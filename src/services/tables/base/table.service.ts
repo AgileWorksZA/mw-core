@@ -1,10 +1,7 @@
 import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
 import type { ANY } from "../../../types/hack";
 import { enforceType } from "../../../types/helpers";
-import type {
-  MoneyWorksConfig,
-  MoneyWorksQueryParams,
-} from "../../../types/moneyworks";
+import type { MoneyWorksQueryParams } from "../../../types/moneyworks";
 import { MoneyWorksApiService } from "../../moneyworks-api.service";
 
 /**
@@ -30,7 +27,7 @@ export class TableService<
   dataCenterJsonToTableUsingFields(fields: FIELD[], data: ANY): T {
     return fields.reduce((acc, key) => {
       if (data[key] === undefined) {
-        console.error(
+        console.warn(
           `Missing key ${String(key)} in data center json for Account record`,
         );
       }
@@ -42,7 +39,7 @@ export class TableService<
   dataCenterJsonToTable(data: ANY): T {
     return this.fields.reduce((acc, key) => {
       if (data[String(key).toLowerCase()] === undefined) {
-        console.error(
+        console.warn(
           `Missing key ${String(key).toLowerCase()} in data center json for Account record`,
         );
       }

@@ -325,10 +325,6 @@ export class MoneyWorksApiService {
         table.toLowerCase() === "detail" ? "transaction" : table;
       const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
 
-      console.log(
-        "this.buildQueryParams(queryParams, parent)",
-        `"${decodeURIComponent(this.buildQueryParams(queryParams, parent))}"`,
-      );
       const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
       const authHeaders = this.createAuthHeaders();
 
@@ -339,12 +335,10 @@ export class MoneyWorksApiService {
           ? "text"
           : undefined;
 
-      console.log("URL:", { url, responseType });
       const response = await axios.get(url, {
         headers: authHeaders,
         responseType,
       });
-      console.log("Response:", response.data);
 
       // For XML format
       if (
@@ -352,7 +346,6 @@ export class MoneyWorksApiService {
         queryParams.format &&
         queryParams.format.startsWith("xml")
       ) {
-        console.log("Parsing XML response");
         const res = this.parser.parse(response.data);
         const data: T[] = res.table[res.table._name.toLowerCase()] ?? [];
         const limit: number = res.table._count;
@@ -378,12 +371,9 @@ export class MoneyWorksApiService {
       const data: T[] = [];
       const rawData = response.data;
 
-      console.log({ fields });
-
       // Start parsing
       for (const line of rawData.split("\n")) {
         if (!line.trim()) continue; // Skip empty lines
-        console.log("Line:", line);
         const record: Record<string, string | number | boolean | null> = {};
         const values = line.split("\t");
         for (let i = 0; i < fields.length; i++) {
@@ -391,7 +381,6 @@ export class MoneyWorksApiService {
         }
         data.push(record as T);
       }
-      console.log("Data:", data);
 
       return {
         data,
@@ -447,8 +436,6 @@ export class MoneyWorksApiService {
         headers: authHeaders,
         responseType: "text",
       });
-      console.log("Response:", response.data);
-      console.log("url:", url);
 
       return response.data;
     } catch (error) {
