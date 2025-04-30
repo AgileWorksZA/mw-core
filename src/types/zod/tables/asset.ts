@@ -130,12 +130,12 @@ export const transactionZod = z.object({
     ),
   /** Transaction type (indexed). Defines the nature of the transaction. */
   Type: TransactionTypeEnum, // Using the defined enum
-  /** Their reference (mutable: freely, script-only). Max 32 chars. */
+  /** Their reference . Max 32 chars. */
   TheirRef: z
     .string()
     .max(32)
     .describe(
-      "Their reference (mutable: freely, script-only). For debtor invoices, the customer's order number; for creditor invoices, the supplier's invoice number; for receipts, the cheque number.",
+      "Their reference . For debtor invoices, the customer's order number; for creditor invoices, the supplier's invoice number; for receipts, the cheque number.",
     ),
   /** Name code (indexed). Customer or Supplier Code associated with the transaction. Max 12 chars. */
   NameCode: z
@@ -144,12 +144,12 @@ export const transactionZod = z.object({
     .describe(
       "Name code (indexed). Customer or Supplier Code associated with the transaction.",
     ),
-  /** Flag (mutable: freely, script-only). If not blank, a flag icon shows in the transaction list. Max 6 chars. */
+  /** Flag . If not blank, a flag icon shows in the transaction list. Max 6 chars. */
   Flag: z
     .string()
     .max(6)
     .describe(
-      "Flag (mutable: freely, script-only). If this field is not blank, a flag icon shows up in the status column of the transaction list.",
+      "Flag . If this field is not blank, a flag icon shows up in the status column of the transaction list.",
     ),
   /** Description (mutable: conditionally). Max 1024 characters. */
   Description: z
@@ -164,12 +164,12 @@ export const transactionZod = z.object({
     .describe(
       "Gross amount. The gross value of the transaction. This must be equal to the sum of the detail line gross values.",
     ),
-  /** Analysis code (mutable: freely, script-only). Used for tagging (e.g., batch number, user initials). Max 10 chars. */
+  /** Analysis code . Used for tagging (e.g., batch number, user initials). Max 10 chars. */
   Analysis: z
     .string()
     .max(10)
     .describe(
-      "Analysis code (mutable: freely, script-only). Can be used to tag a transaction (e.g., batch number, user initials).",
+      "Analysis code . Can be used to tag a transaction (e.g., batch number, user initials).",
     ),
   /** Contra account. Bank account for CP/CR, AP/AR control account for invoices. Max 8 chars. */
   Contra: z
@@ -232,11 +232,11 @@ export const transactionZod = z.object({
     .describe(
       "Recurring transaction flag. True if the transaction is set up to recur in the future.",
     ),
-  /** Print status (mutable: freely, script-only). 0 if not Printed; 1 if Printed. */
+  /** Print status . 0 if not Printed; 1 if Printed. */
   Printed: z
     .number()
     .describe(
-      "Print status (mutable: freely, script-only). 0 if not Printed; 1 if Printed.",
+      "Print status . 0 if not Printed; 1 if Printed.",
     ),
   /** Flags. Bitmapped field indicating various transaction states. See documentation. */
   Flags: z
@@ -280,27 +280,27 @@ export const transactionZod = z.object({
     .describe(
       "Security level (indexed). Transaction's security level, highest of visible detail lines.",
     ),
-  /** User field 1 (mutable: freely, script-only). Max 256 chars. */
+  /** User field 1 . Max 256 chars. */
   User1: z
     .string()
     .max(256)
-    .describe("User field 1 (mutable: freely, script-only)."),
-  /** User field 2 (mutable: freely, script-only). Max 256 chars. */
+    .describe("User field 1 ."),
+  /** User field 2 . Max 256 chars. */
   User2: z
     .string()
     .max(256)
-    .describe("User field 2 (mutable: freely, script-only)."),
-  /** User field 3 (mutable: freely, script-only). Max 256 chars. */
+    .describe("User field 2 ."),
+  /** User field 3 . Max 256 chars. */
   User3: z
     .string()
     .max(256)
-    .describe("User field 3 (mutable: freely, script-only)."),
-  /** Prompt payment date (mutable: freely, script-only). Discount expiry date. Should be specified in YYYY-MM-DD format. */
+    .describe("User field 3 ."),
+  /** Prompt payment date . Discount expiry date. Should be specified in YYYY-MM-DD format. */
   PromptPaymentDate: z
     .string()
     .nullable()
     .describe(
-      "Prompt payment date (mutable: freely, script-only). The date the prompt payment discount expires. Should be specified in YYYY-MM-DD format.",
+      "Prompt payment date . The date the prompt payment discount expires. Should be specified in YYYY-MM-DD format.",
     ),
   /** Prompt payment amount. Eligible discount amount. */
   PromptPaymentAmt: z
@@ -331,31 +331,31 @@ export const transactionZod = z.object({
   FreightCode: z.string().max(32).describe("Freight code used for orders."),
   /** Freight amount. Freight amount on the order. */
   FreightAmount: z.number().describe("Freight amount of order."),
-  /** Freight details (mutable: freely, script-only). Max 256 chars. */
+  /** Freight details . Max 256 chars. */
   FreightDetails: z
     .string()
     .max(256)
-    .describe("Freight details (mutable: freely, script-only)."),
-  /** Special bank (mutable: freely, script-only). Bank number for receipts. Max 32 chars. */
+    .describe("Freight details ."),
+  /** Special bank . Bank number for receipts. Max 32 chars. */
   SpecialBank: z
     .string()
     .max(32)
     .describe(
-      "Special bank (mutable: freely, script-only). For receipts, the bank number of the cheque/card.",
+      "Special bank . For receipts, the bank number of the cheque/card.",
     ),
-  /** Special branch (mutable: freely, script-only). Branch for receipts. Max 32 chars. */
+  /** Special branch . Branch for receipts. Max 32 chars. */
   SpecialBranch: z
     .string()
     .max(32)
     .describe(
-      "Special branch (mutable: freely, script-only). For receipts, the branch of the cheque/card.",
+      "Special branch . For receipts, the branch of the cheque/card.",
     ),
-  /** Special account (mutable: freely, script-only). Account number for receipts. Max 32 chars. */
+  /** Special account . Account number for receipts. Max 32 chars. */
   SpecialAccount: z
     .string()
     .max(32)
     .describe(
-      "Special account (mutable: freely, script-only). For receipts, the account number of the cheque/card.",
+      "Special account . For receipts, the account number of the cheque/card.",
     ),
   /** Currency code (empty for local currency). Max 4 chars. */
   Currency: z
@@ -420,56 +420,56 @@ export const transactionZod = z.object({
     .string()
     .max(4)
     .describe("Second approval user (mutable: conditionally, script-only)."),
-  /** User number (mutable: freely, script-only). User-defined numeric field. */
-  UserNum: z.number().describe("User number (mutable: freely, script-only)."),
-  /** User text (mutable: freely, script-only). User-defined text field. Max 256 chars. */
+  /** User number . User-defined numeric field. */
+  UserNum: z.number().describe("User number ."),
+  /** User text . User-defined text field. Max 256 chars. */
   UserText: z
     .string()
     .max(256)
-    .describe("User text (mutable: freely, script-only)."),
-  /** User field 4 (mutable: freely, script-only). User-defined text field. Max 16 chars. */
+    .describe("User text ."),
+  /** User field 4 . User-defined text field. Max 16 chars. */
   User4: z
     .string()
     .max(16)
-    .describe("User field 4 (mutable: freely, script-only)."),
-  /** User field 5 (mutable: freely, script-only). User-defined text field. Max 16 chars. */
+    .describe("User field 4 ."),
+  /** User field 5 . User-defined text field. Max 16 chars. */
   User5: z
     .string()
     .max(16)
-    .describe("User field 5 (mutable: freely, script-only)."),
-  /** User field 6 (mutable: freely, script-only). User-defined text field. Max 16 chars. */
+    .describe("User field 5 ."),
+  /** User field 6 . User-defined text field. Max 16 chars. */
   User6: z
     .string()
     .max(16)
-    .describe("User field 6 (mutable: freely, script-only)."),
-  /** User field 7 (mutable: freely, script-only). User-defined text field. Max 16 chars. */
+    .describe("User field 6 ."),
+  /** User field 7 . User-defined text field. Max 16 chars. */
   User7: z
     .string()
     .max(16)
-    .describe("User field 7 (mutable: freely, script-only)."),
-  /** User field 8 (mutable: freely, script-only). User-defined text field. Max 16 chars. */
+    .describe("User field 7 ."),
+  /** User field 8 . User-defined text field. Max 16 chars. */
   User8: z
     .string()
     .max(16)
-    .describe("User field 8 (mutable: freely, script-only)."),
-  /** Tagged text (mutable: freely, script-only). Storage for key-value pairs used by scripts. Max 256 chars. */
+    .describe("User field 8 ."),
+  /** Tagged text . Storage for key-value pairs used by scripts. Max 256 chars. */
   TaggedText: z
     .string()
     .max(256)
     .describe(
-      "Tagged text (mutable: freely, script-only). Scriptable tag storage.",
+      "Tagged text . Scriptable tag storage.",
     ),
-  /** Email status (mutable: freely, script-only). Non-zero if the transaction has been emailed. */
+  /** Email status . Non-zero if the transaction has been emailed. */
   Emailed: z
     .number()
     .describe(
-      "Email status (mutable: freely, script-only). Non-zero if transaction has been emailed.",
+      "Email status . Non-zero if transaction has been emailed.",
     ),
-  /** Transfer status (mutable: freely, script-only). Non-zero if the transaction has been sent as an eInvoice. */
+  /** Transfer status . Non-zero if the transaction has been sent as an eInvoice. */
   Transferred: z
     .number()
     .describe(
-      "Transfer status (mutable: freely, script-only). Non-zero if transaction has been sent as eInvoice.",
+      "Transfer status . Non-zero if transaction has been sent as eInvoice.",
     ),
 });
 
