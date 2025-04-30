@@ -1,46 +1,16 @@
-import { Elysia, t } from "elysia";
-import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
 import { UserService } from "../../services/tables/user.service";
 import { userObject } from "../../types/constants.eden";
-import { type User, UserFields } from "../../types/interface/tables/user";
+import type { User } from "../../types/interface/tables/user";
+import { moneyworksRoute } from "./base/moneyworks.route";
 
-// Initialize the user service with configuration
-const config = loadMoneyWorksConfig();
-const userService = new UserService(config);
-
-export const userRoutes = new Elysia({ prefix: "/api" }).get(
-  "/users",
-  async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search } = query;
-
-    try {
-      return await userService.getUsers({
-        limit: Number(limit),
-        offset: Number(offset),
-        sort,
-        order: order as "asc" | "desc",
-        search: search as unknown as Partial<User>,
-      });
-    } catch (error) {
-      console.error("Error in GET /users:", error);
-      throw error;
-    }
-  },
+export const userRoutes = moneyworksRoute<User, "User", typeof userObject>(
+  "User",
+  userObject,
+  new UserService(),
   {
-    query: t.Object({
-      limit: t.Optional(t.Numeric()),
-      offset: t.Optional(t.Numeric()),
-      sort: t.Optional(t.String()),
-      order: t.Optional(t.String()),
-      search: t.Optional(userObject),
-    }),
-    detail: {
-      summary: "Users",
-      description: `Provides a simple key-value storage table (string key, string data) for use by scripts or plug-ins.
-
-      Search by: ${UserFields.join(", ")}`,
-    },
+    summary: "Users",
+    description:
+      "Provides a simple key-value storage table (string key, string data) for use by scripts or plug-ins.",
     tags: ["System"],
-    response: { $schema: { $ref: "#/components/schemas/Users" } },
   },
 );

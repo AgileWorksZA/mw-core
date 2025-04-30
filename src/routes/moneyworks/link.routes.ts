@@ -1,52 +1,15 @@
-import { Elysia, t } from "elysia";
-import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
 import { LinkService } from "../../services/tables/link.service";
 import { linkObject } from "../../types/constants.eden";
-import { type Link, LinkFields } from "../../types/interface/tables/link";
+import type { Link } from "../../types/interface/tables/link";
+import { moneyworksRoute } from "./base/moneyworks.route";
 
-// Initialize the link service with configuration
-const config = loadMoneyWorksConfig();
-const linkService = new LinkService(config);
-
-export const linkRoutes = new Elysia({ prefix: "/api" }).get(
-  "/links",
-  async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search, format } = query;
-    // Parse the format parameter as a comma-separated list of field names
-    const fields = format ? format.split(",") : undefined;
-
-    try {
-      return await linkService.getLinks({
-        limit: Number(limit),
-        offset: Number(offset),
-        sort,
-        order: order as "asc" | "desc",
-        search: search as unknown as Partial<Link>,
-        fields,
-      });
-    } catch (error) {
-      console.error("Error in GET /links:", error);
-      throw error;
-    }
-  },
+export const linkRoutes = moneyworksRoute<Link, "Link", typeof linkObject>(
+  "Link",
+  linkObject,
+  new LinkService(),
   {
-    query: t.Object({
-      limit: t.Optional(t.Numeric()),
-      offset: t.Optional(t.Numeric()),
-      sort: t.Optional(t.String()),
-      order: t.Optional(t.String()),
-      search: t.Optional(linkObject),
-      format: t.Optional(t.String()),
-    }),
-    detail: {
-      summary: "Links",
-      description: `Establishes the many-to-many relationship between Departments and Department Groups (Gold/Datacentre only).
-
-      Search by: ${LinkFields.join(", ")}.
-      Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
-      Example: /api/links?format=SequenceNumber,Dept,Group`,
-    },
-    tags: ["CRM"],
-    response: { $schema: { $ref: "#/components/schemas/Links" } },
+    summary: "links",
+    description: "",
+    tags: ["System"],
   },
 );

@@ -1,51 +1,15 @@
-import { Elysia, t } from "elysia";
-import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
 import { NameService } from "../../services/tables/name.service";
 import { nameObject } from "../../types/constants.eden";
-import { type Name, NameFields } from "../../types/interface/tables/name";
+import type { Name } from "../../types/interface/tables/name";
+import { moneyworksRoute } from "./base/moneyworks.route";
 
-// Initialize the name service with configuration
-const config = loadMoneyWorksConfig();
-const nameService = new NameService(config);
-
-export const nameRoutes = new Elysia({ prefix: "/api" }).get(
-  "/names",
-  async ({ query }) => {
-    const { limit = 10, offset = 0, sort, order, search, format } = query;
-    const fields = format ? format.split(",") : undefined;
-
-    try {
-      return await nameService.getNames({
-        limit: Number(limit),
-        offset: Number(offset),
-        sort,
-        order: order as "asc" | "desc",
-        search: search as unknown as Partial<Name>,
-        fields,
-      });
-    } catch (error) {
-      console.error("Error in GET /names:", error);
-      throw error;
-    }
-  },
+export const nameRoutes = moneyworksRoute<Name, "Name", typeof nameObject>(
+  "Name",
+  nameObject,
+  new NameService(),
   {
-    query: t.Object({
-      limit: t.Optional(t.Numeric()),
-      offset: t.Optional(t.Numeric()),
-      sort: t.Optional(t.String()),
-      order: t.Optional(t.String()),
-      search: t.Optional(nameObject),
-      format: t.Optional(t.String()),
-    }),
-    detail: {
-      summary: "Names",
-      description: `Stores information about entities (customers, suppliers, contacts, employees) the business interacts with, including addresses and terms.
-
-      Search by: ${NameFields.join(", ")}.
-      Optionally specify comma-separated field names with "format" parameter to retrieve only specific fields.
-      Example: /api/names?format=SequenceNumber,Code,Name,Phone`,
-    },
+    summary: "Names",
+    description: "Stores contacts, customers, suppliers, employees, and other entities that the organization interacts with.",
     tags: ["CRM"],
-    response: { $schema: { $ref: "#/components/schemas/Names" } },
   },
 );
