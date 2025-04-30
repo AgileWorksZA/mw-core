@@ -36,7 +36,7 @@ export function enforceType(
         "#text": number | string | boolean;
         _system?: boolean;
       },
-  type: "string" | "integer" | "boolean" | "number" | "date" | "date-time",
+  type: "string" | "integer" | "boolean" | "number" | "date" | "string",
 ): string | number | boolean | Date | null {
   const value =
     typeof input === "object" && input !== null && "_system" in input

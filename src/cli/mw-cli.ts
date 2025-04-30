@@ -15,7 +15,7 @@ program
   .description("Align TSV exports with XML-verbose exports")
   .option(
     "-t, --table <table>",
-    "Specific table to check (default: all tables)",
+    "Specific table to check (default: all moneyworks)",
   )
   .option(
     "-o, --output <output>",
@@ -30,8 +30,8 @@ program
   });
 
 program
-  .command("list-tables")
-  .description("List all tables in the MoneyWorks database")
+  .command("list-moneyworks")
+  .description("List all moneyworks in the MoneyWorks database")
   .option("-f, --format <format>", "Output format (text or json)", "text")
   .action(async (options) => {
     const config = loadMoneyWorksConfig();
@@ -42,7 +42,7 @@ program
       );
       console.log(result);
     } catch (error) {
-      console.error("Failed to list tables:", error);
+      console.error("Failed to list moneyworks:", error);
       process.exit(1);
     }
   });

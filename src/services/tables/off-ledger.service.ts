@@ -72,17 +72,6 @@ export class OffLedgerService {
     order?: "asc" | "desc";
     fields?: string[];
   }) {
-    // Validate fields against OffLedgerFields if provided
-    if (params.fields && params.fields.length > 0) {
-      for (const field of params.fields) {
-        if (!OffLedgerFields.includes(field as OffLedgerField)) {
-          throw new Error(
-            `Invalid field '${field}' for OffLedger table. Valid fields are: ${OffLedgerFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<OffLedger> = {

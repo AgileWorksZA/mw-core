@@ -39,8 +39,7 @@ export interface Asset {
   Status: string;
   /** @mutable="automatically" size="3" */
   LastModifiedBy: string | null;
-  /** @mutable="conditionally" */
-  LastRevaluedstring: string | null;
+  LastRevaluedDate: string | null;
   /** @mutable="freely" */
   ExpectedResidualValue: number | null;
   /** @mutable="conditionally" */
@@ -54,7 +53,7 @@ export interface Asset {
   /** @mutable="conditionally" */
   BookValue: number;
   /** @mutable="conditionally" */
-  Disposalstring: string | null;
+  DisposalDate: string | null;
   /** @mutable="conditionally" */
   GainLossOnDisposal: number | null;
   /** @mutable="freely" */
@@ -99,14 +98,14 @@ export const AssetFields: AssetField[] = [
   "PrivateUsePercent",
   "Status",
   "LastModifiedBy",
-  "LastRevaluedstring",
+  "LastRevaluedDate",
   "ExpectedResidualValue",
   "RevalSurplusImpairAmt",
   "UserNum",
   "UserText",
   "AccumDepnAdj",
   "BookValue",
-  "Disposalstring",
+  "DisposalDate",
   "GainLossOnDisposal",
   "Colour",
   "TaggedText",
@@ -118,5 +117,3 @@ export const AssetFields: AssetField[] = [
   "Custom3",
   "Custom4",
 ];
-
-export type AssetObject = Record<AssetField, string>;

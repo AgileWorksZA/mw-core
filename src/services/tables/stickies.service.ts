@@ -72,17 +72,6 @@ export class StickiesService {
     order?: "asc" | "desc";
     fields?: string[];
   }) {
-    // Validate fields against StickiesFields if provided
-    if (params.fields && params.fields.length > 0) {
-      for (const field of params.fields) {
-        if (!StickiesFields.includes(field as StickiesField)) {
-          throw new Error(
-            `Invalid field '${field}' for Stickies table. Valid fields are: ${StickiesFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Stickies> = {

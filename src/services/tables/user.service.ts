@@ -65,17 +65,6 @@ export class UserService {
     order?: "asc" | "desc";
     fields?: string[];
   }) {
-    // Validate fields against UserFields if provided
-    if (params.fields && params.fields.length > 0) {
-      for (const field of params.fields) {
-        if (!UserFields.includes(field as UserField)) {
-          throw new Error(
-            `Invalid field '${field}' for User table. Valid fields are: ${UserFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<User> = {

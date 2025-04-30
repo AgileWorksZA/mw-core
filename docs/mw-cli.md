@@ -36,7 +36,7 @@ This tool compares the fields available in both TSV and XML-verbose export forma
 Lists all tables available in the MoneyWorks database.
 
 ```bash
-bun src/cli/mw-cli.ts list-tables [options]
+bun src/cli/mw-cli.ts list-moneyworks [options]
 ```
 
 Options:

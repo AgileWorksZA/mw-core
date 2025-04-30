@@ -70,17 +70,6 @@ export class User2Service {
     fields?: string[];
     skip_validation?: boolean;
   }) {
-    // Validate fields against User2Fields if provided and skip_validation is not true
-    if (params.fields && params.fields.length > 0 && !params.skip_validation) {
-      for (const field of params.fields) {
-        if (!User2Fields.includes(field as User2Field)) {
-          throw new Error(
-            `Invalid field '${field}' for User2 table. Valid fields are: ${User2Fields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<User2> = {

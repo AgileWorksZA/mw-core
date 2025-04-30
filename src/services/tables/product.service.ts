@@ -73,17 +73,6 @@ export class ProductService {
     fields?: string[];
     skip_validation?: boolean;
   }) {
-    // Validate fields against ProductFields if provided and skip_validation is not true
-    if (params.fields && params.fields.length > 0 && !params.skip_validation) {
-      for (const field of params.fields) {
-        if (!ProductFields.includes(field as ProductField)) {
-          throw new Error(
-            `Invalid field '${field}' for Product table. Valid fields are: ${ProductFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Product> = {

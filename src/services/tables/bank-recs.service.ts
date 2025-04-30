@@ -72,17 +72,6 @@ export class BankRecsService {
     order?: "asc" | "desc";
     fields?: string[]; // Array of field names to include in the response
   }) {
-    // Validate fields against BankRecsFields if provided
-    if (params.fields && params.fields.length > 0) {
-      for (const field of params.fields) {
-        if (!BankRecsFields.includes(field as BankRecsField)) {
-          throw new Error(
-            `Invalid field '${field}' for BankRecs table. Valid fields are: ${BankRecsFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<BankRecs> = {

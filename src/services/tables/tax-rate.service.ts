@@ -72,17 +72,6 @@ export class TaxRateService {
     order?: "asc" | "desc";
     fields?: string[];
   }) {
-    // Validate fields against TaxRateFields if provided
-    if (params.fields && params.fields.length > 0) {
-      for (const field of params.fields) {
-        if (!TaxRateFields.includes(field as TaxRateField)) {
-          throw new Error(
-            `Invalid field '${field}' for TaxRate table. Valid fields are: ${TaxRateFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<TaxRate> = {

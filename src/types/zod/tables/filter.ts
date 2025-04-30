@@ -16,7 +16,7 @@ export const FilterFileEnum = z
     "Job",
     "JobSheet",
     "Detail", // Represents Detail Line Items
-    // Add other potential filterable tables if known
+    // Add other potential filterable moneyworks if known
   ])
   .describe("The MoneyWorks internal table name to which this filter applies.");
 

@@ -30,5 +30,5 @@ export default {
   UserNum: "number",
   UserText: "string",
   TaggedText: "string",
-  TimeProcessed: "date-time",
+  TimeProcessed: "string",
 };

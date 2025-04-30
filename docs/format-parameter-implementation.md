@@ -15,14 +15,14 @@ The `format` parameter implementation requires changes to:
 Update each table route file following this pattern:
 
 ```typescript
-// Example: src/routes/tables/asset.routes.ts
+// Example: src/routes/moneyworks/asset.routes.ts
 
 import { Elysia, t } from "elysia";
 import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
-import { AssetService } from "../../services/tables/asset.service";
+import { AssetService } from "../../services/moneyworks/asset.service";
 import { assetObject } from "../../types/constants.eden";
-import { AssetMany } from "../../types/eden/tables/Asset";
-import { type Asset, AssetFields } from "../../types/interface/tables/asset";
+import { AssetMany } from "../../types/eden/moneyworks/Asset";
+import { type Asset, AssetFields } from "../../types/interface/moneyworks/asset";
 
 // Initialize the asset service with configuration
 const config = loadMoneyWorksConfig();
@@ -83,7 +83,7 @@ Specifically add:
 Update each table service file following this pattern:
 
 ```typescript
-// Example: src/services/tables/asset.service.ts
+// Example: src/services/moneyworks/asset.service.ts
 
 import type { ANY } from "../../types/hack";
 import { enforceType } from "../../types/helpers";
@@ -91,7 +91,7 @@ import {
   type Asset, 
   type AssetField, 
   AssetFields
-} from "../../types/interface/tables/asset";
+} from "../../types/interface/moneyworks/asset";
 import type {
   MoneyWorksConfig,
   MoneyWorksQueryParams,
@@ -219,7 +219,7 @@ Specifically add:
 For each table, ensure the interface file has an exported type for field names:
 
 ```typescript
-// Example: src/types/interface/tables/asset.ts
+// Example: src/types/interface/moneyworks/asset.ts
 
 export type AssetField = keyof Asset;
 ```

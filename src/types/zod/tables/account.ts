@@ -110,7 +110,7 @@ export const accountZod = z.object({
   /** A bitmask field storing various boolean settings/attributes for the account, such as 'Use as Heading', 'Job Code Required', 'Discountable'. */
   Flags: z
     .number()
-    .int()
+
     .describe(
       "A bitmask field storing various boolean settings/attributes for the account, such as 'Use as Heading', 'Job Code Required', 'Discountable'.",
     ),
@@ -149,7 +149,7 @@ export const accountZod = z.object({
   /** A user-assigned colour index (0-7) for visual identification in lists. Labels are user-defined in preferences. (Mutable: conditionally) */
   Colour: z
     .number()
-    .int()
+
     .min(0)
     .max(7)
     .describe(
@@ -165,7 +165,7 @@ export const accountZod = z.object({
   /** Security level assigned to the account (0-5 stars), restricting access based on user security levels (Gold/Datacentre only). Indexed. */
   SecurityLevel: z
     .number()
-    .int()
+
     .describe(
       "Security level assigned to the account (0-5 stars), restricting access based on user security levels (Gold/Datacentre only). Indexed.",
     ),
@@ -209,7 +209,7 @@ export const accountZod = z.object({
   /** Specifies the number of digits for padding the ManualChequeNumber (for bank accounts). */
   ManualChequeNumDigits: z
     .number()
-    .int()
+
     .nullable()
     .describe(
       "Specifies the number of digits for padding the ManualChequeNumber (for bank accounts).",
@@ -217,7 +217,7 @@ export const accountZod = z.object({
   /** Specifies the number of digits for padding the PrintedChequeNumber (for bank accounts). */
   PrintedChequeNumDigits: z
     .number()
-    .int()
+
     .nullable()
     .describe(
       "Specifies the number of digits for padding the PrintedChequeNumber (for bank accounts).",

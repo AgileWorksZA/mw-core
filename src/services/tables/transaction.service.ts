@@ -73,17 +73,6 @@ export class TransactionService {
     fields?: string[]; // Array of field names to include in the response
     skip_validation?: boolean; // Skip validation of fields
   }) {
-    // Validate fields against TransactionFields if provided and skip_validation is not true
-    if (params.fields && params.fields.length > 0 && !params.skip_validation) {
-      for (const field of params.fields) {
-        if (!TransactionFields.includes(field as TransactionField)) {
-          throw new Error(
-            `Invalid field '${field}' for Transaction table. Valid fields are: ${TransactionFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Transaction> = {

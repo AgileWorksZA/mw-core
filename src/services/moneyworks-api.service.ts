@@ -161,7 +161,7 @@ export class MoneyWorksApiService {
   }
 
   /**
-   * Get list of all tables in the database
+   * Get list of all moneyworks in the database
    * @returns Array of table names
    */
   async getDatabaseTables(): Promise<string[]> {
@@ -175,7 +175,7 @@ export class MoneyWorksApiService {
 
       return [];
     } catch (error) {
-      console.error("Error fetching database tables:", error);
+      console.error("Error fetching database moneyworks:", error);
       this.handleError(error);
       return [];
     }
@@ -332,7 +332,6 @@ export class MoneyWorksApiService {
       const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
       const authHeaders = this.createAuthHeaders();
 
-      console.log("URL:", url);
       // When using fields or non-XML format, we need to ensure the response is text
       const responseType =
         params.fields ||
@@ -340,6 +339,7 @@ export class MoneyWorksApiService {
           ? "text"
           : undefined;
 
+      console.log("URL:", { url, responseType });
       const response = await axios.get(url, {
         headers: authHeaders,
         responseType,
@@ -352,6 +352,7 @@ export class MoneyWorksApiService {
         queryParams.format &&
         queryParams.format.startsWith("xml")
       ) {
+        console.log("Parsing XML response");
         const res = this.parser.parse(response.data);
         const data: T[] = res.table[res.table._name.toLowerCase()] ?? [];
         const limit: number = res.table._count;
@@ -390,6 +391,7 @@ export class MoneyWorksApiService {
         }
         data.push(record as T);
       }
+      console.log("Data:", data);
 
       return {
         data,

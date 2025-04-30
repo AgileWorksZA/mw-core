@@ -25,7 +25,7 @@ interface TableAlignment {
  * Align TSV exports with XML-verbose exports
  *
  * @param config MoneyWorks configuration
- * @param specificTable Optional specific table to check (default: all tables)
+ * @param specificTable Optional specific table to check (default: all moneyworks)
  * @param outputFile Output file path for the report
  */
 export async function alignExports(

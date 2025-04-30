@@ -3,37 +3,37 @@ import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import type { OpenAPIV3 } from "openapi-types";
 
-import { accountRoutes } from "./routes/tables/account.routes";
-import { assetCatRoutes } from "./routes/tables/asset-cat.routes";
-import { assetLogRoutes } from "./routes/tables/asset-log.routes";
-import { assetRoutes } from "./routes/tables/asset.routes";
-import { autoSplitRoutes } from "./routes/tables/auto-split.routes";
-import { bankRecsRoutes } from "./routes/tables/bank-recs.routes";
-import { buildRoutes } from "./routes/tables/build.routes";
-import { contactsRoutes } from "./routes/tables/contacts.routes";
-import { departmentRoutes } from "./routes/tables/department.routes";
-import { detailRoutes } from "./routes/tables/detail.routes";
-import { filterRoutes } from "./routes/tables/filter.routes";
-import { generalRoutes } from "./routes/tables/general.routes";
-import { inventoryRoutes } from "./routes/tables/inventory.routes";
-import { jobSheetRoutes } from "./routes/tables/job-sheet.routes";
-import { jobRoutes } from "./routes/tables/job.routes";
-import { ledgerRoutes } from "./routes/tables/ledger.routes";
-import { linkRoutes } from "./routes/tables/link.routes";
-import { listsRoutes } from "./routes/tables/lists.routes";
-import { logRoutes } from "./routes/tables/log.routes";
-import { loginRoutes } from "./routes/tables/login.routes";
-import { memoRoutes } from "./routes/tables/memo.routes";
-import { messageRoutes } from "./routes/tables/message.routes";
-import { nameRoutes } from "./routes/tables/name.routes";
-import { offLedgerRoutes } from "./routes/tables/off-ledger.routes";
-import { paymentsRoutes } from "./routes/tables/payments.routes";
-import { productRoutes } from "./routes/tables/product.routes";
-import { stickiesRoutes } from "./routes/tables/stickies.routes";
-import { taxRateRoutes } from "./routes/tables/tax-rate.routes";
-import { transactionRoutes } from "./routes/tables/transaction.routes";
-import { userRoutes } from "./routes/tables/user.routes";
-import { user2Routes } from "./routes/tables/user2.routes";
+import { accountRoutes } from "./routes/moneyworks/account.routes";
+import { assetCatRoutes } from "./routes/moneyworks/asset-cat.routes";
+import { assetLogRoutes } from "./routes/moneyworks/asset-log.routes";
+import { assetRoutes } from "./routes/moneyworks/asset.routes";
+import { autoSplitRoutes } from "./routes/moneyworks/auto-split.routes";
+import { bankRecsRoutes } from "./routes/moneyworks/bank-recs.routes";
+import { buildRoutes } from "./routes/moneyworks/build.routes";
+import { contactsRoutes } from "./routes/moneyworks/contacts.routes";
+import { departmentRoutes } from "./routes/moneyworks/department.routes";
+import { detailRoutes } from "./routes/moneyworks/detail.routes";
+import { filterRoutes } from "./routes/moneyworks/filter.routes";
+import { generalRoutes } from "./routes/moneyworks/general.routes";
+import { inventoryRoutes } from "./routes/moneyworks/inventory.routes";
+import { jobSheetRoutes } from "./routes/moneyworks/job-sheet.routes";
+import { jobRoutes } from "./routes/moneyworks/job.routes";
+import { ledgerRoutes } from "./routes/moneyworks/ledger.routes";
+import { linkRoutes } from "./routes/moneyworks/link.routes";
+import { listsRoutes } from "./routes/moneyworks/lists.routes";
+import { logRoutes } from "./routes/moneyworks/log.routes";
+import { loginRoutes } from "./routes/moneyworks/login.routes";
+import { memoRoutes } from "./routes/moneyworks/memo.routes";
+import { messageRoutes } from "./routes/moneyworks/message.routes";
+import { nameRoutes } from "./routes/moneyworks/name.routes";
+import { offLedgerRoutes } from "./routes/moneyworks/off-ledger.routes";
+import { paymentsRoutes } from "./routes/moneyworks/payments.routes";
+import { productRoutes } from "./routes/moneyworks/product.routes";
+import { stickiesRoutes } from "./routes/moneyworks/stickies.routes";
+import { taxRateRoutes } from "./routes/moneyworks/tax-rate.routes";
+import { transactionRoutes } from "./routes/moneyworks/transaction.routes";
+import { userRoutes } from "./routes/moneyworks/user.routes";
+import { user2Routes } from "./routes/moneyworks/user2.routes";
 
 import { companyInformationRoutes } from "./routes/system/company-information.routes";
 import { evaluateRoutes } from "./routes/system/evaluate.routes";
@@ -41,7 +41,7 @@ import { reportRoutes } from "./routes/system/report.routes";
 import { systemLabelsRoutes } from "./routes/system/system-labels.routes";
 
 import { z } from "zod";
-import { accountZod } from "./types/zod/tables/account";
+// import { accountZod } from "./types/zod/moneyworks/account";
 import { assetZod } from "./types/zod/tables/asset";
 import { assetCatZod } from "./types/zod/tables/asset-cat";
 import { assetLogZod } from "./types/zod/tables/asset-log";
@@ -118,7 +118,7 @@ const app = new Elysia({
                 prev: z.number(),
               }),
             ) as OpenAPIV3.SchemaObject,
-            Account: z.toJSONSchema(accountZod) as OpenAPIV3.SchemaObject,
+            // Account: z.toJSONSchema(accountZod) as OpenAPIV3.SchemaObject,
             Asset: z.toJSONSchema(assetZod) as OpenAPIV3.SchemaObject,
             AssetCat: z.toJSONSchema(assetCatZod) as OpenAPIV3.SchemaObject,
             AssetLog: z.toJSONSchema(assetLogZod) as OpenAPIV3.SchemaObject,
@@ -151,7 +151,7 @@ const app = new Elysia({
             ) as OpenAPIV3.SchemaObject,
             User: z.toJSONSchema(userZod) as OpenAPIV3.SchemaObject,
             User2: z.toJSONSchema(user2Zod) as OpenAPIV3.SchemaObject,
-            Accounts: pagedSchema("Account"),
+            // Accounts: pagedSchema("Account"),
             Assets: pagedSchema("Asset"),
             AssetCats: pagedSchema("AssetCat"),
             AssetLogs: pagedSchema("AssetLog"),

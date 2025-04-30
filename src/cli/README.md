@@ -29,7 +29,7 @@ Options:
 Lists all tables available in the MoneyWorks database.
 
 ```bash
-bun run cli list-tables [options]
+bun run cli list-moneyworks [options]
 ```
 
 Options:
@@ -43,17 +43,17 @@ Options:
 #### Examples:
 
 ```bash
-# List all tables in text format
-bun run cli list-tables
+# List all moneyworks in text format
+bun run cli list-moneyworks
 
-# Get tables in JSON format
-bun run cli list-tables --format json
+# Get moneyworks in JSON format
+bun run cli list-moneyworks --format json
 
-# Pipe to grep to find specific tables
-bun run cli list-tables | grep "asset"
+# Pipe to grep to find specific moneyworks
+bun run cli list-moneyworks | grep "asset"
 
 # Save the list to a file
-bun run cli list-tables > tables.txt
+bun run cli list-moneyworks > moneyworks.txt
 ```
 
 ### list-fields
@@ -95,8 +95,8 @@ bun run cli list-fields Transaction --format json --with-type
 # Pipe to grep to find specific fields
 bun run cli list-fields Name | grep "Address"
 
-# Combine with list-tables to process multiple tables
-bun run cli list-tables | grep "Asset" | xargs -I{} bun run cli list-fields {}
+# Combine with list-moneyworks to process multiple moneyworks
+bun run cli list-moneyworks | grep "Asset" | xargs -I{} bun run cli list-fields {}
 
 # Save the field list to a file
 bun run cli list-fields Product > product_fields.txt
@@ -150,7 +150,7 @@ The report includes:
 Example usage:
 
 ```bash
-# Check all tables
+# Check all moneyworks
 bun run cli align-export
 
 # Check only the Account table

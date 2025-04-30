@@ -38,7 +38,7 @@ export async function listFields(
     );
 
     if (!matchedTable) {
-      // Display available tables to help the user
+      // Display available moneyworks to help the user
       const availableTables = tables.join("\n");
       throw new Error(
         `Table "${tableName}" not found. Available tables are:\n${availableTables}`,

@@ -2,7 +2,7 @@ import { MoneyWorksApiService } from "../../services/moneyworks-api.service";
 import type { MoneyWorksConfig } from "../../types/moneyworks";
 
 /**
- * List all tables in the MoneyWorks database
+ * List all moneyworks in the MoneyWorks database
  *
  * @param config MoneyWorks configuration
  * @param format Output format (text or json)
@@ -15,7 +15,7 @@ export async function listTables(
   const api = new MoneyWorksApiService(config);
 
   try {
-    // Get tables from MoneyWorks
+    // Get moneyworks from MoneyWorks
     const tables = await api.getDatabaseTables();
 
     // Format the output
@@ -24,7 +24,7 @@ export async function listTables(
     }
     return tables.join("\n");
   } catch (error) {
-    console.error("Error listing tables:", error);
+    console.error("Error listing moneyworks:", error);
     throw error;
   }
 }

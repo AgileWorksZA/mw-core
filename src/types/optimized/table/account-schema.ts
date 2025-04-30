@@ -1,3 +1,5 @@
+import type { AccountField } from "../../interface/tables/account";
+
 export default {
   SequenceNumber: "integer",
   LastModifiedTime: "string",
@@ -10,7 +12,7 @@ export default {
   TaxCode: "string",
   Flags: "integer",
   System: "string",
-  Created: "date-time",
+  Created: "string",
   Category2: "string",
   Category3: "string",
   Category4: "string",
@@ -22,7 +24,7 @@ export default {
   BalanceLimit: "number",
   ManualChequeNumber: "string",
   PrintedChequeNumber: "string",
-  LastStatementImport: "date-time",
+  LastStatementImport: "string",
   Comments: "string",
   ManualChequeNumDigits: "integer",
   PrintedChequeNumDigits: "integer",
@@ -34,4 +36,4 @@ export default {
   Cashforecast: "string",
   EBITDA: "string",
   ImportFormat: "string",
-};
+} as Record<AccountField, string>;

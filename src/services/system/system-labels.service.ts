@@ -98,7 +98,7 @@ export class SystemLabelsService {
   }
 
   /**
-   * Generate and cache field labels for all tables
+   * Generate and cache field labels for all moneyworks
    *
    * @returns Summary of generated labels
    */
@@ -172,7 +172,7 @@ export class SystemLabelsService {
   }
 
   /**
-   * Add enumerated field labels for tables that support them
+   * Add enumerated field labels for moneyworks that support them
    *
    * @param tableName The table name
    * @param labels The existing labels object to add to

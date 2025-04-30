@@ -72,17 +72,6 @@ export class PaymentsService {
     order?: "asc" | "desc";
     fields?: string[];
   }) {
-    // Validate fields against PaymentsFields if provided
-    if (params.fields && params.fields.length > 0) {
-      for (const field of params.fields) {
-        if (!PaymentsFields.includes(field as PaymentsField)) {
-          throw new Error(
-            `Invalid field '${field}' for Payments table. Valid fields are: ${PaymentsFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<Payments> = {

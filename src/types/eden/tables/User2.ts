@@ -1,4 +1,5 @@
 import { t } from "elysia";
+
 export const User2One = t.Object({
   SequenceNumber: t.Number(),
   LastModifiedTime: t.String(),
@@ -23,14 +24,4 @@ export const User2One = t.Object({
   Text4: t.Nullable(t.String()),
   TaggedText: t.Nullable(t.String()),
   Colour: t.Nullable(t.Number()),
-});
-export const User2Many = t.Object({
-  data: t.Array(t.Partial(User2One)),
-  pagination: t.Object({
-    total: t.Number(),
-    limit: t.Number(),
-    offset: t.Number(),
-    next: t.Number(),
-    prev: t.Number(),
-  }),
 });

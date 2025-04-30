@@ -1,3 +1,5 @@
+import type { AssetField } from "../../interface/tables/asset";
+
 export default {
   SequenceNumber: "number",
   LastModifiedTime: "string",
@@ -36,4 +38,4 @@ export default {
   Custom2: "string",
   Custom3: "string",
   Custom4: "string",
-};
+} as Record<AssetField, string>;

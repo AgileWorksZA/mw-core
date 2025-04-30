@@ -72,17 +72,6 @@ export class AssetCatService {
     order?: "asc" | "desc";
     fields?: string[]; // Array of field names to include in the response
   }) {
-    // Validate fields against AssetCatFields if provided
-    if (params.fields && params.fields.length > 0) {
-      for (const field of params.fields) {
-        if (!AssetCatFields.includes(field as AssetCatField)) {
-          throw new Error(
-            `Invalid field '${field}' for AssetCat table. Valid fields are: ${AssetCatFields.join(", ")}`,
-          );
-        }
-      }
-    }
-
     try {
       // Convert from our API params to MoneyWorks params
       const mwParams: MoneyWorksQueryParams<AssetCat> = {
