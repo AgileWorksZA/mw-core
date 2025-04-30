@@ -2,26 +2,26 @@ import { t } from "elysia";
 
 export const BuildOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this BOM line item."
     }),
     LastModifiedTime: t.String({
       description: "Last modified timestamp. The date and time that this record was last changed."
     }),
-    ProductSeq: t.Number({
+    ProductSeq: t.Integer({
       description: "The sequence number of the parent Product record (Product.SequenceNumber) to which this recipe line belongs."
     }),
-    Order: t.Nullable(t.Number({
+    Order: t.Nullable(t.Integer({
       description: "The order/position of this component within the Bill of Materials for the parent product."
     })),
-    Qty: t.Number({
+    Qty: t.Integer({
       description: "Quantity of the component required to build ONE unit of the parent product."
     }),
     PartCode: t.String({
       description: "Code of the component product/item used in the build. Must be an existing Product code.",
       maxLength: 31
     }),
-    Flags: t.Nullable(t.Number({
+    Flags: t.Nullable(t.Integer({
       description: "Flags associated with the build component line (usage not explicitly documented)."
     })),
     Memo: t.Nullable(t.String({

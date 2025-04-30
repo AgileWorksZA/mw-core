@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const GeneralOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this record."
     }),
     LastModifiedTime: t.String({
@@ -16,10 +16,10 @@ export const GeneralOne = t.Object(
       description: "The description or name of the Category, Classification, or Group. Max 25 chars.",
       maxLength: 25
     })),
-    Date: t.Nullable(t.Date({
+    Date: t.Nullable(t.String({
       description: "Date associated with this record, if applicable."
     })),
-    Long: t.Nullable(t.Number({
+    Long: t.Nullable(t.Integer({
       description: "Numeric data associated with this record, if applicable."
     })),
   },

@@ -60,6 +60,6 @@ export const systemLabelsRoutes = new Elysia({ prefix: "/api" })
         )}`,
       },
       tags: ["Labels"],
-      response: t.Record(t.String(), t.Number()),
+      response: t.Record(t.String(), t.Integer()),
     },
   );

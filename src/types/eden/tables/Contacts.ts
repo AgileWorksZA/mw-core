@@ -2,16 +2,16 @@ import { t } from "elysia";
 
 export const ContactsOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Internal unique identifier for the contact record itself."
     }),
     LastModifiedTime: t.String({
       description: "Timestamp indicating the last time the contact record was modified."
     }),
-    ParentSeq: t.Number({
+    ParentSeq: t.Integer({
       description: "Foreign key linking to the SequenceNumber of the parent Name record. Indexed."
     }),
-    Order: t.Number({
+    Order: t.Integer({
       description: "The display order of this contact within the parent Name record's contact list."
     }),
     ContactName: t.Nullable(t.String({
@@ -46,10 +46,10 @@ export const ContactsOne = t.Object(
       description: "General memo or notes specifically about this contact.",
       maxLength: 256
     })),
-    Role: t.Nullable(t.Number({
+    Role: t.Nullable(t.Integer({
       description: "Represents the roles assigned to the contact (e.g., Payables, CEO). Stored as a bitmask. Corresponds to Name.Role and Name.Role2. Bitmask field where each bit corresponds to one of the 16 possible roles defined in Preferences."
     })),
-    UserNum: t.Nullable(t.Number({
+    UserNum: t.Nullable(t.Integer({
       description: "A user-defined number field for custom data storage, often used by scripts. (Mutable: freely, script-only)"
     })),
     UserText: t.Nullable(t.String({

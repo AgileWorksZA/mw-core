@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const LoginOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this user/login record."
     }),
     LastModifiedTime: t.String({
@@ -20,7 +20,7 @@ export const LoginOne = t.Object(
       description: "The user's password (stored encrypted). Can be empty if no password is set. Max 33 chars (encrypted length).",
       maxLength: 33
     })),
-    SecurityLevel: t.Nullable(t.Number({
+    SecurityLevel: t.Nullable(t.Integer({
       description: "The security level assigned to the user (0-5 stars), controlling access to sensitive accounts/transactions.",
       minimum: 0,
       maximum: 5
@@ -33,7 +33,7 @@ export const LoginOne = t.Object(
       description: "The user's email address. Max 63 chars.",
       maxLength: 63
     })),
-    Flags: t.Nullable(t.Number({
+    Flags: t.Nullable(t.Integer({
       description: "Bitmapped flags field. Bit 0: Is a Role definition; Bit 1: Is Read Only user; Bit 3: User is logged in via MoneyWorks Now."
     })),
     Category: t.Nullable(t.String({
@@ -44,7 +44,7 @@ export const LoginOne = t.Object(
       description: "The name of the Role assigned to this user (if applicable). Max 31 chars.",
       maxLength: 31
     })),
-    UserNum: t.Nullable(t.Number({
+    UserNum: t.Nullable(t.Integer({
       description: "User-defined numeric field (scriptable)."
     })),
     UserText: t.Nullable(t.String({

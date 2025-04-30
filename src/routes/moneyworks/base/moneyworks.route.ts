@@ -1,5 +1,4 @@
-import type { TNull, TSchema, TUndefined } from "@sinclair/typebox";
-import type { TObject } from "@sinclair/typebox/build/cjs/type/object/object";
+import type { TSchema } from "@sinclair/typebox";
 import { type DocumentDecoration, Elysia, t } from "elysia";
 import type { TableService } from "../../../services/tables/base/table.service";
 import { accountObject } from "../../../types/constants.eden";
@@ -8,7 +7,6 @@ export function moneyworksRoute<
   T extends object,
   const Name extends string,
   const Model extends TSchema,
-  QueryType extends TObject = TObject,
 >(
   model: Name,
   objectSchema: Model,
@@ -55,7 +53,7 @@ export function moneyworksRoute<
           fields,
         });
       } catch (error) {
-        console.error("Error in GET /accounts:", error);
+        console.error(`Error in GET /${model.toLowerCase()}s:`, error);
         throw error;
       }
     },
@@ -66,11 +64,11 @@ export function moneyworksRoute<
         200: t.Object({
           data: t.Array(objectSchema),
           pagination: t.Object({
-            total: t.Number(),
-            limit: t.Number(),
-            offset: t.Number(),
-            next: t.Number(),
-            prev: t.Number(),
+            total: t.Integer(),
+            limit: t.Integer(),
+            offset: t.Integer(),
+            next: t.Integer(),
+            prev: t.Integer(),
           }),
         }),
       },

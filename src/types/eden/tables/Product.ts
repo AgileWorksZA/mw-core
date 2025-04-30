@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const ProductOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this product record."
     }),
     LastModifiedTime: t.String({
@@ -56,140 +56,140 @@ export const ProductOne = t.Object(
       description: "Stock Asset GL account debited when bought/credited when sold (if stocked). Required if stocked.",
       maxLength: 13
     })),
-    UserNum: t.Nullable(t.Number({
+    UserNum: t.Nullable(t.Integer({
       description: "User-defined numeric field (scriptable)."
     })),
     SellUnit: t.Nullable(t.String({
       description: "The units in which the product is sold (e.g., 'ea', 'kg').",
       maxLength: 5
     })),
-    SellPrice: t.Nullable(t.Number({
+    SellPrice: t.Nullable(t.Integer({
       description: "The 'A' level selling price (tax exclusive by default, before discounts)."
     })),
-    Plussage: t.Nullable(t.Number({
+    Plussage: t.Nullable(t.Integer({
       description: "Additional cost added to BuyPrice for margin calculations (not an accounting cost)."
     })),
-    BuyWeight: t.Nullable(t.Number({
+    BuyWeight: t.Nullable(t.Integer({
       description: "Weight/volume of one buying unit (for shipping calculations)."
     })),
     BuyUnit: t.Nullable(t.String({
       description: "The units in which the product is bought.",
       maxLength: 5
     })),
-    CostPrice: t.Nullable(t.Number({
+    CostPrice: t.Nullable(t.Integer({
       description: "Standard cost in base currency (calculated from last BuyPrice/AvgValue)."
     })),
-    ConversionFactor: t.Nullable(t.Number({
+    ConversionFactor: t.Nullable(t.Integer({
       description: "Conversion factor: Sell Units = Buy Units / ConversionFactor. (Note: Reciprocal of UI value)."
     })),
-    MarginWarning: t.Nullable(t.Number({
+    MarginWarning: t.Nullable(t.Integer({
       description: "Minimum margin/markup percentage below which a warning appears in the Sell Prices tab."
     })),
-    SellDiscount: t.Nullable(t.Number({
+    SellDiscount: t.Nullable(t.Integer({
       description: "Default discount percentage applied if SellDiscountMode is 'By Product' or 'Add'."
     })),
-    SellDiscountMode: t.Nullable(t.Number({
+    SellDiscountMode: t.Nullable(t.Integer({
       description: "Sell discount calculation mode. Values: 1=None, 2=By Customer, 3=By Product, 4=Add."
     })),
     UserText: t.Nullable(t.String({
       description: "User-defined text field (scriptable).",
       maxLength: 255
     })),
-    StockOnHand: t.Nullable(t.Number({
+    StockOnHand: t.Nullable(t.Integer({
       description: "Current total stock on hand across all locations (in selling units). Use SOHForLocation() for specific locations."
     })),
-    StockValue: t.Nullable(t.Number({
+    StockValue: t.Nullable(t.Integer({
       description: "Total value of stock on hand (based on average cost)."
     })),
-    MinBuildQty: t.Nullable(t.Number({
+    MinBuildQty: t.Nullable(t.Integer({
       description: "Minimum quantity that can be built in one manufacturing run."
     })),
-    NormalBuildQty: t.Nullable(t.Number({
+    NormalBuildQty: t.Nullable(t.Integer({
       description: "Normal/preferred quantity for a manufacturing run or purchase reorder."
     })),
-    ReorderLevel: t.Nullable(t.Number({
+    ReorderLevel: t.Nullable(t.Integer({
       description: "Stock level (in selling units) at which a reorder warning is triggered."
     })),
-    JobPricingMode: t.Nullable(t.Number({
+    JobPricingMode: t.Nullable(t.Integer({
       description: "Job pricing mode determining how charges are calculated when used in job costing. Values: 1=Use Product Sell Price, 2=Apply Job Markup to Std Cost, 3=Use Undiscounted Purchase Price."
     })),
-    Flags: t.Nullable(t.Number({
+    Flags: t.Nullable(t.Integer({
       description: "Bitmapped flags field. See documentation for Product Flags."
     })),
-    Colour: t.Nullable(t.Number({
+    Colour: t.Nullable(t.Integer({
       description: "Display color index (0-7)."
     })),
     UseMultiplePrices: t.Nullable(t.Boolean({
       description: "Flag indicating if multiple sell prices (A-F) are enabled for this product."
     })),
-    SellPriceB: t.Nullable(t.Number({
+    SellPriceB: t.Nullable(t.Integer({
       description: "Sell price level B."
     })),
-    SellPriceC: t.Nullable(t.Number({
+    SellPriceC: t.Nullable(t.Integer({
       description: "Sell price level C."
     })),
-    SellPriceD: t.Nullable(t.Number({
+    SellPriceD: t.Nullable(t.Integer({
       description: "Sell price level D (can be cost-plus or discount %)."
     })),
-    SellPriceE: t.Nullable(t.Number({
+    SellPriceE: t.Nullable(t.Integer({
       description: "Sell price level E (can be cost-plus or discount %)."
     })),
-    SellPriceF: t.Nullable(t.Number({
+    SellPriceF: t.Nullable(t.Integer({
       description: "Sell price level F (can be cost-plus or discount %)."
     })),
-    QtyBreak1: t.Nullable(t.Number({
+    QtyBreak1: t.Nullable(t.Integer({
       description: "Quantity threshold for the first price break (levels A & B)."
     })),
-    QtyBreak2: t.Nullable(t.Number({
+    QtyBreak2: t.Nullable(t.Integer({
       description: "Quantity threshold for the second price break (levels A & B)."
     })),
-    QtyBreak3: t.Nullable(t.Number({
+    QtyBreak3: t.Nullable(t.Integer({
       description: "Quantity threshold for the third price break (levels A & B)."
     })),
-    QtyBreak4: t.Nullable(t.Number({
+    QtyBreak4: t.Nullable(t.Integer({
       description: "Quantity threshold for the fourth price break (levels A & B)."
     })),
-    QtyBrkSellPriceA1: t.Nullable(t.Number({
+    QtyBrkSellPriceA1: t.Nullable(t.Integer({
       description: "Price level A when quantity >= QtyBreak1."
     })),
-    QtyBrkSellPriceA2: t.Nullable(t.Number({
+    QtyBrkSellPriceA2: t.Nullable(t.Integer({
       description: "Price level A when quantity >= QtyBreak2."
     })),
-    QtyBrkSellPriceA3: t.Nullable(t.Number({
+    QtyBrkSellPriceA3: t.Nullable(t.Integer({
       description: "Price level A when quantity >= QtyBreak3."
     })),
-    QtyBrkSellPriceA4: t.Nullable(t.Number({
+    QtyBrkSellPriceA4: t.Nullable(t.Integer({
       description: "Price level A when quantity >= QtyBreak4."
     })),
-    QtyBrkSellPriceB1: t.Nullable(t.Number({
+    QtyBrkSellPriceB1: t.Nullable(t.Integer({
       description: "Price level B when quantity >= QtyBreak1."
     })),
-    QtyBrkSellPriceB2: t.Nullable(t.Number({
+    QtyBrkSellPriceB2: t.Nullable(t.Integer({
       description: "Price level B when quantity >= QtyBreak2."
     })),
-    QtyBrkSellPriceB3: t.Nullable(t.Number({
+    QtyBrkSellPriceB3: t.Nullable(t.Integer({
       description: "Price level B when quantity >= QtyBreak3."
     })),
-    QtyBrkSellPriceB4: t.Nullable(t.Number({
+    QtyBrkSellPriceB4: t.Nullable(t.Integer({
       description: "Price level B when quantity >= QtyBreak4."
     })),
     Type: t.Nullable(t.String({
       description: "Item type/class: P=Product, R=Resource, S=Ship Method, T=Time, O=Other.",
       maxLength: 1
     })),
-    Count: t.Nullable(t.Number({
+    Count: t.Nullable(t.Integer({
       description: "Current count for items marked as 'We Count It' (simple count, not full inventory)."
     })),
-    OnOrder: t.Nullable(t.Number({
+    OnOrder: t.Nullable(t.Integer({
       description: "Total quantity currently on outstanding Purchase Orders."
     })),
-    StockTakeStartQty: t.Nullable(t.Number({
+    StockTakeStartQty: t.Nullable(t.Integer({
       description: "Total stock on hand recorded at the start of the current stocktake."
     })),
-    StockTakeValue: t.Nullable(t.Number({
+    StockTakeValue: t.Nullable(t.Integer({
       description: "Total value of stock recorded at the start of the current stocktake."
     })),
-    StockTakeNewQty: t.Nullable(t.Number({
+    StockTakeNewQty: t.Nullable(t.Integer({
       description: "The physically counted stock quantity entered during the current stocktake."
     })),
     BarCode: t.Nullable(t.String({
@@ -200,7 +200,7 @@ export const ProductOne = t.Object(
       description: "The currency code for the last Buy Price update.",
       maxLength: 3
     })),
-    BuyPrice: t.Nullable(t.Number({
+    BuyPrice: t.Nullable(t.Integer({
       description: "Last undiscounted buy price (in BuyPriceCurrency). Updated automatically unless disabled."
     })),
     Custom1: t.Nullable(t.String({
@@ -227,13 +227,13 @@ export const ProductOne = t.Object(
       description: "Tax code to override the default when selling this item.",
       maxLength: 5
     })),
-    LeadTimeDays: t.Nullable(t.Number({
+    LeadTimeDays: t.Nullable(t.Integer({
       description: "Normal lead time in days for delivery from the usual supplier."
     })),
-    Hash: t.Nullable(t.Number({
+    Hash: t.Nullable(t.Integer({
       description: "Internal hash value used for indexing/searching based on Buy/Sell/Stock status."
     })),
-    SellWeight: t.Nullable(t.Number({
+    SellWeight: t.Nullable(t.Integer({
       description: "Weight/volume of one selling unit (for shipping calculations)."
     })),
     Custom5: t.Nullable(t.String({

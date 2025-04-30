@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const LinkOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this link record."
     }),
     LastModifiedTime: t.String({

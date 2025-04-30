@@ -7,12 +7,10 @@
         "@elysiajs/cors": "^1.2.0",
         "@elysiajs/swagger": "^1.2.2",
         "@modelcontextprotocol/sdk": "^1.9.0",
-        "@smithery/sdk": "^1.0.2",
-        "@types/xml2js": "^0.4.14",
         "@zod/mini": "^4.0.0-beta.0",
         "axios": "^1.6.8",
         "commander": "^13.1.0",
-        "elysia": "latest",
+        "elysia": "^1.2.25",
         "fast-xml-parser": "^4.3.6",
         "jsdom": "^26.0.0",
         "translate": "^3.0.1",
@@ -21,6 +19,8 @@
       },
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
+        "@smithery/sdk": "^1.0.2",
+        "@types/xml2js": "^0.4.14",
         "bun-types": "latest",
       },
     },
@@ -72,7 +72,7 @@
 
     "@scalar/types": ["@scalar/types@0.0.12", "", { "dependencies": { "@scalar/openapi-types": "0.1.1", "@unhead/schema": "^1.9.5" } }, "sha512-XYZ36lSEx87i4gDqopQlGCOkdIITHHEvgkuJFrXFATQs9zHARop0PN0g4RZYWj+ZpCUclOcaOjbCt8JGe22mnQ=="],
 
-    "@sinclair/typebox": ["@sinclair/typebox@0.34.30", "", {}, "sha512-gFB3BiqjDxEoadW0zn+xyMVb7cLxPCoblVn2C/BKpI41WPYi2d6fwHAlynPNZ5O/Q4WEiujdnJzVtvG/Jc2CBQ=="],
+    "@sinclair/typebox": ["@sinclair/typebox@0.34.33", "", {}, "sha512-5HAV9exOMcXRUxo+9iYB5n09XxzCXnfy4VTNW4xnDv+FgjzAGY989C28BIdljKqmF+ZltUwujE3aossvcVtq6g=="],
 
     "@smithery/sdk": ["@smithery/sdk@1.0.2", "", { "dependencies": { "@anthropic-ai/sdk": "^0.32.1", "@icons-pack/react-simple-icons": "^10.2.0", "@modelcontextprotocol/sdk": "^1.5.0", "openai": "^4.0.0", "uuid": "^11.0.3" } }, "sha512-sq2aWgvNottb8h14AQDmJSdw+vPrfG+59juANgaYbt0jbpIaYN0xeeopF3jSI6Em3RYteGUtb1WS3ETYIansKA=="],
 

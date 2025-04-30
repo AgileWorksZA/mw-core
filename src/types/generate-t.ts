@@ -45,7 +45,7 @@ function generateElysiaTypeCode(schema: ANY, indent = 0): string {
     return "t.String()";
   }
   if (schema.type === "number" || schema.type === "integer") {
-    return "t.Number()";
+    return "t.Integer()";
   }
   if (schema.type === "boolean") {
     return "t.Boolean()";
@@ -95,11 +95,11 @@ export const ${name}One = ${typeCode};
 export const ${name}Many = t.Object({
   data: t.Array(${name}One),
   pagination: t.Object({
-    total: t.Number(),
-    limit: t.Number(),
-    offset: t.Number(),
-    next: t.Number(),
-    prev: t.Number(),
+    total: t.Integer(),
+    limit: t.Integer(),
+    offset: t.Integer(),
+    next: t.Integer(),
+    prev: t.Integer(),
   })
 });
 `;

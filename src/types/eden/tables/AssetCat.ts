@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const AssetCatOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for the asset category record."
     }),
     LastModifiedTime: t.Optional(t.Nullable(t.String({
@@ -47,7 +47,7 @@ export const AssetCatOne = t.Object(
       description: "An expense account for asset impairment (when assets are revalued down).",
       maxLength: 13
     }))),
-    Rate: t.Number({
+    Rate: t.Integer({
       description: "Default annual depreciation rate percentage for this category."
     }),
     RevalSurplus: t.Optional(t.Nullable(t.String({
@@ -62,7 +62,7 @@ export const AssetCatOne = t.Object(
       description: "Account for the private use portion of depreciation expense.",
       maxLength: 13
     }))),
-    UserNum: t.Optional(t.Nullable(t.Number({
+    UserNum: t.Optional(t.Nullable(t.Integer({
       description: "User defined number (scriptable)."
     }))),
     UserText: t.Optional(t.Nullable(t.String({
@@ -76,7 +76,7 @@ export const AssetCatOne = t.Object(
       description: "Scriptable tag storage, up to 255 characters.",
       maxLength: 255
     }))),
-    Flags: t.Nullable(t.Number({
+    Flags: t.Nullable(t.Integer({
       description: "Bitmapped flags field. Flag 0x01: Assets can have personal/private use. Flag 0x02: Calculate depreciation on a daily basis."
     })),
   },

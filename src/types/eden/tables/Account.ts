@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const AccountOne = t.Object(
   {
-    SequenceNumber: t.Nullable(t.Number({
+    SequenceNumber: t.Nullable(t.Integer({
       description: "Internal unique identifier for the account record."
     })),
     LastModifiedTime: t.Nullable(t.String({
@@ -36,13 +36,13 @@ export const AccountOne = t.Object(
       description: "The default Tax Code used for transactions involving this account. References the TaxRate table. (Mutable: conditionally)",
       maxLength: 6
     })),
-    Flags: t.Nullable(t.Number({
+    Flags: t.Nullable(t.Integer({
       description: "A bitmask field storing various boolean settings/attributes for the account, such as 'Use as Heading', 'Job Code Required', 'Discountable'."
     })),
     System: t.Nullable(t.String({
       description: "Indicates if the account is a system control account. Values: P: GP - GST/VAT/TAX Paid control account, R: GR - GST/VAT/TAX Received control account, K: BK - Bank Account, A: AR - Accounts Receivable control account, L: AP - Accounts Payable control account, F: PL - Profit & Loss account,  : Not a system account"
     })),
-    Created: t.Nullable(t.Date({
+    Created: t.Nullable(t.String({
       description: "Timestamp indicating when the account record was created."
     })),
     Category2: t.Nullable(t.String({
@@ -61,7 +61,7 @@ export const AccountOne = t.Object(
       description: "The account code used by the external accountant, for mapping purposes (e.g., in Accountant's Export). May be empty. (Mutable: freely, script-only)",
       maxLength: 10
     })),
-    Colour: t.Nullable(t.Number({
+    Colour: t.Nullable(t.Integer({
       description: "A user-assigned colour index (0-7) for visual identification in lists. Labels are user-defined in preferences. (Mutable: conditionally)",
       minimum: 0,
       maximum: 7
@@ -70,14 +70,14 @@ export const AccountOne = t.Object(
       description: "The currency code (e.g., 'USD', 'EUR') for foreign currency accounts. Empty for base currency accounts. Requires multi-currency feature (Gold).",
       maxLength: 4
     })),
-    SecurityLevel: t.Nullable(t.Number({
+    SecurityLevel: t.Nullable(t.Integer({
       description: "Security level assigned to the account (0-5 stars), restricting access based on user security levels (Gold/Datacentre only). Indexed."
     })),
     BankAccountNumber: t.Nullable(t.String({
       description: "The bank account number associated with this account (only applicable for Bank type accounts). Used for electronic payments. May be empty. (Mutable: freely, script-only)",
       maxLength: 24
     })),
-    BalanceLimit: t.Nullable(t.Nullable(t.Number({
+    BalanceLimit: t.Nullable(t.Nullable(t.Integer({
       description: "A user-defined balance limit for the account, potentially used for credit limits or overdraft warnings."
     }))),
     ManualChequeNumber: t.Nullable(t.String({
@@ -88,20 +88,20 @@ export const AccountOne = t.Object(
       description: "The next sequence number for cheques printed by MoneyWorks drawn on this bank account.",
       maxLength: 12
     })),
-    LastStatementImport: t.Nullable(t.Date({
+    LastStatementImport: t.Nullable(t.String({
       description: "Timestamp of the last imported bank statement for this account."
     })),
     Comments: t.Nullable(t.String({
       description: "User-entered notes or comments about the account. May be empty. (Mutable: freely, script-only)",
       maxLength: 1024
     })),
-    ManualChequeNumDigits: t.Nullable(t.Nullable(t.Number({
+    ManualChequeNumDigits: t.Nullable(t.Nullable(t.Integer({
       description: "Specifies the number of digits for padding the ManualChequeNumber (for bank accounts)."
     }))),
-    PrintedChequeNumDigits: t.Nullable(t.Nullable(t.Number({
+    PrintedChequeNumDigits: t.Nullable(t.Nullable(t.Integer({
       description: "Specifies the number of digits for padding the PrintedChequeNumber (for bank accounts)."
     }))),
-    UserNum: t.Nullable(t.Number({
+    UserNum: t.Nullable(t.Integer({
       description: "A user-defined number field for custom data storage, often used by scripts. (Mutable: freely, script-only)"
     })),
     UserText: t.Nullable(t.String({

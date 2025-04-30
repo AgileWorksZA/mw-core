@@ -2,25 +2,25 @@ import { t } from "elysia";
 
 export const MemoOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this memo record."
     }),
     LastModifiedTime: t.String({
       description: "Last modified timestamp. The date and time that this record was last changed."
     }),
-    NameSeq: t.Number({
+    NameSeq: t.Integer({
       description: "The sequence number of the parent Name record (Name.SequenceNumber) to which this memo belongs."
     }),
-    Order: t.Nullable(t.Number({
+    Order: t.Nullable(t.Integer({
       description: "The display order of this memo within the list for the parent Name record."
     })),
-    Date: t.Nullable(t.Date({
+    Date: t.Nullable(t.String({
       description: "The date the memo was created or the contact occurred. Should be specified in YYYY-MM-DD format."
     })),
-    RecallDate: t.Nullable(t.Date({
+    RecallDate: t.Nullable(t.String({
       description: "The date for a follow-up reminder. If set, a reminder appears in MoneyWorks on or after this date. Should be specified in YYYY-MM-DD format."
     })),
-    Flags: t.Nullable(t.Number({
+    Flags: t.Nullable(t.Integer({
       description: "Bitmapped flags field (usage not explicitly detailed in appendix)."
     })),
     Text: t.String({

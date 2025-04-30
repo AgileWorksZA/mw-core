@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const DepartmentOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this department record."
     }),
     LastModifiedTime: t.String({
@@ -28,10 +28,10 @@ export const DepartmentOne = t.Object(
       description: "Custom field 2 for user definition, up to 9 characters.",
       maxLength: 9
     })),
-    Flags: t.Nullable(t.Number({
+    Flags: t.Nullable(t.Integer({
       description: "Bitmapped flags field. Bit 0x8000: Heading Only (cannot be posted to directly)."
     })),
-    UserNum: t.Nullable(t.Number({
+    UserNum: t.Nullable(t.Integer({
       description: "User defined number (scriptable)."
     })),
     UserText: t.Nullable(t.String({

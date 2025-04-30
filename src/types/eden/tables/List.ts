@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const ListOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this list item record."
     }),
     LastModifiedTime: t.String({
@@ -20,7 +20,7 @@ export const ListOne = t.Object(
       description: "The description associated with the list item, displayed in choices lists. Max 255 chars (assumed).",
       maxLength: 255
     })),
-    UserNum: t.Nullable(t.Number({
+    UserNum: t.Nullable(t.Integer({
       description: "User-defined numeric field (scriptable)."
     })),
     UserText: t.Nullable(t.String({

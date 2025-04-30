@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const UserOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this user data record."
     }),
     LastModifiedTime: t.String({

@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const NameOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this Name record."
     }),
     LastModifiedTime: t.String({
@@ -80,28 +80,28 @@ export const NameOne = t.Object(
       description: "User-defined category 4.",
       maxLength: 15
     })),
-    CustomerType: t.Nullable(t.Number({
+    CustomerType: t.Nullable(t.Integer({
       description: "Customer type: 0=Not Customer, 1=Customer, 2=Debtor."
     })),
-    D90Plus: t.Nullable(t.Number({
+    D90Plus: t.Nullable(t.Integer({
       description: "Debtor balance aged 90+ days/cycles."
     })),
-    D60Plus: t.Nullable(t.Number({
+    D60Plus: t.Nullable(t.Integer({
       description: "Debtor balance aged 60-89 days/cycles."
     })),
-    D30Plus: t.Nullable(t.Number({
+    D30Plus: t.Nullable(t.Integer({
       description: "Debtor balance aged 30-59 days/cycles."
     })),
-    DCurrent: t.Nullable(t.Number({
+    DCurrent: t.Nullable(t.Integer({
       description: "Debtor balance aged less than 30 days/cycles (current)."
     })),
-    CCurrent: t.Nullable(t.Number({
+    CCurrent: t.Nullable(t.Integer({
       description: "Creditor current balance (total amount owing)."
     })),
-    DebtorTerms: t.Nullable(t.Number({
+    DebtorTerms: t.Nullable(t.Integer({
       description: "Debtor payment terms: positive N = N days, negative -N = Nth day of following month."
     })),
-    CreditorTerms: t.Nullable(t.Number({
+    CreditorTerms: t.Nullable(t.Integer({
       description: "Creditor payment terms: positive N = N days, negative -N = Nth day of following month."
     })),
     Bank: t.Nullable(t.String({
@@ -131,23 +131,23 @@ export const NameOne = t.Object(
       description: "Accounts Payable control GL account code for this creditor.",
       maxLength: 7
     })),
-    Kind: t.Nullable(t.Number({
+    Kind: t.Nullable(t.Integer({
       description: "Kind of Name: 0=Template, 1=Normal."
     })),
-    CreditLimit: t.Nullable(t.Number({
+    CreditLimit: t.Nullable(t.Integer({
       description: "Credit limit extended to this debtor (0 = unlimited)."
     })),
-    Discount: t.Nullable(t.Number({
+    Discount: t.Nullable(t.Integer({
       description: "Default discount percentage for this customer."
     })),
     Comment: t.Nullable(t.String({
       description: "General comment field.",
       maxLength: 1020
     })),
-    SupplierType: t.Nullable(t.Number({
+    SupplierType: t.Nullable(t.Integer({
       description: "Supplier type: 0=Not Supplier, 1=Supplier, 2=Creditor."
     })),
-    Colour: t.Nullable(t.Number({
+    Colour: t.Nullable(t.Integer({
       description: "Display color index (0-7).",
       min: 0,
       max: 7
@@ -160,7 +160,7 @@ export const NameOne = t.Object(
       description: "Override tax code applied to transactions for this Name.",
       maxLength: 5
     })),
-    SplitMode: t.Nullable(t.Number({
+    SplitMode: t.Nullable(t.Integer({
       description: "Auto-allocation split mode (not explicitly documented in Appendix A)."
     })),
     PostCode: t.Nullable(t.String({
@@ -179,10 +179,10 @@ export const NameOne = t.Object(
       description: "Default currency code for this Name (empty if base currency).",
       maxLength: 3
     })),
-    PaymentMethod: t.Nullable(t.Number({
+    PaymentMethod: t.Nullable(t.Integer({
       description: "Default payment method when paying this creditor. Values: 0=None, 1=Cash, 2=Cheque, 3=Electronic, 4=Credit Card, 5-7=User Defined."
     })),
-    DBalance: t.Nullable(t.Number({
+    DBalance: t.Nullable(t.Integer({
       description: "Total debtor balance (sum of DCurrent, D30Plus, D60Plus, D90Plus)."
     })),
     DDI: t.Nullable(t.String({
@@ -232,7 +232,7 @@ export const NameOne = t.Object(
     ProductPricing: t.Nullable(t.String({
       description: "Product pricing level (A-F) for this customer."
     })),
-    DateOfLastSale: t.Nullable(t.Date({
+    DateOfLastSale: t.Nullable(t.String({
       description: "Date of the last sales invoice or cash sale to this customer."
     })),
     SplitAcct1: t.Nullable(t.String({
@@ -243,32 +243,32 @@ export const NameOne = t.Object(
       description: "Second (remainder) account code for auto-allocation split.",
       maxLength: 13
     })),
-    SplitPercent: t.Nullable(t.Number({
+    SplitPercent: t.Nullable(t.Integer({
       description: "Percentage allocation to SplitAcct1 for auto-allocation."
     })),
-    SplitAmount: t.Nullable(t.Number({
+    SplitAmount: t.Nullable(t.Integer({
       description: "Amount allocation for auto-allocation."
     })),
-    UserNum: t.Nullable(t.Number({
+    UserNum: t.Nullable(t.Integer({
       description: "User-defined numeric field (scriptable)."
     })),
     UserText: t.Nullable(t.String({
       description: "User-defined text field (scriptable).",
       maxLength: 255
     })),
-    CustPromptPaymentTerms: t.Nullable(t.Number({
+    CustPromptPaymentTerms: t.Nullable(t.Integer({
       description: "Customer prompt payment terms: positive N = N days, negative -N = Nth day of following month."
     })),
-    CustPromptPaymentDiscount: t.Nullable(t.Number({
+    CustPromptPaymentDiscount: t.Nullable(t.Integer({
       description: "Customer prompt payment discount percentage."
     })),
-    SuppPromptPaymentTerms: t.Nullable(t.Number({
+    SuppPromptPaymentTerms: t.Nullable(t.Integer({
       description: "Supplier prompt payment terms: positive N = N days, negative -N = Nth day of following month."
     })),
-    SuppPromptPaymentDiscount: t.Nullable(t.Number({
+    SuppPromptPaymentDiscount: t.Nullable(t.Integer({
       description: "Supplier prompt payment discount percentage offered."
     })),
-    LastPaymentMethod: t.Nullable(t.Number({
+    LastPaymentMethod: t.Nullable(t.Integer({
       description: "Payment method used in the last transaction with this Name. Values: 0=None, 1=Cash, 2=Cheque, 3=Electronic, 4=Credit Card, 5-7=User Defined."
     })),
     CreditCardNum: t.Nullable(t.String({
@@ -319,7 +319,7 @@ export const NameOne = t.Object(
       description: "Country for delivery address (from Delivery4).",
       maxLength: 59
     })),
-    ReceiptMethod: t.Nullable(t.Number({
+    ReceiptMethod: t.Nullable(t.Integer({
       description: "Preferred payment method used by this customer. Values: 0=None, 1=Cash, 2=Cheque, 3=Electronic, 4=Credit Card, 5-7=User Defined."
     })),
     ABUID: t.Nullable(t.String({
@@ -329,7 +329,7 @@ export const NameOne = t.Object(
       description: "Bank particulars/reference for electronic payments.",
       maxLength: 32
     })),
-    Flags: t.Nullable(t.Number({
+    Flags: t.Nullable(t.Integer({
       description: "Bitmapped flags field. See documentation for Name Flags."
     })),
     Salutation: t.Nullable(t.String({
@@ -348,10 +348,10 @@ export const NameOne = t.Object(
       description: "Memo/notes for secondary contact.",
       maxLength: 255
     })),
-    Role: t.Nullable(t.Number({
+    Role: t.Nullable(t.Integer({
       description: "Bitmapped field representing roles assigned to primary contact."
     })),
-    Role2: t.Nullable(t.Number({
+    Role2: t.Nullable(t.Integer({
       description: "Bitmapped field representing roles assigned to secondary contact."
     })),
     Custom5: t.Nullable(t.String({

@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const InventoryOne = t.Object(
   {
-    SequenceNumber: t.Number({
+    SequenceNumber: t.Integer({
       description: "Unsigned long sequence number (indexed). Unique internal identifier for this specific inventory record."
     }),
     LastModifiedTime: t.String({
@@ -16,10 +16,10 @@ export const InventoryOne = t.Object(
       description: "The stock location code where this item/batch is stored. Blank means default location. Max 15 chars.",
       maxLength: 15
     }))),
-    ProductSeq: t.Number({
+    ProductSeq: t.Integer({
       description: "The sequence number of the parent Product record (Product.SequenceNumber) this inventory belongs to."
     }),
-    Qty: t.Number({
+    Qty: t.Integer({
       description: "The quantity (stock on hand) for this specific serial/batch at this specific location."
     }),
     Expiry: t.Optional(t.Nullable(t.String({
