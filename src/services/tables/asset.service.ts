@@ -1,4 +1,3 @@
-import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
 import { type Asset, AssetFields } from "../../types/interface/tables/asset";
 import schema from "../../types/optimized/table/asset-schema";
 import { TableService } from "./base/table.service";
