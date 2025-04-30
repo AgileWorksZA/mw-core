@@ -1,4 +1,3 @@
-import { loadMoneyWorksConfig } from "../../config/moneyworks.config";
 import { AssetService } from "../../services/tables/asset.service";
 import { assetObject } from "../../types/constants.eden";
 import type { Asset } from "../../types/interface/tables/asset";
@@ -7,7 +6,7 @@ import { moneyworksRoute } from "./base/moneyworks.route";
 export const assetRoutes = moneyworksRoute<Asset, "Asset", typeof assetObject>(
   "Asset",
   assetObject,
-  new AssetService(loadMoneyWorksConfig()),
+  new AssetService(),
   {
     summary: "Assets",
     description:

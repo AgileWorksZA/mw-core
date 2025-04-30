@@ -1,7 +1,11 @@
-import {MoneyWorksApiService} from "../../moneyworks-api.service";
-import type {MoneyWorksConfig, MoneyWorksQueryParams} from "../../../types/moneyworks";
-import type {ANY} from "../../../types/hack";
-import {enforceType} from "../../../types/helpers";
+import { loadMoneyWorksConfig } from "../../../config/moneyworks.config";
+import type { ANY } from "../../../types/hack";
+import { enforceType } from "../../../types/helpers";
+import type {
+  MoneyWorksConfig,
+  MoneyWorksQueryParams,
+} from "../../../types/moneyworks";
+import { MoneyWorksApiService } from "../../moneyworks-api.service";
 
 /**
  * Service for interacting with MoneyWorks Account table
@@ -17,13 +21,8 @@ export class TableService<
   private readonly fields: FIELD[];
   private readonly table: string;
 
-  constructor(
-    config: MoneyWorksConfig,
-    table: string,
-    schema: S,
-    fields: FIELD[],
-  ) {
-    this.api = new MoneyWorksApiService(config);
+  constructor(table: string, schema: S, fields: FIELD[]) {
+    this.api = new MoneyWorksApiService(loadMoneyWorksConfig());
     this.schema = schema;
     this.fields = fields;
     this.table = table;
