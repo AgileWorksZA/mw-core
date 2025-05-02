@@ -50,14 +50,14 @@ export const ContactsOne = t.Object(
       description: "Represents the roles assigned to the contact (e.g., Payables, CEO). Stored as a bitmask. Corresponds to Name.Role and Name.Role2. Bitmask field where each bit corresponds to one of the 16 possible roles defined in Preferences."
     })),
     UserNum: t.Nullable(t.Integer({
-      description: "A user-defined number field for custom data storage, often used by scripts. (Mutable: freely, script-only)"
+      description: "A user-defined number field for custom data storage, often used by scripts."
     })),
     UserText: t.Nullable(t.String({
-      description: "A user-defined text field for custom data storage, often used by scripts. (Mutable: freely, script-only)",
+      description: "A user-defined text field for custom data storage, often used by scripts.",
       maxLength: 256
     })),
     TaggedText: t.Nullable(t.String({
-      description: "Stores key-value pairs for custom data, primarily accessed via scripting functions GetTaggedValue/SetTaggedValue. (Mutable: freely, script-only)",
+      description: "Stores key-value pairs for custom data, primarily accessed via scripting functions GetTaggedValue/SetTaggedValue.",
       maxLength: 256
     })),
   },

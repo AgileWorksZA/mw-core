@@ -25,7 +25,7 @@ export const AccountOne = t.Object(
       maxLength: 8
     })),
     Description: t.Nullable(t.String({
-      description: "The descriptive name of the account, often displayed in reports. (Mutable: freely, script-only)",
+      description: "The descriptive name of the account, often displayed in reports.",
       maxLength: 64
     })),
     PandL: t.Nullable(t.String({
@@ -46,19 +46,19 @@ export const AccountOne = t.Object(
       description: "Timestamp indicating when the account record was created."
     })),
     Category2: t.Nullable(t.String({
-      description: "A secondary user-defined category code for reporting and analysis. May be empty. (Mutable: freely, script-only)",
+      description: "A secondary user-defined category code for reporting and analysis. May be empty.",
       maxLength: 16
     })),
     Category3: t.Nullable(t.String({
-      description: "A tertiary user-defined category code for reporting and analysis. May be empty. (Mutable: freely, script-only)",
+      description: "A tertiary user-defined category code for reporting and analysis. May be empty.",
       maxLength: 16
     })),
     Category4: t.Nullable(t.String({
-      description: "A quaternary user-defined category code for reporting and analysis. May be empty. (Mutable: freely, script-only)",
+      description: "A quaternary user-defined category code for reporting and analysis. May be empty.",
       maxLength: 16
     })),
     AccountantCode: t.Nullable(t.String({
-      description: "The account code used by the external accountant, for mapping purposes (e.g., in Accountant's Export). May be empty. (Mutable: freely, script-only)",
+      description: "The account code used by the external accountant, for mapping purposes (e.g., in Accountant's Export). May be empty.",
       maxLength: 10
     })),
     Colour: t.Nullable(t.Integer({
@@ -74,7 +74,7 @@ export const AccountOne = t.Object(
       description: "Security level assigned to the account (0-5 stars), restricting access based on user security levels (Gold/Datacentre only). Indexed."
     })),
     BankAccountNumber: t.Nullable(t.String({
-      description: "The bank account number associated with this account (only applicable for Bank type accounts). Used for electronic payments. May be empty. (Mutable: freely, script-only)",
+      description: "The bank account number associated with this account (only applicable for Bank type accounts). Used for electronic payments. May be empty.",
       maxLength: 24
     })),
     BalanceLimit: t.Nullable(t.Nullable(t.Integer({
@@ -92,7 +92,7 @@ export const AccountOne = t.Object(
       description: "Timestamp of the last imported bank statement for this account."
     })),
     Comments: t.Nullable(t.String({
-      description: "User-entered notes or comments about the account. May be empty. (Mutable: freely, script-only)",
+      description: "User-entered notes or comments about the account. May be empty.",
       maxLength: 1024
     })),
     ManualChequeNumDigits: t.Nullable(t.Nullable(t.Integer({
@@ -102,26 +102,26 @@ export const AccountOne = t.Object(
       description: "Specifies the number of digits for padding the PrintedChequeNumber (for bank accounts)."
     }))),
     UserNum: t.Nullable(t.Integer({
-      description: "A user-defined number field for custom data storage, often used by scripts. (Mutable: freely, script-only)"
+      description: "A user-defined number field for custom data storage, often used by scripts."
     })),
     UserText: t.Nullable(t.String({
-      description: "A user-defined text field for custom data storage, often used by scripts. (Mutable: freely, script-only)",
+      description: "A user-defined text field for custom data storage, often used by scripts.",
       maxLength: 256
     })),
     TaggedText: t.Nullable(t.String({
-      description: "Stores key-value pairs for custom data, primarily accessed via scripting functions GetTaggedValue/SetTaggedValue. (Mutable: freely, script-only)",
+      description: "Stores key-value pairs for custom data, primarily accessed via scripting functions GetTaggedValue/SetTaggedValue.",
       maxLength: 256
     })),
     FeedID: t.Nullable(t.String({
-      description: "Identifier related to bank feeds service for this bank account. (Mutable: freely, script-only)",
+      description: "Identifier related to bank feeds service for this bank account.",
       maxLength: 32
     })),
     Cashflow: t.Nullable(t.String({
-      description: "Assigns the account to a category (Operating, Investing, Financing) for the Statement of Cash Flows report. Codes typically start 'OP', 'INV', 'FIN'. (Mutable: freely, script-only)",
+      description: "Assigns the account to a category (Operating, Investing, Financing) for the Statement of Cash Flows report. Codes typically start 'OP', 'INV', 'FIN'.",
       maxLength: 8
     })),
     Cashforecast: t.Nullable(t.String({
-      description: "Defines the cash spread pattern (e.g., '10/60/30') for the Cash Forecast report, overriding default income/expense spreads. (Mutable: freely, script-only)",
+      description: "Defines the cash spread pattern (e.g., '10/60/30') for the Cash Forecast report, overriding default income/expense spreads.",
       maxLength: 32
     })),
     EBITDA: t.Nullable(t.String({
