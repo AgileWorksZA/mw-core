@@ -17,23 +17,23 @@ db.exec("PRAGMA foreign_keys = ON");
 console.log("🔧 Running database migrations...");
 
 try {
-  // Execute schema
-  db.exec(SCHEMA);
+	// Execute schema
+	db.exec(SCHEMA);
 
-  // Verify tables were created
-  const tables = db
-    .prepare(`
+	// Verify tables were created
+	const tables = db
+		.prepare(`
     SELECT name FROM sqlite_master 
     WHERE type='table' AND name NOT LIKE 'sqlite_%'
     ORDER BY name
   `)
-    .all() as { name: string }[];
+		.all() as { name: string }[];
 
-  console.log("✅ Database migration completed successfully!");
-  console.log("📊 Created tables:", tables.map((t) => t.name).join(", "));
+	console.log("✅ Database migration completed successfully!");
+	console.log("📊 Created tables:", tables.map((t) => t.name).join(", "));
 } catch (error) {
-  console.error("❌ Migration failed:", error);
-  process.exit(1);
+	console.error("❌ Migration failed:", error);
+	process.exit(1);
 } finally {
-  db.close();
+	db.close();
 }

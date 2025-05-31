@@ -12,8 +12,9 @@
     "db:reset": "rm -f data/tickets.db && bun run db:migrate"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.6.0",
-    "@moneyworks/api": "workspace:*"
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@moneyworks/api": "workspace:*",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.11",

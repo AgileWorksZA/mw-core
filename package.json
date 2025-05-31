@@ -1,10 +1,10 @@
 {
   "name": "@moneyworks/monorepo",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "bun-types": "latest"
+  },
   "private": true,
-  "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "dev": "bun run dev:api",
     "dev:api": "bun --cwd packages/api dev",
@@ -16,8 +16,8 @@
     "test": "bun test",
     "cli": "bun --cwd packages/api cli"
   },
-  "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "bun-types": "latest"
-  }
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ]
 }
