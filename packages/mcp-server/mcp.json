@@ -1,0 +1,33 @@
+{
+  "name": "moneyworks-assistant",
+  "version": "1.0.0",
+  "description": "MCP server for MoneyWorks accounting operations with error tracking",
+  "main": "dist/index.js",
+  "commands": {
+    "start": {
+      "command": "bun",
+      "args": ["run", "src/index.ts"],
+      "env": {
+        "TICKETS_DB_PATH": "${TICKETS_DB_PATH:-./data/tickets.db}",
+        "MW_CONFIG_PATH": "${MW_CONFIG_PATH:-../mw-config.json}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "searchAccounts",
+      "description": "Search for accounts in MoneyWorks"
+    },
+    {
+      "name": "getAccount",
+      "description": "Get a specific account by code"
+    },
+    {
+      "name": "listAccountFields",
+      "description": "List all available fields for accounts"
+    }
+  ],
+  "capabilities": {
+    "tools": true
+  }
+}

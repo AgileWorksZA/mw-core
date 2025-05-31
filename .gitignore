@@ -17,7 +17,7 @@
 /dist
 
 # MoneyWorks configuration
-mw-config.json
+packages/api/mw-config.json
 
 # misc
 .DS_Store
@@ -44,7 +44,7 @@ yarn-error.log*
 **/*.log
 package-lock.json
 **/*.bun
-/alignment-report.md
+/packages/api/alignment-report.md
 /cache/Name-labels-af.json
 /cache/Name-labels-en.json
 /cache/Name-labels-fr.json

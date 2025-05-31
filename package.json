@@ -1,36 +1,23 @@
 {
-  "name": "mw-core",
-  "version": "1.0.50",
+  "name": "@moneyworks/monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts",
-    "build": "bun build ./src/index.ts --outdir ./dist --target bun",
-    "build2": "bun build \\\n\t--compile \\\n\t--minify-whitespace \\\n\t--minify-syntax \\\n\t--target bun \\\n\t--outfile server \\\n\t./src/index.ts",
-    "start": "bun ./dist/index.js",
-    "cli": "bun src/cli/mw-cli.ts"
-  },
-  "dependencies": {
-    "@elysiajs/cors": "^1.2.0",
-    "@elysiajs/swagger": "^1.2.2",
-    "@modelcontextprotocol/sdk": "^1.9.0",
-    "@zod/mini": "^4.0.0-beta.0",
-    "axios": "^1.6.8",
-    "commander": "^13.1.0",
-    "elysia": "^1.2.25",
-    "fast-xml-parser": "^4.3.6",
-    "jsdom": "^26.0.0",
-    "translate": "^3.0.1",
-    "xml2js": "^0.6.2",
-    "zod": "^4.0.0-beta.20250415T232143"
+    "dev": "bun run dev:api",
+    "dev:api": "bun --cwd packages/api dev",
+    "dev:mcp": "bun --cwd packages/mcp-server dev",
+    "build": "bun run build:api && bun run build:mcp",
+    "build:api": "bun --cwd packages/api build",
+    "build:mcp": "bun --cwd packages/mcp-server build",
+    "clean": "rm -rf node_modules packages/*/node_modules",
+    "test": "bun test",
+    "cli": "bun --cwd packages/api cli"
   },
   "devDependencies": {
-    "@smithery/sdk": "^1.0.2",
-    "@types/xml2js": "^0.4.14",
     "@biomejs/biome": "^1.9.4",
     "bun-types": "latest"
-  },
-  "module": "src/index.js",
-  "bin": {
-    "mw-cli": "./src/cli/mw-cli.ts"
   }
 }

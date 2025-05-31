@@ -1,6 +1,13 @@
-# MoneyWorks Core API
+# MoneyWorks Core Monorepo
 
-This project provides a REST API for interacting with MoneyWorks Datacentre using TypeScript and Elysia.js running on Bun.
+A modern API and MCP server for MoneyWorks accounting software, built with Bun, Elysia, and TypeScript.
+
+## Structure
+
+This is a Bun workspace monorepo containing:
+
+- **`packages/api`** - REST API server for MoneyWorks (Elysia)
+- **`packages/mcp-server`** - Model Context Protocol server for AI assistants
 
 ## Features
 
@@ -65,7 +72,14 @@ This project provides a REST API for interacting with MoneyWorks Datacentre usin
 
 To start the development server:
 ```bash
-bun run dev
+# Run the API server
+bun run dev:api
+
+# Run the MCP server
+bun run dev:mcp
+
+# Build all packages
+bun run build
 ```
 
 The API will be available at http://localhost:3131, with Swagger documentation at http://localhost:3131/swagger.
@@ -147,7 +161,42 @@ The project includes several command-line tools for working with MoneyWorks data
 - `list-tables` - List all tables in the MoneyWorks database
 - `list-fields` - List all fields in a specific MoneyWorks table (with optional type information)
 
-For detailed documentation on using the CLI tools, see [mw-cli.md](docs/mw-cli.md).
+For detailed documentation on using the CLI tools, see [mw-cli.md](packages/api/docs/mw-cli.md).
+
+## Packages
+
+### API Server (`packages/api`)
+
+The main REST API that interfaces with MoneyWorks:
+- Built with Elysia and Bun
+- Full TypeScript support with Zod validation
+- Swagger documentation
+- Service layer for all MoneyWorks tables
+
+### MCP Server (`packages/mcp-server`)
+
+Model Context Protocol server for AI assistants:
+- Direct integration with API services
+- Automatic error tracking with SQLite
+- Tools for MoneyWorks operations
+
+## Workspace Development
+
+This monorepo uses Bun workspaces, allowing packages to depend on each other:
+
+```json
+// packages/mcp-server/package.json
+{
+  "dependencies": {
+    "@moneyworks/api": "workspace:*"
+  }
+}
+```
+
+This enables clean imports:
+```typescript
+import { AccountService } from "@moneyworks/api/src/services/tables/account.service";
+```
 
 ## License
 
