@@ -45,3 +45,8 @@ yarn-error.log*
 package-lock.json
 **/*.bun
 /alignment-report.md
+/cache/Name-labels-af.json
+/cache/Name-labels-en.json
+/cache/Name-labels-fr.json
+/cache/Transaction-labels-en.json
+/cache/Transaction-labels-fr.json
