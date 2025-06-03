@@ -85,10 +85,6 @@ import {
 	getValidationRulesTool,
 	initializeValidationRulesTools,
 } from "./tools/validation-rules";
-import {
-	logTicketTool,
-	initializeLogTicketTool,
-} from "./tools/log-ticket";
 
 // Configuration
 const TICKETS_DB_PATH = process.env.TICKETS_DB_PATH || "./data/tickets.db";
@@ -105,7 +101,6 @@ initializeEnumValuesTools(ticketService);
 initializeDateFormatsTools(ticketService);
 initializeCurrencyInfoTools(ticketService);
 initializePermissionInfoTools(ticketService);
-initializeLogTicketTool(ticketService);
 
 // Session tracking
 const sessionId = Date.now().toString();
@@ -118,13 +113,10 @@ const server = new McpServer({
 
 // Helper function to register a consolidated tool
 function registerConsolidatedTool(toolName: string, tool: any) {
-	// Extract the shape from the Zod object schema
-	const schemaShape = tool.inputSchema.shape || tool.inputSchema._def?.shape || tool.inputSchema;
-	
 	server.tool(
 		toolName,
 		tool.description,
-		schemaShape,
+		tool.inputSchema,
 		async (args: any, extra: any) => {
 			try {
 				const result = await tool.execute(args);
@@ -189,9 +181,6 @@ registerConsolidatedTool('listSupportedLanguages', listSupportedLanguagesTool);
 registerConsolidatedTool('generateAllLabels', generateAllLabelsTool);
 registerConsolidatedTool('getCompanyInformation', getCompanyInformationTool);
 registerConsolidatedTool('listCompanyInformationFields', listCompanyInformationFieldsTool);
-
-// Register the ticket logging tool
-registerConsolidatedTool('logTicket', logTicketTool);
 
 // Helper function to handle tool errors and log to ticketing system
 async function handleToolError(

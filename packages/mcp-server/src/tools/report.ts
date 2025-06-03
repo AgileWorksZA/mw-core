@@ -1,0 +1,187 @@
+import { ReportService } from "@moneyworks/api/src/services/system/report.service";
+import type { MoneyWorksConfig } from "@moneyworks/api/src/types/moneyworks";
+import { z } from "zod";
+
+// Initialize with default config - this should be replaced with actual config
+const defaultConfig: MoneyWorksConfig = {
+	host: process.env.MONEYWORKS_HOST || "localhost",
+	port: Number(process.env.MONEYWORKS_PORT) || 6700,
+	dataFile: process.env.MONEYWORKS_DATAFILE || "",
+	username: process.env.MONEYWORKS_USERNAME || "",
+	password: process.env.MONEYWORKS_PASSWORD || "",
+};
+
+const reportService = new ReportService(defaultConfig);
+
+// Generate report
+const generateReportSchema = z.object({
+	reportName: z
+		.string()
+		.describe(
+			"The name of the MoneyWorks report to generate (e.g., 'Profit & Loss', 'Balance Sheet', 'Trial Balance', 'Customer Statement')",
+		),
+});
+
+export const generateReportTool = {
+	description:
+		"Generate a MoneyWorks report in HTML format. Returns the complete HTML report content",
+	inputSchema: generateReportSchema,
+
+	async execute(args: z.infer<typeof generateReportSchema>) {
+		try {
+			const htmlContent = await reportService.generateReport(args.reportName);
+
+			// Extract some metadata from the HTML if possible
+			const titleMatch = htmlContent.match(/<title>(.*?)<\/title>/i);
+			const title = titleMatch ? titleMatch[1] : args.reportName;
+
+			// Check if report has content
+			const hasContent =
+				htmlContent.length > 100 && htmlContent.includes("<body");
+
+			return {
+				reportName: args.reportName,
+				title,
+				format: "html",
+				contentLength: htmlContent.length,
+				hasContent,
+				htmlContent,
+				note: "The report is returned in HTML format. You can save this to a file or display it in a web browser.",
+			};
+		} catch (error) {
+			// Handle specific report generation errors
+			const errorMessage =
+				error instanceof Error ? error.message : String(error);
+
+			// Check for common report errors
+			if (errorMessage.includes("404") || errorMessage.includes("not found")) {
+				throw new Error(
+					`Report '${args.reportName}' not found. Please verify the report name is correct and exists in MoneyWorks.`,
+				);
+			}
+
+			if (errorMessage.includes("401") || errorMessage.includes("unauthor")) {
+				throw new Error(
+					"Authorization failed. Please check your MoneyWorks credentials and permissions to generate reports.",
+				);
+			}
+
+			if (errorMessage.includes("timeout")) {
+				throw new Error(
+					`Report generation timed out. The report '${args.reportName}' may be too large or complex.`,
+				);
+			}
+
+			// Re-throw with context
+			throw new Error(`Report generation failed: ${errorMessage}`);
+		}
+	},
+};
+
+// List common reports
+const listCommonReportsSchema = z.object({});
+
+export const listCommonReportsTool = {
+	description:
+		"List common MoneyWorks reports that can be generated using the generateReport tool",
+	inputSchema: listCommonReportsSchema,
+
+	async execute() {
+		return {
+			categories: {
+				financial: {
+					description: "Core financial reports",
+					reports: [
+						"Profit & Loss - Income statement for a period",
+						"Balance Sheet - Financial position at a point in time",
+						"Trial Balance - List of all account balances",
+						"Cash Flow Statement - Cash movements analysis",
+						"General Ledger - Detailed transaction listing by account",
+					],
+				},
+				sales: {
+					description: "Sales and customer reports",
+					reports: [
+						"Customer Statement - Statement for a specific customer",
+						"Aged Receivables - Outstanding customer invoices by age",
+						"Sales Analysis - Sales performance metrics",
+						"Customer List - List of all customers with details",
+						"Invoice Register - List of all sales invoices",
+					],
+				},
+				purchasing: {
+					description: "Purchasing and supplier reports",
+					reports: [
+						"Supplier Statement - Statement for a specific supplier",
+						"Aged Payables - Outstanding supplier invoices by age",
+						"Purchase Analysis - Purchasing metrics",
+						"Supplier List - List of all suppliers with details",
+						"Bill Register - List of all purchase invoices",
+					],
+				},
+				inventory: {
+					description: "Inventory and stock reports",
+					reports: [
+						"Stock on Hand - Current inventory levels",
+						"Stock Valuation - Inventory value report",
+						"Stock Movement - Stock ins and outs",
+						"Product List - List of all products",
+						"Reorder Report - Items below reorder level",
+					],
+				},
+				tax: {
+					description: "Tax and compliance reports",
+					reports: [
+						"GST Report - Tax summary for period",
+						"Tax Audit Trail - Detailed tax transactions",
+						"Tax Exceptions - Transactions with tax issues",
+						"BAS Summary - Business Activity Statement (AU)",
+					],
+				},
+				job: {
+					description: "Job and project reports",
+					reports: [
+						"Job Profitability - Profit analysis by job",
+						"Job List - List of all jobs with status",
+						"Job Sheet Summary - Time and materials by job",
+						"WIP Report - Work in progress summary",
+					],
+				},
+			},
+			usage: "Pass the exact report name to the generateReport tool",
+			customReports:
+				"Custom reports created in MoneyWorks can also be generated by name",
+			note: "Report names are case-sensitive. Use the exact name as it appears in MoneyWorks.",
+		};
+	},
+};
+
+// Get report parameters info
+const getReportParametersSchema = z.object({});
+
+export const getReportParametersTool = {
+	description:
+		"Get information about the default parameters used when generating reports",
+	inputSchema: getReportParametersSchema,
+
+	async execute() {
+		return {
+			defaultParameters: {
+				format: "html",
+				leading: 8,
+				font: "Verdana",
+				size: 10,
+			},
+			explanation: {
+				format: "Output format - currently only HTML is supported",
+				leading: "Line spacing in points",
+				font: "Font family used in the report",
+				size: "Font size in points",
+			},
+			customization:
+				"These parameters are currently fixed. Future versions may allow customization.",
+			supportedFormats: ["html"],
+			note: "Reports are generated with MoneyWorks' default settings for the specified report.",
+		};
+	},
+};

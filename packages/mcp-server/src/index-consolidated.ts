@@ -4,11 +4,38 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { TicketService } from "./services/ticket-service";
 
-// Core consolidated table tools (manually verified)
+// Consolidated table tools
 import { accountTool } from "./tools/account";
 import { transactionTool } from "./tools/transaction";
 import { nameTool } from "./tools/name";
 import { buildTool } from "./tools/build";
+import { productTool } from "./tools/product";
+import { jobTool } from "./tools/job";
+import { detailTool } from "./tools/detail";
+import { taxrateTool } from "./tools/tax-rate";
+import { departmentTool } from "./tools/department";
+import { paymentTool } from "./tools/payment";
+import { bankrecTool } from "./tools/bank-rec";
+import { ledgerTool } from "./tools/ledger";
+import { jobsheetTool } from "./tools/job-sheet";
+import { contactTool } from "./tools/contact";
+import { inventoryTool } from "./tools/inventory";
+import { generalTool } from "./tools/general";
+import { loginTool } from "./tools/login";
+import { messageTool } from "./tools/message";
+import { listTool } from "./tools/list";
+import { userTool } from "./tools/user";
+import { filterTool } from "./tools/filter";
+import { memoTool } from "./tools/memo";
+import { user2Tool } from "./tools/user2";
+import { stickieTool } from "./tools/stickie";
+import { offledgerTool } from "./tools/off-ledger";
+import { autosplitTool } from "./tools/auto-split";
+import { linkTool } from "./tools/link";
+import { logTool } from "./tools/log";
+import { assetTool } from "./tools/asset";
+import { assetcatTool } from "./tools/asset-cat";
+import { assetlogTool } from "./tools/asset-log";
 
 // Essential system tools
 import {
@@ -85,10 +112,6 @@ import {
 	getValidationRulesTool,
 	initializeValidationRulesTools,
 } from "./tools/validation-rules";
-import {
-	logTicketTool,
-	initializeLogTicketTool,
-} from "./tools/log-ticket";
 
 // Configuration
 const TICKETS_DB_PATH = process.env.TICKETS_DB_PATH || "./data/tickets.db";
@@ -105,7 +128,6 @@ initializeEnumValuesTools(ticketService);
 initializeDateFormatsTools(ticketService);
 initializeCurrencyInfoTools(ticketService);
 initializePermissionInfoTools(ticketService);
-initializeLogTicketTool(ticketService);
 
 // Session tracking
 const sessionId = Date.now().toString();
@@ -118,13 +140,10 @@ const server = new McpServer({
 
 // Helper function to register a consolidated tool
 function registerConsolidatedTool(toolName: string, tool: any) {
-	// Extract the shape from the Zod object schema
-	const schemaShape = tool.inputSchema.shape || tool.inputSchema._def?.shape || tool.inputSchema;
-	
 	server.tool(
 		toolName,
 		tool.description,
-		schemaShape,
+		tool.inputSchema,
 		async (args: any, extra: any) => {
 			try {
 				const result = await tool.execute(args);
@@ -140,13 +159,40 @@ function registerConsolidatedTool(toolName: string, tool: any) {
 	);
 }
 
-// Register core consolidated table tools (4 tools)
+// Register consolidated table tools (31 tools)
 registerConsolidatedTool('accounts', accountTool);
 registerConsolidatedTool('transactions', transactionTool);
 registerConsolidatedTool('names', nameTool);
 registerConsolidatedTool('builds', buildTool);
+registerConsolidatedTool('products', productTool);
+registerConsolidatedTool('jobs', jobTool);
+registerConsolidatedTool('details', detailTool);
+registerConsolidatedTool('taxRates', taxrateTool);
+registerConsolidatedTool('departments', departmentTool);
+registerConsolidatedTool('payments', paymentTool);
+registerConsolidatedTool('bankRecs', bankrecTool);
+registerConsolidatedTool('ledger', ledgerTool);
+registerConsolidatedTool('jobSheets', jobsheetTool);
+registerConsolidatedTool('contacts', contactTool);
+registerConsolidatedTool('inventory', inventoryTool);
+registerConsolidatedTool('general', generalTool);
+registerConsolidatedTool('logins', loginTool);
+registerConsolidatedTool('messages', messageTool);
+registerConsolidatedTool('lists', listTool);
+registerConsolidatedTool('users', userTool);
+registerConsolidatedTool('filters', filterTool);
+registerConsolidatedTool('memos', memoTool);
+registerConsolidatedTool('user2', user2Tool);
+registerConsolidatedTool('stickies', stickieTool);
+registerConsolidatedTool('offLedger', offledgerTool);
+registerConsolidatedTool('autoSplits', autosplitTool);
+registerConsolidatedTool('links', linkTool);
+registerConsolidatedTool('logs', logTool);
+registerConsolidatedTool('assets', assetTool);
+registerConsolidatedTool('assetCategories', assetcatTool);
+registerConsolidatedTool('assetLogs', assetlogTool);
 
-// Register essential system tools (40 tools)
+// Register essential system tools (52 tools)
 registerConsolidatedTool('listTables', listTablesTool);
 registerConsolidatedTool('describeTableSchema', describeTableSchemaTool);
 registerConsolidatedTool('getFieldMetadata', getFieldMetadataTool);
@@ -189,9 +235,6 @@ registerConsolidatedTool('listSupportedLanguages', listSupportedLanguagesTool);
 registerConsolidatedTool('generateAllLabels', generateAllLabelsTool);
 registerConsolidatedTool('getCompanyInformation', getCompanyInformationTool);
 registerConsolidatedTool('listCompanyInformationFields', listCompanyInformationFieldsTool);
-
-// Register the ticket logging tool
-registerConsolidatedTool('logTicket', logTicketTool);
 
 // Helper function to handle tool errors and log to ticketing system
 async function handleToolError(

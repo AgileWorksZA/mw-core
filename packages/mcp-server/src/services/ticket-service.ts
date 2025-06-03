@@ -1,7 +1,7 @@
 import { Database } from "bun:sqlite";
-import { type Issue, IssueSchema } from "../types";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
+import { type Issue, IssueSchema } from "../types";
 
 export class TicketService {
 	private db: Database;
@@ -13,15 +13,15 @@ export class TicketService {
 		} catch (error) {
 			// Directory might already exist, that's fine
 		}
-		
+
 		this.db = new Database(dbPath);
 		this.db.exec("PRAGMA journal_mode = WAL");
 		this.db.exec("PRAGMA foreign_keys = ON");
-		
+
 		// Run migrations to ensure tables exist
 		this.runMigrations();
 	}
-	
+
 	private runMigrations(): void {
 		// Create tables if they don't exist
 		this.db.exec(`

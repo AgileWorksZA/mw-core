@@ -44,3 +44,11 @@ export const IssueSchema = z.object({
 });
 
 export type Issue = z.infer<typeof IssueSchema>;
+
+// Tool type for MCP tools
+export interface Tool<T> {
+	name: string;
+	description: string;
+	inputSchema: z.ZodSchema<T>;
+	execute: (args: T) => Promise<unknown>;
+}

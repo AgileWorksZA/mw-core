@@ -1,0 +1,191 @@
+{
+  "testSuites": {
+    "unit": {
+      "description": "Unit tests for individual tool functions",
+      "timeout": 5000,
+      "retries": 3
+    },
+    "integration": {
+      "description": "Integration tests for MCP server tool execution",
+      "timeout": 15000,
+      "retries": 2
+    },
+    "validation": {
+      "description": "Schema validation and error handling tests",
+      "timeout": 3000,
+      "retries": 1
+    },
+    "performance": {
+      "description": "Performance and load tests",
+      "timeout": 30000,
+      "retries": 1
+    }
+  },
+  "tools": {
+    "categories": {
+      "core": [
+        "searchAccounts",
+        "getAccount",
+        "listAccountFields",
+        "searchTransactions",
+        "getTransaction",
+        "getTransactionByRef",
+        "listTransactionFields",
+        "getTransactionSummary"
+      ],
+      "assets": [
+        "searchAssets",
+        "getAsset",
+        "listAssetFields",
+        "searchAssetCats",
+        "getAssetCat",
+        "listAssetCatFields",
+        "searchAssetLogs",
+        "getAssetLog",
+        "listAssetLogFields"
+      ],
+      "contacts": [
+        "searchContacts",
+        "getContact",
+        "listContactFields"
+      ],
+      "inventory": [
+        "searchInventory",
+        "getInventoryItem",
+        "listInventoryFields"
+      ],
+      "reporting": [
+        "searchReports",
+        "generateReport",
+        "listReportFields"
+      ],
+      "system": [
+        "getSystemInfo",
+        "getCompanyInformation",
+        "getUserInfo",
+        "getPermissionInfo",
+        "getTablePermissions",
+        "getUserRoles",
+        "checkUserPermissions",
+        "getSecurityAuditInfo"
+      ],
+      "utility": [
+        "getTableSchema",
+        "getApiEndpoints",
+        "getValidationRules",
+        "getEnumValues",
+        "getDateFormats",
+        "getCurrencyInfo",
+        "convertCurrency",
+        "getMoneyWorksCurrencySettings"
+      ]
+    }
+  },
+  "sampleQueries": {
+    "searchAccounts": [
+      {
+        "name": "Basic search",
+        "args": { "query": "cash", "limit": 10 }
+      },
+      {
+        "name": "Type filter",
+        "args": { "type": "CA", "limit": 5 }
+      },
+      {
+        "name": "Category filter",
+        "args": { "category": "BANK", "limit": 20 }
+      },
+      {
+        "name": "Pagination test",
+        "args": { "limit": 5, "offset": 10 }
+      }
+    ],
+    "searchTransactions": [
+      {
+        "name": "Recent invoices",
+        "args": { "type": "SI", "status": "OP", "limit": 10 }
+      },
+      {
+        "name": "Date range",
+        "args": { "fromDate": "2024-01-01", "toDate": "2024-01-31" }
+      },
+      {
+        "name": "Amount range",
+        "args": { "minAmount": 1000, "maxAmount": 5000 }
+      },
+      {
+        "name": "Customer transactions",
+        "args": { "nameCode": "CUST001", "limit": 20 }
+      }
+    ],
+    "searchContacts": [
+      {
+        "name": "Customer search",
+        "args": { "type": "C", "limit": 10 }
+      },
+      {
+        "name": "Name search",
+        "args": { "query": "ABC" }
+      },
+      {
+        "name": "Active contacts",
+        "args": { "isActive": true }
+      }
+    ]
+  },
+  "errorScenarios": {
+    "invalidInput": [
+      {
+        "tool": "getAccount",
+        "args": { "code": "" },
+        "expectedError": "validation"
+      },
+      {
+        "tool": "searchAccounts",
+        "args": { "limit": -1 },
+        "expectedError": "validation"
+      },
+      {
+        "tool": "searchTransactions",
+        "args": { "fromDate": "invalid-date" },
+        "expectedError": "validation"
+      }
+    ],
+    "notFound": [
+      {
+        "tool": "getAccount",
+        "args": { "code": "NONEXISTENT" },
+        "expectedError": "not_found"
+      },
+      {
+        "tool": "getTransaction",
+        "args": { "sequenceNumber": 999999 },
+        "expectedError": "not_found"
+      }
+    ],
+    "networkErrors": [
+      {
+        "description": "Simulate API timeout",
+        "errorType": "timeout"
+      },
+      {
+        "description": "Simulate server error",
+        "errorType": "server_error"
+      }
+    ]
+  },
+  "performance": {
+    "benchmarks": {
+      "searchAccounts": {
+        "target_response_time_ms": 500,
+        "concurrent_requests": 10,
+        "test_duration_seconds": 30
+      },
+      "searchTransactions": {
+        "target_response_time_ms": 1000,
+        "concurrent_requests": 5,
+        "test_duration_seconds": 60
+      }
+    }
+  }
+}

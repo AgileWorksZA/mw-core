@@ -9,7 +9,18 @@
     "build": "bun build src/index.ts --outdir dist --target node",
     "start": "node dist/index.js",
     "db:migrate": "bun run src/database/migrate.ts",
-    "db:reset": "rm -f data/tickets.db && bun run db:migrate"
+    "db:reset": "rm -f data/tickets.db && bun run db:migrate",
+    "test": "bun test",
+    "test:unit": "bun test tests/unit/",
+    "test:integration": "bun test tests/integration/",
+    "test:validation": "bun test tests/validation/",
+    "test:performance": "bun test tests/performance/",
+    "test:all": "bun run tests/run-all-tests.ts",
+    "test:manual": "bun run tests/samples/manual-test-runner.ts",
+    "test:benchmark": "bun run tests/performance/benchmark-runner.ts",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
+    "test:clean": "bun run tests/run-all-tests.ts --cleanup"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
