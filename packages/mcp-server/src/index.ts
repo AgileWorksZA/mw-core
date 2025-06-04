@@ -208,7 +208,7 @@ async function handleToolError(
 		type: errorType,
 		severity,
 		status: "open",
-		user_prompt: JSON.stringify(args),
+		user_prompt: JSON.stringify(args) || "No user prompt available (automatic error tracking)",
 		ai_attempted_action: `Execute tool: ${toolName}`,
 		mcp_tool_used: toolName,
 		api_endpoint: `${toolName} operation`,

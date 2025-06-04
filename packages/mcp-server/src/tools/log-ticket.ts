@@ -110,8 +110,11 @@ export const logTicketTool = {
 				await ticketService.addContext(ticketId, "user_context", args.context);
 			}
 
-			// Add description as a note
-			await ticketService.addNote(ticketId, args.description);
+			// Add description as context
+			await ticketService.addContext(ticketId, "state", {
+				description: args.description,
+				type: "user_description"
+			});
 
 			// Add tags
 			const tags = args.tags || [];

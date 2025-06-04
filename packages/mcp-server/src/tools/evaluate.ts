@@ -1,17 +1,8 @@
 import { EvaluateService } from "@moneyworks/api/src/services/system/evaluate.service";
-import type { MoneyWorksConfig } from "@moneyworks/api/src/types/moneyworks";
 import { z } from "zod";
+import { moneyWorksConfig } from "../config/moneyworks.config";
 
-// Initialize with default config - this should be replaced with actual config
-const defaultConfig: MoneyWorksConfig = {
-	host: process.env.MONEYWORKS_HOST || "localhost",
-	port: Number(process.env.MONEYWORKS_PORT) || 6700,
-	dataFile: process.env.MONEYWORKS_DATAFILE || "",
-	username: process.env.MONEYWORKS_USERNAME || "",
-	password: process.env.MONEYWORKS_PASSWORD || "",
-};
-
-const evaluateService = new EvaluateService(defaultConfig);
+const evaluateService = new EvaluateService(moneyWorksConfig);
 
 // Evaluate expression
 const evaluateExpressionSchema = z.object({
