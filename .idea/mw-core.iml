@@ -6,6 +6,11 @@
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/web/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/web/.react-router" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/web/data" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/web/public" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/web/sample" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -5,7 +5,6 @@ export interface MCPConfig {
   command: string;
   args: string[];
   env?: Record<string, string>;
-  bearerToken?: string;
 }
 
 export class MCPClient {
@@ -18,15 +17,11 @@ export class MCPClient {
 
   async connect(): Promise<void> {
     try {
-      // Build environment with bearer token if provided
+      // Build environment
       const env: Record<string, string> = {
         ...process.env,
         ...this.config.env,
       } as Record<string, string>;
-      
-      if (this.config.bearerToken) {
-        env.MW_BEARER_TOKEN = this.config.bearerToken;
-      }
       
       const transport = new StdioClientTransport({
         command: this.config.command,

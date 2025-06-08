@@ -1,31 +1,21 @@
-import { createOpenAI } from "@ai-sdk/openai";
-import { streamText, tool } from "ai";
 import type { ActionFunctionArgs } from "react-router";
-import { type ZodObject, z } from "zod";
 import { getMCPClient } from "~/lib/mcp-client";
+import { streamText, tool } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { z, type ZodObject } from "zod";
 
-interface MCPTool {
-	name: string;
-	description: string;
-	inputSchema?: {
-		type: "object";
-		properties: Record<string, unknown>;
-		required?: string[];
-	};
+function jsonResponse(data: any, init?: ResponseInit) {
+  return new Response(JSON.stringify(data), {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...init?.headers,
+    },
+  });
 }
 
-function jsonResponse(data: unknown, init?: ResponseInit) {
-	return new Response(JSON.stringify(data), {
-		...init,
-		headers: {
-			"Content-Type": "application/json",
-			...init?.headers,
-		},
-	});
-}
-
-export function getSystemPrompt(tools: MCPTool[], hasTicketTool = false) {
-	const basePrompt = `You are a MoneyWorks AI Assistant with DIRECT ACCESS to live MoneyWorks data through function calls. Only answer the question, DO NOT say stuff like "feel free to ask!"
+export function getSystemPrompt(tools: any[], hasTicketTool = false) {
+  const basePrompt = `You are a MoneyWorks AI Assistant with DIRECT ACCESS to live MoneyWorks data through function calls. Only answer the question, DO NOT say stuff like "feel free to ask!"
 
 CRITICAL INSTRUCTIONS:
 1. You MUST use the provided functions to answer ANY question about MoneyWorks data
@@ -43,15 +33,15 @@ MoneyWorks is a comprehensive accounting and ERP system. Key concepts:
 - **Transactions**: Financial records with types like SI (Sales Invoice), PI (Purchase Invoice), etc.
 - **Account Types**: I=Income, S=Sales, E=Expense, C=Cost of Sales, A=Current Asset, L=Current Liability, etc.`;
 
-	if (tools.length > 0 || hasTicketTool) {
-		const toolList = tools
-			.map((t) => `- ${t.name}: ${t.description}`)
-			.join("\n");
-		const ticketToolDesc = hasTicketTool
-			? "- createTicket: Create a support ticket for bugs, issues, or feature requests"
-			: "";
+  if (tools.length > 0 || hasTicketTool) {
+    const toolList = tools
+      .map((t) => `- ${t.name}: ${t.description}`)
+      .join("\n");
+    const ticketToolDesc = hasTicketTool
+      ? "- createTicket: Create a support ticket for bugs, issues, or feature requests"
+      : "";
 
-		return `${basePrompt}
+    return `${basePrompt}
 
 ## AVAILABLE FUNCTIONS (YOU MUST USE THESE):
 ${toolList}
@@ -327,330 +317,336 @@ This calculates the average monthly sales for the last 3 months.
 6. **Test Incrementally**: Build complex expressions step by step
 
 `;
-	}
+  }
 
-	return basePrompt;
+  return basePrompt;
 }
 
 // Initialize MCP client on first use
 let mcpInitialized = false;
 let mcpInitializing = false;
-export let mcpTools: MCPTool[] = [];
+export let mcpTools: any[] = [];
 
 async function initializeMCP() {
-	if (mcpInitialized || mcpInitializing) return;
+  if (mcpInitialized || mcpInitializing) return;
+  
+  mcpInitializing = true;
 
-	mcpInitializing = true;
+  try {
+    const mwConfigPath = process.env.MW_CONFIG_PATH;
+    console.log("MCP initialization starting...", {
+      MW_CONFIG_PATH: mwConfigPath,
+      MCP_SERVER_PATH: process.env.MCP_SERVER_PATH,
+      MW_API_MODE: process.env.MW_API_MODE,
+      MW_API_BASE_URL: process.env.MW_API_BASE_URL,
+      MW_BEARER_TOKEN: process.env.MW_BEARER_TOKEN ? "***set***" : "not set"
+    });
+    
+    if (!mwConfigPath) {
+      console.warn("MW_CONFIG_PATH not set, MCP features will be disabled");
+      return;
+    }
 
-	try {
-		const mwConfigPath = process.env.MW_CONFIG_PATH;
-		console.log("MCP initialization starting...", {
-			MW_CONFIG_PATH: mwConfigPath,
-			MCP_SERVER_PATH: process.env.MCP_SERVER_PATH,
-			MW_API_MODE: process.env.MW_API_MODE,
-			MW_API_BASE_URL: process.env.MW_API_BASE_URL,
-			MW_BEARER_TOKEN: process.env.MW_BEARER_TOKEN ? "***set***" : "not set",
-		});
+    const mcpServerPath = process.env.MCP_SERVER_PATH ||
+      "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index-api-mode.ts";
+    
+    console.log("Creating MCP client with server path:", mcpServerPath);
+    
+    const mcpClient = getMCPClient({
+      command: "bun",
+      args: ["run", mcpServerPath],
+      env: {
+        MW_CONFIG_PATH: mwConfigPath,
+        MW_API_BASE_URL: process.env.MW_API_BASE_URL || "http://localhost:3131",
+        TICKETS_DB_PATH: process.env.TICKETS_DB_PATH || "./data/tickets.db",
+        MCP_DEBUG: "true",
+        MCP_LOG_FILE: "./mcp-debug.log",
+      },
+    });
 
-		if (!mwConfigPath) {
-			console.warn("MW_CONFIG_PATH not set, MCP features will be disabled");
-			return;
-		}
+    await mcpClient.connect();
+    console.log("MCP client connected, waiting for server to be ready...");
+    
+    // Give the server time to fully initialize
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-		const mcpServerPath =
-			process.env.MCP_SERVER_PATH ||
-			"/Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index.ts";
-
-		console.log("Creating MCP client with server path:", mcpServerPath);
-
-		const mcpClient = getMCPClient({
-			command: "bun",
-			args: ["run", mcpServerPath],
-			env: {
-				MW_CONFIG_PATH: mwConfigPath,
-				MW_API_MODE: process.env.MW_API_MODE || "rest",
-				MW_BEARER_TOKEN: process.env.MW_BEARER_TOKEN,
-				MW_API_BASE_URL: process.env.MW_API_BASE_URL || "http://localhost:3131",
-				MCP_DEBUG: "true",
-				MCP_LOG_FILE: "./mcp-debug.log",
-			},
-			bearerToken: process.env.MW_BEARER_TOKEN,
-		});
-
-		await mcpClient.connect();
-		console.log("MCP client connected, waiting for server to be ready...");
-
-		// Give the server time to fully initialize
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-
-		// Get available tools from MCP server
-		try {
-			mcpTools = await mcpClient.listTools();
-			console.log(
-				"Available MCP tools:",
-				mcpTools.map((t) => t.name),
-			);
-
-			mcpInitialized = true;
-			console.log(
-				"MoneyWorks MCP server connected with",
-				mcpTools.length,
-				"tools",
-			);
-		} catch (toolError) {
-			console.error("Failed to list MCP tools:", toolError);
-			throw new Error(
-				`MCP connected but failed to list tools: ${(toolError as Error).message}`,
-			);
-		}
-	} catch (error) {
-		console.error("Failed to initialize MCP:", error);
-		// Store the error for debugging
-		if (error instanceof Error) {
-			console.error("MCP Error details:", {
-				message: error.message,
-				stack: error.stack,
-				name: error.name,
-			});
-		}
-		// Don't set mcpInitialized to true if it failed
-		mcpInitialized = false;
-		mcpInitializing = false;
-		mcpTools = [];
-	} finally {
-		mcpInitializing = false;
-	}
+    // Get available tools from MCP server
+    try {
+      mcpTools = await mcpClient.listTools();
+      console.log(
+        "Available MCP tools:",
+        mcpTools.map((t) => t.name),
+      );
+      
+      mcpInitialized = true;
+      console.log(
+        "MoneyWorks MCP server connected with",
+        mcpTools.length,
+        "tools",
+      );
+    } catch (toolError) {
+      console.error("Failed to list MCP tools:", toolError);
+      throw new Error(`MCP connected but failed to list tools: ${toolError.message}`);
+    }
+  } catch (error) {
+    console.error("Failed to initialize MCP:", error);
+    // Store the error for debugging
+    if (error instanceof Error) {
+      console.error("MCP Error details:", {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+    }
+    // Don't set mcpInitialized to true if it failed
+    mcpInitialized = false;
+    mcpInitializing = false;
+    mcpTools = [];
+  } finally {
+    mcpInitializing = false;
+  }
 }
 
 const ready = initializeMCP();
 
 // Convert MCP tools to AI SDK tools
 function createAISDKTools() {
-	const tools: Record<string, any> = {};
+  const tools: Record<string, any> = {};
 
-	// Add ticket creation tool
-	tools.createTicket = tool({
-		description:
-			"Create a support ticket for bugs, issues, or feature requests",
-		parameters: z.object({
-			title: z.string().describe("Brief title for the ticket"),
-			description: z
-				.string()
-				.describe("Detailed description of the issue or request"),
-			category: z
-				.enum([
-					"api_error",
-					"missing_feature",
-					"unclear_query",
-					"data_issue",
-					"authentication",
-					"other",
-				])
-				.describe("Category of the ticket"),
-			userQuery: z
-				.string()
-				.describe("The original user query that prompted this ticket"),
-			aiResponse: z
-				.string()
-				.optional()
-				.describe("The AI's response or attempted response"),
-			priority: z
-				.enum(["low", "medium", "high", "critical"])
-				.optional()
-				.describe("Priority level of the ticket"),
-			metadata: z
-				.record(z.any())
-				.optional()
-				.describe("Additional metadata for the ticket"),
-		}),
-		execute: async ({
-			title,
-			description,
-			category,
-			userQuery,
-			aiResponse,
-			priority,
-			metadata,
-		}) => {
-			// Temporarily disabled due to bun:sqlite import issue
-			console.log("Ticket creation temporarily disabled:", {
-				title,
-				description,
-				category,
-				userQuery,
-			});
+  // Check if logTicket tool exists in MCP tools
+  const hasLogTicketTool = mcpTools.some(tool => tool.name === "logTicket");
+  
+  if (!hasLogTicketTool) {
+    // Add a wrapper for ticket creation if MCP's logTicket is not available
+    tools.createTicket = tool({
+      description:
+        "Create a support ticket for bugs, issues, or feature requests",
+      parameters: z.object({
+        title: z.string().describe("Brief title for the ticket"),
+        description: z
+          .string()
+          .describe("Detailed description of the issue or request"),
+        category: z
+          .enum([
+            "api_error",
+            "missing_feature",
+            "unclear_query",
+            "data_issue",
+            "authentication",
+            "other",
+          ])
+          .describe("Category of the ticket"),
+        userQuery: z
+          .string()
+          .describe("The original user query that prompted this ticket"),
+        aiResponse: z
+          .string()
+          .optional()
+          .describe("The AI's response or attempted response"),
+        priority: z
+          .enum(["low", "medium", "high", "critical"])
+          .optional()
+          .describe("Priority level of the ticket"),
+        metadata: z
+          .record(z.any())
+          .optional()
+          .describe("Additional metadata for the ticket"),
+      }),
+      execute: async ({
+        title,
+        description,
+        category,
+        userQuery,
+        aiResponse,
+        priority = "medium",
+        metadata,
+      }) => {
+        try {
+          // Map to MCP's logTicket schema
+          const mcpClient = getMCPClient();
+          const result = await mcpClient.callTool("logTicket", {
+            type: category === "missing_feature" ? "feature_request" : 
+                  category === "api_error" || category === "data_issue" ? "bug" : "improvement",
+            severity: priority || "medium",
+            title,
+            description,
+            userPrompt: userQuery,
+            attemptedAction: aiResponse,
+            metadata: JSON.stringify(metadata || {}),
+          });
+          
+          return {
+            success: true,
+            ticketId: result.ticketId,
+            message: `Ticket created successfully: ${title}`,
+          };
+        } catch (error) {
+          console.error("Failed to create ticket:", error);
+          return {
+            success: false,
+            message: `Failed to create ticket: ${error.message}`,
+          };
+        }
+      },
+    });
+  }
 
-			return {
-				success: true,
-				ticketId: `TEMP-${Date.now()}`,
-				message: `Ticket logging temporarily disabled. Would have created: ${title}`,
-			};
-		},
-	});
+  for (const mcpTool of mcpTools) {
+    // Create a more specific schema based on the tool
+    let parameters: ZodObject<any>;
 
-	for (const mcpTool of mcpTools) {
-		// Create a more specific schema based on the tool
-		let parameters: ZodObject<any>;
+    // Add specific schemas for known tools based on MCP server structure (note: tool names are plural)
+    if (mcpTool.name === "accounts") {
+      parameters = z.object({
+        operation: z.enum(["search", "get", "listFields"]).describe("The operation to perform"),
+        // Parameters at top level as expected by MCP server
+        query: z.string().optional().describe("Search query for account code or description"),
+        type: z.enum(["IN", "SA", "EX", "CS", "CA", "CL", "FA", "TA", "TL", "SF"]).optional().describe("Account type filter"),
+        category: z.string().optional().describe("Category code filter"),
+        limit: z.number().min(1).max(100).default(50).describe("Maximum number of results"),
+        offset: z.number().min(0).default(0).describe("Number of results to skip"),
+        code: z.string().optional().describe("The account code to retrieve (get operation only)"),
+      });
+    } else if (mcpTool.name === "transactions") {
+      parameters = z.object({
+        operation: z.enum(["search", "get", "listFields"]).describe("The operation to perform"),
+        // Transaction tool parameters
+        filter: z.string().optional().describe("MoneyWorks search expression"),
+        startDate: z.string().optional().describe("Start date (YYYYMMDD format)"),
+        endDate: z.string().optional().describe("End date (YYYYMMDD format)"),
+        type: z.string().optional().describe("Transaction type filter"),
+        status: z.enum(["ALL", "POSTED", "UNPOSTED", "LOCKED"]).optional().describe("Transaction status filter"),
+        limit: z.number().min(1).max(100).default(50).describe("Maximum number of results"),
+        offset: z.number().min(0).default(0).describe("Number of results to skip"),
+        sequenceNumber: z.number().optional().describe("The sequence number to retrieve (get operation only)"),
+      });
+    } else if (mcpTool.name === "names") {
+      parameters = z.object({
+        operation: z.enum(["search", "get", "listFields"]).describe("The operation to perform"),
+        // Name tool parameters
+        query: z.string().optional().describe("Search query for name code or description"),
+        type: z.enum(["Customer", "Supplier", "Both"]).optional().describe("Name type filter"),
+        limit: z.number().min(1).max(100).default(50).describe("Maximum number of results"),
+        offset: z.number().min(0).default(0).describe("Number of results to skip"),
+        code: z.string().optional().describe("The name code to retrieve (get operation only)"),
+      });
+    } else {
+      // Default schema for other tools
+      parameters = z.object({}).passthrough();
+    }
 
-		// Add specific schemas for known tools based on the consolidated format
-		if (mcpTool.name === "accounts") {
-			parameters = z.object({
-				operation: z.enum(["search", "get", "listFields"]),
-				query: z.string().optional(),
-				type: z
-					.enum(["IN", "SA", "EX", "CS", "CA", "CL", "FA", "TA", "TL", "SF"])
-					.optional(),
-				category: z.string().optional(),
-				limit: z.number().min(1).max(100).default(50).optional(),
-				offset: z.number().min(0).default(0).optional(),
-				code: z.string().optional(), // for 'get' operation
-			});
-		} else if (mcpTool.name === "transactions") {
-			parameters = z.object({
-				operation: z.enum(["search", "get", "listFields"]),
-				query: z.string().optional(),
-				type: z.string().optional(),
-				dateFrom: z.string().optional(),
-				dateTo: z.string().optional(),
-				status: z.string().optional(),
-				limit: z.number().min(1).max(100).default(50).optional(),
-				offset: z.number().min(0).default(0).optional(),
-				sequenceNumber: z.number().optional(), // for 'get' operation
-			});
-		} else if (mcpTool.name === "names") {
-			parameters = z.object({
-				operation: z.enum(["search", "get", "listFields"]),
-				query: z.string().optional(),
-				type: z.enum(["C", "S", "E"]).optional(), // Customer, Supplier, Employee
-				limit: z.number().min(1).max(100).default(50).optional(),
-				offset: z.number().min(0).default(0).optional(),
-				code: z.string().optional(), // for 'get' operation
-			});
-		} else if (mcpTool.name === "builds") {
-			parameters = z.object({
-				operation: z.enum(["search", "get", "listFields"]),
-				query: z.string().optional(),
-				limit: z.number().min(1).max(100).default(50).optional(),
-				offset: z.number().min(0).default(0).optional(),
-				sequenceNumber: z.number().optional(),
-			});
-		} else {
-			// Default schema for other tools
-			parameters = z.object({}).passthrough();
-		}
+    tools[mcpTool.name] = tool({
+      description: mcpTool.description,
+      parameters,
+      execute: async (args) => {
+        console.log(`Executing MCP tool: ${mcpTool.name} with args:`, args);
+        try {
+          const mcpClient = getMCPClient();
+          const result = await mcpClient.callTool(mcpTool.name, args);
+          console.log("MCP tool result:", result);
+          return result;
+        } catch (error) {
+          console.error("MCP tool call failed:", error);
+          throw error;
+        }
+      },
+    });
+  }
 
-		tools[mcpTool.name] = tool({
-			description: mcpTool.description,
-			parameters,
-			execute: async (args) => {
-				console.log(`Executing MCP tool: ${mcpTool.name} with args:`, args);
-				try {
-					const mcpClient = getMCPClient();
-					const result = await mcpClient.callTool(mcpTool.name, args);
-					console.log("MCP tool result:", result);
-					return result;
-				} catch (error) {
-					console.error("MCP tool call failed:", error);
-					throw error;
-				}
-			},
-		});
-	}
-
-	return tools;
+  return tools;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-	console.log("=== MoneyWorks AI API Request ===");
+  console.log("=== MoneyWorks AI API Request ===");
 
-	if (request.method !== "POST") {
-		return jsonResponse({ error: "Method not allowed" }, { status: 405 });
-	}
+  if (request.method !== "POST") {
+    return jsonResponse({ error: "Method not allowed" }, { status: 405 });
+  }
 
-	try {
-		const body = await request.json();
-		const { messages, chatId } = body;
-		console.log("Received messages:", messages.length, "chatId:", chatId);
+  try {
+    const body = await request.json();
+    const { messages, chatId } = body;
+    console.log("Received messages:", messages.length, "chatId:", chatId);
 
-		if (!messages || !Array.isArray(messages)) {
-			return jsonResponse({ error: "Invalid request body" }, { status: 400 });
-		}
+    if (!messages || !Array.isArray(messages)) {
+      return jsonResponse({ error: "Invalid request body" }, { status: 400 });
+    }
 
-		const apiKey = process.env.OPENAI_API_KEY;
-		if (!apiKey) {
-			return jsonResponse(
-				{ error: "OpenAI API key not configured" },
-				{ status: 500 },
-			);
-		}
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return jsonResponse(
+        { error: "OpenAI API key not configured" },
+        { status: 500 },
+      );
+    }
 
-		// Initialize MCP if not already done (optional - errors won't block chat)
-		try {
-			await ready;
-			console.log(
-				"MCP initialized successfully, tools available:",
-				mcpTools.length,
-			);
-		} catch (error) {
-			console.warn(
-				"MCP initialization failed, continuing without MCP features:",
-				error,
-			);
-		}
+    // Initialize MCP if not already done (optional - errors won't block chat)
+    try {
+      await ready;
+      console.log(
+        "MCP initialized successfully, tools available:",
+        mcpTools.length,
+      );
+    } catch (error) {
+      console.warn(
+        "MCP initialization failed, continuing without MCP features:",
+        error,
+      );
+    }
 
-		// Create AI SDK tools from MCP tools
-		let tools = {};
-		try {
-			tools = createAISDKTools();
-			console.log(`Using ${Object.keys(tools).length} tools with AI SDK`);
-		} catch (toolError) {
-			console.error("Error creating AI SDK tools:", toolError);
-			// Continue without tools
-		}
+    // Create AI SDK tools from MCP tools
+    let tools = {};
+    try {
+      tools = createAISDKTools();
+      console.log(`Using ${Object.keys(tools).length} tools with AI SDK`);
+    } catch (toolError) {
+      console.error("Error creating AI SDK tools:", toolError);
+      // Continue without tools
+    }
 
-		const hasTicketTool = "createTicket" in tools;
+    const hasTicketTool = "createTicket" in tools || mcpTools.some(t => t.name === "logTicket");
 
-		console.log(
-			"System prompt preview:",
-			`${getSystemPrompt(mcpTools, hasTicketTool).substring(0, 500)}...`,
-		);
-		console.log("User message:", messages[messages.length - 1]?.content);
+    console.log(
+      "System prompt preview:",
+      `${getSystemPrompt(mcpTools, hasTicketTool).substring(0, 500)}...`,
+    );
+    console.log("User message:", messages[messages.length - 1]?.content);
 
-		// Create OpenAI provider with API key
-		const openai = createOpenAI({
-			apiKey,
-		});
+    // Create OpenAI provider with API key
+    const openai = createOpenAI({
+      apiKey,
+    });
 
-		// Use AI SDK's streamText with tools
-		const result = streamText({
-			model: openai("gpt-4o"),
-			system: getSystemPrompt(mcpTools, hasTicketTool),
-			messages,
-			tools: Object.keys(tools).length > 0 ? tools : undefined,
-			toolChoice: "auto",
-			maxSteps: 5, // Allow multiple tool calls if needed
-		});
+    // Use AI SDK's streamText with tools
+    const result = await streamText({
+      model: openai("gpt-4o"),
+      system: getSystemPrompt(mcpTools, hasTicketTool),
+      messages,
+      tools: Object.keys(tools).length > 0 ? tools : undefined,
+      toolChoice: "auto",
+      maxSteps: 5, // Allow multiple tool calls if needed
+    });
 
-		console.log("StreamText result created, converting to response...");
+    console.log("StreamText result created, converting to response...");
 
-		// Use toDataStreamResponse which properly handles the AI SDK data stream protocol
-		const response = result.toDataStreamResponse();
+    // Use toDataStreamResponse which properly handles the AI SDK data stream protocol
+    const response = result.toDataStreamResponse();
 
-		// Add headers to ensure proper streaming
-		response.headers.set("Content-Type", "text/event-stream");
-		response.headers.set("Cache-Control", "no-cache");
-		response.headers.set("Connection", "keep-alive");
+    // Add headers to ensure proper streaming
+    response.headers.set("Content-Type", "text/event-stream");
+    response.headers.set("Cache-Control", "no-cache");
+    response.headers.set("Connection", "keep-alive");
 
-		return response;
-	} catch (error: any) {
-		console.error("MoneyWorks AI API error:", error);
-		console.error("Error stack:", error.stack);
-		return jsonResponse(
-			{
-				error: "Internal server error",
-				details: error.message,
-			},
-			{ status: 500 },
-		);
-	}
+    return response;
+  } catch (error: any) {
+    console.error("MoneyWorks AI API error:", error);
+    console.error("Error stack:", error.stack);
+    return jsonResponse(
+      {
+        error: "Internal server error",
+        details: error.message,
+      },
+      { status: 500 },
+    );
+  }
 }
