@@ -3,7 +3,8 @@ import { useFetcher, useNavigate, useRouteLoaderData } from "react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { FileText, Brain, Settings } from "lucide-react";
 import { CardBrowser } from "~/components/knowledge-alignment/card-browser";
-import type { KnowledgeCard } from "~/modules/knowledge-alignment/types";
+import { PromptTemplates } from "~/components/knowledge-alignment/prompt-templates";
+import type { KnowledgeCard, PromptTemplate } from "~/modules/knowledge-alignment/types";
 
 export default function KnowledgeAlignmentIndex() {
   const parentData = useRouteLoaderData("routes/knowledge-alignment") as any;
@@ -100,11 +101,11 @@ export default function KnowledgeAlignmentIndex() {
       </TabsContent>
 
       <TabsContent value="templates">
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">
-            Prompt template management coming soon...
-          </p>
-        </div>
+        <PromptTemplates 
+          templates={parentData?.templates || []}
+          cards={parentData?.cards || []}
+          defaultTemplateId={parentData?.defaultTemplateId}
+        />
       </TabsContent>
 
       <TabsContent value="settings">

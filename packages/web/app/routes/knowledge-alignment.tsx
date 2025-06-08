@@ -11,6 +11,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const cards = knowledgeDB.searchCards();
   const tags = knowledgeDB.getAllTags();
   const config = knowledgeDB.getConfig();
+  const templates = knowledgeDB.getAllTemplates();
+  const defaultTemplate = knowledgeDB.getDefaultTemplate();
   
   // Get MCP tools if available
   let mcpTools: string[] = [];
@@ -23,7 +25,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     console.error("Failed to get MCP tools:", error);
   }
   
-  return Response.json({ cards, tags, config, mcpTools });
+  return Response.json({ 
+    cards, 
+    tags, 
+    config, 
+    mcpTools,
+    templates,
+    defaultTemplateId: defaultTemplate?.id || null
+  });
 }
 
 export default function KnowledgeAlignmentLayout() {

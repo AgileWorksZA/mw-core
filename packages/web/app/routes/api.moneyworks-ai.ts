@@ -19,36 +19,47 @@ export function getSystemPrompt(tools: any[], hasTicketTool = false, messages: a
   // Get relevant knowledge cards based on the conversation context
   let knowledgeContext = "";
   try {
-    // Extract keywords from recent messages for context
-    const recentMessages = messages.slice(-5); // Last 5 messages for context
-    const contextText = recentMessages
-      .map(m => m.content)
-      .join(" ")
-      .toLowerCase();
+    // Check if there's a default template
+    const defaultTemplate = knowledgeDB.getDefaultTemplate();
+    let relevantCards = [];
     
-    // Get relevant tags based on context
-    const contextTags: string[] = [];
-    if (contextText.includes("invoice") || contextText.includes("bill")) {
-      contextTags.push("invoices", "transactions");
+    if (defaultTemplate) {
+      // Use the default template cards as a base
+      relevantCards = defaultTemplate.cardIds
+        .map(id => knowledgeDB.getCard(id))
+        .filter(card => card !== null && card.active) as any[];
+    } else {
+      // Original behavior: Extract keywords from recent messages for context
+      const recentMessages = messages.slice(-5); // Last 5 messages for context
+      const contextText = recentMessages
+        .map(m => m.content)
+        .join(" ")
+        .toLowerCase();
+      
+      // Get relevant tags based on context
+      const contextTags: string[] = [];
+      if (contextText.includes("invoice") || contextText.includes("bill")) {
+        contextTags.push("invoices", "transactions");
+      }
+      if (contextText.includes("account") || contextText.includes("chart")) {
+        contextTags.push("accounts", "chart-of-accounts");
+      }
+      if (contextText.includes("customer") || contextText.includes("supplier")) {
+        contextTags.push("names", "customers", "suppliers");
+      }
+      if (contextText.includes("mwscript") || contextText.includes("script")) {
+        contextTags.push("mwscript", "scripting");
+      }
+      if (contextText.includes("unposted") || contextText.includes("open")) {
+        contextTags.push("status", "unposted");
+      }
+      
+      // Search for relevant cards
+      relevantCards = knowledgeDB.searchCards({
+        tags: contextTags.length > 0 ? contextTags : undefined,
+        active: true,
+      });
     }
-    if (contextText.includes("account") || contextText.includes("chart")) {
-      contextTags.push("accounts", "chart-of-accounts");
-    }
-    if (contextText.includes("customer") || contextText.includes("supplier")) {
-      contextTags.push("names", "customers", "suppliers");
-    }
-    if (contextText.includes("mwscript") || contextText.includes("script")) {
-      contextTags.push("mwscript", "scripting");
-    }
-    if (contextText.includes("unposted") || contextText.includes("open")) {
-      contextTags.push("status", "unposted");
-    }
-    
-    // Search for relevant cards
-    const relevantCards = knowledgeDB.searchCards({
-      tags: contextTags.length > 0 ? contextTags : undefined,
-      active: true,
-    });
     
     // Sort by priority and limit to top cards
     const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
@@ -58,11 +69,15 @@ export function getSystemPrompt(tools: any[], hasTicketTool = false, messages: a
         const bPriority = priorityOrder[b.priority] || 0;
         return bPriority - aPriority;
       })
-      .slice(0, 5); // Top 5 most relevant cards
+      .slice(0, defaultTemplate?.maxTokens ? 20 : 5); // More cards if using template
     
     // Build knowledge context
     if (topCards.length > 0) {
       knowledgeContext = "\n\n## Domain-Specific Knowledge\n";
+      if (defaultTemplate) {
+        knowledgeContext += `*Using template: ${defaultTemplate.name}*\n`;
+      }
+      
       topCards.forEach(card => {
         knowledgeContext += `\n### ${card.title}\n${card.summary}\n`;
         if (card.content) {

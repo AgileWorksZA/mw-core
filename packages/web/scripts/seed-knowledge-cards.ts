@@ -164,3 +164,19 @@ for (const card of sampleCards) {
 
 console.log("\nKnowledge cards seeded successfully!");
 console.log(`Total cards: ${knowledgeDB.searchCards().length}`);
+
+// Create a sample template
+console.log("\nCreating sample template...");
+
+const allCards = knowledgeDB.searchCards();
+const template = knowledgeDB.createTemplate({
+  name: "MoneyWorks Essentials",
+  description: "Core knowledge cards for understanding MoneyWorks transactions, accounts, and status codes",
+  cardIds: allCards.map(c => c.id),
+  isDefault: true,
+  maxTokens: 3000,
+});
+
+knowledgeDB.setDefaultTemplate(template.id);
+console.log(`✓ Created template: ${template.name} (default)`);
+console.log(`Total templates: ${knowledgeDB.getAllTemplates().length}`);

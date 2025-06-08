@@ -379,6 +379,94 @@ export class KnowledgeAlignmentDB {
     return updated;
   }
 
+  // Prompt Template Operations
+  createTemplate(template: Omit<PromptTemplate, "id" | "createdAt" | "updatedAt">): PromptTemplate {
+    const id = nanoid();
+    const now = new Date().toISOString();
+    
+    const newTemplate: PromptTemplate = {
+      ...template,
+      id,
+      createdAt: new Date(now),
+      updatedAt: new Date(now),
+    };
+
+    this.db.query(`
+      INSERT INTO prompt_templates (
+        id, name, description, card_ids, is_default, max_tokens, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      newTemplate.id,
+      newTemplate.name,
+      newTemplate.description,
+      JSON.stringify(newTemplate.cardIds),
+      newTemplate.isDefault ? 1 : 0,
+      newTemplate.maxTokens || null,
+      now,
+      now
+    );
+
+    return newTemplate;
+  }
+
+  updateTemplate(id: string, updates: Partial<PromptTemplate>): PromptTemplate | null {
+    const existing = this.getTemplate(id);
+    if (!existing) return null;
+
+    const now = new Date().toISOString();
+    const updated = {
+      ...existing,
+      ...updates,
+      id,
+      updatedAt: new Date(now),
+    };
+
+    this.db.query(`
+      UPDATE prompt_templates SET
+        name = ?, description = ?, card_ids = ?, is_default = ?, max_tokens = ?, updated_at = ?
+      WHERE id = ?
+    `).run(
+      updated.name,
+      updated.description,
+      JSON.stringify(updated.cardIds),
+      updated.isDefault ? 1 : 0,
+      updated.maxTokens || null,
+      now,
+      id
+    );
+
+    return updated;
+  }
+
+  deleteTemplate(id: string): boolean {
+    const result = this.db.query("DELETE FROM prompt_templates WHERE id = ?").run(id);
+    return result.changes > 0;
+  }
+
+  getTemplate(id: string): PromptTemplate | null {
+    const row = this.db.query("SELECT * FROM prompt_templates WHERE id = ?").get(id) as any;
+    return row ? this.rowToTemplate(row) : null;
+  }
+
+  getAllTemplates(): PromptTemplate[] {
+    const rows = this.db.query("SELECT * FROM prompt_templates ORDER BY name").all() as any[];
+    return rows.map(row => this.rowToTemplate(row));
+  }
+
+  getDefaultTemplate(): PromptTemplate | null {
+    const row = this.db.query("SELECT * FROM prompt_templates WHERE is_default = 1").get() as any;
+    return row ? this.rowToTemplate(row) : null;
+  }
+
+  setDefaultTemplate(id: string): boolean {
+    // First, unset any existing default
+    this.db.query("UPDATE prompt_templates SET is_default = 0 WHERE is_default = 1").run();
+    
+    // Then set the new default
+    const result = this.db.query("UPDATE prompt_templates SET is_default = 1 WHERE id = ?").run(id);
+    return result.changes > 0;
+  }
+
   // Helper method to convert database row to KnowledgeCard
   private rowToCard(row: any): KnowledgeCard {
     return {
@@ -397,6 +485,20 @@ export class KnowledgeAlignmentDB {
       updatedAt: new Date(row.updated_at),
       createdBy: row.created_by,
       lastModifiedBy: row.last_modified_by,
+    };
+  }
+
+  // Helper method to convert database row to PromptTemplate
+  private rowToTemplate(row: any): PromptTemplate {
+    return {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      cardIds: JSON.parse(row.card_ids),
+      isDefault: Boolean(row.is_default),
+      maxTokens: row.max_tokens,
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
     };
   }
 
