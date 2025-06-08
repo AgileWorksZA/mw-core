@@ -1,54 +1,99 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("node:fs");
+const path = require("node:path");
 
 // Read the current index.ts file
-const indexPath = path.join(__dirname, 'src', 'index.ts');
-const indexContent = fs.readFileSync(indexPath, 'utf8');
+const indexPath = path.join(__dirname, "src", "index.ts");
+const indexContent = fs.readFileSync(indexPath, "utf8");
 
 // Define the consolidated tools (the ones we've actually consolidated)
 const consolidatedTools = {
-  'account': ['searchAccountsTool', 'getAccountTool', 'listAccountFieldsTool'],
-  'transaction': ['searchTransactionsTool', 'getTransactionTool', 'getTransactionByRefTool', 'listTransactionFieldsTool', 'getTransactionSummaryTool'],
-  'name': ['searchNamesTool', 'getNameTool', 'listNameFieldsTool'],
-  'build': ['searchBuildsTool', 'getBuildTool', 'listBuildFieldsTool'],
-  // Auto-consolidated tools from script
-  'product': ['searchProductsTool', 'getProductTool', 'listProductFieldsTool'],
-  'job': ['searchJobsTool', 'getJobTool', 'listJobFieldsTool'],
-  'detail': ['searchDetailsTool', 'getDetailTool', 'listDetailFieldsTool'],
-  'taxrate': ['searchTaxRatesTool', 'getTaxRateTool', 'listTaxRateFieldsTool'],
-  'department': ['searchDepartmentsTool', 'getDepartmentTool', 'listDepartmentFieldsTool'],
-  'payment': ['searchPaymentsTool', 'getPaymentTool', 'listPaymentFieldsTool', 'getPaymentSummaryTool', 'getPaymentsByCashTransTool', 'getPaymentsByInvoiceTool'],
-  'bankrec': ['searchBankRecsTool', 'getBankRecTool', 'listBankRecFieldsTool'],
-  'ledger': ['searchLedgerTool', 'getLedgerEntryTool', 'listLedgerFieldsTool'],
-  'jobsheet': ['searchJobSheetsTool', 'getJobSheetTool', 'listJobSheetFieldsTool'],
-  'contact': ['searchContactsTool', 'getContactTool', 'listContactFieldsTool'],
-  'inventory': ['searchInventoryTool', 'getInventoryItemTool', 'listInventoryFieldsTool'],
-  'general': ['searchGeneralTool', 'getGeneralSettingTool', 'listGeneralFieldsTool'],
-  'login': ['searchLoginsTool', 'getLoginTool', 'listLoginFieldsTool'],
-  'message': ['searchMessagesTool', 'getMessageTool', 'listMessageFieldsTool'],
-  'list': ['searchListsTool', 'getListTool', 'listListFieldsTool'],
-  'user': ['searchUsersTool', 'getUserTool', 'listUserFieldsTool'],
-  'filter': ['searchFiltersTool', 'getFilterTool', 'listFilterFieldsTool'],
-  'memo': ['searchMemosTool', 'getMemoTool', 'listMemoFieldsTool'],
-  'user2': ['searchUser2sTool', 'getUser2Tool', 'listUser2FieldsTool'],
-  'stickie': ['searchStickiesTool', 'getStickieTool', 'listStickieFieldsTool'],
-  'offledger': ['searchOffLedgerTool', 'getOffLedgerEntryTool', 'listOffLedgerFieldsTool'],
-  'autosplit': ['searchAutoSplitsTool', 'getAutoSplitTool', 'listAutoSplitFieldsTool'],
-  'link': ['searchLinksTool', 'getLinkTool', 'listLinkFieldsTool'],
-  'log': ['searchLogsTool', 'getLogTool', 'listLogFieldsTool'],
-  'asset': ['searchAssetsTool', 'getAssetTool', 'listAssetFieldsTool'],
-  'assetcat': ['searchAssetCatsTool', 'getAssetCatTool', 'listAssetCatFieldsTool'],
-  'assetlog': ['searchAssetLogsTool', 'getAssetLogTool', 'listAssetLogFieldsTool']
+	account: ["searchAccountsTool", "getAccountTool", "listAccountFieldsTool"],
+	transaction: [
+		"searchTransactionsTool",
+		"getTransactionTool",
+		"getTransactionByRefTool",
+		"listTransactionFieldsTool",
+		"getTransactionSummaryTool",
+	],
+	name: ["searchNamesTool", "getNameTool", "listNameFieldsTool"],
+	build: ["searchBuildsTool", "getBuildTool", "listBuildFieldsTool"],
+	// Auto-consolidated tools from script
+	product: ["searchProductsTool", "getProductTool", "listProductFieldsTool"],
+	job: ["searchJobsTool", "getJobTool", "listJobFieldsTool"],
+	detail: ["searchDetailsTool", "getDetailTool", "listDetailFieldsTool"],
+	taxrate: ["searchTaxRatesTool", "getTaxRateTool", "listTaxRateFieldsTool"],
+	department: [
+		"searchDepartmentsTool",
+		"getDepartmentTool",
+		"listDepartmentFieldsTool",
+	],
+	payment: [
+		"searchPaymentsTool",
+		"getPaymentTool",
+		"listPaymentFieldsTool",
+		"getPaymentSummaryTool",
+		"getPaymentsByCashTransTool",
+		"getPaymentsByInvoiceTool",
+	],
+	bankrec: ["searchBankRecsTool", "getBankRecTool", "listBankRecFieldsTool"],
+	ledger: ["searchLedgerTool", "getLedgerEntryTool", "listLedgerFieldsTool"],
+	jobsheet: [
+		"searchJobSheetsTool",
+		"getJobSheetTool",
+		"listJobSheetFieldsTool",
+	],
+	contact: ["searchContactsTool", "getContactTool", "listContactFieldsTool"],
+	inventory: [
+		"searchInventoryTool",
+		"getInventoryItemTool",
+		"listInventoryFieldsTool",
+	],
+	general: [
+		"searchGeneralTool",
+		"getGeneralSettingTool",
+		"listGeneralFieldsTool",
+	],
+	login: ["searchLoginsTool", "getLoginTool", "listLoginFieldsTool"],
+	message: ["searchMessagesTool", "getMessageTool", "listMessageFieldsTool"],
+	list: ["searchListsTool", "getListTool", "listListFieldsTool"],
+	user: ["searchUsersTool", "getUserTool", "listUserFieldsTool"],
+	filter: ["searchFiltersTool", "getFilterTool", "listFilterFieldsTool"],
+	memo: ["searchMemosTool", "getMemoTool", "listMemoFieldsTool"],
+	user2: ["searchUser2sTool", "getUser2Tool", "listUser2FieldsTool"],
+	stickie: ["searchStickiesTool", "getStickieTool", "listStickieFieldsTool"],
+	offledger: [
+		"searchOffLedgerTool",
+		"getOffLedgerEntryTool",
+		"listOffLedgerFieldsTool",
+	],
+	autosplit: [
+		"searchAutoSplitsTool",
+		"getAutoSplitTool",
+		"listAutoSplitFieldsTool",
+	],
+	link: ["searchLinksTool", "getLinkTool", "listLinkFieldsTool"],
+	log: ["searchLogsTool", "getLogTool", "listLogFieldsTool"],
+	asset: ["searchAssetsTool", "getAssetTool", "listAssetFieldsTool"],
+	assetcat: [
+		"searchAssetCatsTool",
+		"getAssetCatTool",
+		"listAssetCatFieldsTool",
+	],
+	assetlog: [
+		"searchAssetLogsTool",
+		"getAssetLogTool",
+		"listAssetLogFieldsTool",
+	],
 };
 
 // Function to create new import statements for consolidated tools
 function createNewImportSection() {
-  const imports = [];
-  
-  // Add non-consolidated tool imports first
-  imports.push(`#!/usr/bin/env bun
+	const imports = [];
+
+	// Add non-consolidated tool imports first
+	imports.push(`#!/usr/bin/env bun
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -163,16 +208,16 @@ import {
 	initializeValidationRulesTools,
 } from "./tools/validation-rules";`);
 
-  return imports.join('\n');
+	return imports.join("\n");
 }
 
 // Function to create consolidated tool registrations
 function createConsolidatedToolRegistrations() {
-  const registrations = [];
-  
-  // Helper function to register a consolidated tool
-  const registerTool = (toolName, varName) => {
-    registrations.push(`
+	const registrations = [];
+
+	// Helper function to register a consolidated tool
+	const registerTool = (toolName, varName) => {
+		registrations.push(`
 // Register ${toolName} tool (consolidated)
 server.tool(
 	"${toolName}",
@@ -191,51 +236,55 @@ server.tool(
 		}
 	},
 );`);
-  };
+	};
 
-  // Register consolidated tools
-  registerTool('accounts', 'accountTool');
-  registerTool('transactions', 'transactionTool');
-  registerTool('names', 'nameTool');
-  registerTool('builds', 'buildTool');
-  registerTool('products', 'productTool');
-  registerTool('jobs', 'jobTool');
-  registerTool('details', 'detailTool');
-  registerTool('taxRates', 'taxrateTool');
-  registerTool('departments', 'departmentTool');
-  registerTool('payments', 'paymentTool');
-  registerTool('bankRecs', 'bankrecTool');
-  registerTool('ledger', 'ledgerTool');
-  registerTool('jobSheets', 'jobsheetTool');
-  registerTool('contacts', 'contactTool');
-  registerTool('inventory', 'inventoryTool');
-  registerTool('general', 'generalTool');
-  registerTool('logins', 'loginTool');
-  registerTool('messages', 'messageTool');
-  registerTool('lists', 'listTool');
-  registerTool('users', 'userTool');
-  registerTool('filters', 'filterTool');
-  registerTool('memos', 'memoTool');
-  registerTool('user2', 'user2Tool');
-  registerTool('stickies', 'stickieTool');
-  registerTool('offLedger', 'offledgerTool');
-  registerTool('autoSplits', 'autosplitTool');
-  registerTool('links', 'linkTool');
-  registerTool('logs', 'logTool');
-  registerTool('assets', 'assetTool');
-  registerTool('assetCategories', 'assetcatTool');
-  registerTool('assetLogs', 'assetlogTool');
+	// Register consolidated tools
+	registerTool("accounts", "accountTool");
+	registerTool("transactions", "transactionTool");
+	registerTool("names", "nameTool");
+	registerTool("builds", "buildTool");
+	registerTool("products", "productTool");
+	registerTool("jobs", "jobTool");
+	registerTool("details", "detailTool");
+	registerTool("taxRates", "taxrateTool");
+	registerTool("departments", "departmentTool");
+	registerTool("payments", "paymentTool");
+	registerTool("bankRecs", "bankrecTool");
+	registerTool("ledger", "ledgerTool");
+	registerTool("jobSheets", "jobsheetTool");
+	registerTool("contacts", "contactTool");
+	registerTool("inventory", "inventoryTool");
+	registerTool("general", "generalTool");
+	registerTool("logins", "loginTool");
+	registerTool("messages", "messageTool");
+	registerTool("lists", "listTool");
+	registerTool("users", "userTool");
+	registerTool("filters", "filterTool");
+	registerTool("memos", "memoTool");
+	registerTool("user2", "user2Tool");
+	registerTool("stickies", "stickieTool");
+	registerTool("offLedger", "offledgerTool");
+	registerTool("autoSplits", "autosplitTool");
+	registerTool("links", "linkTool");
+	registerTool("logs", "logTool");
+	registerTool("assets", "assetTool");
+	registerTool("assetCategories", "assetcatTool");
+	registerTool("assetLogs", "assetlogTool");
 
-  return registrations.join('\n');
+	return registrations.join("\n");
 }
 
 // Extract the error handling and service setup code
-const serviceSetupMatch = indexContent.match(/(\/\/ Configuration[\s\S]*?\/\/ Initialize all tools with ticket service[\s\S]*?initializePermissionInfoTools\(ticketService\);)/);
-const errorHandlingMatch = indexContent.match(/(async function handleToolError[\s\S]*?}[\s\S]*?\/\/ Start the server[\s\S]*$)/);
+const serviceSetupMatch = indexContent.match(
+	/(\/\/ Configuration[\s\S]*?\/\/ Initialize all tools with ticket service[\s\S]*?initializePermissionInfoTools\(ticketService\);)/,
+);
+const errorHandlingMatch = indexContent.match(
+	/(async function handleToolError[\s\S]*?}[\s\S]*?\/\/ Start the server[\s\S]*$)/,
+);
 
 if (!serviceSetupMatch || !errorHandlingMatch) {
-  console.error('Could not extract service setup or error handling code');
-  process.exit(1);
+	console.error("Could not extract service setup or error handling code");
+	process.exit(1);
 }
 
 // Create the new index.ts content
@@ -1016,9 +1065,11 @@ ${errorHandlingMatch[1]}`;
 // Write the new index.ts file
 fs.writeFileSync(indexPath, newIndexContent);
 
-console.log('✓ Updated index.ts with consolidated tools');
+console.log("✓ Updated index.ts with consolidated tools");
 
 // Count new tool registrations
 const newToolCount = (newIndexContent.match(/server\.tool\(/g) || []).length;
 console.log(`New tool count: ${newToolCount}`);
-console.log(`Reduced from 140 to ${newToolCount} tools (${140 - newToolCount} tools removed)`);
+console.log(
+	`Reduced from 140 to ${newToolCount} tools (${140 - newToolCount} tools removed)`,
+);

@@ -1,0 +1,32 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T05:12:33.278Z",
+      "2025-06-04T05:12:51.418Z"
+    ],
+    "sessions": {
+      "1": {
+        "title": [
+          "New Chat",
+          "Can you tell me more about the reporting features?"
+        ],
+        "messages": {
+          "0": [
+            {
+              "id": "efd621bb-4fb0-4419-ac4c-495586662eb2",
+              "role": "user",
+              "content": "Can you tell me more about the reporting features?",
+              "createdAt": "2025-06-04T05:12:51.413Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T05:12:26.682Z",
+          "2025-06-04T05:12:51.418Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

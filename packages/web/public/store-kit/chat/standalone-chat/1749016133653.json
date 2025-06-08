@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T05:46:36.290Z",
+      "2025-06-04T05:48:53.141Z"
+    ],
+    "sessions": {
+      "2": {
+        "messages": {
+          "19": [
+            {
+              "id": "f27d0cc6-1ded-487c-a551-f99c88bec31e",
+              "role": "user",
+              "content": "can you log that ticket again",
+              "createdAt": "2025-06-04T05:48:53.130Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T05:46:36.290Z",
+          "2025-06-04T05:48:53.141Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

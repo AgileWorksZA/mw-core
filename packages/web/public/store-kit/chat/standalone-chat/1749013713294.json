@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T05:08:26.830Z",
+      "2025-06-04T05:08:32.775Z"
+    ],
+    "sessions": {
+      "0": {
+        "messages": {
+          "15": [
+            {
+              "id": "76d95737-dac3-4334-9430-53199377cdd3",
+              "role": "assistant",
+              "content": "You have a total of 982 transactions in your MoneyWorks system. If you need more details about any specific transaction, feel free to ask!",
+              "createdAt": "2025-06-04T05:08:32.775Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T05:08:26.830Z",
+          "2025-06-04T05:08:32.775Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

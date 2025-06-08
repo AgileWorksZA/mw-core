@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T05:43:31.340Z",
+      "2025-06-04T05:46:31.186Z"
+    ],
+    "sessions": {
+      "2": {
+        "messages": {
+          "17": [
+            {
+              "id": "c4ce6ce7-ba55-4f14-b2cd-213ecd948ee3",
+              "role": "user",
+              "content": "Please create a feature request ticket for adding bulk invoice generation capability",
+              "createdAt": "2025-06-04T05:46:31.179Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T05:43:31.340Z",
+          "2025-06-04T05:46:31.186Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

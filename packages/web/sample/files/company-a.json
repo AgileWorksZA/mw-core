@@ -1,0 +1,22 @@
+{
+  "data": {
+    "manifest": {
+      "id": "company-a",
+      "type": "test-file",
+      "path": "company-a"
+    },
+    "mapping": {
+      "input": {
+        "variables": {
+          "name": "ACME Corporation",
+          "established": 1942,
+          "details": {
+            "headquarters": "Somewhere, USA",
+            "industry": "Everything"
+          }
+        }
+      },
+      "output": true
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "delta": {
+    "files": {
+      "white-electric-planula-4142": {
+        "mapping": {
+          "output": {
+            "variables": [
+              {},
+              true
+            ]
+          }
+        }
+      }
+    }
+  }
+}

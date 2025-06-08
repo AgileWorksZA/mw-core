@@ -208,26 +208,25 @@ export const getUserRolesTool = {
 					conflicts: checkPermissionConflicts(role),
 					recommendations: generateRoleRecommendations(role),
 				};
-			} else {
-				// Get all roles
-				const roles = getAllUserRoles(args.includeBuiltIn, args.includeCustom);
-				const roleComparison = compareRoles(roles);
-
-				return {
-					roles: roles,
-					summary: {
-						totalRoles: roles.length,
-						builtInRoles: roles.filter((r) => r.isBuiltIn).length,
-						customRoles: roles.filter((r) => !r.isBuiltIn).length,
-						averagePermissions: Math.round(
-							roles.reduce((sum, r) => sum + r.permissions.length, 0) /
-								roles.length,
-						),
-					},
-					comparison: roleComparison,
-					recommendations: generateRoleManagementRecommendations(roles),
-				};
 			}
+			// Get all roles
+			const roles = getAllUserRoles(args.includeBuiltIn, args.includeCustom);
+			const roleComparison = compareRoles(roles);
+
+			return {
+				roles: roles,
+				summary: {
+					totalRoles: roles.length,
+					builtInRoles: roles.filter((r) => r.isBuiltIn).length,
+					customRoles: roles.filter((r) => !r.isBuiltIn).length,
+					averagePermissions: Math.round(
+						roles.reduce((sum, r) => sum + r.permissions.length, 0) /
+							roles.length,
+					),
+				},
+				comparison: roleComparison,
+				recommendations: generateRoleManagementRecommendations(roles),
+			};
 		} catch (error) {
 			await trackError(error, "getUserRoles", args);
 			throw error;
@@ -562,7 +561,7 @@ function getTablePermissions(
 		permissions: basePermissions,
 		minimumRole: securityLevel === "high" ? "Administrator" : "User",
 		securityLevel: securityLevel,
-		auditRequired: securityLevel !== "low",
+		auditRequired: (securityLevel as "low" | "medium" | "high" | "critical") !== "low",
 	};
 }
 

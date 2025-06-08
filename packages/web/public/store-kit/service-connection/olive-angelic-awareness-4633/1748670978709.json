@@ -1,0 +1,18 @@
+{
+  "context": {
+    "data": {
+      "name": "New Service Connection",
+      "type": "rest",
+      "url": "",
+      "authentication": {
+        "type": "none"
+      },
+      "headers": {},
+      "queryParams": {},
+      "metadata": {
+        "description": "",
+        "tags": []
+      }
+    }
+  }
+}

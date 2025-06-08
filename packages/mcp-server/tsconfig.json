@@ -1,21 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "lib": ["ESNext"],
-    "outDir": "./dist",
-    "rootDir": "../",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "types": ["bun-types"]
-  },
-  "include": ["src/**/*"],
-  "exclude": [
-    "node_modules", "dist"]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src"
+	},
+	"include": ["src/index.ts", "src/**/*.ts"],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"src/index-original.ts",
+		"src/index-consolidated.ts", 
+		"src/index-minimal.ts",
+		"src/index-api-mode*.ts"
+	]
 }

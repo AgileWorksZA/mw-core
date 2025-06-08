@@ -1,0 +1,31 @@
+{
+  "delta": {
+    "files": {
+      "ivory-sunny-rationale-2059": [
+        {
+          "id": "ivory-sunny-rationale-2059",
+          "type": "chat",
+          "path": "lavender-noxious-cow-7412",
+          "mapping": {
+            "input": {
+              "variables": {}
+            },
+            "output": {
+              "variables": {}
+            }
+          }
+        },
+        0,
+        0
+      ]
+    },
+    "fileOrder": {
+      "_t": "a",
+      "_13": [
+        "ivory-sunny-rationale-2059",
+        0,
+        0
+      ]
+    }
+  }
+}

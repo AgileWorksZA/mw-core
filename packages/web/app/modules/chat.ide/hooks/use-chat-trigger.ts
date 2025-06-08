@@ -1,0 +1,1 @@
+export { useChatTrigger } from "~/modules/chat";

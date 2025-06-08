@@ -1,0 +1,23 @@
+{
+  "delta": {
+    "files": {
+      "pink-thorny-seagull-7836": {
+        "mapping": {
+          "input": {
+            "variables": {
+              "asdf": [
+                "test",
+                {
+                  "internal": "pointer",
+                  "type": "json",
+                  "id": "white-electric-planula-4142",
+                  "path": ""
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

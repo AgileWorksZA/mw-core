@@ -1,0 +1,14 @@
+{
+  "delta": {
+    "data": {
+      "document": {
+        "info": {
+          "description": [
+            "API for interacting with MoneyWorks accounting data",
+            "API  for interacting with MoneyWorks accounting data"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      {},
+      "2025-06-06T14:09:38.820Z"
+    ],
+    "sessions": {
+      "1": {
+        "messages": {
+          "3": [
+            {
+              "id": "c3df777d-91b8-4ea3-9e9d-abb898848f6d",
+              "role": "user",
+              "content": "what is my company name?",
+              "createdAt": "2025-06-06T14:09:38.809Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T05:13:37.987Z",
+          "2025-06-06T14:09:38.820Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

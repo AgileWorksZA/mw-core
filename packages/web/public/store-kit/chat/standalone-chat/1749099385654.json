@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-05T04:52:45.964Z",
+      "2025-06-05T04:56:25.146Z"
+    ],
+    "sessions": {
+      "5": {
+        "messages": {
+          "21": [
+            {
+              "id": "614e6f28-9766-44f7-9e3f-5d7e08ae52ac",
+              "role": "user",
+              "content": "How many accounts are there in total?",
+              "createdAt": "2025-06-05T04:56:25.142Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-05T04:52:45.964Z",
+          "2025-06-05T04:56:25.146Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

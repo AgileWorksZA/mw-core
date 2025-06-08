@@ -1,4 +1,4 @@
-import { AssetCatService } from "@moneyworks/api/src/services/tables/assetcat.service";
+import { AssetCatService } from "@moneyworks/api/src/services/tables/asset-cat.service";
 import type { AssetCat } from "@moneyworks/api/src/types/interface/tables/assetcat";
 import { z } from "zod";
 
@@ -8,28 +8,38 @@ const assetcatService = new AssetCatService();
 const assetcatToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for assetcats, get specific assetcat, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for assetcats, get specific assetcat, or list available fields",
+		),
+
 	// Search operation parameters
-	query: z
-		.string()
-		.optional()
-		.describe("Search query (search operation only)"),
+	query: z.string().optional().describe("Search query (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
 	// Get operation parameters (adjust based on primary key)
-	sequenceNumber: z.number().optional().describe("The assetcat sequence number to retrieve (get operation only)"),
-	code: z.string().optional().describe("The assetcat code to retrieve (get operation only)"),
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The assetcat sequence number to retrieve (get operation only)"),
+	code: z
+		.string()
+		.optional()
+		.describe("The assetcat code to retrieve (get operation only)"),
 });
 
 export const assetcatTool = {
-	description: "Unified tool for assetcat operations: search assetcats, get specific assetcat, or list available fields",
+	description:
+		"Unified tool for assetcat operations: search assetcats, get specific assetcat, or list available fields",
 	inputSchema: assetcatToolSchema,
 
 	async execute(args: z.infer<typeof assetcatToolSchema>) {
@@ -67,7 +77,9 @@ export const assetcatTool = {
 				} else if (args.code) {
 					searchCriteria = { Code: args.code };
 				} else {
-					throw new Error("Either sequenceNumber or code is required for get operation");
+					throw new Error(
+						"Either sequenceNumber or code is required for get operation",
+					);
 				}
 
 				const result = await assetcatService.getData({
@@ -77,7 +89,7 @@ export const assetcatTool = {
 				});
 
 				if (!result.data || result.data.length === 0) {
-					throw new Error(`Assetcat not found`);
+					throw new Error("Assetcat not found");
 				}
 
 				return {

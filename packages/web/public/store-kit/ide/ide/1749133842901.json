@@ -1,0 +1,26 @@
+{
+  "delta": {
+    "environmentConfig": {
+      "environments": {
+        "env_1749133842387": [
+          {
+            "id": "env_1749133842387",
+            "name": "Development",
+            "description": "Development environment for testing",
+            "color": "#3b82f6",
+            "variables": {},
+            "secrets": {},
+            "createdAt": "2025-06-05T14:30:42.387Z",
+            "updatedAt": "2025-06-05T14:30:42.387Z"
+          }
+        ]
+      },
+      "metadata": {
+        "updatedAt": [
+          "2025-06-05T14:30:12.689Z",
+          "2025-06-05T14:30:42.387Z"
+        ]
+      }
+    }
+  }
+}

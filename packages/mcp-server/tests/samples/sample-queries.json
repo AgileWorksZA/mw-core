@@ -1,564 +1,564 @@
 {
-  "description": "Sample queries for manual testing of MCP tools",
-  "version": "1.0.0",
-  "categories": {
-    "accounts": {
-      "basic_search": [
-        {
-          "name": "Search for cash accounts",
-          "tool": "searchAccounts",
-          "args": {
-            "query": "cash",
-            "limit": 10
-          },
-          "description": "Find all accounts containing 'cash' in code or description",
-          "expected_results": "Accounts like 'Cash at Bank', 'Petty Cash', etc."
-        },
-        {
-          "name": "Find bank accounts",
-          "tool": "searchAccounts", 
-          "args": {
-            "query": "bank",
-            "type": "CA",
-            "limit": 20
-          },
-          "description": "Find current asset accounts related to banking",
-          "expected_results": "Bank accounts, savings accounts, etc."
-        },
-        {
-          "name": "Revenue accounts search",
-          "tool": "searchAccounts",
-          "args": {
-            "type": "IN",
-            "limit": 15
-          },
-          "description": "List all income/revenue accounts",
-          "expected_results": "Sales revenue, service income, interest income, etc."
-        }
-      ],
-      "specific_accounts": [
-        {
-          "name": "Get cash account details",
-          "tool": "getAccount",
-          "args": {
-            "code": "1000"
-          },
-          "description": "Retrieve details for account code 1000 (typically cash)",
-          "expected_results": "Full account details including balance, type, category"
-        },
-        {
-          "name": "Get sales revenue account",
-          "tool": "getAccount", 
-          "args": {
-            "code": "4000"
-          },
-          "description": "Retrieve details for main sales revenue account",
-          "expected_results": "Revenue account with current period activity"
-        }
-      ],
-      "filtering": [
-        {
-          "name": "Current assets only",
-          "tool": "searchAccounts",
-          "args": {
-            "type": "CA",
-            "limit": 50
-          },
-          "description": "List all current asset accounts",
-          "expected_results": "Cash, receivables, inventory, prepaid expenses"
-        },
-        {
-          "name": "Expense accounts",
-          "tool": "searchAccounts",
-          "args": {
-            "type": "EX", 
-            "limit": 30
-          },
-          "description": "List all expense accounts",
-          "expected_results": "Operating expenses, admin costs, utilities, etc."
-        },
-        {
-          "name": "Fixed assets",
-          "tool": "searchAccounts",
-          "args": {
-            "type": "FA",
-            "limit": 25
-          },
-          "description": "List all fixed asset accounts",
-          "expected_results": "Equipment, buildings, vehicles, accumulated depreciation"
-        }
-      ],
-      "pagination": [
-        {
-          "name": "First page of accounts",
-          "tool": "searchAccounts",
-          "args": {
-            "limit": 10,
-            "offset": 0
-          },
-          "description": "Get first 10 accounts",
-          "expected_results": "First 10 accounts in the system"
-        },
-        {
-          "name": "Second page of accounts",
-          "tool": "searchAccounts",
-          "args": {
-            "limit": 10,
-            "offset": 10
-          },
-          "description": "Get accounts 11-20",
-          "expected_results": "Next 10 accounts"
-        }
-      ]
-    },
-    "transactions": {
-      "recent_activity": [
-        {
-          "name": "Recent sales invoices",
-          "tool": "searchTransactions",
-          "args": {
-            "type": "SI",
-            "status": "OP",
-            "limit": 15
-          },
-          "description": "Find recent open sales invoices",
-          "expected_results": "Unpaid customer invoices"
-        },
-        {
-          "name": "This month's receipts",
-          "tool": "searchTransactions",
-          "args": {
-            "type": "SR",
-            "fromDate": "2024-01-01",
-            "toDate": "2024-01-31",
-            "limit": 20
-          },
-          "description": "All sales receipts for January 2024",
-          "expected_results": "Customer payments received in January"
-        },
-        {
-          "name": "Purchase invoices pending",
-          "tool": "searchTransactions",
-          "args": {
-            "type": "PI",
-            "status": "OP",
-            "limit": 10
-          },
-          "description": "Outstanding supplier invoices",
-          "expected_results": "Unpaid supplier bills"
-        }
-      ],
-      "customer_analysis": [
-        {
-          "name": "Customer transaction history",
-          "tool": "searchTransactions",
-          "args": {
-            "nameCode": "CUST001",
-            "limit": 25
-          },
-          "description": "All transactions for customer CUST001",
-          "expected_results": "Complete transaction history for this customer"
-        },
-        {
-          "name": "Large transactions",
-          "tool": "searchTransactions",
-          "args": {
-            "minAmount": 5000,
-            "limit": 20
-          },
-          "description": "Transactions over $5,000",
-          "expected_results": "High-value transactions across all types"
-        },
-        {
-          "name": "Small amount transactions",
-          "tool": "searchTransactions",
-          "args": {
-            "maxAmount": 100,
-            "limit": 30
-          },
-          "description": "Transactions under $100",
-          "expected_results": "Small transactions, petty cash items"
-        }
-      ],
-      "specific_lookups": [
-        {
-          "name": "Get transaction by sequence",
-          "tool": "getTransaction",
-          "args": {
-            "sequenceNumber": 1001
-          },
-          "description": "Retrieve specific transaction by sequence number",
-          "expected_results": "Complete transaction details"
-        },
-        {
-          "name": "Find transaction by reference",
-          "tool": "getTransactionByRef",
-          "args": {
-            "reference": "INV-001"
-          },
-          "description": "Find transaction using reference number",
-          "expected_results": "Transaction matching the reference"
-        }
-      ],
-      "reporting": [
-        {
-          "name": "Monthly transaction summary",
-          "tool": "getTransactionSummary",
-          "args": {
-            "fromDate": "2024-01-01",
-            "toDate": "2024-01-31"
-          },
-          "description": "Summary of all transactions for January",
-          "expected_results": "Totals by type and status, outstanding amounts"
-        },
-        {
-          "name": "Customer summary",
-          "tool": "getTransactionSummary",
-          "args": {
-            "nameCode": "CUST001",
-            "type": "SI"
-          },
-          "description": "Sales invoice summary for specific customer",
-          "expected_results": "Customer's invoice totals and outstanding balance"
-        }
-      ],
-      "date_ranges": [
-        {
-          "name": "Last quarter transactions",
-          "tool": "searchTransactions",
-          "args": {
-            "fromDate": "2023-10-01",
-            "toDate": "2023-12-31",
-            "limit": 50
-          },
-          "description": "All transactions from Q4 2023",
-          "expected_results": "Quarter's transaction activity"
-        },
-        {
-          "name": "Year-to-date sales",
-          "tool": "searchTransactions",
-          "args": {
-            "type": "SI",
-            "fromDate": "2024-01-01",
-            "limit": 100
-          },
-          "description": "All sales invoices for current year",
-          "expected_results": "YTD sales activity"
-        }
-      ]
-    },
-    "contacts": {
-      "customer_search": [
-        {
-          "name": "Find all customers",
-          "tool": "searchContacts",
-          "args": {
-            "type": "C",
-            "limit": 25
-          },
-          "description": "List all customer contacts",
-          "expected_results": "Customer database"
-        },
-        {
-          "name": "Active customers only",
-          "tool": "searchContacts",
-          "args": {
-            "type": "C",
-            "isActive": true,
-            "limit": 30
-          },
-          "description": "Only active customer accounts",
-          "expected_results": "Currently active customers"
-        },
-        {
-          "name": "Search by company name",
-          "tool": "searchContacts",
-          "args": {
-            "query": "ABC Corporation",
-            "limit": 10
-          },
-          "description": "Find contacts matching company name",
-          "expected_results": "Contacts with ABC Corporation in name/description"
-        }
-      ],
-      "supplier_search": [
-        {
-          "name": "Find all suppliers",
-          "tool": "searchContacts",
-          "args": {
-            "type": "S",
-            "limit": 20
-          },
-          "description": "List all supplier contacts",
-          "expected_results": "Supplier database"
-        },
-        {
-          "name": "Search supplier by code",
-          "tool": "searchContacts",
-          "args": {
-            "code": "SUPP001",
-            "limit": 5
-          },
-          "description": "Find specific supplier by code",
-          "expected_results": "Supplier SUPP001 details"
-        }
-      ],
-      "employee_search": [
-        {
-          "name": "Find all employees",
-          "tool": "searchContacts",
-          "args": {
-            "type": "E",
-            "limit": 15
-          },
-          "description": "List all employee contacts",
-          "expected_results": "Employee database"
-        }
-      ],
-      "specific_contacts": [
-        {
-          "name": "Get customer details",
-          "tool": "getContact",
-          "args": {
-            "code": "CUST001"
-          },
-          "description": "Retrieve full details for customer CUST001",
-          "expected_results": "Complete customer record with address, phone, email"
-        },
-        {
-          "name": "Get supplier details",
-          "tool": "getContact", 
-          "args": {
-            "code": "SUPP001"
-          },
-          "description": "Retrieve full details for supplier SUPP001",
-          "expected_results": "Complete supplier record"
-        }
-      ],
-      "name_searches": [
-        {
-          "name": "Search by partial name",
-          "tool": "searchContacts",
-          "args": {
-            "query": "Smith",
-            "limit": 15
-          },
-          "description": "Find all contacts with 'Smith' in name",
-          "expected_results": "All Smith contacts (customers, suppliers, employees)"
-        },
-        {
-          "name": "Search by description keyword",
-          "tool": "searchContacts",
-          "args": {
-            "description": "Technology",
-            "limit": 10
-          },
-          "description": "Find contacts with 'Technology' in description",
-          "expected_results": "Technology-related companies"
-        }
-      ]
-    },
-    "system_information": [
-      {
-        "name": "List account fields",
-        "tool": "listAccountFields",
-        "args": {},
-        "description": "Get all available account fields for queries",
-        "expected_results": "Complete list of account table fields"
-      },
-      {
-        "name": "List transaction fields", 
-        "tool": "listTransactionFields",
-        "args": {},
-        "description": "Get all available transaction fields and types",
-        "expected_results": "Transaction fields, types, and status codes"
-      },
-      {
-        "name": "List contact fields",
-        "tool": "listContactFields", 
-        "args": {},
-        "description": "Get all available contact fields",
-        "expected_results": "Complete list of contact table fields"
-      }
-    ]
-  },
-  "test_scenarios": {
-    "data_quality": [
-      {
-        "name": "Empty result set",
-        "tool": "searchAccounts",
-        "args": {
-          "query": "NONEXISTENT_ACCOUNT_XYZ",
-          "limit": 10
-        },
-        "description": "Test handling of no results",
-        "expected_results": "Empty accounts array, total: 0"
-      },
-      {
-        "name": "Invalid account code lookup",
-        "tool": "getAccount",
-        "args": {
-          "code": "INVALID999"
-        },
-        "description": "Test error handling for non-existent account",
-        "expected_results": "Error: Account not found"
-      }
-    ],
-    "edge_cases": [
-      {
-        "name": "Maximum limit test",
-        "tool": "searchAccounts",
-        "args": {
-          "limit": 100,
-          "offset": 0
-        },
-        "description": "Test maximum allowed limit",
-        "expected_results": "Up to 100 accounts returned"
-      },
-      {
-        "name": "Large offset test",
-        "tool": "searchTransactions",
-        "args": {
-          "limit": 10,
-          "offset": 1000
-        },
-        "description": "Test pagination with large offset",
-        "expected_results": "Results from offset 1000 or empty if beyond data"
-      },
-      {
-        "name": "Special characters in query",
-        "tool": "searchContacts",
-        "args": {
-          "query": "O'Brien & Co.",
-          "limit": 5
-        },
-        "description": "Test handling of special characters",
-        "expected_results": "Contacts matching the name with special chars"
-      }
-    ],
-    "performance": [
-      {
-        "name": "Large result set",
-        "tool": "searchAccounts",
-        "args": {
-          "limit": 100
-        },
-        "description": "Test performance with maximum results",
-        "expected_results": "Fast response even with 100 records"
-      },
-      {
-        "name": "Complex transaction search",
-        "tool": "searchTransactions",
-        "args": {
-          "type": "SI",
-          "status": "OP",
-          "fromDate": "2023-01-01",
-          "toDate": "2024-12-31",
-          "minAmount": 100,
-          "maxAmount": 10000,
-          "limit": 50
-        },
-        "description": "Test complex multi-filter search",
-        "expected_results": "Filtered results meeting all criteria"
-      }
-    ]
-  },
-  "validation_tests": {
-    "schema_validation": [
-      {
-        "name": "Invalid account type",
-        "tool": "searchAccounts",
-        "args": {
-          "type": "INVALID",
-          "limit": 10
-        },
-        "description": "Test schema validation for invalid enum",
-        "expected_results": "Validation error before API call"
-      },
-      {
-        "name": "Negative limit",
-        "tool": "searchTransactions",
-        "args": {
-          "limit": -5
-        },
-        "description": "Test validation of negative limit",
-        "expected_results": "Validation error for negative number"
-      },
-      {
-        "name": "Missing required field",
-        "tool": "getAccount", 
-        "args": {},
-        "description": "Test validation when required field missing",
-        "expected_results": "Validation error for missing code"
-      }
-    ]
-  },
-  "workflow_examples": {
-    "customer_analysis": [
-      {
-        "sequence": 1,
-        "name": "Find customer",
-        "tool": "searchContacts",
-        "args": {
-          "query": "ABC Corp",
-          "type": "C",
-          "limit": 5
-        },
-        "description": "First, find the customer"
-      },
-      {
-        "sequence": 2,
-        "name": "Get customer transactions",
-        "tool": "searchTransactions",
-        "args": {
-          "nameCode": "CUST001",
-          "limit": 20
-        },
-        "description": "Then get their transaction history",
-        "note": "Use customer code from step 1"
-      },
-      {
-        "sequence": 3,
-        "name": "Get customer summary",
-        "tool": "getTransactionSummary",
-        "args": {
-          "nameCode": "CUST001"
-        },
-        "description": "Finally get summary totals"
-      }
-    ],
-    "account_reconciliation": [
-      {
-        "sequence": 1,
-        "name": "Find bank account",
-        "tool": "searchAccounts",
-        "args": {
-          "query": "bank",
-          "type": "CA",
-          "limit": 10
-        },
-        "description": "Find the bank account to reconcile"
-      },
-      {
-        "sequence": 2,
-        "name": "Get account details",
-        "tool": "getAccount",
-        "args": {
-          "code": "1000"
-        },
-        "description": "Get current balance and details"
-      },
-      {
-        "sequence": 3,
-        "name": "Get recent transactions",
-        "tool": "searchTransactions",
-        "args": {
-          "type": "BR",
-          "fromDate": "2024-01-01",
-          "limit": 50
-        },
-        "description": "Get bank receipts for reconciliation"
-      }
-    ]
-  }
+	"description": "Sample queries for manual testing of MCP tools",
+	"version": "1.0.0",
+	"categories": {
+		"accounts": {
+			"basic_search": [
+				{
+					"name": "Search for cash accounts",
+					"tool": "searchAccounts",
+					"args": {
+						"query": "cash",
+						"limit": 10
+					},
+					"description": "Find all accounts containing 'cash' in code or description",
+					"expected_results": "Accounts like 'Cash at Bank', 'Petty Cash', etc."
+				},
+				{
+					"name": "Find bank accounts",
+					"tool": "searchAccounts",
+					"args": {
+						"query": "bank",
+						"type": "CA",
+						"limit": 20
+					},
+					"description": "Find current asset accounts related to banking",
+					"expected_results": "Bank accounts, savings accounts, etc."
+				},
+				{
+					"name": "Revenue accounts search",
+					"tool": "searchAccounts",
+					"args": {
+						"type": "IN",
+						"limit": 15
+					},
+					"description": "List all income/revenue accounts",
+					"expected_results": "Sales revenue, service income, interest income, etc."
+				}
+			],
+			"specific_accounts": [
+				{
+					"name": "Get cash account details",
+					"tool": "getAccount",
+					"args": {
+						"code": "1000"
+					},
+					"description": "Retrieve details for account code 1000 (typically cash)",
+					"expected_results": "Full account details including balance, type, category"
+				},
+				{
+					"name": "Get sales revenue account",
+					"tool": "getAccount",
+					"args": {
+						"code": "4000"
+					},
+					"description": "Retrieve details for main sales revenue account",
+					"expected_results": "Revenue account with current period activity"
+				}
+			],
+			"filtering": [
+				{
+					"name": "Current assets only",
+					"tool": "searchAccounts",
+					"args": {
+						"type": "CA",
+						"limit": 50
+					},
+					"description": "List all current asset accounts",
+					"expected_results": "Cash, receivables, inventory, prepaid expenses"
+				},
+				{
+					"name": "Expense accounts",
+					"tool": "searchAccounts",
+					"args": {
+						"type": "EX",
+						"limit": 30
+					},
+					"description": "List all expense accounts",
+					"expected_results": "Operating expenses, admin costs, utilities, etc."
+				},
+				{
+					"name": "Fixed assets",
+					"tool": "searchAccounts",
+					"args": {
+						"type": "FA",
+						"limit": 25
+					},
+					"description": "List all fixed asset accounts",
+					"expected_results": "Equipment, buildings, vehicles, accumulated depreciation"
+				}
+			],
+			"pagination": [
+				{
+					"name": "First page of accounts",
+					"tool": "searchAccounts",
+					"args": {
+						"limit": 10,
+						"offset": 0
+					},
+					"description": "Get first 10 accounts",
+					"expected_results": "First 10 accounts in the system"
+				},
+				{
+					"name": "Second page of accounts",
+					"tool": "searchAccounts",
+					"args": {
+						"limit": 10,
+						"offset": 10
+					},
+					"description": "Get accounts 11-20",
+					"expected_results": "Next 10 accounts"
+				}
+			]
+		},
+		"transactions": {
+			"recent_activity": [
+				{
+					"name": "Recent sales invoices",
+					"tool": "searchTransactions",
+					"args": {
+						"type": "SI",
+						"status": "OP",
+						"limit": 15
+					},
+					"description": "Find recent open sales invoices",
+					"expected_results": "Unpaid customer invoices"
+				},
+				{
+					"name": "This month's receipts",
+					"tool": "searchTransactions",
+					"args": {
+						"type": "SR",
+						"fromDate": "2024-01-01",
+						"toDate": "2024-01-31",
+						"limit": 20
+					},
+					"description": "All sales receipts for January 2024",
+					"expected_results": "Customer payments received in January"
+				},
+				{
+					"name": "Purchase invoices pending",
+					"tool": "searchTransactions",
+					"args": {
+						"type": "PI",
+						"status": "OP",
+						"limit": 10
+					},
+					"description": "Outstanding supplier invoices",
+					"expected_results": "Unpaid supplier bills"
+				}
+			],
+			"customer_analysis": [
+				{
+					"name": "Customer transaction history",
+					"tool": "searchTransactions",
+					"args": {
+						"nameCode": "CUST001",
+						"limit": 25
+					},
+					"description": "All transactions for customer CUST001",
+					"expected_results": "Complete transaction history for this customer"
+				},
+				{
+					"name": "Large transactions",
+					"tool": "searchTransactions",
+					"args": {
+						"minAmount": 5000,
+						"limit": 20
+					},
+					"description": "Transactions over $5,000",
+					"expected_results": "High-value transactions across all types"
+				},
+				{
+					"name": "Small amount transactions",
+					"tool": "searchTransactions",
+					"args": {
+						"maxAmount": 100,
+						"limit": 30
+					},
+					"description": "Transactions under $100",
+					"expected_results": "Small transactions, petty cash items"
+				}
+			],
+			"specific_lookups": [
+				{
+					"name": "Get transaction by sequence",
+					"tool": "getTransaction",
+					"args": {
+						"sequenceNumber": 1001
+					},
+					"description": "Retrieve specific transaction by sequence number",
+					"expected_results": "Complete transaction details"
+				},
+				{
+					"name": "Find transaction by reference",
+					"tool": "getTransactionByRef",
+					"args": {
+						"reference": "INV-001"
+					},
+					"description": "Find transaction using reference number",
+					"expected_results": "Transaction matching the reference"
+				}
+			],
+			"reporting": [
+				{
+					"name": "Monthly transaction summary",
+					"tool": "getTransactionSummary",
+					"args": {
+						"fromDate": "2024-01-01",
+						"toDate": "2024-01-31"
+					},
+					"description": "Summary of all transactions for January",
+					"expected_results": "Totals by type and status, outstanding amounts"
+				},
+				{
+					"name": "Customer summary",
+					"tool": "getTransactionSummary",
+					"args": {
+						"nameCode": "CUST001",
+						"type": "SI"
+					},
+					"description": "Sales invoice summary for specific customer",
+					"expected_results": "Customer's invoice totals and outstanding balance"
+				}
+			],
+			"date_ranges": [
+				{
+					"name": "Last quarter transactions",
+					"tool": "searchTransactions",
+					"args": {
+						"fromDate": "2023-10-01",
+						"toDate": "2023-12-31",
+						"limit": 50
+					},
+					"description": "All transactions from Q4 2023",
+					"expected_results": "Quarter's transaction activity"
+				},
+				{
+					"name": "Year-to-date sales",
+					"tool": "searchTransactions",
+					"args": {
+						"type": "SI",
+						"fromDate": "2024-01-01",
+						"limit": 100
+					},
+					"description": "All sales invoices for current year",
+					"expected_results": "YTD sales activity"
+				}
+			]
+		},
+		"contacts": {
+			"customer_search": [
+				{
+					"name": "Find all customers",
+					"tool": "searchContacts",
+					"args": {
+						"type": "C",
+						"limit": 25
+					},
+					"description": "List all customer contacts",
+					"expected_results": "Customer database"
+				},
+				{
+					"name": "Active customers only",
+					"tool": "searchContacts",
+					"args": {
+						"type": "C",
+						"isActive": true,
+						"limit": 30
+					},
+					"description": "Only active customer accounts",
+					"expected_results": "Currently active customers"
+				},
+				{
+					"name": "Search by company name",
+					"tool": "searchContacts",
+					"args": {
+						"query": "ABC Corporation",
+						"limit": 10
+					},
+					"description": "Find contacts matching company name",
+					"expected_results": "Contacts with ABC Corporation in name/description"
+				}
+			],
+			"supplier_search": [
+				{
+					"name": "Find all suppliers",
+					"tool": "searchContacts",
+					"args": {
+						"type": "S",
+						"limit": 20
+					},
+					"description": "List all supplier contacts",
+					"expected_results": "Supplier database"
+				},
+				{
+					"name": "Search supplier by code",
+					"tool": "searchContacts",
+					"args": {
+						"code": "SUPP001",
+						"limit": 5
+					},
+					"description": "Find specific supplier by code",
+					"expected_results": "Supplier SUPP001 details"
+				}
+			],
+			"employee_search": [
+				{
+					"name": "Find all employees",
+					"tool": "searchContacts",
+					"args": {
+						"type": "E",
+						"limit": 15
+					},
+					"description": "List all employee contacts",
+					"expected_results": "Employee database"
+				}
+			],
+			"specific_contacts": [
+				{
+					"name": "Get customer details",
+					"tool": "getContact",
+					"args": {
+						"code": "CUST001"
+					},
+					"description": "Retrieve full details for customer CUST001",
+					"expected_results": "Complete customer record with address, phone, email"
+				},
+				{
+					"name": "Get supplier details",
+					"tool": "getContact",
+					"args": {
+						"code": "SUPP001"
+					},
+					"description": "Retrieve full details for supplier SUPP001",
+					"expected_results": "Complete supplier record"
+				}
+			],
+			"name_searches": [
+				{
+					"name": "Search by partial name",
+					"tool": "searchContacts",
+					"args": {
+						"query": "Smith",
+						"limit": 15
+					},
+					"description": "Find all contacts with 'Smith' in name",
+					"expected_results": "All Smith contacts (customers, suppliers, employees)"
+				},
+				{
+					"name": "Search by description keyword",
+					"tool": "searchContacts",
+					"args": {
+						"description": "Technology",
+						"limit": 10
+					},
+					"description": "Find contacts with 'Technology' in description",
+					"expected_results": "Technology-related companies"
+				}
+			]
+		},
+		"system_information": [
+			{
+				"name": "List account fields",
+				"tool": "listAccountFields",
+				"args": {},
+				"description": "Get all available account fields for queries",
+				"expected_results": "Complete list of account table fields"
+			},
+			{
+				"name": "List transaction fields",
+				"tool": "listTransactionFields",
+				"args": {},
+				"description": "Get all available transaction fields and types",
+				"expected_results": "Transaction fields, types, and status codes"
+			},
+			{
+				"name": "List contact fields",
+				"tool": "listContactFields",
+				"args": {},
+				"description": "Get all available contact fields",
+				"expected_results": "Complete list of contact table fields"
+			}
+		]
+	},
+	"test_scenarios": {
+		"data_quality": [
+			{
+				"name": "Empty result set",
+				"tool": "searchAccounts",
+				"args": {
+					"query": "NONEXISTENT_ACCOUNT_XYZ",
+					"limit": 10
+				},
+				"description": "Test handling of no results",
+				"expected_results": "Empty accounts array, total: 0"
+			},
+			{
+				"name": "Invalid account code lookup",
+				"tool": "getAccount",
+				"args": {
+					"code": "INVALID999"
+				},
+				"description": "Test error handling for non-existent account",
+				"expected_results": "Error: Account not found"
+			}
+		],
+		"edge_cases": [
+			{
+				"name": "Maximum limit test",
+				"tool": "searchAccounts",
+				"args": {
+					"limit": 100,
+					"offset": 0
+				},
+				"description": "Test maximum allowed limit",
+				"expected_results": "Up to 100 accounts returned"
+			},
+			{
+				"name": "Large offset test",
+				"tool": "searchTransactions",
+				"args": {
+					"limit": 10,
+					"offset": 1000
+				},
+				"description": "Test pagination with large offset",
+				"expected_results": "Results from offset 1000 or empty if beyond data"
+			},
+			{
+				"name": "Special characters in query",
+				"tool": "searchContacts",
+				"args": {
+					"query": "O'Brien & Co.",
+					"limit": 5
+				},
+				"description": "Test handling of special characters",
+				"expected_results": "Contacts matching the name with special chars"
+			}
+		],
+		"performance": [
+			{
+				"name": "Large result set",
+				"tool": "searchAccounts",
+				"args": {
+					"limit": 100
+				},
+				"description": "Test performance with maximum results",
+				"expected_results": "Fast response even with 100 records"
+			},
+			{
+				"name": "Complex transaction search",
+				"tool": "searchTransactions",
+				"args": {
+					"type": "SI",
+					"status": "OP",
+					"fromDate": "2023-01-01",
+					"toDate": "2024-12-31",
+					"minAmount": 100,
+					"maxAmount": 10000,
+					"limit": 50
+				},
+				"description": "Test complex multi-filter search",
+				"expected_results": "Filtered results meeting all criteria"
+			}
+		]
+	},
+	"validation_tests": {
+		"schema_validation": [
+			{
+				"name": "Invalid account type",
+				"tool": "searchAccounts",
+				"args": {
+					"type": "INVALID",
+					"limit": 10
+				},
+				"description": "Test schema validation for invalid enum",
+				"expected_results": "Validation error before API call"
+			},
+			{
+				"name": "Negative limit",
+				"tool": "searchTransactions",
+				"args": {
+					"limit": -5
+				},
+				"description": "Test validation of negative limit",
+				"expected_results": "Validation error for negative number"
+			},
+			{
+				"name": "Missing required field",
+				"tool": "getAccount",
+				"args": {},
+				"description": "Test validation when required field missing",
+				"expected_results": "Validation error for missing code"
+			}
+		]
+	},
+	"workflow_examples": {
+		"customer_analysis": [
+			{
+				"sequence": 1,
+				"name": "Find customer",
+				"tool": "searchContacts",
+				"args": {
+					"query": "ABC Corp",
+					"type": "C",
+					"limit": 5
+				},
+				"description": "First, find the customer"
+			},
+			{
+				"sequence": 2,
+				"name": "Get customer transactions",
+				"tool": "searchTransactions",
+				"args": {
+					"nameCode": "CUST001",
+					"limit": 20
+				},
+				"description": "Then get their transaction history",
+				"note": "Use customer code from step 1"
+			},
+			{
+				"sequence": 3,
+				"name": "Get customer summary",
+				"tool": "getTransactionSummary",
+				"args": {
+					"nameCode": "CUST001"
+				},
+				"description": "Finally get summary totals"
+			}
+		],
+		"account_reconciliation": [
+			{
+				"sequence": 1,
+				"name": "Find bank account",
+				"tool": "searchAccounts",
+				"args": {
+					"query": "bank",
+					"type": "CA",
+					"limit": 10
+				},
+				"description": "Find the bank account to reconcile"
+			},
+			{
+				"sequence": 2,
+				"name": "Get account details",
+				"tool": "getAccount",
+				"args": {
+					"code": "1000"
+				},
+				"description": "Get current balance and details"
+			},
+			{
+				"sequence": 3,
+				"name": "Get recent transactions",
+				"tool": "searchTransactions",
+				"args": {
+					"type": "BR",
+					"fromDate": "2024-01-01",
+					"limit": 50
+				},
+				"description": "Get bank receipts for reconciliation"
+			}
+		]
+	}
 }

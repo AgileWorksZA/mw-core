@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T06:03:46.173Z",
+      "2025-06-04T06:15:21.144Z"
+    ],
+    "sessions": {
+      "2": {
+        "messages": {
+          "27": [
+            {
+              "id": "8344bc67-f672-433f-8603-4190441c95e8",
+              "role": "user",
+              "content": "can you use the evaluateExpression tool to run GetCompanyName()?",
+              "createdAt": "2025-06-04T06:15:21.136Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T06:03:46.173Z",
+          "2025-06-04T06:15:21.144Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

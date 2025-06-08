@@ -1,0 +1,29 @@
+{
+  "delta": {
+    "files": {
+      "violet-parched-knickers-1135": [
+        {
+          "id": "violet-parched-knickers-1135",
+          "type": "json",
+          "path": "magenta-unsightly-heroine-9763",
+          "mapping": {
+            "input": {
+              "variables": {
+                "asdfad": ""
+              }
+            },
+            "output": {
+              "variables": {}
+            }
+          }
+        }
+      ]
+    },
+    "fileOrder": {
+      "0": [
+        "violet-parched-knickers-1135"
+      ],
+      "_t": "a"
+    }
+  }
+}

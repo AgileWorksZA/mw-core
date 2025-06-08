@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T04:51:16.337Z",
+      "2025-06-04T04:51:18.534Z"
+    ],
+    "sessions": {
+      "0": {
+        "messages": {
+          "1": [
+            {
+              "id": "09aa11f0-522e-4d8c-89a0-9dd8c7098922",
+              "role": "assistant",
+              "content": "Hello! How can I assist you today with MoneyWorks data or any related queries?",
+              "createdAt": "2025-06-04T04:51:18.534Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T04:51:16.337Z",
+          "2025-06-04T04:51:18.534Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

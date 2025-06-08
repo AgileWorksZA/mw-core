@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T06:21:19.253Z",
+      "2025-06-04T06:22:13.125Z"
+    ],
+    "sessions": {
+      "2": {
+        "messages": {
+          "31": [
+            {
+              "id": "5844e00d-387b-44eb-b45b-c4c14fb8fa7d",
+              "role": "user",
+              "content": "list all available MCP tools",
+              "createdAt": "2025-06-04T06:22:13.119Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T06:21:19.253Z",
+          "2025-06-04T06:22:13.125Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

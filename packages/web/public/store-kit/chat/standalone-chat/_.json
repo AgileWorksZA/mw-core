@@ -1,0 +1,32 @@
+{
+  "id": "standalone-chat",
+  "title": "Chat Sessions",
+  "messages": [],
+  "createdAt": "2024-01-03T00:00:00.000Z",
+  "updatedAt": "2025-06-04T04:51:18.534Z",
+  "currentSessionId": "default-session",
+  "sessions": [
+    {
+      "id": "default-session",
+      "title": "hi",
+      "messages": [
+        {
+          "id": "d3279c54-b615-4de7-a7b9-c7320ddd1f6f",
+          "role": "user",
+          "content": "hi",
+          "createdAt": "2025-06-04T04:51:16.336Z"
+        },
+        {
+          "id": "09aa11f0-522e-4d8c-89a0-9dd8c7098922",
+          "role": "assistant",
+          "content": "Hello! How can I assist you today with MoneyWorks data or any related queries?",
+          "createdAt": "2025-06-04T04:51:18.534Z"
+        }
+      ],
+      "createdAt": "2024-01-03T00:00:00.000Z",
+      "updatedAt": "2025-06-04T04:51:18.534Z"
+    }
+  ],
+  "isLoading": false,
+  "error": null
+}

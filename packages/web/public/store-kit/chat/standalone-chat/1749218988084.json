@@ -1,0 +1,34 @@
+{
+  "delta": {
+    "updatedAt": [
+      {},
+      "2025-06-06T14:09:47.570Z"
+    ],
+    "sessions": {
+      "1": {
+        "messages": {
+          "3": {
+            "createdAt": [
+              {},
+              "2025-06-06T14:09:38.809Z"
+            ]
+          },
+          "4": [
+            {
+              "id": "2feab7a7-c35e-4c08-a30a-94663a4e05b7",
+              "role": "assistant",
+              "content": "I am currently unable to retrieve the company name due to a technical issue. A ticket has been logged for further investigation.",
+              "createdAt": "2025-06-06T14:09:47.570Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          {},
+          "2025-06-06T14:09:47.570Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

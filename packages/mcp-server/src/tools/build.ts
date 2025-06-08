@@ -8,29 +8,45 @@ const buildService = new BuildService();
 const buildToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for builds, get specific build, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for builds, get specific build, or list available fields",
+		),
+
 	// Search operation parameters
 	productSeq: z
 		.number()
 		.optional()
 		.describe("Filter by product sequence number (search operation only)"),
-	partCode: z.string().optional().describe("Search by part code (search operation only)"),
-	order: z.number().optional().describe("Filter by order number (search operation only)"),
+	partCode: z
+		.string()
+		.optional()
+		.describe("Search by part code (search operation only)"),
+	order: z
+		.number()
+		.optional()
+		.describe("Filter by order number (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
 	// Get operation parameters
-	sequenceNumber: z.number().optional().describe("The build sequence number to retrieve (get operation only)"),
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The build sequence number to retrieve (get operation only)"),
 });
 
 export const buildTool = {
-	description: "Unified tool for build operations: search builds, get specific build, or list available fields",
+	description:
+		"Unified tool for build operations: search builds, get specific build, or list available fields",
 	inputSchema: buildToolSchema,
 
 	async execute(args: z.infer<typeof buildToolSchema>) {

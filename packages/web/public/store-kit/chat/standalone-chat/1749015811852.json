@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T05:43:28.666Z",
+      "2025-06-04T05:43:31.340Z"
+    ],
+    "sessions": {
+      "2": {
+        "messages": {
+          "14": [
+            {
+              "id": "06fa93d3-4546-451b-8a69-6babc4c2be49",
+              "role": "assistant",
+              "content": "I am currently unable to retrieve the company name due to a technical issue with the system. The error indicates a constraint failure. Please try again later or contact support for assistance.",
+              "createdAt": "2025-06-04T05:43:31.340Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T05:43:28.666Z",
+          "2025-06-04T05:43:31.340Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

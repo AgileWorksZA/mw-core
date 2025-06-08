@@ -1,0 +1,20 @@
+{
+  "delta": {
+    "files": {
+      "pink-thorny-seagull-7836": {
+        "mapping": {
+          "input": {
+            "variables": {
+              "asdf": {
+                "path": [
+                  "",
+                  "asdfasdf"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "context": {
+    "name": "ide",
+    "id": "ide",
+    "files": {
+      "orchid-defensive-freight-5815": {
+        "id": "orchid-defensive-freight-5815",
+        "type": "json",
+        "path": "violet-delirious-bell-1656",
+        "mapping": {
+          "input": {
+            "variables": {}
+          },
+          "output": {
+            "variables": {}
+          }
+        }
+      }
+    },
+    "fileOrder": [
+      "orchid-defensive-freight-5815"
+    ],
+    "expandedPaths": []
+  }
+}

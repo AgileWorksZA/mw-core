@@ -1,0 +1,1 @@
+{"context":{"id":"standalone-chat","title":"Chat Sessions","messages":[],"createdAt":"2024-01-03T00:00:00.000Z","updatedAt":"2024-01-03T00:00:00.000Z","currentSessionId":"default-session","sessions":[{"id":"default-session","title":"New Chat","messages":[],"createdAt":"2024-01-03T00:00:00.000Z","updatedAt":"2024-01-03T00:00:00.000Z"}],"isLoading":false,"error":null}}

@@ -1,0 +1,25 @@
+{
+  "context": {
+    "name": "ide",
+    "id": "ide",
+    "files": {
+      "violet-parched-knickers-1135": {
+        "id": "violet-parched-knickers-1135",
+        "type": "json",
+        "path": "magenta-unsightly-heroine-9763",
+        "mapping": {
+          "input": {
+            "variables": {}
+          },
+          "output": {
+            "variables": {}
+          }
+        }
+      }
+    },
+    "fileOrder": [
+      "violet-parched-knickers-1135"
+    ],
+    "expandedPaths": []
+  }
+}

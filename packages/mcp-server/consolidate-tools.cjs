@@ -1,23 +1,51 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("node:fs");
+const path = require("node:path");
 
 // List of table tools that need consolidation (excluding already done ones)
 const tableTools = [
-  'product', 'job', 'detail', 'tax-rate', 'department', 'payment', 
-  'bank-rec', 'ledger', 'job-sheet', 'contact', 'inventory', 'general',
-  'login', 'message', 'list', 'user', 'filter', 'memo', 'user2', 
-  'stickie', 'off-ledger', 'auto-split', 'link', 'log', 'asset', 
-  'asset-cat', 'asset-log'
+	"product",
+	"job",
+	"detail",
+	"tax-rate",
+	"department",
+	"payment",
+	"bank-rec",
+	"ledger",
+	"job-sheet",
+	"contact",
+	"inventory",
+	"general",
+	"login",
+	"message",
+	"list",
+	"user",
+	"filter",
+	"memo",
+	"user2",
+	"stickie",
+	"off-ledger",
+	"auto-split",
+	"link",
+	"log",
+	"asset",
+	"asset-cat",
+	"asset-log",
 ];
 
 // Template for consolidated tool
-function generateConsolidatedTool(tableName, serviceName, interfaceName, fieldsName) {
-  const capitalizedName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
-  const toolName = tableName.toLowerCase() + 'Tool';
-  
-  return `import { ${serviceName} } from "@moneyworks/api/src/services/tables/${tableName}.service";
+function generateConsolidatedTool(
+	tableName,
+	serviceName,
+	interfaceName,
+	fieldsName,
+) {
+	const capitalizedName =
+		tableName.charAt(0).toUpperCase() + tableName.slice(1);
+	const toolName = `${tableName.toLowerCase()}Tool`;
+
+	return `import { ${serviceName} } from "@moneyworks/api/src/services/tables/${tableName}.service";
 import type { ${interfaceName} } from "@moneyworks/api/src/types/interface/tables/${tableName}";
 import { z } from "zod";
 
@@ -126,52 +154,56 @@ export const ${toolName} = {
 
 // Function to consolidate a single tool file
 function consolidateToolFile(toolName) {
-  const filePath = path.join(__dirname, 'src', 'tools', `${toolName}.ts`);
-  
-  if (!fs.existsSync(filePath)) {
-    console.log(`Skipping ${toolName}.ts - file not found`);
-    return false;
-  }
+	const filePath = path.join(__dirname, "src", "tools", `${toolName}.ts`);
 
-  try {
-    // Generate names based on conventions
-    const capitalizedName = toolName.charAt(0).toUpperCase() + toolName.slice(1).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-    const serviceName = `${capitalizedName}Service`;
-    const interfaceName = capitalizedName;
-    const fieldsName = `${capitalizedName}Fields`;
-    
-    // Generate consolidated content
-    const consolidatedContent = generateConsolidatedTool(
-      toolName.replace(/-/g, ''), // Remove hyphens for import paths
-      serviceName,
-      interfaceName,
-      fieldsName
-    );
+	if (!fs.existsSync(filePath)) {
+		console.log(`Skipping ${toolName}.ts - file not found`);
+		return false;
+	}
 
-    // Write the consolidated file
-    fs.writeFileSync(filePath, consolidatedContent);
-    console.log(`✓ Consolidated ${toolName}.ts`);
-    return true;
-  } catch (error) {
-    console.error(`✗ Failed to consolidate ${toolName}.ts:`, error.message);
-    return false;
-  }
+	try {
+		// Generate names based on conventions
+		const capitalizedName =
+			toolName.charAt(0).toUpperCase() +
+			toolName.slice(1).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+		const serviceName = `${capitalizedName}Service`;
+		const interfaceName = capitalizedName;
+		const fieldsName = `${capitalizedName}Fields`;
+
+		// Generate consolidated content
+		const consolidatedContent = generateConsolidatedTool(
+			toolName.replace(/-/g, ""), // Remove hyphens for import paths
+			serviceName,
+			interfaceName,
+			fieldsName,
+		);
+
+		// Write the consolidated file
+		fs.writeFileSync(filePath, consolidatedContent);
+		console.log(`✓ Consolidated ${toolName}.ts`);
+		return true;
+	} catch (error) {
+		console.error(`✗ Failed to consolidate ${toolName}.ts:`, error.message);
+		return false;
+	}
 }
 
 // Main execution
-console.log('Starting tool consolidation...');
+console.log("Starting tool consolidation...");
 let consolidated = 0;
 let failed = 0;
 
 for (const toolName of tableTools) {
-  if (consolidateToolFile(toolName)) {
-    consolidated++;
-  } else {
-    failed++;
-  }
+	if (consolidateToolFile(toolName)) {
+		consolidated++;
+	} else {
+		failed++;
+	}
 }
 
-console.log(`\nConsolidation complete:`);
+console.log("\nConsolidation complete:");
 console.log(`✓ Successfully consolidated: ${consolidated} tools`);
 console.log(`✗ Failed: ${failed} tools`);
-console.log(`\nEstimated tool reduction: ${consolidated * 2} tools (assuming 3 → 1 consolidation)`);
+console.log(
+	`\nEstimated tool reduction: ${consolidated * 2} tools (assuming 3 → 1 consolidation)`,
+);

@@ -1,0 +1,22 @@
+{
+  "data": {
+    "manifest": {
+      "id": "company-c",
+      "type": "test-file",
+      "path": "company-c"
+    },
+    "mapping": {
+      "input": {
+        "variables": {
+          "indirectCompanyRef": {
+            "internal": "pointer",
+            "type": "test-file",
+            "id": "company-b",
+            "path": "companyRef"
+          }
+        }
+      },
+      "output": true
+    }
+  }
+}

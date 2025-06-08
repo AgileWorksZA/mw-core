@@ -1,0 +1,34 @@
+{
+  "delta": {
+    "updatedAt": [
+      {},
+      "2025-06-06T15:45:50.367Z"
+    ],
+    "sessions": {
+      "6": {
+        "messages": {
+          "18": {
+            "createdAt": [
+              {},
+              "2025-06-06T15:45:45.196Z"
+            ]
+          },
+          "19": [
+            {
+              "id": "48aea47e-5d82-4e63-8f47-2f1b563cc8dd",
+              "role": "assistant",
+              "content": "You have a total of 78 accounts in your MoneyWorks system.",
+              "createdAt": "2025-06-06T15:45:50.366Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          {},
+          "2025-06-06T15:45:50.367Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

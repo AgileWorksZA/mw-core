@@ -8,28 +8,38 @@ const messageService = new MessageService();
 const messageToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for messages, get specific message, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for messages, get specific message, or list available fields",
+		),
+
 	// Search operation parameters
-	query: z
-		.string()
-		.optional()
-		.describe("Search query (search operation only)"),
+	query: z.string().optional().describe("Search query (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
-	// Get operation parameters (adjust based on primary key)
-	sequenceNumber: z.number().optional().describe("The message sequence number to retrieve (get operation only)"),
-	code: z.string().optional().describe("The message code to retrieve (get operation only)"),
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
+	// Get operation parameters
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The message sequence number to retrieve (get operation only)"),
+	user: z
+		.string()
+		.optional()
+		.describe("The user to retrieve messages for (get operation only)"),
 });
 
 export const messageTool = {
-	description: "Unified tool for message operations: search messages, get specific message, or list available fields",
+	description:
+		"Unified tool for message operations: search messages, get specific message, or list available fields",
 	inputSchema: messageToolSchema,
 
 	async execute(args: z.infer<typeof messageToolSchema>) {
@@ -39,8 +49,8 @@ export const messageTool = {
 
 				// Build search criteria
 				if (args.query) {
-					// Adjust based on table structure
-					search.Code = args.query;
+					// Search by message content
+					search.Message = args.query;
 				}
 
 				// Execute search using the existing service
@@ -60,14 +70,16 @@ export const messageTool = {
 			}
 
 			case "get": {
-				// Try sequence number first, then code
+				// Try sequence number first, then user
 				let searchCriteria;
 				if (args.sequenceNumber) {
 					searchCriteria = { SequenceNumber: args.sequenceNumber };
-				} else if (args.code) {
-					searchCriteria = { Code: args.code };
+				} else if (args.user) {
+					searchCriteria = { User: args.user };
 				} else {
-					throw new Error("Either sequenceNumber or code is required for get operation");
+					throw new Error(
+						"Either sequenceNumber or user is required for get operation",
+					);
 				}
 
 				const result = await messageService.getData({
@@ -77,7 +89,7 @@ export const messageTool = {
 				});
 
 				if (!result.data || result.data.length === 0) {
-					throw new Error(`Message not found`);
+					throw new Error("Message not found");
 				}
 
 				return {

@@ -1,0 +1,18 @@
+{
+  "delta": {
+    "data": {
+      "authentication": {
+        "type": [
+          "apikey",
+          "oauth2"
+        ]
+      },
+      "metadata": {
+        "updatedAt": [
+          "2025-05-31T05:56:31.198Z",
+          "2025-05-31T05:56:33.118Z"
+        ]
+      }
+    }
+  }
+}

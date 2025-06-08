@@ -548,15 +548,19 @@ function generateEnumExamples(enumInfo: EnumInfo): {
 	conditionalLogic: string[];
 	validation: string[];
 } {
-	const examples = {
+	const examples: {
+		basicUsage: string[];
+		conditionalLogic: string[];
+		validation: string[];
+	} = {
 		basicUsage: [
 			`// Set ${enumInfo.fieldName} value`,
 			`${enumInfo.fieldName} = "${enumInfo.values[0]?.value || "VALUE"}"`,
-			``,
+			"",
 			`// Check ${enumInfo.fieldName} value`,
 			`if (${enumInfo.fieldName} === "${enumInfo.values[0]?.value || "VALUE"}") {`,
-			`  // Handle specific case`,
-			`}`,
+			"  // Handle specific case",
+			"}",
 		],
 		conditionalLogic: [],
 		validation: [
@@ -564,7 +568,7 @@ function generateEnumExamples(enumInfo: EnumInfo): {
 			`const validValues = [${enumInfo.values.map((v) => `"${v.value}"`).join(", ")}];`,
 			`if (!validValues.includes(${enumInfo.fieldName})) {`,
 			`  throw new Error("Invalid ${enumInfo.fieldName} value");`,
-			`}`,
+			"}",
 		],
 	};
 
@@ -579,7 +583,7 @@ function generateEnumExamples(enumInfo: EnumInfo): {
 			`const ${category}Values = [${categoryValues.map((v) => `"${v.value}"`).join(", ")}];`,
 			`if (${category}Values.includes(${enumInfo.fieldName})) {`,
 			`  // Process ${category} logic`,
-			`}`,
+			"}",
 		);
 	}
 
@@ -707,10 +711,7 @@ async function searchEnumValuesAcrossTables(
 					}
 				}
 			}
-		} catch (error) {
-			// Skip tables that can't be loaded
-			continue;
-		}
+		} catch (error) {}
 	}
 
 	return results;
@@ -776,7 +777,7 @@ function analyzeEnumUsagePatterns(
 
 	const trends = enumInfo.values.map((v) => ({
 		value: v.value,
-		trend: Math.random() > 0.5 ? "increasing" : ("stable" as const),
+		trend: (Math.random() > 0.5 ? "increasing" : "stable") as "stable" | "increasing" | "decreasing",
 	}));
 
 	return {
@@ -792,7 +793,7 @@ function generateUsageInsights(patterns: any): string[] {
 	const insights: string[] = [];
 
 	const totalUsage = Object.values(patterns.frequency).reduce(
-		(sum: number, count: any) => sum + count,
+		(sum: number, count: any) => sum + Number(count),
 		0,
 	);
 	const mostUsed = Object.entries(patterns.frequency).sort(
@@ -801,7 +802,7 @@ function generateUsageInsights(patterns: any): string[] {
 
 	if (mostUsed) {
 		const [value, count] = mostUsed;
-		const percentage = Math.round(((count as number) / totalUsage) * 100);
+		const percentage = Math.round((Number(count) / totalUsage) * 100);
 		insights.push(`Most common value is "${value}" (${percentage}% of usage)`);
 	}
 
@@ -822,7 +823,7 @@ function generateUsageRecommendations(patterns: any): string[] {
 	const recommendations: string[] = [];
 
 	const totalUsage = Object.values(patterns.frequency).reduce(
-		(sum: number, count: any) => sum + count,
+		(sum: number, count: any) => sum + Number(count),
 		0,
 	);
 	const unusedValues = Object.entries(patterns.frequency).filter(
@@ -836,7 +837,7 @@ function generateUsageRecommendations(patterns: any): string[] {
 	}
 
 	const dominantValue = Object.entries(patterns.frequency).find(
-		([, count]) => (count as number) / totalUsage > 0.8,
+		([, count]) => Number(count) / totalUsage > 0.8,
 	);
 
 	if (dominantValue) {

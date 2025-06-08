@@ -6,9 +6,9 @@ import { TicketService } from "./services/ticket-service";
 
 // Core consolidated table tools (manually verified)
 import { accountTool } from "./tools/account";
-import { transactionTool } from "./tools/transaction";
-import { nameTool } from "./tools/name";
 import { buildTool } from "./tools/build";
+import { nameTool } from "./tools/name";
+import { transactionTool } from "./tools/transaction";
 
 // Essential system tools
 import {
@@ -133,54 +133,66 @@ function registerConsolidatedTool(toolName: string, tool: any) {
 }
 
 // Register core consolidated table tools (4 tools)
-registerConsolidatedTool('accounts', accountTool);
-registerConsolidatedTool('transactions', transactionTool);
-registerConsolidatedTool('names', nameTool);
-registerConsolidatedTool('builds', buildTool);
+registerConsolidatedTool("accounts", accountTool);
+registerConsolidatedTool("transactions", transactionTool);
+registerConsolidatedTool("names", nameTool);
+registerConsolidatedTool("builds", buildTool);
 
 // Register essential system tools (40 tools)
-registerConsolidatedTool('listTables', listTablesTool);
-registerConsolidatedTool('describeTableSchema', describeTableSchemaTool);
-registerConsolidatedTool('getFieldMetadata', getFieldMetadataTool);
-registerConsolidatedTool('getTableRelationships', getTableRelationshipsTool);
-registerConsolidatedTool('listEndpoints', listEndpointsTool);
-registerConsolidatedTool('describeEndpoint', describeEndpointTool);
-registerConsolidatedTool('getSystemInfo', getSystemInfoTool);
-registerConsolidatedTool('getApiCapabilities', getApiCapabilitiesTool);
-registerConsolidatedTool('getSystemStatus', getSystemStatusTool);
-registerConsolidatedTool('getValidationRules', getValidationRulesTool);
-registerConsolidatedTool('getTableValidationRules', getTableValidationRulesTool);
-registerConsolidatedTool('getBusinessRules', getBusinessRulesTool);
-registerConsolidatedTool('getEnumValues', getEnumValuesTool);
-registerConsolidatedTool('searchEnumValues', searchEnumValuesTool);
-registerConsolidatedTool('getTableEnumFields', getTableEnumFieldsTool);
-registerConsolidatedTool('getEnumUsagePatterns', getEnumUsagePatternsTool);
-registerConsolidatedTool('getDateFormats', getDateFormatsTool);
-registerConsolidatedTool('getTableDateFields', getTableDateFieldsTool);
-registerConsolidatedTool('getSupportedDateFormats', getSupportedDateFormatsTool);
-registerConsolidatedTool('parseDateString', parseDateStringTool);
-registerConsolidatedTool('getCurrencyInfo', getCurrencyInfoTool);
-registerConsolidatedTool('getCurrencyFormatting', getCurrencyFormattingTool);
-registerConsolidatedTool('getExchangeRates', getExchangeRatesTool);
-registerConsolidatedTool('convertCurrency', convertCurrencyTool);
-registerConsolidatedTool('getMoneyWorksCurrencySettings', getMoneyWorksCurrencySettingsTool);
-registerConsolidatedTool('getPermissionInfo', getPermissionInfoTool);
-registerConsolidatedTool('getTablePermissions', getTablePermissionsTool);
-registerConsolidatedTool('getUserRoles', getUserRolesTool);
-registerConsolidatedTool('checkUserPermissions', checkUserPermissionsTool);
-registerConsolidatedTool('getSecurityAuditInfo', getSecurityAuditInfoTool);
-registerConsolidatedTool('evaluateExpression', evaluateExpressionTool);
-registerConsolidatedTool('evaluateTemplate', evaluateTemplateTool);
-registerConsolidatedTool('listCommonExpressions', listCommonExpressionsTool);
-registerConsolidatedTool('generateReport', generateReportTool);
-registerConsolidatedTool('getReportParameters', getReportParametersTool);
-registerConsolidatedTool('listCommonReports', listCommonReportsTool);
-registerConsolidatedTool('getTableLabels', getTableLabelsTool);
-registerConsolidatedTool('listAvailableTables', listAvailableTablesTool);
-registerConsolidatedTool('listSupportedLanguages', listSupportedLanguagesTool);
-registerConsolidatedTool('generateAllLabels', generateAllLabelsTool);
-registerConsolidatedTool('getCompanyInformation', getCompanyInformationTool);
-registerConsolidatedTool('listCompanyInformationFields', listCompanyInformationFieldsTool);
+registerConsolidatedTool("listTables", listTablesTool);
+registerConsolidatedTool("describeTableSchema", describeTableSchemaTool);
+registerConsolidatedTool("getFieldMetadata", getFieldMetadataTool);
+registerConsolidatedTool("getTableRelationships", getTableRelationshipsTool);
+registerConsolidatedTool("listEndpoints", listEndpointsTool);
+registerConsolidatedTool("describeEndpoint", describeEndpointTool);
+registerConsolidatedTool("getSystemInfo", getSystemInfoTool);
+registerConsolidatedTool("getApiCapabilities", getApiCapabilitiesTool);
+registerConsolidatedTool("getSystemStatus", getSystemStatusTool);
+registerConsolidatedTool("getValidationRules", getValidationRulesTool);
+registerConsolidatedTool(
+	"getTableValidationRules",
+	getTableValidationRulesTool,
+);
+registerConsolidatedTool("getBusinessRules", getBusinessRulesTool);
+registerConsolidatedTool("getEnumValues", getEnumValuesTool);
+registerConsolidatedTool("searchEnumValues", searchEnumValuesTool);
+registerConsolidatedTool("getTableEnumFields", getTableEnumFieldsTool);
+registerConsolidatedTool("getEnumUsagePatterns", getEnumUsagePatternsTool);
+registerConsolidatedTool("getDateFormats", getDateFormatsTool);
+registerConsolidatedTool("getTableDateFields", getTableDateFieldsTool);
+registerConsolidatedTool(
+	"getSupportedDateFormats",
+	getSupportedDateFormatsTool,
+);
+registerConsolidatedTool("parseDateString", parseDateStringTool);
+registerConsolidatedTool("getCurrencyInfo", getCurrencyInfoTool);
+registerConsolidatedTool("getCurrencyFormatting", getCurrencyFormattingTool);
+registerConsolidatedTool("getExchangeRates", getExchangeRatesTool);
+registerConsolidatedTool("convertCurrency", convertCurrencyTool);
+registerConsolidatedTool(
+	"getMoneyWorksCurrencySettings",
+	getMoneyWorksCurrencySettingsTool,
+);
+registerConsolidatedTool("getPermissionInfo", getPermissionInfoTool);
+registerConsolidatedTool("getTablePermissions", getTablePermissionsTool);
+registerConsolidatedTool("getUserRoles", getUserRolesTool);
+registerConsolidatedTool("checkUserPermissions", checkUserPermissionsTool);
+registerConsolidatedTool("getSecurityAuditInfo", getSecurityAuditInfoTool);
+registerConsolidatedTool("evaluateExpression", evaluateExpressionTool);
+registerConsolidatedTool("evaluateTemplate", evaluateTemplateTool);
+registerConsolidatedTool("listCommonExpressions", listCommonExpressionsTool);
+registerConsolidatedTool("generateReport", generateReportTool);
+registerConsolidatedTool("getReportParameters", getReportParametersTool);
+registerConsolidatedTool("listCommonReports", listCommonReportsTool);
+registerConsolidatedTool("getTableLabels", getTableLabelsTool);
+registerConsolidatedTool("listAvailableTables", listAvailableTablesTool);
+registerConsolidatedTool("listSupportedLanguages", listSupportedLanguagesTool);
+registerConsolidatedTool("generateAllLabels", generateAllLabelsTool);
+registerConsolidatedTool("getCompanyInformation", getCompanyInformationTool);
+registerConsolidatedTool(
+	"listCompanyInformationFields",
+	listCompanyInformationFieldsTool,
+);
 
 // Helper function to handle tool errors and log to ticketing system
 async function handleToolError(

@@ -1,46 +1,59 @@
-import { PaymentService } from "@moneyworks/api/src/services/tables/payment.service";
-import type { Payment } from "@moneyworks/api/src/types/interface/tables/payment";
+import { PaymentsService } from "@moneyworks/api/src/services/tables/payments.service";
+import type { Payments } from "@moneyworks/api/src/types/interface/tables/payments";
 import { z } from "zod";
 
-const paymentService = new PaymentService();
+const paymentService = new PaymentsService();
 
 // Consolidated payment tool schema
 const paymentToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for payments, get specific payment, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for payments, get specific payment, or list available fields",
+		),
+
 	// Search operation parameters
-	query: z
-		.string()
-		.optional()
-		.describe("Search query (search operation only)"),
+	query: z.string().optional().describe("Search query (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
-	// Get operation parameters (adjust based on primary key)
-	sequenceNumber: z.number().optional().describe("The payment sequence number to retrieve (get operation only)"),
-	code: z.string().optional().describe("The payment code to retrieve (get operation only)"),
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
+	// Get operation parameters
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The payment sequence number to retrieve (get operation only)"),
+	invoiceId: z
+		.number()
+		.optional()
+		.describe("The invoice ID to retrieve payments for (get operation only)"),
 });
 
 export const paymentTool = {
-	description: "Unified tool for payment operations: search payments, get specific payment, or list available fields",
+	description:
+		"Unified tool for payment operations: search payments, get specific payment, or list available fields",
 	inputSchema: paymentToolSchema,
 
 	async execute(args: z.infer<typeof paymentToolSchema>) {
 		switch (args.operation) {
 			case "search": {
-				const search: Partial<Payment> = {};
+				const search: Partial<Payments> = {};
 
 				// Build search criteria
 				if (args.query) {
-					// Adjust based on table structure
-					search.Code = args.query;
+					// Search by invoice ID (convert string to number if needed)
+					const invoiceId = parseInt(args.query);
+					if (!isNaN(invoiceId)) {
+						search.InvoiceID = invoiceId;
+					}
 				}
 
 				// Execute search using the existing service
@@ -60,14 +73,16 @@ export const paymentTool = {
 			}
 
 			case "get": {
-				// Try sequence number first, then code
+				// Try sequence number first, then invoiceId
 				let searchCriteria;
 				if (args.sequenceNumber) {
 					searchCriteria = { SequenceNumber: args.sequenceNumber };
-				} else if (args.code) {
-					searchCriteria = { Code: args.code };
+				} else if (args.invoiceId) {
+					searchCriteria = { InvoiceID: args.invoiceId };
 				} else {
-					throw new Error("Either sequenceNumber or code is required for get operation");
+					throw new Error(
+						"Either sequenceNumber or invoiceId is required for get operation",
+					);
 				}
 
 				const result = await paymentService.getData({
@@ -77,7 +92,7 @@ export const paymentTool = {
 				});
 
 				if (!result.data || result.data.length === 0) {
-					throw new Error(`Payment not found`);
+					throw new Error("Payment not found");
 				}
 
 				return {
@@ -88,12 +103,12 @@ export const paymentTool = {
 
 			case "listFields": {
 				// Import the fields from the interface
-				const { PaymentFields } = await import(
-					"@moneyworks/api/src/types/interface/tables/payment"
+				const { PaymentsFields } = await import(
+					"@moneyworks/api/src/types/interface/tables/payments"
 				);
 				return {
 					operation: "listFields",
-					fields: PaymentFields,
+					fields: PaymentsFields,
 					description: "Available fields for payment queries and filters",
 				};
 			}
