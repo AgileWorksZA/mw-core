@@ -11,7 +11,7 @@ import { ChatStoreProvider } from "~/modules/chat/provider";
 import { useChatContext, useChatSessions, useCurrentSession, useChatTrigger } from "~/modules/chat/hooks";
 import type { ChatContext, ChatMessage } from "~/modules/chat/types";
 import { useState } from "react";
-import { Bug, Check } from "lucide-react";
+import { Bug, Check, Brain } from "lucide-react";
 
 const CHAT_STORAGE_KEY = "standalone-chat";
 
@@ -241,7 +241,15 @@ function ChatInterface() {
           >
             ☰
           </button>
-          <h1 className="text-xl font-semibold">MoneyWorks AI Chat</h1>
+          <h1 className="text-xl font-semibold flex items-center gap-2">
+            MoneyWorks AI Chat
+            <a href="/knowledge-alignment" className="group relative">
+              <Brain className="h-5 w-5 text-blue-500 hover:text-blue-600 cursor-pointer" />
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                Knowledge Alignment Active - Click to manage
+              </div>
+            </a>
+          </h1>
           <div className="flex items-center gap-2">
             <button
               onClick={copyDebugUrl}
@@ -265,8 +273,18 @@ function ChatInterface() {
         
         <div className="flex-1 overflow-y-auto p-4" ref={chatContainerRef}>
           {messages.length === 0 ? (
-            <div className="text-center text-gray-500 mt-8">
-              <p>Start a new conversation with MoneyWorks AI</p>
+            <div className="text-center text-gray-500 mt-8 space-y-4">
+              <p className="text-lg">Start a new conversation with MoneyWorks AI</p>
+              <div className="max-w-lg mx-auto bg-blue-50 dark:bg-blue-950 p-4 rounded-lg text-sm text-left">
+                <p className="font-semibold mb-2 flex items-center gap-2">
+                  <Brain className="h-4 w-4" />
+                  Knowledge Alignment System Active
+                </p>
+                <p className="text-gray-600 dark:text-gray-400">
+                  This chat uses domain-specific knowledge cards to provide accurate MoneyWorks information.
+                  Click the brain icon above to manage knowledge cards and improve AI responses.
+                </p>
+              </div>
             </div>
           ) : (
             <div className="space-y-4 max-w-4xl mx-auto">

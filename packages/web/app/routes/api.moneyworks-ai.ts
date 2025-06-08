@@ -3,6 +3,7 @@ import { getMCPClient } from "~/lib/mcp-client";
 import { streamText, tool } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
 import { z, type ZodObject } from "zod";
+import { knowledgeDB } from "~/modules/knowledge-alignment/db/schema.server";
 
 function jsonResponse(data: any, init?: ResponseInit) {
   return new Response(JSON.stringify(data), {
@@ -14,7 +15,81 @@ function jsonResponse(data: any, init?: ResponseInit) {
   });
 }
 
-export function getSystemPrompt(tools: any[], hasTicketTool = false) {
+export function getSystemPrompt(tools: any[], hasTicketTool = false, messages: any[] = []) {
+  // Get relevant knowledge cards based on the conversation context
+  let knowledgeContext = "";
+  try {
+    // Extract keywords from recent messages for context
+    const recentMessages = messages.slice(-5); // Last 5 messages for context
+    const contextText = recentMessages
+      .map(m => m.content)
+      .join(" ")
+      .toLowerCase();
+    
+    // Get relevant tags based on context
+    const contextTags: string[] = [];
+    if (contextText.includes("invoice") || contextText.includes("bill")) {
+      contextTags.push("invoices", "transactions");
+    }
+    if (contextText.includes("account") || contextText.includes("chart")) {
+      contextTags.push("accounts", "chart-of-accounts");
+    }
+    if (contextText.includes("customer") || contextText.includes("supplier")) {
+      contextTags.push("names", "customers", "suppliers");
+    }
+    if (contextText.includes("mwscript") || contextText.includes("script")) {
+      contextTags.push("mwscript", "scripting");
+    }
+    if (contextText.includes("unposted") || contextText.includes("open")) {
+      contextTags.push("status", "unposted");
+    }
+    
+    // Search for relevant cards
+    const relevantCards = knowledgeDB.searchCards({
+      tags: contextTags.length > 0 ? contextTags : undefined,
+      active: true,
+    });
+    
+    // Sort by priority and limit to top cards
+    const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+    const topCards = relevantCards
+      .sort((a, b) => {
+        const aPriority = priorityOrder[a.priority] || 0;
+        const bPriority = priorityOrder[b.priority] || 0;
+        return bPriority - aPriority;
+      })
+      .slice(0, 5); // Top 5 most relevant cards
+    
+    // Build knowledge context
+    if (topCards.length > 0) {
+      knowledgeContext = "\n\n## Domain-Specific Knowledge\n";
+      topCards.forEach(card => {
+        knowledgeContext += `\n### ${card.title}\n${card.summary}\n`;
+        if (card.content) {
+          knowledgeContext += `\n${card.content}\n`;
+        }
+        if (card.examples?.correct && card.examples.correct.length > 0) {
+          knowledgeContext += "\n**Correct Examples:**\n";
+          card.examples.correct.forEach(ex => {
+            knowledgeContext += `- ${ex}\n`;
+          });
+        }
+        if (card.examples?.incorrect && card.examples.incorrect.length > 0) {
+          knowledgeContext += "\n**Avoid These Patterns:**\n";
+          card.examples.incorrect.forEach(ex => {
+            knowledgeContext += `- ${ex}\n`;
+          });
+        }
+        
+        // Record usage
+        knowledgeDB.recordCardUsage(card.id);
+      });
+    }
+  } catch (error) {
+    console.error("Error loading knowledge cards:", error);
+    // Continue without knowledge cards if there's an error
+  }
+  
   const basePrompt = `You are a MoneyWorks AI Assistant with DIRECT ACCESS to live MoneyWorks data through function calls. Only answer the question, DO NOT say stuff like "feel free to ask!"
 
 CRITICAL INSTRUCTIONS:
@@ -46,7 +121,7 @@ Example for "list unposted invoices":
   "type": "SI",
   "status": "OP",
   "limit": 50
-}`;
+}${knowledgeContext}`;
 
   if (tools.length > 0 || hasTicketTool) {
     const toolList = tools
@@ -629,7 +704,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     console.log(
       "System prompt preview:",
-      `${getSystemPrompt(mcpTools, hasTicketTool).substring(0, 500)}...`,
+      `${getSystemPrompt(mcpTools, hasTicketTool, messages).substring(0, 500)}...`,
     );
     console.log("User message:", messages[messages.length - 1]?.content);
 
@@ -641,7 +716,7 @@ export async function action({ request }: ActionFunctionArgs) {
     // Use AI SDK's streamText with tools
     const result = await streamText({
       model: openai("gpt-4o"),
-      system: getSystemPrompt(mcpTools, hasTicketTool),
+      system: getSystemPrompt(mcpTools, hasTicketTool, messages),
       messages,
       tools: Object.keys(tools).length > 0 ? tools : undefined,
       toolChoice: "auto",
