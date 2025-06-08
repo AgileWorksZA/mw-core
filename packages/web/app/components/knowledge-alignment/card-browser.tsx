@@ -40,13 +40,15 @@ interface CardBrowserProps {
 
 const categoryIcons = {
   concept: Info,
-  calculation: AlertCircle,
+  "tool-companion": AlertCircle,
   workflow: CheckCircle,
   "data-structure": Info,
   "best-practice": CheckCircle,
   "common-mistake": XCircle,
+  "business-rule": AlertCircle,
   integration: Info,
   mwscript: Info,
+  troubleshooting: AlertCircle,
 };
 
 const priorityColors = {
@@ -109,13 +111,15 @@ export function CardBrowser({
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="concept">Concept</SelectItem>
-                <SelectItem value="calculation">Calculation</SelectItem>
+                <SelectItem value="tool-companion">Tool Companion</SelectItem>
                 <SelectItem value="workflow">Workflow</SelectItem>
                 <SelectItem value="data-structure">Data Structure</SelectItem>
                 <SelectItem value="best-practice">Best Practice</SelectItem>
                 <SelectItem value="common-mistake">Common Mistake</SelectItem>
+                <SelectItem value="business-rule">Business Rule</SelectItem>
                 <SelectItem value="integration">Integration</SelectItem>
                 <SelectItem value="mwscript">MWScript</SelectItem>
+                <SelectItem value="troubleshooting">Troubleshooting</SelectItem>
               </SelectContent>
             </Select>
 

@@ -21,13 +21,15 @@ export interface KnowledgeCard {
 
 export type CardCategory = 
   | "concept" // Domain concepts and terminology
-  | "calculation" // How calculations work
-  | "workflow" // Business processes
-  | "data-structure" // Data relationships
+  | "tool-companion" // Companion knowledge for specific MCP tools
+  | "workflow" // Business processes and procedures
+  | "data-structure" // Data relationships and schemas
   | "best-practice" // Domain best practices
-  | "common-mistake" // Common misconceptions
+  | "common-mistake" // Common misconceptions to avoid
   | "integration" // Integration patterns
-  | "mwscript"; // MWScript specific knowledge
+  | "mwscript" // MWScript specific knowledge
+  | "business-rule" // Business logic and rules
+  | "troubleshooting"; // Debugging and problem-solving
 
 export type Priority = "low" | "medium" | "high" | "critical";
 

@@ -165,13 +165,15 @@ export function CardEditor({ card, onSave, onCancel, availableTags, mcpTools }: 
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="concept">Concept</SelectItem>
-                  <SelectItem value="calculation">Calculation</SelectItem>
+                  <SelectItem value="tool-companion">Tool Companion</SelectItem>
                   <SelectItem value="workflow">Workflow</SelectItem>
                   <SelectItem value="data-structure">Data Structure</SelectItem>
                   <SelectItem value="best-practice">Best Practice</SelectItem>
                   <SelectItem value="common-mistake">Common Mistake</SelectItem>
+                  <SelectItem value="business-rule">Business Rule</SelectItem>
                   <SelectItem value="integration">Integration</SelectItem>
                   <SelectItem value="mwscript">MWScript</SelectItem>
+                  <SelectItem value="troubleshooting">Troubleshooting</SelectItem>
                 </SelectContent>
               </Select>
             </div>

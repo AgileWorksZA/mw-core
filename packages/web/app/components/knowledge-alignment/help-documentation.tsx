@@ -31,8 +31,9 @@ export function HelpDocumentation({ open, onOpenChange }: HelpDocumentationProps
         </DialogHeader>
 
         <Tabs defaultValue="overview" className="mt-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="hybrid">Hybrid Approach</TabsTrigger>
             <TabsTrigger value="creating">Creating Cards</TabsTrigger>
             <TabsTrigger value="realtime">Real-time Updates</TabsTrigger>
             <TabsTrigger value="bestpractices">Best Practices</TabsTrigger>
@@ -102,6 +103,91 @@ export function HelpDocumentation({ open, onOpenChange }: HelpDocumentationProps
             </Card>
           </TabsContent>
 
+          <TabsContent value="hybrid" className="space-y-4 mt-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-yellow-500" />
+                  The Hybrid Approach: Tools + Knowledge
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
+                  <p className="font-semibold mb-2">Key Principle</p>
+                  <p className="text-sm">
+                    Technical specifications live in MCP tool descriptions, while business context 
+                    and domain knowledge live in Knowledge Cards. This separation ensures maintainability 
+                    and clarity.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">What Goes Where?</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="border rounded-lg p-4">
+                      <h5 className="font-semibold text-sm mb-2">📧 MCP Tool Descriptions</h5>
+                      <ul className="text-sm space-y-1">
+                        <li>• Parameter formats (NameType='C')</li>
+                        <li>• Field names and types</li>
+                        <li>• Valid enum values</li>
+                        <li>• API constraints</li>
+                        <li>• Direct usage syntax</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="border rounded-lg p-4">
+                      <h5 className="font-semibold text-sm mb-2">🧠 Knowledge Cards</h5>
+                      <ul className="text-sm space-y-1">
+                        <li>• Business concepts</li>
+                        <li>• Why and when to use</li>
+                        <li>• Common workflows</li>
+                        <li>• Edge cases</li>
+                        <li>• Best practices</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Tool Companion Cards</h4>
+                  <p className="text-sm mb-2">
+                    Special category of cards that provide business context for specific MCP tools:
+                  </p>
+                  <div className="bg-green-50 dark:bg-green-950 p-3 rounded-lg">
+                    <p className="text-sm">
+                      <strong>Example:</strong> The 'names' tool shows HOW to filter (NameType='C'), 
+                      while its companion card explains WHAT customers are in MoneyWorks context 
+                      and WHEN to use different filters.
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Benefits of Hybrid Approach</h4>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
+                      <span>Clean separation of concerns</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
+                      <span>Technical changes don't affect business knowledge</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
+                      <span>Users can customize knowledge without touching code</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
+                      <span>AI gets both precise syntax AND rich context</span>
+                    </li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="creating" className="space-y-4 mt-4">
             <Card>
               <CardHeader>
@@ -122,6 +208,17 @@ export function HelpDocumentation({ open, onOpenChange }: HelpDocumentationProps
                     </li>
                     <li>
                       <strong>Tags:</strong> Keywords that trigger this card (e.g., "status", "unposted")
+                    </li>
+                    <li>
+                      <strong>Category:</strong> Choose the right type:
+                      <ul className="ml-4 mt-1 space-y-1 text-xs">
+                        <li>• <strong>Tool Companion:</strong> Business context for MCP tools</li>
+                        <li>• <strong>Concept:</strong> Core MoneyWorks concepts</li>
+                        <li>• <strong>Workflow:</strong> Step-by-step procedures</li>
+                        <li>• <strong>Business Rule:</strong> Logic and compliance</li>
+                        <li>• <strong>Common Mistake:</strong> What to avoid</li>
+                        <li>• <strong>Troubleshooting:</strong> Problem-solving guides</li>
+                      </ul>
                     </li>
                   </ul>
                 </div>
