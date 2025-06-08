@@ -25,7 +25,7 @@ import { X, Plus, Eye, Edit as EditIcon } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import { useResolvedTheme } from "~/modules/theme-preferences/hooks";
 import { marked } from "marked";
-import type { KnowledgeCard, CardCategory, Priority } from "~/modules/knowledge-alignment/types";
+import type { KnowledgeCard } from "~/modules/knowledge-alignment/types";
 
 // Configure marked options
 marked.setOptions({
@@ -50,7 +50,7 @@ interface CardEditorProps {
   mcpTools: string[];
 }
 
-export function CardEditor({ card, onSave, onCancel, availableTags, mcpTools }: CardEditorProps) {
+export function CardEditor({ card, onSave, onCancel, mcpTools }: CardEditorProps) {
   const [tags, setTags] = useState<string[]>(card?.tags || []);
   const [selectedTools, setSelectedTools] = useState<string[]>(card?.mcpTools || []);
   const [newTag, setNewTag] = useState("");
