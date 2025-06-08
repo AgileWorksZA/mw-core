@@ -21,8 +21,17 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Eye, Edit as EditIcon } from "lucide-react";
+import Editor from "@monaco-editor/react";
+import { useResolvedTheme } from "~/modules/theme-preferences/hooks";
+import { marked } from "marked";
 import type { KnowledgeCard, CardCategory, Priority } from "~/modules/knowledge-alignment/types";
+
+// Configure marked options
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+});
 
 const cardSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -51,6 +60,8 @@ export function CardEditor({ card, onSave, onCancel, availableTags, mcpTools }: 
   const [incorrectExamples, setIncorrectExamples] = useState<string[]>(
     card?.examples?.incorrect || []
   );
+  const [isPreview, setIsPreview] = useState(false);
+  const theme = useResolvedTheme();
 
   const {
     register,
@@ -139,14 +150,65 @@ export function CardEditor({ card, onSave, onCancel, availableTags, mcpTools }: 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="content">Content (Markdown supported)</Label>
-            <Textarea
-              id="content"
-              {...register("content")}
-              placeholder="Detailed explanation..."
-              rows={8}
-              className="font-mono text-sm"
-            />
+            <div className="flex items-center justify-between">
+              <Label htmlFor="content">Content (Markdown supported)</Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setIsPreview(!isPreview)}
+                className="gap-2"
+              >
+                {isPreview ? (
+                  <>
+                    <EditIcon className="h-4 w-4" />
+                    Edit
+                  </>
+                ) : (
+                  <>
+                    <Eye className="h-4 w-4" />
+                    Preview
+                  </>
+                )}
+              </Button>
+            </div>
+            <div className="border rounded-md overflow-hidden">
+              {isPreview ? (
+                <div 
+                  className="p-4 min-h-[300px] max-h-[300px] overflow-auto markdown-preview"
+                  dangerouslySetInnerHTML={{ 
+                    __html: marked(watch("content") || "") 
+                  }}
+                />
+              ) : (
+                <Editor
+                  height="300px"
+                  defaultLanguage="markdown"
+                  value={watch("content")}
+                  onChange={(value) => setValue("content", value || "")}
+                  theme={theme === "light" ? "vs" : "vs-dark"}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    lineNumbers: "off",
+                    wordWrap: "on",
+                    padding: { top: 8, bottom: 8 },
+                    scrollBeyondLastLine: false,
+                    renderWhitespace: "none",
+                    folding: false,
+                    lineDecorationsWidth: 0,
+                    lineNumbersMinChars: 0,
+                    overviewRulerLanes: 0,
+                    hideCursorInOverviewRuler: true,
+                    scrollbar: {
+                      vertical: "visible",
+                      horizontal: "hidden",
+                    },
+                    overviewRulerBorder: false,
+                  }}
+                />
+              )}
+            </div>
             {errors.content && (
               <p className="text-sm text-destructive">{errors.content.message}</p>
             )}

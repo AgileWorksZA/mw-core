@@ -19,5 +19,8 @@
   "type": "module",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@xstate/react": "^5.0.5"
+  }
 }

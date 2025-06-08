@@ -3,6 +3,9 @@
   "workspaces": {
     "": {
       "name": "@moneyworks/monorepo",
+      "dependencies": {
+        "@xstate/react": "^5.0.5",
+      },
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
         "bun-types": "latest",
