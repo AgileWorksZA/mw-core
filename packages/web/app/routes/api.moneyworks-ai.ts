@@ -31,7 +31,22 @@ MoneyWorks is a comprehensive accounting and ERP system. Key concepts:
 - **Accounts**: Chart of accounts with codes like "1100" for Bank Account
 - **Names**: Customers and suppliers with unique codes
 - **Transactions**: Financial records with types like SI (Sales Invoice), PI (Purchase Invoice), etc.
-- **Account Types**: I=Income, S=Sales, E=Expense, C=Cost of Sales, A=Current Asset, L=Current Liability, etc.`;
+- **Account Types**: I=Income, S=Sales, E=Expense, C=Cost of Sales, A=Current Asset, L=Current Liability, etc.
+
+## IMPORTANT: How to Use the Transactions Tool
+When searching for transactions, use the "transactions" tool with:
+- operation: "search" for listing transactions
+- type: Use proper codes like "SI" for Sales Invoice, "PI" for Purchase Invoice
+- status: Use "OP" for Open/Unposted, "CL" for Closed/Posted, "PA" for Partial, etc.
+- DO NOT use filter parameter - use type, status, nameCode, fromDate, toDate instead
+
+Example for "list unposted invoices":
+{
+  "operation": "search",
+  "type": "SI",
+  "status": "OP",
+  "limit": 50
+}`;
 
   if (tools.length > 0 || hasTicketTool) {
     const toolList = tools
@@ -509,16 +524,22 @@ function createAISDKTools() {
       });
     } else if (mcpTool.name === "transactions") {
       parameters = z.object({
-        operation: z.enum(["search", "get", "listFields"]).describe("The operation to perform"),
-        // Transaction tool parameters
-        filter: z.string().optional().describe("MoneyWorks search expression"),
-        startDate: z.string().optional().describe("Start date (YYYYMMDD format)"),
-        endDate: z.string().optional().describe("End date (YYYYMMDD format)"),
-        type: z.string().optional().describe("Transaction type filter"),
-        status: z.enum(["ALL", "POSTED", "UNPOSTED", "LOCKED"]).optional().describe("Transaction status filter"),
-        limit: z.number().min(1).max(100).default(50).describe("Maximum number of results"),
-        offset: z.number().min(0).default(0).describe("Number of results to skip"),
-        sequenceNumber: z.number().optional().describe("The sequence number to retrieve (get operation only)"),
+        operation: z.enum(["search", "get", "getByRef", "listFields", "summary"]).describe("The operation to perform: search transactions, get by sequence number, get by reference, list fields, or get summary"),
+        // Search operation parameters
+        query: z.string().optional().describe("Search query for reference, description, or name (search operation only)"),
+        type: z.enum(["SI", "SC", "SR", "SD", "PI", "PC", "PP", "PD", "JN", "JC", "BR", "BP", "BT", "ST", "SO", "PO"]).optional().describe("Transaction type: SI=Sales Invoice, SC=Sales Credit, SR=Sales Receipt, SD=Sales Deposit, PI=Purchase Invoice, PC=Purchase Credit, PP=Purchase Payment, PD=Purchase Deposit, JN=Journal, JC=Journal Correction, BR=Bank Receipt, BP=Bank Payment, BT=Bank Transfer, ST=Stock Transfer, SO=Sales Order, PO=Purchase Order"),
+        status: z.enum(["OP", "CL", "PA", "CA", "DR"]).optional().describe("Transaction status: OP=Open, CL=Closed, PA=Partial, CA=Cancelled, DR=Draft (search operation only)"),
+        nameCode: z.string().optional().describe("Customer/Supplier code filter (search/summary operations)"),
+        fromDate: z.string().optional().describe("Filter transactions from this date (YYYY-MM-DD) (search/summary operations)"),
+        toDate: z.string().optional().describe("Filter transactions up to this date (YYYY-MM-DD) (search/summary operations)"),
+        period: z.number().optional().describe("Accounting period filter (search operation only)"),
+        minAmount: z.number().optional().describe("Minimum transaction amount (search operation only)"),
+        maxAmount: z.number().optional().describe("Maximum transaction amount (search operation only)"),
+        limit: z.number().min(1).max(100).default(50).describe("Maximum number of results (search operation only)"),
+        offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
+        // Get operation parameters
+        sequenceNumber: z.number().optional().describe("The transaction sequence number to retrieve (get operation only)"),
+        reference: z.string().optional().describe("The transaction reference (OurRef) to retrieve (getByRef operation only)"),
       });
     } else if (mcpTool.name === "names") {
       parameters = z.object({

@@ -6,14 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { FileCode, Ticket, Bot } from "lucide-react";
+import { FileCode, Ticket, Bot, Brain } from "lucide-react";
 
 export default function Index() {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-4xl font-bold mb-8">OpenAPI UI Generator</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
         <Link to="/ide" className="block h-full">
           <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
             <CardHeader>
@@ -69,6 +69,26 @@ export default function Index() {
               <p className="text-sm text-muted-foreground">
                 Get help with MoneyWorks accounting tasks, MWScript, reports,
                 and more using live data access.
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link to="/knowledge-alignment" className="block h-full">
+          <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Brain className="h-8 w-8 text-primary" />
+                <CardTitle>Knowledge Alignment</CardTitle>
+              </div>
+              <CardDescription>
+                Manage domain expertise for AI agents
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Curate MoneyWorks-specific knowledge cards to improve AI
+                understanding and prevent hallucination in this specialized domain.
               </p>
             </CardContent>
           </Card>
