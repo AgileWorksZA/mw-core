@@ -46,6 +46,7 @@ This is a Bun workspace monorepo containing:
      {
        "host": "your-moneyworks-server.com",
        "port": 6710,
+       "protocol": "http",
        "dataFile": "YourCompany.moneyworks",
        "username": "ApiUser",
        "password": "yourpassword",
@@ -55,12 +56,21 @@ This is a Bun workspace monorepo containing:
        }
      }
      ```
+   - **Important**: Ensure the document password is correct for your specific user account
    - If your server doesn't require folder authentication, remove the `folderAuth` section.
+   - Set `protocol` to `"https"` if your MoneyWorks server has SSL certificates configured.
+
+   **Authentication Requirements:**
+   - For folder-based documents, both `folderAuth` and document credentials are required
+   - The system uses dual Authorization headers for folder + document authentication
+   - Document password format: `username:Document:password`
+   - Folder password format: `folderName:Datacentre:password`
 
    Alternatively, you can use environment variables:
    ```
    MW_HOST=your-moneyworks-server.com
    MW_PORT=6710
+   MW_PROTOCOL=http
    MW_DATA_FILE=YourCompany.moneyworks
    MW_USERNAME=ApiUser
    MW_PASSWORD=yourpassword
@@ -178,7 +188,24 @@ The main REST API that interfaces with MoneyWorks:
 Model Context Protocol server for AI assistants:
 - Direct integration with API services
 - Automatic error tracking with SQLite
-- Tools for MoneyWorks operations
+- 44 consolidated tools for MoneyWorks operations
+- Support for Claude Code CLI and Claude Desktop
+
+**Quick Setup:**
+```bash
+# Configure for Claude Code CLI
+claude mcp add-json moneyworks '{
+  "command": "/Users/your-username/.bun/bin/bun",
+  "args": ["run", "dev:mcp"],
+  "cwd": "/path/to/mw-core",
+  "env": {
+    "MW_CONFIG_PATH": "/path/to/mw-core/packages/api/mw-config.json",
+    "TICKETS_DB_PATH": "/path/to/mw-core/packages/mcp-server/data/tickets.db"
+  }
+}' -s user
+```
+
+For detailed configuration and troubleshooting, see [MCP Server README](packages/mcp-server/README.md).
 
 ## Workspace Development
 

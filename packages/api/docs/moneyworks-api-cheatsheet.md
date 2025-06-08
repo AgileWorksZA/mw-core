@@ -23,20 +23,36 @@ Authorization: Basic Um9ib3Q6RG9jdW1lbnQ6czNjcmV0
 
 This is a Base64-encoded string of `username:Document:password`.
 
-### Two-level Authentication (Folder + Document)
+### Two-level Authentication (Folder + Document) ✅ **VALIDATED**
 Required when the MoneyWorks server is configured with "Require Folder Name and Password to Connect (ASP mode)".
 
-```
-Authorization: Basic Um9ib3Q6RG9jdW1lbnQ6czNjcmV0
-Authorization: Basic U29tZSBGb2xkZXI6RGF0YWNlbnRyZTpzb01lLXA0YXM1d29yZA==
+**Working Implementation:**
+```typescript
+// Dual headers as array (recommended for Axios)
+headers: {
+  Authorization: [folderAuth, documentAuth]
+}
 ```
 
-The first header is for document credentials (same as single-level).
-The second header is a Base64-encoded string of `foldername:Datacentre:folderpassword`.
-
-Both headers can be combined with a comma separator:
+**Raw HTTP Headers:**
 ```
-Authorization: Basic Um9ib3Q6RG9jdW1lbnQ6czNjcmV0, Basic U29tZSBGb2xkZXI6RGF0YWNlbnRyZTpzb01lLXA0YXM1d29yZA==
+Authorization: Basic QWdpbGV3b3JrczpEYXRhY2VudHJlOnNoYWxvbTEwMjQ=
+Authorization: Basic c3VwcG9ydDpEb2N1bWVudDpzdXBwb3J0MTAyNA==
+```
+
+Where:
+- **Document auth**: Base64-encoded `username:Document:password`
+- **Folder auth**: Base64-encoded `foldername:Datacentre:folderpassword`
+
+**Alternative formats that work:**
+```
+# Comma-separated single header
+Authorization: Basic QWdpbGV3b3JrczpEYXRhY2VudHJlOnNoYWxvbTEwMjQ=, Basic c3VwcG9ydDpEb2N1bWVudDpzdXBwb3J0MTAyNA==
+
+# CURL with duplicate headers
+curl -H "Authorization: Basic QWdpbGV3b3JrczpEYXRhY2VudHJlOnNoYWxvbTEwMjQ=" \
+     -H "Authorization: Basic c3VwcG9ydDpEb2N1bWVudDpzdXBwb3J0MTAyNA==" \
+     "http://server:6710/REST/Folder%2fDocument.moneyworks/export?table=name"
 ```
 
 ### Configuration Example

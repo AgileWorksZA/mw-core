@@ -95,6 +95,88 @@ const app = new Elysia({
   .use(evaluateRoutes)
   .use(reportRoutes)
   .use(systemLabelsRoutes)
+  
+  // Debug endpoint to check config
+  .get("/debug/config", () => {
+    const { loadMoneyWorksConfig } = require("./config/moneyworks.config");
+    const config = loadMoneyWorksConfig();
+    return {
+      host: config.host,
+      port: config.port,
+      username: config.username,
+      password: config.password ? '***' + config.password.slice(-3) : 'MISSING',
+      dataFile: config.dataFile,
+      folderAuth: config.folderAuth ? {
+        folderName: config.folderAuth.folderName,
+        password: config.folderAuth.password ? '***' + config.folderAuth.password.slice(-3) : 'MISSING'
+      } : null,
+      workingDirectory: process.cwd()
+    };
+  })
+  
+  // Debug endpoint to test MoneyWorks API directly
+  .get("/debug/moneyworks", async () => {
+    try {
+      const { loadMoneyWorksConfig } = require("./config/moneyworks.config");
+      const { MoneyWorksApiService } = require("./services/moneyworks-api.service");
+      
+      const config = loadMoneyWorksConfig();
+      const api = new MoneyWorksApiService(config);
+      
+      // Test simple expression first
+      const expression = await api.evaluate("1+1");
+      
+      // Test name export
+      const nameResult = await api.export("name", { limit: 2, format: "xml-verbose" });
+      
+      return {
+        status: "success",
+        expression: expression,
+        nameExport: {
+          recordCount: nameResult.data.length,
+          totalRecords: nameResult.pagination.total,
+          sampleFields: nameResult.data[0] ? Object.keys(nameResult.data[0]).slice(0, 5) : []
+        }
+      };
+    } catch (error) {
+      return {
+        status: "error",
+        message: error.message,
+        stack: error.stack
+      };
+    }
+  })
+  
+  // Direct name test bypassing TableService
+  .get("/debug/names-direct", async () => {
+    try {
+      const { loadMoneyWorksConfig } = require("./config/moneyworks.config");
+      const { MoneyWorksApiService } = require("./services/moneyworks-api.service");
+      
+      const config = loadMoneyWorksConfig();
+      const api = new MoneyWorksApiService(config);
+      
+      // Call export directly with same params as the API endpoint
+      const result = await api.export("name", { 
+        limit: 5, 
+        start: 0,
+        format: "xml-verbose" 
+      });
+      
+      return {
+        status: "success",
+        recordCount: result.data.length,
+        totalRecords: result.pagination.total,
+        pagination: result.pagination,
+        sampleRecord: result.data[0] || null
+      };
+    } catch (error) {
+      return {
+        status: "error",
+        message: error.message
+      };
+    }
+  })
 
   .listen(3131);
 

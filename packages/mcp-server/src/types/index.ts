@@ -22,25 +22,25 @@ export const IssueSchema = z.object({
 
 	// Context
 	user_prompt: z.string(),
-	ai_attempted_action: z.string().optional(),
-	mcp_tool_used: z.string().optional(),
-	api_endpoint: z.string().optional(),
+	ai_attempted_action: z.string().nullable().optional(),
+	mcp_tool_used: z.string().nullable().optional(),
+	api_endpoint: z.string().nullable().optional(),
 
 	// Error details
-	error_message: z.string().optional(),
-	error_stack: z.string().optional(),
-	api_response_code: z.number().optional(),
-	api_response_body: z.string().optional(),
+	error_message: z.string().nullable().optional(),
+	error_stack: z.string().nullable().optional(),
+	api_response_code: z.number().nullable().optional(),
+	api_response_body: z.string().nullable().optional(),
 
 	// Resolution
-	resolution_notes: z.string().optional(),
-	resolved_by: z.string().optional(),
-	resolved_at: z.string().optional(),
+	resolution_notes: z.string().nullable().optional(),
+	resolved_by: z.string().nullable().optional(),
+	resolved_at: z.string().nullable().optional(),
 
 	// Metadata
-	session_id: z.string().optional(),
-	moneyworks_version: z.string().optional(),
-	api_version: z.string().optional(),
+	session_id: z.string().nullable().optional(),
+	moneyworks_version: z.string().nullable().optional(),
+	api_version: z.string().nullable().optional(),
 });
 
 export type Issue = z.infer<typeof IssueSchema>;

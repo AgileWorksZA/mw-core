@@ -55,9 +55,9 @@ export class MoneyWorksApiService {
       const folderCredentials = `${folderName}:Datacentre:${password}`;
       const folderAuth = `Basic ${Buffer.from(folderCredentials).toString("base64")}`;
 
-      // Return combined auth headers
+      // Return dual headers as array (Axios format for duplicate header names)
       return {
-        Authorization: `${documentAuth}, ${folderAuth}`,
+        Authorization: [folderAuth, documentAuth],
       };
     }
 
@@ -71,7 +71,18 @@ export class MoneyWorksApiService {
    * Build the base URL for MoneyWorks REST API
    */
   private getBaseUrl() {
-    return `http://${this.config.host}:${this.config.port}/REST/${encodeURIComponent(this.config.dataFile)}`;
+    const protocol = this.config.protocol || "http";
+    
+    // If folderAuth exists, use folder path structure per MoneyWorks specification
+    if (this.config.folderAuth) {
+      const folderName = this.config.folderAuth.folderName;
+      const folderPathEncoded = encodeURIComponent(folderName).replace('/', '%2f');
+      const docNameEncoded = encodeURIComponent(this.config.dataFile);
+      return `${protocol}://${this.config.host}:${this.config.port}/REST/${folderPathEncoded}%2f${docNameEncoded}`;
+    }
+    
+    // Top-level document (no folder)
+    return `${protocol}://${this.config.host}:${this.config.port}/REST/${encodeURIComponent(this.config.dataFile)}`;
   }
 
   /**
@@ -325,7 +336,7 @@ export class MoneyWorksApiService {
         table.toLowerCase() === "detail" ? "transaction" : table;
       const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
 
-      const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
+      const url = `${this.getBaseUrl()}/export?table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
       const authHeaders = this.createAuthHeaders();
 
       // When using fields or non-XML format, we need to ensure the response is text
@@ -429,7 +440,7 @@ export class MoneyWorksApiService {
         table.toLowerCase() === "detail" ? "transaction" : table;
       const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
 
-      const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
+      const url = `${this.getBaseUrl()}/export?table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
       const authHeaders = this.createAuthHeaders();
 
       const response = await axios.get(url, {

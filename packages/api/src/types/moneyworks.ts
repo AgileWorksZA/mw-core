@@ -1,6 +1,7 @@
 export interface MoneyWorksConfig {
   host: string;
   port: number;
+  protocol?: "http" | "https"; // Optional protocol, defaults to http
   dataFile: string;
   username: string;
   password: string;

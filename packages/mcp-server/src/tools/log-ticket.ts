@@ -99,7 +99,10 @@ export const logTicketTool = {
 					actual: args.actualBehavior,
 					suggestion: args.suggestedSolution,
 				}),
+				resolution_notes: args.suggestedSolution,
+				resolved_by: undefined,
 				session_id: Date.now().toString(),
+				moneyworks_version: undefined,
 				api_version: "1.0.0",
 			};
 
@@ -107,7 +110,7 @@ export const logTicketTool = {
 
 			// Add context if provided
 			if (args.context) {
-				await ticketService.addContext(ticketId, "user_context", args.context);
+				await ticketService.addContext(ticketId, "request", args.context);
 			}
 
 			// Add description as context

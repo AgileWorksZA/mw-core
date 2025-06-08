@@ -5,6 +5,7 @@ import type { MoneyWorksConfig } from "../types/moneyworks";
 const config: MoneyWorksConfig = {
   host: "localhost",
   port: 6710,
+  protocol: "http",
   dataFile: "",
   username: "",
   password: "",
@@ -19,6 +20,7 @@ if (process.env.MW_HOST && process.env.MW_PORT && process.env.MW_DATA_FILE) {
   Object.assign(config, {
     host: process.env.MW_HOST,
     port: Number.parseInt(process.env.MW_PORT, 10),
+    protocol: (process.env.MW_PROTOCOL as "http" | "https") || "http",
     dataFile: process.env.MW_DATA_FILE,
     username: process.env.MW_USERNAME || "",
     password: process.env.MW_PASSWORD || "",

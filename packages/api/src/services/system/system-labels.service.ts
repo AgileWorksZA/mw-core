@@ -16,7 +16,11 @@ export class SystemLabelsService {
 
   constructor(config: MoneyWorksConfig) {
     this.api = new MoneyWorksApiService(config);
-    this.cacheDir = path.join(process.cwd(), "cache");
+    
+    // Use a more appropriate cache directory that works in all contexts
+    const projectRoot = process.env.MW_CACHE_DIR || 
+                       path.join(process.env.TMPDIR || '/tmp', 'moneyworks-cache');
+    this.cacheDir = projectRoot;
 
     // Ensure cache directory exists
     if (!fs.existsSync(this.cacheDir)) {

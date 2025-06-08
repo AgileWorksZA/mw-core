@@ -23,28 +23,39 @@ export class TicketService {
 	}
 
 	private runMigrations(): void {
-		// Create tables if they don't exist
+		// Create tables if they don't exist (using correct field order to match existing schema)
 		this.db.exec(`
 			CREATE TABLE IF NOT EXISTS issues (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+				updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+				
+				-- Issue categorization
 				type TEXT NOT NULL CHECK(type IN ('bug', 'feature_request', 'improvement')),
 				severity TEXT NOT NULL CHECK(severity IN ('low', 'medium', 'high', 'critical')),
-				status TEXT NOT NULL CHECK(status IN ('open', 'in_progress', 'resolved', 'closed')),
+				status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'in_progress', 'resolved', 'closed')),
+				
+				-- Context information
 				user_prompt TEXT NOT NULL,
 				ai_attempted_action TEXT,
 				mcp_tool_used TEXT,
 				api_endpoint TEXT,
+				
+				-- Error details
 				error_message TEXT,
 				error_stack TEXT,
 				api_response_code INTEGER,
 				api_response_body TEXT,
+				
+				-- Resolution tracking
+				resolution_notes TEXT,
+				resolved_by TEXT,
+				resolved_at DATETIME,
+				
+				-- Metadata
 				session_id TEXT,
 				moneyworks_version TEXT,
-				api_version TEXT,
-				resolution_notes TEXT,
-				created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-				updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-				resolved_at DATETIME
+				api_version TEXT
 			);
 
 			CREATE TABLE IF NOT EXISTS issue_context (
@@ -85,17 +96,34 @@ export class TicketService {
       INSERT INTO issues (
         type, severity, status, user_prompt, ai_attempted_action,
         mcp_tool_used, api_endpoint, error_message, error_stack,
-        api_response_code, api_response_body, session_id,
-        moneyworks_version, api_version
+        api_response_code, api_response_body, resolution_notes, resolved_by,
+        session_id, moneyworks_version, api_version
       ) VALUES (
-        $type, $severity, $status, $user_prompt, $ai_attempted_action,
-        $mcp_tool_used, $api_endpoint, $error_message, $error_stack,
-        $api_response_code, $api_response_body, $session_id,
-        $moneyworks_version, $api_version
+        ?, ?, ?, ?, ?,
+        ?, ?, ?, ?,
+        ?, ?, ?, ?,
+        ?, ?, ?
       )
     `);
 
-		const info = stmt.run(validated);
+		const info = stmt.run(
+			validated.type,
+			validated.severity,
+			validated.status,
+			validated.user_prompt,
+			validated.ai_attempted_action,
+			validated.mcp_tool_used,
+			validated.api_endpoint,
+			validated.error_message,
+			validated.error_stack,
+			validated.api_response_code,
+			validated.api_response_body,
+			validated.resolution_notes,
+			validated.resolved_by,
+			validated.session_id,
+			validated.moneyworks_version,
+			validated.api_version
+		);
 		return info.lastInsertRowid as number;
 	}
 

@@ -1,6 +1,7 @@
 {
   "host": "example.moneyworks.net.nz",
   "port": 6710,
+  "protocol": "http",
   "dataFile": "Accounting.moneyworks",
   "username": "APIUser",
   "password": "password123",
