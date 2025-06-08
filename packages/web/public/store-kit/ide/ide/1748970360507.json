@@ -1,0 +1,31 @@
+{
+  "delta": {
+    "files": {
+      "green-elegant-consistency-2763": [
+        {
+          "id": "green-elegant-consistency-2763",
+          "type": "api-get",
+          "path": "pink-quick-fun-8958",
+          "mapping": {
+            "input": {
+              "variables": {}
+            },
+            "output": {
+              "variables": {}
+            }
+          }
+        },
+        0,
+        0
+      ]
+    },
+    "fileOrder": {
+      "_t": "a",
+      "_13": [
+        "green-elegant-consistency-2763",
+        0,
+        0
+      ]
+    }
+  }
+}

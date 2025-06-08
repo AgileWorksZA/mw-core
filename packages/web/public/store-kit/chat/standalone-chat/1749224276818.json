@@ -1,0 +1,34 @@
+{
+  "delta": {
+    "updatedAt": [
+      {},
+      "2025-06-06T15:37:56.303Z"
+    ],
+    "sessions": {
+      "6": {
+        "messages": {
+          "8": {
+            "createdAt": [
+              {},
+              "2025-06-06T15:37:54.073Z"
+            ]
+          },
+          "9": [
+            {
+              "id": "8b0fabee-e721-42e9-8e4b-b33918da0152",
+              "role": "assistant",
+              "content": "Your company is connected to the MoneyWorks system with the following details:\n\n- **Host**: localhost\n- **Port**: 6710\n- **Data File**: ACME/Acme Widgets Gold.moneyworks\n- **Username**: hardy@agileworks.co.za\n\nIf you need more specific information, please let me know!",
+              "createdAt": "2025-06-06T15:37:56.303Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          {},
+          "2025-06-06T15:37:56.303Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

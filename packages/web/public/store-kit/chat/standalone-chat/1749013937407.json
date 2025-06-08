@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T05:08:32.775Z",
+      "2025-06-04T05:12:16.901Z"
+    ],
+    "sessions": {
+      "0": {
+        "messages": {
+          "20": [
+            {
+              "id": "c5d0b4b8-cbe7-4394-b67b-be629cad2632",
+              "role": "user",
+              "content": "Can you tell me more about the reporting features?",
+              "createdAt": "2025-06-04T05:12:16.887Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T05:08:32.775Z",
+          "2025-06-04T05:12:16.901Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

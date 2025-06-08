@@ -102,6 +102,10 @@ export class SchemaService {
 			}
 		}
 
+		if (!schema) {
+			throw new Error(`Schema not found for table: ${tableName}`);
+		}
+
 		const fields = this.extractFieldInfo(schema);
 
 		return {

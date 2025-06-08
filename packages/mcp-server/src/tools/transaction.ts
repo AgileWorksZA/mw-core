@@ -46,13 +46,17 @@ type TransactionStatusCode = keyof typeof transactionStatuses;
 const transactionToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "getByRef", "listFields", "summary"])
-		.describe("The operation to perform: search transactions, get by sequence number, get by reference, list fields, or get summary"),
-	
+		.describe(
+			"The operation to perform: search transactions, get by sequence number, get by reference, list fields, or get summary",
+		),
+
 	// Search operation parameters
 	query: z
 		.string()
 		.optional()
-		.describe("Search query for reference, description, or name (search operation only)"),
+		.describe(
+			"Search query for reference, description, or name (search operation only)",
+		),
 	type: z
 		.enum([
 			"SI",
@@ -82,39 +86,64 @@ const transactionToolSchema = z.object({
 		.describe(
 			"Transaction status: OP=Open, CL=Closed, PA=Partial, CA=Cancelled, DR=Draft (search operation only)",
 		),
-	nameCode: z.string().optional().describe("Customer/Supplier code filter (search/summary operations)"),
+	nameCode: z
+		.string()
+		.optional()
+		.describe("Customer/Supplier code filter (search/summary operations)"),
 	fromDate: z
 		.string()
 		.optional()
-		.describe("Filter transactions from this date (YYYY-MM-DD) (search/summary operations)"),
+		.describe(
+			"Filter transactions from this date (YYYY-MM-DD) (search/summary operations)",
+		),
 	toDate: z
 		.string()
 		.optional()
-		.describe("Filter transactions up to this date (YYYY-MM-DD) (search/summary operations)"),
-	period: z.number().optional().describe("Accounting period filter (search operation only)"),
-	minAmount: z.number().optional().describe("Minimum transaction amount (search operation only)"),
-	maxAmount: z.number().optional().describe("Maximum transaction amount (search operation only)"),
+		.describe(
+			"Filter transactions up to this date (YYYY-MM-DD) (search/summary operations)",
+		),
+	period: z
+		.number()
+		.optional()
+		.describe("Accounting period filter (search operation only)"),
+	minAmount: z
+		.number()
+		.optional()
+		.describe("Minimum transaction amount (search operation only)"),
+	maxAmount: z
+		.number()
+		.optional()
+		.describe("Maximum transaction amount (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
 	// Get operation parameters
 	sequenceNumber: z
 		.number()
 		.optional()
-		.describe("The transaction sequence number to retrieve (get operation only)"),
+		.describe(
+			"The transaction sequence number to retrieve (get operation only)",
+		),
 	reference: z
 		.string()
 		.optional()
-		.describe("The transaction reference (OurRef) to retrieve (getByRef operation only)"),
+		.describe(
+			"The transaction reference (OurRef) to retrieve (getByRef operation only)",
+		),
 });
 
 export const transactionTool = {
-	description: "Unified tool for transaction operations: search, get by sequence/reference, list fields, or get summary",
+	description:
+		"Unified tool for transaction operations: search, get by sequence/reference, list fields, or get summary",
 	inputSchema: transactionToolSchema,
 
 	async execute(args: z.infer<typeof transactionToolSchema>) {
@@ -157,7 +186,8 @@ export const transactionTool = {
 				if (args.fromDate || args.toDate) {
 					filteredData = filteredData.filter((trans) => {
 						const transDate = new Date(trans.TransDate);
-						if (args.fromDate && transDate < new Date(args.fromDate)) return false;
+						if (args.fromDate && transDate < new Date(args.fromDate))
+							return false;
 						if (args.toDate && transDate > new Date(args.toDate)) return false;
 						return true;
 					});
@@ -269,7 +299,8 @@ export const transactionTool = {
 				if (args.fromDate || args.toDate) {
 					transactions = transactions.filter((trans) => {
 						const transDate = new Date(trans.TransDate);
-						if (args.fromDate && transDate < new Date(args.fromDate)) return false;
+						if (args.fromDate && transDate < new Date(args.fromDate))
+							return false;
 						if (args.toDate && transDate > new Date(args.toDate)) return false;
 						return true;
 					});

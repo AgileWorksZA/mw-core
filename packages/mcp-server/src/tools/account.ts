@@ -22,34 +22,49 @@ const typeMapping: Record<string, string> = {
 const accountToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for accounts, get specific account, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for accounts, get specific account, or list available fields",
+		),
+
 	// Search operation parameters
 	query: z
 		.string()
 		.optional()
-		.describe("Search query for account code or description (search operation only)"),
+		.describe(
+			"Search query for account code or description (search operation only)",
+		),
 	type: z
 		.enum(["IN", "SA", "EX", "CS", "CA", "CL", "FA", "TA", "TL", "SF"])
 		.optional()
 		.describe(
 			"Account type filter: IN=Income, SA=Sales, EX=Expense, CS=Cost of Sales, CA=Current Asset, CL=Current Liability, FA=Fixed Asset, TA=Term Asset, TL=Term Liability, SF=Shareholders Funds (search operation only)",
 		),
-	category: z.string().optional().describe("Category code filter (search operation only)"),
+	category: z
+		.string()
+		.optional()
+		.describe("Category code filter (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
 	// Get operation parameters
-	code: z.string().optional().describe("The account code to retrieve (get operation only)"),
+	code: z
+		.string()
+		.optional()
+		.describe("The account code to retrieve (get operation only)"),
 });
 
 export const accountTool = {
-	description: "Unified tool for account operations: search accounts, get specific account, or list available fields",
+	description:
+		"Unified tool for account operations: search accounts, get specific account, or list available fields",
 	inputSchema: accountToolSchema,
 
 	async execute(args: z.infer<typeof accountToolSchema>) {

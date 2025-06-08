@@ -1,0 +1,32 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T05:19:59.656Z",
+      "2025-06-04T05:20:04.897Z"
+    ],
+    "sessions": {
+      "2": {
+        "title": [
+          "New Chat",
+          "what is my company name?"
+        ],
+        "messages": {
+          "0": [
+            {
+              "id": "55575295-f609-4df0-8846-35ab5f5f288f",
+              "role": "user",
+              "content": "what is my company name?",
+              "createdAt": "2025-06-04T05:20:04.887Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T05:19:59.656Z",
+          "2025-06-04T05:20:04.897Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

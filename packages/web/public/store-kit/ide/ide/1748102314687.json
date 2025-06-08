@@ -1,0 +1,25 @@
+{
+  "context": {
+    "name": "ide",
+    "id": "ide",
+    "files": {
+      "blue-dapper-markup-7435": {
+        "id": "blue-dapper-markup-7435",
+        "type": "json",
+        "path": "fuchsia-lustrous-conversation-2802",
+        "mapping": {
+          "input": {
+            "variables": {}
+          },
+          "output": {
+            "variables": {}
+          }
+        }
+      }
+    },
+    "fileOrder": [
+      "blue-dapper-markup-7435"
+    ],
+    "expandedPaths": []
+  }
+}

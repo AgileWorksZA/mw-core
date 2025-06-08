@@ -1,0 +1,22 @@
+{
+  "name": "ide",
+  "id": "ide",
+  "files": {
+    "test-api": {
+      "id": "test-api",
+      "path": "petstore-api",
+      "type": "openapi",
+      "mapping": {
+        "input": {
+          "variables": {}
+        },
+        "output": {
+          "variables": {}
+        }
+      }
+    }
+  },
+  "fileOrder": ["test-api"],
+  "fileTypes": ["openapi"],
+  "expandedPaths": []
+}

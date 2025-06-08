@@ -72,8 +72,9 @@ export const listEndpointsTool = {
 			let filteredEndpoints = endpoints;
 
 			if (args.category) {
+				const category = args.category.toLowerCase();
 				filteredEndpoints = endpoints.filter((e) =>
-					e.category.toLowerCase().includes(args.category!.toLowerCase()),
+					e.category.toLowerCase().includes(category),
 				);
 			}
 

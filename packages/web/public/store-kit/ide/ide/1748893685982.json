@@ -1,0 +1,25 @@
+{
+  "delta": {
+    "environmentConfig": {
+      "globals": {
+        "variables": {
+          "TEST": [
+            {
+              "key": "TEST",
+              "value": "test",
+              "description": "Test",
+              "createdAt": "2025-06-02T19:48:05.463Z",
+              "updatedAt": "2025-06-02T19:48:05.463Z"
+            }
+          ]
+        }
+      },
+      "metadata": {
+        "updatedAt": [
+          "2025-06-02T18:52:58.933Z",
+          "2025-06-02T19:48:05.463Z"
+        ]
+      }
+    }
+  }
+}

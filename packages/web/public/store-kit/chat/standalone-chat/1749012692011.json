@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T04:51:29.458Z",
+      "2025-06-04T04:51:31.005Z"
+    ],
+    "sessions": {
+      "0": {
+        "messages": {
+          "3": [
+            {
+              "id": "6345c777-ac01-445a-a3f8-dd94e5dd94e2",
+              "role": "assistant",
+              "content": "I received your test message. How can I assist you today?",
+              "createdAt": "2025-06-04T04:51:31.004Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T04:51:29.458Z",
+          "2025-06-04T04:51:31.005Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

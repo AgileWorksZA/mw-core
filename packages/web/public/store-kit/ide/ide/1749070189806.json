@@ -1,0 +1,17 @@
+{
+  "delta": {
+    "files": {
+      "purple-qualified-contractor-9644": {
+        "mapping": {
+          "input": {
+            "variables": {
+              "base_url": [
+                ""
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "context": {
+    "name": "ide",
+    "id": "ide",
+    "files": {
+      "white-electric-planula-4142": {
+        "id": "white-electric-planula-4142",
+        "type": "json",
+        "path": "black-decent-bonnet-4593",
+        "mapping": {
+          "input": {
+            "variables": {}
+          },
+          "output": {
+            "variables": {}
+          }
+        }
+      }
+    },
+    "fileOrder": [
+      "white-electric-planula-4142"
+    ],
+    "expandedPaths": [],
+    "debug": 0.9614263991413914
+  }
+}

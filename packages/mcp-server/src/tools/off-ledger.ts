@@ -1,4 +1,4 @@
-import { OffLedgerService } from "@moneyworks/api/src/services/tables/offledger.service";
+import { OffLedgerService } from "@moneyworks/api/src/services/tables/off-ledger.service";
 import type { OffLedger } from "@moneyworks/api/src/types/interface/tables/offledger";
 import { z } from "zod";
 
@@ -8,28 +8,38 @@ const offledgerService = new OffLedgerService();
 const offledgerToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for offledgers, get specific offledger, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for offledgers, get specific offledger, or list available fields",
+		),
+
 	// Search operation parameters
-	query: z
-		.string()
-		.optional()
-		.describe("Search query (search operation only)"),
+	query: z.string().optional().describe("Search query (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
-	// Get operation parameters (adjust based on primary key)
-	sequenceNumber: z.number().optional().describe("The offledger sequence number to retrieve (get operation only)"),
-	code: z.string().optional().describe("The offledger code to retrieve (get operation only)"),
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
+	// Get operation parameters
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The offledger sequence number to retrieve (get operation only)"),
+	name: z
+		.string()
+		.optional()
+		.describe("The offledger name to retrieve (get operation only)"),
 });
 
 export const offledgerTool = {
-	description: "Unified tool for offledger operations: search offledgers, get specific offledger, or list available fields",
+	description:
+		"Unified tool for offledger operations: search offledgers, get specific offledger, or list available fields",
 	inputSchema: offledgerToolSchema,
 
 	async execute(args: z.infer<typeof offledgerToolSchema>) {
@@ -39,8 +49,8 @@ export const offledgerTool = {
 
 				// Build search criteria
 				if (args.query) {
-					// Adjust based on table structure
-					search.Code = args.query;
+					// Search by name
+					search.Name = args.query;
 				}
 
 				// Execute search using the existing service
@@ -60,14 +70,16 @@ export const offledgerTool = {
 			}
 
 			case "get": {
-				// Try sequence number first, then code
+				// Try sequence number first, then name
 				let searchCriteria;
 				if (args.sequenceNumber) {
 					searchCriteria = { SequenceNumber: args.sequenceNumber };
-				} else if (args.code) {
-					searchCriteria = { Code: args.code };
+				} else if (args.name) {
+					searchCriteria = { Name: args.name };
 				} else {
-					throw new Error("Either sequenceNumber or code is required for get operation");
+					throw new Error(
+						"Either sequenceNumber or name is required for get operation",
+					);
 				}
 
 				const result = await offledgerService.getData({
@@ -77,7 +89,7 @@ export const offledgerTool = {
 				});
 
 				if (!result.data || result.data.length === 0) {
-					throw new Error(`Offledger not found`);
+					throw new Error("Offledger not found");
 				}
 
 				return {

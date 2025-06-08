@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T06:32:43.106Z",
+      "2025-06-04T06:32:45.158Z"
+    ],
+    "sessions": {
+      "2": {
+        "messages": {
+          "36": [
+            {
+              "id": "f0faed9a-0a9d-4487-9084-4622a431b224",
+              "role": "assistant",
+              "content": "Could you please specify the details you would like included in the ticket? This will help ensure that the ticket is logged accurately.",
+              "createdAt": "2025-06-04T06:32:45.157Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T06:32:43.106Z",
+          "2025-06-04T06:32:45.158Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

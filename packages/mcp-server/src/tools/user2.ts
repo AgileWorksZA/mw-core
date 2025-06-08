@@ -8,28 +8,38 @@ const user2Service = new User2Service();
 const user2ToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for user2s, get specific user2, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for user2s, get specific user2, or list available fields",
+		),
+
 	// Search operation parameters
-	query: z
-		.string()
-		.optional()
-		.describe("Search query (search operation only)"),
+	query: z.string().optional().describe("Search query (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
-	// Get operation parameters (adjust based on primary key)
-	sequenceNumber: z.number().optional().describe("The user2 sequence number to retrieve (get operation only)"),
-	code: z.string().optional().describe("The user2 code to retrieve (get operation only)"),
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
+	// Get operation parameters
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The user2 sequence number to retrieve (get operation only)"),
+	key: z
+		.string()
+		.optional()
+		.describe("The user2 key to retrieve (get operation only)"),
 });
 
 export const user2Tool = {
-	description: "Unified tool for user2 operations: search user2s, get specific user2, or list available fields",
+	description:
+		"Unified tool for user2 operations: search user2s, get specific user2, or list available fields",
 	inputSchema: user2ToolSchema,
 
 	async execute(args: z.infer<typeof user2ToolSchema>) {
@@ -39,8 +49,8 @@ export const user2Tool = {
 
 				// Build search criteria
 				if (args.query) {
-					// Adjust based on table structure
-					search.Code = args.query;
+					// Search by key
+					search.Key = args.query;
 				}
 
 				// Execute search using the existing service
@@ -60,14 +70,16 @@ export const user2Tool = {
 			}
 
 			case "get": {
-				// Try sequence number first, then code
+				// Try sequence number first, then key
 				let searchCriteria;
 				if (args.sequenceNumber) {
 					searchCriteria = { SequenceNumber: args.sequenceNumber };
-				} else if (args.code) {
-					searchCriteria = { Code: args.code };
+				} else if (args.key) {
+					searchCriteria = { Key: args.key };
 				} else {
-					throw new Error("Either sequenceNumber or code is required for get operation");
+					throw new Error(
+						"Either sequenceNumber or key is required for get operation",
+					);
 				}
 
 				const result = await user2Service.getData({
@@ -77,7 +89,7 @@ export const user2Tool = {
 				});
 
 				if (!result.data || result.data.length === 0) {
-					throw new Error(`User2 not found`);
+					throw new Error("User2 not found");
 				}
 
 				return {

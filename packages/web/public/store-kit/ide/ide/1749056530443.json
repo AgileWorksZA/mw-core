@@ -1,0 +1,20 @@
+{
+  "delta": {
+    "files": {
+      "salmon-merry-mom-6805": {
+        "mapping": {
+          "input": {
+            "variables": {
+              "name": {
+                "path": [
+                  "Name",
+                  "asdf"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

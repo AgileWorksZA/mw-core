@@ -1,0 +1,25 @@
+{
+  "context": {
+    "name": "ide",
+    "id": "ide",
+    "files": {
+      "plum-overdue-alert-6269": {
+        "id": "plum-overdue-alert-6269",
+        "type": "json",
+        "path": "purple-reasonable-willow-1478",
+        "mapping": {
+          "input": {
+            "variables": {}
+          },
+          "output": {
+            "variables": {}
+          }
+        }
+      }
+    },
+    "fileOrder": [
+      "plum-overdue-alert-6269"
+    ],
+    "expandedPaths": []
+  }
+}

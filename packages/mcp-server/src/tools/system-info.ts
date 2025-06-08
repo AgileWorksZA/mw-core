@@ -103,7 +103,11 @@ export const getSystemInfoTool = {
 
 	async execute(args: z.infer<typeof getSystemInfoInputSchema>) {
 		try {
-			const systemInfo = await getSystemInformation(args);
+			const systemInfo = await getSystemInformation({
+				includePerformance: args.includePerformance ?? true,
+				includeEnvironment: args.includeEnvironment ?? true,
+				includeDatabase: args.includeDatabase ?? true,
+			});
 
 			// Add summary information
 			const summary = {

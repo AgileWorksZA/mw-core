@@ -116,24 +116,23 @@ export const getCurrencyInfoTool = {
 						: undefined,
 					recommendations: generateCurrencyRecommendations(currencyInfo),
 				};
-			} else {
-				// Get all supported currencies
-				const currencies = getAllSupportedCurrencies();
-				const baseCurrency = getBaseCurrency();
-
-				return {
-					baseCurrency: baseCurrency,
-					supportedCurrencies: currencies,
-					totalCurrencies: currencies.length,
-					byRegion: groupCurrenciesByRegion(currencies),
-					mostCommon: getMostCommonCurrencies(),
-					summary: {
-						activeCurrencies: currencies.filter((c) => c.isActive).length,
-						regions: [...new Set(currencies.map((c) => c.region))].length,
-						lastUpdated: new Date().toISOString(),
-					},
-				};
 			}
+			// Get all supported currencies
+			const currencies = getAllSupportedCurrencies();
+			const baseCurrency = getBaseCurrency();
+
+			return {
+				baseCurrency: baseCurrency,
+				supportedCurrencies: currencies,
+				totalCurrencies: currencies.length,
+				byRegion: groupCurrenciesByRegion(currencies),
+				mostCommon: getMostCommonCurrencies(),
+				summary: {
+					activeCurrencies: currencies.filter((c) => c.isActive).length,
+					regions: [...new Set(currencies.map((c) => c.region))].length,
+					lastUpdated: new Date().toISOString(),
+				},
+			};
 		} catch (error) {
 			await trackError(error, "getCurrencyInfo", args);
 			throw error;
@@ -495,8 +494,8 @@ function getCurrencyFormatting(currency: CurrencyInfo): CurrencyFormatting {
 // Format currency amount
 function formatCurrencyAmount(amount: number, currency: CurrencyInfo): string {
 	const rounded =
-		Math.round(amount * Math.pow(10, currency.decimalPlaces)) /
-		Math.pow(10, currency.decimalPlaces);
+		Math.round(amount * 10 ** currency.decimalPlaces) /
+		10 ** currency.decimalPlaces;
 	const parts = Math.abs(rounded).toFixed(currency.decimalPlaces).split(".");
 	const integerPart = parts[0].replace(
 		/\B(?=(\d{3})+(?!\d))/g,
@@ -512,11 +511,10 @@ function formatCurrencyAmount(amount: number, currency: CurrencyInfo): string {
 		return isNegative
 			? `(${currency.symbol}${formattedAmount})`
 			: `${currency.symbol}${formattedAmount}`;
-	} else {
-		return isNegative
-			? `(${formattedAmount}${currency.symbol})`
-			: `${formattedAmount}${currency.symbol}`;
 	}
+	return isNegative
+		? `(${formattedAmount}${currency.symbol})`
+		: `${formattedAmount}${currency.symbol}`;
 }
 
 // Get all supported currencies

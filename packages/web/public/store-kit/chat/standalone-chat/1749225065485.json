@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-06T15:47:51.895Z",
+      "2025-06-06T15:51:04.976Z"
+    ],
+    "sessions": {
+      "6": {
+        "messages": {
+          "24": [
+            {
+              "id": "1b5a8293-5bd0-41b7-bc1f-0456ed22f0c1",
+              "role": "user",
+              "content": "Show me the last 5 transactions",
+              "createdAt": "2025-06-06T15:51:04.968Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-06T15:47:51.895Z",
+          "2025-06-06T15:51:04.976Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

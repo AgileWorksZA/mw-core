@@ -1,0 +1,1 @@
+export { loader } from "~/modules/cache/routes/api.cache.$";

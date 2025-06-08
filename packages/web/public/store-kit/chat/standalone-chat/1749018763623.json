@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T06:22:24.696Z",
+      "2025-06-04T06:32:43.106Z"
+    ],
+    "sessions": {
+      "2": {
+        "messages": {
+          "35": [
+            {
+              "id": "74cff090-ba36-40a8-8a0a-2a3bc55c59de",
+              "role": "user",
+              "content": "log a ticket with details",
+              "createdAt": "2025-06-04T06:32:43.092Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T06:22:24.696Z",
+          "2025-06-04T06:32:43.106Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

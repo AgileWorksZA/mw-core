@@ -8,28 +8,38 @@ const generalService = new GeneralService();
 const generalToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for generals, get specific general, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for generals, get specific general, or list available fields",
+		),
+
 	// Search operation parameters
-	query: z
-		.string()
-		.optional()
-		.describe("Search query (search operation only)"),
+	query: z.string().optional().describe("Search query (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
 	// Get operation parameters (adjust based on primary key)
-	sequenceNumber: z.number().optional().describe("The general sequence number to retrieve (get operation only)"),
-	code: z.string().optional().describe("The general code to retrieve (get operation only)"),
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The general sequence number to retrieve (get operation only)"),
+	code: z
+		.string()
+		.optional()
+		.describe("The general code to retrieve (get operation only)"),
 });
 
 export const generalTool = {
-	description: "Unified tool for general operations: search generals, get specific general, or list available fields",
+	description:
+		"Unified tool for general operations: search generals, get specific general, or list available fields",
 	inputSchema: generalToolSchema,
 
 	async execute(args: z.infer<typeof generalToolSchema>) {
@@ -67,7 +77,9 @@ export const generalTool = {
 				} else if (args.code) {
 					searchCriteria = { Code: args.code };
 				} else {
-					throw new Error("Either sequenceNumber or code is required for get operation");
+					throw new Error(
+						"Either sequenceNumber or code is required for get operation",
+					);
 				}
 
 				const result = await generalService.getData({
@@ -77,7 +89,7 @@ export const generalTool = {
 				});
 
 				if (!result.data || result.data.length === 0) {
-					throw new Error(`General not found`);
+					throw new Error("General not found");
 				}
 
 				return {

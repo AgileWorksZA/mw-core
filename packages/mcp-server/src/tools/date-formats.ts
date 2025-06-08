@@ -894,7 +894,7 @@ function parseDateString(
 		// Try to parse the date
 		const parsedDate = new Date(dateString);
 
-		if (isNaN(parsedDate.getTime())) {
+		if (Number.isNaN(parsedDate.getTime())) {
 			errors.push("Invalid date string");
 			return { success: false, errors, warnings };
 		}

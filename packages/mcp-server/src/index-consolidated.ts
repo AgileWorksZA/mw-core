@@ -6,36 +6,36 @@ import { TicketService } from "./services/ticket-service";
 
 // Consolidated table tools
 import { accountTool } from "./tools/account";
-import { transactionTool } from "./tools/transaction";
-import { nameTool } from "./tools/name";
-import { buildTool } from "./tools/build";
-import { productTool } from "./tools/product";
-import { jobTool } from "./tools/job";
-import { detailTool } from "./tools/detail";
-import { taxrateTool } from "./tools/tax-rate";
-import { departmentTool } from "./tools/department";
-import { paymentTool } from "./tools/payment";
-import { bankrecTool } from "./tools/bank-rec";
-import { ledgerTool } from "./tools/ledger";
-import { jobsheetTool } from "./tools/job-sheet";
-import { contactTool } from "./tools/contact";
-import { inventoryTool } from "./tools/inventory";
-import { generalTool } from "./tools/general";
-import { loginTool } from "./tools/login";
-import { messageTool } from "./tools/message";
-import { listTool } from "./tools/list";
-import { userTool } from "./tools/user";
-import { filterTool } from "./tools/filter";
-import { memoTool } from "./tools/memo";
-import { user2Tool } from "./tools/user2";
-import { stickieTool } from "./tools/stickie";
-import { offledgerTool } from "./tools/off-ledger";
-import { autosplitTool } from "./tools/auto-split";
-import { linkTool } from "./tools/link";
-import { logTool } from "./tools/log";
 import { assetTool } from "./tools/asset";
 import { assetcatTool } from "./tools/asset-cat";
 import { assetlogTool } from "./tools/asset-log";
+import { autosplitTool } from "./tools/auto-split";
+import { bankrecTool } from "./tools/bank-rec";
+import { buildTool } from "./tools/build";
+import { contactTool } from "./tools/contact";
+import { departmentTool } from "./tools/department";
+import { detailTool } from "./tools/detail";
+import { filterTool } from "./tools/filter";
+import { generalTool } from "./tools/general";
+import { inventoryTool } from "./tools/inventory";
+import { jobTool } from "./tools/job";
+import { jobsheetTool } from "./tools/job-sheet";
+import { ledgerTool } from "./tools/ledger";
+import { linkTool } from "./tools/link";
+import { listTool } from "./tools/list";
+import { logTool } from "./tools/log";
+import { loginTool } from "./tools/login";
+import { memoTool } from "./tools/memo";
+import { messageTool } from "./tools/message";
+import { nameTool } from "./tools/name";
+import { offledgerTool } from "./tools/off-ledger";
+import { paymentTool } from "./tools/payment";
+import { productTool } from "./tools/product";
+import { stickieTool } from "./tools/stickie";
+import { taxrateTool } from "./tools/tax-rate";
+import { transactionTool } from "./tools/transaction";
+import { userTool } from "./tools/user";
+import { user2Tool } from "./tools/user2";
 
 // Essential system tools
 import {
@@ -160,81 +160,93 @@ function registerConsolidatedTool(toolName: string, tool: any) {
 }
 
 // Register consolidated table tools (31 tools)
-registerConsolidatedTool('accounts', accountTool);
-registerConsolidatedTool('transactions', transactionTool);
-registerConsolidatedTool('names', nameTool);
-registerConsolidatedTool('builds', buildTool);
-registerConsolidatedTool('products', productTool);
-registerConsolidatedTool('jobs', jobTool);
-registerConsolidatedTool('details', detailTool);
-registerConsolidatedTool('taxRates', taxrateTool);
-registerConsolidatedTool('departments', departmentTool);
-registerConsolidatedTool('payments', paymentTool);
-registerConsolidatedTool('bankRecs', bankrecTool);
-registerConsolidatedTool('ledger', ledgerTool);
-registerConsolidatedTool('jobSheets', jobsheetTool);
-registerConsolidatedTool('contacts', contactTool);
-registerConsolidatedTool('inventory', inventoryTool);
-registerConsolidatedTool('general', generalTool);
-registerConsolidatedTool('logins', loginTool);
-registerConsolidatedTool('messages', messageTool);
-registerConsolidatedTool('lists', listTool);
-registerConsolidatedTool('users', userTool);
-registerConsolidatedTool('filters', filterTool);
-registerConsolidatedTool('memos', memoTool);
-registerConsolidatedTool('user2', user2Tool);
-registerConsolidatedTool('stickies', stickieTool);
-registerConsolidatedTool('offLedger', offledgerTool);
-registerConsolidatedTool('autoSplits', autosplitTool);
-registerConsolidatedTool('links', linkTool);
-registerConsolidatedTool('logs', logTool);
-registerConsolidatedTool('assets', assetTool);
-registerConsolidatedTool('assetCategories', assetcatTool);
-registerConsolidatedTool('assetLogs', assetlogTool);
+registerConsolidatedTool("accounts", accountTool);
+registerConsolidatedTool("transactions", transactionTool);
+registerConsolidatedTool("names", nameTool);
+registerConsolidatedTool("builds", buildTool);
+registerConsolidatedTool("products", productTool);
+registerConsolidatedTool("jobs", jobTool);
+registerConsolidatedTool("details", detailTool);
+registerConsolidatedTool("taxRates", taxrateTool);
+registerConsolidatedTool("departments", departmentTool);
+registerConsolidatedTool("payments", paymentTool);
+registerConsolidatedTool("bankRecs", bankrecTool);
+registerConsolidatedTool("ledger", ledgerTool);
+registerConsolidatedTool("jobSheets", jobsheetTool);
+registerConsolidatedTool("contacts", contactTool);
+registerConsolidatedTool("inventory", inventoryTool);
+registerConsolidatedTool("general", generalTool);
+registerConsolidatedTool("logins", loginTool);
+registerConsolidatedTool("messages", messageTool);
+registerConsolidatedTool("lists", listTool);
+registerConsolidatedTool("users", userTool);
+registerConsolidatedTool("filters", filterTool);
+registerConsolidatedTool("memos", memoTool);
+registerConsolidatedTool("user2", user2Tool);
+registerConsolidatedTool("stickies", stickieTool);
+registerConsolidatedTool("offLedger", offledgerTool);
+registerConsolidatedTool("autoSplits", autosplitTool);
+registerConsolidatedTool("links", linkTool);
+registerConsolidatedTool("logs", logTool);
+registerConsolidatedTool("assets", assetTool);
+registerConsolidatedTool("assetCategories", assetcatTool);
+registerConsolidatedTool("assetLogs", assetlogTool);
 
 // Register essential system tools (52 tools)
-registerConsolidatedTool('listTables', listTablesTool);
-registerConsolidatedTool('describeTableSchema', describeTableSchemaTool);
-registerConsolidatedTool('getFieldMetadata', getFieldMetadataTool);
-registerConsolidatedTool('getTableRelationships', getTableRelationshipsTool);
-registerConsolidatedTool('listEndpoints', listEndpointsTool);
-registerConsolidatedTool('describeEndpoint', describeEndpointTool);
-registerConsolidatedTool('getSystemInfo', getSystemInfoTool);
-registerConsolidatedTool('getApiCapabilities', getApiCapabilitiesTool);
-registerConsolidatedTool('getSystemStatus', getSystemStatusTool);
-registerConsolidatedTool('getValidationRules', getValidationRulesTool);
-registerConsolidatedTool('getTableValidationRules', getTableValidationRulesTool);
-registerConsolidatedTool('getBusinessRules', getBusinessRulesTool);
-registerConsolidatedTool('getEnumValues', getEnumValuesTool);
-registerConsolidatedTool('searchEnumValues', searchEnumValuesTool);
-registerConsolidatedTool('getTableEnumFields', getTableEnumFieldsTool);
-registerConsolidatedTool('getEnumUsagePatterns', getEnumUsagePatternsTool);
-registerConsolidatedTool('getDateFormats', getDateFormatsTool);
-registerConsolidatedTool('getTableDateFields', getTableDateFieldsTool);
-registerConsolidatedTool('getSupportedDateFormats', getSupportedDateFormatsTool);
-registerConsolidatedTool('parseDateString', parseDateStringTool);
-registerConsolidatedTool('getCurrencyInfo', getCurrencyInfoTool);
-registerConsolidatedTool('getCurrencyFormatting', getCurrencyFormattingTool);
-registerConsolidatedTool('getExchangeRates', getExchangeRatesTool);
-registerConsolidatedTool('convertCurrency', convertCurrencyTool);
-registerConsolidatedTool('getMoneyWorksCurrencySettings', getMoneyWorksCurrencySettingsTool);
-registerConsolidatedTool('getPermissionInfo', getPermissionInfoTool);
-registerConsolidatedTool('getTablePermissions', getTablePermissionsTool);
-registerConsolidatedTool('getUserRoles', getUserRolesTool);
-registerConsolidatedTool('checkUserPermissions', checkUserPermissionsTool);
-registerConsolidatedTool('getSecurityAuditInfo', getSecurityAuditInfoTool);
-registerConsolidatedTool('evaluateExpression', evaluateExpressionTool);
-registerConsolidatedTool('evaluateTemplate', evaluateTemplateTool);
-registerConsolidatedTool('listCommonExpressions', listCommonExpressionsTool);
-registerConsolidatedTool('generateReport', generateReportTool);
-registerConsolidatedTool('getReportParameters', getReportParametersTool);
-registerConsolidatedTool('listCommonReports', listCommonReportsTool);
-registerConsolidatedTool('getTableLabels', getTableLabelsTool);
-registerConsolidatedTool('listAvailableTables', listAvailableTablesTool);
-registerConsolidatedTool('listSupportedLanguages', listSupportedLanguagesTool);
-registerConsolidatedTool('generateAllLabels', generateAllLabelsTool);
-registerConsolidatedTool('getCompanyInformation', getCompanyInformationTool);
-registerConsolidatedTool('listCompanyInformationFields', listCompanyInformationFieldsTool);
+registerConsolidatedTool("listTables", listTablesTool);
+registerConsolidatedTool("describeTableSchema", describeTableSchemaTool);
+registerConsolidatedTool("getFieldMetadata", getFieldMetadataTool);
+registerConsolidatedTool("getTableRelationships", getTableRelationshipsTool);
+registerConsolidatedTool("listEndpoints", listEndpointsTool);
+registerConsolidatedTool("describeEndpoint", describeEndpointTool);
+registerConsolidatedTool("getSystemInfo", getSystemInfoTool);
+registerConsolidatedTool("getApiCapabilities", getApiCapabilitiesTool);
+registerConsolidatedTool("getSystemStatus", getSystemStatusTool);
+registerConsolidatedTool("getValidationRules", getValidationRulesTool);
+registerConsolidatedTool(
+	"getTableValidationRules",
+	getTableValidationRulesTool,
+);
+registerConsolidatedTool("getBusinessRules", getBusinessRulesTool);
+registerConsolidatedTool("getEnumValues", getEnumValuesTool);
+registerConsolidatedTool("searchEnumValues", searchEnumValuesTool);
+registerConsolidatedTool("getTableEnumFields", getTableEnumFieldsTool);
+registerConsolidatedTool("getEnumUsagePatterns", getEnumUsagePatternsTool);
+registerConsolidatedTool("getDateFormats", getDateFormatsTool);
+registerConsolidatedTool("getTableDateFields", getTableDateFieldsTool);
+registerConsolidatedTool(
+	"getSupportedDateFormats",
+	getSupportedDateFormatsTool,
+);
+registerConsolidatedTool("parseDateString", parseDateStringTool);
+registerConsolidatedTool("getCurrencyInfo", getCurrencyInfoTool);
+registerConsolidatedTool("getCurrencyFormatting", getCurrencyFormattingTool);
+registerConsolidatedTool("getExchangeRates", getExchangeRatesTool);
+registerConsolidatedTool("convertCurrency", convertCurrencyTool);
+registerConsolidatedTool(
+	"getMoneyWorksCurrencySettings",
+	getMoneyWorksCurrencySettingsTool,
+);
+registerConsolidatedTool("getPermissionInfo", getPermissionInfoTool);
+registerConsolidatedTool("getTablePermissions", getTablePermissionsTool);
+registerConsolidatedTool("getUserRoles", getUserRolesTool);
+registerConsolidatedTool("checkUserPermissions", checkUserPermissionsTool);
+registerConsolidatedTool("getSecurityAuditInfo", getSecurityAuditInfoTool);
+registerConsolidatedTool("evaluateExpression", evaluateExpressionTool);
+registerConsolidatedTool("evaluateTemplate", evaluateTemplateTool);
+registerConsolidatedTool("listCommonExpressions", listCommonExpressionsTool);
+registerConsolidatedTool("generateReport", generateReportTool);
+registerConsolidatedTool("getReportParameters", getReportParametersTool);
+registerConsolidatedTool("listCommonReports", listCommonReportsTool);
+registerConsolidatedTool("getTableLabels", getTableLabelsTool);
+registerConsolidatedTool("listAvailableTables", listAvailableTablesTool);
+registerConsolidatedTool("listSupportedLanguages", listSupportedLanguagesTool);
+registerConsolidatedTool("generateAllLabels", generateAllLabelsTool);
+registerConsolidatedTool("getCompanyInformation", getCompanyInformationTool);
+registerConsolidatedTool(
+	"listCompanyInformationFields",
+	listCompanyInformationFieldsTool,
+);
 
 // Helper function to handle tool errors and log to ticketing system
 async function handleToolError(

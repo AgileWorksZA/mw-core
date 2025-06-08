@@ -1,0 +1,6 @@
+bun test v1.2.14 (6a363a38)
+Adapter json registered.
+Adapter openapi registered.
+Adapter service-connection registered.
+Adapter api-get registered.
+Adapter chat registered.

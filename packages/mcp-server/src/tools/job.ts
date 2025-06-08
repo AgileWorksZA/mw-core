@@ -8,28 +8,38 @@ const jobService = new JobService();
 const jobToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for jobs, get specific job, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for jobs, get specific job, or list available fields",
+		),
+
 	// Search operation parameters
-	query: z
-		.string()
-		.optional()
-		.describe("Search query (search operation only)"),
+	query: z.string().optional().describe("Search query (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
 	// Get operation parameters (adjust based on primary key)
-	sequenceNumber: z.number().optional().describe("The job sequence number to retrieve (get operation only)"),
-	code: z.string().optional().describe("The job code to retrieve (get operation only)"),
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The job sequence number to retrieve (get operation only)"),
+	code: z
+		.string()
+		.optional()
+		.describe("The job code to retrieve (get operation only)"),
 });
 
 export const jobTool = {
-	description: "Unified tool for job operations: search jobs, get specific job, or list available fields",
+	description:
+		"Unified tool for job operations: search jobs, get specific job, or list available fields",
 	inputSchema: jobToolSchema,
 
 	async execute(args: z.infer<typeof jobToolSchema>) {
@@ -67,7 +77,9 @@ export const jobTool = {
 				} else if (args.code) {
 					searchCriteria = { Code: args.code };
 				} else {
-					throw new Error("Either sequenceNumber or code is required for get operation");
+					throw new Error(
+						"Either sequenceNumber or code is required for get operation",
+					);
 				}
 
 				const result = await jobService.getData({
@@ -77,7 +89,7 @@ export const jobTool = {
 				});
 
 				if (!result.data || result.data.length === 0) {
-					throw new Error(`Job not found`);
+					throw new Error("Job not found");
 				}
 
 				return {

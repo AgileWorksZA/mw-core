@@ -1,0 +1,25 @@
+{
+  "context": {
+    "name": "ide",
+    "id": "ide",
+    "files": {
+      "lime-unpleasant-wilderness-8967": {
+        "id": "lime-unpleasant-wilderness-8967",
+        "type": "json",
+        "path": "A",
+        "mapping": {
+          "input": {
+            "variables": {}
+          },
+          "output": {
+            "variables": {}
+          }
+        }
+      }
+    },
+    "fileOrder": [
+      "lime-unpleasant-wilderness-8967"
+    ],
+    "expandedPaths": []
+  }
+}

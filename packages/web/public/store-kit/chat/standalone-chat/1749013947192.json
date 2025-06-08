@@ -1,0 +1,24 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T05:12:23.210Z",
+      "2025-06-04T05:12:26.682Z"
+    ],
+    "currentSessionId": [
+      "default-session",
+      "c134766a-8407-43ff-afc6-662b936548bc"
+    ],
+    "sessions": {
+      "1": [
+        {
+          "id": "c134766a-8407-43ff-afc6-662b936548bc",
+          "title": "New Chat",
+          "messages": [],
+          "createdAt": "2025-06-04T05:12:26.682Z",
+          "updatedAt": "2025-06-04T05:12:26.682Z"
+        }
+      ],
+      "_t": "a"
+    }
+  }
+}

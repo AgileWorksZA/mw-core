@@ -1,0 +1,20 @@
+{
+  "data": {
+    "name": "Test Project",
+    "id": "test-project",
+    "files": {
+      "company-a": {
+        "type": "test-file",
+        "dependencies": []
+      },
+      "company-b": {
+        "type": "test-file",
+        "dependencies": ["company-a"]
+      },
+      "company-c": {
+        "type": "test-file",
+        "dependencies": ["company-b"]
+      }
+    }
+  }
+}

@@ -9,38 +9,73 @@ const nameService = new NameService();
 const nameToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for names, get specific name, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for names, get specific name, or list available fields",
+		),
+
 	// Search operation parameters
 	query: z
 		.string()
 		.optional()
-		.describe("Search query for name code, name, or contact (search operation only)"),
-	customerType: z.number().optional().describe("Customer type filter (search operation only)"),
-	supplierType: z.number().optional().describe("Supplier type filter (search operation only)"),
+		.describe(
+			"Search query for name code, name, or contact (search operation only)",
+		),
+	customerType: z
+		.number()
+		.optional()
+		.describe("Customer type filter (search operation only)"),
+	supplierType: z
+		.number()
+		.optional()
+		.describe("Supplier type filter (search operation only)"),
 	kind: z
 		.number()
 		.optional()
-		.describe("Kind filter (0=Customer, 1=Supplier, 2=Both) (search operation only)"),
-	category1: z.string().optional().describe("Category 1 filter (search operation only)"),
-	category2: z.string().optional().describe("Category 2 filter (search operation only)"),
-	category3: z.string().optional().describe("Category 3 filter (search operation only)"),
-	category4: z.string().optional().describe("Category 4 filter (search operation only)"),
-	hold: z.boolean().optional().describe("Filter by hold status (search operation only)"),
+		.describe(
+			"Kind filter (0=Customer, 1=Supplier, 2=Both) (search operation only)",
+		),
+	category1: z
+		.string()
+		.optional()
+		.describe("Category 1 filter (search operation only)"),
+	category2: z
+		.string()
+		.optional()
+		.describe("Category 2 filter (search operation only)"),
+	category3: z
+		.string()
+		.optional()
+		.describe("Category 3 filter (search operation only)"),
+	category4: z
+		.string()
+		.optional()
+		.describe("Category 4 filter (search operation only)"),
+	hold: z
+		.boolean()
+		.optional()
+		.describe("Filter by hold status (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
 	// Get operation parameters
-	code: z.string().optional().describe("The name code to retrieve (get operation only)"),
+	code: z
+		.string()
+		.optional()
+		.describe("The name code to retrieve (get operation only)"),
 });
 
 export const nameTool = {
-	description: "Unified tool for name operations: search names (customers/suppliers), get specific name, or list available fields",
+	description:
+		"Unified tool for name operations: search names (customers/suppliers), get specific name, or list available fields",
 	inputSchema: nameToolSchema,
 
 	async execute(args: z.infer<typeof nameToolSchema>) {
@@ -112,11 +147,11 @@ export const nameTool = {
 					offset: 0,
 					// Getting all fields to ensure data is returned properly
 				});
-				
+
 				if (!result.data || result.data.length === 0) {
 					throw new Error(`Name with code '${args.code}' not found`);
 				}
-				
+
 				return {
 					operation: "get",
 					name: result.data[0],

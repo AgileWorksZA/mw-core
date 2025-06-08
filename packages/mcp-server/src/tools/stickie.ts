@@ -1,46 +1,56 @@
-import { StickieService } from "@moneyworks/api/src/services/tables/stickie.service";
-import type { Stickie } from "@moneyworks/api/src/types/interface/tables/stickie";
+import { StickiesService } from "@moneyworks/api/src/services/tables/stickies.service";
+import type { Stickies } from "@moneyworks/api/src/types/interface/tables/stickies";
 import { z } from "zod";
 
-const stickieService = new StickieService();
+const stickieService = new StickiesService();
 
 // Consolidated stickie tool schema
 const stickieToolSchema = z.object({
 	operation: z
 		.enum(["search", "get", "listFields"])
-		.describe("The operation to perform: search for stickies, get specific stickie, or list available fields"),
-	
+		.describe(
+			"The operation to perform: search for stickies, get specific stickie, or list available fields",
+		),
+
 	// Search operation parameters
-	query: z
-		.string()
-		.optional()
-		.describe("Search query (search operation only)"),
+	query: z.string().optional().describe("Search query (search operation only)"),
 	limit: z
 		.number()
 		.min(1)
 		.max(100)
 		.default(50)
 		.describe("Maximum number of results (search operation only)"),
-	offset: z.number().min(0).default(0).describe("Number of results to skip (search operation only)"),
-	
-	// Get operation parameters (adjust based on primary key)
-	sequenceNumber: z.number().optional().describe("The stickie sequence number to retrieve (get operation only)"),
-	code: z.string().optional().describe("The stickie code to retrieve (get operation only)"),
+	offset: z
+		.number()
+		.min(0)
+		.default(0)
+		.describe("Number of results to skip (search operation only)"),
+
+	// Get operation parameters
+	sequenceNumber: z
+		.number()
+		.optional()
+		.describe("The stickie sequence number to retrieve (get operation only)"),
+	ownerSeq: z
+		.number()
+		.optional()
+		.describe("The owner sequence number to retrieve stickies for (get operation only)"),
 });
 
 export const stickieTool = {
-	description: "Unified tool for stickie operations: search stickies, get specific stickie, or list available fields",
+	description:
+		"Unified tool for stickie operations: search stickies, get specific stickie, or list available fields",
 	inputSchema: stickieToolSchema,
 
 	async execute(args: z.infer<typeof stickieToolSchema>) {
 		switch (args.operation) {
 			case "search": {
-				const search: Partial<Stickie> = {};
+				const search: Partial<Stickies> = {};
 
 				// Build search criteria
 				if (args.query) {
-					// Adjust based on table structure
-					search.Code = args.query;
+					// Search by message content
+					search.Message = args.query;
 				}
 
 				// Execute search using the existing service
@@ -60,14 +70,16 @@ export const stickieTool = {
 			}
 
 			case "get": {
-				// Try sequence number first, then code
+				// Try sequence number first, then ownerSeq
 				let searchCriteria;
 				if (args.sequenceNumber) {
 					searchCriteria = { SequenceNumber: args.sequenceNumber };
-				} else if (args.code) {
-					searchCriteria = { Code: args.code };
+				} else if (args.ownerSeq) {
+					searchCriteria = { OwnerSeq: args.ownerSeq };
 				} else {
-					throw new Error("Either sequenceNumber or code is required for get operation");
+					throw new Error(
+						"Either sequenceNumber or ownerSeq is required for get operation",
+					);
 				}
 
 				const result = await stickieService.getData({
@@ -77,7 +89,7 @@ export const stickieTool = {
 				});
 
 				if (!result.data || result.data.length === 0) {
-					throw new Error(`Stickie not found`);
+					throw new Error("Stickie not found");
 				}
 
 				return {
@@ -88,12 +100,12 @@ export const stickieTool = {
 
 			case "listFields": {
 				// Import the fields from the interface
-				const { StickieFields } = await import(
-					"@moneyworks/api/src/types/interface/tables/stickie"
+				const { StickiesFields } = await import(
+					"@moneyworks/api/src/types/interface/tables/stickies"
 				);
 				return {
 					operation: "listFields",
-					fields: StickieFields,
+					fields: StickiesFields,
 					description: "Available fields for stickie queries and filters",
 				};
 			}

@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-05T04:24:23.301Z",
+      "2025-06-05T04:28:54.011Z"
+    ],
+    "sessions": {
+      "5": {
+        "messages": {
+          "9": [
+            {
+              "id": "9060a4b4-345a-408c-83ff-30eec8584ff0",
+              "role": "user",
+              "content": "How many accounts do I have in MoneyWorks?",
+              "createdAt": "2025-06-05T04:28:53.999Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-05T04:24:23.301Z",
+          "2025-06-05T04:28:54.011Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "delta": {
+    "updatedAt": [
+      {},
+      "2025-06-06T15:31:47.361Z"
+    ],
+    "sessions": {
+      "7": {
+        "title": [
+          "New Chat",
+          "who are my clients with outstanding balances?"
+        ],
+        "messages": {
+          "0": [
+            {
+              "id": "a7af1964-fa95-4148-bf92-6dfaefb40968",
+              "role": "user",
+              "content": "who are my clients with outstanding balances?",
+              "createdAt": "2025-06-06T15:31:47.351Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "createdAt": [
+          {},
+          "2025-06-06T15:31:15.428Z"
+        ],
+        "updatedAt": [
+          {},
+          "2025-06-06T15:31:47.361Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}

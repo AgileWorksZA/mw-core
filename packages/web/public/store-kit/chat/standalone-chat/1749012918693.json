@@ -1,0 +1,28 @@
+{
+  "delta": {
+    "updatedAt": [
+      "2025-06-04T04:55:06.602Z",
+      "2025-06-04T04:55:17.682Z"
+    ],
+    "sessions": {
+      "0": {
+        "messages": {
+          "7": [
+            {
+              "id": "34754f0b-640c-4de3-9372-47beb40c2de0",
+              "role": "user",
+              "content": "Hello, can you help me with MoneyWorks?",
+              "createdAt": "2025-06-04T04:55:17.678Z"
+            }
+          ],
+          "_t": "a"
+        },
+        "updatedAt": [
+          "2025-06-04T04:55:06.602Z",
+          "2025-06-04T04:55:17.682Z"
+        ]
+      },
+      "_t": "a"
+    }
+  }
+}
