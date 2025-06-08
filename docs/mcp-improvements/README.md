@@ -4,6 +4,53 @@
 
 This folder contains documentation for tracking and implementing improvements to the MoneyWorks MCP (Model Context Protocol) server. The MCP server provides Claude Code with access to MoneyWorks accounting data through 44 specialized tools organized into 8 functional categories.
 
+## 🚨 CRITICAL: First Steps for Next Session
+
+### Immediate Action Required
+
+1. **Fix logTicket Tool** - BLOCKING all improvement tracking
+   - **File**: `packages/mcp-server/src/tools/log-ticket.ts`
+   - **Issue**: Database constraint error `"NOT NULL constraint failed: issues.type"`
+   - **Fix**: Add `type: args.type` to database insert operation
+   - **See**: [FIXES.md](./FIXES.md) for complete implementation details
+
+2. **Test the Fix**
+   ```typescript
+   mcp__moneyworks__logTicket({
+     type: "feature_request",
+     title: "Test Fix",
+     description: "Verify logTicket works after database constraint fix"
+   })
+   ```
+
+3. **Revolutionary Design Implementation**
+   - **See**: [OPTIMAL-MCP-DESIGN.md](./OPTIMAL-MCP-DESIGN.md) for comprehensive next-generation interface design
+   - **Priority**: Implement `businessQuery` natural language tool
+   - **Goal**: Transform from technical tools to business-intent interfaces
+
+## 🚀 **PARADIGM SHIFT: Next-Generation MCP Design**
+
+**New Vision**: Move beyond current 44-tool complexity to **5 intelligent business tools** that understand intent and provide contextual intelligence.
+
+### **Revolutionary Approach**
+- **Natural Language Business Queries**: "Show me our top customers" vs technical parameter structures
+- **Intelligent Context Aggregation**: Single tools that understand business relationships  
+- **Adaptive Response Intelligence**: Responses that scale to AI agent sophistication
+- **Business Process Workflows**: Pre-built financial analysis and operational workflows
+
+### **Immediate Priority Shift**
+1. **Phase 1**: Fix logTicket → Implement businessQuery tool
+2. **Phase 2**: Build natural language → MoneyWorks query translation
+3. **Phase 3**: Create intelligent response enhancement system
+
+## Current Status Summary
+
+- **Current Architecture**: 44 technical tools across 8 categories
+- **New Vision**: 5 intelligent business tools + 8 enhanced technical tools
+- **Critical Issues**: 1 (logTicket database constraint) 
+- **Revolutionary Opportunity**: Transform MCP interface paradigm
+- **Next Session Goals**: Fix logTicket, begin businessQuery implementation
+
 ## Documentation Structure
 
 ### Category-Based Organization

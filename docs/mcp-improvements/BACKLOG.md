@@ -1,8 +1,37 @@
 # MoneyWorks MCP Tools Improvement Backlog
 
+## 🚨 NEXT SESSION PRIORITIES
+
+### IMMEDIATE (Session 1)
+1. **🔥 CRITICAL**: Fix logTicket database constraint error (BLOCKING)
+   - File: `packages/mcp-server/src/tools/log-ticket.ts`  
+   - Add `type: args.type` to database insert
+   - Test with valid feature request
+   
+2. **📈 HIGH**: accounts response structure hierarchy
+   - Implement enhanced format option
+   - Add human-readable labels
+   - Include balance information
+
+3. **📈 HIGH**: transaction pagination optimization
+   - Optimize large dataset queries
+   - Implement smart field selection
+
+### FOLLOW-UP (Sessions 2-3)
+- Complete core-data-tools improvements
+- Implement date format standardization
+- Add unified error handling across tools
+
 ## Progress Overview
 
 **Total Tools**: 44 | **Categories**: 8 | **Completed**: 0 | **In Progress**: 0 | **Planned**: 44
+
+## Current Session Context
+
+- **Documentation Created**: Complete structure for tracking all improvements
+- **Critical Issue Identified**: logTicket tool completely non-functional
+- **High-Priority Issues**: accounts structure, transaction pagination
+- **Implementation Files Known**: Specific files and locations documented
 
 ---
 
@@ -299,7 +328,11 @@
 ### Issue Management
 
 - [ ] **logTicket** - Bug and feature tracking
-  - [ ] **🔥 HIGH PRIORITY**: Fix NOT NULL constraint error
+  - [ ] **🔥 CRITICAL - BLOCKING**: Fix NOT NULL constraint error
+    - **File**: `packages/mcp-server/src/tools/log-ticket.ts`
+    - **Issue**: Missing `type: args.type` in database insert
+    - **Fix**: Add parameter mapping in ticket object creation
+    - **Test**: Create feature request after fix
   - [ ] Add ticket categorization
   - [ ] Include attachment support
   - [ ] Enhance workflow management
