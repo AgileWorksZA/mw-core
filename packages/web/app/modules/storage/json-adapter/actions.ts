@@ -1,5 +1,6 @@
 import type { Delta } from "jsondiffpatch";
 import type { ActionFunctionArgs } from "react-router";
+import { storageEvents } from "~/modules/storage/events/storage-events.server";
 /*
  * React Router action creators for JSON storage adapter
  */
@@ -61,7 +62,16 @@ export function createPOSTAction<TContext>(
 				defaultContext,
 			});
 		}
-		// TODO: Emit the event for this sessionId to other clients. Payload: { context, delta, sessionId }
+		// Emit the event for this sessionId to other clients
+		storageEvents.emitUpdate({
+			type,
+			id,
+			cursor: result.cursor,
+			sessionId,
+			timestamp: result.cursor.timestamp,
+			operation: timestampForBranch ? "replace" : "write",
+		});
+
 		return result;
 	};
 }
