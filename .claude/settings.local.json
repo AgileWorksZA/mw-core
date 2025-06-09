@@ -68,7 +68,9 @@
       "Bash(MW_CONFIG_PATH=\"/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/packages/api/mw-config.json\" TICKETS_DB_PATH=\"/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/packages/mcp-server/data/tickets.db\" MW_CACHE_DIR=\"/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/packages/api/cache\" timeout 10s bun run dev:mcp)",
       "Bash(rm:*)",
       "Bash(git fetch:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git checkout:*)",
+      "Bash(git stash:*)"
     ],
     "deny": []
   }
