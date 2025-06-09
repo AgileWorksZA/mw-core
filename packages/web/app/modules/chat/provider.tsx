@@ -1,79 +1,79 @@
 import React from "react";
-import { useCreateStoreKit } from "~/modules/store-kit";
-import { on } from "./store/on";
-import { emits } from "./store/emits";
-import type { ChatContext, ChatEventPayloads } from "./types";
-import type { VersionCursor } from "~/modules/store-kit/versioning/types";
-import { useServerSync } from "~/modules/store-kit/hooks/use-server-sync";
 import { useSyncDocument } from "~/modules/storage/json-adapter/client";
+import { useCreateStoreKit } from "~/modules/store-kit";
 import type { StoreKit } from "~/modules/store-kit";
+import { useServerSync } from "~/modules/store-kit/hooks/use-server-sync";
+import type { VersionCursor } from "~/modules/store-kit/versioning/types";
+import { emits } from "./store/emits";
+import { on } from "./store/on";
+import type { ChatContext, ChatEventPayloads } from "./types";
 
 // Define emit payloads type (empty for now as we don't emit events)
 export type ChatEmitPayloads = {
-  updated: undefined;
+	updated: undefined;
 };
 
 export type ChatStoreKit = StoreKit<
-  ChatContext,
-  ChatEventPayloads,
-  ChatEmitPayloads
+	ChatContext,
+	ChatEventPayloads,
+	ChatEmitPayloads
 >;
 
 const ChatStoreContext = React.createContext<
-  | {
-      store: ChatStoreKit;
-      cursor: VersionCursor;
-    }
-  | undefined
+	| {
+			store: ChatStoreKit;
+			cursor: VersionCursor;
+	  }
+	| undefined
 >(undefined);
 
 export const ChatStoreProvider: React.FC<{
-  children: React.ReactNode;
-  documentContext: ChatContext;
-  cursor: VersionCursor;
-  type: string;
-  id: string;
+	children: React.ReactNode;
+	documentContext: ChatContext;
+	cursor: VersionCursor;
+	type: string;
+	id: string;
 }> = ({ children, documentContext, cursor, type, id }) => {
-  const store: ChatStoreKit = useCreateStoreKit<
-    ChatContext,
-    ChatEventPayloads,
-    ChatEmitPayloads
-  >({
-    context: documentContext,
-    on,
-    emits,
-  });
+	const store: ChatStoreKit = useCreateStoreKit<
+		ChatContext,
+		ChatEventPayloads,
+		ChatEmitPayloads
+	>({
+		context: documentContext,
+		on,
+		emits,
+	});
 
-  const storageFn = useSyncDocument(type, id);
+	const storageFn = useSyncDocument(type, id, store.sessionId);
 
-  useServerSync<ChatContext, ChatEventPayloads, ChatEmitPayloads>({
-    store,
-    type,
-    id,
-    cursor,
-    maxWait: 500,
-    storageFn,
-  });
+	useServerSync<ChatContext, ChatEventPayloads, ChatEmitPayloads>({
+		store,
+		type,
+		id,
+		cursor,
+		maxWait: 500,
+		storageFn,
+	});
 
-  return (
-    <ChatStoreContext.Provider value={{ store, cursor }}>
-      {children}
-    </ChatStoreContext.Provider>
-  );
+	return (
+		<ChatStoreContext.Provider value={{ store, cursor }}>
+			{children}
+		</ChatStoreContext.Provider>
+	);
 };
 
 export const useChatStore = () => {
-  const context = React.useContext(ChatStoreContext);
-  if (!context) {
-    throw new Error("useChatStore must be used within ChatStoreProvider");
-  }
-  return context.store;
+	const context = React.useContext(ChatStoreContext);
+	if (!context) {
+		throw new Error("useChatStore must be used within ChatStoreProvider");
+	}
+	return context.store;
 };
 
 export const useChatCursor = () => {
-  const context = React.useContext(ChatStoreContext);
-  if (!context) {
-    throw new Error("useChatCursor must be used within ChatStoreProvider");
-  }
-  return context.cursor;
+	const context = React.useContext(ChatStoreContext);
+	if (!context) {
+		throw new Error("useChatCursor must be used within ChatStoreProvider");
+	}
+	return context.cursor;
 };

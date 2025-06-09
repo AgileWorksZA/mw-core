@@ -1,7 +1,7 @@
 import type { Delta } from "jsondiffpatch";
 import type { VersionCursor } from "~/modules/store-kit/versioning/types";
 
-export function useSyncDocument<Context>(type: string, id: string) {
+export function useSyncDocument<Context>(type: string, id: string, sessionId: string) {
   return async ({
     context,
     delta,
@@ -22,8 +22,8 @@ export function useSyncDocument<Context>(type: string, id: string) {
         },
         body:
           JSON.stringify({ delta }).length > JSON.stringify({ context }).length
-            ? JSON.stringify({ context })
-            : JSON.stringify({ delta }),
+            ? JSON.stringify({ context, sessionId })
+            : JSON.stringify({ delta, sessionId }),
       },
     ).then(async (response) => {
       // Extract timestamp info from response
