@@ -7,6 +7,8 @@ export interface ContextUpdateEvent {
   timestamp: number;
   operation: "write" | "delete" | "replace";
   fromSessionId?: string;
+  context?: any;
+  delta?: any;
 }
 
 export interface ContextSubscriptionOptions {

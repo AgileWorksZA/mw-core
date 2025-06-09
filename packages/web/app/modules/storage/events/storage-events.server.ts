@@ -8,6 +8,8 @@ export interface StorageUpdateEvent {
   sessionId?: string;
   timestamp: number;
   operation: "write" | "delete" | "replace";
+  context?: any;
+  delta?: any;
 }
 
 class StorageEventEmitter extends EventEmitter {

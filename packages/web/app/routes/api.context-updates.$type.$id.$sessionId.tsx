@@ -30,6 +30,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
                 timestamp: event.timestamp,
                 operation: event.operation,
                 fromSessionId: event.sessionId,
+                context: event.context,
+                delta: event.delta,
               })}\n\n`;
               
               controller.enqueue(message);

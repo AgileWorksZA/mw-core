@@ -68,8 +68,9 @@ export function createPOSTAction<TContext>(
 			id,
 			cursor: result.cursor,
 			sessionId,
-			timestamp: result.cursor.timestamp,
 			operation: timestampForBranch ? "replace" : "write",
+			context,
+			delta,
 		});
 
 		return result;
@@ -90,7 +91,7 @@ export function createDELETEAction<TContext>(
 
 			await adapter.deleteDocument({ type, id });
 			return { type, id };
-		} catch (error: any) {
+		} catch (error) {
 			console.error(
 				`Error in DELETE action for ${args.params.type}/${args.params.id}:`,
 				error,

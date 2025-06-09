@@ -17,7 +17,7 @@ import type { VersionCursor } from "~/modules/store-kit/versioning/types";
 export interface UseServerSyncOptions<TContext extends StoreContext> {
 	type: string;
 	id: string;
-	store: StoreKit<TContext, unknown, unknown, EventObject, EventObject>;
+	store: StoreKit<TContext, any, any, any, any>;
 	cursor: VersionCursor;
 	maxWait?: number;
 	maxRetries?: number;
@@ -66,6 +66,7 @@ export function useServerSync<
 }: UseServerSyncOptions<TContext>) {
 	const storeSubscriptionRef = useRef<Subscription | null>(null);
 	const serverUpdatesSubscriptionRef = useRef<Subscription | null>(null);
+	const isServerUpdateRef = useRef(false);
 	const retryManager = useRef(
 		new RetryManager({
 			maxRetries,
@@ -182,7 +183,14 @@ export function useServerSync<
 		storeSubscriptionRef.current = store.subscribe(async (state) => {
 			logger.log("[store-kit] Store updated", state);
 			Tracking.clientContextChanged({ id, type });
-			// TODO: We need to not trigger synch if the sessionId from serverUpdatesSubscriptionRef is not our store.Sessionid
+
+			// Don't sync if this update came from the server
+			if (isServerUpdateRef.current) {
+				logger.log("[store-kit] Skipping sync - update came from server");
+				isServerUpdateRef.current = false;
+				return;
+			}
+
 			await sync(state.context);
 		});
 		serverUpdatesSubscriptionRef.current = (() => {
@@ -196,11 +204,48 @@ export function useServerSync<
 					}
 					logger.log("[store-kit] Server update received", event);
 					try {
-						const serverContext = await Tracking.getServerContext<TContext>({
+						let serverContext: TContext;
+
+						// If the event includes the full context, use it directly
+						if (event.context) {
+							serverContext = event.context;
+						} else {
+							// Otherwise, fetch the latest server context
+							serverContext = await Tracking.getServerContext<TContext>({
+								type,
+								id,
+							});
+						}
+
+						// Set flag to prevent sync loop
+						isServerUpdateRef.current = true;
+
+						const { delta, context } = event;
+
+						if (delta) {
+							// TODO: Update from delta
+							console.log(
+								"[store-kit] Applying delta from server update",
+								delta,
+							);
+						}
+						if (context) {
+							// TODO: Update from context
+							console.log(
+								"[store-kit] Applying context from server update",
+								context,
+							);
+						}
+
+						// Update tracking with new server context
+						await Tracking.saveServerContext({
 							type,
 							id,
+							cursor: event.cursor,
+							context: serverContext,
 						});
-						await sync(serverContext);
+
+						onSyncComplete?.(event.cursor);
 					} catch (error) {
 						const syncError = SyncError.fromError(error, {
 							documentType: type,
@@ -234,8 +279,12 @@ export function useServerSync<
 				storeSubscriptionRef.current.unsubscribe();
 				storeSubscriptionRef.current = null;
 			}
+			if (serverUpdatesSubscriptionRef.current) {
+				serverUpdatesSubscriptionRef.current.unsubscribe();
+				serverUpdatesSubscriptionRef.current = null;
+			}
 		};
-	}, [store, cursor, sync, type, id, logger, onError]);
+	}, [store, cursor, sync, type, id, logger, onError, onSyncComplete]);
 
 	return sync;
 }
