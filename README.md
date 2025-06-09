@@ -6,17 +6,57 @@ A modern API and MCP server for MoneyWorks accounting software, built with Bun, 
 
 This is a Bun workspace monorepo containing:
 
-- **`packages/api`** - REST API server for MoneyWorks (Elysia)
-- **`packages/mcp-server`** - Model Context Protocol server for AI assistants
+- **`packages/api`** - REST API server for MoneyWorks (Elysia)  
+- **`packages/mcp-server`** - Model Context Protocol server for AI assistants (44 tools)
+- **`packages/web`** - React web client with MoneyWorks AI chat integration
 
 ## Features
 
-- TypeScript type definitions for MoneyWorks data structures
-- RESTful API endpoints for accessing MoneyWorks data
-- Automatic conversion between MoneyWorks and JSON formats
-- Support for both folder and document authentication
-- Pagination, sorting, and filtering
-- Comprehensive Swagger documentation with fully-typed request/response schemas
+- **TypeScript type definitions** for MoneyWorks data structures
+- **RESTful API endpoints** for accessing MoneyWorks data
+- **Automatic conversion** between MoneyWorks and JSON formats
+- **Dual authentication support** (folder + document)
+- **Pagination, sorting, and filtering** for efficient data access
+- **Comprehensive Swagger documentation** with fully-typed request/response schemas
+- **44 MCP tools** across 8 categories for AI assistant integration
+- **Web client interface** with real-time MoneyWorks AI chat
+- **Error tracking system** with SQLite database for improvement management
+
+## Current Development Status
+
+### Branch: `feature/moneyworks-authentication-fixes`
+
+This branch contains **comprehensive authentication fixes and MCP improvements**:
+
+#### 🔧 **Authentication Fixes Applied**
+- **Document password corrected**: `support1024` (was incorrectly `shalom1024`)
+- **URL format fixed**: Proper REST API format `/export?table=` (was `/export/table=`)
+- **Dual authorization headers**: Correct array format for Axios
+- **Full documentation**: See `AUTHENTICATION-GUIDE.md` and `URL-FIX-SUMMARY.md`
+
+#### 🚀 **MCP System Enhancements**
+- **44 MCP tools** fully functional and tested
+- **Revolutionary design documentation**: `docs/mcp-improvements/` (8 files, ~78KB)
+- **Error tracking system**: SQLite-based ticket management
+- **logTicket tool**: Ready for systematic improvement tracking
+- **Complete implementation roadmap**: From technical tools to business intelligence
+
+#### 📊 **Web Client Integration**
+- **React-based interface** with MoneyWorks AI chat
+- **Real-time MCP integration** for natural language business queries
+- **Knowledge Alignment tools** for enhanced AI assistance
+
+#### 📋 **Comprehensive Documentation**
+- `docs/mcp-improvements/OPTIMAL-MCP-DESIGN.md` - Revolutionary MCP architecture
+- `docs/mcp-improvements/BACKLOG.md` - Complete 44-tool improvement tracking
+- `docs/mcp-improvements/FIXES.md` - Critical issue documentation
+- `AUTHENTICATION-GUIDE.md` - Complete authentication model
+- `URL-FIX-SUMMARY.md` - API endpoint fix summary
+
+### **Next Steps:**
+1. **Merge to `origin/dev/hardy`** to preserve all work
+2. **Implement revolutionary MCP design** per documentation
+3. **Complete business intelligence transformation**
 
 ## Setup
 
