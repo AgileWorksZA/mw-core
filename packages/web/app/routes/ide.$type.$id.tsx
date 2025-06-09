@@ -18,22 +18,22 @@
  * File deletion is handled through a DELETE request to this route,
  * which removes the file and updates the project context.
  */
-import { useParams, Outlet } from "react-router";
+import { Outlet, useParams } from "react-router";
 import { useAdapter } from "~/modules/ide/adapter/register";
 import { loader } from "~/modules/ide/routes/ide.$type.$id";
 
 export default function File() {
-  const { id } = useParams();
-  if (!id) {
-    return <div>ID is required</div>;
-  }
-  const { Provider, type } = useAdapter();
+	const { id } = useParams();
+	if (!id) {
+		return <div>ID is required</div>;
+	}
+	const { Provider, type } = useAdapter();
 
-  return (
-    <Provider>
-      <Outlet />
-    </Provider>
-  );
+	return (
+		<Provider id={id}>
+			<Outlet />
+		</Provider>
+	);
 }
 
 export { loader };
