@@ -491,7 +491,7 @@ async function initializeMCP() {
       );
     } catch (toolError) {
       console.error("Failed to list MCP tools:", toolError);
-      throw new Error(`MCP connected but failed to list tools: ${toolError.message}`);
+      throw new Error(`MCP connected but failed to list tools: ${(toolError as Error).message}`);
     }
   } catch (error) {
     console.error("Failed to initialize MCP:", error);
