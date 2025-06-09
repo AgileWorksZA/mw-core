@@ -1,0 +1,22 @@
+{
+  "name": "moneyworks-transaction-entity",
+  "version": "1.0.0",
+  "description": "Autonomous generation of MoneyWorks Transaction entity",
+  "main": "transaction.js",
+  "scripts": {
+    "test": "jest --verbose",
+    "validate": "tsc --noEmit transaction.ts && npm test",
+    "typecheck": "tsc --noEmit transaction.ts"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.5.0",
+    "typescript": "^5.0.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": ["**/*.test.ts"]
+  }
+} 

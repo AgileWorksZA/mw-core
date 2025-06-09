@@ -2,36 +2,48 @@
 
 ## 🚨 NEXT SESSION PRIORITIES
 
-### IMMEDIATE (Session 1)
+### IMMEDIATE (Session 1) 
 1. **🔥 CRITICAL**: Fix logTicket database constraint error (BLOCKING)
    - File: `packages/mcp-server/src/tools/log-ticket.ts`  
    - Add `type: args.type` to database insert
    - Test with valid feature request
-   
+
+### STRATEGIC ARCHITECTURE (Sessions 2-4)
+1. **🏗️ ARCHITECTURAL**: Dual Transport MCP Implementation
+   - **Phase 1**: Migrate to official MCP TypeScript SDK (Week 1)
+   - **Phase 2**: Add HTTP/SSE transport for ChatGPT (Week 2) 
+   - **Phase 3**: ChatGPT Teams integration optimization (Week 3)
+   - **Phase 4**: Documentation and production deployment (Week 4)
+   - **Reference**: `DUAL-TRANSPORT-ARCHITECTURE-DECISION.md`
+
+### FOLLOW-UP (Sessions 5-6)
 2. **📈 HIGH**: accounts response structure hierarchy
-   - Implement enhanced format option
+   - Implement enhanced format option with SDK patterns
    - Add human-readable labels
    - Include balance information
 
 3. **📈 HIGH**: transaction pagination optimization
-   - Optimize large dataset queries
+   - Optimize large dataset queries with transport awareness
    - Implement smart field selection
-
-### FOLLOW-UP (Sessions 2-3)
-- Complete core-data-tools improvements
-- Implement date format standardization
-- Add unified error handling across tools
+   - Add protocol-specific response formatting
 
 ## Progress Overview
 
-**Total Tools**: 44 | **Categories**: 8 | **Completed**: 0 | **In Progress**: 0 | **Planned**: 44
+**Total Tools**: 44 | **Categories**: 8 + 1 Platform Integration | **Completed**: 0 | **In Progress**: 0 | **Planned**: 44
+
+**Platform Integration**: Comprehensive dual transport architecture decision completed with 4-phase implementation plan
 
 ## Current Session Context
 
 - **Documentation Created**: Complete structure for tracking all improvements
-- **Critical Issue Identified**: logTicket tool completely non-functional
+- **Critical Issue Identified**: logTicket tool completely non-functional  
 - **High-Priority Issues**: accounts structure, transaction pagination
 - **Implementation Files Known**: Specific files and locations documented
+- **🏗️ MAJOR ARCHITECTURE DECISION**: Dual transport MCP architecture selected
+  - **Decision Document**: `DUAL-TRANSPORT-ARCHITECTURE-DECISION.md` (comprehensive analysis)
+  - **Strategy**: Official MCP TypeScript SDK with shared core + transport adapters
+  - **Timeline**: 4-week phased implementation (SDK migration → HTTP transport → ChatGPT integration → production)
+  - **Outcome**: Single codebase supporting both Claude (stdio) and ChatGPT (HTTP/SSE)
 
 ---
 
@@ -339,6 +351,56 @@
 
 ---
 
+## 9. Platform Integration & Architecture
+
+### Dual Transport MCP Architecture
+
+- [ ] **🏗️ PHASE 1: SDK Migration Foundation** - Migrate to official TypeScript SDK (Week 1)
+  - [ ] Install official MCP TypeScript SDK (`@modelcontextprotocol/typescript-sdk`)
+  - [ ] Refactor server initialization to use `McpServer` class
+  - [ ] Migrate all 44 tool handlers to SDK `ToolsRequestSchema` pattern  
+  - [ ] Ensure stdio transport maintains 100% compatibility with Claude
+  - [ ] Update build scripts and development workflow
+  - [ ] **Validation**: All existing Claude integrations work flawlessly
+
+- [ ] **🌐 PHASE 2: HTTP Transport Implementation** - Add ChatGPT compatibility (Week 2)
+  - [ ] Implement `StreamableHTTPTransport` configuration
+  - [ ] Add environment-based transport selection (`MCP_TRANSPORT=http|stdio`)
+  - [ ] Configure CORS for ChatGPT domains (`chatgpt.com`, `chat.openai.com`)
+  - [ ] Add ChatGPT-specific tool filtering (search/retrieve only for beta)
+  - [ ] Implement API key authentication for HTTP endpoints
+  - [ ] **Validation**: HTTP server responds correctly to MCP protocol requests
+
+- [ ] **⚡ PHASE 3: ChatGPT Teams Integration** - Production optimization (Week 3)  
+  - [ ] Deploy HTTP server to secure HTTPS endpoint with SSL certificate
+  - [ ] Request and configure ChatGPT Teams workspace MCP connector
+  - [ ] Test core search tools (accounts, transactions, names, builds) with ChatGPT
+  - [ ] Implement protocol-aware response formatting
+  - [ ] Add monitoring, logging, and health checks for HTTP endpoints
+  - [ ] **Validation**: ChatGPT Teams users successfully access MoneyWorks data
+
+- [ ] **📚 PHASE 4: Documentation & Production** - Polish and deploy (Week 4)
+  - [ ] Performance optimization and caching for HTTP transport
+  - [ ] Comprehensive testing suite covering both transport protocols
+  - [ ] Update all setup documentation for dual transport architecture
+  - [ ] Create troubleshooting guides for Claude vs ChatGPT platforms
+  - [ ] Plan next iteration improvements and feature enhancements
+  - [ ] **Validation**: Production-ready dual transport MCP server
+
+### Alternative Integration Strategy (Lower Priority)
+
+- [ ] **mcp.run Bridge Evaluation** - Third-party bridge service assessment
+  - [ ] Test existing stdio server with mcp.run platform
+  - [ ] Document setup process and performance characteristics  
+  - [ ] Compare maintenance vs native HTTP implementation
+  - [ ] Assess as fallback option if official SDK approach fails
+
+**Reference Documentation**: 
+- `DUAL-TRANSPORT-ARCHITECTURE-DECISION.md` - Complete decision analysis and rationale
+- `CHATGPT-INTEGRATION-REQUIREMENTS.md` - ChatGPT-specific requirements and limitations
+
+---
+
 ## Priority Matrix
 
 ### 🔥 Critical (Blocking functionality)
@@ -353,6 +415,13 @@
 - [ ] getSystemStatus - Real-time metrics
 - [ ] generateReport - Output format options
 - [ ] getTableLabels - Translation validation
+
+### 🏗️ Strategic Priority (Architecture & Platform Integration)
+- [ ] **Dual Transport MCP Architecture** - 4-week phased implementation
+  - [ ] Phase 1: Official SDK migration (maintains Claude compatibility)
+  - [ ] Phase 2: HTTP transport for ChatGPT compatibility
+  - [ ] Phase 3: ChatGPT Teams integration and optimization
+  - [ ] Phase 4: Documentation and production deployment
 
 ### 🔧 Low Priority (Nice-to-have improvements)
 - [ ] listCommonExpressions - Usage frequency data

@@ -70,7 +70,25 @@
       "Bash(git fetch:*)",
       "Bash(git checkout:*)",
       "Bash(git checkout:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(MW_CONFIG_PATH=\"/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/packages/api/mw-config.json\" TICKETS_DB_PATH=\"/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/packages/mcp-server/data/tickets.db\" MW_CACHE_DIR=\"/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/packages/api/cache\" bun --cwd packages/mcp-server run dev)",
+      "Bash(MW_CONFIG_PATH=\"../api/mw-config.json\" TICKETS_DB_PATH=\"data/tickets.db\" MW_CACHE_DIR=\"../api/cache\" bun run dev --version)",
+      "Bash(MW_CONFIG_PATH=\"../api/mw-config.json\" TICKETS_DB_PATH=\"data/tickets.db\" MW_CACHE_DIR=\"../api/cache\" bun run test:manual)",
+      "Bash(MW_CONFIG_PATH=\"../api/mw-config.json\" TICKETS_DB_PATH=\"data/tickets.db\" MW_CACHE_DIR=\"../api/cache\" bun run test:unit)",
+      "Bash(MW_CONFIG_PATH=\"../api/mw-config.json\" TICKETS_DB_PATH=\"data/tickets.db\" MW_CACHE_DIR=\"../api/cache\" bun run test:integration)",
+      "Bash(MW_CONFIG_PATH=\"../api/mw-config.json\" TICKETS_DB_PATH=\"data/tickets.db\" MW_CACHE_DIR=\"../api/cache\" bun run db:migrate)",
+      "Bash(MW_CONFIG_PATH=\"../api/mw-config.json\" TICKETS_DB_PATH=\"data/tickets.db\" MW_CACHE_DIR=\"../api/cache\" bun run test-logticket.ts)",
+      "Bash(rm:*)",
+      "Bash(rg:*)",
+      "Bash(/private/tmp/bunx-1842630344-@anthropic-ai/claude-code@latest/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/x64-darwin/rg -n \"export\\(\" moneyworks-api.service.ts)",
+      "Bash(/private/tmp/bunx-1842630344-@anthropic-ai/claude-code@latest/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/x64-darwin/rg -n \"export\\(\" ~/Development/gitprojects/AgileWorksZA/mw-core/packages/api/src/services/moneyworks-api.service.ts)",
+      "mcp__brave-search__brave_web_search",
+      "WebFetch(domain:docs.mcp.run)",
+      "WebFetch(domain:openai.github.io)",
+      "WebFetch(domain:community.openai.com)",
+      "WebFetch(domain:help.openai.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:modelcontextprotocol.io)"
     ],
     "deny": []
   }
