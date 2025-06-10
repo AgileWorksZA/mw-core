@@ -9,10 +9,7 @@ export const on: EventHandlers<
 	ChatEmitPayloads
 > = {
 	update: (context, event, enqueue) => {
-		return {
-			...context,
-			...event.context,
-		};
+		Object.assign(context, event.context);
 	},
 	"session:create": (context, event) => {
 		const newSession = event.session || {

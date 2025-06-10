@@ -1,5 +1,5 @@
 import type { EventObject, Subscription } from "@xstate/store";
-import { type Delta, diff } from "jsondiffpatch";
+import { type Delta, diff, patch } from "jsondiffpatch";
 import { useEffect, useRef } from "react";
 import { useDebounceCallback } from "~/lib/use-debounce-callback";
 import { subscribeToContextUpdates } from "~/modules/storage/context-updates";
@@ -202,40 +202,37 @@ export function useServerSync<
 					if (event.fromSessionId === store.sessionId) {
 						return; // Ignore updates from the same session
 					}
-					logger.log("[store-kit] Server update received", event);
 					try {
 						let serverContext: TContext;
 
-						// If the event includes the full context, use it directly
-						if (event.context) {
+						// If the event includes a delta, apply it to the current context
+						if (event.delta) {
+							const currentContext = store.getSnapshot().context;
+							serverContext = patch(currentContext, event.delta) as TContext;
+							logger.log("[store-kit] Applied delta patch to current context", {
+								delta: event.delta,
+								result: serverContext,
+							});
+						} else if (event.context) {
+							// If the event includes the full context, use it directly
 							serverContext = event.context;
+							logger.log(
+								"[store-kit] Using full context from event",
+								serverContext,
+							);
 						} else {
-							// Otherwise, fetch the latest server context
-							serverContext = await Tracking.getServerContext<TContext>({
-								type,
-								id,
+							throw new SyncError({
+								type: "server",
+								message: "Server update event missing context",
+								retryable: false,
 							});
 						}
 
 						// Set flag to prevent sync loop
 						isServerUpdateRef.current = true;
 
-						const { delta, context } = event;
-
-						if (delta) {
-							// TODO: Update from delta
-							console.log(
-								"[store-kit] Applying delta from server update",
-								delta,
-							);
-						}
-						if (context) {
-							// TODO: Update from context
-							console.log(
-								"[store-kit] Applying context from server update",
-								context,
-							);
-						}
+						// Update the store with the server context
+						store.trigger.update({ context: serverContext });
 
 						// Update tracking with new server context
 						await Tracking.saveServerContext({

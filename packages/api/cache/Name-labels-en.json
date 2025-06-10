@@ -15,8 +15,8 @@
   "Delivery4": "Delivery4",
   "Phone": "Phone",
   "Fax": "Fax",
-  "Category1": "Region",
-  "Category2": "Type",
+  "Category1": "Category1",
+  "Category2": "Category2",
   "Category3": "Category3",
   "Category4": "Category4",
   "CustomerType": "CustomerType",
@@ -108,5 +108,5 @@
   "Colour.4": "Cyan",
   "Colour.5": "Blue",
   "Colour.6": "Green",
-  "Colour.7": "Poop"
+  "Colour.7": "Brown"
 }

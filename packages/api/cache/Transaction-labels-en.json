@@ -78,12 +78,12 @@
   "Colour.4": "Cyan",
   "Colour.5": "Blue",
   "Colour.6": "Green",
-  "Colour.7": "Poo",
+  "Colour.7": "Brown",
   "PaymentMethod.1": "Cash",
   "PaymentMethod.2": "Cheque",
   "PaymentMethod.3": "Electronic [Direct Debit]",
   "PaymentMethod.4": "Credit Card",
-  "PaymentMethod.5": "Five",
-  "PaymentMethod.6": "Size",
-  "PaymentMethod.7": "Seven"
+  "PaymentMethod.5": "Method 5",
+  "PaymentMethod.6": "Method 6",
+  "PaymentMethod.7": "Method 7"
 }
