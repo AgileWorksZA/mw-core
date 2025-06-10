@@ -82,7 +82,7 @@ const COMMON_PATTERNS = {
 };
 
 export default {
-  name: "generate-mw-table-types",
+  name: "mw-generate-table-types",
   description: "Generate TypeScript interfaces for MoneyWorks tables",
   
   async execute(args) {
@@ -92,7 +92,7 @@ export default {
     if (!tableName) {
       return {
         error: "No table name provided",
-        usage: "/project:generate-mw-table-types table=\"names\"",
+        usage: "/project:mw-generate-table-types table=\"names\"",
         availableTables: Object.keys(TABLE_URLS),
       };
     }
@@ -108,9 +108,9 @@ export default {
       };
     }
     
-    // Prepare output directory - relative to the package root
-    const packageRoot = join(__dirname, '../..');
-    const outputDir = join(packageRoot, 'src/tables');
+    // Prepare output directory - for the core package
+    const projectRoot = join(__dirname, '../..');
+    const outputDir = join(projectRoot, 'packages/core/src/tables');
     const outputPath = join(outputDir, `${tableName}.ts`);
     
     try {

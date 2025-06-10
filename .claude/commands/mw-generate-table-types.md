@@ -5,7 +5,7 @@ Generate comprehensive TypeScript interfaces for MoneyWorks tables by analyzing 
 ## Usage
 
 ```
-/project:generate-mw-table-types table="<table-name>"
+/project:mw-generate-table-types table="<table-name>"
 ```
 
 ## Arguments
@@ -87,7 +87,7 @@ Save the generated TypeScript to the path specified in `outputPath`.
 ## Example
 
 ```
-/project:generate-mw-table-types table="names"
+/project:mw-generate-table-types table="names"
 ```
 
 This will trigger the JavaScript handler which validates the input and prepares context, then Claude will analyze the documentation and generate the interface.
