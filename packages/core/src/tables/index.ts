@@ -5,32 +5,40 @@
  * with type-safe table names and interfaces.
  */
 
+import type { Account, AccountCamel } from "./accounts";
 // Import table interfaces as they are generated
 import type { Name, NameCamel } from "./names";
+import type { Product, ProductCamel } from "./products";
+import type { Transaction, TransactionCamel } from "./transactions";
 
 /**
  * Implemented table names with TypeScript interfaces
  * @description Add to this union as new tables are generated
  */
-export type TableName = "Name"; // | "Account" | "Transaction" | etc...
+export type TableName = "Name" | "Account" | "Transaction" | "Product"; // | "Job" | "Department" | etc...
 
 /**
  * Array of implemented table names for runtime checks
  */
-export const tableNames = ["Name"] as const satisfies ReadonlyArray<TableName>;
+export const tableNames = [
+	"Name",
+	"Account",
+	"Transaction",
+	"Product",
+] as const satisfies ReadonlyArray<TableName>;
 
 /**
  * Map of table names to their TypeScript interfaces (raw MoneyWorks format)
  * @description Provides a cleaner way to map table names to types
  */
 export interface TableMap {
-  Name: Name;
-  // Account: Account;
-  // Transaction: Transaction;
-  // Product: Product;
-  // Job: Job;
-  // Department: Department;
-  // Add more as implemented
+	Name: Name;
+	Account: Account;
+	Transaction: Transaction;
+	Product: Product;
+	// Job: Job;
+	// Department: Department;
+	// Add more as implemented
 }
 
 /**
@@ -38,13 +46,13 @@ export interface TableMap {
  * @description Developer-friendly versions with camelCase properties
  */
 export interface TableMapCamel {
-  Name: NameCamel;
-  // Account: AccountCamel;
-  // Transaction: TransactionCamel;
-  // Product: ProductCamel;
-  // Job: JobCamel;
-  // Department: DepartmentCamel;
-  // Add more as implemented
+	Name: NameCamel;
+	Account: AccountCamel;
+	Transaction: TransactionCamel;
+	Product: ProductCamel;
+	// Job: JobCamel;
+	// Department: DepartmentCamel;
+	// Add more as implemented
 }
 
 /**
@@ -57,8 +65,8 @@ export interface TableMapCamel {
  * ```
  */
 export type Table<T extends TableName> = T extends keyof TableMap
-  ? TableMap[T]
-  : never;
+	? TableMap[T]
+	: never;
 
 /**
  * Generic table type resolver (camelCase format)
@@ -70,8 +78,8 @@ export type Table<T extends TableName> = T extends keyof TableMap
  * ```
  */
 export type TableCamel<T extends TableName> = T extends keyof TableMapCamel
-  ? TableMapCamel[T]
-  : never;
+	? TableMapCamel[T]
+	: never;
 
 /**
  * Union of all implemented table types
@@ -86,18 +94,18 @@ export type AnyTable = TableMap[keyof TableMap];
  * ```
  */
 export type TableNameFromType<T> = T extends TableMap[infer K extends
-  keyof TableMap]
-  ? K
-  : never;
+	keyof TableMap]
+	? K
+	: never;
 
 /**
  * Common fields present in all MoneyWorks tables
  */
 export interface CommonTableFields {
-  /** Last modification timestamp (ISO 8601 format) */
-  ModTime?: string;
-  /** User who last modified the record */
-  ModUser?: string;
+	/** Last modification timestamp (ISO 8601 format) */
+	ModTime?: string;
+	/** User who last modified the record */
+	ModUser?: string;
 }
 
 /**
@@ -114,16 +122,16 @@ export type TableFields<T extends TableName> = keyof Table<T>;
  * Extract only required fields from a table
  */
 export type RequiredTableFields<T extends TableName> = {
-  // biome-ignore lint/complexity/noBannedTypes: <explanation>
-  [K in keyof Table<T>]-?: {} extends Pick<Table<T>, K> ? never : K;
+	// biome-ignore lint/complexity/noBannedTypes: <explanation>
+	[K in keyof Table<T>]-?: {} extends Pick<Table<T>, K> ? never : K;
 }[keyof Table<T>];
 
 /**
  * Extract only optional fields from a table
  */
 export type OptionalTableFields<T extends TableName> = {
-  // biome-ignore lint/complexity/noBannedTypes: <explanation>
-  [K in keyof Table<T>]-?: {} extends Pick<Table<T>, K> ? K : never;
+	// biome-ignore lint/complexity/noBannedTypes: <explanation>
+	[K in keyof Table<T>]-?: {} extends Pick<Table<T>, K> ? K : never;
 }[keyof Table<T>];
 
 /**
@@ -131,12 +139,12 @@ export type OptionalTableFields<T extends TableName> = {
  * @description Uses exact MoneyWorks field names (PascalCase)
  */
 export const tablePrimaryKeys = {
-  Name: "Code",
-  // Account: "Code",
-  // Transaction: "SequenceNumber", // Note: Transaction uses SequenceNumber, not Code
-  // Product: "Code",
-  // Job: "Code",
-  // Department: "Code",
+	Name: "Code",
+	Account: "Code",
+	Transaction: "SequenceNumber", // Note: Transaction uses SequenceNumber, not Code
+	Product: "Code",
+	// Job: "Code",
+	// Department: "Code",
 } as const satisfies Record<TableName, string>;
 
 /**
@@ -147,30 +155,34 @@ export type PrimaryKeyField<T extends TableName> = (typeof tablePrimaryKeys)[T];
 /**
  * Extract the type of the primary key value for a table
  */
-export type PrimaryKeyValue<T extends TableName> = Table<T>[PrimaryKeyField<T>];
+export type PrimaryKeyValue<T extends TableName> = T extends TableName
+	? Table<T>[PrimaryKeyField<T> & keyof Table<T>]
+	: never;
 
 /**
  * Create a partial record for updates (all fields optional except primary key)
  */
-export type PartialTable<T extends TableName> = Partial<Table<T>> &
-  Pick<Table<T>, PrimaryKeyField<T>>;
+export type PartialTable<T extends TableName> = T extends TableName
+	? Partial<Table<T>> & Pick<Table<T>, PrimaryKeyField<T> & keyof Table<T>>
+	: never;
 
 /**
  * Type guard to check if a value is a valid table name
  */
 export function isTableName(value: unknown): value is TableName {
-  return typeof value === "string" && tableNames.includes(value as TableName);
+	return typeof value === "string" && tableNames.includes(value as TableName);
 }
 
 /**
  * Get the primary key value from a table record
  */
 export function getPrimaryKey<T extends TableName>(
-  tableName: T,
-  record: Table<T>,
-): PrimaryKeyValue<T> {
-  const keyField = tablePrimaryKeys[tableName];
-  return record[keyField as keyof Table<T>] as PrimaryKeyValue<T>;
+	tableName: T,
+	record: Table<T>,
+): string | number {
+	const keyField = tablePrimaryKeys[tableName];
+	// biome-ignore lint/suspicious/noExplicitAny: Type system limitation with generics
+	return (record as any)[keyField] as string | number;
 }
 
 /**
@@ -184,17 +196,20 @@ export function getPrimaryKey<T extends TableName>(
  * ```
  */
 export function isTableType<T extends TableName>(
-  record: unknown,
-  tableName: T,
+	record: unknown,
+	tableName: T,
 ): record is Table<T> {
-  if (typeof record !== "object" || record === null) {
-    return false;
-  }
+	if (typeof record !== "object" || record === null) {
+		return false;
+	}
 
-  // Check for primary key presence
-  const primaryKeyField = tablePrimaryKeys[tableName];
-  return primaryKeyField in record;
+	// Check for primary key presence
+	const primaryKeyField = tablePrimaryKeys[tableName];
+	return primaryKeyField in record;
 }
 
 // Re-export table interfaces
 export type { Name, NameCamel } from "./names";
+export type { Account, AccountCamel } from "./accounts";
+export type { Transaction, TransactionCamel } from "./transactions";
+export type { Product, ProductCamel } from "./products";
