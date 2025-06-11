@@ -5,7 +5,7 @@
 /**
  * Result type for operations that can succeed or fail
  */
-export type Result<T, E = Error> = 
+export type Result<T, E = Error> =
   | { success: true; data: T }
   | { success: false; error: E };
 
@@ -38,7 +38,8 @@ export type RequireKeys<T, K extends keyof T> = T & Required<Pick<T, K>>;
 /**
  * Make specific keys optional
  */
-export type PartialKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type PartialKeys<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;
 
 /**
  * Nullable type helper

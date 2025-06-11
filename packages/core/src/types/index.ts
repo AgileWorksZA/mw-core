@@ -19,7 +19,7 @@ export interface TableField {
   /** Field name as it appears in MoneyWorks */
   name: string;
   /** Field type (T=Text, N=Numeric, D=Date, etc.) */
-  type: 'T' | 'N' | 'D' | 'A' | 'S' | 'B';
+  type: "T" | "N" | "D" | "A" | "S" | "B";
   /** Maximum length for text fields */
   maxLength?: number;
   /** Whether the field is required */
@@ -29,7 +29,7 @@ export interface TableField {
 }
 
 // Re-export common types
-export * from './common';
+export * from "./common";
 
 // Re-export table-specific types when they exist
-export * from './tables';
+export * from "./tables";

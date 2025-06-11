@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    
+
     // Strict type checking
     "strict": true,
     "noImplicitAny": true,
@@ -12,14 +12,14 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    
+
     // Additional checks for library
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-    
+
     // Module settings
     "module": "ESNext",
     "target": "ES2022",
@@ -28,10 +28,10 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    
+
     // No emit - just type checking
     "noEmit": true,
-    
+
     // Type acquisition
     "types": ["bun-types"],
     "lib": ["ES2022"]

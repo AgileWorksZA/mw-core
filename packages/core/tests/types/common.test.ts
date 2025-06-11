@@ -1,34 +1,34 @@
-import { describe, it, expect } from 'bun:test';
-import type { Result, DeepPartial } from '../../src/types/common';
+import { describe, expect, it } from "bun:test";
+import type { DeepPartial, Result } from "../../src/types/common";
 
-describe('Common Types', () => {
-  describe('Result type', () => {
-    it('should handle success result', () => {
+describe("Common Types", () => {
+  describe("Result type", () => {
+    it("should handle success result", () => {
       const result: Result<string> = {
         success: true,
-        data: 'test'
+        data: "test",
       };
-      
+
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.data).toBe('test');
+        expect(result.data).toBe("test");
       }
     });
 
-    it('should handle error result', () => {
+    it("should handle error result", () => {
       const result: Result<string> = {
         success: false,
-        error: new Error('Test error')
+        error: new Error("Test error"),
       };
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.message).toBe('Test error');
+        expect(result.error.message).toBe("Test error");
       }
     });
   });
 
-  describe('DeepPartial type', () => {
+  describe("DeepPartial type", () => {
     interface TestObject {
       name: string;
       nested: {
@@ -39,13 +39,13 @@ describe('Common Types', () => {
       };
     }
 
-    it('should allow partial nested objects', () => {
+    it("should allow partial nested objects", () => {
       const partial: DeepPartial<TestObject> = {
         nested: {
           deep: {
-            flag: true
-          }
-        }
+            flag: true,
+          },
+        },
       };
 
       expect(partial.nested?.deep?.flag).toBe(true);

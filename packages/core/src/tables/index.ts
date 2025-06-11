@@ -6,7 +6,11 @@
  */
 
 import type { Account, AccountCamel } from "./accounts";
+import type { Asset, AssetCamel } from "./assets";
+import type { Contact, ContactCamel } from "./contacts";
 import type { Department, DepartmentCamel } from "./departments";
+import type { Inventory, InventoryCamel } from "./inventory";
+import type { JobSheetItem, JobSheetItemCamel } from "./job-sheet-items";
 import type { Job, JobCamel } from "./jobs";
 // Import table interfaces as they are generated
 import type { Name, NameCamel } from "./names";
@@ -19,25 +23,33 @@ import type { Transaction, TransactionCamel } from "./transactions";
  * @description Add to this union as new tables are generated
  */
 export type TableName =
-	| "Name"
-	| "Account"
-	| "Transaction"
-	| "Product"
-	| "Job"
-	| "Department"
-	| "TaxRate"; // | "Contact" | "Asset" | etc...
+  | "Name"
+  | "Account"
+  | "Transaction"
+  | "Product"
+  | "Job"
+  | "Department"
+  | "TaxRate"
+  | "Asset"
+  | "Contact"
+  | "Inventory"
+  | "JobSheetItem"; // | etc...
 
 /**
  * Array of implemented table names for runtime checks
  */
 export const tableNames = [
-	"Name",
-	"Account",
-	"Transaction",
-	"Product",
-	"Job",
-	"Department",
-	"TaxRate",
+  "Name",
+  "Account",
+  "Transaction",
+  "Product",
+  "Job",
+  "Department",
+  "TaxRate",
+  "Asset",
+  "Contact",
+  "Inventory",
+  "JobSheetItem",
 ] as const satisfies ReadonlyArray<TableName>;
 
 /**
@@ -45,16 +57,18 @@ export const tableNames = [
  * @description Provides a cleaner way to map table names to types
  */
 export interface TableMap {
-	Name: Name;
-	Account: Account;
-	Transaction: Transaction;
-	Product: Product;
-	Job: Job;
-	Department: Department;
-	TaxRate: TaxRate;
-	// Contact: Contact;
-	// Asset: Asset;
-	// Add more as implemented
+  Name: Name;
+  Account: Account;
+  Transaction: Transaction;
+  Product: Product;
+  Job: Job;
+  Department: Department;
+  TaxRate: TaxRate;
+  Asset: Asset;
+  Contact: Contact;
+  Inventory: Inventory;
+  JobSheetItem: JobSheetItem;
+  // Add more as implemented
 }
 
 /**
@@ -62,16 +76,18 @@ export interface TableMap {
  * @description Developer-friendly versions with camelCase properties
  */
 export interface TableMapCamel {
-	Name: NameCamel;
-	Account: AccountCamel;
-	Transaction: TransactionCamel;
-	Product: ProductCamel;
-	Job: JobCamel;
-	Department: DepartmentCamel;
-	TaxRate: TaxRateCamel;
-	// Contact: ContactCamel;
-	// Asset: AssetCamel;
-	// Add more as implemented
+  Name: NameCamel;
+  Account: AccountCamel;
+  Transaction: TransactionCamel;
+  Product: ProductCamel;
+  Job: JobCamel;
+  Department: DepartmentCamel;
+  TaxRate: TaxRateCamel;
+  Asset: AssetCamel;
+  Contact: ContactCamel;
+  Inventory: InventoryCamel;
+  JobSheetItem: JobSheetItemCamel;
+  // Add more as implemented
 }
 
 /**
@@ -84,8 +100,8 @@ export interface TableMapCamel {
  * ```
  */
 export type Table<T extends TableName> = T extends keyof TableMap
-	? TableMap[T]
-	: never;
+  ? TableMap[T]
+  : never;
 
 /**
  * Generic table type resolver (camelCase format)
@@ -97,8 +113,8 @@ export type Table<T extends TableName> = T extends keyof TableMap
  * ```
  */
 export type TableCamel<T extends TableName> = T extends keyof TableMapCamel
-	? TableMapCamel[T]
-	: never;
+  ? TableMapCamel[T]
+  : never;
 
 /**
  * Union of all implemented table types
@@ -113,18 +129,18 @@ export type AnyTable = TableMap[keyof TableMap];
  * ```
  */
 export type TableNameFromType<T> = T extends TableMap[infer K extends
-	keyof TableMap]
-	? K
-	: never;
+  keyof TableMap]
+  ? K
+  : never;
 
 /**
  * Common fields present in all MoneyWorks tables
  */
 export interface CommonTableFields {
-	/** Last modification timestamp (ISO 8601 format) */
-	ModTime?: string;
-	/** User who last modified the record */
-	ModUser?: string;
+  /** Last modification timestamp (ISO 8601 format) */
+  ModTime?: string;
+  /** User who last modified the record */
+  ModUser?: string;
 }
 
 /**
@@ -141,16 +157,16 @@ export type TableFields<T extends TableName> = keyof Table<T>;
  * Extract only required fields from a table
  */
 export type RequiredTableFields<T extends TableName> = {
-	// biome-ignore lint/complexity/noBannedTypes: <explanation>
-	[K in keyof Table<T>]-?: {} extends Pick<Table<T>, K> ? never : K;
+  // biome-ignore lint/complexity/noBannedTypes: <explanation>
+  [K in keyof Table<T>]-?: {} extends Pick<Table<T>, K> ? never : K;
 }[keyof Table<T>];
 
 /**
  * Extract only optional fields from a table
  */
 export type OptionalTableFields<T extends TableName> = {
-	// biome-ignore lint/complexity/noBannedTypes: <explanation>
-	[K in keyof Table<T>]-?: {} extends Pick<Table<T>, K> ? K : never;
+  // biome-ignore lint/complexity/noBannedTypes: <explanation>
+  [K in keyof Table<T>]-?: {} extends Pick<Table<T>, K> ? K : never;
 }[keyof Table<T>];
 
 /**
@@ -158,13 +174,17 @@ export type OptionalTableFields<T extends TableName> = {
  * @description Uses exact MoneyWorks field names (PascalCase)
  */
 export const tablePrimaryKeys = {
-	Name: "Code",
-	Account: "Code",
-	Transaction: "SequenceNumber", // Note: Transaction uses SequenceNumber, not Code
-	Product: "Code",
-	Job: "Code",
-	Department: "Code",
-	TaxRate: "TaxCode", // Note: TaxRate uses TaxCode as primary key
+  Name: "Code",
+  Account: "Code",
+  Transaction: "SequenceNumber", // Note: Transaction uses SequenceNumber, not Code
+  Product: "Code",
+  Job: "Code",
+  Department: "Code",
+  TaxRate: "TaxCode", // Note: TaxRate uses TaxCode as primary key
+  Asset: "Code",
+  Contact: "ParentSeq", // Note: Contact uses ParentSeq to link to Name record
+  Inventory: "ProductSeq", // Note: Inventory uses ProductSeq as primary key
+  JobSheetItem: "SequenceNumber", // Note: JobSheetItem uses SequenceNumber as primary key
 } as const satisfies Record<TableName, string>;
 
 /**
@@ -176,33 +196,33 @@ export type PrimaryKeyField<T extends TableName> = (typeof tablePrimaryKeys)[T];
  * Extract the type of the primary key value for a table
  */
 export type PrimaryKeyValue<T extends TableName> = T extends TableName
-	? Table<T>[PrimaryKeyField<T> & keyof Table<T>]
-	: never;
+  ? Table<T>[PrimaryKeyField<T> & keyof Table<T>]
+  : never;
 
 /**
  * Create a partial record for updates (all fields optional except primary key)
  */
 export type PartialTable<T extends TableName> = T extends TableName
-	? Partial<Table<T>> & Pick<Table<T>, PrimaryKeyField<T> & keyof Table<T>>
-	: never;
+  ? Partial<Table<T>> & Pick<Table<T>, PrimaryKeyField<T> & keyof Table<T>>
+  : never;
 
 /**
  * Type guard to check if a value is a valid table name
  */
 export function isTableName(value: unknown): value is TableName {
-	return typeof value === "string" && tableNames.includes(value as TableName);
+  return typeof value === "string" && tableNames.includes(value as TableName);
 }
 
 /**
  * Get the primary key value from a table record
  */
 export function getPrimaryKey<T extends TableName>(
-	tableName: T,
-	record: Table<T>,
+  tableName: T,
+  record: Table<T>,
 ): string | number {
-	const keyField = tablePrimaryKeys[tableName];
-	// biome-ignore lint/suspicious/noExplicitAny: Type system limitation with generics
-	return (record as any)[keyField] as string | number;
+  const keyField = tablePrimaryKeys[tableName];
+  // biome-ignore lint/suspicious/noExplicitAny: Type system limitation with generics
+  return (record as any)[keyField] as string | number;
 }
 
 /**
@@ -216,16 +236,16 @@ export function getPrimaryKey<T extends TableName>(
  * ```
  */
 export function isTableType<T extends TableName>(
-	record: unknown,
-	tableName: T,
+  record: unknown,
+  tableName: T,
 ): record is Table<T> {
-	if (typeof record !== "object" || record === null) {
-		return false;
-	}
+  if (typeof record !== "object" || record === null) {
+    return false;
+  }
 
-	// Check for primary key presence
-	const primaryKeyField = tablePrimaryKeys[tableName];
-	return primaryKeyField in record;
+  // Check for primary key presence
+  const primaryKeyField = tablePrimaryKeys[tableName];
+  return primaryKeyField in record;
 }
 
 // Re-export table interfaces
@@ -236,3 +256,7 @@ export type { Product, ProductCamel } from "./products";
 export type { Job, JobCamel } from "./jobs";
 export type { Department, DepartmentCamel } from "./departments";
 export type { TaxRate, TaxRateCamel } from "./tax-rates";
+export type { Asset, AssetCamel } from "./assets";
+export type { Contact, ContactCamel } from "./contacts";
+export type { Inventory, InventoryCamel } from "./inventory";
+export type { JobSheetItem, JobSheetItemCamel } from "./job-sheet-items";

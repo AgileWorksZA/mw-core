@@ -9,8 +9,5 @@ export interface PaginationParams {
   limit?: number;
   offset?: number;
   sortBy?: string;
-  sortDirection?: 'asc' | 'desc';
+  sortDirection?: "asc" | "desc";
 }
-
-// Placeholder for schema-related types
-export {};
