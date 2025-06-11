@@ -42,7 +42,10 @@ Many of these tables don't define primary keys in documentation:
 
 ### 2. Subfile Tables
 - **AssetLog** is a subfile of Assets
-- Access via: `Asset.Log[index]`
+  - Access via: `Asset.Log[index]`
+- **Detail** is a subfile of Transactions
+  - Access via: Transaction detail lines
+  - Contains line-level accounting details
 
 **Solution**: Generate as nested interface within parent table.
 
@@ -80,7 +83,8 @@ const MONEYWORKS_TABLES = [
   'build',
   'auto-split',
   'reconciliation',
-  'general'
+  'general',
+  'detail'
 ];
 ```
 
@@ -102,7 +106,8 @@ const TABLE_URLS = {
   build: "https://cognito.co.nz/manual/moneyworks_appendix_build_file.html",
   "auto-split": "https://cognito.co.nz/manual/moneyworks_appendix_allocation_file.html#autosplit",
   reconciliation: "https://cognito.co.nz/manual/moneyworks_appendix_reconciliation_file.html",
-  general: "https://cognito.co.nz/manual/moneyworks_appendix_account_categories__department_classifications_and_groups.html"
+  general: "https://cognito.co.nz/manual/moneyworks_appendix_account_categories__department_classifications_and_groups.html",
+  detail: "https://cognito.co.nz/manual/moneyworks_appendix_transactions.html"
 };
 ```
 
@@ -167,6 +172,13 @@ const TABLE_PATTERNS = {
     multiPurpose: true,
     codePrefix: ["A_", "D_", "G_"],
     logicalTables: ["Categories", "Classifications", "Groups"]
+  },
+  detail: {
+    isSubfile: true,
+    parentTable: "transactions",
+    noDirectAccess: true,
+    hasFlags: true,
+    linkedTables: ["accounts", "products", "departments", "jobs"]
   }
 };
 ```

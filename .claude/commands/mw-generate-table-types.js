@@ -40,6 +40,8 @@ const TABLE_URLS = {
   memo: "https://cognito.co.nz/manual/moneyworks_appendix_memo_file.html",
   // Configuration tables
   general: "https://cognito.co.nz/manual/moneyworks_appendix_account_categories__department_classifications_and_groups.html",
+  // Transaction subfiles
+  detail: "https://cognito.co.nz/manual/moneyworks_appendix_transactions.html",
 };
 
 // Table-specific patterns and exceptions
@@ -188,6 +190,26 @@ const TABLE_PATTERNS = {
     logicalTables: ["Categories", "Classifications", "Groups"],
     exceptionalFields: {
       Code: "Prefix determines type: A_=Categories, D_=Classifications, G_=Groups",
+    },
+  },
+  // Transaction subfiles
+  detail: {
+    isSubfile: true,
+    parentTable: "transactions",
+    noDirectAccess: true,
+    keyField: "ParentSeq",
+    exceptionalFields: {
+      Account: "14-character account code",
+      StockCode: "19-character product code",
+      Custom1: "Scriptable text field",
+      Custom2: "Scriptable text field",
+    },
+    hasFlags: true,
+    linkedTables: {
+      Account: "accounts.Code",
+      StockCode: "products.Code",
+      Department: "departments.Code",
+      Job: "jobs.Code",
     },
   },
 };

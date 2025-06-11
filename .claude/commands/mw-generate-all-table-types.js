@@ -35,7 +35,9 @@ const MONEYWORKS_TABLES = [
   // CRM & documentation
   'memo',
   // Configuration tables
-  'general'
+  'general',
+  // Transaction subfiles
+  'detail'
 ];
 
 export default {

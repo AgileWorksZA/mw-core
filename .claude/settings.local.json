@@ -91,7 +91,9 @@
       "WebFetch(domain:modelcontextprotocol.io)",
       "WebFetch(domain:cognito.co.nz)",
       "Bash(chmod:*)",
-      "WebFetch(domain:secure.cognito.co.nz)"
+      "WebFetch(domain:secure.cognito.co.nz)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(node:*)"
     ],
     "deny": []
   }
