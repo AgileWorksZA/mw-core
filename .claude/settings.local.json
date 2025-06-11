@@ -90,7 +90,8 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:modelcontextprotocol.io)",
       "WebFetch(domain:cognito.co.nz)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "WebFetch(domain:secure.cognito.co.nz)"
     ],
     "deny": []
   }

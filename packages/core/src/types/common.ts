@@ -20,14 +20,14 @@ export type DeepPartial<T> = T extends object
  * Extract the keys of T that are required
  */
 export type RequiredKeys<T> = {
-  [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
+  [K in keyof T]-?: undefined extends T[K] ? never : K;
 }[keyof T];
 
 /**
  * Extract the keys of T that are optional
  */
 export type OptionalKeys<T> = {
-  [K in keyof T]-?: {} extends Pick<T, K> ? K : never;
+  [K in keyof T]-?: undefined extends T[K] ? K : never;
 }[keyof T];
 
 /**
@@ -50,3 +50,15 @@ export type Nullable<T> = T | null;
  * Maybe type helper (nullable or undefined)
  */
 export type Maybe<T> = T | null | undefined;
+
+/**
+ * ISO 8601 timestamp string
+ */
+export type Timestamp = string;
+
+/**
+ * Base interface for tables with timestamps
+ */
+export interface BaseTable {
+  LastModifiedTime?: Timestamp;
+}

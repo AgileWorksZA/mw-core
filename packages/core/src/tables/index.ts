@@ -6,17 +6,28 @@
  */
 
 import type { Account, AccountCamel } from "./accounts";
+import type { AssetCategories, AssetCategoriesCamel } from "./asset-categories";
+import type { AssetLog, AssetLogCamel } from "./asset-log";
 import type { Asset, AssetCamel } from "./assets";
+import type { AutoSplit, AutoSplitCamel } from "./auto-split";
+import type { Build, BuildCamel } from "./build";
 import type { Contact, ContactCamel } from "./contacts";
 import type { Department, DepartmentCamel } from "./departments";
+import type { General, GeneralCamel } from "./general";
 import type { Inventory, InventoryCamel } from "./inventory";
 import type { JobSheetItem, JobSheetItemCamel } from "./job-sheet-items";
 import type { Job, JobCamel } from "./jobs";
-// Import table interfaces as they are generated
+import type { Login, LoginCamel } from "./login";
+import type { Memo, MemoCamel } from "./memo";
 import type { Name, NameCamel } from "./names";
+import type { OffLedger, OffLedgerCamel } from "./offledger";
+import type { Payments, PaymentsCamel } from "./payments";
 import type { Product, ProductCamel } from "./products";
+import type { Reconciliation, ReconciliationCamel } from "./reconciliation";
 import type { TaxRate, TaxRateCamel } from "./tax-rates";
 import type { Transaction, TransactionCamel } from "./transactions";
+import type { User, UserCamel } from "./user";
+import type { User2, User2Camel } from "./user2";
 
 /**
  * Implemented table names with TypeScript interfaces
@@ -31,9 +42,21 @@ export type TableName =
   | "Department"
   | "TaxRate"
   | "Asset"
+  | "AssetCategories"
+  | "AssetLog"
+  | "AutoSplit"
+  | "Build"
   | "Contact"
+  | "General"
   | "Inventory"
-  | "JobSheetItem"; // | etc...
+  | "JobSheetItem"
+  | "Login"
+  | "Memo"
+  | "OffLedger"
+  | "Payments"
+  | "Reconciliation"
+  | "User"
+  | "User2";
 
 /**
  * Array of implemented table names for runtime checks
@@ -47,9 +70,21 @@ export const tableNames = [
   "Department",
   "TaxRate",
   "Asset",
+  "AssetCategories",
+  "AssetLog",
+  "AutoSplit",
+  "Build",
   "Contact",
+  "General",
   "Inventory",
   "JobSheetItem",
+  "Login",
+  "Memo",
+  "OffLedger",
+  "Payments",
+  "Reconciliation",
+  "User",
+  "User2",
 ] as const satisfies ReadonlyArray<TableName>;
 
 /**
@@ -65,10 +100,21 @@ export interface TableMap {
   Department: Department;
   TaxRate: TaxRate;
   Asset: Asset;
+  AssetCategories: AssetCategories;
+  AssetLog: AssetLog;
+  AutoSplit: AutoSplit;
+  Build: Build;
   Contact: Contact;
+  General: General;
   Inventory: Inventory;
   JobSheetItem: JobSheetItem;
-  // Add more as implemented
+  Login: Login;
+  Memo: Memo;
+  OffLedger: OffLedger;
+  Payments: Payments;
+  Reconciliation: Reconciliation;
+  User: User;
+  User2: User2;
 }
 
 /**
@@ -84,10 +130,21 @@ export interface TableMapCamel {
   Department: DepartmentCamel;
   TaxRate: TaxRateCamel;
   Asset: AssetCamel;
+  AssetCategories: AssetCategoriesCamel;
+  AssetLog: AssetLogCamel;
+  AutoSplit: AutoSplitCamel;
+  Build: BuildCamel;
   Contact: ContactCamel;
+  General: GeneralCamel;
   Inventory: InventoryCamel;
   JobSheetItem: JobSheetItemCamel;
-  // Add more as implemented
+  Login: LoginCamel;
+  Memo: MemoCamel;
+  OffLedger: OffLedgerCamel;
+  Payments: PaymentsCamel;
+  Reconciliation: ReconciliationCamel;
+  User: UserCamel;
+  User2: User2Camel;
 }
 
 /**
@@ -182,9 +239,21 @@ export const tablePrimaryKeys = {
   Department: "Code",
   TaxRate: "TaxCode", // Note: TaxRate uses TaxCode as primary key
   Asset: "Code",
+  AssetCategories: "Code",
+  AssetLog: "ParentSeq", // Note: AssetLog is a subfile, uses ParentSeq to link to Asset
+  AutoSplit: "MatchFunction", // Note: AutoSplit uses combination of fields
+  Build: "Build.ProductSeq", // Note: Build uses ProductSeq as key
   Contact: "ParentSeq", // Note: Contact uses ParentSeq to link to Name record
+  General: "Code", // Note: General uses Code with prefix to determine type
   Inventory: "ProductSeq", // Note: Inventory uses ProductSeq as primary key
   JobSheetItem: "SequenceNumber", // Note: JobSheetItem uses SequenceNumber as primary key
+  Login: "UserID", // Note: Login uses UserID as primary key
+  Memo: "SequenceNumber", // Note: Memo uses SequenceNumber as primary key
+  OffLedger: "Name", // Note: OffLedger uses Name as primary key
+  Payments: "TransSeq", // Note: Payments uses TransSeq/InvoiceSeq combination
+  Reconciliation: "Account", // Note: Reconciliation uses Account/Statement combination
+  User: "Key", // Note: User uses Key as primary key
+  User2: "Key", // Note: User2 uses Key as primary key
 } as const satisfies Record<TableName, string>;
 
 /**
@@ -251,12 +320,55 @@ export function isTableType<T extends TableName>(
 // Re-export table interfaces
 export type { Name, NameCamel } from "./names";
 export type { Account, AccountCamel } from "./accounts";
-export type { Transaction, TransactionCamel } from "./transactions";
-export type { Product, ProductCamel } from "./products";
-export type { Job, JobCamel } from "./jobs";
-export type { Department, DepartmentCamel } from "./departments";
-export type { TaxRate, TaxRateCamel } from "./tax-rates";
 export type { Asset, AssetCamel } from "./assets";
+export type { AssetCategories, AssetCategoriesCamel } from "./asset-categories";
+export type { AssetLog, AssetLogCamel } from "./asset-log";
+export type { AutoSplit, AutoSplitCamel } from "./auto-split";
+export type { Build, BuildCamel } from "./build";
 export type { Contact, ContactCamel } from "./contacts";
+export type { Department, DepartmentCamel } from "./departments";
+export type {
+  General,
+  GeneralCamel,
+  AccountCategory,
+  DepartmentClassification,
+  Group,
+  AccountCategoryCamel,
+  DepartmentClassificationCamel,
+  GroupCamel,
+} from "./general";
 export type { Inventory, InventoryCamel } from "./inventory";
+export type { Job, JobCamel } from "./jobs";
 export type { JobSheetItem, JobSheetItemCamel } from "./job-sheet-items";
+export type { Login, LoginCamel } from "./login";
+export type { Memo, MemoCamel } from "./memo";
+export type { OffLedger, OffLedgerCamel } from "./offledger";
+export type { Payments, PaymentsCamel } from "./payments";
+export type { Product, ProductCamel } from "./products";
+export type { Reconciliation, ReconciliationCamel } from "./reconciliation";
+export type { TaxRate, TaxRateCamel } from "./tax-rates";
+export type { Transaction, TransactionCamel } from "./transactions";
+export type { User, UserCamel } from "./user";
+export type { User2, User2Camel } from "./user2";
+
+// Re-export enums and helpers
+export { AssetLogAction, isAssetLog, isAssetLogCamel } from "./asset-log";
+export { DepreciationType } from "./asset-categories";
+export { SplitModeType } from "./auto-split";
+export {
+  GeneralType,
+  generalTypeGuards,
+  generalConverters,
+  generalHelpers,
+  generalTypeAssertions,
+} from "./general";
+export { MemoFlags } from "./memo";
+export {
+  OffLedgerKind,
+  offLedgerHelpers,
+  offLedgerConverters,
+  isOffLedger,
+  isOffLedgerCamel,
+} from "./offledger";
+export { PaymentType, GSTBasis } from "./payments";
+export { UserHelpers } from "./user";
