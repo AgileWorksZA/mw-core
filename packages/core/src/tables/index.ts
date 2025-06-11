@@ -28,6 +28,7 @@ import type { TaxRate, TaxRateCamel } from "./tax-rates";
 import type { Transaction, TransactionCamel } from "./transactions";
 import type { User, UserCamel } from "./user";
 import type { User2, User2Camel } from "./user2";
+import type { Detail, DetailCamel } from "./detail";
 
 /**
  * Implemented table names with TypeScript interfaces
@@ -56,7 +57,8 @@ export type TableName =
   | "Payments"
   | "Reconciliation"
   | "User"
-  | "User2";
+  | "User2"
+  | "Detail";
 
 /**
  * Array of implemented table names for runtime checks
@@ -85,6 +87,7 @@ export const tableNames = [
   "Reconciliation",
   "User",
   "User2",
+  "Detail",
 ] as const satisfies ReadonlyArray<TableName>;
 
 /**
@@ -115,6 +118,7 @@ export interface TableMap {
   Reconciliation: Reconciliation;
   User: User;
   User2: User2;
+  Detail: Detail;
 }
 
 /**
@@ -145,6 +149,7 @@ export interface TableMapCamel {
   Reconciliation: ReconciliationCamel;
   User: UserCamel;
   User2: User2Camel;
+  Detail: DetailCamel;
 }
 
 /**
@@ -254,6 +259,7 @@ export const tablePrimaryKeys = {
   Reconciliation: "Account", // Note: Reconciliation uses Account/Statement combination
   User: "Key", // Note: User uses Key as primary key
   User2: "Key", // Note: User2 uses Key as primary key
+  Detail: "ParentSeq", // Note: Detail is a subfile, uses ParentSeq to link to Transaction
 } as const satisfies Record<TableName, string>;
 
 /**
@@ -372,3 +378,12 @@ export {
 } from "./offledger";
 export { PaymentType, GSTBasis } from "./payments";
 export { UserHelpers } from "./user";
+export { 
+  DetailFlags, 
+  detailFieldMappings, 
+  detailConverters, 
+  detailHelpers,
+  isDetail,
+  isDetailCamel,
+  validateDetailFieldLengths
+} from "./detail";

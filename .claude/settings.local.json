@@ -93,7 +93,8 @@
       "Bash(chmod:*)",
       "WebFetch(domain:secure.cognito.co.nz)",
       "mcp__sequential-thinking__sequentialthinking",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(moneyworks:*)"
     ],
     "deny": []
   }

@@ -6,7 +6,7 @@ export const config: AdapterConfig = {
   metadata: {
     name: "Service Connection",
     description: "Service connection configuration for external services",
-    accept: [".connection.json", ".svc.json"],
+    accept: [".mw-config.json", ".svc.json"],
     tags: ["connection", "service", "auth", "api"],
     category: AdapterCategories.CONFIGURATION,
   },
