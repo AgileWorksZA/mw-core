@@ -5,6 +5,7 @@ const execCommand = promisify(spawn);
 
 // List of all MoneyWorks tables to generate
 const MONEYWORKS_TABLES = [
+  // Core business tables
   'names',
   'accounts',
   'products',
@@ -16,6 +17,25 @@ const MONEYWORKS_TABLES = [
   'inventory',
   'job-sheet-items',
   'tax-rate',
+  // Authentication & security tables
+  'login',
+  'user',
+  'user2',
+  // Financial transaction tables
+  'payments',
+  'reconciliation',
+  'auto-split',
+  // Asset management tables
+  'asset-log',
+  'asset-categories',
+  // Multi-currency & off-ledger
+  'offledger',
+  // Manufacturing & inventory
+  'build',
+  // CRM & documentation
+  'memo',
+  // Configuration tables
+  'general'
 ];
 
 export default {

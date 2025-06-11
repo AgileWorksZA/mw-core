@@ -89,7 +89,8 @@
       "WebFetch(domain:help.openai.com)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:modelcontextprotocol.io)",
-      "WebFetch(domain:cognito.co.nz)"
+      "WebFetch(domain:cognito.co.nz)",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }

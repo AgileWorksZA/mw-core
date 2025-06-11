@@ -9,6 +9,7 @@ const __dirname = dirname(__filename);
 
 // MoneyWorks table documentation URLs
 const TABLE_URLS = {
+  // Core business tables
   accounts: "https://cognito.co.nz/manual/moneyworks_appendix_accounts.html",
   names: "https://cognito.co.nz/manual/moneyworks_appendix_names.html",
   products: "https://cognito.co.nz/manual/moneyworks_appendix_products.html",
@@ -20,6 +21,25 @@ const TABLE_URLS = {
   inventory: "https://cognito.co.nz/manual/moneyworks_appendix_inventory.html",
   "job-sheet-items": "https://cognito.co.nz/manual/moneyworks_appendix_job_sheet_items.html",
   "tax-rate": "https://cognito.co.nz/manual/moneyworks_appendix_tax_rate.html",
+  // Authentication & security tables
+  login: "https://cognito.co.nz/manual/moneyworks_appendix_login_file.html",
+  user: "https://cognito.co.nz/manual/moneyworks_appendix_user_file.html",
+  user2: "https://cognito.co.nz/manual/moneyworks_appendix_user2_file.html",
+  // Financial transaction tables
+  payments: "https://cognito.co.nz/manual/moneyworks_appendix_payments_file.html",
+  reconciliation: "https://cognito.co.nz/manual/moneyworks_appendix_reconciliation_file.html",
+  "auto-split": "https://cognito.co.nz/manual/moneyworks_appendix_allocation_file.html",
+  // Asset management tables
+  "asset-log": "https://cognito.co.nz/manual/moneyworks_appendix_assets.html",
+  "asset-categories": "https://cognito.co.nz/manual/moneyworks_appendix_asset_categories.html",
+  // Multi-currency & off-ledger
+  offledger: "https://cognito.co.nz/manual/moneyworks_appendix_offledgers_and_currency.html",
+  // Manufacturing & inventory
+  build: "https://cognito.co.nz/manual/moneyworks_appendix_build_file.html",
+  // CRM & documentation
+  memo: "https://cognito.co.nz/manual/moneyworks_appendix_memo_file.html",
+  // Configuration tables
+  general: "https://cognito.co.nz/manual/moneyworks_appendix_account_categories__department_classifications_and_groups.html",
 };
 
 // Table-specific patterns and exceptions
@@ -65,6 +85,110 @@ const TABLE_PATTERNS = {
   jobs: {
     hasBudgetTracking: true,
     hasTimeTracking: true,
+  },
+  // Authentication & security tables
+  login: {
+    noCodeField: true,
+    hasEncryption: true,
+    exceptionalFields: {
+      Password: "Encrypted field",
+      Privileges: "Encoded as string but represents access rights",
+    },
+  },
+  user: {
+    scriptStorage: true,
+    keyField: "Key",
+    keyLength: 63,
+    exceptionalFields: {
+      Key: "Primary key up to 63 characters",
+    },
+  },
+  user2: {
+    scriptStorage: true,
+    keyField: "Key",
+    keyLength: 255,
+    extendedFields: true,
+    exceptionalFields: {
+      Key: "Primary key up to 255 characters",
+    },
+  },
+  // Financial transaction tables
+  payments: {
+    noCodeField: true,
+    manyToMany: true,
+    exceptionalFields: {
+      OurAmount: "High bit indicates overpayment",
+      TransSeq: "Links to Transaction.SequenceNumber",
+      InvoiceSeq: "Links to invoice Transaction.SequenceNumber",
+    },
+  },
+  reconciliation: {
+    noCodeField: true,
+    bankIntegration: true,
+    exceptionalFields: {
+      BankStatementDate: "Date of bank statement",
+      Discrepancy: "Difference amount in reconciliation",
+    },
+  },
+  "auto-split": {
+    hasRules: true,
+    percentageAllocation: true,
+    exceptionalFields: {
+      Percent: "Percentage allocation (0-100)",
+      Amount: "Fixed amount allocation",
+    },
+  },
+  // Asset management tables
+  "asset-log": {
+    isSubfile: true,
+    parentTable: "assets",
+    noDirectAccess: true,
+    exceptionalFields: {
+      Note: "Description of asset transaction",
+    },
+  },
+  "asset-categories": {
+    hasGLMapping: true,
+    exceptionalFields: {
+      DepreciationMethod: "0=None, 1=StraightLine, 2=DiminishingValue",
+    },
+  },
+  // Multi-currency & off-ledger
+  offledger: {
+    dualPurpose: true,
+    variableArrays: true,
+    currencySupport: true,
+    exceptionalFields: {
+      Code: "Starts with @ for currencies",
+      HistoricBalances: "Variable size array of historical balances",
+    },
+  },
+  // Manufacturing & inventory
+  build: {
+    isBOM: true,
+    linkedToProducts: true,
+    exceptionalFields: {
+      ProductCode: "Links to Products.Code",
+      ComponentCode: "Component product code",
+    },
+  },
+  // CRM & documentation
+  memo: {
+    hasReminders: true,
+    linkedToNames: true,
+    exceptionalFields: {
+      NameCode: "Links to Names.Code",
+      ReminderDate: "Optional reminder date",
+    },
+  },
+  // Configuration tables
+  general: {
+    multiPurpose: true,
+    codePrefix: ["A_", "D_", "G_"],
+    logicalTables: ["Categories", "Classifications", "Groups"],
+    exceptionalFields: {
+      Code: "Prefix determines type: A_=Categories, D_=Classifications, G_=Groups",
+    },
   },
 };
 
@@ -217,14 +341,28 @@ function levenshteinDistance(a, b) {
 
 function findRelatedTables(tableName) {
   const relations = {
-    names: ['contacts', 'transactions'],
-    accounts: ['transactions'],
-    transactions: ['names', 'accounts', 'products'],
-    products: ['inventory', 'transactions'],
+    names: ['contacts', 'transactions', 'memo'],
+    accounts: ['transactions', 'asset-categories'],
+    transactions: ['names', 'accounts', 'products', 'payments'],
+    products: ['inventory', 'transactions', 'build'],
     jobs: ['transactions', 'job-sheet-items'],
     contacts: ['names'],
     inventory: ['products'],
     'job-sheet-items': ['jobs'],
+    // New table relationships
+    login: ['user', 'user2'],
+    user: ['login'],
+    user2: ['login'],
+    payments: ['transactions'],
+    reconciliation: ['accounts'],
+    'auto-split': ['accounts'],
+    'asset-log': ['assets'],
+    'asset-categories': ['assets', 'accounts'],
+    assets: ['asset-log', 'asset-categories'],
+    offledger: [],
+    build: ['products'],
+    memo: ['names'],
+    general: ['accounts', 'departments'],
   };
   
   return relations[tableName] || [];
