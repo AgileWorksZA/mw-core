@@ -88,7 +88,9 @@
       "WebFetch(domain:community.openai.com)",
       "WebFetch(domain:help.openai.com)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:modelcontextprotocol.io)"
+      "WebFetch(domain:modelcontextprotocol.io)",
+      "mcp__moneyworks__listTables",
+      "mcp__moneyworks__describeTableSchema"
     ],
     "deny": []
   }
