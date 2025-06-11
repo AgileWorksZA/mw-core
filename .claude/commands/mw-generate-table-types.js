@@ -32,6 +32,13 @@ const TABLE_PATTERNS = {
     },
     hasFlags: true,
     hasDualRole: true,
+    relationships: {
+      SalesPerson: "User.Code",
+      Bank: "Bank.Code",
+      Currency: "Currency.Code",
+      TaxCode: "TaxRate.Code",
+    },
+    balanceGroups: ["Creditor", "Debtor"],
   },
   accounts: {
     exceptionalFields: {
@@ -159,6 +166,7 @@ export default {
       examples: {
         enumPattern: tablePatterns.typeEnum ? generateEnumExample(tableName, tablePatterns.typeEnum) : null,
         flagHelpers: tablePatterns.hasFlags ? generateFlagHelperExample(tableName) : null,
+        converters: generateConverterExample(tableName),
       },
     };
   },
@@ -237,6 +245,33 @@ function generateFlagHelperExample(tableName) {
   },
   encodeFlags(flags: ${interfaceName}Flags): number {
     // Encode to bitwise number
+  }
+};`;
+}
+
+function generateConverterExample(tableName) {
+  const interfaceName = toInterfaceName(tableName);
+  return `export const ${tableName}Converters = {
+  /**
+   * Convert from MoneyWorks PascalCase to camelCase
+   */
+  toCamelCase(raw: ${interfaceName}): ${interfaceName}Camel {
+    return {
+      code: raw.Code,
+      name: raw.Name,
+      // Map all fields...
+    };
+  },
+  
+  /**
+   * Convert from camelCase to MoneyWorks PascalCase
+   */
+  fromCamelCase(camel: ${interfaceName}Camel): ${interfaceName} {
+    return {
+      Code: camel.code,
+      Name: camel.name,
+      // Map all fields...
+    };
   }
 };`;
 }

@@ -6,7 +6,7 @@
  */
 
 // Import table interfaces as they are generated
-import type { Name } from "./names";
+import type { Name, NameCamel } from "./names";
 
 /**
  * Implemented table names with TypeScript interfaces
@@ -20,7 +20,7 @@ export type TableName = "Name"; // | "Account" | "Transaction" | etc...
 export const tableNames = ["Name"] as const satisfies ReadonlyArray<TableName>;
 
 /**
- * Map of table names to their TypeScript interfaces
+ * Map of table names to their TypeScript interfaces (raw MoneyWorks format)
  * @description Provides a cleaner way to map table names to types
  */
 export interface TableMap {
@@ -34,7 +34,21 @@ export interface TableMap {
 }
 
 /**
- * Generic table type resolver
+ * Map of table names to their camelCase interfaces
+ * @description Developer-friendly versions with camelCase properties
+ */
+export interface TableMapCamel {
+  Name: NameCamel;
+  // Account: AccountCamel;
+  // Transaction: TransactionCamel;
+  // Product: ProductCamel;
+  // Job: JobCamel;
+  // Department: DepartmentCamel;
+  // Add more as implemented
+}
+
+/**
+ * Generic table type resolver (raw MoneyWorks format)
  * @template T - The table name
  * @example
  * ```typescript
@@ -44,6 +58,19 @@ export interface TableMap {
  */
 export type Table<T extends TableName> = T extends keyof TableMap
   ? TableMap[T]
+  : never;
+
+/**
+ * Generic table type resolver (camelCase format)
+ * @template T - The table name
+ * @example
+ * ```typescript
+ * type NameRecord = TableCamel<"Name">; // Resolves to NameCamel interface
+ * const record: TableCamel<"Name"> = { code: "CUST001", name: "Acme Corp", ... };
+ * ```
+ */
+export type TableCamel<T extends TableName> = T extends keyof TableMapCamel
+  ? TableMapCamel[T]
   : never;
 
 /**
@@ -101,14 +128,15 @@ export type OptionalTableFields<T extends TableName> = {
 
 /**
  * Primary key configuration for each table
+ * @description Uses exact MoneyWorks field names (PascalCase)
  */
 export const tablePrimaryKeys = {
-  Name: "code",
-  // Account: "code",
-  // Transaction: "sequenceNumber", // Note: Transaction uses SequenceNumber, not Code
-  // Product: "code",
-  // Job: "code",
-  // Department: "code",
+  Name: "Code",
+  // Account: "Code",
+  // Transaction: "SequenceNumber", // Note: Transaction uses SequenceNumber, not Code
+  // Product: "Code",
+  // Job: "Code",
+  // Department: "Code",
 } as const satisfies Record<TableName, string>;
 
 /**
@@ -169,4 +197,4 @@ export function isTableType<T extends TableName>(
 }
 
 // Re-export table interfaces
-export type { Name } from "./names";
+export type { Name, NameCamel } from "./names";

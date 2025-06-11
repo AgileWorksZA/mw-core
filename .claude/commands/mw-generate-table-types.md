@@ -75,14 +75,79 @@ When the command executes, you will receive a context object with:
 - **S (Special/Timestamp)**: `string` (ISO format)
 - **B (Boolean)**: `boolean` or `0 | 1` depending on context
 
+### Field Naming Convention
+
+**IMPORTANT**: Use exact MoneyWorks field names (PascalCase) for API compatibility:
+- `Code` not `code`
+- `CustomerType` not `customerType`
+- `CreditLimit` not `creditLimit`
+
+### Generate Two Interfaces
+
+1. **Raw Interface** - Exact MoneyWorks field names:
+   ```typescript
+   export interface [TableName] {
+     Code: string;
+     Name: string;
+     CustomerType: NameType;
+     // etc...
+   }
+   ```
+
+2. **CamelCase Interface** - Developer-friendly version:
+   ```typescript
+   export interface [TableName]Camel {
+     code: string;
+     name: string;
+     customerType: NameType;
+     // etc...
+   }
+   ```
+
+3. **Conversion Utilities**:
+   ```typescript
+   export const [tableName]Converters = {
+     toCamelCase(raw: [TableName]): [TableName]Camel { ... },
+     fromCamelCase(camel: [TableName]Camel): [TableName] { ... }
+   };
+   ```
+
+### Group Related Fields
+
+For fields that are logically grouped (like balances), create sub-interfaces:
+```typescript
+export interface CreditorBalances {
+  Current: number;
+  Days30: number;
+  Days60: number;
+  Days90Plus: number;
+}
+
+// In the main interface:
+CreditorBalances?: CreditorBalances;
+```
+
+### Add Relationship Metadata
+
+For fields that reference other tables, add JSDoc annotations:
+```typescript
+/**
+ * Sales person code
+ * @maxLength 5
+ * @relationship References User.Code
+ */
+SalesPerson?: string;
+```
+
 ### Quality Requirements
 
 - Every field must have comprehensive JSDoc
 - Include `@example` tags where helpful
 - Note any MoneyWorks-specific quirks
-- Use TypeScript best practices (camelCase properties)
+- Use exact MoneyWorks field names for the raw interface
 - Make optional fields optional with `?`
-- Export all types appropriately
+- Export all types and utilities appropriately
+- Add `@relationship` tags for foreign key fields
 
 Save the generated TypeScript to the path specified in `outputPath`.
 
@@ -116,7 +181,7 @@ After generating the table interface, update `packages/core/src/tables/index.ts`
 5. Add to `tablePrimaryKeys`:
    ```typescript
    export const tablePrimaryKeys = {
-     Name: "Code",
+     Name: "Code", // Use exact MoneyWorks field name
      [TableName]: "[PrimaryKeyField]", // Add primary key field
    } as const;
    ```
