@@ -45,10 +45,12 @@ When the command executes, you will receive a context object with:
     * 
     * @see [documentationUrl]
     */
-   export interface MoneyWorks[TableName] {
+   export interface [TableName] {
      // Fields with comprehensive JSDoc
    }
    ```
+   
+   **Important**: Name the interface with just the singular table name (e.g., `Name`, not `MoneyWorksName`)
 
 4. **Create Enums for Coded Fields**
    - Use the `examples.enumPattern` if provided
@@ -83,6 +85,46 @@ When the command executes, you will receive a context object with:
 - Export all types appropriately
 
 Save the generated TypeScript to the path specified in `outputPath`.
+
+### Update Index File
+
+After generating the table interface, update `packages/core/src/tables/index.ts`:
+
+1. Import the new interface:
+   ```typescript
+   import type { [TableName] } from "./[table-name]";
+   ```
+
+2. Add to `TableName` union:
+   ```typescript
+   export type TableName = "Name" | "[TableName]"; // Add your table
+   ```
+
+3. Add to `tableNames` array:
+   ```typescript
+   export const tableNames = ["Name", "[TableName]"] as const;
+   ```
+
+4. Add to `TableMap` interface:
+   ```typescript
+   export interface TableMap {
+     Name: Name;
+     [TableName]: [TableName]; // Add your mapping
+   }
+   ```
+
+5. Add to `tablePrimaryKeys`:
+   ```typescript
+   export const tablePrimaryKeys = {
+     Name: "Code",
+     [TableName]: "[PrimaryKeyField]", // Add primary key field
+   } as const;
+   ```
+
+6. Export the type:
+   ```typescript
+   export type { [TableName] } from "./[table-name]";
+   ```
 
 ## Example
 
