@@ -6,19 +6,19 @@
  *
  * For better tree-shaking, prefer importing from subpaths:
  * - `@moneyworks/core/types` for type definitions
- * - `@moneyworks/core/models` for data models
+ * - `@moneyworks/core/tables` for table interfaces
+ * - `@moneyworks/core/export-import` for REST API functionality
  * - `@moneyworks/core/utils` for utility functions
  */
 
-// Re-export specific items for better tree-shaking
-// Types
+// Core types
 export type { MoneyWorksTable, TableField } from "./types";
 
-// Models - will be populated as we create them
-// export { NameModel } from './models/name';
+// Table system
+export * from "./tables";
 
-// Utilities - will be populated as we create them
-// export { nameHelpers } from './utils/name-helpers';
+// Export/Import system
+export * from "./export-import";
 
 // Constants
 export { TABLE_NAMES, FIELD_TYPES } from "./constants";

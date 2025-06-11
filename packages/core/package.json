@@ -28,19 +28,41 @@
       "types": "./src/utils/index.ts",
       "import": "./src/utils/index.ts"
     },
+    "./tables": {
+      "bun": "./src/tables/index.ts",
+      "types": "./src/tables/index.ts",
+      "import": "./src/tables/index.ts"
+    },
     "./tables/*": {
       "bun": "./src/tables/*.ts",
       "types": "./src/tables/*.ts",
       "import": "./src/tables/*.ts"
+    },
+    "./export-import": {
+      "bun": "./src/export-import/index.ts",
+      "types": "./src/export-import/index.ts",
+      "import": "./src/export-import/index.ts"
+    },
+    "./schemas/*.json": {
+      "import": "./src/schemas/*.json"
     }
   },
   "files": ["src", "README.md"],
   "scripts": {
     "test": "bun test",
     "test:watch": "bun test --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate:schemas": "bun run scripts/generate-schemas.ts",
+    "example:export-import": "bun run examples/export-import-usage.ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/xml2js": "^0.4.14",
+    "xml2js": "^0.6.2",
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.22.3",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "bun-types": "latest",
