@@ -6,16 +6,26 @@
  */
 
 import type { Account, AccountCamel } from "./accounts";
+import type { Department, DepartmentCamel } from "./departments";
+import type { Job, JobCamel } from "./jobs";
 // Import table interfaces as they are generated
 import type { Name, NameCamel } from "./names";
 import type { Product, ProductCamel } from "./products";
+import type { TaxRate, TaxRateCamel } from "./tax-rates";
 import type { Transaction, TransactionCamel } from "./transactions";
 
 /**
  * Implemented table names with TypeScript interfaces
  * @description Add to this union as new tables are generated
  */
-export type TableName = "Name" | "Account" | "Transaction" | "Product"; // | "Job" | "Department" | etc...
+export type TableName =
+	| "Name"
+	| "Account"
+	| "Transaction"
+	| "Product"
+	| "Job"
+	| "Department"
+	| "TaxRate"; // | "Contact" | "Asset" | etc...
 
 /**
  * Array of implemented table names for runtime checks
@@ -25,6 +35,9 @@ export const tableNames = [
 	"Account",
 	"Transaction",
 	"Product",
+	"Job",
+	"Department",
+	"TaxRate",
 ] as const satisfies ReadonlyArray<TableName>;
 
 /**
@@ -36,8 +49,11 @@ export interface TableMap {
 	Account: Account;
 	Transaction: Transaction;
 	Product: Product;
-	// Job: Job;
-	// Department: Department;
+	Job: Job;
+	Department: Department;
+	TaxRate: TaxRate;
+	// Contact: Contact;
+	// Asset: Asset;
 	// Add more as implemented
 }
 
@@ -50,8 +66,11 @@ export interface TableMapCamel {
 	Account: AccountCamel;
 	Transaction: TransactionCamel;
 	Product: ProductCamel;
-	// Job: JobCamel;
-	// Department: DepartmentCamel;
+	Job: JobCamel;
+	Department: DepartmentCamel;
+	TaxRate: TaxRateCamel;
+	// Contact: ContactCamel;
+	// Asset: AssetCamel;
 	// Add more as implemented
 }
 
@@ -143,8 +162,9 @@ export const tablePrimaryKeys = {
 	Account: "Code",
 	Transaction: "SequenceNumber", // Note: Transaction uses SequenceNumber, not Code
 	Product: "Code",
-	// Job: "Code",
-	// Department: "Code",
+	Job: "Code",
+	Department: "Code",
+	TaxRate: "TaxCode", // Note: TaxRate uses TaxCode as primary key
 } as const satisfies Record<TableName, string>;
 
 /**
@@ -213,3 +233,6 @@ export type { Name, NameCamel } from "./names";
 export type { Account, AccountCamel } from "./accounts";
 export type { Transaction, TransactionCamel } from "./transactions";
 export type { Product, ProductCamel } from "./products";
+export type { Job, JobCamel } from "./jobs";
+export type { Department, DepartmentCamel } from "./departments";
+export type { TaxRate, TaxRateCamel } from "./tax-rates";
