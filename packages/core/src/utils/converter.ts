@@ -8,14 +8,14 @@
  * @param fieldMap Mapping of source fields to target fields
  * @returns Converted object with mapped field names
  */
-export function convertFields<
-  S extends object,
-  T extends object,
->(source: S, fieldMap: Record<keyof T, keyof S>): T {
+export function convertFields<S extends object, T extends object>(
+  source: S,
+  fieldMap: Record<keyof T, keyof S>,
+): T {
   const result = {} as T;
 
   for (const [targetKey, sourceKey] of Object.entries(fieldMap)) {
-    if (typeof sourceKey === 'string' && sourceKey in source) {
+    if (typeof sourceKey === "string" && sourceKey in source) {
       (result as Record<string, unknown>)[targetKey] =
         source[sourceKey as keyof S];
     }
@@ -29,10 +29,9 @@ export function convertFields<
  * @param fieldMap Mapping from format A to format B
  * @returns Object with toB and toA converter functions
  */
-export function createConverter<
-  A extends object,
-  B extends object,
->(fieldMap: Record<keyof B, keyof A>) {
+export function createConverter<A extends object, B extends object>(
+  fieldMap: Record<keyof B, keyof A>,
+) {
   // Create reverse mapping
   const reverseMap = {} as Record<keyof A, keyof B>;
   for (const [bKey, aKey] of Object.entries(fieldMap)) {
@@ -51,14 +50,14 @@ export function createConverter<
  * @param fieldMap Field mapping
  * @returns Partial converted object
  */
-export function convertPartialFields<
-  S extends object,
-  T extends object,
->(source: Partial<S>, fieldMap: Record<keyof T, keyof S>): Partial<T> {
+export function convertPartialFields<S extends object, T extends object>(
+  source: Partial<S>,
+  fieldMap: Record<keyof T, keyof S>,
+): Partial<T> {
   const result: Partial<T> = {};
 
   for (const [targetKey, sourceKey] of Object.entries(fieldMap)) {
-    if (typeof sourceKey === 'string' && sourceKey in source) {
+    if (typeof sourceKey === "string" && sourceKey in source) {
       (result as Record<string, unknown>)[targetKey] =
         source[sourceKey as keyof S];
     }

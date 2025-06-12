@@ -4,6 +4,26 @@
 
 This document provides a complete guide for generating TypeScript interfaces for ALL MoneyWorks tables, including the exceptional tables that were discovered outside the initial context.
 
+## Important: Field Mapping Requirements
+
+### Key Discovery
+MoneyWorks REST API returns field names in **lowercase** format in XML/TSV exports, not in PascalCase as documented. This requires special handling in our TypeScript system.
+
+### Required Implementations
+
+1. **Field Converter Updates** (`src/converters/field-converter.ts`):
+   - Each table needs a custom converter function to map lowercase MW fields to camelCase TS fields
+   - Special cases like `type` → `typeCode` for transactions, `description` → `name` for accounts
+   - Handle XML attributes with underscore (e.g., `{_: value, system: "true"}`)
+
+2. **Export Builder Updates** (`src/export/builder.ts`):
+   - The `getMWFieldName()` method must map camelCase to lowercase MW field names
+   - Required for `whereField()` and `orderBy()` to generate correct filters
+
+3. **XML Parser Considerations**:
+   - MoneyWorks includes `count` and `found` attributes in table responses
+   - `found` = total matching records, `count` = returned records (affected by limit)
+
 ## Table Categories
 
 ### 1. Core Business Tables (Already Generated)
@@ -46,6 +66,43 @@ This document provides a complete guide for generating TypeScript interfaces for
 
 #### Configuration
 - `general` - Multi-purpose (Categories/Classifications/Groups)
+
+## Field Mapping Examples
+
+### Account Table
+```typescript
+// MoneyWorks returns: {type: "CA", description: "Assets", taxcode: "*"}
+// We need: {accountType: "CA", name: "Assets", taxCode: "*"}
+
+const fieldMap = {
+  'type': 'accountType',
+  'description': 'name',  // In accounts, description is the name
+  'taxcode': 'taxCode',
+  'bankaccountnumber': 'bankAccountNumber',
+  // ... etc
+}
+```
+
+### Transaction Table
+```typescript
+// MoneyWorks returns: {type: "DII", ourref: "INV001", namecode: "CUST001"}
+// We need: {typeCode: "DII", ourRef: "INV001", nameCode: "CUST001"}
+
+const fieldMap = {
+  'type': 'typeCode',  // type → typeCode for transactions
+  'ourref': 'ourRef',
+  'namecode': 'nameCode',
+  'transdate': 'transDate',
+  // ... etc
+}
+```
+
+### Detail Table (Special Case)
+```typescript
+// MoneyWorks returns Detail fields with "Detail." prefix
+// {Detail.Account: "4100", Detail.Debit: 100}
+// We need: {account: "4100", debit: 100}
+```
 
 ## Generation Commands
 
@@ -141,11 +198,63 @@ packages/core/src/tables/
 └── index.ts              # Export all interfaces
 ```
 
+## Field Mapping Implementation
+
+### Step 1: Update field-converter.ts
+After generating a new table, add its converter function:
+
+```typescript
+function convertTableNameToCamel(record: any): any {
+  const result: any = {};
+  
+  for (const [key, value] of Object.entries(record)) {
+    let camelKey = key;
+    
+    if (key === key.toLowerCase()) {
+      const fieldMap: Record<string, string> = {
+        // Add all field mappings for this table
+        'fieldname': 'fieldName',
+        // Special cases
+        'type': 'specificType', // if 'type' means something specific
+      };
+      camelKey = fieldMap[key] || key;
+    }
+    
+    // Handle XML attributes
+    if (typeof value === 'object' && '_' in value) {
+      result[camelKey] = value._;
+    } else {
+      result[camelKey] = value;
+    }
+  }
+  
+  return result;
+}
+```
+
+### Step 2: Update convertPascalToCamel switch
+```typescript
+case 'TableName':
+  return convertTableNameToCamel(record as any) as Partial<TableMapCamel[T]>;
+```
+
+### Step 3: Update export builder getMWFieldName
+Add table-specific field mappings to the fieldMap object.
+
+### Step 4: Test the mapping
+```typescript
+// Test export
+const records = await client.export('TableName', { format: 'json' });
+// Verify fields are properly mapped to camelCase
+```
+
 ## Post-Generation Checklist
 
 - [ ] All interfaces compile without TypeScript errors
 - [ ] Enums created for fields with specific values
 - [ ] Helper functions for special encodings
+- [ ] **Field converter function added to field-converter.ts**
+- [ ] **Field mappings added to export builder getMWFieldName()**
 - [ ] Converter functions (PascalCase ↔ camelCase)
 - [ ] Type guards for multi-purpose tables
 - [ ] Documentation comments on interfaces
@@ -153,6 +262,7 @@ packages/core/src/tables/
 - [ ] Optional fields properly marked
 - [ ] Relationships documented
 - [ ] Index.ts updated with all exports
+- [ ] **Tested export returns properly mapped camelCase fields**
 
 ## Maintenance Notes
 

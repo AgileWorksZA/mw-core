@@ -1,11 +1,12 @@
 /**
  * MoneyWorks Export/Import System
- * 
+ *
  * Main entry point for export/import functionality.
  */
 
 // REST Client and types
-export { MoneyWorksRESTClient } from '../rest/client';
+export { MoneyWorksRESTClient } from "../rest/client";
+export { MoneyWorksErrorCode } from "../rest/types";
 export type {
   MoneyWorksConfig,
   ExportFormat,
@@ -14,8 +15,7 @@ export type {
   ImportResult,
   RESTResponse,
   StreamOptions,
-  MoneyWorksErrorCode
-} from '../rest/types';
+} from "../rest/types";
 
 // Errors
 export {
@@ -26,34 +26,37 @@ export {
   ConnectionError,
   ValidationError,
   TimeoutError,
-  ParseError
-} from '../rest/errors';
+  ParseError,
+} from "../rest/errors";
 
 // Export functionality
-export { ExportBuilder, exportFrom } from '../export/builder';
-export { ExportParser } from '../export/parser';
-export { ExportTemplate } from '../export/template';
+export { ExportBuilder, exportFrom } from "../export/builder";
+export { ExportParser } from "../export/parser";
+export { ExportTemplate } from "../export/template";
 
 // Import functionality
-export { ImportBuilder, importInto } from '../import/builder';
-export { TransactionBuilder, buildTransaction } from '../import/transaction-builder';
-export type { TransactionImport } from '../import/transaction-builder';
+export { ImportBuilder, importInto } from "../import/builder";
+export {
+  TransactionBuilder,
+  buildTransaction,
+} from "../import/transaction-builder";
+export type { TransactionImport } from "../import/transaction-builder";
 
 // XML utilities
-export { XMLParser } from '../xml/parser';
-export { XMLBuilder } from '../xml/builder';
+export { XMLParser } from "../xml/parser";
+export { XMLBuilder } from "../xml/builder";
 
 // Field conversion
-export { 
-  convertPascalToCamel, 
+export {
+  convertPascalToCamel,
   convertCamelToPascal,
   getFieldMappings,
-  convertFieldName
-} from '../converters/field-converter';
+  convertFieldName,
+} from "../converters/field-converter";
 
 // Quick start functions
-import { MoneyWorksRESTClient } from '../rest/client';
-import type { MoneyWorksConfig } from '../rest/types';
+import { MoneyWorksRESTClient } from "../rest/client";
+import type { MoneyWorksConfig } from "../rest/types";
 
 /**
  * Create a new MoneyWorks client
@@ -65,8 +68,10 @@ export function createClient(config: MoneyWorksConfig): MoneyWorksRESTClient {
 /**
  * Load config from file
  */
-export async function loadConfig(filePath: string = './mw-config.json'): Promise<MoneyWorksConfig> {
-  const fs = await import('fs/promises');
-  const content = await fs.readFile(filePath, 'utf-8');
+export async function loadConfig(
+  filePath = "./mw-config.json",
+): Promise<MoneyWorksConfig> {
+  const fs = await import("node:fs/promises");
+  const content = await fs.readFile(filePath, "utf-8");
   return JSON.parse(content);
 }

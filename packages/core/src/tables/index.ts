@@ -13,6 +13,7 @@ import type { AutoSplit, AutoSplitCamel } from "./auto-split";
 import type { Build, BuildCamel } from "./build";
 import type { Contact, ContactCamel } from "./contacts";
 import type { Department, DepartmentCamel } from "./departments";
+import type { Detail, DetailCamel } from "./detail";
 import type { General, GeneralCamel } from "./general";
 import type { Inventory, InventoryCamel } from "./inventory";
 import type { JobSheetItem, JobSheetItemCamel } from "./job-sheet-items";
@@ -28,7 +29,6 @@ import type { TaxRate, TaxRateCamel } from "./tax-rates";
 import type { Transaction, TransactionCamel } from "./transactions";
 import type { User, UserCamel } from "./user";
 import type { User2, User2Camel } from "./user2";
-import type { Detail, DetailCamel } from "./detail";
 
 /**
  * Implemented table names with TypeScript interfaces
@@ -356,6 +356,7 @@ export type { TaxRate, TaxRateCamel } from "./tax-rates";
 export type { Transaction, TransactionCamel } from "./transactions";
 export type { User, UserCamel } from "./user";
 export type { User2, User2Camel } from "./user2";
+export type { Detail, DetailCamel } from "./detail";
 
 // Re-export enums and helpers
 export { AssetLogAction, isAssetLog, isAssetLogCamel } from "./asset-log";
@@ -378,12 +379,12 @@ export {
 } from "./offledger";
 export { PaymentType, GSTBasis } from "./payments";
 export { UserHelpers } from "./user";
-export { 
-  DetailFlags, 
-  detailFieldMappings, 
-  detailConverters, 
+export {
+  DetailFlags,
+  detailFieldMappings,
+  detailConverters,
   detailHelpers,
   isDetail,
   isDetailCamel,
-  validateDetailFieldLengths
+  validateDetailFieldLengths,
 } from "./detail";

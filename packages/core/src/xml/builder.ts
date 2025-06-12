@@ -1,235 +1,280 @@
 /**
  * XML Builder for MoneyWorks
- * 
+ *
  * Builds MoneyWorks XML import format from TypeScript objects.
  */
 
-import type { TableName, TableMapCamel } from '../tables';
-import { Builder } from 'xml2js';
-import { convertCamelToPascal } from '../converters/field-converter';
-import { validateDetailFieldLengths } from '../tables/detail';
+import { Builder } from "xml2js";
+import { convertCamelToPascal } from "../converters/field-converter";
+import type { Detail, TableMapCamel, TableName } from "../tables";
+import { validateDetailFieldLengths } from "../tables/detail";
 
 export interface XMLBuildOptions {
-  mode?: 'create' | 'update' | 'upsert';
+  mode?: "create" | "update" | "upsert";
   workItOut?: string[];
   calculated?: Record<string, string>;
 }
 
+interface SubfileDetail {
+  $?: { name: string };
+  detail: Record<string, unknown>[];
+}
+
 /**
- * XML Builder for MoneyWorks imports
+ * Build XML import document
  */
-export class XMLBuilder {
-  /**
-   * Build XML import document
-   */
-  static build<T extends TableName>(
-    table: T,
-    records: Partial<TableMapCamel[T]>[],
-    options: XMLBuildOptions = {}
-  ): string {
-    // Convert records to PascalCase
-    const pascalRecords = records.map(record => 
-      convertCamelToPascal(table, record)
-    );
-    
-    // Build XML structure
-    const xmlObj = this.buildXMLStructure(table, pascalRecords, options);
-    
-    // Convert to XML string
-    const builder = new Builder({
-      renderOpts: {
-        pretty: true,
-        indent: '  ',
-        newline: '\n'
-      },
-      xmldec: {
-        version: '1.0',
-        encoding: 'UTF-8'
-      },
-      headless: false
-    });
-    
-    return builder.buildObject(xmlObj);
-  }
-  
-  /**
-   * Build XML structure
-   */
-  private static buildXMLStructure(
-    table: TableName,
-    records: Record<string, unknown>[],
-    options: XMLBuildOptions
-  ): Record<string, unknown> {
-    const tableElement = {
-      $: {
-        name: table.toLowerCase(),
-        ...(options.mode && { mode: options.mode })
-      },
-      [table.toLowerCase()]: records.map(record => 
-        this.processRecord(table, record, options)
-      )
+export function buildXML<T extends TableName>(
+  table: T,
+  records: Partial<TableMapCamel[T]>[],
+  options: XMLBuildOptions = {},
+): string {
+  // Convert records to PascalCase
+  const pascalRecords = records.map((record) =>
+    convertCamelToPascal(table, record),
+  );
+
+  // Build XML structure
+  const xmlObj = buildXMLStructure(table, pascalRecords, options);
+
+  // Convert to XML string
+  const builder = new Builder({
+    renderOpts: {
+      pretty: true,
+      indent: "  ",
+      newline: "\n",
+    },
+    xmldec: {
+      version: "1.0",
+      encoding: "UTF-8",
+    },
+    headless: false,
+  });
+
+  return builder.buildObject(xmlObj);
+}
+
+/**
+ * Build XML structure
+ */
+function buildXMLStructure(
+  table: TableName,
+  records: Record<string, unknown>[],
+  options: XMLBuildOptions,
+): Record<string, unknown> {
+  const tableElement = {
+    $: {
+      name: table.toLowerCase(),
+      ...(options.mode && { mode: options.mode }),
+    },
+    [table.toLowerCase()]: records.map((record) =>
+      processRecord(record, options),
+    ),
+  };
+
+  return {
+    import: {
+      table: tableElement,
+    },
+  };
+}
+
+/**
+ * Process individual record
+ */
+function processRecord(
+  record: Record<string, unknown>,
+  options: XMLBuildOptions,
+): Record<string, unknown> {
+  const processed: Record<string, unknown> = {};
+
+  // Add work-it-out attribute if needed
+  if (options.workItOut?.length) {
+    processed.$ = {
+      "work-it-out": options.workItOut.join(","),
     };
-    
-    return {
-      import: {
-        table: tableElement
-      }
-    };
   }
-  
-  /**
-   * Process individual record
-   */
-  private static processRecord(
-    table: TableName,
-    record: Record<string, unknown>,
-    options: XMLBuildOptions
-  ): Record<string, unknown> {
-    const processed: Record<string, unknown> = {};
-    
-    // Add work-it-out attribute if needed
-    if (options.workItOut?.length) {
-      processed.$ = {
-        'work-it-out': options.workItOut.join(',')
-      };
+
+  // Process each field
+  for (const [field, value] of Object.entries(record)) {
+    if (value === undefined || value === null) {
+      continue;
     }
-    
-    // Process each field
-    for (const [field, value] of Object.entries(record)) {
-      if (value === undefined || value === null) {
-        continue;
-      }
-      
-      // Handle calculated fields
-      if (options.calculated?.[field]) {
-        processed[field] = {
-          $: { calculated: options.calculated[field] }
-        };
-        continue;
-      }
-      
-      // Handle special field types
-      if (field === 'subfile' && Array.isArray(value)) {
-        processed.subfile = this.buildSubfile(value);
-        continue;
-      }
-      
-      // Format value based on type
-      processed[field] = this.formatValue(field, value);
-    }
-    
-    return processed;
-  }
-  
-  /**
-   * Build subfile structure (for transaction details)
-   */
-  private static buildSubfile(details: any[]): any {
-    return {
-      $: { name: 'detail' },
-      detail: details.map(detail => {
-        const pascalDetail = convertCamelToPascal('Detail', detail);
-        const formatted: Record<string, unknown> = {};
-        
-        for (const [field, value] of Object.entries(pascalDetail)) {
-          if (value !== undefined && value !== null) {
-            formatted[field] = this.formatValue(field, value);
-          }
+
+    // Special handling for subfiles
+    if (field === "subfile" && Array.isArray(value)) {
+      processed.subfile = value.map((sub) => {
+        if (sub.name === "detail" && Array.isArray(sub.records)) {
+          return buildSubfile(sub.records);
         }
-        
-        return formatted;
-      })
-    };
+        return sub;
+      });
+      continue;
+    }
+
+    // Format value
+    processed[field] = formatValue(value);
   }
-  
-  /**
-   * Format field value for XML
-   */
-  private static formatValue(field: string, value: unknown): string {
-    // Handle dates
-    if (value instanceof Date) {
-      return this.formatDate(value);
+
+  // Add calculated fields if provided
+  if (options.calculated) {
+    for (const [field, expression] of Object.entries(options.calculated)) {
+      processed[`calculated_${field}`] = expression;
     }
-    
-    // Handle booleans
-    if (typeof value === 'boolean') {
-      return value ? '1' : '0';
-    }
-    
-    // Handle numbers
-    if (typeof value === 'number') {
-      // Check if it's a monetary field
-      if (this.isMonetaryField(field)) {
-        return value.toFixed(2);
+  }
+
+  return processed;
+}
+
+/**
+ * Build subfile structure (for transaction details)
+ */
+function buildSubfile(details: Record<string, unknown>[]): SubfileDetail {
+  return {
+    $: { name: "detail" },
+    detail: details.map((detail) => {
+      const processed: Record<string, unknown> = {};
+      for (const [field, value] of Object.entries(detail)) {
+        if (value !== undefined && value !== null) {
+          processed[field] = formatValue(value);
+        }
       }
-      return value.toString();
-    }
-    
-    // Handle strings
-    return String(value);
-  }
-  
-  /**
-   * Format date to YYYYMMDD
-   */
-  private static formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    
+      return processed;
+    }),
+  };
+}
+
+/**
+ * Format value for XML
+ */
+function formatValue(value: unknown): string | number {
+  if (value instanceof Date) {
+    // Format as YYYYMMDD
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, "0");
+    const day = String(value.getDate()).padStart(2, "0");
     return `${year}${month}${day}`;
   }
-  
-  /**
-   * Check if field is monetary
-   */
-  private static isMonetaryField(field: string): boolean {
-    const monetaryFields = [
-      'gross', 'net', 'tax', 'amount', 'debit', 'credit',
-      'balance', 'price', 'cost', 'total', 'subtotal',
-      'discount', 'freight', 'ourAmount', 'theirAmount'
-    ];
-    
-    return monetaryFields.some(f => 
-      field.toLowerCase().includes(f.toLowerCase())
-    );
+
+  if (typeof value === "boolean") {
+    return value ? 1 : 0;
   }
-  
-  /**
-   * Build transaction with details
-   */
-  static buildTransactionWithDetails(
-    transaction: Partial<TableMapCamel['Transaction']>,
-    details: Partial<TableMapCamel['Detail']>[],
-    options: XMLBuildOptions = {}
-  ): string {
-    // Add details as subfile
-    const transWithDetails = {
-      ...transaction,
-      subfile: details
-    };
-    
-    return this.build('Transaction', [transWithDetails], options);
+
+  if (typeof value === "string") {
+    // Escape XML special characters
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
   }
-  
-  /**
-   * Validate before building
-   */
-  static validate<T extends TableName>(
-    table: T,
-    record: Partial<TableMapCamel[T]>
-  ): string[] {
-    const errors: string[] = [];
-    
-    // Table-specific validation
-    if (table === 'Detail') {
-      const pascalRecord = convertCamelToPascal(table, record);
-      const detailErrors = validateDetailFieldLengths(pascalRecord as any);
-      errors.push(...detailErrors);
-    }
-    
-    // Add more table-specific validations as needed
-    
-    return errors;
-  }
+
+  return value as string | number;
 }
+
+/**
+ * Build transaction with details
+ */
+export function buildTransactionWithDetails(
+  transaction: Partial<TableMapCamel["Transaction"]>,
+  details: Partial<TableMapCamel["Detail"]>[],
+  options: XMLBuildOptions = {},
+): string {
+  // Convert to PascalCase
+  const pascalTrans = convertCamelToPascal("Transaction", transaction);
+  const pascalDetails = details.map((d) => convertCamelToPascal("Detail", d));
+
+  // Add details as subfile
+  const transWithDetails = {
+    ...pascalTrans,
+    subfile: [
+      {
+        name: "detail",
+        records: pascalDetails,
+      },
+    ],
+  };
+
+  return buildXML(
+    "Transaction",
+    [transWithDetails as Partial<TableMapCamel["Transaction"]>],
+    options,
+  );
+}
+
+/**
+ * Build batch import for multiple tables
+ */
+export function buildBatchImport(
+  imports: Array<{
+    table: TableName;
+    records: Partial<TableMapCamel[TableName]>[];
+    options?: XMLBuildOptions;
+  }>,
+): string {
+  const tables = imports.map(({ table, records, options = {} }) => {
+    const pascalRecords = records.map((record) =>
+      convertCamelToPascal(table, record),
+    );
+
+    return {
+      $: {
+        name: table.toLowerCase(),
+        ...(options.mode && { mode: options.mode }),
+      },
+      [table.toLowerCase()]: pascalRecords.map((record) =>
+        processRecord(record, options),
+      ),
+    };
+  });
+
+  const builder = new Builder({
+    renderOpts: {
+      pretty: true,
+      indent: "  ",
+      newline: "\n",
+    },
+    xmldec: {
+      version: "1.0",
+      encoding: "UTF-8",
+    },
+    headless: false,
+  });
+
+  return builder.buildObject({
+    import: {
+      table: tables,
+    },
+  });
+}
+
+/**
+ * Validate record before building XML
+ */
+export function validateRecord<T extends TableName>(
+  table: T,
+  record: Partial<TableMapCamel[T]>,
+): string[] {
+  const errors: string[] = [];
+
+  // Table-specific validation
+  if (table === "Detail") {
+    const pascalRecord = convertCamelToPascal(table, record);
+    const detailErrors = validateDetailFieldLengths(
+      pascalRecord as unknown as Detail,
+    );
+    errors.push(...detailErrors);
+  }
+
+  // Add more table-specific validations as needed
+
+  return errors;
+}
+
+// Export legacy-style object for backward compatibility
+export const XMLBuilder = {
+  build: buildXML,
+  buildTransactionWithDetails,
+  buildBatchImport,
+  validateRecord,
+};

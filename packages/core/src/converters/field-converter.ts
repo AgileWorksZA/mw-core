@@ -1,67 +1,59 @@
 /**
- * Enhanced Field Converter
- * 
- * Converts between camelCase and PascalCase for all MoneyWorks tables.
+ * Field Converter
+ *
+ * Converts field names between camelCase (TypeScript) and PascalCase (MoneyWorks).
+ * Also handles lowercase field names from MoneyWorks XML/TSV exports.
  */
 
-import type { TableName, TableMap, TableMapCamel } from '../tables';
-import { detailFieldMappings } from '../tables/detail';
-import { toCamelCase, fromCamelCase } from './key-converter';
-
-// Import all table converters
-import { nameConverters } from '../tables/names';
-import { accountConverters } from '../tables/accounts';
-import { transactionConverters } from '../tables/transactions';
-import { productConverters } from '../tables/products';
-import { departmentConverters } from '../tables/departments';
-import { jobConverters } from '../tables/jobs';
-import { taxRateConverters } from '../tables/tax-rates';
-import { assetConverters } from '../tables/assets';
-import { contactConverters } from '../tables/contacts';
-import { assetCategoriesConverters } from '../tables/asset-categories';
-import { assetLogConverters } from '../tables/asset-log';
-import { autoSplitConverters } from '../tables/auto-split';
-import { buildConverters } from '../tables/build';
-import { generalConverters } from '../tables/general';
-import { inventoryConverters } from '../tables/inventory';
-import { jobSheetItemConverters } from '../tables/job-sheet-items';
-import { loginConverters } from '../tables/login';
-import { memoConverters } from '../tables/memo';
-import { offLedgerConverters } from '../tables/offledger';
-import { paymentsConverters } from '../tables/payments';
-import { reconciliationConverters } from '../tables/reconciliation';
-import { userConverters } from '../tables/user';
-import { user2Converters } from '../tables/user2';
-import { detailConverters } from '../tables/detail';
+import type {
+  Account,
+  AccountCamel,
+  Product,
+  ProductCamel,
+  TableMap,
+  TableMapCamel,
+  TableName,
+  Transaction,
+  TransactionCamel,
+} from "../tables";
+import type { Name, NameCamel } from "../tables";
+import type { DetailCamel, Detail as DetailPascal } from "../tables/detail";
+import { fromCamelCase, toCamelCase } from "./key-converter";
 
 /**
- * Map of table converters
+ * Field mappings for Detail table
+ * Maps camelCase to PascalCase field names
  */
-const tableConverters: Record<TableName, any> = {
-  Name: nameConverters,
-  Account: accountConverters,
-  Transaction: transactionConverters,
-  Product: productConverters,
-  Department: departmentConverters,
-  Job: jobConverters,
-  TaxRate: taxRateConverters,
-  Asset: assetConverters,
-  Contact: contactConverters,
-  AssetCategories: assetCategoriesConverters,
-  AssetLog: assetLogConverters,
-  AutoSplit: autoSplitConverters,
-  Build: buildConverters,
-  General: generalConverters,
-  Inventory: inventoryConverters,
-  JobSheetItem: jobSheetItemConverters,
-  Login: loginConverters,
-  Memo: memoConverters,
-  OffLedger: offLedgerConverters,
-  Payments: paymentsConverters,
-  Reconciliation: reconciliationConverters,
-  User: userConverters,
-  User2: user2Converters,
-  Detail: detailConverters
+const detailFieldMappings: Record<keyof DetailCamel, keyof DetailPascal> = {
+  // Core fields
+  sequenceNumber: "SequenceNumber",
+  lastModifiedTime: "LastModifiedTime",
+  parentSeq: "Detail.ParentSeq",
+  account: "Detail.Account",
+  debit: "Detail.Debit",
+  credit: "Detail.Credit",
+  description: "Detail.Description",
+  taxCode: "Detail.TaxCode",
+  gross: "Detail.Gross",
+  net: "Detail.Net",
+  tax: "Detail.Tax",
+
+  // Additional fields
+  department: "Detail.Department",
+  job: "Detail.Job",
+  stockCode: "Detail.StockCode",
+  stockQty: "Detail.StockQty",
+  unitPrice: "Detail.UnitPrice",
+  costPrice: "Detail.CostPrice",
+  saleUnit: "Detail.SaleUnit",
+  lineNumber: "Detail.LineNumber",
+  flags: "Detail.Flags",
+  moreFlags: "Detail.MoreFlags",
+  custom1: "Detail.Custom1",
+  custom2: "Detail.Custom2",
+  serialNumber: "Detail.SerialNumber",
+  batchNumber: "Detail.BatchNumber",
+  discount: "Detail.Discount",
 };
 
 /**
@@ -69,16 +61,34 @@ const tableConverters: Record<TableName, any> = {
  */
 export function convertPascalToCamel<T extends TableName>(
   table: T,
-  record: Partial<TableMap[T]>
+  record: Partial<TableMap[T]>,
 ): Partial<TableMapCamel[T]> {
-  const converter = tableConverters[table];
-  
-  if (converter?.toCamelCase) {
-    return converter.toCamelCase(record);
+  // Use table-specific converters when available
+  switch (table) {
+    case "Detail":
+      return convertDetailPascalToCamel(
+        record as Partial<DetailPascal>,
+      ) as Partial<TableMapCamel[T]>;
+    case "Account":
+      return convertAccountToCamel(record as Partial<Account>) as Partial<
+        TableMapCamel[T]
+      >;
+    case "Transaction":
+      return convertTransactionToCamel(
+        record as Partial<Transaction>,
+      ) as Partial<TableMapCamel[T]>;
+    case "Name":
+      return convertNameToCamel(record as Partial<Name>) as Partial<
+        TableMapCamel[T]
+      >;
+    case "Product":
+      return convertProductToCamel(record as Partial<Product>) as Partial<
+        TableMapCamel[T]
+      >;
+    default:
+      // Fallback to generic conversion
+      return genericToCamelCase(record);
   }
-  
-  // Fallback to generic conversion
-  return genericToCamelCase(record);
 }
 
 /**
@@ -86,106 +96,372 @@ export function convertPascalToCamel<T extends TableName>(
  */
 export function convertCamelToPascal<T extends TableName>(
   table: T,
-  record: Partial<TableMapCamel[T]>
+  record: Partial<TableMapCamel[T]>,
 ): Partial<TableMap[T]> {
-  const converter = tableConverters[table];
-  
-  if (converter?.fromCamelCase) {
-    return converter.fromCamelCase(record);
+  // For Detail table, use special mapping
+  if (table === "Detail") {
+    return convertDetailCamelToPascal(
+      record as Partial<DetailCamel>,
+    ) as Partial<TableMap[T]>;
   }
-  
+
   // Fallback to generic conversion
   return genericFromCamelCase(record);
 }
 
 /**
- * Generic camelCase conversion
+ * Convert Detail from PascalCase to camelCase
  */
-function genericToCamelCase<T extends object>(obj: T): any {
-  const result: any = {};
-  
-  for (const [key, value] of Object.entries(obj)) {
-    const camelKey = toCamelCase(key);
-    
-    if (value !== undefined && value !== null) {
-      if (Array.isArray(value)) {
-        result[camelKey] = value.map(item => 
-          typeof item === 'object' ? genericToCamelCase(item) : item
-        );
-      } else if (typeof value === 'object' && !(value instanceof Date)) {
-        result[camelKey] = genericToCamelCase(value);
-      } else {
-        result[camelKey] = value;
+function convertDetailPascalToCamel(
+  record: Partial<DetailPascal>,
+): Partial<DetailCamel> {
+  const result: Partial<DetailCamel> = {};
+
+  for (const [key, value] of Object.entries(record)) {
+    // Find the camelCase field name
+    let camelKey = key as keyof DetailCamel;
+    for (const [camel, pascal] of Object.entries(detailFieldMappings)) {
+      if (pascal === key) {
+        camelKey = camel as keyof DetailCamel;
+        break;
       }
     }
+
+    if (camelKey in result || camelKey) {
+      (result as Record<string, unknown>)[camelKey] = value;
+    }
   }
-  
+
   return result;
 }
 
 /**
- * Generic PascalCase conversion
+ * Convert Detail from camelCase to PascalCase
  */
-function genericFromCamelCase<T extends object>(obj: T): any {
-  const result: any = {};
-  
-  for (const [key, value] of Object.entries(obj)) {
-    const pascalKey = fromCamelCase(key);
-    
-    if (value !== undefined && value !== null) {
-      if (Array.isArray(value)) {
-        result[pascalKey] = value.map(item => 
-          typeof item === 'object' ? genericFromCamelCase(item) : item
-        );
-      } else if (typeof value === 'object' && !(value instanceof Date)) {
-        result[pascalKey] = genericFromCamelCase(value);
-      } else {
-        result[pascalKey] = value;
-      }
+function convertDetailCamelToPascal(
+  record: Partial<DetailCamel>,
+): Partial<DetailPascal> {
+  const result: Partial<DetailPascal> = {};
+
+  for (const [key, value] of Object.entries(record)) {
+    // Use direct mapping or fallback to PascalCase conversion
+    const pascalKey =
+      detailFieldMappings[key as keyof DetailCamel] || fromCamelCase(key);
+    (result as Record<string, unknown>)[pascalKey] = value;
+  }
+
+  return result;
+}
+
+/**
+ * Convert Account fields from lowercase to camelCase
+ */
+function convertAccountToCamel(
+  record: Partial<Account>,
+): Partial<AccountCamel> {
+  const result: Partial<AccountCamel> = {};
+
+  // Map of lowercase field names to camelCase
+  const fieldMap: Record<string, keyof AccountCamel> = {
+    // Core fields
+    code: "code",
+    type: "type",
+    description: "description",
+
+    // Additional fields
+    accountantscode: "accountantsCode",
+    taxcode: "taxCode",
+    bankaccountnumber: "bankAccountNumber",
+    currency: "currency",
+    colour: "colour",
+    hidden: "hidden",
+    securitylevel: "securityLevel",
+    system: "system",
+    // Group and category fields
+    category: "category",
+    category2: "category2",
+    category3: "category3",
+    category4: "category4",
+    group: "group",
+    usernum: "userNum",
+    usertext: "userText",
+    manualchequenumber: "manualChequeNumber",
+    printedchequenumber: "printedChequeNumber",
+    laststatementimport: "lastStatementImport",
+    // P&L and other fields
+    pandl: "pandL",
+    ebitda: "ebitda",
+    comments: "comments",
+    created: "created",
+    taggedtext: "taggedText",
+    lastmodifiedtime: "lastModifiedTime",
+    // Balance fields
+    balance: "balance",
+    balancef: "balanceF",
+    localbalance: "localBalance",
+    // Flags and modUser
+    flags: "flags",
+    moduser: "modUser",
+  };
+
+  for (const [key, value] of Object.entries(record)) {
+    const lowerKey = key.toLowerCase();
+    const camelKey =
+      fieldMap[lowerKey] || (toCamelCase(key) as keyof AccountCamel);
+    if (camelKey) {
+      (result as Record<string, unknown>)[camelKey] = value;
     }
   }
-  
+
   return result;
+}
+
+/**
+ * Convert Transaction fields from lowercase to camelCase
+ */
+function convertTransactionToCamel(
+  record: Partial<Transaction>,
+): Partial<TransactionCamel> {
+  const result: Partial<TransactionCamel> = {};
+
+  // Map of lowercase field names to camelCase
+  const fieldMap: Record<string, keyof TransactionCamel> = {
+    // Core fields
+    sequencenumber: "sequenceNumber",
+    namecode: "nameCode",
+    transdate: "transDate",
+    enterdate: "enterDate",
+    description: "description",
+    gross: "gross",
+    taxamount: "taxAmount",
+    net: "net",
+    ourref: "ourRef",
+    theirref: "theirRef",
+    type: "type",
+
+    // Additional fields
+    duedate: "dueDate",
+    amtpaid: "amtPaid",
+    amtwrittenoff: "amtWrittenOff",
+    balance: "balance",
+    status: "status",
+    period: "period",
+    tofrom: "toFrom",
+    department: "department",
+    bankaccount: "bankAccount",
+    currency: "currency",
+    exchangerate: "exchangeRate",
+    recurring: "recurring",
+    printed: "printed",
+    transferred: "transferred",
+    securitylevel: "securityLevel",
+    enteredby: "enteredBy",
+    postedby: "postedBy",
+    timeposted: "timePosted",
+    created: "created",
+    lastmodifiedtime: "lastModifiedTime",
+    hold: "hold",
+    usernum: "userNum",
+    usertext: "userText",
+    flags: "flags",
+    moduser: "modUser",
+  };
+
+  for (const [key, value] of Object.entries(record)) {
+    const lowerKey = key.toLowerCase();
+    const camelKey =
+      fieldMap[lowerKey] || (toCamelCase(key) as keyof TransactionCamel);
+    if (camelKey) {
+      (result as Record<string, unknown>)[camelKey] = value;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Convert Name fields from lowercase to camelCase
+ */
+function convertNameToCamel(record: Partial<Name>): Partial<NameCamel> {
+  const result: Partial<NameCamel> = {};
+
+  // Map of lowercase field names to camelCase
+  const fieldMap: Record<string, keyof NameCamel> = {
+    // Core fields
+    code: "code",
+    name: "name",
+
+    // Contact fields
+    contact: "contact",
+    phone: "phone",
+    fax: "fax",
+    mobile: "mobile",
+    email: "email",
+    weburl: "webURL",
+
+    // Address fields
+    address1: "address1",
+    address2: "address2",
+    address3: "address3",
+    address4: "address4",
+    delivery1: "delivery1",
+    delivery2: "delivery2",
+    delivery3: "delivery3",
+    delivery4: "delivery4",
+    deliverypostcode: "deliveryPostcode",
+
+    // Financial fields
+    customertype: "customerType",
+    creditlimit: "creditLimit",
+    creditorterms: "creditorTerms",
+    debtorterms: "debtorTerms",
+    taxnumber: "taxNumber",
+
+    // Bank fields
+    bank: "bank",
+    bankbranch: "bankBranch",
+    bankaccountnumber: "bankAccountNumber",
+
+    // Other fields
+    colour: "colour",
+    cbalance: "cBalance",
+    lastmodifiedtime: "lastModifiedTime",
+  };
+
+  for (const [key, value] of Object.entries(record)) {
+    const lowerKey = key.toLowerCase();
+    const camelKey =
+      fieldMap[lowerKey] || (toCamelCase(key) as keyof NameCamel);
+    if (camelKey) {
+      (result as Record<string, unknown>)[camelKey] = value;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Convert Product fields from lowercase to camelCase
+ */
+function convertProductToCamel(
+  record: Partial<Product>,
+): Partial<ProductCamel> {
+  const result: Partial<ProductCamel> = {};
+
+  // Map of lowercase field names to camelCase
+  const fieldMap: Record<string, keyof ProductCamel> = {
+    // Core fields
+    code: "code",
+    description: "description",
+
+    // Pricing fields
+    sellunit: "sellUnit",
+    sellprice: "sellPrice",
+    buyunit: "buyUnit",
+    buyprice: "buyPrice",
+
+    // Stock fields
+    stockonhand: "stockOnHand",
+    reorderlevel: "reorderLevel",
+
+    // Accounting fields
+    salesacct: "salesAcct",
+    cogacct: "cogAcct",
+
+    // Other fields
+    supplier: "supplier",
+    supplierscode: "suppliersCode",
+    barcode: "barCode",
+
+    // Metadata
+    lastmodifiedtime: "lastModifiedTime",
+  };
+
+  for (const [key, value] of Object.entries(record)) {
+    const lowerKey = key.toLowerCase();
+    const camelKey =
+      fieldMap[lowerKey] || (toCamelCase(key) as keyof ProductCamel);
+    if (camelKey) {
+      (result as Record<string, unknown>)[camelKey] = value;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Generic conversion from PascalCase/lowercase to camelCase
+ */
+function genericToCamelCase<T extends TableName>(
+  record: Partial<TableMap[T]>,
+): Partial<TableMapCamel[T]> {
+  const result: Record<string, unknown> = {};
+
+  // Common field mappings across all tables
+  const commonFieldMap: Record<string, string> = {
+    sequencenumber: "sequenceNumber",
+    lastmodifiedtime: "lastModifiedTime",
+    usernum: "userNum",
+    usertext: "userText",
+    colour: "colour",
+    namecode: "nameCode",
+    transdate: "transDate",
+    accountcode: "accountCode",
+    taxcode: "taxCode",
+  };
+
+  for (const [key, value] of Object.entries(record)) {
+    // Try lowercase mapping first
+    const lowerKey = key.toLowerCase();
+    const mappedKey = commonFieldMap[lowerKey];
+
+    if (mappedKey) {
+      result[mappedKey] = value;
+    } else {
+      // Use standard camelCase conversion
+      result[toCamelCase(key)] = value;
+    }
+  }
+
+  return result as Partial<TableMapCamel[T]>;
+}
+
+/**
+ * Generic conversion from camelCase to PascalCase
+ */
+function genericFromCamelCase<T extends TableName>(
+  record: Partial<TableMapCamel[T]>,
+): Partial<TableMap[T]> {
+  const result: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(record)) {
+    result[fromCamelCase(key)] = value;
+  }
+
+  return result as Partial<TableMap[T]>;
 }
 
 /**
  * Get field mappings for a table
  */
 export function getFieldMappings(table: TableName): Record<string, string> {
-  switch (table) {
-    case 'Detail':
-      return detailFieldMappings;
-    // Add other table mappings as they have custom field names
-    default:
-      return {};
+  if (table === "Detail") {
+    return detailFieldMappings as Record<string, string>;
   }
+
+  // Return empty object for tables without special mappings
+  return {};
 }
 
 /**
- * Convert field name based on table mappings
+ * Convert field name between formats
  */
 export function convertFieldName(
-  table: TableName,
   field: string,
-  toCamel: boolean
+  direction: "toCamel" | "fromCamel",
 ): string {
-  const mappings = getFieldMappings(table);
-  
-  if (toCamel) {
-    // Find camelCase mapping
-    for (const [camel, pascal] of Object.entries(mappings)) {
-      if (pascal === field) {
-        return camel;
-      }
-    }
-  } else {
-    // Use direct mapping
-    const pascal = mappings[field];
-    if (pascal) {
-      return pascal;
-    }
+  if (direction === "toCamel") {
+    return toCamelCase(field);
   }
-  
-  // Fallback to generic conversion
-  return toCamel ? toCamelCase(field) : fromCamelCase(field);
+  return fromCamelCase(field);
 }

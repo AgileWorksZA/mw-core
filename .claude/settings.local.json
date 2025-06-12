@@ -94,7 +94,19 @@
       "WebFetch(domain:secure.cognito.co.nz)",
       "mcp__sequential-thinking__sequentialthinking",
       "Bash(node:*)",
-      "Bash(moneyworks:*)"
+      "Bash(moneyworks:*)",
+      "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/node_modules/.bin/bun test)",
+      "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/node_modules/.bin/bun test-basic.ts)",
+      "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/node_modules/.bin/bun test-imports.ts)",
+      "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/node_modules/.bin/bun test-transactions.ts)",
+      "Bash(npx tsx:*)",
+      "Bash(./test-curl.sh)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run:*)",
+      "Bash(npx @biomejs/biome check:*)",
+      "Bash(../../node_modules/.bin/biome lint:*)",
+      "Bash(npx tsc:*)",
+      "Bash(awk:*)"
     ],
     "deny": []
   }

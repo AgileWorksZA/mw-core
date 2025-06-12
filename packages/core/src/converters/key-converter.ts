@@ -22,6 +22,10 @@ export function camelToPascalCase(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+// Aliases for compatibility
+export const toCamelCase = pascalToCamelCase;
+export const fromCamelCase = camelToPascalCase;
+
 /**
  * Converts object keys from PascalCase to camelCase
  * @param obj Object with PascalCase keys

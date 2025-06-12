@@ -1,11 +1,11 @@
 /**
  * MoneyWorks REST API Errors
- * 
+ *
  * Custom error classes for MoneyWorks REST operations.
  */
 
-import type { MoneyWorksErrorCode } from './types';
-import type { TableName } from '../tables';
+import type { TableName } from "../tables";
+import { MoneyWorksErrorCode } from "./types";
 
 /**
  * Base MoneyWorks error
@@ -14,12 +14,12 @@ export class MoneyWorksError extends Error {
   constructor(
     public code: MoneyWorksErrorCode,
     message: string,
-    public details?: unknown
+    public details?: unknown,
   ) {
     super(message);
-    this.name = 'MoneyWorksError';
+    this.name = "MoneyWorksError";
   }
-  
+
   /**
    * Check if error is of specific type
    */
@@ -36,10 +36,10 @@ export class ExportError extends MoneyWorksError {
     public table: TableName,
     message: string,
     public filter?: string,
-    details?: unknown
+    details?: unknown,
   ) {
     super(MoneyWorksErrorCode.INVALID_REQUEST, message, details);
-    this.name = 'ExportError';
+    this.name = "ExportError";
   }
 }
 
@@ -56,10 +56,10 @@ export class ImportError extends MoneyWorksError {
       field?: string;
       message: string;
     }>,
-    details?: unknown
+    details?: unknown,
   ) {
     super(MoneyWorksErrorCode.VALIDATION_ERROR, message, details);
-    this.name = 'ImportError';
+    this.name = "ImportError";
   }
 }
 
@@ -69,11 +69,11 @@ export class ImportError extends MoneyWorksError {
 export class AuthenticationError extends MoneyWorksError {
   constructor(
     message: string,
-    public realm?: 'document' | 'folder',
-    details?: unknown
+    public realm?: "document" | "folder",
+    details?: unknown,
   ) {
     super(MoneyWorksErrorCode.AUTH_FAILED, message, details);
-    this.name = 'AuthenticationError';
+    this.name = "AuthenticationError";
   }
 }
 
@@ -85,10 +85,10 @@ export class ConnectionError extends MoneyWorksError {
     message: string,
     public host: string,
     public port: number,
-    details?: unknown
+    details?: unknown,
   ) {
     super(MoneyWorksErrorCode.SERVER_ERROR, message, details);
-    this.name = 'ConnectionError';
+    this.name = "ConnectionError";
   }
 }
 
@@ -101,10 +101,10 @@ export class ValidationError extends MoneyWorksError {
     public field: string,
     message: string,
     public value?: unknown,
-    details?: unknown
+    details?: unknown,
   ) {
     super(MoneyWorksErrorCode.VALIDATION_ERROR, message, details);
-    this.name = 'ValidationError';
+    this.name = "ValidationError";
   }
 }
 
@@ -116,10 +116,10 @@ export class TimeoutError extends MoneyWorksError {
     message: string,
     public operation: string,
     public timeout: number,
-    details?: unknown
+    details?: unknown,
   ) {
     super(MoneyWorksErrorCode.TIMEOUT, message, details);
-    this.name = 'TimeoutError';
+    this.name = "TimeoutError";
   }
 }
 
@@ -131,10 +131,10 @@ export class ParseError extends MoneyWorksError {
     message: string,
     public format: string,
     public content?: string,
-    details?: unknown
+    details?: unknown,
   ) {
     super(MoneyWorksErrorCode.INVALID_REQUEST, message, details);
-    this.name = 'ParseError';
+    this.name = "ParseError";
   }
 }
 
@@ -144,54 +144,54 @@ export class ParseError extends MoneyWorksError {
 export function createErrorFromResponse(
   response: Response,
   operation: string,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
 ): MoneyWorksError {
   const status = response.status;
   const statusText = response.statusText;
-  
+
   switch (status) {
     case 401:
       return new AuthenticationError(
         `Authentication failed for ${operation}`,
-        context?.realm as 'document' | 'folder',
-        { status, statusText }
+        context?.realm as "document" | "folder",
+        { status, statusText },
       );
-      
+
     case 403:
       return new MoneyWorksError(
         MoneyWorksErrorCode.PERMISSION_DENIED,
         `Permission denied for ${operation}`,
-        { status, statusText, ...context }
+        { status, statusText, ...context },
       );
-      
+
     case 404:
       return new MoneyWorksError(
         MoneyWorksErrorCode.DOCUMENT_NOT_FOUND,
         `Document not found during ${operation}`,
-        { status, statusText, ...context }
+        { status, statusText, ...context },
       );
-      
+
     case 400:
       return new MoneyWorksError(
         MoneyWorksErrorCode.INVALID_REQUEST,
         `Invalid request for ${operation}`,
-        { status, statusText, ...context }
+        { status, statusText, ...context },
       );
-      
+
     case 500:
     case 502:
     case 503:
       return new MoneyWorksError(
         MoneyWorksErrorCode.SERVER_ERROR,
         `Server error during ${operation}`,
-        { status, statusText, ...context }
+        { status, statusText, ...context },
       );
-      
+
     default:
       return new MoneyWorksError(
         MoneyWorksErrorCode.UNKNOWN,
         `Unexpected error during ${operation}: ${status} ${statusText}`,
-        { status, statusText, ...context }
+        { status, statusText, ...context },
       );
   }
 }
@@ -201,7 +201,7 @@ export function createErrorFromResponse(
  */
 export function formatErrorMessage(error: MoneyWorksError): string {
   let message = `${error.name}: ${error.message}`;
-  
+
   if (error instanceof ExportError) {
     message += `\n  Table: ${error.table}`;
     if (error.filter) {
@@ -220,6 +220,6 @@ export function formatErrorMessage(error: MoneyWorksError): string {
       message += `\n  Value: ${JSON.stringify(error.value)}`;
     }
   }
-  
+
   return message;
 }
