@@ -125,14 +125,10 @@ export function validateConfig(config: MoneyWorksConfig): void {
   }
 
   // Validate folder auth completeness
-  if (
-    (config.folderName && !config.folderPassword) ||
-    (!config.folderName && config.folderPassword)
-  ) {
+  if (config.folderPassword && !config.folderName)
     throw new Error(
       "Both folderName and folderPassword must be provided for folder authentication",
     );
-  }
 }
 
 /**

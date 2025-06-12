@@ -308,7 +308,14 @@ function convertNameToCamel(record: Partial<Name>): Partial<NameCamel> {
     delivery2: "delivery2",
     delivery3: "delivery3",
     delivery4: "delivery4",
+    postcode: "postcode",
+    state: "state",
+    addresscountry: "addressCountry",
+    
+    // Delivery address fields (consistent naming)
     deliverypostcode: "deliveryPostcode",
+    deliverystate: "deliveryState",
+    deliverycountry: "deliveryCountry",
 
     // Financial fields
     customertype: "customerType",
@@ -316,16 +323,110 @@ function convertNameToCamel(record: Partial<Name>): Partial<NameCamel> {
     creditorterms: "creditorTerms",
     debtorterms: "debtorTerms",
     taxnumber: "taxNumber",
+    
+    // Category fields
+    category1: "category1",
+    category2: "category2",
+    category3: "category3",
+    category4: "category4",
+    
+    // Custom fields
+    custom1: "custom1",
+    custom2: "custom2",
+    custom3: "custom3",
+    custom4: "custom4",
+    custom5: "custom5",
+    custom6: "custom6",
+    custom7: "custom7",
+    custom8: "custom8",
 
     // Bank fields
     bank: "bank",
     bankbranch: "bankBranch",
     bankaccountnumber: "bankAccountNumber",
 
+    // Date fields
+    dateoflastsale: "dateOfLastSale",
+    
+    // Payment terms
+    custpromptpaymentterms: "custPromptPaymentTerms",
+    custpromptpaymentdiscount: "custPromptPaymentDiscount", 
+    supppromptpaymentterms: "suppPromptPaymentTerms",
+    supppromptpaymentdiscount: "suppPromptPaymentDiscount",
+    
+    // Credit card fields
+    creditcardnum: "creditCardNum",
+    creditcardexpiry: "creditCardExpiry",
+    creditcardname: "creditCardName",
+    
+    // Other IDs
+    abuid: "abuId",
+    einvoicingid: "einvoicingId",
+    
+    // Sales fields
+    salesperson: "salesPerson",
+    productpricing: "productPricing",
+    
+    // User fields
+    usernum: "userNum",
+    usertext: "userText",
+    
+    // Contact fields 2
+    contact2: "contact2",
+    position2: "position2",
+    email2: "email2",
+    mobile2: "mobile2",
+    afterhours: "afterHours",
+    afterhours2: "afterHours2",
+    ddi: "ddi",
+    ddi2: "ddi2",
+    
+    // Aging fields
+    d90plus: "d90Plus",
+    d60plus: "d60Plus", 
+    d30plus: "d30Plus",
+    dcurrent: "dCurrent",
+    ccurrent: "cCurrent",
+    
+    // Account fields
+    recaccount: "recAccount",
+    payaccount: "payAccount",
+    accountname: "accountName",
+    
+    // Split fields
+    splitacct1: "splitAcct1",
+    splitacct2: "splitAcct2",
+    splitpercent: "splitPercent",
+    
+    // Payment fields
+    paymentmethod: "paymentMethod",
+    lastpaymentmethod: "lastPaymentMethod",
+    receiptmethod: "receiptMethod",
+    
+    // Supplier fields
+    suppliertype: "supplierType",
+    theirref: "theirRef",
+    
     // Other fields
     colour: "colour",
     cbalance: "cBalance",
+    dbalance: "dBalance",
     lastmodifiedtime: "lastModifiedTime",
+    hold: "hold",
+    kind: "kind",
+    discount: "discount",
+    comment: "comment",
+    position: "position",
+    weburl: "webURL",
+    flags: "flags",
+    salutation: "salutation",
+    salutation2: "salutation2",
+    memo: "memo",
+    memo2: "memo2",
+    role: "role",
+    role2: "role2",
+    taggedtext: "taggedText",
+    moduser: "modUser",
   };
 
   for (const [key, value] of Object.entries(record)) {

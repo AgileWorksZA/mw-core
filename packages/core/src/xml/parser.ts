@@ -7,6 +7,7 @@
 import { parseStringPromise } from "xml2js";
 import { convertPascalToCamel } from "../converters/field-converter";
 import { ParseError } from "../rest/errors";
+import { shouldKeepAsString } from "../schemas/field-types";
 import type {
   TableMap,
   TableMapCamel,
@@ -46,21 +47,45 @@ export async function parseXML<T extends TableName>(
   format: "xml-terse" | "xml-verbose",
 ): Promise<TableMapCamel[T][]> {
   try {
+    // We need to track current field name for context
+    let currentFieldPath: string[] = [];
+    
     // Parse XML to JavaScript object
     const parsed = await parseStringPromise(xml, {
       explicitArray: false,
       ignoreAttrs: false,
-      mergeAttrs: true,
+      mergeAttrs: false, // Don't merge attributes - we need to handle them specially
       tagNameProcessors: [
-        (name) => name, // Keep original case for now
+        (name) => {
+          // Track field path
+          currentFieldPath.push(name);
+          return name; // Keep original case for now
+        },
       ],
       attrNameProcessors: [(name) => name],
+      attrValueProcessors: [
+        (value, name) => {
+          // Skip system attributes
+          if (name === "system") return undefined;
+          return value;
+        },
+      ],
       valueProcessors: [
-        (value) => {
+        (value, name) => {
           // Handle MoneyWorks special values
           if (value === "") return undefined;
           if (value === "true") return true;
           if (value === "false") return false;
+
+          // For strings, check if we should keep as string based on schema
+          if (typeof value === "string" && /^\d+$/.test(value)) {
+            // Get the current field name (last in path that's not a container)
+            const fieldName = currentFieldPath[currentFieldPath.length - 1] || "";
+            
+            if (shouldKeepAsString(table, fieldName, value)) {
+              return value;
+            }
+          }
 
           // Try to parse numbers
           const num = Number(value);
@@ -76,8 +101,11 @@ export async function parseXML<T extends TableName>(
     // Extract records based on structure
     const records = extractRecords(parsed as ParsedXML, table);
 
+    // Clean up records - handle MoneyWorks attribute structure
+    const cleanedRecords = records.map(cleanMoneyWorksRecord);
+
     // Convert to camelCase
-    return records.map(
+    return cleanedRecords.map(
       (record) =>
         convertPascalToCamel(
           table,
@@ -85,13 +113,58 @@ export async function parseXML<T extends TableName>(
         ) as TableMapCamel[T],
     );
   } catch (error) {
+    // Add more context for debugging
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const xmlPreview = xml.substring(0, 500);
+    
+    // Check for specific issues
+    if (xmlPreview.includes(`<${table.toLowerCase()}>${table}</${table.toLowerCase()}>`)) {
+      throw new ParseError(
+        `Malformed XML: Table '${table}' contains string value instead of records`,
+        format,
+        xmlPreview,
+        error,
+      );
+    }
+    
     throw new ParseError(
-      `Failed to parse ${format} XML for ${table}`,
+      `Failed to parse ${format} XML for ${table}: ${errorMessage}`,
       format,
-      xml.substring(0, 500),
+      xmlPreview,
       error,
     );
   }
+}
+
+/**
+ * Clean MoneyWorks record - extract values from attribute structure
+ */
+function cleanMoneyWorksRecord(record: Record<string, unknown>): Record<string, unknown> {
+  const cleaned: Record<string, unknown> = {};
+  
+  for (const [key, value] of Object.entries(record)) {
+    // Handle MoneyWorks attribute structure where value is in "_" attribute
+    if (value && typeof value === "object" && "_" in value) {
+      // Extract the actual value from the "_" attribute
+      cleaned[key] = (value as Record<string, unknown>)._;
+    } 
+    // Handle empty XML elements that become {$: {}} or similar
+    else if (
+      value && 
+      typeof value === "object" && 
+      !Array.isArray(value) &&
+      (Object.keys(value).length === 0 || 
+       (Object.keys(value).length === 1 && "$" in value))
+    ) {
+      // Empty element - convert to empty string
+      cleaned[key] = "";
+    }
+    else {
+      cleaned[key] = value;
+    }
+  }
+  
+  return cleaned;
 }
 
 /**
@@ -112,6 +185,12 @@ function extractRecords(
 
   // Structure 2: <export><table name="..."><record>...</record></table></export>
   if (parsed.export?.table) {
+    // Check if export.table is a string (malformed response)
+    if (typeof parsed.export.table === "string") {
+      console.warn(`Warning: Expected table object but got string: "${parsed.export.table}"`);
+      return [];
+    }
+    
     const tables = Array.isArray(parsed.export.table)
       ? parsed.export.table
       : [parsed.export.table];
@@ -136,9 +215,18 @@ function extractRecords(
   // Structure 3: Direct records under root
   const rootKey = table.toLowerCase();
   if (parsed[rootKey]) {
-    return Array.isArray(parsed[rootKey])
-      ? (parsed[rootKey] as Record<string, unknown>[])
-      : [parsed[rootKey] as Record<string, unknown>];
+    const data = parsed[rootKey];
+    
+    // Check if data is a string - this might happen with malformed XML
+    // or when MoneyWorks returns an error
+    if (typeof data === "string") {
+      console.warn(`Warning: Expected object for table '${table}' but got string: "${data}"`);
+      return [];
+    }
+    
+    return Array.isArray(data)
+      ? (data as Record<string, unknown>[])
+      : [data as Record<string, unknown>];
   }
 
   // Structure 4: Records under plural form

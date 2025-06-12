@@ -233,6 +233,9 @@ export enum MoneyWorksErrorCode {
 
   /** Timeout */
   TIMEOUT = "TIMEOUT",
+  
+  /** Invalid response format */
+  INVALID_RESPONSE = "INVALID_RESPONSE",
 
   /** Unknown error */
   UNKNOWN = "UNKNOWN",

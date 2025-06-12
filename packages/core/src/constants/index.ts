@@ -15,22 +15,45 @@ export const DEFAULT_DATETIME_FORMAT = "YYYY-MM-DD HH:mm:ss" as const;
 export const SYSTEM_USER_ID = "system" as const;
 
 // MoneyWorks table names
-export const TABLE_NAMES = {
-  ACCOUNTS: "accounts",
-  NAMES: "names",
-  PRODUCTS: "products",
-  TRANSACTIONS: "transactions",
-  JOBS: "jobs",
-  CONTACTS: "contacts",
-  ASSETS: "assets",
-  DEPARTMENTS: "departments",
-  INVENTORY: "inventory",
-  JOB_SHEET_ITEMS: "job-sheet-items",
-  TAX_RATE: "tax-rate",
+export const TABLE_NAMES = [
+  "Name",
+  "Account", 
+  "Transaction",
+  "Product",
+  "Job",
+  "Department",
+  "TaxRate",
+  "Asset",
+  "AssetCategories",
+  "AssetLog",
+  "AutoSplit",
+  "Build",
+  "Contact",
+  "General",
+  "Inventory",
+  "JobSheetItem",
+  "Login",
+  "Memo",
+  "OffLedger",
+  "Payments",
+  "Reconciliation",
+  "User",
+  "User2",
+  "Detail",
+] as const;
+
+// Field types
+export const FIELD_TYPES = {
+  STRING: "string",
+  NUMBER: "number", 
+  BOOLEAN: "boolean",
+  DATE: "date",
+  DATETIME: "datetime",
+  MONEY: "money",
 } as const;
 
-// MoneyWorks field types
-export const FIELD_TYPES = {
+// MoneyWorks internal field type codes
+export const MW_FIELD_TYPES = {
   TEXT: "T",
   NUMERIC: "N",
   DATE: "D",

@@ -20,6 +20,13 @@ export * from "./tables";
 // Export/Import system
 export * from "./export-import";
 
+// REST client
+export * from "./rest";
+
+// CLI wrapper
+export { MoneyWorksCLI } from "./cli/wrapper";
+export type { CLIConfig, CLIResult } from "./cli/wrapper";
+
 // Constants
 export { TABLE_NAMES, FIELD_TYPES } from "./constants";
 

@@ -67,12 +67,21 @@ export class MoneyWorksRESTClient {
     table: T,
     options: ExportOptions = {},
   ): Promise<TableMapCamel[T][] | string> {
-    let format = options.format || "xml-verbose";
+    let format = options.format || "json"; // Default to JSON, not XML
 
     // Handle 'json' as a special case - export as XML and convert
     const isJsonFormat = format === "json";
     if (isJsonFormat) {
       format = "xml-verbose";
+    }
+    
+    if (this.config.debug) {
+      console.log("Export options:", { 
+        originalFormat: options.format,
+        format, 
+        isJsonFormat,
+        table 
+      });
     }
 
     // Build query parameters
@@ -91,25 +100,62 @@ export class MoneyWorksRESTClient {
 
     // Make request
     const url = buildRESTUrl(this.config, REST_ENDPOINTS.EXPORT, params);
+    
+    if (this.config.debug) {
+      console.log("Export URL:", url);
+      console.log("Format param:", this.getFormatParam(format));
+    }
+    
     const response = await this.makeRequest(url, {
       method: "GET",
       headers: this.cleanHeaders(this.authHeaders),
     });
 
     const data = await response.text();
+    
+    if (this.config.debug) {
+      console.log(`Response data (first 200 chars): ${data.substring(0, 200)}`);
+    }
+    
+    // Check if we got a valid response
+    if (!data || data.trim().length === 0) {
+      throw new MoneyWorksError(
+        MoneyWorksErrorCode.INVALID_RESPONSE,
+        "Empty response from server"
+      );
+    }
+    
+    // Check if response is just a single word (likely an error)
+    if (data.trim().indexOf(' ') === -1 && data.trim().indexOf('<') === -1 && data.trim().indexOf('\t') === -1) {
+      throw new MoneyWorksError(
+        MoneyWorksErrorCode.INVALID_RESPONSE,
+        `Invalid response from server: ${data.trim()}`
+      );
+    }
 
     // Parse based on format
     if (
       typeof format === "string" &&
       (format === "xml-terse" || format === "xml-verbose")
     ) {
-      const parsed = await ExportParser.parseXML<T>(data, table, format);
-      // If user requested JSON format, return the parsed array
-      return isJsonFormat ? parsed : data;
+      // For XML formats, return raw XML unless JSON was explicitly requested
+      if (isJsonFormat) {
+        return await ExportParser.parseXML<T>(data, table, format);
+      }
+      if (this.config.debug) {
+        console.log("Returning raw XML for format:", format);
+      }
+      return data; // Return raw XML string
     }
 
     if (format === "tsv") {
+      // For TSV, always parse to array (can't use raw TSV as easily)
       return ExportParser.parseTSV<T>(data, table);
+    }
+
+    if (format === "json" || isJsonFormat) {
+      // JSON format - parse the XML and return as JSON
+      return await ExportParser.parseXML<T>(data, table, "xml-verbose");
     }
 
     // Return raw data for custom formats

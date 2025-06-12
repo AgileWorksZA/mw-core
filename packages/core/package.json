@@ -43,6 +43,11 @@
       "types": "./src/export-import/index.ts",
       "import": "./src/export-import/index.ts"
     },
+    "./rest": {
+      "bun": "./src/rest/index.ts",
+      "types": "./src/rest/index.ts",
+      "import": "./src/rest/index.ts"
+    },
     "./schemas/*.json": {
       "import": "./src/schemas/*.json"
     }
