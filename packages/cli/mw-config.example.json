@@ -1,0 +1,9 @@
+{
+  "host": "localhost",
+  "port": 6710,
+  "username": "Admin",
+  "password": "",
+  "dataFile": "Acme Widgets",
+  "timeout": 30000,
+  "debug": false
+}

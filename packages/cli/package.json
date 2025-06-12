@@ -1,0 +1,20 @@
+{
+  "name": "@moneyworks/cli",
+  "version": "0.1.0",
+  "description": "CLI for testing MoneyWorks core functionality",
+  "type": "module",
+  "bin": {
+    "mw": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "build": "bun build src/index.ts --compile --outfile mw",
+    "build:dist": "bun build src/index.ts --outdir dist --target node"
+  },
+  "dependencies": {
+    "@moneyworks/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
