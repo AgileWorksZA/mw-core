@@ -5,7 +5,7 @@
  */
 
 import { parseStringPromise } from "xml2js";
-import { convertPascalToCamel } from "../converters/field-converter";
+import { convertPascalToCamel, toCamelCase } from "../converters/field-converter";
 import { ParseError } from "../rest/errors";
 import { shouldKeepAsString } from "../schemas/field-types";
 import type {
@@ -102,7 +102,7 @@ export async function parseXML<T extends TableName>(
     const records = extractRecords(parsed as ParsedXML, table);
 
     // Clean up records - handle MoneyWorks attribute structure
-    const cleanedRecords = records.map(cleanMoneyWorksRecord);
+    const cleanedRecords = records.map(record => cleanMoneyWorksRecord(record, table));
 
     // Convert to camelCase
     return cleanedRecords.map(
@@ -139,12 +139,83 @@ export async function parseXML<T extends TableName>(
 /**
  * Clean MoneyWorks record - extract values from attribute structure
  */
-function cleanMoneyWorksRecord(record: Record<string, unknown>): Record<string, unknown> {
+function cleanMoneyWorksRecord(record: Record<string, unknown>, table?: string): Record<string, unknown> {
   const cleaned: Record<string, unknown> = {};
   
   for (const [key, value] of Object.entries(record)) {
+    // Special handling for subfile (transaction details)
+    if (key === "subfile" && value && table === "Transaction") {
+      // Process subfile structure and flatten to details array
+      const subfiles = Array.isArray(value) ? value : [value];
+      const allDetails = [];
+      
+      for (const subfile of subfiles) {
+        if (typeof subfile === "object" && subfile !== null) {
+          const subfileObj = subfile as Record<string, unknown>;
+          
+          // Check if this is a Detail subfile
+          const isDetailSubfile = 
+            (subfileObj.$ && (subfileObj.$ as any).name === "Detail") ||
+            subfileObj.name === "Detail";
+          
+          if (isDetailSubfile) {
+            // Extract detail records
+            const detailRecords = subfileObj.detail || subfileObj.Detail;
+            if (detailRecords) {
+              const details = Array.isArray(detailRecords) 
+                ? detailRecords 
+                : [detailRecords];
+              
+              // Process each detail record
+              for (const detail of details) {
+                const cleanDetail: Record<string, unknown> = {};
+                
+                for (const [detailKey, detailValue] of Object.entries(detail as Record<string, unknown>)) {
+                  // Skip $ attribute
+                  if (detailKey === "$") continue;
+                  
+                  // Convert detail.fieldname to just fieldname
+                  let fieldName = detailKey;
+                  if (detailKey.startsWith("detail.")) {
+                    fieldName = detailKey.substring(7);
+                  }
+                  
+                  // Extract value from MoneyWorks attribute structure
+                  let cleanValue = detailValue;
+                  if (detailValue && typeof detailValue === "object" && "_" in detailValue) {
+                    cleanValue = (detailValue as Record<string, unknown>)._;
+                  }
+                  // Skip empty objects with only $
+                  else if (
+                    detailValue && 
+                    typeof detailValue === "object" && 
+                    !Array.isArray(detailValue) &&
+                    (Object.keys(detailValue).length === 0 || 
+                     (Object.keys(detailValue).length === 1 && "$" in detailValue))
+                  ) {
+                    // Empty element - use empty string
+                    cleanValue = "";
+                  }
+                  
+                  cleanDetail[fieldName] = cleanValue;
+                }
+                
+                // Add the cleaned detail record
+                allDetails.push(cleanDetail);
+              }
+            }
+          }
+        }
+      }
+      
+      // Add details directly to transaction instead of subfile
+      if (allDetails.length > 0) {
+        cleaned.details = allDetails;
+      }
+      // Don't add subfile to cleaned record
+    }
     // Handle MoneyWorks attribute structure where value is in "_" attribute
-    if (value && typeof value === "object" && "_" in value) {
+    else if (value && typeof value === "object" && "_" in value) {
       // Extract the actual value from the "_" attribute
       cleaned[key] = (value as Record<string, unknown>)._;
     } 
@@ -156,8 +227,8 @@ function cleanMoneyWorksRecord(record: Record<string, unknown>): Record<string, 
       (Object.keys(value).length === 0 || 
        (Object.keys(value).length === 1 && "$" in value))
     ) {
-      // Empty element - convert to empty string
-      cleaned[key] = "";
+      // Empty element - skip it entirely
+      // Don't add to cleaned object
     }
     else {
       cleaned[key] = value;

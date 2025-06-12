@@ -129,6 +129,9 @@ export const fieldTypes: Record<string, Record<string, FieldType>> = {
     hold: "number",
     flags: "number",
     usernum: "number",
+    
+    // Special fields - keep as is
+    subfile: "string", // Actually an object/array but we don't want it converted
   },
   
   Product: {
@@ -154,13 +157,17 @@ export const fieldTypes: Record<string, Record<string, FieldType>> = {
   },
   
   Detail: {
-    // Identifiers
+    // Identifiers - always strings
+    sequencenumber: "string",
     parentseq: "string",
     serialnumber: "string",
     batchnumber: "string",
+    transactiontype: "string",
+    moreflags: "string", // Even though it looks numeric, it's often "0"
     
     // Date times
     lastmodifiedtime: "datetime",
+    date: "date",
     
     // Money fields
     debit: "money",
@@ -171,12 +178,24 @@ export const fieldTypes: Record<string, Record<string, FieldType>> = {
     unitprice: "money",
     costprice: "money",
     discount: "money",
+    basecurrencynet: "money",
+    originalunitcost: "money",
     
     // Numbers
     stockqty: "number",
-    linenumber: "number",
+    postedqty: "number",
+    orderqty: "number",
+    backorderqty: "number",
+    prevshipqty: "number",
+    sort: "number",
+    statement: "number",
     flags: "number",
-    moreflags: "number",
+    orderstatus: "number",
+    expensedtax: "number",
+    securitylevel: "number",
+    period: "number",
+    usernum: "number",
+    noninvrcvdnotinvoicedqty: "number",
   }
 };
 

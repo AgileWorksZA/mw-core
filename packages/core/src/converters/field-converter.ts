@@ -117,17 +117,74 @@ function convertDetailPascalToCamel(
 ): Partial<DetailCamel> {
   const result: Partial<DetailCamel> = {};
 
-  for (const [key, value] of Object.entries(record)) {
-    // Find the camelCase field name
-    let camelKey = key as keyof DetailCamel;
-    for (const [camel, pascal] of Object.entries(detailFieldMappings)) {
-      if (pascal === key) {
-        camelKey = camel as keyof DetailCamel;
-        break;
-      }
-    }
+  // Map of lowercase field names to camelCase for Detail
+  const fieldMap: Record<string, string> = {
+    // Core fields
+    sequencenumber: "sequenceNumber",
+    lastmodifiedtime: "lastModifiedTime",
+    parentseq: "parentSeq",
+    sort: "sort",
+    account: "account",
+    dept: "dept",
+    
+    // Quantity and tax fields
+    postedqty: "postedQty",
+    taxcode: "taxCode",
+    gross: "gross",
+    tax: "tax",
+    net: "net",
+    debit: "debit",
+    credit: "credit",
+    
+    // Description and stock fields
+    description: "description",
+    stockqty: "stockQty",
+    stockcode: "stockCode",
+    costprice: "costPrice",
+    unitprice: "unitPrice",
+    
+    // Job and sales fields
+    statement: "statement",
+    jobcode: "jobCode",
+    saleunit: "saleUnit",
+    discount: "discount",
+    
+    // Order fields
+    orderqty: "orderQty",
+    backorderqty: "backorderQty",
+    prevshipqty: "prevShipQty",
+    basecurrencynet: "baseCurrencyNet",
+    
+    // Serial and tracking
+    serialnumber: "serialNumber",
+    batchnumber: "batchNumber",
+    period: "period",
+    transactiontype: "transactionType",
+    securitylevel: "securityLevel",
+    stocklocation: "stockLocation",
+    
+    // Status fields
+    orderstatus: "orderStatus",
+    expensedtax: "expensedTax",
+    date: "date",
+    moreflags: "moreFlags",
+    
+    // User fields
+    usernum: "userNum",
+    usertext: "userText",
+    taggedtext: "taggedText",
+    
+    // Non-inventory fields
+    noninvrcvdnotinvoicedqty: "nonInvRcvdNotInvoicedQty",
+    custom1: "custom1",
+    custom2: "custom2",
+    originalunitcost: "originalUnitCost",
+  };
 
-    if (camelKey in result || camelKey) {
+  for (const [key, value] of Object.entries(record)) {
+    const lowerKey = key.toLowerCase();
+    const camelKey = fieldMap[lowerKey] || toCamelCase(key);
+    if (camelKey) {
       (result as Record<string, unknown>)[camelKey] = value;
     }
   }
@@ -265,14 +322,55 @@ function convertTransactionToCamel(
     usertext: "userText",
     flags: "flags",
     moduser: "modUser",
+    subfile: "subfile", // Keep as-is for transaction details
+    details: "details", // For flattened detail records
+    
+    // Additional fields found in the data
+    datepaid: "datePaid",
+    payamount: "payAmount",
+    taxcycle: "taxCycle",
+    taxprocessed: "taxProcessed",
+    salesperson: "salesPerson",
+    bankjnseq: "bankJnSeq",
+    paymentmethod: "paymentMethod",
+    promptpaymentdate: "promptPaymentDate",
+    promptpaymentamt: "promptPaymentAmt",
+    prodpricecode: "prodPriceCode",
+    mailingaddress: "mailingAddress",
+    deliveryaddress: "deliveryAddress",
+    freightcode: "freightCode",
+    freightamount: "freightAmount",
+    freightdetails: "freightDetails",
+    specialbank: "specialBank",
+    specialbranch: "specialBranch",
+    specialaccount: "specialAccount",
+    ordertotal: "orderTotal",
+    ordershipped: "orderShipped",
+    orderdeposit: "orderDeposit",
+    originatingorderseq: "originatingOrderSeq",
+    currencytransferseq: "currencyTransferSeq",
+    promptpaymentterms: "promptPaymentTerms",
+    promptpaymentdisc: "promptPaymentDisc",
+    approvedby1: "approvedBy1",
+    approvedby2: "approvedBy2",
+    taggedtext: "taggedText",
   };
 
   for (const [key, value] of Object.entries(record)) {
     const lowerKey = key.toLowerCase();
-    const camelKey =
-      fieldMap[lowerKey] || (toCamelCase(key) as keyof TransactionCamel);
-    if (camelKey) {
-      (result as Record<string, unknown>)[camelKey] = value;
+    
+    // Special handling for details array
+    if (key === "details" && Array.isArray(value)) {
+      // Convert each detail record's fields to camelCase
+      (result as Record<string, unknown>).details = value.map((detail: any) => {
+        return convertDetailPascalToCamel(detail);
+      });
+    } else {
+      const camelKey =
+        fieldMap[lowerKey] || (toCamelCase(key) as keyof TransactionCamel);
+      if (camelKey) {
+        (result as Record<string, unknown>)[camelKey] = value;
+      }
     }
   }
 
@@ -566,3 +664,6 @@ export function convertFieldName(
   }
   return fromCamelCase(field);
 }
+
+// Re-export for convenience
+export { toCamelCase };

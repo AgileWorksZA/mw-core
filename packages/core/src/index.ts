@@ -30,5 +30,8 @@ export type { CLIConfig, CLIResult } from "./cli/wrapper";
 // Constants
 export { TABLE_NAMES, FIELD_TYPES } from "./constants";
 
+// Schemas
+export * from "./schemas";
+
 // Version info
 export const version = "0.1.0" as const;

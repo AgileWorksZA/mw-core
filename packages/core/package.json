@@ -50,6 +50,11 @@
     },
     "./schemas/*.json": {
       "import": "./src/schemas/*.json"
+    },
+    "./schemas": {
+      "bun": "./src/schemas/index.ts",
+      "types": "./src/schemas/index.ts",
+      "import": "./src/schemas/index.ts"
     }
   },
   "files": ["src", "README.md"],
