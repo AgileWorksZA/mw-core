@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# MoneyWorks CLI wrapper script
+# This script runs the CLI from the development directory
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Parse arguments to handle config file paths
+ARGS=()
+for i in "$@"; do
+  if [[ "$prev_arg" == "-c" || "$prev_arg" == "--config" ]]; then
+    # If this is a config file path, make it absolute if it's relative
+    if [[ "$i" != /* ]]; then
+      # Relative path - make it absolute based on current working directory
+      ARGS+=("$(pwd)/$i")
+    else
+      ARGS+=("$i")
+    fi
+  else
+    ARGS+=("$i")
+  fi
+  prev_arg="$i"
+done
+
+cd "$SCRIPT_DIR/packages/cli" && bun run src/index.ts "${ARGS[@]}"

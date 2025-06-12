@@ -106,7 +106,15 @@
       "Bash(npx @biomejs/biome check:*)",
       "Bash(../../node_modules/.bin/biome lint:*)",
       "Bash(npx tsc:*)",
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "mcp__bun_Docs__search_bun_documentation",
+      "Bash(../../node_modules/.bin/bun test-name-export.ts:*)",
+      "Bash(../../node_modules/.bin/bun:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(/usr/local/bin/bun:*)",
+      "Bash(true)",
+      "Bash(open:*)",
+      "Bash(./mw:*)"
     ],
     "deny": []
   }
