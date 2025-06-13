@@ -61,7 +61,10 @@ export async function exportCommand(
   });
 
   try {
-    console.log(`Exporting ${table} records...`);
+    // Only show the message if output is to a file, not stdout
+    if (values.output) {
+      console.log(`Exporting ${table} records...`);
+    }
 
     const format = values.format as ExportFormat;
     const limit = values.limit ? parseInt(values.limit as string) : undefined;

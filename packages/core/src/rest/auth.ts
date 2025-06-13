@@ -11,7 +11,7 @@ import type { AuthHeaders, MoneyWorksConfig } from "./types";
  */
 export function buildAuthHeaders(config: MoneyWorksConfig): AuthHeaders {
   const headers: AuthHeaders = {
-    Authorization: buildBasicAuth(config.username, config.password),
+    Authorization: buildBasicAuth(config.username, config.password || ""),
   };
 
   // Add folder-level authentication if provided
@@ -59,7 +59,7 @@ export function buildDocumentPath(config: MoneyWorksConfig): string {
   const encodedDataFile = dataFile.replace(/\//g, "%2f");
 
   // Format: username:password@document.moneyworks
-  return `${encodeURIComponent(username)}:${encodeURIComponent(password)}@${encodedDataFile}`;
+  return `${encodeURIComponent(username)}:${encodeURIComponent(password || "")}@${encodedDataFile}`;
 }
 
 /**
@@ -79,10 +79,10 @@ export function buildRESTUrl(
   // Add document path
   url += `/${buildDocumentPath(config)}`;
 
-  // Add endpoint
+  // Add endpoint (which may already include path parameters for export)
   url += endpoint;
 
-  // Add query parameters
+  // Add query parameters only if provided
   if (params?.toString()) {
     url += `?${params.toString()}`;
   }
@@ -99,7 +99,6 @@ export function validateConfig(config: MoneyWorksConfig): void {
     "port",
     "dataFile",
     "username",
-    "password",
   ];
 
   for (const field of required) {

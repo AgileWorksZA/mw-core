@@ -11,7 +11,7 @@ import path from "path";
 
 export interface CLIConfig {
   username: string;
-  password: string;
+  password?: string;
   filePath?: string;
   debug?: boolean;
 }
@@ -37,8 +37,11 @@ export class MoneyWorksCLI {
     const args: string[] = [];
     
     // Add authentication
-    if (this.config.username && this.config.password) {
-      args.push("-u", `${this.config.username}:${this.config.password}`);
+    if (this.config.username) {
+      const auth = this.config.password 
+        ? `${this.config.username}:${this.config.password}`
+        : this.config.username;
+      args.push("-u", auth);
     }
 
     // Add file path

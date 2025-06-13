@@ -1,0 +1,1 @@
+./mw: line 25:  1760 Killed: 9               bun run src/index.ts "${ARGS[@]}"

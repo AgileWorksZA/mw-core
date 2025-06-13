@@ -100,7 +100,10 @@ async function main() {
       process.exit(1);
     }
     
-    await handler(client, positionals.slice(1), values);
+    // Pass all args after the command name to the handler
+    const commandIndex = process.argv.indexOf(command);
+    const commandArgs = commandIndex >= 0 ? process.argv.slice(commandIndex + 1) : positionals.slice(1);
+    await handler(client, commandArgs, values);
   } catch (error) {
     console.error("Error:", error instanceof Error ? error.message : error);
     if (values.debug && error instanceof Error) {

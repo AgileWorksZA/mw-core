@@ -114,7 +114,13 @@
       "Bash(/usr/local/bin/bun:*)",
       "Bash(true)",
       "Bash(open:*)",
-      "Bash(./mw:*)"
+      "Bash(./mw:*)",
+      "Bash(./mw:*)",
+      "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/test-rest-limit.sh)",
+      "Bash(jq:*)",
+      "mcp__curl__curl",
+      "Bash(npm test:*)",
+      "Bash(killall:*)"
     ],
     "deny": []
   }

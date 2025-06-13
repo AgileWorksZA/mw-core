@@ -85,22 +85,41 @@ export class MoneyWorksRESTClient {
       });
     }
 
-    // Build query parameters
-    const params = new URLSearchParams({
-      table,
-      format: this.getFormatParam(format),
-      ...(options.filter && { filter: options.filter }),
-      ...(options.start !== undefined && { start: options.start.toString() }),
-      ...(options.limit !== undefined && { limit: options.limit.toString() }),
-      ...(options.orderBy && { orderby: options.orderBy }),
-      ...(options.noLinger && { no_linger: "true" }),
-    });
+    // Build path parameters for export (MoneyWorks uses path params, not query params)
+    const pathParams: string[] = [`table=${table}`];
+    
+    if (options.filter) {
+      pathParams.push(`search=${encodeURIComponent(options.filter)}`);
+    }
+    if (options.start !== undefined) {
+      pathParams.push(`start=${options.start}`);
+    }
+    if (options.limit !== undefined) {
+      pathParams.push(`limit=${options.limit}`);
+    }
+    if (options.orderBy) {
+      pathParams.push(`orderby=${encodeURIComponent(options.orderBy)}`);
+    }
+    pathParams.push(`format=${this.getFormatParam(format)}`);
+    
+    if (options.noLinger) {
+      pathParams.push("no_linger=true");
+    }
 
     // Add custom template/script if needed
-    this.addCustomFormatParams(params, format);
+    if (typeof format === "object") {
+      if ("template" in format) {
+        pathParams.push(`template=${encodeURIComponent(format.template)}`);
+      } else if ("script" in format) {
+        pathParams.push(`script=${encodeURIComponent(format.script)}`);
+      }
+    }
 
-    // Make request
-    const url = buildRESTUrl(this.config, REST_ENDPOINTS.EXPORT, params);
+    // Build the export endpoint with path parameters
+    const exportEndpoint = `${REST_ENDPOINTS.EXPORT}/${pathParams.join("&")}`;
+    
+    // Make request (no query params for export)
+    const url = buildRESTUrl(this.config, exportEndpoint);
     
     if (this.config.debug) {
       console.log("Export URL:", url);

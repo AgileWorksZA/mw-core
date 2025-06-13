@@ -22,8 +22,8 @@ export interface MoneyWorksConfig {
   /** Document username */
   username: string;
 
-  /** Document password */
-  password: string;
+  /** Document password (optional - some operations may not require authentication) */
+  password?: string;
 
   /** Optional folder password for two-level authentication */
   folderPassword?: string;

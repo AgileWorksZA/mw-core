@@ -1,0 +1,8 @@
+{
+  "command": "/Users/hgeldenhuys/.bun/bin/bun",
+  "args": ["run", "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index.ts"],
+  "env": {
+    "MW_CONFIG_PATH": "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/core/mw-config.json",
+    "TICKETS_DB_PATH": "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/data/tickets.db"
+  }
+}
