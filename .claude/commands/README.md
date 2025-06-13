@@ -25,6 +25,7 @@ The following commands are available globally (in `~/.claude/commands/`):
 - `/smart-pr` - Well-documented pull request creation
 - `/workspace-setup` - Development environment verification
 - `/quick-open-md` - Open recently created markdown documents
+- `/mw-docs` - Intelligent MoneyWorks documentation search and access
 
 ### Code Quality & Analysis
 - `/analyze-code` - Comprehensive code analysis and recommendations
@@ -39,6 +40,7 @@ The following commands are available globally (in `~/.claude/commands/`):
 /memory-refresh                    # Get project context
 /mw-dev-cycle                     # Run MoneyWorks development cycle
 /mcp-debug listTables             # Debug specific MCP tool
+/mw-docs accounts                 # Open accounts documentation
 /smart-commit "fix MW auth"       # Commit with intelligent message
 ```
 
@@ -46,6 +48,7 @@ The following commands are available globally (in `~/.claude/commands/`):
 ```bash
 /project-health                   # Check project status
 /quick-open-md                    # Open recent documentation
+/mw-docs payments                 # Search MoneyWorks documentation
 /analyze-code src/services/       # Analyze specific directory
 /create-feature "user auth"       # Implement new feature
 /security-audit                   # Security assessment
