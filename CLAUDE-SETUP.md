@@ -27,16 +27,27 @@ rm -rf /tmp/claude-suite
 ### 🌐 Global Commands (Available Everywhere)
 After setup, these commands work in any project:
 
+**Development Workflow:**
 - `/memory-refresh` - Read project context and provide briefing
-- `/smart-commit` - Intelligent commit with conventional formatting
+- `/smart-commit` - Intelligent commit with conventional formatting + push
 - `/sync-from-server` - Safe branch syncing with conflict resolution
 - `/project-health` - Comprehensive project diagnostics
 - `/smart-pr` - Well-documented pull request creation
 - `/workspace-setup` - Development environment verification
+- `/quick-open-md` - Open recently created markdown documents
+
+**Intelligent Search & Discovery:**
+- `/project-search` - Smart project-wide search using macOS Spotlight
+- `/mw-docs` - Intelligent MoneyWorks documentation search and access
+- `/mdfind-guide` - Comprehensive guide to macOS mdfind command
+
+**Code Quality & Analysis:**
 - `/analyze-code` - Code analysis and recommendations
 - `/security-audit` - Security vulnerability assessment
 - `/create-feature` - Structured feature development
 - `/fix-issue` - Systematic debugging and issue resolution
+
+**Total: 16 global commands** available across all projects
 
 ### 🏠 MoneyWorks Project Commands (This Project Only)
 These are automatically available when working in this project:
