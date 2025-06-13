@@ -90,7 +90,9 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:modelcontextprotocol.io)",
       "mcp__moneyworks__listTables",
-      "mcp__moneyworks__describeTableSchema"
+      "mcp__moneyworks__describeTableSchema",
+      "Bash(git pull:*)",
+      "Bash(git ls-tree:*)"
     ],
     "deny": []
   }
