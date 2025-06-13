@@ -43,8 +43,9 @@ export {
 export type { TransactionImport } from "../import/transaction-builder";
 
 // XML utilities
-export { XMLParser } from "../xml/parser";
+export { XMLParser, parseXML } from "../xml/parser";
 export { XMLBuilder } from "../xml/builder";
+export { parseXMLWithSchema } from "../xml/schema-parser";
 
 // Field conversion
 export {

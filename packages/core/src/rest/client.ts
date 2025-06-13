@@ -7,6 +7,7 @@
 import { ExportParser } from "../export/parser";
 import type { TableMapCamel, TableName } from "../tables";
 import { XMLBuilder } from "../xml/builder";
+import { parseXMLWithSchema } from "../xml/schema-parser";
 import {
   buildAuthHeaders,
   buildRESTUrl,
@@ -140,7 +141,8 @@ export class MoneyWorksRESTClient {
     ) {
       // For XML formats, return raw XML unless JSON was explicitly requested
       if (isJsonFormat) {
-        return await ExportParser.parseXML<T>(data, table, format);
+        // Use schema-aware parser for better validation and typing
+        return await parseXMLWithSchema<T>(data, table, format);
       }
       if (this.config.debug) {
         console.log("Returning raw XML for format:", format);
@@ -154,8 +156,8 @@ export class MoneyWorksRESTClient {
     }
 
     if (format === "json" || isJsonFormat) {
-      // JSON format - parse the XML and return as JSON
-      return await ExportParser.parseXML<T>(data, table, "xml-verbose");
+      // JSON format - parse the XML and return as JSON with schema validation
+      return await parseXMLWithSchema<T>(data, table, "xml-verbose");
     }
 
     // Return raw data for custom formats
