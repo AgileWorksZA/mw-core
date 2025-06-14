@@ -80,8 +80,10 @@ export function registerTransactionTool(server: McpServer, transactionService: T
   server.tool(
     "transaction_operations",
     "Search, retrieve and analyze transactions including invoices, payments, journals, and bank transactions",
-    transactionInputSchema,
+    transactionInputSchema.shape,
     async (params: unknown) => {
+      console.error("[DEBUG] transaction_operations received params:", JSON.stringify(params));
+      
       const input = transactionInputSchema.parse(params);
       
       try {

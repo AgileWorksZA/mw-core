@@ -28,8 +28,10 @@ export function registerLogTicketTool(server: McpServer, ticketService: TicketSe
   server.tool(
     "log_ticket",
     "Log errors, issues, and improvement suggestions for systematic tracking",
-    logTicketSchema,
+    logTicketSchema.shape,
     async (params: unknown) => {
+      console.error("[DEBUG] log_ticket received params:", JSON.stringify(params));
+      
       const input = logTicketSchema.parse(params);
       
       try {

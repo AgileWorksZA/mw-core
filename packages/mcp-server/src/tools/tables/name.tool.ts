@@ -35,7 +35,7 @@ export function registerNameTool(server: McpServer, nameService: NameService) {
   server.tool(
     "name_operations",
     "Search, retrieve and analyze customers, suppliers, and contacts in MoneyWorks",
-    nameInputSchema,
+    nameInputSchema.shape,
     async (params: unknown) => {
       const input = nameInputSchema.parse(params);
       

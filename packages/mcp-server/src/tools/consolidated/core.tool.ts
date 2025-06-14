@@ -48,8 +48,10 @@ export function registerCoreTool(server: McpServer, client: MoneyWorksRESTClient
   server.tool(
     "moneyworks_core",
     "Comprehensive MoneyWorks operations including validation, permissions, schemas, calculations, and system functions. Provides 41 specialized tools in one interface.",
-    coreOperationSchema,
+    coreOperationSchema.shape,
     async (params: unknown) => {
+      console.error("[DEBUG] moneyworks_core received params:", JSON.stringify(params));
+      
       const input = coreOperationSchema.parse(params);
       
       try {

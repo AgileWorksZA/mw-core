@@ -1,5 +1,6 @@
 /**
  * Account operations tool for MCP server using @moneyworks/core
+ * FIXED VERSION - Using correct schema format for MCP SDK
  */
 
 import { z } from "zod";
@@ -52,7 +53,8 @@ const ACCOUNT_TYPE_DISPLAY: Record<string, string> = {
   "OE": "Other Expense",
 };
 
-const accountInputSchema = z.object({
+// CORRECT: Define the raw shape for MCP SDK
+const accountInputShape = {
   operation: z.enum(["search", "get", "listFields"]).describe("Operation to perform"),
   searchTerm: z.string().optional().describe("Search term for account code or description"),
   code: z.string().optional().describe("Account code for get operation"),
@@ -62,14 +64,18 @@ const accountInputSchema = z.object({
   parentCode: z.string().optional().describe("Get child accounts of this parent"),
   limit: z.number().optional().describe("Maximum number of results"),
   offset: z.number().optional().describe("Number of results to skip"),
-});
+};
 
-export function registerAccountTool(server: McpServer, accountService: AccountService) {
+// Create the schema object for validation (optional, for internal use)
+const accountInputSchema = z.object(accountInputShape);
+
+export function registerAccountToolFixed(server: McpServer, accountService: AccountService) {
   server.tool(
     "account_operations",
     "Search, retrieve and analyze accounts in MoneyWorks. Includes chart of accounts, bank accounts, income/expense categories, and balance information.",
-    accountInputSchema.shape,
+    accountInputShape, // CORRECT: Pass the raw shape, not the z.object() result
     async (params: unknown) => {
+      // We can still use the schema object for parsing/validation
       const input = accountInputSchema.parse(params);
       
       try {
@@ -206,6 +212,39 @@ export function registerAccountTool(server: McpServer, accountService: AccountSe
           }]
         };
       }
+    }
+  );
+}
+
+// Alternative approach using .shape property
+export function registerAccountToolAlternative(server: McpServer, accountService: AccountService) {
+  // Define schema as z.object
+  const schema = z.object({
+    operation: z.enum(["search", "get", "listFields"]).describe("Operation to perform"),
+    searchTerm: z.string().optional().describe("Search term for account code or description"),
+    code: z.string().optional().describe("Account code for get operation"),
+    accountType: z.string().optional().describe("Filter by account type (e.g., BA, CA, FA, CL, IN, EX)"),
+    onlyActive: z.boolean().optional().describe("Only return active accounts"),
+    withBalance: z.boolean().optional().describe("Only return accounts with non-zero balance"),
+    parentCode: z.string().optional().describe("Get child accounts of this parent"),
+    limit: z.number().optional().describe("Maximum number of results"),
+    offset: z.number().optional().describe("Number of results to skip"),
+  });
+
+  // Extract the shape using .shape property
+  server.tool(
+    "account_operations_alt",
+    "Alternative implementation using .shape",
+    schema.shape, // Use .shape to get the raw shape
+    async (params: unknown) => {
+      const input = schema.parse(params);
+      // ... rest of the implementation
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({ success: true, message: "Using .shape approach" }, null, 2)
+        }]
+      };
     }
   );
 }

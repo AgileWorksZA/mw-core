@@ -39,7 +39,7 @@ export function registerBuildTool(server: McpServer, buildService: BuildService)
   server.tool(
     "build_operations",
     "Search, retrieve and analyze manufacturing builds and bill of materials in MoneyWorks",
-    buildInputSchema,
+    buildInputSchema.shape,
     async (params: unknown) => {
       const input = buildInputSchema.parse(params);
       
