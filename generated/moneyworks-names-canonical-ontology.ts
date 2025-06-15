@@ -74,6 +74,7 @@ export enum MoneyWorksPaymentMethod {
   ELECTRONIC = 3
   
   // Note: Manual indicates "etc" - more values exist but not specified
+  // #TODO - Read the PaymentMethods and complete them here.
 }
 
 /**

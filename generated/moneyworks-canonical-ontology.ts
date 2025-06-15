@@ -631,6 +631,19 @@ export {
   MONEYWORKS_TAX_RATE_CANONICAL_TERMS
 } from "./moneyworks-taxrates-canonical-ontology";
 
+// ============================================================================
+// JOBS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Jobs canonical definitions
+export {
+  MoneyWorksJobStatus,
+  MoneyWorksJobColour,
+  MONEYWORKS_JOB_STATUS_DEFINITIONS,
+  MONEYWORKS_JOB_FIELDS,
+  MONEYWORKS_JOB_CANONICAL_TERMS
+} from "./moneyworks-jobs-canonical-ontology";
+
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,
   MONEYWORKS_ACCOUNT_TYPE_DEFINITIONS,

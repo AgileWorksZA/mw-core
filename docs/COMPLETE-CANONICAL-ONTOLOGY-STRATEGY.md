@@ -4,12 +4,13 @@
 
 ## 🎯 **WHERE WE ARE → WHERE WE'RE GOING**
 
-### **Current State (Foundational Progress - 5/17 Entities Complete)**
+### **Current State (Foundational Progress - 6/17 Entities Complete)**
 - ✅ **Transaction Entity**: 17 canonical types extracted and validated
 - ✅ **Account Entity**: 10 canonical types with system account integration
 - ✅ **Names Entity**: Hierarchical Customer/Debtor, Supplier/Creditor classification discovered
 - ✅ **Products Entity**: Enterprise inventory management system (69 fields, complex pricing matrices)
 - ✅ **TaxRates Entity**: International tax compliance system (17 fields, dual-rate, multi-tier support)
+- ✅ **Jobs Entity**: Sophisticated project management system (34 fields, hierarchical structure, client-debtor integration)
 - ✅ **Validation Framework**: Comprehensive canonical terminology verification
 - ✅ **Purity Principles**: Three-layer semantic architecture established
 - ✅ **Domain Pollution Prevention**: Continuous terminology consistency checking
@@ -32,7 +33,7 @@ Based on the manual structure, MoneyWorks has these core entities:
 2. ✅ **Accounts** - Chart of accounts (10 types, completed)
 3. ✅ **Names** - Creditors/Debtors hierarchical classification (completed)
 4. ✅ **Products** - Enterprise inventory management (69 fields, completed)
-5. 🔄 **Jobs** - Projects and job costing
+5. ✅ **Jobs** - Projects and job costing (34 fields, hierarchical structure, completed)
 6. 🔄 **Assets** - Fixed asset register
 
 ### **Supporting Entities**
@@ -179,12 +180,12 @@ interface EntityRelationship {
 
 ## 🚀 **IMPLEMENTATION STRATEGY**
 
-### **Immediate Next Steps (FOUNDATIONAL PHASE 4)**
-1. **Extract Jobs Entity**: Project costing and management system
-2. **Deep Manual Reading**: Thorough analysis of `moneyworks_appendix_jobs.html`
-3. **Extract Job Costing Rules**: Project management, cost tracking, billing methods
-4. **Map Entity Relationships**: Jobs → Products/Names/Accounts/TaxRates integration
-5. **Validate Project Management**: Cross-business project costing universality
+### **Immediate Next Steps (FOUNDATIONAL PHASE 5)**
+1. **Extract Departments Entity**: Cost center classifications and departmental structure
+2. **Deep Manual Reading**: Thorough analysis of `moneyworks_appendix_departments.html`
+3. **Extract Departmental Rules**: Cost allocation, reporting segments, organizational structure
+4. **Map Entity Relationships**: Departments → Accounts/Transactions/Jobs integration
+5. **Validate Cost Centers**: Cross-business departmental organization universality
 
 ### **Iterative Cycle (Per Entity)**
 ```
@@ -193,7 +194,7 @@ Read Manual → Extract Canonical → Validate Consistency → Update Ontology �
   2-3 hours      1-2 hours           30 mins              30 mins         1 hour
 ```
 
-**Estimated Timeline**: 3-4 entities per week = 5-6 weeks for complete ontology
+**Estimated Timeline**: 3-4 entities per week = 4-5 weeks remaining for complete ontology
 
 ### **Risk Mitigation**
 - **Incremental Validation**: Catch inconsistencies early
