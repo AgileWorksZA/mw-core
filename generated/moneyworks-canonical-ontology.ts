@@ -620,6 +620,17 @@ export {
   MONEYWORKS_PRODUCT_CANONICAL_TERMS
 } from "./moneyworks-products-canonical-ontology";
 
+// ============================================================================
+// TAXRATES ENTITY INTEGRATION
+// ============================================================================
+
+// Import TaxRates canonical definitions
+export {
+  MoneyWorksTaxCombineMode,
+  MONEYWORKS_TAX_RATE_FIELDS,
+  MONEYWORKS_TAX_RATE_CANONICAL_TERMS
+} from "./moneyworks-taxrates-canonical-ontology";
+
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,
   MONEYWORKS_ACCOUNT_TYPE_DEFINITIONS,
