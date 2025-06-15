@@ -100,7 +100,9 @@
       "Bash(/Users/hjonck/dotfiles/claude/install-claude.sh:*)",
       "Bash(mdfind:*)",
       "Bash(mdutil:*)",
-      "Bash(git -C /Users/hjonck/dotfiles log --oneline -3)"
+      "Bash(git -C /Users/hjonck/dotfiles log --oneline -3)",
+      "Bash(git tag:*)",
+      "Bash(git merge:*)"
     ],
     "deny": []
   }
