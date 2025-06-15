@@ -1,0 +1,207 @@
+body	{
+	font-size: 12px;
+	}
+
+#manual a.link {
+	color: blue;
+	text-decoration: underline;
+}
+#manual A.visited {
+	color: purple;
+	text-decoration: underline;
+}
+#manual A.active {
+	color: red;
+	text-decoration: underline;
+}
+
+#manual h1 {
+	font-size: 16pt;
+	}
+#manual h2, h3 {
+	font-size: 14pt;
+	color: black;
+	}
+	
+#manual h4 {
+	font-size: 12pt;
+	text-transform: none;
+	}
+	
+#manual Body {
+	font-family: "Verdana", "Arial";
+	font-size: 9.000000pt;
+	text-align: left;
+	};
+
+#manual P.CellBody, P.CellHeading {
+	font-family: "Verdana", "Arial";
+	}
+#manual P.Numbered, P.Numbered1{
+	font-weight: Bold;
+    padding-left: 14pt ;
+    text-indent: -14pt ;
+
+}
+
+#manual P.Bulleted {
+    padding-left: 7pt ;
+    text-indent: -7pt ;
+}
+
+#manual P.NavLinks {
+    margin-top: 20pt ;
+    margin-bottom: 0pt ;
+    text-align:right;
+    padding:0;
+}
+
+#manual P.Indented {
+	margin-left: 28pt;
+}
+
+#manual P.PicIndented {
+	padding-left: 28pt;
+	}
+
+#manual P.HeadingRunIn {
+/*	margin-left: 28pt;*/
+	font-weight: Bold;
+	}
+
+#manual P.Note {
+	font-weight: Bold;
+	margin-left: 20pt;
+	}
+#manual h6.Heading0TOC {
+	font-size: 12pt;
+	margin-left: 20pt;
+	}
+	
+#manual P.Heading1TOC, P.Heading0TOC {
+	font-size: 11pt;
+	margin-left: 20pt;
+	line-height: 14pt;
+	}
+#manual H1.Heading0TOC, H2.Heading0TOC, H3.Heading0TOC, H4.Heading0TOC, H5.Heading0TOC {
+	font-size: 9pt;
+	} 
+#manual H1.Heading0TocNoneTOC {
+	font-size: 9pt;
+	}
+#manual H1.Heading1TOC,  H2.Heading1TOC,  H3.Heading1TOC,  H4.Heading1TOC, H5.Heading1TOC {
+	font-size: 9pt;
+	}
+#manual H1.Heading3TOC,  H2.Heading3TOC,  H3.Heading3TOC,  H4.Heading3TOC, H5.Heading3TOC {
+	font-size: 9pt;
+	}
+
+
+#manual P.Footnote {
+	display: inline;
+	font-size: 0.8em;
+	font-weight: Light;
+	}
+	
+#manual H3.Heading3-Form	{
+	padding-top: 20pt;
+	border-bottom: 1px solid #888;
+	}
+
+#manual A.footnote {
+	display: inline;
+	vertical-align: super;
+	font-size: 0.66em;
+	font-weight: Light;
+	}
+
+#manual EM.Bolded {
+	font-weight: Bold;
+}
+#manual EM.ChangeBar {
+	font-style: Regular;
+}
+#manual EM.Emphasis {
+	font-style: Italic;
+}
+#manual EM.EquationVariables {
+	font-style: Italic;
+}
+#manual EM.Superscript {
+	font-size: 8.000000pt;
+	font-weight: Light;
+	font-style: Regular;
+	color: #000000;
+	text-decoration: none;
+	vertical-align: super;
+	text-transform: none;
+	font-family: "Verdana";
+}
+
+/*#manual img {
+    max-width:600px;
+    padding:20px;
+}*/
+
+#manual .smallimg, .nopadding {
+    padding:0px;
+}
+
+#manual P.CellBody	{
+	padding: 4px;
+	}
+
+#manual table	{
+	border-collapse:collapse;
+	}
+#manual table,th, td	{
+	border: 1px solid #aaaaaa;
+	}
+	
+#manual P.Indented ~ P.HeadingRunIn	{
+	margin-left: 28pt;
+	}
+	
+#manual input	{
+	margin-top: 8px;
+	}
+
+
+#manual-navigation li {
+	padding: 0 10px;
+	border-left: 1px solid #bbb;
+	
+}
+
+#manual-navigation li:first-child {
+	padding-left: 0;
+	border: 0;
+}
+
+input.button	{
+	padding: 2px;
+	padding-left: 12px;
+	padding-right: 12px;
+	background-color: #EEEEEE;
+	border: 1px solid #888;
+	border-radius: 4px;
+  cursor:pointer;
+	}
+
+input.button:hover	{
+	background-color:#DDD;
+	}
+	 
+input.button:focus	{
+	background-color:#AAA;
+	}
+
+input	{
+	padding: 1px;
+	padding-left: 5px;
+	padding-right: 5px;
+	background: #F8F8F8s;
+	border: 1px solid #999;
+	border-radius: 4px;
+	}
+
