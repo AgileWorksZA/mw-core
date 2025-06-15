@@ -1,290 +1,241 @@
 # MoneyWorks MCP Server
 
-An MCP (Model Context Protocol) server that provides AI assistants with access to MoneyWorks accounting operations, complete with automatic error tracking and ticket creation.
+Model Context Protocol (MCP) server for MoneyWorks accounting software, providing AI assistants with structured access to MoneyWorks data and operations.
+
+## Overview
+
+This MCP server provides 45 tools across two main categories:
+- **4 Table Tools**: Direct access to core MoneyWorks tables (accounts, transactions, names, builds)
+- **41 System Tools**: Validation, permissions, schemas, calculations, and more
+
+Built with **@moneyworks/core** for type-safe, modern MoneyWorks integration.
 
 ## Features
 
-- **Direct Service Integration**: Uses existing MoneyWorks service classes from the main project
-- **Error Tracking**: Automatic SQLite-based ticketing system for failures
-- **Type Safety**: Full TypeScript with Zod validation
-- **Session Tracking**: Links errors to specific AI sessions
-- **No Duplicate Code**: Leverages all existing services and configurations
+- 🔒 **Secure Authentication**: Dual authentication support (folder + document)
+- 📊 **Comprehensive Data Access**: All major MoneyWorks tables
+- 🔍 **Advanced Search**: MoneyWorks expression language support
+- 📈 **Real-time Calculations**: Evaluate expressions and aggregations
+- 🎯 **Type-Safe**: Full TypeScript support with @moneyworks/core
+- 🐛 **Error Tracking**: Built-in ticket system for continuous improvement
+- 🚀 **High Performance**: Direct REST API integration
 
-## Prerequisites
+## Architecture
 
-1. **MoneyWorks DataCentre Server**: Must be running and accessible (✅ Validated)
-2. **MoneyWorks Document**: Must be open and available via REST API (✅ Working)
-3. **Network Access**: Claude environment must reach MoneyWorks server (✅ Confirmed)
-4. **Authentication**: Valid MoneyWorks user credentials (✅ **FULLY RESOLVED**)
+```
+MCP Server
+├── Services Layer          # Wraps @moneyworks/core REST client
+│   ├── BaseTableService    # Common operations for all tables
+│   └── Table Services      # Specific services for each table
+├── Tools Layer            # MCP tool implementations
+│   ├── Table Tools        # 4 core table operations
+│   └── Core Tool          # 41 system operations
+└── Infrastructure
+    ├── REST Client        # From @moneyworks/core
+    ├── CLI Wrapper        # MoneyWorks CLI integration
+    └── Ticket Service     # Error tracking with SQLite
+```
 
-**Authentication Status**: All MoneyWorks authentication issues have been resolved. The system now correctly handles:
-- Dual authorization headers for folder-based documents
-- Proper URL encoding for folder paths (`%2f` separators)
-- Correct document password authentication
-- Full compatibility with MoneyWorks DataCentre 9.2.1b5
+## Installation
 
-## Setup
-
-1. Install dependencies:
 ```bash
-cd mcp-server
+# Clone the repository
+git clone https://github.com/yourusername/mw-core.git
+cd mw-core
+
+# Install dependencies
 bun install
+
+# Configure MoneyWorks connection
+cp packages/api/mw-config.json packages/mcp-server/mw-config.json
+# Edit mw-config.json with your MoneyWorks server details
 ```
 
-2. Set up the database:
-```bash
-bun run db:migrate
-```
+## Configuration
 
-3. Configure MoneyWorks connection (choose one method):
+Create a `mw-config.json` file:
 
-   **Method A: Configuration File** (Recommended)
-   ```bash
-   # Create or verify mw-config.json in packages/api/
-   {
-     "host": "your-moneyworks-server.local",
-     "port": 6710,
-     "protocol": "http",
-     "dataFile": "YourCompany.moneyworks", 
-     "username": "ApiUser",
-     "password": "yourpassword",
-     "folderAuth": {
-       "folderName": "CompanyFolder",
-       "password": "folderpassword"
-     }
-   }
-   ```
-
-   **Method B: Environment Variables**
-   ```bash
-   export MW_HOST="your-moneyworks-server.local"
-   export MW_PORT="6710"
-   export MW_PROTOCOL="http"
-   export MW_DATA_FILE="YourCompany.moneyworks"
-   export MW_USERNAME="ApiUser" 
-   export MW_PASSWORD="yourpassword"
-   export MW_FOLDER_NAME="CompanyFolder"
-   export MW_FOLDER_PASSWORD="folderpassword"
-   ```
-
-4. Test MoneyWorks connection:
-```bash
-# From workspace root
-MW_CONFIG_PATH="./packages/api/mw-config.json" bun run cli list-moneyworks
-
-# Or test with curl (using your actual config values):
-FOLDER_CREDS=$(echo -n 'Agileworks:Datacentre:shalom1024' | base64)
-DOC_CREDS=$(echo -n 'support:Document:shalom1024' | base64)
-
-curl -H "Authorization: Basic $FOLDER_CREDS" \
-     -H "Authorization: Basic $DOC_CREDS" \
-     "http://hjonck-pro.local:6710/REST/AgileWorks%20Information%20Systems%20Main%20GL%20To%20Fix.moneyworks/evaluate?expr=1%2B1"
-```
-
-5. Run the MCP server:
-```bash
-# From workspace root 
-bun run dev:mcp
-```
-
-## MoneyWorks Authentication
-
-The MCP server uses **dual-header authentication** with TWO separate Authorization headers:
-
-1. **Folder Authentication**: `folderName:Datacentre:folderPassword` (Base64 encoded)
-2. **Document Authentication**: `username:Document:password` (Base64 encoded)
-
-**HTTP Headers Required:**
-```
-Authorization: Basic <base64-encoded-folder-credentials>
-Authorization: Basic <base64-encoded-document-credentials>
-```
-
-**Credential Format:**
-- Folder: `folderName:Datacentre:folderPassword`
-- Document: `username:Document:password`
-
-**REST API Pattern:**
-```
-http://{host}:{port}/REST/{dataFile}/
-```
-
-**Important**: Both Authorization headers use the same header name but contain different credentials. This is MoneyWorks' unique dual-authentication approach.
-
-**Implementation Note**: The current MoneyWorks API service combines both credentials into a single Authorization header (comma-separated). While this works for the current configuration, the official MoneyWorks specification requires two separate headers with identical names. Some HTTP libraries may require special handling for duplicate header names.
-
-## Required Environment Variables
-
-For MCP server operation, these environment variables are required:
-
-```bash
-# MoneyWorks Configuration (required)
-MW_CONFIG_PATH="/path/to/mw-config.json"
-
-# Error Tracking Database (required)  
-TICKETS_DB_PATH="/path/to/tickets.db"
-
-# Cache Directory (optional)
-MW_CACHE_DIR="/path/to/cache"
-```
-
-## Claude Code CLI Configuration
-
-Configure the MCP server for Claude Code CLI:
-
-```bash
-claude mcp add-json moneyworks '{
-  "command": "/Users/your-username/.bun/bin/bun",
-  "args": ["run", "dev:mcp"],
-  "cwd": "/path/to/mw-core",
-  "env": {
-    "MW_CONFIG_PATH": "/path/to/mw-core/packages/api/mw-config.json",
-    "MW_CACHE_DIR": "/path/to/mw-core/packages/api/cache",
-    "TICKETS_DB_PATH": "/path/to/mw-core/packages/mcp-server/data/tickets.db"
+```json
+{
+  "host": "localhost",
+  "port": 6710,
+  "protocol": "http",
+  "dataFile": "YourCompany.moneyworks",
+  "username": "ApiUser",
+  "password": "yourpassword",
+  "folderAuth": {
+    "folderName": "CompanyFolder",
+    "password": "folderPassword"
   }
-}' -s user
+}
 ```
 
-## Claude Desktop Configuration
+## Usage
 
-Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+### With Claude Desktop
+
+Add to your Claude Desktop configuration:
 
 ```json
 {
   "mcpServers": {
     "moneyworks": {
-      "command": "/Users/your-username/.bun/bin/bun",
-      "args": ["run", "dev:mcp"],
-      "cwd": "/path/to/mw-core",
+      "command": "bun",
+      "args": ["run", "/path/to/mw-core/packages/mcp-server/src/index.ts"],
       "env": {
-        "MW_CONFIG_PATH": "/path/to/mw-core/packages/api/mw-config.json",
-        "MW_CACHE_DIR": "/path/to/mw-core/packages/api/cache", 
-        "TICKETS_DB_PATH": "/path/to/mw-core/packages/mcp-server/data/tickets.db"
+        "MW_CONFIG_PATH": "/path/to/mw-config.json"
       }
     }
   }
 }
 ```
 
-**Important Notes:**
-- Use **absolute paths** for all file references
-- Set **working directory** (`cwd`) to the workspace root
-- Use **workspace script** (`dev:mcp`) instead of direct file execution
-- Include **all required environment variables**
+### With Claude CLI
+
+```bash
+claude mcp add-json moneyworks '{
+  "command": "/Users/your-username/.bun/bin/bun",
+  "args": ["run", "src/index.ts"],
+  "cwd": "/path/to/mw-core/packages/mcp-server",
+  "env": {
+    "MW_CONFIG_PATH": "/path/to/mw-config.json",
+    "TICKETS_DB_PATH": "/path/to/tickets.db"
+  }
+}' -s user
+```
 
 ## Available Tools
 
-- **searchAccounts**: Search accounts by code, description, type, or category
-- **getAccount**: Get a specific account by code
-- **listAccountFields**: List all available fields for accounts
-- More tools coming soon for other tables...
+### Table Tools (4)
 
-## Error Tracking
+1. **account_operations** - Chart of accounts management
+   - Search accounts by code, description, type
+   - Get account balances and hierarchies
+   - Filter by active status, balance, parent
 
-All errors are automatically logged to SQLite with:
-- User prompt that caused the error
-- API endpoint that failed
-- Error details and stack trace
-- Session ID for tracking
-- Automatic categorization with tags
+2. **transaction_operations** - Transaction management
+   - Search by date, account, name, type
+   - Get posted/unposted transactions
+   - Find outstanding invoices
 
-View tickets:
-```bash
-sqlite3 data/tickets.db "SELECT * FROM issues WHERE status='open';"
+3. **name_operations** - Customer/supplier management
+   - Search by name, email, phone
+   - Filter customers vs suppliers
+   - Check credit status and balances
+
+4. **build_operations** - Manufacturing/inventory
+   - Track builds by product, date, location
+   - Analyze cost variances
+   - Monitor production quantities
+
+### System Tools (41)
+
+Accessed through the `moneyworks_core` tool with categories:
+
+- **validation**: Field validation, code checks, expression testing
+- **permission**: User permissions, table access, security audit
+- **schema**: Table schemas, field metadata, relationships
+- **dataRelationship**: Find related records across tables
+- **calculation**: Evaluate expressions, aggregations
+- **sequence**: Get next sequence numbers
+- **constant**: System constants (TODAY, VERSION, etc.)
+- **searchExpression**: Build and test search expressions
+- **system**: Version info, custom exports, reports
+
+### Error Tracking Tool (1)
+
+**log_ticket** - Track and manage errors for continuous improvement
+- Log errors with context
+- List and filter tickets
+- Track resolution status
+- Generate statistics
+
+## Examples
+
+### Search for Accounts
+```json
+{
+  "tool": "account_operations",
+  "arguments": {
+    "operation": "search",
+    "searchTerm": "sales",
+    "accountType": "IN",
+    "onlyActive": true
+  }
+}
 ```
 
-## Troubleshooting
-
-### Connection Issues
-
-**Error: "DoConnect failed -43"**
-
-This indicates MoneyWorks DataCentre connectivity issues:
-
-1. **Verify MoneyWorks DataCentre is running:**
-   ```bash
-   # Test if server is reachable
-   curl -I http://your-server:6710/
-   ```
-
-2. **Check document availability:**
-   ```bash
-   # Test basic REST API access (requires TWO Authorization headers)
-   FOLDER_CREDS=$(echo -n 'folderName:Datacentre:folderPassword' | base64)
-   DOC_CREDS=$(echo -n 'username:Document:password' | base64)
-   
-   curl -H "Authorization: Basic $FOLDER_CREDS" \
-        -H "Authorization: Basic $DOC_CREDS" \
-        http://your-server:6710/REST/YourDocument.moneyworks/evaluate?expr=1+1
-   ```
-
-3. **Verify network connectivity:**
-   - Ensure Claude environment can reach MoneyWorks server
-   - Check firewall settings on port 6710
-   - Verify hostname resolution
-
-4. **Validate credentials:**
-   - Test username/password in MoneyWorks directly
-   - Verify folder authentication if required
-   - Check user permissions for REST API access
-
-**Error: "File not found on server"**
-
-1. **Verify document name:**
-   - Check exact spelling and case sensitivity
-   - Ensure `.moneyworks` extension is included
-   - Verify document is open in MoneyWorks DataCentre
-
-2. **Check document permissions:**
-   - Ensure user has access to the document
-   - Verify folder authentication is correct
-
-**MCP Server Not Appearing in Claude**
-
-1. **Check MCP configuration scope:**
-   ```bash
-   claude mcp list -s user    # Should show moneyworks
-   claude mcp list -s local   # Check local scope too
-   ```
-
-2. **Verify working directory:**
-   - MCP server must run from workspace root (`mw-core`)
-   - Use `cwd` parameter in configuration
-
-3. **Test MCP server startup:**
-   ```bash
-   # Manual test
-   MW_CONFIG_PATH="/path/to/config.json" \
-   TICKETS_DB_PATH="/path/to/tickets.db" \
-   bun run dev:mcp
-   ```
-
-### Environment Variable Issues
-
-**Config file not found:**
-```bash
-# Verify file exists and is readable
-ls -la /path/to/mw-config.json
-
-# Test with absolute path
-MW_CONFIG_PATH="/full/absolute/path/to/mw-config.json" bun run dev:mcp
+### Get Recent Transactions
+```json
+{
+  "tool": "transaction_operations", 
+  "arguments": {
+    "operation": "search",
+    "fromDate": "20240101",
+    "toDate": "20241231",
+    "onlyPosted": true
+  }
+}
 ```
 
-**Database initialization errors:**
-```bash
-# Recreate database
-rm -f packages/mcp-server/data/tickets.db
-bun run db:migrate
+### Evaluate Expression
+```json
+{
+  "tool": "moneyworks_core",
+  "arguments": {
+    "category": "calculation",
+    "operation": "calculate",
+    "expression": "Sum(Account.Balance, Type=\"IN\")"
+  }
+}
 ```
 
 ## Development
 
-To add a new tool:
-1. Create a new file in `src/tools/`
-2. Define the schema and tool implementation
-3. Register it in `src/index.ts`
-4. Update `mcp.json`
+```bash
+# Run in development mode
+bun run dev
 
-## System Prompt
+# Build for production
+bun run build
 
-Use the system prompt from `/docs/mcp-server-plan.md` to configure your AI assistant for MoneyWorks-specific tasks.
+# Run tests
+bun test
+
+# Reset ticket database
+bun run db:reset
+```
+
+## Migration from @moneyworks/api
+
+This server has been completely rewritten to use `@moneyworks/core` instead of the legacy `@moneyworks/api` package. Benefits include:
+
+- ✅ Better type safety with comprehensive TypeScript interfaces
+- ✅ Modern REST client with JSON support (faster than XML)
+- ✅ Cleaner architecture with service layer pattern
+- ✅ Direct access to MoneyWorks CLI for advanced operations
+- ✅ Improved error handling and tracking
+
+The tool interfaces remain unchanged, ensuring backward compatibility for existing AI assistants.
+
+## Troubleshooting
+
+### Connection Issues
+- Verify MoneyWorks Datacentre is running
+- Check firewall settings for port 6710
+- Ensure REST API is enabled in MoneyWorks
+- Verify authentication credentials
+
+### Performance
+- Use pagination for large datasets
+- Enable `debug: true` in config for detailed logs
+- Check MoneyWorks server resources
+
+### Error Tracking
+- Errors are automatically logged to SQLite database
+- Use `log_ticket` tool to review and manage errors
+- Check `data/tickets.db` for persistent storage
+
+## License
+
+MIT

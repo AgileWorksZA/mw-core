@@ -336,7 +336,7 @@ export class MoneyWorksApiService {
         table.toLowerCase() === "detail" ? "transaction" : table;
       const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
 
-      const url = `${this.getBaseUrl()}/export?table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
+      const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
       const authHeaders = this.createAuthHeaders();
 
       // When using fields or non-XML format, we need to ensure the response is text
@@ -440,7 +440,7 @@ export class MoneyWorksApiService {
         table.toLowerCase() === "detail" ? "transaction" : table;
       const parent = table.toLowerCase() === "detail" ? "Detail" : undefined;
 
-      const url = `${this.getBaseUrl()}/export?table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
+      const url = `${this.getBaseUrl()}/export/table=${exportTable}&${this.buildQueryParams(queryParams, parent)}`;
       const authHeaders = this.createAuthHeaders();
 
       const response = await axios.get(url, {

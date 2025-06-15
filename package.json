@@ -9,12 +9,15 @@
     "dev": "bun run dev:api",
     "dev:api": "bun --cwd packages/api dev",
     "dev:mcp": "bun --cwd packages/mcp-server dev",
-    "build": "bun run build:api && bun run build:mcp",
+    "dev:cli": "bun --cwd packages/cli dev",
+    "build": "bun run build:api && bun run build:mcp && bun run build:cli",
     "build:api": "bun --cwd packages/api build",
     "build:mcp": "bun --cwd packages/mcp-server build",
+    "build:cli": "bun --cwd packages/cli build",
     "clean": "rm -rf node_modules packages/*/node_modules",
     "test": "bun test",
-    "cli": "bun --cwd packages/api cli"
+    "cli": "bun --cwd packages/api cli",
+    "mw": "bun --cwd packages/cli dev"
   },
   "type": "module",
   "workspaces": [
