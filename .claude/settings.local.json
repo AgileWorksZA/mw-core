@@ -135,7 +135,8 @@
       "mcp__curl__curl",
       "Bash(npm test:*)",
       "Bash(killall:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
