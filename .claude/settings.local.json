@@ -92,7 +92,15 @@
       "mcp__moneyworks__listTables",
       "mcp__moneyworks__describeTableSchema",
       "Bash(git pull:*)",
-      "Bash(git ls-tree:*)"
+      "Bash(git ls-tree:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(./setup-claude-commands.sh:*)",
+      "Bash(open:*)",
+      "Bash(/Users/hjonck/dotfiles/claude/commands/apply-tags.sh:*)",
+      "Bash(/Users/hjonck/dotfiles/claude/install-claude.sh:*)",
+      "Bash(mdfind:*)",
+      "Bash(mdutil:*)",
+      "Bash(git -C /Users/hjonck/dotfiles log --oneline -3)"
     ],
     "deny": []
   }

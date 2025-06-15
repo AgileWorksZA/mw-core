@@ -2,14 +2,22 @@
 
 ## 🚨 NEXT SESSION PRIORITIES
 
+### 🔥 **HIGH PRIORITY - ARCHITECTURAL REVOLUTION**
+1. **🧠 SEMANTIC MCP OPTIMIZATION**: Semantic AI-First MoneyWorks API Architecture  
+   - **Priority**: HIGH (Architecture paradigm shift)
+   - **Impact**: Transforms MCP from data access to conversational business intelligence
+   - **Reference**: `docs/SEMANTIC-MCP-OPTIMIZATION-ANALYSIS.md`
+   - **Timeline**: 3-phase implementation (Semantic Types → MCP Interface → LLM Optimization)
+   - **Vision**: Enable natural language MoneyWorks operations via LLM conversations
+
 ### IMMEDIATE (Session 1) 
-1. **🔥 CRITICAL**: Fix logTicket database constraint error (BLOCKING)
+2. **🔥 CRITICAL**: Fix logTicket database constraint error (BLOCKING)
    - File: `packages/mcp-server/src/tools/log-ticket.ts`  
    - Add `type: args.type` to database insert
    - Test with valid feature request
 
 ### STRATEGIC ARCHITECTURE (Sessions 2-4)
-1. **🏗️ ARCHITECTURAL**: Dual Transport MCP Implementation
+3. **🏗️ ARCHITECTURAL**: Dual Transport MCP Implementation
    - **Phase 1**: Migrate to official MCP TypeScript SDK (Week 1)
    - **Phase 2**: Add HTTP/SSE transport for ChatGPT (Week 2) 
    - **Phase 3**: ChatGPT Teams integration optimization (Week 3)
