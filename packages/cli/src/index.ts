@@ -27,6 +27,11 @@ const { values, positionals } = parseArgs({
       type: "boolean",
       short: "d",
     },
+    timing: {
+      type: "boolean",
+      short: "t",
+      description: "Show timing information for the command",
+    },
   },
   strict: false,
   allowPositionals: true,
@@ -56,6 +61,7 @@ Commands:
 Options:
   -c, --config <file>  Config file path (default: ./mw-config.json)
   -d, --debug         Enable debug mode
+  -t, --timing        Show timing information
   -h, --help          Show help
   -v, --version       Show version
 
@@ -78,6 +84,8 @@ Examples:
 
 // Main CLI logic
 async function main() {
+  const startTime = values.timing ? performance.now() : 0;
+  
   try {
     const command = positionals[0];
     
@@ -103,8 +111,33 @@ async function main() {
     // Pass all args after the command name to the handler
     const commandIndex = process.argv.indexOf(command);
     const commandArgs = commandIndex >= 0 ? process.argv.slice(commandIndex + 1) : positionals.slice(1);
+    
+    if (values.timing) {
+      console.error(`\n[Timing] Starting command: ${command}`);
+    }
+    
     await handler(client, commandArgs, values);
+    
+    if (values.timing) {
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+      console.error(`\n[Timing] Command completed in ${duration.toFixed(2)}ms (${(duration / 1000).toFixed(3)}s)`);
+      
+      // Additional timing breakdown if available
+      if (config.debug) {
+        console.error(`[Timing] Breakdown:`);
+        console.error(`  - Total execution: ${duration.toFixed(2)}ms`);
+        console.error(`  - Command: ${command}`);
+        console.error(`  - Args: ${commandArgs.join(' ')}`);
+      }
+    }
   } catch (error) {
+    if (values.timing) {
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+      console.error(`\n[Timing] Command failed after ${duration.toFixed(2)}ms`);
+    }
+    
     console.error("Error:", error instanceof Error ? error.message : error);
     if (values.debug && error instanceof Error) {
       console.error(error.stack);

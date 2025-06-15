@@ -31,48 +31,10 @@ export function parseTSV<T extends TableName>(
   data: string,
   table: T,
 ): TableMapCamel[T][] {
-  try {
-    const lines = data.trim().split("\n");
-
-    if (lines.length === 0) {
-      return [];
-    }
-
-    // First line contains headers
-    const headers = lines[0]?.split("\t") || [];
-
-    // Parse records
-    const records = lines.slice(1).map((line) => {
-      const values = line.split("\t");
-      const record: Record<string, unknown> = {};
-
-      for (let index = 0; index < headers.length; index++) {
-        const header = headers[index];
-        const value = values[index];
-        if (header && value !== undefined && value !== "") {
-          record[header] = parseValue(value, header);
-        }
-      }
-
-      return record;
-    });
-
-    // Convert to camelCase
-    return records.map(
-      (record) =>
-        convertPascalToCamel(
-          table,
-          record as Partial<TableMap[T]>,
-        ) as TableMapCamel[T],
-    );
-  } catch (error) {
-    throw new ParseError(
-      `Failed to parse TSV for ${table}`,
-      "tsv",
-      data.substring(0, 500),
-      error,
-    );
-  }
+  // MoneyWorks TSV format returns raw data without headers
+  // For now, return the raw string data
+  // In the future, we could map columns to field names based on table schema
+  return data as any;
 }
 
 /**

@@ -85,45 +85,48 @@ export class MoneyWorksRESTClient {
       });
     }
 
-    // Build path parameters for export (MoneyWorks uses path params, not query params)
-    const pathParams: string[] = [`table=${table}`];
+    // Build query parameters for export
+    const queryParams = new URLSearchParams();
+    
+    queryParams.append("table", table);
     
     if (options.filter) {
-      pathParams.push(`search=${encodeURIComponent(options.filter)}`);
+      queryParams.append("search", options.filter);
     }
     if (options.start !== undefined) {
-      pathParams.push(`start=${options.start}`);
+      queryParams.append("start", options.start.toString());
     }
     if (options.limit !== undefined) {
-      pathParams.push(`limit=${options.limit}`);
+      queryParams.append("limit", options.limit.toString());
     }
     if (options.orderBy) {
-      pathParams.push(`orderby=${encodeURIComponent(options.orderBy)}`);
+      queryParams.append("orderby", options.orderBy);
     }
-    pathParams.push(`format=${this.getFormatParam(format)}`);
     
-    if (options.noLinger) {
-      pathParams.push("no_linger=true");
-    }
-
-    // Add custom template/script if needed
-    if (typeof format === "object") {
-      if ("template" in format) {
-        pathParams.push(`template=${encodeURIComponent(format.template)}`);
-      } else if ("script" in format) {
-        pathParams.push(`script=${encodeURIComponent(format.script)}`);
+    // Handle format parameter
+    // MoneyWorks defaults to TSV when no format is specified
+    if (format && format !== "tsv") {
+      if (typeof format === "object") {
+        if ("template" in format) {
+          queryParams.append("format", format.template);
+        } else if ("script" in format) {
+          queryParams.append("format", format.script);
+        }
+      } else {
+        queryParams.append("format", format);
       }
     }
-
-    // Build the export endpoint with path parameters
-    const exportEndpoint = `${REST_ENDPOINTS.EXPORT}/${pathParams.join("&")}`;
+    // If format is "tsv" or undefined, don't add format parameter (defaults to TSV)
     
-    // Make request (no query params for export)
-    const url = buildRESTUrl(this.config, exportEndpoint);
+    if (options.noLinger) {
+      queryParams.append("no_linger", "true");
+    }
+
+    // Build URL with query parameters
+    const url = buildRESTUrl(this.config, REST_ENDPOINTS.EXPORT, queryParams);
     
     if (this.config.debug) {
       console.log("Export URL:", url);
-      console.log("Format param:", this.getFormatParam(format));
     }
     
     const response = await this.makeRequest(url, {
@@ -146,11 +149,14 @@ export class MoneyWorksRESTClient {
     }
     
     // Check if response is just a single word (likely an error)
-    if (data.trim().indexOf(' ') === -1 && data.trim().indexOf('<') === -1 && data.trim().indexOf('\t') === -1) {
-      throw new MoneyWorksError(
-        MoneyWorksErrorCode.INVALID_RESPONSE,
-        `Invalid response from server: ${data.trim()}`
-      );
+    // Skip this check for custom formats which might return simple output
+    if (typeof format !== "object") {
+      if (data.trim().indexOf(' ') === -1 && data.trim().indexOf('<') === -1 && data.trim().indexOf('\t') === -1) {
+        throw new MoneyWorksError(
+          MoneyWorksErrorCode.INVALID_RESPONSE,
+          `Invalid response from server: ${data.trim()}`
+        );
+      }
     }
 
     // Parse based on format
@@ -169,9 +175,9 @@ export class MoneyWorksRESTClient {
       return data; // Return raw XML string
     }
 
-    if (format === "tsv") {
-      // For TSV, always parse to array (can't use raw TSV as easily)
-      return ExportParser.parseTSV<T>(data, table);
+    if (format === "tsv" || (!format && !isJsonFormat)) {
+      // For TSV (explicit or default), return raw data
+      return data;
     }
 
     if (format === "json" || isJsonFormat) {
@@ -179,7 +185,15 @@ export class MoneyWorksRESTClient {
       return await parseXMLWithSchema<T>(data, table, "xml-verbose");
     }
 
-    // Return raw data for custom formats
+    // Custom format - return raw text output
+    if (typeof format === "object") {
+      if (this.config.debug) {
+        console.log("Returning raw custom format output");
+      }
+      return data;
+    }
+
+    // Default: return raw data
     return data;
   }
 

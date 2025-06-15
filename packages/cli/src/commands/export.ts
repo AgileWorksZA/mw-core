@@ -6,6 +6,8 @@ export async function exportCommand(
   args: string[],
   _globalOptions: Record<string, unknown>
 ): Promise<void> {
+  const timing = _globalOptions.timing as boolean;
+  const timingStart = timing ? performance.now() : 0;
   if (args.length === 0) {
     console.error("Usage: mw export <table> [options]");
     console.error("Tables: Account, Transaction, Name, Product, Department, Job, etc.");
@@ -112,6 +114,7 @@ export async function exportCommand(
         console.log(`Debug: format = ${format}`);
       }
       
+      const exportStart = timing ? performance.now() : 0;
       const result = await client.export(table, {
         format,
         filter: values.filter as string,
@@ -120,11 +123,18 @@ export async function exportCommand(
         orderBy: values.orderBy as string,
       });
       
+      if (timing) {
+        const exportEnd = performance.now();
+        console.error(`[Timing] Export API call: ${(exportEnd - exportStart).toFixed(2)}ms`);
+      }
+      
       if (_globalOptions.debug) {
         console.log(`Debug: result type = ${typeof result}`);
         console.log(`Debug: is array = ${Array.isArray(result)}`);
       }
 
+      const outputStart = timing ? performance.now() : 0;
+      
       if (values.output) {
         if (typeof result === "string") {
           await Bun.write(values.output as string, result);
@@ -137,6 +147,16 @@ export async function exportCommand(
           console.log(result);
         } else {
           console.log(JSON.stringify(result, null, 2));
+        }
+      }
+      
+      if (timing) {
+        const outputEnd = performance.now();
+        console.error(`[Timing] Output processing: ${(outputEnd - outputStart).toFixed(2)}ms`);
+        if (Array.isArray(result)) {
+          console.error(`[Timing] Records processed: ${result.length}`);
+        } else if (typeof result === "string") {
+          console.error(`[Timing] Output size: ${(result.length / 1024).toFixed(2)}KB`);
         }
       }
     }
