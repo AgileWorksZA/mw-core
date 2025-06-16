@@ -2,7 +2,7 @@
  * Tests for authentication
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'bun:test';
 import { 
   createBasicAuth, 
   createTwoLevelAuth, 
@@ -152,13 +152,13 @@ describe('Authentication', () => {
   describe('AuthMode detection', () => {
     it('should detect basic auth mode', () => {
       const config: MoneyWorksConfig = fixtures.config.valid;
-      expect(config.dataFolder).toBeUndefined();
+      expect(config.folderName).toBeUndefined();
       expect(config.folderPassword).toBeUndefined();
     });
 
     it('should detect two-level auth mode', () => {
       const config: MoneyWorksConfig = fixtures.config.twoLevel;
-      expect(config.dataFolder).toBeDefined();
+      expect(config.folderName).toBeDefined();
       expect(config.folderPassword).toBeDefined();
     });
 
@@ -173,7 +173,7 @@ describe('Authentication', () => {
       const twoLevelAuth = createTwoLevelAuth(
         twoLevelConfig.username,
         twoLevelConfig.password!,
-        twoLevelConfig.dataFolder!,
+        twoLevelConfig.folderName!,
         twoLevelConfig.folderPassword!
       );
       expect(twoLevelAuth).toContain('Basic');

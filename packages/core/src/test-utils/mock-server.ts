@@ -174,12 +174,21 @@ export class MockMoneyWorksServer {
       // Return mock data based on table
       const mockData = this.getMockDataForTable(table, url.searchParams);
       
-      if (format === 'xml') {
+      // When no format is specified, MoneyWorks defaults to TSV
+      const actualFormat = format || 'tsv';
+      
+      if (actualFormat.startsWith('xml')) {
         res.writeHead(200, { 'Content-Type': 'text/xml' });
         res.end(this.convertToXML(table, mockData));
-      } else {
+      } else if (actualFormat === 'json') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(mockData));
+      } else if (actualFormat === 'tsv') {
+        res.writeHead(200, { 'Content-Type': 'text/tab-separated-values' });
+        res.end(this.convertToTSV(mockData));
+      } else {
+        res.writeHead(200, { 'Content-Type': 'text/xml' });
+        res.end(this.convertToXML(table, mockData));
       }
     });
 
@@ -194,25 +203,23 @@ export class MockMoneyWorksServer {
     });
 
     // Evaluate endpoint
-    this.addRoute('POST', /^\/REST\/([^/]+)\/evaluate$/, (req, res) => {
-      let body = '';
-      req.on('data', chunk => body += chunk);
-      req.on('end', () => {
-        // Simple expression evaluation
-        const expression = body;
-        let result = '0';
-        
-        if (expression.includes('CurrentPeriod')) {
-          result = '12';
-        } else if (expression.includes('Count')) {
-          result = '42';
-        } else if (expression.includes('Sum')) {
-          result = '12345.67';
-        }
+    this.addRoute('GET', /^\/REST\/([^/]+)\/evaluate$/, (req, res) => {
+      const url = new URL(req.url || '/', `http://localhost:${this.port}`);
+      const expression = url.searchParams.get('expr') || '';
+      let result = '0';
+      
+      if (expression.includes('CurrentPeriod')) {
+        result = '12';
+      } else if (expression.includes('Count')) {
+        result = '42';
+      } else if (expression.includes('Sum')) {
+        result = '12345.67';
+      } else if (expression === '1 + 1') {
+        result = '2';
+      }
 
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end(result);
-      });
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end(result);
     });
   }
 
@@ -241,17 +248,17 @@ export class MockMoneyWorksServer {
 
   private generateAccounts(): any[] {
     return [
-      { Code: 'BANK-CHQ', Description: 'Checking Account', Type: 'BA', Balance: '10000.00' },
       { Code: 'ACCT-REC', Description: 'Accounts Receivable', Type: 'CA', Balance: '25000.00' },
-      { Code: 'SALES-PROD', Description: 'Product Sales', Type: 'IN', Balance: '-50000.00' },
+      { Code: 'BANK-CHQ', Description: 'Checking Account', Type: 'BA', Balance: '10000.00' },
       { Code: 'EXP-WAGES', Description: 'Wages Expense', Type: 'EX', Balance: '30000.00' },
+      { Code: 'SALES-PROD', Description: 'Product Sales', Type: 'IN', Balance: '-50000.00' },
     ];
   }
 
   private generateTransactions(): any[] {
     return [
       { SequenceNumber: '1001', Type: 'DI', TransDate: '20240101', Description: 'Invoice #1001', Gross: '1100.00' },
-      { SequenceNumber: '1002', Type: 'CI', TransDate: '20240102', Description: 'Bill #2001', Gross: '550.00' },
+      { SequenceNumber: '1002', Type: 'DC', TransDate: '20240102', Description: 'Credit Note #2001', Gross: '550.00' },
       { SequenceNumber: '1003', Type: 'DP', TransDate: '20240103', Description: 'Payment Received', Gross: '1100.00' },
     ];
   }
@@ -272,17 +279,18 @@ export class MockMoneyWorksServer {
   }
 
   private convertToXML(table: string, data: any[]): string {
-    let xml = `<?xml version="1.0"?>\n<table name="${table}">\n`;
+    const tableLower = table.toLowerCase();
+    let xml = `<?xml version="1.0"?>\n<export>\n  <table name="${table}">\n`;
     
     for (const record of data) {
-      xml += '  <record>\n';
+      xml += `    <${tableLower}>\n`;
       for (const [key, value] of Object.entries(record)) {
-        xml += `    <field name="${key}">${this.escapeXML(String(value))}</field>\n`;
+        xml += `      <${key}>${this.escapeXML(String(value))}</${key}>\n`;
       }
-      xml += '  </record>\n';
+      xml += `    </${tableLower}>\n`;
     }
     
-    xml += '</table>';
+    xml += '  </table>\n</export>';
     return xml;
   }
 
@@ -293,5 +301,17 @@ export class MockMoneyWorksServer {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&apos;');
+  }
+  
+  private convertToTSV(data: any[]): string {
+    if (data.length === 0) return '';
+    
+    // Get headers from first record
+    const headers = Object.keys(data[0]);
+    const rows = data.map(record => 
+      headers.map(header => String(record[header] || '')).join('\t')
+    );
+    
+    return rows.join('\n');
   }
 }

@@ -6,6 +6,7 @@
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
         "bun-types": "latest",
+        "xml2js": "^0.6.2",
       },
     },
     "packages/api": {

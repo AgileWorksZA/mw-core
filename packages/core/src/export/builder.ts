@@ -45,7 +45,9 @@ export class ExportBuilder<T extends TableName> {
   ): this {
     // Convert camelCase field to MoneyWorks field name
     const mwField = this.getMWFieldName(String(field));
-    const filterExpr = `${mwField}${operator}${this.formatValue(value)}`;
+    // Add space before LIKE operator
+    const op = operator === "LIKE" ? ` ${operator} ` : operator;
+    const filterExpr = `${mwField}${op}${this.formatValue(value)}`;
 
     if (this.options.filter) {
       this.options.filter += ` AND ${filterExpr}`;

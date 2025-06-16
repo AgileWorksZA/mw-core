@@ -2,12 +2,13 @@
  * Tests for MoneyWorksRESTClient
  */
 
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { MoneyWorksRESTClient } from '../client';
 import { createTestClient, assert } from '../../test-utils/helpers';
 import { fixtures } from '../../test-utils/fixtures';
 import { createAccount, createTransaction } from '../../test-utils/factories';
 import type { MockMoneyWorksServer } from '../../test-utils/mock-server';
+import { buildXML } from '../../xml/builder';
 
 describe('MoneyWorksRESTClient', () => {
   let client: MoneyWorksRESTClient;
@@ -76,7 +77,7 @@ describe('MoneyWorksRESTClient', () => {
 
   describe('export', () => {
     it('should export all records from a table', async () => {
-      server.mockResponse('GET', '/REST/TestFile/export?table=Account', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/export?table=Account', {
         body: fixtures.xml.validExport,
         headers: { 'Content-Type': 'text/xml' }
       });
@@ -93,7 +94,7 @@ describe('MoneyWorksRESTClient', () => {
     it('should apply filters', async () => {
       server.addRoute('GET', /\/REST\/.*\/export/, (req, res, matches) => {
         const url = new URL(req.url!, `http://localhost`);
-        const filter = url.searchParams.get('filter');
+        const filter = url.searchParams.get('search');
         
         expect(filter).toBe('Type="BA"');
         
@@ -108,17 +109,17 @@ describe('MoneyWorksRESTClient', () => {
       server.addRoute('GET', /\/REST\/.*\/export/, (req, res) => {
         const url = new URL(req.url!, `http://localhost`);
         expect(url.searchParams.get('limit')).toBe('10');
-        expect(url.searchParams.get('offset')).toBe('20');
+        expect(url.searchParams.get('start')).toBe('20');
         
         res.writeHead(200, { 'Content-Type': 'text/xml' });
         res.end(fixtures.xml.emptyExport);
       });
 
-      await client.export('Account', { limit: 10, offset: 20 });
+      await client.export('Account', { limit: 10, start: 20 });
     });
 
     it('should handle empty results', async () => {
-      server.mockResponse('GET', '/REST/TestFile/export?table=Account', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/export?table=Account', {
         body: fixtures.xml.emptyExport
       });
 
@@ -127,7 +128,7 @@ describe('MoneyWorksRESTClient', () => {
     });
 
     it('should handle malformed XML', async () => {
-      server.mockResponse('GET', '/REST/TestFile/export?table=Account', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/export?table=Account', {
         body: fixtures.xml.malformed
       });
 
@@ -138,7 +139,7 @@ describe('MoneyWorksRESTClient', () => {
     });
 
     it('should decode special characters', async () => {
-      server.mockResponse('GET', '/REST/TestFile/export?table=Name', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/export?table=Name', {
         body: fixtures.xml.withSpecialChars
       });
 
@@ -148,17 +149,22 @@ describe('MoneyWorksRESTClient', () => {
     });
 
     it('should support different formats', async () => {
-      // JSON format
-      server.mockResponse('GET', '/REST/TestFile/export?table=Account&format=json', {
-        body: JSON.stringify(fixtures.json.accounts),
-        headers: { 'Content-Type': 'application/json' }
+      // JSON format - client requests XML and converts it
+      server.mockResponse('GET', '/REST/TestFile.mwd7/export?table=Account&format=xml-verbose', {
+        body: fixtures.xml.validExport,
+        headers: { 'Content-Type': 'text/xml' }
       });
 
       const jsonAccounts = await client.export('Account', { format: 'json' });
-      expect(jsonAccounts).toEqual(fixtures.json.accounts);
+      expect(jsonAccounts).toHaveLength(2);
+      expect(jsonAccounts[0]).toMatchObject({
+        code: 'BANK-001',
+        description: 'Main Bank Account',
+        type: 'BA'
+      });
 
       // TSV format
-      server.mockResponse('GET', '/REST/TestFile/export?table=Account&format=tsv', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/export?table=Account', {
         body: fixtures.tsv.validExport,
         headers: { 'Content-Type': 'text/tab-separated-values' }
       });
@@ -170,12 +176,12 @@ describe('MoneyWorksRESTClient', () => {
 
   describe('import', () => {
     it('should import a single record', async () => {
-      server.mockResponse('POST', '/REST/TestFile/import?table=Account', {
+      server.mockResponse('POST', '/REST/TestFile.mwd7/import', {
         body: fixtures.xml.importSuccess
       });
 
       const account = createAccount({ code: 'NEW-001' });
-      const result = await client.import('Account', account);
+      const result = await client.import('Account', [account]);
       
       expect(result).toEqual({
         success: true,
@@ -209,12 +215,12 @@ describe('MoneyWorksRESTClient', () => {
     });
 
     it('should handle import errors', async () => {
-      server.mockResponse('POST', '/REST/TestFile/import?table=Account', {
+      server.mockResponse('POST', '/REST/TestFile.mwd7/import', {
         body: fixtures.xml.importError
       });
 
       await assert.rejects(
-        client.import('Account', createAccount()),
+        client.import('Account', [createAccount()]),
         /Duplicate code/
       );
     });
@@ -222,7 +228,7 @@ describe('MoneyWorksRESTClient', () => {
 
   describe('evaluate', () => {
     it('should evaluate simple expressions', async () => {
-      server.mockResponse('POST', '/REST/TestFile/evaluate', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/evaluate?expr=1%20%2B%201', {
         body: '2'
       });
 
@@ -231,18 +237,17 @@ describe('MoneyWorksRESTClient', () => {
     });
 
     it('should evaluate complex expressions', async () => {
-      server.addRoute('POST', /\/REST\/.*\/evaluate/, (req, res) => {
-        let body = '';
-        req.on('data', chunk => body += chunk);
-        req.on('end', () => {
-          if (body.includes('Count')) {
-            res.end('42');
-          } else if (body.includes('Sum')) {
-            res.end('12345.67');
-          } else {
-            res.end('0');
-          }
-        });
+      server.addRoute('GET', /\/REST\/.*\/evaluate/, (req, res) => {
+        const url = new URL(req.url!, `http://localhost`);
+        const expr = url.searchParams.get('expr') || '';
+        
+        if (expr.includes('Count')) {
+          res.end('42');
+        } else if (expr.includes('Sum')) {
+          res.end('12345.67');
+        } else {
+          res.end('0');
+        }
       });
 
       const count = await client.evaluate('Count(Transaction, Type="DI")');
@@ -253,7 +258,7 @@ describe('MoneyWorksRESTClient', () => {
     });
 
     it('should handle evaluation errors', async () => {
-      server.mockResponse('POST', '/REST/TestFile/evaluate', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/evaluate?expr=Invalid%28', {
         status: 400,
         body: 'Invalid expression'
       });
@@ -295,7 +300,7 @@ describe('MoneyWorksRESTClient', () => {
     });
 
     it('should handle 404 errors', async () => {
-      server.mockResponse('GET', '/REST/TestFile/export?table=InvalidTable', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/export?table=InvalidTable', {
         status: 404,
         body: 'Table not found'
       });
@@ -307,7 +312,7 @@ describe('MoneyWorksRESTClient', () => {
     });
 
     it('should handle 500 errors', async () => {
-      server.mockResponse('GET', '/REST/TestFile/export?table=Account', {
+      server.mockResponse('GET', '/REST/TestFile.mwd7/export?table=Account', {
         status: 500,
         body: 'Internal Server Error'
       });
@@ -327,7 +332,7 @@ describe('MoneyWorksRESTClient', () => {
       );
 
       server.addRoute('GET', /\/REST\/.*\/export/, (req, res) => {
-        const xml = client['buildXML']('Account', largeDataset);
+        const xml = buildXML('Account', largeDataset);
         res.writeHead(200, { 'Content-Type': 'text/xml' });
         res.end(xml);
       });

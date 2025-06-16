@@ -2,10 +2,10 @@
  * Test data factories for generating consistent test data
  */
 
-import type { Account } from '../tables/accounts';
-import type { Transaction } from '../tables/transactions';
-import type { Name } from '../tables/names';
-import type { Product } from '../tables/products';
+import type { AccountCamel } from '../tables/accounts';
+import type { TransactionCamel } from '../tables/transactions';
+import type { NameCamel } from '../tables/names';
+import type { ProductCamel } from '../tables/products';
 
 let sequenceCounter = 1000;
 
@@ -26,34 +26,32 @@ function nextSequence(): number {
 /**
  * Account factory
  */
-export function createAccount(overrides: Partial<Account> = {}): Account {
-  const defaults: Account = {
-    sequenceNumber: nextSequence(),
+export function createAccount(overrides: Partial<AccountCamel> = {}): AccountCamel {
+  const defaults: AccountCamel = {
     code: `TEST-${nextSequence()}`,
     description: 'Test Account',
-    type: 'BA',
-    inactive: false,
-    parentAccount: '',
-    accountingType: 0,
-    currencyCode: 'AUD',
-    colour: 0,
-    displayOrder: 0,
+    type: 'BA' as any, // AccountType.CurrentAsset
+    // Optional fields with sensible defaults
+    system: '  ' as any,
+    currency: 'AUD',
     balance: 0,
-    foreignBalance: 0,
-    enteredBalance: 0,
-    //... other fields with defaults
+    balanceF: 0,
+    localBalance: 0,
+    colour: 0 as any,
+    hidden: false,
+    flags: 0,
   };
 
-  return { ...defaults, ...overrides } as Account;
+  return { ...defaults, ...overrides };
 }
 
 /**
  * Transaction factory
  */
-export function createTransaction(overrides: Partial<Transaction> = {}): Transaction {
-  const defaults: Transaction = {
+export function createTransaction(overrides: Partial<TransactionCamel> = {}): TransactionCamel {
+  const defaults: TransactionCamel = {
     sequenceNumber: nextSequence(),
-    type: 'DI',
+    type: 'DI' as any,
     transDate: '20240101',
     period: 1,
     fromAccount: 'BANK-001',
@@ -66,63 +64,61 @@ export function createTransaction(overrides: Partial<Transaction> = {}): Transac
     ourReference: `INV-${nextSequence()}`,
     theirReference: '',
     status: 0, // Unposted
-    transactionMode: 0,
-    currencyCode: 'AUD',
+    mode: 0,
+    currency: 'AUD',
     exchangeRate: 1,
-    foreignGross: 100,
-    posted: false,
-    //... other fields
+    grossF: 100,
+    taxF: 10,
+    netF: 90,
+    posted: 0,
   };
 
-  return { ...defaults, ...overrides } as Transaction;
+  return { ...defaults, ...overrides };
 }
 
 /**
  * Name (Customer/Supplier) factory
  */
-export function createName(overrides: Partial<Name> = {}): Name {
+export function createName(overrides: Partial<NameCamel> = {}): NameCamel {
   const isCustomer = overrides.type === 'C' || !overrides.type;
   
-  const defaults: Name = {
-    sequenceNumber: nextSequence(),
+  const defaults: NameCamel = {
     code: `${isCustomer ? 'CUST' : 'SUPP'}-${nextSequence()}`,
     name: `Test ${isCustomer ? 'Customer' : 'Supplier'} ${nextSequence()}`,
-    type: isCustomer ? 'C' : 'S',
-    inactive: false,
+    type: isCustomer ? 'C' : 'S' as any,
+    active: 1,
     address1: '123 Test Street',
     address2: 'Test Suburb',
     address3: '',
     address4: 'Test City',
     postcode: '1234',
-    phone: '555-1234',
-    mobile: '555-5678',
+    phone1: '555-1234',
+    phone2: '555-5678',
     fax: '',
     email: 'test@example.com',
     webURL: '',
-    contactName: 'Test Contact',
-    abn: '',
+    contact: 'Test Contact',
+    aBN: '',
     balance: 0,
     creditLimit: 1000,
     discount: 0,
     paymentTerms: 30,
     taxCode: 'STD',
-    holdStatus: 0,
-    //... other fields
+    hold: 0,
   };
 
-  return { ...defaults, ...overrides } as Name;
+  return { ...defaults, ...overrides };
 }
 
 /**
  * Product factory
  */
-export function createProduct(overrides: Partial<Product> = {}): Product {
-  const defaults: Product = {
-    sequenceNumber: nextSequence(),
+export function createProduct(overrides: Partial<ProductCamel> = {}): ProductCamel {
+  const defaults: ProductCamel = {
     code: `PROD-${nextSequence()}`,
     description: 'Test Product',
     comment: 'Test product for unit tests',
-    inactive: false,
+    active: 1,
     ledgerCode: 'SALES-001',
     sellUnit: 'EA',
     sellPrice: 100,
@@ -144,10 +140,9 @@ export function createProduct(overrides: Partial<Product> = {}): Product {
     customField3: '',
     customField4: '',
     barcode: '',
-    //... other fields
   };
 
-  return { ...defaults, ...overrides } as Product;
+  return { ...defaults, ...overrides };
 }
 
 /**
@@ -192,7 +187,7 @@ export const scenarios = {
       type: 'DP',
       nameCode: customer.code,
       gross: 1100,
-      linkedTransaction: invoice.sequenceNumber,
+      linkedSeq: invoice.sequenceNumber,
       status: 1, // Posted
     });
     
@@ -213,7 +208,7 @@ export const scenarios = {
     const invoice = createTransaction({
       type: 'CI',
       nameCode: supplier.code,
-      linkedTransaction: order.sequenceNumber,
+      linkedSeq: order.sequenceNumber,
       status: 1, // Posted
     });
     
@@ -254,8 +249,8 @@ export const edgeCases = {
    * Maximum length fields
    */
   maxLengthAccount: () => createAccount({
-    code: 'A'.repeat(15), // Max account code length
-    description: 'D'.repeat(255), // Max description length
+    code: 'A'.repeat(7), // Max account code length
+    description: 'D'.repeat(39), // Max description length
   }),
 
   /**

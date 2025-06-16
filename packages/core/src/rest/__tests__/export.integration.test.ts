@@ -3,7 +3,7 @@
  * These tests require a running MoneyWorks instance or will use mock server
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'bun:test';
 import { MoneyWorksRESTClient } from '../client';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';

@@ -32,7 +32,7 @@ export async function createTestClient(
     port,
     username: 'test',
     password: 'test123',
-    dataFile: 'TestFile',
+    dataFile: 'TestFile.mwd7',
     ...config,
   };
   
@@ -181,17 +181,34 @@ export const assert = {
     promise: Promise<any>,
     expectedError?: string | RegExp | Error
   ): Promise<void> {
+    let thrown = false;
+    let actualError: any;
+    
     try {
       await promise;
-      throw new Error('Expected promise to reject, but it resolved');
     } catch (error) {
-      if (expectedError) {
-        if (typeof expectedError === 'string') {
-          expect(error.message).toContain(expectedError);
-        } else if (expectedError instanceof RegExp) {
-          expect(error.message).toMatch(expectedError);
-        } else if (expectedError instanceof Error) {
-          expect(error.message).toBe(expectedError.message);
+      thrown = true;
+      actualError = error;
+    }
+    
+    if (!thrown) {
+      throw new Error('Expected promise to reject, but it resolved');
+    }
+    
+    if (expectedError) {
+      const errorMessage = actualError?.message || String(actualError);
+      
+      if (typeof expectedError === 'string') {
+        if (!errorMessage.includes(expectedError)) {
+          throw new Error(`Expected error to contain "${expectedError}" but got "${errorMessage}"`);
+        }
+      } else if (expectedError instanceof RegExp) {
+        if (!expectedError.test(errorMessage)) {
+          throw new Error(`Expected error to match ${expectedError} but got "${errorMessage}"`);
+        }
+      } else if (expectedError instanceof Error) {
+        if (errorMessage !== expectedError.message) {
+          throw new Error(`Expected error message "${expectedError.message}" but got "${errorMessage}"`);
         }
       }
     }
@@ -202,7 +219,9 @@ export const assert = {
    */
   matchesShape<T>(actual: any, shape: T): void {
     for (const key in shape) {
-      expect(actual).toHaveProperty(key);
+      if (!(key in actual)) {
+        throw new Error(`Expected property "${key}" to exist`);
+      }
       if (typeof shape[key] === 'object' && shape[key] !== null) {
         assert.matchesShape(actual[key], shape[key]);
       }
@@ -219,9 +238,13 @@ export const assert = {
   ): void {
     const matches = array.filter(predicate);
     if (count !== undefined) {
-      expect(matches).toHaveLength(count);
+      if (matches.length !== count) {
+        throw new Error(`Expected ${count} matches but found ${matches.length}`);
+      }
     } else {
-      expect(matches.length).toBeGreaterThan(0);
+      if (matches.length === 0) {
+        throw new Error('Expected at least one match but found none');
+      }
     }
   }
 };

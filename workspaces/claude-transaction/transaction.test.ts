@@ -56,8 +56,8 @@ describe('Transaction Entity Validation', () => {
         }).not.toThrow();
       });
 
-      // Verify we have exactly 71 fields as per transaction-source.ts
-      expect(requiredFields.length).toBe(71);
+      // Verify we have exactly 72 fields as per transaction-source.ts
+      expect(requiredFields.length).toBe(72);
     });
   });
 
@@ -137,7 +137,8 @@ describe('Transaction Entity Validation', () => {
 
       const result = validateTransaction(invalidTransaction);
       expect(result.isValid).toBe(false);
-      expect(result.errors.length).toBe(5);
+      // We expect 6 errors: 5 for field length constraints + 1 for missing TransDate
+      expect(result.errors.length).toBe(6);
     });
 
     test('Should validate enum values', () => {

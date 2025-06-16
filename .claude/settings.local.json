@@ -130,7 +130,13 @@
       "mcp__filesystem__directory_tree",
       "mcp__filesystem__read_file",
       "mcp__filesystem__read_multiple_files",
-      "mcp__filesystem__list_directory"
+      "mcp__filesystem__list_directory",
+      "mcp__filesystem__move_file",
+      "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/run-tests.sh)",
+      "Bash(./test-runner.sh:*)",
+      "mcp__desktop-commander__execute_command",
+      "mcp__desktop-commander__read_file",
+      "Bash(MW_CONFIG_PATH=/Users/hgeldenhuys/WebstormProjects/mw-core/packages/core/mw-config.json bun run packages/mcp-server/src/index.ts)"
     ],
     "deny": []
   }

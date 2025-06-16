@@ -418,7 +418,13 @@ export class MoneyWorksRESTClient {
         this.config.timeout || 30000,
       );
 
-      const response = await fetch(url, {
+      // Use globalThis.fetch to ensure we get the global fetch
+      const fetchFn = globalThis.fetch || fetch;
+      if (!fetchFn) {
+        throw new Error('fetch is not available');
+      }
+
+      const response = await fetchFn(url, {
         ...options,
         signal: controller.signal,
       });
@@ -492,6 +498,35 @@ export class MoneyWorksRESTClient {
     responseText: string,
     recordCount: number,
   ): ImportResult {
+    // Try to parse as XML first
+    if (responseText.includes("<?xml")) {
+      try {
+        // Simple XML parsing for import response
+        const statusMatch = responseText.match(/status="([^"]+)"/);
+        const countMatch = responseText.match(/count="(\d+)"/);
+        const sequenceMatch = responseText.match(/sequence="(\d+)"/);
+        const errorMatch = responseText.match(/<error[^>]*message="([^"]+)"/);
+        
+        if (statusMatch?.[1] === "success") {
+          const count = countMatch?.[1] ? Number.parseInt(countMatch[1], 10) : recordCount;
+          const sequences = sequenceMatch ? [Number.parseInt(sequenceMatch[1], 10)] : undefined;
+          return {
+            success: true,
+            count,
+            sequenceNumbers: sequences,
+          };
+        } else if (errorMatch?.[1]) {
+          throw new MoneyWorksError(
+            MoneyWorksErrorCode.IMPORT_ERROR,
+            errorMatch[1]
+          );
+        }
+      } catch (error) {
+        if (error instanceof MoneyWorksError) throw error;
+        // Fall through to text parsing
+      }
+    }
+    
     // Look for error patterns
     const errors = responseText.match(/\[ERROR\]([^\n]+)/g) || [];
     const errorDetails = errors.map((error, index) => ({

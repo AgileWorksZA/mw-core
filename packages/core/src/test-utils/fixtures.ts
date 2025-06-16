@@ -163,7 +163,7 @@ TEST-003\tLine1\\nLine2`,
       port: 9595,
       username: 'test',
       password: 'test123',
-      dataFile: 'TestFile',
+      dataFile: 'TestFile.mwd7',
     },
 
     // Two-level auth
@@ -172,8 +172,8 @@ TEST-003\tLine1\\nLine2`,
       port: 9595,
       username: 'test',
       password: 'test123',
-      dataFile: 'TestFile',
-      dataFolder: 'TestFolder',
+      dataFile: 'TestFile.mwd7',
+      folderName: 'TestFolder',
       folderPassword: 'folder123',
     },
 
@@ -182,7 +182,7 @@ TEST-003\tLine1\\nLine2`,
       host: 'localhost',
       port: 9595,
       username: 'test',
-      dataFile: 'TestFile',
+      dataFile: 'TestFile.mwd7',
     },
 
     // Invalid configs
@@ -190,13 +190,13 @@ TEST-003\tLine1\\nLine2`,
       missingHost: {
         port: 9595,
         username: 'test',
-        dataFile: 'TestFile',
+        dataFile: 'TestFile.mwd7',
       },
       badPort: {
         host: 'localhost',
         port: 'not-a-number',
         username: 'test',
-        dataFile: 'TestFile',
+        dataFile: 'TestFile.mwd7',
       }
     }
   },

@@ -142,17 +142,26 @@ export interface RESTResponse<T = unknown> {
  * Import result
  */
 export interface ImportResult {
+  /** Whether the import was successful */
+  success?: boolean;
+  
+  /** Total count of imported records */
+  count?: number;
+  
+  /** Sequence numbers of created records */
+  sequenceNumbers?: number[];
+  
   /** Number of records processed */
-  processed: number;
+  processed?: number;
 
   /** Number of records created */
-  created: number;
+  created?: number;
 
   /** Number of records updated */
-  updated: number;
+  updated?: number;
 
   /** Number of errors */
-  errors: number;
+  errors?: number;
 
   /** Error details */
   errorDetails?: Array<{
