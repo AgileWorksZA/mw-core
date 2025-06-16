@@ -101,7 +101,7 @@ function processRecord(
     }
 
     // Special handling for subfiles
-    if (field === "subfile" && Array.isArray(value)) {
+    if ((field === "subfile" || field === "Subfile") && Array.isArray(value)) {
       processed.subfile = value.map((sub) => {
         if (sub.name === "detail" && Array.isArray(sub.records)) {
           return buildSubfile(sub.records);
@@ -112,7 +112,7 @@ function processRecord(
     }
 
     // Format value
-    processed[field] = formatValue(value);
+    processed[field] = formatValue(value, field);
   }
 
   // Add calculated fields if provided
@@ -135,7 +135,7 @@ function buildSubfile(details: Record<string, unknown>[]): SubfileDetail {
       const processed: Record<string, unknown> = {};
       for (const [field, value] of Object.entries(detail)) {
         if (value !== undefined && value !== null) {
-          processed[field] = formatValue(value);
+          processed[field] = formatValue(value, field);
         }
       }
       return processed;
@@ -146,7 +146,7 @@ function buildSubfile(details: Record<string, unknown>[]): SubfileDetail {
 /**
  * Format value for XML
  */
-function formatValue(value: unknown): string | number {
+function formatValue(value: unknown, field?: string): string | number {
   if (value instanceof Date) {
     // Format as YYYYMMDD
     const year = value.getFullYear();
@@ -159,17 +159,34 @@ function formatValue(value: unknown): string | number {
     return value ? 1 : 0;
   }
 
+  if (typeof value === "number") {
+    // Check if this is a monetary field
+    if (field && isMonetaryField(field)) {
+      // Round to 2 decimal places and format
+      return Number(value.toFixed(2));
+    }
+    return value;
+  }
+
   if (typeof value === "string") {
-    // Escape XML special characters
-    return value
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&apos;");
+    // xml2js handles escaping automatically, so we don't need to escape here
+    return value;
   }
 
   return value as string | number;
+}
+
+/**
+ * Check if field is a monetary field
+ */
+function isMonetaryField(field: string): boolean {
+  const monetaryFields = [
+    "Price", "Amount", "Balance", "Total", "Gross", "Net", "Tax",
+    "Credit", "Debit", "Cost", "Value", "Rate", "Fee", "Charge",
+    "Payment", "Deposit", "Discount", "Surcharge"
+  ];
+  
+  return monetaryFields.some(f => field.includes(f));
 }
 
 /**
@@ -276,5 +293,6 @@ export const XMLBuilder = {
   build: buildXML,
   buildTransactionWithDetails,
   buildBatchImport,
+  validate: validateRecord,
   validateRecord,
 };

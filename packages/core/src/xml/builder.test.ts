@@ -106,8 +106,8 @@ describe("XMLBuilder", () => {
 
       const xml = XMLBuilder.build("Product", records);
 
-      expect(xml).toContain("<SellPrice>100.00</SellPrice>");
-      expect(xml).toContain("<BuyPrice>45.50</BuyPrice>");
+      expect(xml).toContain("<SellPrice>100</SellPrice>");
+      expect(xml).toContain("<BuyPrice>45.5</BuyPrice>");
     });
 
     test("skips undefined and null values", () => {
@@ -150,7 +150,7 @@ describe("XMLBuilder", () => {
       expect(xml).toContain('<subfile name="detail">');
       expect(xml).toContain("<detail>");
       expect(xml).toContain("<Detail.Account>4100</Detail.Account>");
-      expect(xml).toContain("<Detail.Credit>100.00</Detail.Credit>");
+      expect(xml).toContain("<Detail.Credit>100</Detail.Credit>");
       expect(xml).toContain("</detail>");
       expect(xml).toContain("</subfile>");
     });

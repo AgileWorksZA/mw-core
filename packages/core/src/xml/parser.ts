@@ -102,15 +102,20 @@ export async function parseXML<T extends TableName>(
     const records = extractRecords(parsed as ParsedXML, table);
 
     // Clean up records - handle MoneyWorks attribute structure
-    const cleanedRecords = records.map(record => cleanMoneyWorksRecord(record, table));
+    const cleanedRecords = records.map(record => {
+      const cleaned = cleanMoneyWorksRecord(record, table);
+      return cleaned;
+    });
 
     // Convert to camelCase
     return cleanedRecords.map(
-      (record) =>
-        convertPascalToCamel(
+      (record) => {
+        const converted = convertPascalToCamel(
           table,
           record as Partial<TableMap[T]>,
-        ) as TableMapCamel[T],
+        ) as TableMapCamel[T];
+        return converted;
+      }
     );
   } catch (error) {
     // Add more context for debugging
@@ -145,7 +150,10 @@ function cleanMoneyWorksRecord(record: Record<string, unknown>, table?: string):
   for (const [key, value] of Object.entries(record)) {
     // Special handling for subfile (transaction details)
     if (key === "subfile" && value && table === "Transaction") {
-      // Process subfile structure and flatten to details array
+      // For now, preserve the raw subfile structure as array
+      cleaned.subfile = Array.isArray(value) ? value : [value];
+      
+      // Also process subfile structure and flatten to details array
       const subfiles = Array.isArray(value) ? value : [value];
       const allDetails = [];
       
@@ -218,7 +226,12 @@ function cleanMoneyWorksRecord(record: Record<string, unknown>, table?: string):
     else if (value && typeof value === "object" && "_" in value) {
       // Extract the actual value from the "_" attribute
       cleaned[key] = (value as Record<string, unknown>)._;
-    } 
+    }
+    // Handle MoneyWorks attribute structure where value is in "$._"
+    else if (value && typeof value === "object" && "$" in value && typeof (value as any).$ === "object" && "_" in (value as any).$) {
+      // Extract the actual value from the "$._" attribute
+      cleaned[key] = (value as any).$._;
+    }
     // Handle empty XML elements that become {$: {}} or similar
     else if (
       value && 
@@ -258,6 +271,12 @@ function extractRecords(
   if (parsed.export?.table) {
     // Check if export.table is a string (malformed response)
     if (typeof parsed.export.table === "string") {
+      // Special case for malformed MoneyWorks response where table name is returned as string
+      // Instead of proper structure
+      if (parsed.export.table === table || parsed.export.table === table.toLowerCase()) {
+        console.warn(`Warning: Expected table object but got string: "${parsed.export.table}"`);
+        return [];
+      }
       console.warn(`Warning: Expected table object but got string: "${parsed.export.table}"`);
       return [];
     }
@@ -267,9 +286,12 @@ function extractRecords(
       : [parsed.export.table];
 
     const targetTable = tables.find(
-      (t) =>
-        (t as TableNode).name === table ||
-        (t as TableNode).name === table.toLowerCase(),
+      (t) => {
+        const tableObj = t as any;
+        // Check for name in attributes
+        const tableName = tableObj.$?.name || tableObj.name;
+        return tableName === table || tableName === table.toLowerCase();
+      }
     );
 
     if (targetTable) {

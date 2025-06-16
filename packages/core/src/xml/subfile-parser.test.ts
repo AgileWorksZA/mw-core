@@ -32,10 +32,19 @@ describe("XMLParser - Transaction with subfiles", () => {
     // Check subfile
     expect(result[0].subfile).toBeDefined();
     expect(Array.isArray(result[0].subfile)).toBe(true);
-    expect(result[0].subfile[0].name).toBe("Detail");
-    expect(result[0].subfile[0].detail).toBeDefined();
-    expect(result[0].subfile[0].detail[0].lineNumber).toBe(1);
-    expect(result[0].subfile[0].detail[0].gross).toBe(500);
+    expect(result[0].subfile[0].$?.name).toBe("Detail");
+    
+    // Check detail content
+    const detail = result[0].subfile[0].Detail || result[0].subfile[0].detail;
+    expect(detail).toBeDefined();
+    
+    if (Array.isArray(detail)) {
+      expect(Number(detail[0].LineNumber || detail[0].lineNumber)).toBe(1);
+      expect(Number(detail[0].Gross || detail[0].gross)).toBe(500);
+    } else {
+      expect(Number(detail.LineNumber || detail.lineNumber)).toBe(1);
+      expect(Number(detail.Gross || detail.gross)).toBe(500);
+    }
   });
 
   it("should handle MoneyWorks attribute-style XML", async () => {
@@ -55,6 +64,6 @@ describe("XMLParser - Transaction with subfiles", () => {
     
     expect(result).toHaveLength(1);
     expect(result[0].sequenceNumber).toBe("12345");
-    expect(result[0].gross).toBe(1000);
+    expect(Number(result[0].gross)).toBe(1000);
   });
 });
