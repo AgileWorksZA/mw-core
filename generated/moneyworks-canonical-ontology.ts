@@ -644,6 +644,24 @@ export {
   MONEYWORKS_JOB_CANONICAL_TERMS
 } from "./moneyworks-jobs-canonical-ontology";
 
+// ============================================================================
+// DEPARTMENTS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Departments canonical definitions
+export {
+  MONEYWORKS_DEPARTMENT_FIELDS,
+  MONEYWORKS_DEPARTMENT_REQUIRED_FIELDS,
+  MONEYWORKS_DEPARTMENT_INDEXED_FIELDS,
+  MONEYWORKS_DEPARTMENT_CUSTOM_FIELDS,
+  MONEYWORKS_DEPARTMENT_SYSTEM_FIELDS,
+  MONEYWORKS_DEPARTMENT_RELATIONSHIPS,
+  MONEYWORKS_DEPARTMENT_VALIDATION_RULES,
+  MONEYWORKS_DEPARTMENT_BUSINESS_MAPPINGS,
+  MoneyWorksDepartmentEntity,
+  MoneyWorksDepartmentDataType
+} from "./moneyworks-departments-canonical-ontology";
+
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,
   MONEYWORKS_ACCOUNT_TYPE_DEFINITIONS,

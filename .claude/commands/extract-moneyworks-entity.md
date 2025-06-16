@@ -26,6 +26,7 @@ You are continuing the MoneyWorks Semantic Vocabulary Distillation project.
 - Location: `/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core`
 - Master Specification: `docs/MONEYWORKS-SEMANTIC-VOCABULARY-DISTILLATION-MASTER-SPEC.md`
 - Progress Tracking: `docs/COMPLETE-CANONICAL-ONTOLOGY-STRATEGY.md`
+- Read these documents before reading the Moneyworks entity source
 
 **Foundational Entities Complete (6/17-20, ~35% progress):**
 1. ✅ Transactions (17 types) - Financial transaction system
@@ -51,10 +52,29 @@ Now extract the **{{entity_name}}** entity canonical ontology from MoneyWorks ma
 - Cross-business universality validation (test across restaurant, legal, construction, consulting domains)
 - Comprehensive validation framework (create test suite with 100% field coverage)
 
+## ARCHITECTURAL CONSISTENCY REQUIREMENT
+  Before starting extraction, examine these existing ontology files to understand the established pattern:
+  - generated/moneyworks-names-canonical-ontology.ts
+  - generated/moneyworks-products-canonical-ontology.ts
+  - generated/moneyworks-jobs-canonical-ontology.ts
+
+  ## REQUIRED OUTPUT STRUCTURE
+  Follow this exact pattern:
+  1. Enums for categorical/classified field values
+  2. Array-based field definitions using standardized object structure
+  3. Export collections like MONEYWORKS_[ENTITY]_FIELDS
+  4. Target ~300-600 lines, prioritize conciseness over comprehensiveness, however, use as many lines as required to capture all the detail required.
+
+  ## PATTERN VERIFICATION
+  - Use same field object structure: {fieldName, dataType, maxLength, canonicalDescription, manualSource, isRequired?, isIndexed?}
+  - Use same enum patterns for classified values
+  - Export same style of field collections
+  - Maintain consistent verbosity level with existing files
+
 ## MULTI-ENTITY FILE GUARD:
 ⚠️ **IMPORTANT**: Check if the manual page contains multiple distinct entities in one file:
-- If multiple entities detected: Extract EACH entity separately maintaining terminological purity
-- Create separate ontology files for each entity: moneyworks-[entity1]-canonical-ontology.ts, moneyworks-[entity2]-canonical-ontology.ts
+- If multiple entities detected: Extract EACH entity separately maintaining terminological purity IF the page states that the files are stored separately. If mutiple logical entities are described but stored in one file, create only one ontological file.
+- Create separate ontology files for each entity IF the page states that they are stored in speparate files: moneyworks-[entity1]-canonical-ontology.ts, moneyworks-[entity2]-canonical-ontology.ts
 - Include WARNING in output: "Multi-entity file detected - extracted [X] distinct entities to prevent DSL pollution"
 - Validate that entities don't share conflicting terminology or field definitions
 - Document entity boundaries clearly in session summary
@@ -66,6 +86,9 @@ Now extract the **{{entity_name}}** entity canonical ontology from MoneyWorks ma
 4. Generate appropriate ontology files (single or multiple based on analysis)
 5. Create comprehensive validation tests for each entity
 6. Update integration files and document discoveries
+7. ONLY edit or create files under the ./generated or ./docs folders. 
+8. To be clear, do NOT edit files in other folders except as stated in no 7. 
+9. Take note of refrences to other files and add a todo to revisit this file when the other dependent entities have been processed.
 
 ## PURITY PRINCIPLES:
 - Use MoneyWorks canonical terminology exclusively (Creditor not Supplier, Debtor not Customer)
