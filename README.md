@@ -120,6 +120,7 @@ This branch contains **comprehensive authentication fixes and MCP improvements**
 
 ## Development
 
+### Quick Start
 To start the development server:
 ```bash
 # Run the API server
@@ -133,6 +134,14 @@ bun run build
 ```
 
 The API will be available at http://localhost:3131, with Swagger documentation at http://localhost:3131/swagger.
+
+### Claude Code Setup
+This project includes custom Claude Code commands for enhanced development productivity. See [CLAUDE-SETUP.md](CLAUDE-SETUP.md) for:
+- Global command installation (universal workflows)
+- MoneyWorks-specific automation commands
+- Team development workflow optimization
+
+**Quick test**: After setup, try `/memory-refresh` or `/mw-dev-cycle` in Claude Code.
 
 ## API Endpoints
 
