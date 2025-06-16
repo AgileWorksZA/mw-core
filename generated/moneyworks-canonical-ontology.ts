@@ -662,6 +662,29 @@ export {
   MoneyWorksDepartmentDataType
 } from "./moneyworks-departments-canonical-ontology";
 
+// ============================================================================
+// GENERAL CLASSIFICATIONS ENTITY INTEGRATION
+// ============================================================================
+
+// Import General Classifications canonical definitions (Account Categories, Department Classifications, Department Groups)
+export {
+  MoneyWorksGeneralPrefix,
+  MoneyWorksGeneralClassificationType,
+  MoneyWorksAccountCategoryDefinition,
+  MoneyWorksDepartmentClassificationDefinition,
+  MoneyWorksDepartmentGroupDefinition,
+  MONEYWORKS_GENERAL_FIELDS,
+  MONEYWORKS_GENERAL_CANONICAL_TERMS,
+  MONEYWORKS_ACCOUNT_CATEGORY_RULES,
+  MONEYWORKS_DEPARTMENT_CLASSIFICATION_RULES,
+  MONEYWORKS_DEPARTMENT_GROUP_RULES,
+  validateGeneralPrefix,
+  getCanonicalClassificationExplanation,
+  parseGeneralCode,
+  createGeneralCode,
+  validateGeneralUniversality
+} from "./moneyworks-general-classifications-canonical-ontology";
+
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,
   MONEYWORKS_ACCOUNT_TYPE_DEFINITIONS,

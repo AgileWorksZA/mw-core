@@ -17,11 +17,11 @@
  */
 export enum GeneralType {
   /** Account Categories */
-  CATEGORY = "A_",
+  CATEGORY = "C",
   /** Department Classifications */
-  CLASSIFICATION = "D_",
+  CLASSIFICATION = "D",
   /** Groups */
-  GROUP = "G_",
+  GROUP = "S",
 }
 
 /**
@@ -33,12 +33,12 @@ export interface General {
    * Item code with type prefix
    * @maxLength 5
    * @description Unique identifier with prefix indicating type:
-   * - A_ = Account Category
-   * - D_ = Department Classification
-   * - G_ = Group
-   * @example "A_100" for an account category
-   * @example "D_ADM" for a department classification
-   * @example "G_001" for a group
+   * - C = Account Category
+   * - D = Department Classification
+   * - S = Group
+   * @example "C100" for an account category
+   * @example "DADM" for a department classification
+   * @example "S001" for a group
    */
   Code: string;
 
@@ -71,12 +71,12 @@ export interface GeneralCamel {
    * Item code with type prefix
    * @maxLength 5
    * @description Unique identifier with prefix indicating type:
-   * - A_ = Account Category
-   * - D_ = Department Classification
-   * - G_ = Group
-   * @example "A_100" for an account category
-   * @example "D_ADM" for a department classification
-   * @example "G_001" for a group
+   * - C = Account Category
+   * - D = Department Classification
+   * - S = Group
+   * @example "C100" for an account category
+   * @example "DADM" for a department classification
+   * @example "S001" for a group
    */
   code: string;
 
@@ -178,7 +178,7 @@ export const generalHelpers = {
    * @returns Formatted category code
    */
   createCategoryCode(suffix: string): string {
-    const formatted = suffix.toUpperCase().substring(0, 3);
+    const formatted = suffix.toUpperCase().substring(0, 4);
     return `${GeneralType.CATEGORY}${formatted}`;
   },
 
@@ -188,7 +188,7 @@ export const generalHelpers = {
    * @returns Formatted classification code
    */
   createClassificationCode(suffix: string): string {
-    const formatted = suffix.toUpperCase().substring(0, 3);
+    const formatted = suffix.toUpperCase().substring(0, 4);
     return `${GeneralType.CLASSIFICATION}${formatted}`;
   },
 
@@ -198,7 +198,7 @@ export const generalHelpers = {
    * @returns Formatted group code
    */
   createGroupCode(suffix: string): string {
-    const formatted = suffix.toUpperCase().substring(0, 3);
+    const formatted = suffix.toUpperCase().substring(0, 4);
     return `${GeneralType.GROUP}${formatted}`;
   },
 
@@ -208,8 +208,8 @@ export const generalHelpers = {
    * @returns The code suffix without prefix
    */
   getCodeSuffix(code: string): string {
-    if (code.length > 2 && code[1] === "_") {
-      return code.substring(2);
+    if (code.length > 1 && (code[0] === "C" || code[0] === "D" || code[0] === "S")) {
+      return code.substring(1);
     }
     return code;
   },
@@ -221,7 +221,7 @@ export const generalHelpers = {
    * @returns Formatted code with prefix
    */
   formatCode(type: GeneralType, suffix: string): string {
-    const formatted = suffix.toUpperCase().substring(0, 3);
+    const formatted = suffix.toUpperCase().substring(0, 4);
     return `${type}${formatted}`;
   },
 
@@ -301,42 +301,42 @@ export const generalHelpers = {
  * Account Category (subset of General)
  */
 export interface AccountCategory extends General {
-  Code: `A_${string}`;
+  Code: `C${string}`;
 }
 
 /**
  * Department Classification (subset of General)
  */
 export interface DepartmentClassification extends General {
-  Code: `D_${string}`;
+  Code: `D${string}`;
 }
 
 /**
  * Group (subset of General)
  */
 export interface Group extends General {
-  Code: `G_${string}`;
+  Code: `S${string}`;
 }
 
 /**
  * Account Category (camelCase)
  */
 export interface AccountCategoryCamel extends GeneralCamel {
-  code: `A_${string}`;
+  code: `C${string}`;
 }
 
 /**
  * Department Classification (camelCase)
  */
 export interface DepartmentClassificationCamel extends GeneralCamel {
-  code: `D_${string}`;
+  code: `D${string}`;
 }
 
 /**
  * Group (camelCase)
  */
 export interface GroupCamel extends GeneralCamel {
-  code: `G_${string}`;
+  code: `S${string}`;
 }
 
 /**

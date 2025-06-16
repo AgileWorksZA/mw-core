@@ -4,7 +4,7 @@
 
 ## 🎯 **WHERE WE ARE → WHERE WE'RE GOING**
 
-### **Current State (Foundational Progress - 7/17 Entities Complete)**
+### **Current State (Foundational Progress - 8/17 Entities Complete)**
 - ✅ **Transaction Entity**: 17 canonical types extracted and validated
 - ✅ **Account Entity**: 10 canonical types with system account integration
 - ✅ **Names Entity**: Hierarchical Customer/Debtor, Supplier/Creditor classification discovered
@@ -12,6 +12,7 @@
 - ✅ **TaxRates Entity**: International tax compliance system (17 fields, dual-rate, multi-tier support)
 - ✅ **Jobs Entity**: Sophisticated project management system (34 fields, hierarchical structure, client-debtor integration)
 - ✅ **Departments Entity**: Organizational classification system (9 fields, cost center tracking, universal business applicability)
+- ✅ **General Classifications Entity**: Account Categories, Department Classifications, and Department Groups (prefix-based logical separation, universal business applicability)
 - ✅ **Validation Framework**: Comprehensive canonical terminology verification
 - ✅ **Purity Principles**: Three-layer semantic architecture established
 - ✅ **Domain Pollution Prevention**: Continuous terminology consistency checking
@@ -47,7 +48,7 @@ Based on the manual structure, MoneyWorks has these core entities:
 
 ### **System Entities**
 13. 🔄 **User Management** - Login and security
-14. 🔄 **Categories** - Classification systems
+14. ✅ **General Classifications** - Account Categories, Department Classifications, and Department Groups (prefix-based logical separation in single file)
 15. 🔄 **Allocations** - Cost allocation rules
 16. 🔄 **Build Records** - Manufacturing/assembly
 17. 🔄 **Memo Records** - Notes and documentation
