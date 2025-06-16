@@ -196,7 +196,7 @@ describe('MoneyWorksRESTClient', () => {
         req.on('data', chunk => body += chunk);
         req.on('end', () => {
           // Check that multiple records were sent
-          const recordCount = (body.match(/<record>/g) || []).length;
+          const recordCount = (body.match(/<account>/g) || []).length;
           expect(recordCount).toBe(3);
           
           res.writeHead(200, { 'Content-Type': 'text/xml' });

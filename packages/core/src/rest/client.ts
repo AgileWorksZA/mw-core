@@ -504,12 +504,21 @@ export class MoneyWorksRESTClient {
         // Simple XML parsing for import response
         const statusMatch = responseText.match(/status="([^"]+)"/);
         const countMatch = responseText.match(/count="(\d+)"/);
-        const sequenceMatch = responseText.match(/sequence="(\d+)"/);
         const errorMatch = responseText.match(/<error[^>]*message="([^"]+)"/);
         
         if (statusMatch?.[1] === "success") {
           const count = countMatch?.[1] ? Number.parseInt(countMatch[1], 10) : recordCount;
-          const sequences = sequenceMatch ? [Number.parseInt(sequenceMatch[1], 10)] : undefined;
+          
+          // Parse sequence numbers from record elements
+          const sequenceMatches = responseText.match(/<record[^>]*sequence="(\d+)"/g);
+          let sequences: number[] | undefined;
+          if (sequenceMatches) {
+            sequences = sequenceMatches.map(match => {
+              const seqMatch = match.match(/sequence="(\d+)"/);
+              return seqMatch ? Number.parseInt(seqMatch[1], 10) : 0;
+            }).filter(seq => seq > 0);
+          }
+          
           return {
             success: true,
             count,

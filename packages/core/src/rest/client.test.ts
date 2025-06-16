@@ -108,7 +108,7 @@ describe("MoneyWorks REST Client", () => {
       const incompleteFolder = { ...testConfig, folderName: "folder" };
 
       expect(() => validateConfig(incompleteFolder)).toThrow(
-        "Both folderName and folderPassword must be provided",
+        "Folder name provided without folder password",
       );
     });
   });

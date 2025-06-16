@@ -9,44 +9,49 @@ export const fixtures = {
   xml: {
     // Valid export response
     validExport: `<?xml version="1.0"?>
-<table name="Account">
-  <record>
-    <field name="SequenceNumber">1001</field>
-    <field name="Code">BANK-001</field>
-    <field name="Description">Main Bank Account</field>
-    <field name="Type">BA</field>
-    <field name="Balance">10000.00</field>
-  </record>
-  <record>
-    <field name="SequenceNumber">1002</field>
-    <field name="Code">SALES-001</field>
-    <field name="Description">Sales Revenue</field>
-    <field name="Type">IN</field>
-    <field name="Balance">-50000.00</field>
-  </record>
-</table>`,
+<export>
+  <table name="Account">
+    <account>
+      <Code>BANK-001</Code>
+      <Description>Main Bank Account</Description>
+      <Type>BA</Type>
+      <Balance>10000.00</Balance>
+    </account>
+    <account>
+      <Code>SALES-001</Code>
+      <Description>Sales Revenue</Description>
+      <Type>IN</Type>
+      <Balance>-50000.00</Balance>
+    </account>
+  </table>
+</export>`,
 
     // Empty result
     emptyExport: `<?xml version="1.0"?>
-<table name="Account">
-</table>`,
+<export>
+  <table name="Account">
+  </table>
+</export>`,
 
     // Malformed XML
     malformed: `<?xml version="1.0"?>
-<table name="Account">
-  <record>
-    <field name="Code">TEST</field>
-    <!-- Missing closing tags`,
+<export>
+  <table name="Account">
+    <account>
+      <Code>TEST</Code>
+      <!-- Missing closing tags`,
 
     // Special characters
     withSpecialChars: `<?xml version="1.0"?>
-<table name="Name">
-  <record>
-    <field name="Code">SPECIAL-001</field>
-    <field name="Name">Test &amp; Co &lt;Special&gt;</field>
-    <field name="Description">Description with "quotes" and 'apostrophes'</field>
-  </record>
-</table>`,
+<export>
+  <table name="Name">
+    <name>
+      <Code>SPECIAL-001</Code>
+      <Name>Test &amp; Co &lt;Special&gt;</Name>
+      <Description>Description with "quotes" and 'apostrophes'</Description>
+    </name>
+  </table>
+</export>`,
 
     // Error response
     errorResponse: `<?xml version="1.0"?>

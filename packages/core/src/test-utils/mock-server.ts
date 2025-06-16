@@ -152,8 +152,8 @@ export class MockMoneyWorksServer {
   }
 
   private setupDefaultRoutes() {
-    // Version endpoint
-    this.addRoute('GET', '/version', (req, res) => {
+    // Version endpoint (matches /REST/{dataFile}/version)
+    this.addRoute('GET', /^\/REST\/([^/]+)\/version$/, (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/plain' });
       res.end('MoneyWorks Gold 9.1.7 REST API');
     });
@@ -225,25 +225,143 @@ export class MockMoneyWorksServer {
 
   private getMockDataForTable(table: string, params: URLSearchParams): any[] {
     const limit = parseInt(params.get('limit') || '100');
-    const offset = parseInt(params.get('offset') || '0');
+    const start = parseInt(params.get('start') || '0');
+    const filter = params.get('search') || '';
 
     // Generate mock data based on table
+    let data: any[];
     switch (table.toLowerCase()) {
       case 'account':
-        return this.generateAccounts().slice(offset, offset + limit);
+        data = this.generateAccounts();
+        break;
       
       case 'transaction':
-        return this.generateTransactions().slice(offset, offset + limit);
+        data = this.generateTransactions();
+        break;
       
       case 'name':
-        return this.generateNames().slice(offset, offset + limit);
+        data = this.generateNames();
+        break;
       
       case 'product':
-        return this.generateProducts().slice(offset, offset + limit);
+        data = this.generateProducts();
+        break;
       
       default:
         return [];
     }
+
+    // Apply filter if provided
+    if (filter) {
+      data = this.applyFilter(data, filter);
+    }
+
+    // Apply pagination
+    return data.slice(start, start + limit);
+  }
+
+  private applyFilter(data: any[], filter: string): any[] {
+    // Handle complex expressions with parentheses and AND/OR
+    if (filter.includes(' AND ') || filter.includes(' OR ')) {
+      return data.filter(item => this.evaluateComplexFilter(item, filter));
+    }
+    
+    // Simple filter parser for tests
+    const match = filter.match(/(\w+)\s*=\s*"([^"]+)"/);
+    if (match) {
+      const [, field, value] = match;
+      return data.filter(item => item[field] === value);
+    }
+    
+    // Handle LIKE operator
+    const likeMatch = filter.match(/(\w+)\s+LIKE\s+"([^"]+)"/);
+    if (likeMatch) {
+      const [, field, pattern] = likeMatch;
+      const regex = new RegExp(pattern.replace(/%/g, '.*'), 'i');
+      return data.filter(item => regex.test(String(item[field] || '')));
+    }
+    
+    // Handle comparison operators
+    const compMatch = filter.match(/(\w+)\s*([><=]+)\s*(\d+)/);
+    if (compMatch) {
+      const [, field, op, value] = compMatch;
+      const numValue = parseFloat(value);
+      return data.filter(item => {
+        const itemValue = parseFloat(item[field] || '0');
+        switch (op) {
+          case '>': return itemValue > numValue;
+          case '<': return itemValue < numValue;
+          case '>=': return itemValue >= numValue;
+          case '<=': return itemValue <= numValue;
+          case '=': return itemValue === numValue;
+          default: return false;
+        }
+      });
+    }
+    
+    return data;
+  }
+
+  private evaluateComplexFilter(item: any, filter: string): boolean {
+    // Handle parentheses by extracting and evaluating inner expressions first
+    let workingFilter = filter;
+    
+    // Replace function calls with dummy values for testing
+    workingFilter = workingFilter.replace(/CurrentPeriod\(\)/g, '12');
+    
+    // Extract parenthetical expressions
+    const parenMatch = workingFilter.match(/\(([^)]+)\)/);
+    if (parenMatch) {
+      const innerExpr = parenMatch[1];
+      const innerResult = this.evaluateComplexFilter(item, innerExpr);
+      workingFilter = workingFilter.replace(parenMatch[0], innerResult ? 'TRUE' : 'FALSE');
+    }
+    
+    // Handle AND
+    if (workingFilter.includes(' AND ')) {
+      const parts = workingFilter.split(' AND ');
+      return parts.every(part => this.evaluateSingleCondition(item, part.trim()));
+    }
+    
+    // Handle OR
+    if (workingFilter.includes(' OR ')) {
+      const parts = workingFilter.split(' OR ');
+      return parts.some(part => this.evaluateSingleCondition(item, part.trim()));
+    }
+    
+    // Single condition
+    return this.evaluateSingleCondition(item, workingFilter);
+  }
+
+  private evaluateSingleCondition(item: any, condition: string): boolean {
+    // Handle TRUE/FALSE from evaluated expressions
+    if (condition === 'TRUE') return true;
+    if (condition === 'FALSE') return false;
+    
+    // Handle equality
+    const eqMatch = condition.match(/(\w+)\s*=\s*"([^"]+)"/);
+    if (eqMatch) {
+      const [, field, value] = eqMatch;
+      return item[field] === value;
+    }
+    
+    // Handle numeric comparisons
+    const compMatch = condition.match(/(\w+)\s*([><=]+)\s*(\d+)/);
+    if (compMatch) {
+      const [, field, op, value] = compMatch;
+      const numValue = parseFloat(value);
+      const itemValue = parseFloat(item[field] || '0');
+      switch (op) {
+        case '>': return itemValue > numValue;
+        case '<': return itemValue < numValue;
+        case '>=': return itemValue >= numValue;
+        case '<=': return itemValue <= numValue;
+        case '=': return itemValue === numValue;
+        default: return false;
+      }
+    }
+    
+    return false;
   }
 
   private generateAccounts(): any[] {
@@ -260,14 +378,18 @@ export class MockMoneyWorksServer {
       { SequenceNumber: '1001', Type: 'DI', TransDate: '20240101', Description: 'Invoice #1001', Gross: '1100.00' },
       { SequenceNumber: '1002', Type: 'DC', TransDate: '20240102', Description: 'Credit Note #2001', Gross: '550.00' },
       { SequenceNumber: '1003', Type: 'DP', TransDate: '20240103', Description: 'Payment Received', Gross: '1100.00' },
+      { SequenceNumber: '1004', Type: 'DI', TransDate: '20240104', Description: 'Invoice #1002', Gross: '2200.00' },
+      { SequenceNumber: '1005', Type: 'CI', TransDate: '20240105', Description: 'Supplier Invoice #3001', Gross: '750.00' },
     ];
   }
 
   private generateNames(): any[] {
     return [
-      { Code: 'CUST-001', Name: 'ABC Company', Type: 'C', Balance: '1000.00' },
-      { Code: 'CUST-002', Name: 'XYZ Corporation', Type: 'C', Balance: '2500.00' },
-      { Code: 'SUPP-001', Name: 'Acme Supplies', Type: 'S', Balance: '-500.00' },
+      { Code: 'CUST-001', Name: 'ABC Company', CustomerType: 1, SupplierType: 0, Balance: '1000.00' },
+      { Code: 'CUST-002', Name: 'XYZ Corporation', CustomerType: 1, SupplierType: 0, Balance: '2500.00' },
+      { Code: 'SUPP-001', Name: 'Acme Supplies', CustomerType: 0, SupplierType: 1, Balance: '-500.00' },
+      { Code: 'SUPP-002', Name: 'Office Depot', CustomerType: 0, SupplierType: 1, Balance: '-750.00' },
+      { Code: 'BOTH-001', Name: 'Contractor Inc', CustomerType: 1, SupplierType: 1, Balance: '100.00' },
     ];
   }
 
