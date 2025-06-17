@@ -593,7 +593,7 @@ export function validateFieldDefinition(
 // NAMES ENTITY INTEGRATION
 // ============================================================================
 
-// Import Names canonical definitions
+// Import Names canonical definitions including dual-layer contact architecture
 export {
   MoneyWorksCustomerType,
   MoneyWorksSupplierType,
@@ -601,7 +601,10 @@ export {
   MONEYWORKS_CUSTOMER_TYPE_DEFINITIONS,
   MONEYWORKS_SUPPLIER_TYPE_DEFINITIONS,
   MONEYWORKS_NAME_FIELDS,
-  MONEYWORKS_NAME_CANONICAL_TERMS
+  MONEYWORKS_NAME_CANONICAL_TERMS,
+  MONEYWORKS_DUAL_CONTACT_BUSINESS_RULES,
+  MONEYWORKS_DUAL_CONTACT_USAGE_PATTERNS,
+  MONEYWORKS_CONTACT_FIELD_CAPACITY_MATRIX
 } from "./moneyworks-names-canonical-ontology";
 
 // ============================================================================
@@ -684,6 +687,58 @@ export {
   createGeneralCode,
   validateGeneralUniversality
 } from "./moneyworks-general-classifications-canonical-ontology";
+
+// ============================================================================
+// ASSETS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Assets canonical definitions
+export {
+  MoneyWorksAssetStatus,
+  MoneyWorksDepreciationType,
+  MONEYWORKS_ASSET_FIELDS,
+  MONEYWORKS_ASSET_CANONICAL_TERMS,
+  validateAssetStatus,
+  validateDepreciationType,
+  calculateCanonicalBookValue,
+  requiresDepreciation,
+  getCanonicalAssetLifecycle,
+  validateAssetRelationships
+} from "./moneyworks-assets-canonical-ontology";
+
+// ============================================================================
+// ASSETLOG ENTITY INTEGRATION
+// ============================================================================
+
+// Import AssetLog canonical definitions
+export {
+  MoneyWorksAssetLogAction,
+  MONEYWORKS_ASSETLOG_FIELDS,
+  MONEYWORKS_ASSETLOG_CANONICAL_TERMS,
+  validateAssetLogAction,
+  isDepreciationAction,
+  affectsQuantity,
+  requiresTransaction,
+  getCanonicalActionExplanation,
+  validateAssetLogRelationships,
+  calculateActionImpact
+} from "./moneyworks-assetlog-canonical-ontology";
+
+// ============================================================================
+// CONTACTS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Contacts canonical definitions
+export {
+  MONEYWORKS_CONTACTS_FIELDS,
+  MONEYWORKS_CONTACTS_BUSINESS_RULES,
+  MONEYWORKS_CONTACTS_RELATIONSHIPS,
+  MONEYWORKS_CONTACTS_CANONICAL_SUMMARY,
+  CONTACTS_FIELDS,
+  CONTACTS_BUSINESS_RULES,
+  CONTACTS_RELATIONSHIPS,
+  CONTACTS_CANONICAL_SUMMARY
+} from "./moneyworks-contacts-canonical-ontology";
 
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,
