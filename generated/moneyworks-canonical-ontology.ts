@@ -740,6 +740,40 @@ export {
   CONTACTS_CANONICAL_SUMMARY
 } from "./moneyworks-contacts-canonical-ontology";
 
+// ============================================================================
+// INVENTORY ENTITY INTEGRATION
+// ============================================================================
+
+// Import Inventory canonical definitions
+export {
+  MoneyWorksInventoryRelationshipType,
+  MoneyWorksInventoryTrackingMode,
+  MoneyWorksStockTakeState,
+  MONEYWORKS_INVENTORY_FIELDS,
+  MONEYWORKS_INVENTORY_FUNCTIONS,
+  MONEYWORKS_INVENTORY_CANONICAL_TERMS,
+  validateInventoryLocationCanonical,
+  validateInventoryIdentifierCanonical,
+  validateStockTakeQuantitiesCanonical,
+  validateProductSequenceRelationship,
+  generateInventoryRecordKey,
+  parseInventoryRecordKey,
+  calculateStockVariance,
+  supportsExpiryTracking
+} from "./moneyworks-inventory-canonical-ontology";
+
+// ============================================================================
+// PAYMENTS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Payments canonical definitions
+export {
+  MONEYWORKS_PAYMENTS_FIELDS,
+  MONEYWORKS_PAYMENTS_BUSINESS_RULES,
+  MONEYWORKS_PAYMENTS_RELATIONSHIPS,
+  MONEYWORKS_PAYMENTS_VALIDATION
+} from "./moneyworks-payments-canonical-ontology";
+
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,
   MONEYWORKS_ACCOUNT_TYPE_DEFINITIONS,
