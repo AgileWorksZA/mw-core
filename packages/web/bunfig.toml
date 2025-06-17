@@ -1,4 +1,0 @@
-[test]
-preload = ["./test-setup.ts"]
-# Exclude Playwright tests
-pattern = ["**/*.test.{ts,js}", "!**/*.e2e.test.{ts,js}"]
