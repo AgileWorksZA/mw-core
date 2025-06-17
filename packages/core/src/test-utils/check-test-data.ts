@@ -32,7 +32,7 @@ async function checkTestData() {
         const count = Array.isArray(accounts) ? accounts.length : 0;
         console.log(`   ${type}: ${count} records`);
       } catch (error) {
-        console.log(`   ${type}: Error - ${error.message}`);
+        console.log(`   ${type}: Error - ${error instanceof Error ? error.message : String(error)}`);
       }
     }
 
@@ -49,7 +49,7 @@ async function checkTestData() {
         const count = Array.isArray(transactions) ? transactions.length : 0;
         console.log(`   ${type}: ${count} records`);
       } catch (error) {
-        console.log(`   ${type}: Error - ${error.message}`);
+        console.log(`   ${type}: Error - ${error instanceof Error ? error.message : String(error)}`);
       }
     }
 
@@ -67,7 +67,7 @@ async function checkTestData() {
       console.log(`   Customers: ${Array.isArray(customers) ? customers.length : 0}`);
       console.log(`   Suppliers: ${Array.isArray(suppliers) ? suppliers.length : 0}`);
     } catch (error) {
-      console.log(`   Error: ${error.message}`);
+      console.log(`   Error: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     // 4. Check Products
@@ -93,7 +93,7 @@ async function checkTestData() {
         console.log(`   Buyable: ${Array.isArray(buyable) ? buyable.length : 0}`);
       }
     } catch (error) {
-      console.log(`   Error: ${error.message}`);
+      console.log(`   Error: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     // 5. Check Special Cases
@@ -107,7 +107,7 @@ async function checkTestData() {
       });
       console.log(`   Names with special chars: ${Array.isArray(specialChars) ? specialChars.length : 0}`);
     } catch (error) {
-      console.log(`   Special chars check: ${error.message}`);
+      console.log(`   Special chars check: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     // Check for long descriptions
@@ -115,7 +115,7 @@ async function checkTestData() {
       const result = await client.evaluate(`Count(Name, Length(Description)>50)`);
       console.log(`   Names with long descriptions: ${result}`);
     } catch (error) {
-      console.log(`   Long descriptions check: ${error.message}`);
+      console.log(`   Long descriptions check: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     // 6. Check Periods
@@ -138,7 +138,7 @@ async function checkTestData() {
         console.log("   No period-specific transaction data found");
       }
     } catch (error) {
-      console.log(`   Period check: ${error.message}`);
+      console.log(`   Period check: ${error instanceof Error ? error.message : String(error)}`);
     }
 
   } catch (error) {

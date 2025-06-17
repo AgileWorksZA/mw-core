@@ -88,7 +88,7 @@ export const coreOperationSchema = z.discriminatedUnion("category", [
     
     table: tableNameSchema.optional(),
     field: z.string().optional(),
-    operation: z.string().optional()
+    permissionOperation: z.string().optional()
       .describe("Operation like 'read', 'write', 'delete'"),
     userId: z.string().optional()
       .describe("User ID to check permissions for"),

@@ -192,7 +192,7 @@ export const buildRecordSchema = z.object({
 /**
  * BOM component schema
  */
-export const bomComponentSchema = z.object({
+export const bomComponentSchema: z.ZodType<any> = z.object({
   partCode: z.string(),
   partName: z.string().optional(),
   quantity: z.number(),

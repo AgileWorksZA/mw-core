@@ -7,11 +7,7 @@ process.env.NODE_ENV = 'test';
 process.env.MW_TEST_MODE = 'true';
 
 // Global test utilities
-declare global {
-  var testUtils: any;
-}
-
-global.testUtils = {
+(globalThis as any).testUtils = {
   // Add any global utilities here
 };
 

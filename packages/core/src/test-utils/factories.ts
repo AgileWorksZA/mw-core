@@ -3,9 +3,13 @@
  */
 
 import type { AccountCamel } from '../tables/accounts';
+import { AccountType } from '../tables/accounts';
 import type { TransactionCamel } from '../tables/transactions';
+import { TransactionType, TransactionStatus } from '../tables/transactions';
 import type { NameCamel } from '../tables/names';
+import { NameType } from '../tables/names';
 import type { ProductCamel } from '../tables/products';
+import { ProductType } from '../tables/products';
 
 let sequenceCounter = 1000;
 
@@ -30,7 +34,7 @@ export function createAccount(overrides: Partial<AccountCamel> = {}): AccountCam
   const defaults: AccountCamel = {
     code: `TEST-${nextSequence()}`,
     description: 'Test Account',
-    type: 'BA' as any, // AccountType.CurrentAsset
+    type: AccountType.CurrentAsset,
     // Optional fields with sensible defaults
     system: '  ' as any,
     currency: 'AUD',
@@ -51,26 +55,19 @@ export function createAccount(overrides: Partial<AccountCamel> = {}): AccountCam
 export function createTransaction(overrides: Partial<TransactionCamel> = {}): TransactionCamel {
   const defaults: TransactionCamel = {
     sequenceNumber: nextSequence(),
-    type: 'DI' as any,
+    type: TransactionType.DebtorInvoice,
     transDate: '20240101',
     period: 1,
-    fromAccount: 'BANK-001',
-    toAccount: 'SALES-001',
     description: 'Test Transaction',
     nameCode: 'CUST-001',
     gross: 100,
-    tax: 10,
+    taxAmount: 10,
     net: 90,
-    ourReference: `INV-${nextSequence()}`,
-    theirReference: '',
-    status: 0, // Unposted
-    mode: 0,
+    ourRef: `INV-${nextSequence()}`,
+    theirRef: '',
+    status: TransactionStatus.Unposted,
     currency: 'AUD',
     exchangeRate: 1,
-    grossF: 100,
-    taxF: 10,
-    netF: 90,
-    posted: 0,
   };
 
   return { ...defaults, ...overrides };
@@ -80,31 +77,20 @@ export function createTransaction(overrides: Partial<TransactionCamel> = {}): Tr
  * Name (Customer/Supplier) factory
  */
 export function createName(overrides: Partial<NameCamel> = {}): NameCamel {
-  const isCustomer = overrides.type === 'C' || !overrides.type;
+  const isCustomer = overrides.customerType === NameType.Customer || overrides.customerType === undefined;
   
   const defaults: NameCamel = {
     code: `${isCustomer ? 'CUST' : 'SUPP'}-${nextSequence()}`,
     name: `Test ${isCustomer ? 'Customer' : 'Supplier'} ${nextSequence()}`,
-    type: isCustomer ? 'C' : 'S' as any,
-    active: 1,
+    customerType: isCustomer ? NameType.Customer : NameType.Both,
     address1: '123 Test Street',
     address2: 'Test Suburb',
     address3: '',
     address4: 'Test City',
-    postcode: '1234',
-    phone1: '555-1234',
-    phone2: '555-5678',
+    phone: '555-1234',
     fax: '',
     email: 'test@example.com',
-    webURL: '',
     contact: 'Test Contact',
-    aBN: '',
-    balance: 0,
-    creditLimit: 1000,
-    discount: 0,
-    paymentTerms: 30,
-    taxCode: 'STD',
-    hold: 0,
   };
 
   return { ...defaults, ...overrides };
@@ -117,9 +103,6 @@ export function createProduct(overrides: Partial<ProductCamel> = {}): ProductCam
   const defaults: ProductCamel = {
     code: `PROD-${nextSequence()}`,
     description: 'Test Product',
-    comment: 'Test product for unit tests',
-    active: 1,
-    ledgerCode: 'SALES-001',
     sellUnit: 'EA',
     sellPrice: 100,
     sellPriceB: 90,
@@ -127,19 +110,9 @@ export function createProduct(overrides: Partial<ProductCamel> = {}): ProductCam
     sellPriceD: 80,
     sellPriceE: 75,
     sellPriceF: 70,
-    sellTaxCode: 'STD',
     buyUnit: 'EA',
     buyPrice: 60,
-    buyAccount: 'PURCHASES',
-    minimumStock: 10,
-    maximumStock: 100,
-    type: 0, // Normal product
-    productGroup: '',
-    customField1: '',
-    customField2: '',
-    customField3: '',
-    customField4: '',
-    barcode: '',
+    type: ProductType.Product,
   };
 
   return { ...defaults, ...overrides };
@@ -174,21 +147,20 @@ export const scenarios = {
    * Create an invoice with a payment
    */
   invoiceWithPayment: () => {
-    const customer = createName({ type: 'C', code: 'CUST-PAID' });
+    const customer = createName({ customerType: NameType.Customer, code: 'CUST-PAID' });
     const invoice = createTransaction({
-      type: 'DI',
+      type: TransactionType.DebtorInvoice,
       nameCode: customer.code,
       gross: 1100,
-      tax: 100,
+      taxAmount: 100,
       net: 1000,
-      status: 1, // Posted
+      status: TransactionStatus.Posted,
     });
     const payment = createTransaction({
-      type: 'DP',
+      type: TransactionType.CashReceipt,
       nameCode: customer.code,
       gross: 1100,
-      linkedSeq: invoice.sequenceNumber,
-      status: 1, // Posted
+      status: TransactionStatus.Posted,
     });
     
     return { customer, invoice, payment };
@@ -198,18 +170,17 @@ export const scenarios = {
    * Create a purchase order workflow
    */
   purchaseWorkflow: () => {
-    const supplier = createName({ type: 'S', code: 'SUPP-FLOW' });
+    const supplier = createName({ customerType: NameType.Both, code: 'SUPP-FLOW' });
     const product = createProduct({ code: 'PROD-FLOW' });
     const order = createTransaction({
-      type: 'PO',
+      type: TransactionType.PurchaseOrder,
       nameCode: supplier.code,
-      status: 0, // Unposted
+      status: TransactionStatus.Unposted,
     });
     const invoice = createTransaction({
-      type: 'CI',
+      type: TransactionType.CreditorInvoice,
       nameCode: supplier.code,
-      linkedSeq: order.sequenceNumber,
-      status: 1, // Posted
+      status: TransactionStatus.Posted,
     });
     
     return { supplier, product, order, invoice };
@@ -222,19 +193,17 @@ export const scenarios = {
     const parent = createAccount({
       code: 'PARENT-001',
       description: 'Parent Account',
-      type: 'AS', // Asset header
+      type: AccountType.FixedAsset, // Asset header
     });
     const child1 = createAccount({
       code: 'CHILD-001',
       description: 'Child Account 1',
-      type: 'CA',
-      parentAccount: parent.code,
+      type: AccountType.CurrentAsset,
     });
     const child2 = createAccount({
       code: 'CHILD-002',
       description: 'Child Account 2',
-      type: 'CA',
-      parentAccount: parent.code,
+      type: AccountType.CurrentAsset,
     });
     
     return { parent, children: [child1, child2] };
@@ -266,7 +235,6 @@ export const edgeCases = {
    */
   unicodeName: () => createName({
     name: '测试客户 🎉',
-    contactName: 'François Müller',
   }),
 
   /**
@@ -274,7 +242,7 @@ export const edgeCases = {
    */
   zeroTransaction: () => createTransaction({
     gross: 0,
-    tax: 0,
+    taxAmount: 0,
     net: 0,
   }),
 
@@ -283,7 +251,7 @@ export const edgeCases = {
    */
   largeTransaction: () => createTransaction({
     gross: 999999999.99,
-    tax: 99999999.99,
+    taxAmount: 99999999.99,
     net: 900000000.00,
   }),
 };

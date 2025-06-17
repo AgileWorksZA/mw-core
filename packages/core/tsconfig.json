@@ -2,6 +2,10 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
 
     // Strict type checking
     "strict": true,
@@ -29,8 +33,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
 
-    // No emit - just type checking
-    "noEmit": true,
+    // Emit for composite project
+    "emitDeclarationOnly": false,
 
     // Type acquisition
     "types": ["bun-types"],

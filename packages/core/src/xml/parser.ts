@@ -5,7 +5,7 @@
  */
 
 import { parseStringPromise } from "xml2js";
-import { convertPascalToCamel, toCamelCase } from "../converters/field-converter";
+import { convertPascalToCamel } from "../converters/field-converter";
 import { ParseError } from "../rest/errors";
 import { shouldKeepAsString } from "../schemas/field-types";
 import type {
@@ -71,7 +71,7 @@ export async function parseXML<T extends TableName>(
         },
       ],
       valueProcessors: [
-        (value, name) => {
+        (value) => {
           // Handle MoneyWorks special values
           if (value === "") return undefined;
           if (value === "true") return true;

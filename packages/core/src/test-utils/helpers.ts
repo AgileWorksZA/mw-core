@@ -166,7 +166,10 @@ export const random = {
    * Random item from array
    */
   pick<T>(array: T[]): T {
-    return array[Math.floor(Math.random() * array.length)];
+    if (array.length === 0) {
+      throw new Error('Cannot pick from empty array');
+    }
+    return array[Math.floor(Math.random() * array.length)]!;
   }
 };
 
@@ -290,10 +293,10 @@ export const performance = {
     durations.sort((a, b) => a - b);
     
     return {
-      min: durations[0],
-      max: durations[durations.length - 1],
-      avg: durations.reduce((a, b) => a + b) / durations.length,
-      median: durations[Math.floor(durations.length / 2)],
+      min: durations[0] ?? 0,
+      max: durations[durations.length - 1] ?? 0,
+      avg: durations.length > 0 ? durations.reduce((a, b) => a + b) / durations.length : 0,
+      median: durations[Math.floor(durations.length / 2)] ?? 0,
       results,
     };
   }

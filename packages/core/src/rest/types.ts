@@ -237,6 +237,9 @@ export enum MoneyWorksErrorCode {
   /** Permission denied */
   PERMISSION_DENIED = "PERMISSION_DENIED",
 
+  /** Import error */
+  IMPORT_ERROR = "IMPORT_ERROR",
+
   /** Server error */
   SERVER_ERROR = "SERVER_ERROR",
 

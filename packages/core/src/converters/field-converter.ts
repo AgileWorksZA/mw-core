@@ -215,11 +215,11 @@ function convertDetailCamelToPascal(
  */
 function convertAccountToCamel(
   record: Partial<Account>,
-): Partial<AccountCamel> {
-  const result: Partial<AccountCamel> = {};
+): Partial<AccountCamel> & Record<string, any> {
+  const result: Partial<AccountCamel> & Record<string, any> = {};
 
   // Map of lowercase field names to camelCase
-  const fieldMap: Record<string, keyof AccountCamel> = {
+  const fieldMap: Record<string, string> = {
     // Core fields
     code: "code",
     type: "type",
@@ -278,11 +278,11 @@ function convertAccountToCamel(
  */
 function convertTransactionToCamel(
   record: Partial<Transaction>,
-): Partial<TransactionCamel> {
-  const result: Partial<TransactionCamel> = {};
+): Partial<TransactionCamel> & Record<string, any> {
+  const result: Partial<TransactionCamel> & Record<string, any> = {};
 
   // Map of lowercase field names to camelCase
-  const fieldMap: Record<string, keyof TransactionCamel> = {
+  const fieldMap: Record<string, string> = {
     // Core fields
     sequencenumber: "sequenceNumber",
     namecode: "nameCode",
@@ -380,11 +380,11 @@ function convertTransactionToCamel(
 /**
  * Convert Name fields from lowercase to camelCase
  */
-function convertNameToCamel(record: Partial<Name>): Partial<NameCamel> {
-  const result: Partial<NameCamel> = {};
+function convertNameToCamel(record: Partial<Name>): Partial<NameCamel> & Record<string, any> {
+  const result: Partial<NameCamel> & Record<string, any> = {};
 
   // Map of lowercase field names to camelCase
-  const fieldMap: Record<string, keyof NameCamel> = {
+  const fieldMap: Record<string, string> = {
     // Core fields
     code: "code",
     name: "name",
@@ -515,7 +515,6 @@ function convertNameToCamel(record: Partial<Name>): Partial<NameCamel> {
     discount: "discount",
     comment: "comment",
     position: "position",
-    weburl: "webURL",
     flags: "flags",
     salutation: "salutation",
     salutation2: "salutation2",

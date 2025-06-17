@@ -6,7 +6,6 @@
 
 import { z } from "zod";
 import {
-  baseOperationSchema,
   paginationSchema,
   sortSchema,
   exportFormatSchema,

@@ -4,7 +4,6 @@
  * Main client for interacting with MoneyWorks REST API.
  */
 
-import { ExportParser } from "../export/parser";
 import type { TableMapCamel, TableName } from "../tables";
 import { XMLBuilder } from "../xml/builder";
 import { parseXMLWithSchema } from "../xml/schema-parser";
@@ -18,7 +17,6 @@ import {
 import { MoneyWorksError } from "./errors";
 import type {
   AuthHeaders,
-  ExportFormat,
   ExportOptions,
   ImportOptions,
   ImportResult,
@@ -464,32 +462,6 @@ export class MoneyWorksRESTClient {
     }
   }
 
-  /**
-   * Get format parameter for export
-   */
-  private getFormatParam(format: ExportFormat): string {
-    if (typeof format === "string") {
-      return format;
-    }
-
-    return "custom";
-  }
-
-  /**
-   * Add custom format parameters
-   */
-  private addCustomFormatParams(
-    params: URLSearchParams,
-    format: ExportFormat,
-  ): void {
-    if (typeof format === "object") {
-      if ("template" in format) {
-        params.append("template", format.template);
-      } else if ("script" in format) {
-        params.append("script", format.script);
-      }
-    }
-  }
 
   /**
    * Parse import result from response
@@ -515,7 +487,7 @@ export class MoneyWorksRESTClient {
           if (sequenceMatches) {
             sequences = sequenceMatches.map(match => {
               const seqMatch = match.match(/sequence="(\d+)"/);
-              return seqMatch ? Number.parseInt(seqMatch[1], 10) : 0;
+              return seqMatch && seqMatch[1] ? Number.parseInt(seqMatch[1], 10) : 0;
             }).filter(seq => seq > 0);
           }
           

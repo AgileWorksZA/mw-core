@@ -134,7 +134,16 @@
       "Bash(jq:*)",
       "mcp__curl__curl",
       "Bash(npm test:*)",
-      "Bash(killall:*)"
+      "Bash(killall:*)",
+      "mcp__filesystem__create_directory",
+      "mcp__filesystem__write_file",
+      "Bash(touch:*)",
+      "mcp__bun-scripts__run_script",
+      "mcp__bun-scripts__get_script_output",
+      "mcp__bun-scripts__list_running_scripts",
+      "mcp__bun-scripts__stop_script",
+      "Bash(PORT=5173 bun run dev)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

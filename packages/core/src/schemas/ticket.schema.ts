@@ -54,7 +54,7 @@ export const ticketOperationSchema = z.discriminatedUnion("operation", [
     severity: ticketSeveritySchema.default("medium"),
     tool: z.string()
       .describe("Tool/operation where issue occurred. Example: 'account_operations'"),
-    operation: z.string().optional()
+    specificOperation: z.string().optional()
       .describe("Specific operation. Example: 'search'"),
     error: z.string()
       .describe("Error message or issue description"),

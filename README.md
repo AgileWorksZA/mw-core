@@ -129,6 +129,9 @@ bun run dev:api
 # Run the MCP server
 bun run dev:mcp
 
+# Run the web client
+bun run dev:web
+
 # Build all packages
 bun run build
 ```

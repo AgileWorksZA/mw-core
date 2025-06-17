@@ -304,9 +304,7 @@ export async function parseXMLWithSchema<T extends TableName>(
  * Create a dynamic schema based on field types
  */
 export function createDynamicSchema(table: TableName): z.ZodSchema<any> {
-  const schemaObj: Record<string, z.ZodTypeAny> = {};
-  
-  // This would need to be expanded to read field definitions
+  // This would need to be expanded to read field definitions dynamically
   // For now, returning the predefined schemas
   return getTableSchema(table);
 }

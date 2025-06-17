@@ -76,7 +76,7 @@ export class MockMoneyWorksServer {
    * Add a simple response route
    */
   mockResponse(method: string, path: string, response: MockResponse) {
-    this.addRoute(method, path, async (req, res) => {
+    this.addRoute(method, path, async (_req, res) => {
       if (response.delay) {
         await new Promise(resolve => setTimeout(resolve, response.delay));
       }
@@ -153,14 +153,14 @@ export class MockMoneyWorksServer {
 
   private setupDefaultRoutes() {
     // Version endpoint (matches /REST/{dataFile}/version)
-    this.addRoute('GET', /^\/REST\/([^/]+)\/version$/, (req, res) => {
+    this.addRoute('GET', /^\/REST\/([^/]+)\/version$/, (_req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/plain' });
       res.end('MoneyWorks Gold 9.1.7 REST API');
     });
 
     // Export endpoint
-    this.addRoute('GET', /^\/REST\/([^/]+)\/export$/, (req, res, matches) => {
-      const folder = matches[1];
+    this.addRoute('GET', /^\/REST\/([^/]+)\/export$/, (req, res) => {
+      // const folder = matches[1]; // Not used in mock implementation
       const url = new URL(req.url || '/', `http://localhost:${this.port}`);
       const table = url.searchParams.get('table');
       const format = url.searchParams.get('format') || 'xml';
@@ -270,13 +270,14 @@ export class MockMoneyWorksServer {
     const match = filter.match(/(\w+)\s*=\s*"([^"]+)"/);
     if (match) {
       const [, field, value] = match;
-      return data.filter(item => item[field] === value);
+      return data.filter(item => field && item[field] === value);
     }
     
     // Handle LIKE operator
     const likeMatch = filter.match(/(\w+)\s+LIKE\s+"([^"]+)"/);
     if (likeMatch) {
       const [, field, pattern] = likeMatch;
+      if (!field || !pattern) return data;
       const regex = new RegExp(pattern.replace(/%/g, '.*'), 'i');
       return data.filter(item => regex.test(String(item[field] || '')));
     }
@@ -285,6 +286,7 @@ export class MockMoneyWorksServer {
     const compMatch = filter.match(/(\w+)\s*([><=]+)\s*(\d+)/);
     if (compMatch) {
       const [, field, op, value] = compMatch;
+      if (!field || !op || !value) return data;
       const numValue = parseFloat(value);
       return data.filter(item => {
         const itemValue = parseFloat(item[field] || '0');
@@ -311,7 +313,7 @@ export class MockMoneyWorksServer {
     
     // Extract parenthetical expressions
     const parenMatch = workingFilter.match(/\(([^)]+)\)/);
-    if (parenMatch) {
+    if (parenMatch && parenMatch[1]) {
       const innerExpr = parenMatch[1];
       const innerResult = this.evaluateComplexFilter(item, innerExpr);
       workingFilter = workingFilter.replace(parenMatch[0], innerResult ? 'TRUE' : 'FALSE');
@@ -342,6 +344,7 @@ export class MockMoneyWorksServer {
     const eqMatch = condition.match(/(\w+)\s*=\s*"([^"]+)"/);
     if (eqMatch) {
       const [, field, value] = eqMatch;
+      if (!field) return false;
       return item[field] === value;
     }
     
@@ -349,6 +352,7 @@ export class MockMoneyWorksServer {
     const compMatch = condition.match(/(\w+)\s*([><=]+)\s*(\d+)/);
     if (compMatch) {
       const [, field, op, value] = compMatch;
+      if (!field || !op || !value) return false;
       const numValue = parseFloat(value);
       const itemValue = parseFloat(item[field] || '0');
       switch (op) {
