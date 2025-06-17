@@ -152,7 +152,7 @@ export const MONEYWORKS_INVENTORY_FUNCTIONS = [
     functionName: "SOHForLocation",
     canonicalSignature: "SOHForLocation(location)",
     purpose: "Get stock on hand for a specific location",
-    description: "Returns the quantity of stock on hand for the specified location",
+    description: "Returns the quantity of stock on hand for the specified location. Use empty string (\"\") for default location.",
     manualSource: "moneyworks_appendix_inventory.html"
   },
   {
@@ -184,6 +184,7 @@ export const MONEYWORKS_INVENTORY_FUNCTIONS = [
  * - Stock quantities maintained separately for each physical location
  * - Location field allows warehouse/store-specific inventory management
  * - SOHForLocation() function provides location-specific stock queries
+ * - Default Location: Empty string ("") represents the default/unspecified location
  * 
  * SERIAL/BATCH TRACKING:
  * - Identifier field supports both serial numbers and batch/lot numbers
@@ -208,6 +209,7 @@ export const MONEYWORKS_INVENTORY_CANONICAL_TERMS = {
   // Location-based stock management (MoneyWorks canonical)
   STOCK_LOCATION: "Stock Location",                    // Physical location identifier
   LOCATION_CODE: "Location Code",                      // Location field
+  DEFAULT_LOCATION: "Default Location",                // Empty string location (MoneyWorks canonical)
   STOCK_ON_HAND: "Stock On Hand",                     // Qty field
   LOCATION_QUANTITY: "Location Quantity",             // Stock at specific location
   
@@ -261,20 +263,23 @@ export const MONEYWORKS_INVENTORY_CANONICAL_TERMS = {
  */
 export function validateInventoryLocationCanonical(location: string): {
   isValid: boolean;
+  isDefaultLocation: boolean;
   warnings: string[];
 } {
   const warnings: string[] = [];
   
-  if (!location || location.trim().length === 0) {
-    warnings.push("Location is required for MoneyWorks inventory tracking");
-  }
+  // MoneyWorks canonical behavior: empty string represents the "default location"
+  // Source: moneyworks_serials_locations.html - "The default location is a location with no code"
+  // Source: moneyworks_calculations_sohforlocation.html - "For the default location, use an empty string"
+  const isDefaultLocation = !location || location.trim().length === 0;
   
-  if (location.length > 15) {
+  if (location && location.length > 15) {
     warnings.push("MoneyWorks location code maximum length is 15 characters");
   }
   
   return {
     isValid: warnings.length === 0,
+    isDefaultLocation,
     warnings
   };
 }

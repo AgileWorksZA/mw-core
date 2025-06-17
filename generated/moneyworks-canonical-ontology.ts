@@ -774,6 +774,21 @@ export {
   MONEYWORKS_PAYMENTS_VALIDATION
 } from "./moneyworks-payments-canonical-ontology";
 
+// ============================================================================
+// RECONCILIATION ENTITY INTEGRATION
+// ============================================================================
+
+// Import Reconciliation canonical definitions
+export {
+  MONEYWORKS_RECONCILIATION_FIELDS,
+  MONEYWORKS_RECONCILIATION_ENTITY,
+  RECONCILIATION_FIELD_COUNT,
+  RECONCILIATION_FIELD_NAMES,
+  RECONCILIATION_REQUIRED_FIELDS,
+  RECONCILIATION_INDEXED_FIELDS,
+  RECONCILIATION_RELATIONSHIP_FIELDS
+} from "./moneyworks-reconciliation-canonical-ontology";
+
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,
   MONEYWORKS_ACCOUNT_TYPE_DEFINITIONS,
