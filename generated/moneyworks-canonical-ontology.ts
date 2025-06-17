@@ -759,6 +759,7 @@ export {
   generateInventoryRecordKey,
   parseInventoryRecordKey,
   calculateStockVariance,
+  isDefaultLocation,
   supportsExpiryTracking
 } from "./moneyworks-inventory-canonical-ontology";
 

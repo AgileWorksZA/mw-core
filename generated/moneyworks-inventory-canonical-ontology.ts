@@ -346,6 +346,15 @@ export function validateStockTakeQuantitiesCanonical(
 }
 
 /**
+ * Check if location represents the MoneyWorks default location
+ */
+export function isDefaultLocation(location: string): boolean {
+  // MoneyWorks canonical: default location is represented by empty string
+  // Source: moneyworks_serials_locations.html - "The default location is a location with no code"
+  return !location || location.trim().length === 0;
+}
+
+/**
  * Check if inventory record supports expiry date tracking
  */
 export function supportsExpiryTracking(identifier: string): boolean {

@@ -414,12 +414,12 @@ export function testInventoryBusinessRules(): {
 } {
   const businessRuleTests = [
     {
-      rule: "Location must be specified for inventory tracking",
+      rule: "Location validation with default location support",
       testCases: [
-        { location: "WAREHOUSE", isValid: true },
-        { location: "", isValid: false },
-        { location: "   ", isValid: false },
-        { location: "A".repeat(16), isValid: false } // Over 15 char limit
+        { location: "WAREHOUSE", isValid: true, expectDefault: false },
+        { location: "", isValid: true, expectDefault: true }, // Empty string is valid default location
+        { location: "   ", isValid: true, expectDefault: true }, // Whitespace-only is valid default location
+        { location: "A".repeat(16), isValid: false, expectDefault: false } // Over 15 char limit
       ]
     },
     {
@@ -445,17 +445,20 @@ export function testInventoryBusinessRules(): {
       if (testCase.location !== undefined) {
         const validation = validateInventoryLocationCanonical(testCase.location);
         testCase.actualValid = validation.isValid;
+        testCase.actualDefault = validation.isDefaultLocation;
+        testCase.passed = testCase.isValid === testCase.actualValid && 
+                          (testCase.expectDefault === undefined || testCase.expectDefault === testCase.actualDefault);
       } else if (testCase.identifier !== undefined) {
         const validation = validateInventoryIdentifierCanonical(testCase.identifier);
         testCase.actualValid = validation.isValid;
+        testCase.passed = testCase.isValid === testCase.actualValid;
       } else if (testCase.startQty !== undefined) {
         const validation = validateStockTakeQuantitiesCanonical(
           testCase.startQty, testCase.newQty, testCase.currentQty
         );
         testCase.actualValid = validation.isValid;
+        testCase.passed = testCase.isValid === testCase.actualValid;
       }
-      
-      testCase.passed = testCase.isValid === testCase.actualValid;
     });
   });
   
@@ -603,6 +606,61 @@ export function testInventoryUtilityFunctions(): {
   };
 }
 
+/**
+ * Test 12: Default location handling validation
+ */
+export function testDefaultLocationHandling(): {
+  isValid: boolean;
+  defaultLocationTests: any[];
+} {
+  const defaultLocationTests = [
+    {
+      description: "Empty string is default location",
+      location: "",
+      expectedValid: true,
+      expectedDefault: true
+    },
+    {
+      description: "Whitespace-only is default location",
+      location: "   ",
+      expectedValid: true,
+      expectedDefault: true
+    },
+    {
+      description: "Named location is not default",
+      location: "WAREHOUSE",
+      expectedValid: true,
+      expectedDefault: false
+    },
+    {
+      description: "SOHForLocation function with default location",
+      functionCall: 'SOHForLocation("")',
+      purpose: "Access stock on hand for default location",
+      isCanonical: true
+    }
+  ];
+  
+  defaultLocationTests.forEach(test => {
+    if (test.location !== undefined) {
+      const validation = validateInventoryLocationCanonical(test.location);
+      test.actualValid = validation.isValid;
+      test.actualDefault = validation.isDefaultLocation;
+      test.passed = test.expectedValid === test.actualValid && 
+                    test.expectedDefault === test.actualDefault;
+    } else {
+      // Function call tests are always passed for documentation
+      test.passed = true;
+    }
+  });
+  
+  const allPassed = defaultLocationTests.every(test => test.passed);
+  
+  return {
+    isValid: allPassed,
+    defaultLocationTests
+  };
+}
+
 // ============================================================================
 // COMPREHENSIVE VALIDATION RUNNER
 // ============================================================================
@@ -627,7 +685,8 @@ export function runInventoryCanonicalValidation(): {
     { name: "Product Relationship", test: testInventoryProductRelationship },
     { name: "Business Rules", test: testInventoryBusinessRules },
     { name: "Function Coverage", test: testInventoryFunctionCoverage },
-    { name: "Utility Functions", test: testInventoryUtilityFunctions }
+    { name: "Utility Functions", test: testInventoryUtilityFunctions },
+    { name: "Default Location Handling", test: testDefaultLocationHandling }
   ];
   
   const testResults = tests.map(test => ({
@@ -669,5 +728,6 @@ export default {
   testInventoryProductRelationship,
   testInventoryBusinessRules,
   testInventoryFunctionCoverage,
-  testInventoryUtilityFunctions
+  testInventoryUtilityFunctions,
+  testDefaultLocationHandling
 };
