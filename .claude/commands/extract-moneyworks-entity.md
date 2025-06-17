@@ -129,7 +129,7 @@ Now extract the **{{entity_name}}** entity canonical ontology from MoneyWorks ma
 - Individual validation ensures entity-specific purity
 - Warning documentation alerts to multi-entity complexity
 
-Follow the exact patterns established in our foundational phases. If multi-entity file detected, prioritize DSL purity through separation over file consolidation. Document all discoveries and ensure 100% compliance with MoneyWorks semantic purity framework.
+Follow the exact patterns established in our foundational phases. If multi-entity file detected, prioritize DSL purity through separation over file consolidation. Document all discoveries and ensure 100% compliance with MoneyWorks semantic purity framework. Think deeply at each step.
 
 ## Success Criteria:
 ✅ Complete field extraction with 100% coverage

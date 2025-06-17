@@ -5,9 +5,28 @@
  * Source: moneyworks_appendix_names.html
  * Authority: MoneyWorks Manual - Names Field Descriptions
  * 
- * CRITICAL DISCOVERY: MoneyWorks has hierarchical name classification:
- * - Customer vs Debtor (different types, Debtor is specific type of Customer)
- * - Supplier vs Creditor (different types, Creditor is specific type of Supplier)
+ * CRITICAL DISCOVERIES:
+ * 1. MoneyWorks has hierarchical name classification:
+ *    - Customer vs Debtor (different types, Debtor is specific type of Customer)
+ *    - Supplier vs Creditor (different types, Creditor is specific type of Supplier)
+ * 
+ * 2. DUAL-LAYER CONTACT ARCHITECTURE:
+ *    Names Entity provides built-in contact management for up to 2 contacts per Name:
+ *    - Contact1 fields: Contact, email, Mobile, DDI, Afterhours, Position, Salutation, Role, Memo
+ *    - Contact2 fields: Contact2, email2, Mobile2, DDI2, Afterhours2, Position2, Salutation2, Role2, Memo2
+ *    - Quick access for simple contact scenarios (most common business pattern)
+ *    - Embedded directly in Names record for performance
+ * 
+ *    Contacts Entity (subfile) provides unlimited contact expansion:
+ *    - References Names via ParentSeq → Names.Seq relationship
+ *    - Unlimited contacts per Name entity
+ *    - Enhanced role management and ordering capabilities
+ *    - Used for complex organizational hierarchies
+ * 
+ * 3. ARCHITECTURAL USAGE PATTERNS:
+ *    - Simple businesses: Use Names built-in Contact1/Contact2 fields only
+ *    - Complex organizations: Use Names for primary contacts + Contacts subfile for additional
+ *    - Enterprise scenarios: Contacts subfile becomes primary contact management system
  */
 
 // ============================================================================
@@ -188,6 +207,200 @@ export const MONEYWORKS_NAME_FIELDS = [
     dataType: "N" as const,
     canonicalDescription: "Payment method (0 = None, 1 = Cash, 2 = Cheque, 3 = Electronic, etc).",
     manualSource: "moneyworks_appendix_names.html"
+  },
+
+  // ============================================================================
+  // CONTACT PERSON NAMES (DUAL-LAYER ARCHITECTURE: NAMES BUILT-IN CONTACTS)
+  // ============================================================================
+  
+  {
+    fieldName: "Contact",
+    dataType: "T" as const,
+    maxLength: 25,
+    canonicalDescription: "Contact person 1 in the company",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Contact",
+    relationshipRule: "Primary contact can be supplemented by Contacts subfile for unlimited contacts"
+  },
+  {
+    fieldName: "Contact2", 
+    dataType: "T" as const,
+    maxLength: 29,
+    canonicalDescription: "Name of contact person 2",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Contact",
+    relationshipRule: "Secondary contact can be supplemented by Contacts subfile for unlimited contacts"
+  },
+
+  // ============================================================================
+  // COMMUNICATION FIELDS (DUAL-LAYER ARCHITECTURE: NAMES BUILT-IN COMMUNICATION)
+  // ============================================================================
+  
+  {
+    fieldName: "email",
+    dataType: "T" as const,
+    maxLength: 80,
+    canonicalDescription: "email address for contact 1",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.eMail",
+    relationshipRule: "Built-in email field (max 80 chars) vs Contacts.eMail (max 63 chars) - Names provides more capacity"
+  },
+  {
+    fieldName: "email2",
+    dataType: "T" as const, 
+    maxLength: 80,
+    canonicalDescription: "email address for contact 2",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.eMail",
+    relationshipRule: "Built-in email field (max 80 chars) vs Contacts.eMail (max 63 chars) - Names provides more capacity"
+  },
+  {
+    fieldName: "Mobile",
+    dataType: "T" as const,
+    maxLength: 14,
+    canonicalDescription: "Mobile phone number for contact 1", 
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Mobile",
+    relationshipRule: "Built-in mobile field (max 14 chars) vs Contacts.Mobile (max 19 chars) - Contacts provides more capacity"
+  },
+  {
+    fieldName: "Mobile2",
+    dataType: "T" as const,
+    maxLength: 13,
+    canonicalDescription: "Mobile phone number for contact 2",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Mobile", 
+    relationshipRule: "Built-in mobile field (max 13 chars) vs Contacts.Mobile (max 19 chars) - Contacts provides more capacity"
+  },
+  {
+    fieldName: "DDI",
+    dataType: "T" as const,
+    maxLength: 19,
+    canonicalDescription: "Direct dial number for contact 1",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.DDI",
+    relationshipRule: "Built-in DDI field - same 19 char capacity as Contacts.DDI"
+  },
+  {
+    fieldName: "DDI2",
+    dataType: "T" as const,
+    maxLength: 19,
+    canonicalDescription: "Direct dial number for contact 2",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.DDI",
+    relationshipRule: "Built-in DDI field - same 19 char capacity as Contacts.DDI"
+  },
+  {
+    fieldName: "Afterhours",
+    dataType: "T" as const,
+    maxLength: 11,
+    canonicalDescription: "After hours phone number for contact 1",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.AfterHours",
+    relationshipRule: "Built-in afterhours field (max 11 chars) vs Contacts.AfterHours (max 19 chars) - Contacts provides more capacity"
+  },
+  {
+    fieldName: "Afterhours2",
+    dataType: "T" as const,
+    maxLength: 11,
+    canonicalDescription: "After hours phone number for contact 2",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.AfterHours",
+    relationshipRule: "Built-in afterhours field (max 11 chars) vs Contacts.AfterHours (max 19 chars) - Contacts provides more capacity"
+  },
+  {
+    fieldName: "Phone",
+    dataType: "T" as const,
+    maxLength: 19,
+    canonicalDescription: "Phone number",
+    manualSource: "moneyworks_appendix_names.html"
+  },
+  {
+    fieldName: "Fax",
+    dataType: "T" as const,
+    maxLength: 19,
+    canonicalDescription: "Facsimile number",
+    manualSource: "moneyworks_appendix_names.html"
+  },
+
+  // ============================================================================
+  // PROFESSIONAL CONTACT INFORMATION (DUAL-LAYER ARCHITECTURE)
+  // ============================================================================
+  
+  {
+    fieldName: "Position",
+    dataType: "T" as const,
+    maxLength: 29,
+    canonicalDescription: "Position of contact person 1",
+    manualSource: "moneyworks_appendix_names.html", 
+    relationshipTarget: "Contacts.Position",
+    relationshipRule: "Built-in position field (max 29 chars) vs Contacts.Position (max 39 chars) - Contacts provides more capacity"
+  },
+  {
+    fieldName: "Position2",
+    dataType: "T" as const,
+    maxLength: 29,
+    canonicalDescription: "Position of contact 2",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Position",
+    relationshipRule: "Built-in position field (max 29 chars) vs Contacts.Position (max 39 chars) - Contacts provides more capacity"
+  },
+  {
+    fieldName: "Salutation",
+    dataType: "T" as const,
+    maxLength: 39,
+    canonicalDescription: "Salutation for contact 1",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Salutation",
+    relationshipRule: "Built-in salutation field - same 39 char capacity as Contacts.Salutation"
+  },
+  {
+    fieldName: "Salutation2",
+    dataType: "T" as const,
+    maxLength: 39,
+    canonicalDescription: "Salutation for contact 2",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Salutation",
+    relationshipRule: "Built-in salutation field - same 39 char capacity as Contacts.Salutation"
+  },
+
+  // ============================================================================
+  // ROLE AND MEMO FIELDS (DUAL-LAYER ARCHITECTURE) 
+  // ============================================================================
+  
+  {
+    fieldName: "Role",
+    dataType: "N" as const,
+    canonicalDescription: "Roles for contact 1. This is a bit mapped field, with each bit representing a role.",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Role",
+    relationshipRule: "Built-in role field - same bit-mapped functionality as Contacts.Role"
+  },
+  {
+    fieldName: "Role2",
+    dataType: "N" as const,
+    canonicalDescription: "Roles for contact 2. This is a bit mapped field, with each bit representing a role.",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Role",
+    relationshipRule: "Built-in role field - same bit-mapped functionality as Contacts.Role"
+  },
+  {
+    fieldName: "Memo",
+    dataType: "T" as const,
+    maxLength: 255,
+    canonicalDescription: "Memo/notes for contact 1",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Memo",
+    relationshipRule: "Built-in memo field - same 255 char capacity as Contacts.Memo"
+  },
+  {
+    fieldName: "Memo2",
+    dataType: "T" as const,
+    maxLength: 255,
+    canonicalDescription: "Memo/notes for contact 2",
+    manualSource: "moneyworks_appendix_names.html",
+    relationshipTarget: "Contacts.Memo",
+    relationshipRule: "Built-in memo field - same 255 char capacity as Contacts.Memo"
   }
 ] as const;
 
@@ -302,6 +515,153 @@ export const MONEYWORKS_NAME_CANONICAL_TERMS = {
   CREDITOR_CURRENT: "Creditor Current Balance", // Current payable
   AGING_BALANCE: "Aging Balance"                // Age-based balance tracking
 } as const;
+
+// ============================================================================
+// DUAL-LAYER CONTACT ARCHITECTURE - BUSINESS RULES AND PATTERNS
+// ============================================================================
+
+/**
+ * MoneyWorks Dual-Layer Contact Architecture Business Rules
+ * Source: moneyworks_appendix_names.html + moneyworks_appendix_contacts.html
+ * 
+ * ARCHITECTURAL INSIGHT: MoneyWorks provides two complementary contact management systems:
+ * 1. Names Entity: Built-in Contact1/Contact2 fields (embedded, fast access)
+ * 2. Contacts Entity: Unlimited contacts via subfile (hierarchical, extensible)
+ */
+export const MONEYWORKS_DUAL_CONTACT_BUSINESS_RULES = [
+  {
+    entitySource: "Names + Contacts",
+    ruleType: "architectural" as const,
+    canonicalRule: "Names provides built-in contact fields for up to 2 contacts, Contacts subfile provides unlimited expansion",
+    manualSource: "moneyworks_appendix_names.html + moneyworks_appendix_contacts.html",
+    businessContext: "Dual-layer architecture optimizes for common case (1-2 contacts) while supporting complex hierarchies"
+  },
+  
+  {
+    entitySource: "Names",
+    fieldName: "Contact vs Contact2",
+    ruleType: "capacity" as const,
+    canonicalRule: "Names.Contact (25 chars) vs Names.Contact2 (29 chars) - different field capacities within same entity",
+    manualSource: "moneyworks_appendix_names.html",
+    businessContext: "Contact2 provides slightly more capacity than Contact1"
+  },
+  
+  {
+    entitySource: "Names vs Contacts",
+    fieldName: "email vs eMail",
+    ruleType: "capacity" as const,
+    canonicalRule: "Names.email (80 chars) vs Contacts.eMail (63 chars) - Names provides more email capacity",
+    manualSource: "moneyworks_appendix_names.html + moneyworks_appendix_contacts.html",
+    businessContext: "Built-in Names email fields optimized for longer email addresses"
+  },
+  
+  {
+    entitySource: "Names vs Contacts",
+    fieldName: "Mobile capacity",
+    ruleType: "capacity" as const,
+    canonicalRule: "Names.Mobile (14 chars), Names.Mobile2 (13 chars) vs Contacts.Mobile (19 chars) - Contacts provides more mobile capacity",
+    manualSource: "moneyworks_appendix_names.html + moneyworks_appendix_contacts.html",
+    businessContext: "Contacts subfile optimized for longer international mobile numbers"
+  },
+  
+  {
+    entitySource: "Names vs Contacts",
+    fieldName: "Position capacity",
+    ruleType: "capacity" as const,
+    canonicalRule: "Names.Position/Position2 (29 chars) vs Contacts.Position (39 chars) - Contacts provides more position capacity",
+    manualSource: "moneyworks_appendix_names.html + moneyworks_appendix_contacts.html",
+    businessContext: "Contacts subfile supports longer professional titles"
+  },
+  
+  {
+    entitySource: "Names vs Contacts",
+    fieldName: "Contact name capacity",
+    ruleType: "capacity" as const,
+    canonicalRule: "Names.Contact (25 chars), Names.Contact2 (29 chars) vs Contacts.Contact (39 chars) - Contacts provides most capacity",
+    manualSource: "moneyworks_appendix_names.html + moneyworks_appendix_contacts.html",
+    businessContext: "Contacts subfile supports longer contact names for international scenarios"
+  }
+];
+
+/**
+ * Dual-Layer Contact Architecture Usage Patterns
+ * Canonical recommendations for when to use Names vs Contacts
+ */
+export const MONEYWORKS_DUAL_CONTACT_USAGE_PATTERNS = [
+  {
+    scenario: "Simple Business Operations",
+    recommendation: "Use Names built-in Contact1/Contact2 fields only",
+    reasoning: "Most businesses need only 1-2 contacts per Name, built-in fields provide fastest access",
+    businessTypes: ["small retail", "simple service providers", "basic suppliers"],
+    canonicalApproach: "Names.Contact + Names.Contact2 + communication fields"
+  },
+  
+  {
+    scenario: "Medium Complexity Organizations", 
+    recommendation: "Use Names for primary contacts + Contacts subfile for additional",
+    reasoning: "Primary contacts in Names for fast access, additional contacts in Contacts for full details",
+    businessTypes: ["medium enterprises", "multi-department organizations", "professional services"],
+    canonicalApproach: "Names.Contact/Contact2 + Contacts subfile for 3+ contacts"
+  },
+  
+  {
+    scenario: "Enterprise Complex Hierarchies",
+    recommendation: "Use Contacts subfile as primary contact management system",
+    reasoning: "Complex role management, contact ordering, and unlimited expansion required",
+    businessTypes: ["large corporations", "government entities", "complex suppliers"],
+    canonicalApproach: "Contacts subfile with role-based management, Names fields optional"
+  },
+  
+  {
+    scenario: "International Operations",
+    recommendation: "Use Contacts subfile for enhanced field capacities",
+    reasoning: "Longer international names, mobile numbers, positions require Contacts field capacities",
+    businessTypes: ["multinational companies", "international suppliers", "global customers"],
+    canonicalApproach: "Contacts subfile for extended field lengths and character support"
+  }
+];
+
+/**
+ * Field Capacity Comparison Matrix
+ * Names vs Contacts field capacity analysis for architectural decisions
+ */
+export const MONEYWORKS_CONTACT_FIELD_CAPACITY_MATRIX = {
+  contactName: {
+    names: { Contact: 25, Contact2: 29 },
+    contacts: { Contact: 39 },
+    recommendation: "Use Contacts for longer contact names"
+  },
+  
+  email: {
+    names: { email: 80, email2: 80 },
+    contacts: { eMail: 63 },
+    recommendation: "Use Names for longer email addresses"
+  },
+  
+  mobile: {
+    names: { Mobile: 14, Mobile2: 13 },
+    contacts: { Mobile: 19 },
+    recommendation: "Use Contacts for international mobile numbers"
+  },
+  
+  position: {
+    names: { Position: 29, Position2: 29 },
+    contacts: { Position: 39 },
+    recommendation: "Use Contacts for longer professional titles"
+  },
+  
+  afterhours: {
+    names: { Afterhours: 11, Afterhours2: 11 },
+    contacts: { AfterHours: 19 },
+    recommendation: "Use Contacts for longer after-hours numbers"
+  },
+  
+  consistent: {
+    names: { DDI: 19, DDI2: 19, Salutation: 39, Salutation2: 39, Memo: 255, Memo2: 255 },
+    contacts: { DDI: 19, Salutation: 39, Memo: 255 },
+    recommendation: "Same capacity - use based on architectural needs"
+  }
+};
 
 // ============================================================================
 // CANONICAL VALIDATION FUNCTIONS
