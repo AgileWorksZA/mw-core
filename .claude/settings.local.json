@@ -143,7 +143,9 @@
       "mcp__bun-scripts__list_running_scripts",
       "mcp__bun-scripts__stop_script",
       "Bash(PORT=5173 bun run dev)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npx @biomejs/biome format:*)",
+      "Bash(npx @biomejs/biome lint:*)"
     ],
     "deny": []
   }

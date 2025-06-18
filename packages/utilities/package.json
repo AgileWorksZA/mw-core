@@ -1,0 +1,29 @@
+{
+  "name": "@moneyworks/utilities",
+  "version": "0.1.0",
+  "description": "Shared utilities for MoneyWorks packages",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "bun test",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "moneyworks",
+    "utilities",
+    "date",
+    "json",
+    "helpers"
+  ],
+  "author": "MoneyWorks Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "^1.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "bun": "^1.0.0"
+  }
+}

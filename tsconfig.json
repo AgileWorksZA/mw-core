@@ -2,6 +2,7 @@
   "extends": "./tsconfig.base.json",
   "files": [],
   "references": [
+    { "path": "./packages/utilities" },
     { "path": "./packages/core" },
     { "path": "./packages/semantic" }
   ]
