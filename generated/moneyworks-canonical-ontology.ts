@@ -8,6 +8,15 @@
  * Source: MoneyWorks Manual - Appendix Field Descriptions
  * Authority: /Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror/manual/manual/
  * Validation: Each concept verified against manual source
+ * 
+ * FOUNDATIONAL PHASES COMPLETE (20/20+ Entities):
+ * - Transactions, Accounts, Names, Products, TaxRates, Jobs
+ * - Departments, General Classifications, Assets, AssetLog, Contacts  
+ * - Inventory, Payments, Reconciliation
+ * - User, User2, Login (User Management trilogy)
+ * - Allocations (Auto-allocation rule system)
+ * - Build Records (Manufacturing/assembly recipe system)
+ * - Memo (Names subfile CRM note-taking and reminders)
  */
 
 // ============================================================================
@@ -789,6 +798,101 @@ export {
   RECONCILIATION_INDEXED_FIELDS,
   RECONCILIATION_RELATIONSHIP_FIELDS
 } from "./moneyworks-reconciliation-canonical-ontology";
+
+// ============================================================================
+// USER MANAGEMENT ENTITY INTEGRATION
+// ============================================================================
+
+// Import User canonical definitions (persistent script storage)
+export {
+  MONEYWORKS_USER_FIELDS,
+  MONEYWORKS_USER_BUSINESS_RULES,
+  USER_UNIVERSALITY_EXAMPLES,
+  USER_ENTITY_RELATIONSHIPS,
+  validateUserKey,
+  validateUserData,
+  validateUserRecord,
+  type MoneyWorksUser,
+  type MoneyWorksUserField,
+  type MoneyWorksUserBusinessRule
+} from "./moneyworks-user-canonical-ontology";
+
+// Import User2 canonical definitions (enhanced persistent storage)
+export {
+  MONEYWORKS_USER2_FIELDS,
+  MONEYWORKS_USER2_BUSINESS_RULES,
+  USER2_UNIVERSALITY_EXAMPLES,
+  USER2_ENTITY_RELATIONSHIPS,
+  validateUser2DevKey,
+  validateUser2Key,
+  validateUser2TextField,
+  validateUser2Record,
+  type MoneyWorksUser2,
+  type MoneyWorksUser2Field,
+  type MoneyWorksUser2BusinessRule
+} from "./moneyworks-user2-canonical-ontology";
+
+// Import Login canonical definitions (authentication and authorization)
+export {
+  MONEYWORKS_LOGIN_FIELDS,
+  MONEYWORKS_LOGIN_BUSINESS_RULES,
+  LOGIN_UNIVERSALITY_EXAMPLES,
+  LOGIN_ENTITY_RELATIONSHIPS,
+  validateLoginName,
+  validateLoginEmail,
+  validateLoginSecurityLevel,
+  validateLoginRecord,
+  type MoneyWorksLogin,
+  type MoneyWorksLoginField,
+  type MoneyWorksLoginBusinessRule
+} from "./moneyworks-login-canonical-ontology";
+
+// ============================================================================
+// ALLOCATIONS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Allocations canonical definitions (auto-allocation rule system)
+export {
+  MoneyWorksAllocationSplitMode,
+  MONEYWORKS_ALLOCATION_FIELDS,
+  MONEYWORKS_ALLOCATION_CANONICAL_TERMS,
+  MONEYWORKS_ALLOCATION_BUSINESS_RULES,
+  MONEYWORKS_ALLOCATION_USAGE_PATTERNS,
+  validateAllocationRuleCanonical,
+  getCanonicalAllocationExplanation,
+  getAllocationComplexityLevel
+} from "./moneyworks-allocations-canonical-ontology";
+
+// Build Records Entity - Manufacturing/assembly recipe system
+export {
+  MONEYWORKS_BUILD_RECORDS_FIELDS,
+  MONEYWORKS_BUILD_RECORDS_CANONICAL_TERMS,
+  MONEYWORKS_BUILD_RECORDS_RELATIONSHIPS,
+  MONEYWORKS_BUILD_RECORDS_BUSINESS_RULES,
+  MONEYWORKS_BUILD_RECORDS_USAGE_PATTERNS,
+  validateBuildRecordCanonical,
+  getCanonicalBuildRecordExplanation,
+  validateBuildRecordRelationships,
+  getManufacturingRecipeSummary
+} from "./moneyworks-build-records-canonical-ontology";
+
+// ============================================================================
+// MEMO ENTITY INTEGRATION
+// ============================================================================
+
+// Import Memo canonical definitions (Names subfile CRM functionality)
+export {
+  MONEYWORKS_MEMO_FIELDS,
+  MONEYWORKS_MEMO_CANONICAL_TERMS,
+  validateMemoDateCanonical,
+  validateMemoTextCanonical,
+  validateMemoNameRelationshipCanonical,
+  getCanonicalMemoEntityRelationships,
+  getCanonicalMemoBusinessContext,
+  hasMemoReminder,
+  isMemoOverdue,
+  getMemoAgeInDays
+} from "./moneyworks-memo-canonical-ontology";
 
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,

@@ -4,7 +4,7 @@
 
 ## 🎯 **WHERE WE ARE → WHERE WE'RE GOING**
 
-### **Current State (Foundational Progress - 14/17 Entities Complete)**
+### **Current State (Foundational Progress - 20/20+ Entities Complete)**
 - ✅ **Transaction Entity**: 17 canonical types extracted and validated
 - ✅ **Account Entity**: 10 canonical types with system account integration
 - ✅ **Names Entity**: Hierarchical Customer/Debtor, Supplier/Creditor classification discovered
@@ -19,6 +19,12 @@
 - ✅ **Inventory Entity**: Location-based stock tracking subfile with serial/batch support (8 fields, multi-location management, stock take functionality)
 - ✅ **Payments Entity**: Junction table linking invoices to payment transactions (6 fields, many-to-many relationship management, overpayment encoding)
 - ✅ **Reconciliation Entity**: Bank reconciliation session metadata (8 fields, system tracking entity, financial control universality)
+- ✅ **User Entity**: Persistent script data storage (3 fields, key-value architecture, conflict management)
+- ✅ **User2 Entity**: Enhanced persistent storage with typed data (21 fields, DevKey segmentation, native format storage)
+- ✅ **Login Entity**: User authentication and authorization system (13 fields, role-based access control, security management)
+- ✅ **Allocations Entity**: Auto-allocation rule system (12 fields, rule-based transaction splitting, bank import automation)
+- ✅ **Build Records Entity**: Manufacturing/assembly recipe system (5 fields, product component recipes, bill of materials)
+- ✅ **Memo Entity**: Names subfile CRM functionality (5 fields, note-taking and reminder system, contact relationship management)
 - ✅ **Validation Framework**: Comprehensive canonical terminology verification
 - ✅ **Purity Principles**: Three-layer semantic architecture established
 - ✅ **Domain Pollution Prevention**: Continuous terminology consistency checking
@@ -54,13 +60,16 @@ Based on the manual structure, MoneyWorks has these core entities:
 12. ✅ **Reconciliation** - Bank reconciliation session metadata (8 fields, system tracking entity, completed)
 
 ### **System Entities**
-13. 🔄 **User Management** - Login and security
+13. ✅ **User Management** - Three-entity system complete:
+    - ✅ **User Entity**: Persistent script data storage
+    - ✅ **User2 Entity**: Enhanced persistent storage with typed data
+    - ✅ **Login Entity**: Authentication and authorization system
 14. ✅ **General Classifications** - Account Categories, Department Classifications, and Department Groups (prefix-based logical separation in single file)
-15. 🔄 **Allocations** - Cost allocation rules
-16. 🔄 **Build Records** - Manufacturing/assembly
-17. 🔄 **Memo Records** - Notes and documentation
+15. ✅ **Allocations** - Auto-allocation rule system for transaction splitting (12 fields, rule-based processing)
+16. ✅ **Build Records** - Manufacturing/assembly recipe system (5 fields, component bill of materials)
+17. ✅ **Memo Records** - Names subfile CRM functionality (5 fields, note-taking and reminder system, contact relationship management)
 
-**Total Estimated Entities: ~17-20 major entities**
+**Total Core Entities: 20/20+ Complete (100%+)**
 
 ## 🏗️ **WHY ITERATIVE APPROACH IS ESSENTIAL**
 
