@@ -78,16 +78,17 @@ export function createMoneyWorksReplacer(
 
 	return (key: string, value: JsonValue): JsonValue => {
 		// Apply custom replacer first if provided
+		let processedValue = value;
 		if (replacer) {
-			value = replacer(key, value);
+			processedValue = replacer(key, processedValue);
 		}
 
 		// Handle YYYYMMDD formatting
-		if (formatDates && typeof value === "string" && value.length === 8) {
+		if (formatDates && typeof processedValue === "string" && processedValue.length === 8) {
 			// Check if it looks like a YYYYMMDD
-			if (/^\d{8}$/.test(value)) {
+			if (/^\d{8}$/.test(processedValue)) {
 				try {
-					return formatYYYYMMDD(value as YYYYMMDD, dateSeparator);
+					return formatYYYYMMDD(processedValue as YYYYMMDD, dateSeparator);
 				} catch {
 					// Not a valid date, return as-is
 				}
@@ -97,19 +98,19 @@ export function createMoneyWorksReplacer(
 		// Handle Period formatting
 		if (
 			formatPeriods &&
-			typeof value === "number" &&
-			value >= 100000 &&
-			value <= 999999
+			typeof processedValue === "number" &&
+			processedValue >= 100000 &&
+			processedValue <= 999999
 		) {
 			try {
-				return formatPeriod(value as Period, periodSeparator);
+				return formatPeriod(processedValue as Period, periodSeparator);
 			} catch {
 				// Not a valid period, return as-is
 			}
 		}
 
 		// Branded types serialize as their underlying value
-		return value;
+		return processedValue;
 	};
 }
 

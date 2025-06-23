@@ -51,3 +51,4 @@ package-lock.json
 /cache/Transaction-labels-en.json
 /cache/Transaction-labels-fr.json
 .DS_Store
+/packages/utilities/node_modules/

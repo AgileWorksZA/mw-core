@@ -2,8 +2,8 @@
   "extends": "./tsconfig.base.json",
   "files": [],
   "references": [
-    { "path": "./packages/utilities" },
-    { "path": "./packages/core" },
-    { "path": "./packages/semantic" }
+    { "path": "./packages/utilities/tsconfig.json" },
+    { "path": "./packages/core/tsconfig.json" },
+    { "path": "./packages/semantic/tsconfig.json" }
   ]
 }

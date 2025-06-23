@@ -145,7 +145,8 @@
       "Bash(PORT=5173 bun run dev)",
       "Bash(curl:*)",
       "Bash(npx @biomejs/biome format:*)",
-      "Bash(npx @biomejs/biome lint:*)"
+      "Bash(npx @biomejs/biome lint:*)",
+      "mcp__desktop-commander__execute_command"
     ],
     "deny": []
   }

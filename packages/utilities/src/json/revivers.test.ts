@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, test } from "bun:test";
-import type { HHMMSS, Period, YYYYMMDD } from "../types/branded";
+import type { HHMMSS, Period, YYYYMMDD } from "../types";
 import {
 	createMoneyWorksReviver,
 	createTypedParser,
@@ -144,9 +144,9 @@ describe("JSON revivers", () => {
 
 			const parsed = parseMoneyWorksJSON<Transaction>(json);
 			expect(parsed.id).toBe(1001);
-			expect(parsed.transDate).toBe("20250115");
-			expect(parsed.period).toBe(202501);
-			expect(parsed.transTime).toBe("143000");
+			expect(parsed.transDate.toString()).toBe("20250115");
+			expect(parsed.period.valueOf()).toBe(202501);
+			expect(parsed.transTime.toString()).toBe("143000");
 		});
 
 		test("parses with custom options", () => {
@@ -201,9 +201,9 @@ describe("JSON revivers", () => {
       }`;
 
 			const invoice = parseInvoice(json);
-			expect(invoice.transDate).toBe("20250115");
-			expect(invoice.dueDate).toBe("20250215");
-			expect(invoice.period).toBe(202501);
+			expect(invoice.transDate.toString()).toBe("20250115");
+			expect(invoice.dueDate.toString()).toBe("20250215");
+			expect(invoice.period.valueOf()).toBe(202501);
 			expect(invoice.description).toBe("Test invoice");
 		});
 

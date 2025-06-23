@@ -153,6 +153,39 @@ export function periodRange(from: Period, to: Period): Period[] {
 }
 
 /**
+ * Tagged template literal for creating Period values
+ * 
+ * @example
+ * const period = p`202501`;
+ * const current = p`${new Date()}`;
+ * const composed = p`${2025}${1}`;
+ */
+export function p(
+	strings: TemplateStringsArray,
+	...values: any[]
+): Period {
+	// Combine template parts
+	let result = strings[0];
+	for (let i = 0; i < values.length; i++) {
+		const value = values[i];
+		// Handle Date objects specially
+		if (value instanceof Date) {
+			result += String(dateToPeriod(value)) + strings[i + 1];
+		} else {
+			result += String(value) + strings[i + 1];
+		}
+	}
+	
+	// Parse as number and validate
+	const num = parseInt(result, 10);
+	if (isNaN(num)) {
+		throw new Error(`Invalid period format: ${result}`);
+	}
+	
+	return createPeriod(num);
+}
+
+/**
  * Namespace for Period utilities
  */
 export namespace PeriodUtils {
