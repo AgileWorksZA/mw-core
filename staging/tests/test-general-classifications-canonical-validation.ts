@@ -4,7 +4,7 @@
  * Comprehensive validation suite for Account Categories, Department Classifications, and Department Groups
  * Source: MoneyWorks Manual - General File (Internal Name: "General")
  * 
- * Tests canonical purity, cross-business universality, and MoneyWorks-specific business rules
+ * Tests staging purity, cross-business universality, and MoneyWorks-specific business rules
  */
 
 import {
@@ -27,7 +27,7 @@ import {
 // ============================================================================
 
 describe('MoneyWorks General Classifications - Field Definition Validation', () => {
-  test('All canonical fields are properly defined', () => {
+  test('All staging fields are properly defined', () => {
     expect(MONEYWORKS_GENERAL_FIELDS).toHaveLength(3);
     
     const codeField = MONEYWORKS_GENERAL_FIELDS.find(f => f.fieldName === 'Code');
@@ -187,7 +187,7 @@ describe('MoneyWorks General Classifications - Code Creation', () => {
 // ============================================================================
 
 describe('MoneyWorks General Classifications - Canonical Terminology', () => {
-  test('All canonical terms use MoneyWorks exact terminology', () => {
+  test('All staging terms use MoneyWorks exact terminology', () => {
     expect(MONEYWORKS_GENERAL_CANONICAL_TERMS.INTERNAL_NAME).toBe('General');
     expect(MONEYWORKS_GENERAL_CANONICAL_TERMS.ACCOUNT_CATEGORY).toBe('Account Category');
     expect(MONEYWORKS_GENERAL_CANONICAL_TERMS.DEPARTMENT_CLASSIFICATION).toBe('Department Classification');
@@ -195,7 +195,7 @@ describe('MoneyWorks General Classifications - Canonical Terminology', () => {
     expect(MONEYWORKS_GENERAL_CANONICAL_TERMS.SUB_LEDGER).toBe('Sub-ledger');
   });
 
-  test('No business domain pollution in canonical terms', () => {
+  test('No business domain pollution in staging terms', () => {
     const allTerms = Object.values(MONEYWORKS_GENERAL_CANONICAL_TERMS);
     const businessTerms = ['customer', 'client', 'vendor', 'supplier', 'invoice', 'bill', 'restaurant', 'legal', 'manufacturing'];
     
@@ -436,8 +436,8 @@ describe('MoneyWorks General Classifications - Integration Tests', () => {
   });
 });
 
-console.log('✅ MoneyWorks General Classifications canonical validation complete');
+console.log('✅ MoneyWorks General Classifications staging validation complete');
 console.log('📊 Coverage: All three logical entities (Account Categories, Department Classifications, Department Groups)');
 console.log('🏛️ Architecture: Single file with prefix-based logical separation maintained');
 console.log('🌍 Universality: Validated across restaurant, legal, manufacturing, and consulting domains');
-console.log('📋 Compliance: 100% MoneyWorks canonical terminology and business rules');
+console.log('📋 Compliance: 100% MoneyWorks staging terminology and business rules');

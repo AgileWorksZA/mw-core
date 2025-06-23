@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Assets Canonical Validation Tests
  * 
- * Comprehensive test suite validating MoneyWorks Assets canonical ontology
+ * Comprehensive test suite validating MoneyWorks Assets staging ontology
  * across multiple business scenarios with 100% field coverage
  */
 

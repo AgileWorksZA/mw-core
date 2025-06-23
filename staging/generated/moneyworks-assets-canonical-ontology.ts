@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Assets Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_assets.html
  * Authority: MoneyWorks Manual - Assets Field Descriptions
  * 
@@ -15,7 +15,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks canonical asset status classification
+ * MoneyWorks staging asset status classification
  * Source: moneyworks_appendix_assets.html - "Status" field
  */
 export enum MoneyWorksAssetStatus {
@@ -36,7 +36,7 @@ export enum MoneyWorksAssetStatus {
 }
 
 /**
- * MoneyWorks canonical depreciation type classification
+ * MoneyWorks staging depreciation type classification
  * Source: moneyworks_appendix_assets.html - "Type" field
  */
 export enum MoneyWorksDepreciationType {
@@ -300,38 +300,38 @@ export const MONEYWORKS_ASSET_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical asset management terminology
+ * MoneyWorks staging asset management terminology
  * Source: moneyworks_appendix_assets.html
  */
 export const MONEYWORKS_ASSET_CANONICAL_TERMS = {
-  // Asset classification (MoneyWorks canonical)
+  // Asset classification (MoneyWorks staging)
   FIXED_ASSET: "Fixed Asset",                    // MoneyWorks asset register entry
   ASSET_CODE: "Asset Code",                      // Unique asset identifier
   ASSET_DESCRIPTION: "Asset Description",        // Asset name/description
   ASSET_CATEGORY: "Asset Category",              // Classification grouping
   
-  // Asset lifecycle (MoneyWorks canonical)
+  // Asset lifecycle (MoneyWorks staging)
   ACQUISITION: "Acquisition",                    // Asset purchase/addition
   DEPRECIATION: "Depreciation",                  // Value reduction over time
   REVALUATION: "Revaluation",                    // Asset value reassessment
   DISPOSAL: "Disposal",                          // Asset sale/removal
   
-  // Depreciation methods (MoneyWorks canonical)
+  // Depreciation methods (MoneyWorks staging)
   STRAIGHT_LINE: "Straight Line Depreciation",   // Even depreciation over life
   DIMINISHING_VALUE: "Diminishing Value",        // Accelerated depreciation
   
-  // Asset status (MoneyWorks canonical)
+  // Asset status (MoneyWorks staging)
   ACTIVE_ASSET: "Active Asset",                  // Currently in use
   NON_DEPRECIABLE: "Non-Depreciable Asset",      // Does not depreciate
   DISPOSED_ASSET: "Disposed Asset",              // No longer owned
   
-  // Financial tracking (MoneyWorks canonical)
+  // Financial tracking (MoneyWorks staging)
   BOOK_VALUE: "Book Value",                      // Current accounting value
   ACCUMULATED_DEPRECIATION: "Accumulated Depreciation", // Total depreciation to date
   EXPECTED_LIFE: "Expected Life",                // Useful life in years
   RESIDUAL_VALUE: "Expected Residual Value",     // End-of-life value
   
-  // Location and management (MoneyWorks canonical)
+  // Location and management (MoneyWorks staging)
   ASSET_LOCATION: "Asset Location",              // Physical location
   ASSET_DEPARTMENT: "Asset Department",          // Cost center assignment
   PRIVATE_USE: "Private Use Percentage",         // Personal use portion
@@ -343,7 +343,7 @@ export const MONEYWORKS_ASSET_CANONICAL_TERMS = {
 // ============================================================================
 
 /**
- * Validate canonical MoneyWorks asset status
+ * Validate staging MoneyWorks asset status
  */
 export function validateAssetStatus(status: string): {
   isValid: boolean;
@@ -365,7 +365,7 @@ export function validateAssetStatus(status: string): {
 }
 
 /**
- * Validate canonical MoneyWorks depreciation type
+ * Validate staging MoneyWorks depreciation type
  */
 export function validateDepreciationType(type: string): {
   isValid: boolean;
@@ -387,10 +387,10 @@ export function validateDepreciationType(type: string): {
 }
 
 /**
- * Calculate book value using MoneyWorks canonical rules
+ * Calculate book value using MoneyWorks staging rules
  */
 export function calculateCanonicalBookValue(cost: number, accumDepreciation: number, accumDepnAdj: number): number {
-  // MoneyWorks canonical calculation: Cost - Accumulated Depreciation + Accumulated Depreciation Adjustments
+  // MoneyWorks staging calculation: Cost - Accumulated Depreciation + Accumulated Depreciation Adjustments
   return cost - accumDepreciation + accumDepnAdj;
 }
 
@@ -402,7 +402,7 @@ export function requiresDepreciation(status: MoneyWorksAssetStatus): boolean {
 }
 
 /**
- * Get canonical asset lifecycle explanation
+ * Get staging asset lifecycle explanation
  */
 export function getCanonicalAssetLifecycle(status: MoneyWorksAssetStatus): string {
   switch (status) {

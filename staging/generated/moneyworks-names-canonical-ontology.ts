@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Names Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_names.html
  * Authority: MoneyWorks Manual - Names Field Descriptions
  * 
@@ -15,7 +15,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks canonical customer type classification
+ * MoneyWorks staging customer type classification
  * Source: moneyworks_appendix_names.html - "CustomerType" field
  */
 export enum MoneyWorksCustomerType {
@@ -30,7 +30,7 @@ export enum MoneyWorksCustomerType {
 }
 
 /**
- * MoneyWorks canonical supplier type classification  
+ * MoneyWorks staging supplier type classification
  * Source: moneyworks_appendix_names.html - "SupplierType" field
  */
 export enum MoneyWorksSupplierType {
@@ -45,7 +45,7 @@ export enum MoneyWorksSupplierType {
 }
 
 /**
- * MoneyWorks canonical name kind classification
+ * MoneyWorks staging name kind classification
  * Source: moneyworks_appendix_names.html - "Kind" field
  */
 export enum MoneyWorksNameKind {
@@ -57,7 +57,7 @@ export enum MoneyWorksNameKind {
 }
 
 /**
- * MoneyWorks canonical payment methods
+ * MoneyWorks staging payment methods
  * Source: moneyworks_appendix_names.html - "PaymentMethod" field
  */
 export enum MoneyWorksPaymentMethod {
@@ -78,7 +78,7 @@ export enum MoneyWorksPaymentMethod {
 }
 
 /**
- * MoneyWorks canonical name flags
+ * MoneyWorks staging name flags
  * Source: moneyworks_appendix_names.html - "Name Flags" table
  */
 export enum MoneyWorksNameFlags {
@@ -196,7 +196,7 @@ export const MONEYWORKS_NAME_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical name type definitions with manual explanations
+ * MoneyWorks staging name type definitions with manual explanations
  */
 export interface MoneyWorksNameTypeDefinition {
   type: MoneyWorksCustomerType | MoneyWorksSupplierType;
@@ -261,7 +261,7 @@ export const MONEYWORKS_SUPPLIER_TYPE_DEFINITIONS: MoneyWorksNameTypeDefinition[
 /**
  * CRITICAL ARCHITECTURAL INSIGHT:
  * 
- * MoneyWorks canonical terminology distinguishes between:
+ * MoneyWorks staging terminology distinguishes between:
  * 
  * CUSTOMER vs DEBTOR:
  * - Customer (Type 1): Can make purchases, basic sales functionality
@@ -277,27 +277,27 @@ export const MONEYWORKS_SUPPLIER_TYPE_DEFINITIONS: MoneyWorksNameTypeDefinition[
  */
 
 export const MONEYWORKS_NAME_CANONICAL_TERMS = {
-  // Primary classifications (MoneyWorks canonical)
+  // Primary classifications (MoneyWorks staging)
   CUSTOMER: "Customer",           // Type 1 - basic sales functionality
   DEBTOR: "Debtor",               // Type 2 - full receivables management
   SUPPLIER: "Supplier",           // Type 1 - basic purchase functionality  
   CREDITOR: "Creditor",           // Type 2 - full payables management
   
-  // Name management (MoneyWorks canonical)
+  // Name management (MoneyWorks staging)
   NAME_CODE: "Name Code",         // Unique identifier for name
   NORMAL_NAME: "Normal Name",     // Regular business entity
   TEMPLATE_NAME: "Template Name", // Template for creating new names
   
-  // Account relationships (MoneyWorks canonical)
+  // Account relationships (MoneyWorks staging)
   RECEIVABLES_ACCOUNT: "Accounts Receivable Control Account",  // For debtors
   PAYABLES_ACCOUNT: "Accounts Payable Control Account",        // For creditors
   
-  // Status management (MoneyWorks canonical)
+  // Status management (MoneyWorks staging)
   ON_HOLD: "On Hold",             // Debtor transaction restriction
   CREDIT_LIMIT: "Credit Limit",   // Debtor spending limit
   PAYMENT_TERMS: "Payment Terms", // Days or date-based terms
   
-  // Balance tracking (MoneyWorks canonical)
+  // Balance tracking (MoneyWorks staging)
   DEBTOR_CURRENT: "Debtor Current Balance",    // Current outstanding
   CREDITOR_CURRENT: "Creditor Current Balance", // Current payable
   AGING_BALANCE: "Aging Balance"                // Age-based balance tracking
@@ -308,7 +308,7 @@ export const MONEYWORKS_NAME_CANONICAL_TERMS = {
 // ============================================================================
 
 /**
- * Validate canonical MoneyWorks name type definitions
+ * Validate staging MoneyWorks name type definitions
  */
 export function validateNameTypeCanonical(customerType: number, supplierType: number): {
   isValid: boolean;
@@ -339,7 +339,7 @@ export function validateNameTypeCanonical(customerType: number, supplierType: nu
 }
 
 /**
- * Get canonical MoneyWorks name type explanation
+ * Get staging MoneyWorks name type explanation
  */
 export function getCanonicalNameTypeExplanation(customerType: MoneyWorksCustomerType, supplierType: MoneyWorksSupplierType): string {
   const customerDef = MONEYWORKS_CUSTOMER_TYPE_DEFINITIONS.find(def => def.type === customerType);
@@ -366,7 +366,7 @@ export function isCanonicalCreditor(supplierType: MoneyWorksSupplierType): boole
 }
 
 /**
- * Get canonical account relationships for name
+ * Get staging account relationships for name
  */
 export function getCanonicalAccountRelationships(customerType: MoneyWorksCustomerType, supplierType: MoneyWorksSupplierType): {
   needsReceivablesAccount: boolean;

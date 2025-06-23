@@ -1,7 +1,7 @@
 /**
  * MoneyWorks AssetLog Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_assets.html - AssetLog subfile
  * Authority: MoneyWorks Manual - AssetLog Field Descriptions
  * 
@@ -15,7 +15,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks canonical asset action types
+ * MoneyWorks staging asset action types
  * Source: moneyworks_appendix_assets.html - AssetLog "Action" field
  */
 export enum MoneyWorksAssetLogAction {
@@ -150,11 +150,11 @@ export const MONEYWORKS_ASSETLOG_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical AssetLog terminology
+ * MoneyWorks staging AssetLog terminology
  * Source: moneyworks_appendix_assets.html
  */
 export const MONEYWORKS_ASSETLOG_CANONICAL_TERMS = {
-  // Asset lifecycle actions (MoneyWorks canonical)
+  // Asset lifecycle actions (MoneyWorks staging)
   ACQUISITION_ACTION: "Asset Acquisition",       // AA - asset purchase/addition
   DISPOSAL_ACTION: "Asset Disposal",             // AD - complete disposal
   PART_DISPOSAL_ACTION: "Part Disposal",         // AP - partial disposal
@@ -162,28 +162,28 @@ export const MONEYWORKS_ASSETLOG_CANONICAL_TERMS = {
   REVALUATION_ACTION: "Revaluation",             // RV - value reassessment
   MEMO_ACTION: "Memo Entry",                     // ME - administrative note
   
-  // Depreciation methods (MoneyWorks canonical)
+  // Depreciation methods (MoneyWorks staging)
   STRAIGHT_LINE_DEPN: "Straight Line Depreciation",  // DS - even depreciation
   DIMINISHING_VALUE_DEPN: "Diminishing Value Depreciation", // DD - accelerated
   
-  // Financial tracking (MoneyWorks canonical)
+  // Financial tracking (MoneyWorks staging)
   ACTION_DATE: "Action Date",                    // When action occurred
   DEPRECIATION_AMOUNT: "Depreciation Amount",    // Amount depreciated
   ACCUMULATED_DEPRECIATION: "Accumulated Depreciation", // Total depreciation
   ACCUMULATED_REVALUATION: "Accumulated Revaluation",   // Total revaluations
   CLOSING_VALUE: "Closing Value",                // Book value after action
   
-  // Relationships (MoneyWorks canonical)
+  // Relationships (MoneyWorks staging)
   PARENT_ASSET: "Parent Asset",                  // Asset this log belongs to
   RELATED_TRANSACTION: "Related Transaction",    // Associated transaction
   
-  // Adjustments (MoneyWorks canonical)
+  // Adjustments (MoneyWorks staging)
   ADJUSTMENT_ONE: "Adjustment 1",                // First adjustment amount
   ADJUSTMENT_TWO: "Adjustment 2",                // Second adjustment amount
   DEPRECIATION_RATE: "Depreciation Rate",        // Rate used for calculation
   PRIVATE_USE_PERCENTAGE: "Private Use Percent", // Personal use portion
   
-  // Administrative (MoneyWorks canonical)
+  // Administrative (MoneyWorks staging)
   ACTION_MEMO: "Action Memo",                    // User notes
   AUDIT_TRAIL: "Asset Audit Trail"              // Complete action history
 } as const;
@@ -193,7 +193,7 @@ export const MONEYWORKS_ASSETLOG_CANONICAL_TERMS = {
 // ============================================================================
 
 /**
- * Validate canonical MoneyWorks AssetLog action type
+ * Validate staging MoneyWorks AssetLog action type
  */
 export function validateAssetLogAction(action: string): {
   isValid: boolean;
@@ -242,7 +242,7 @@ export function requiresTransaction(action: MoneyWorksAssetLogAction): boolean {
 }
 
 /**
- * Get canonical action explanation
+ * Get staging action explanation
  */
 export function getCanonicalActionExplanation(action: MoneyWorksAssetLogAction): string {
   switch (action) {

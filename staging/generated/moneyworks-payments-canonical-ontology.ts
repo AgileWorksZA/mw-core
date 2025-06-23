@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Payments Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_payments_file.html
  * Authority: MoneyWorks Manual - Payments Field Descriptions
  * 
@@ -29,7 +29,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks canonical Payments field definitions
+ * MoneyWorks staging Payments field definitions
  * Source: moneyworks_appendix_payments_file.html - Field table
  */
 export const MONEYWORKS_PAYMENTS_FIELDS = [
@@ -87,7 +87,7 @@ export const MONEYWORKS_PAYMENTS_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical Payments business rules
+ * MoneyWorks staging Payments business rules
  * Source: moneyworks_appendix_payments_file.html - Business logic descriptions
  */
 export const MONEYWORKS_PAYMENTS_BUSINESS_RULES = [
@@ -138,7 +138,7 @@ export const MONEYWORKS_PAYMENTS_BUSINESS_RULES = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical Payments entity relationships
+ * MoneyWorks staging Payments entity relationships
  * Source: moneyworks_appendix_payments_file.html - Field descriptions and business logic
  */
 export const MONEYWORKS_PAYMENTS_RELATIONSHIPS = [
@@ -179,7 +179,7 @@ export const MONEYWORKS_PAYMENTS_RELATIONSHIPS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical Payments validation rules
+ * MoneyWorks staging Payments validation rules
  */
 export const MONEYWORKS_PAYMENTS_VALIDATION = {
   validatePaymentRecord: (payment: any) => {

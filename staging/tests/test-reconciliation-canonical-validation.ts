@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Reconciliation Entity - Canonical Validation Test Suite
  * 
- * Comprehensive test suite validating Reconciliation canonical ontology extraction
+ * Comprehensive test suite validating Reconciliation staging ontology extraction
  * Source Authority: moneyworks_appendix_reconciliation_file.html
  * 
  * PURPOSE: Validate 100% coverage and terminological purity of Reconciliation entity
@@ -49,7 +49,7 @@ function testReconciliationFieldCoverage(): void {
 
 /**
  * Test 2: Data type accuracy validation
- * Validates MoneyWorks canonical data types
+ * Validates MoneyWorks staging data types
  */
 function testReconciliationDataTypes(): void {
   const expectedDataTypes = {
@@ -267,7 +267,7 @@ function testReconciliationUniversality(): void {
 // ============================================================================
 
 /**
- * Execute complete Reconciliation canonical validation suite
+ * Execute complete Reconciliation staging validation suite
  */
 function runReconciliationValidationSuite(): void {
   console.log("🚀 STARTING RECONCILIATION CANONICAL VALIDATION SUITE\n");

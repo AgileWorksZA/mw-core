@@ -1,11 +1,11 @@
 /**
  * MoneyWorks Contacts Entity - Canonical Validation Test Suite
  * 
- * Comprehensive validation framework for Contacts entity canonical ontology
+ * Comprehensive validation framework for Contacts entity staging ontology
  * Tests terminological purity, business rule compliance, and cross-business universality
  * 
  * Source Authority: moneyworks_appendix_contacts.html
- * Ontology: moneyworks-contacts-canonical-ontology.ts
+ * Ontology: moneyworks-contacts-staging-ontology.ts
  */
 
 import {
@@ -21,7 +21,7 @@ import {
 
 /**
  * Test 1: Terminological Purity Validation
- * Ensures 100% MoneyWorks canonical terminology without domain pollution
+ * Ensures 100% MoneyWorks staging terminology without domain pollution
  */
 export const CONTACTS_TERMINOLOGY_PURITY_TESTS = [
   {
@@ -194,7 +194,7 @@ export const CONTACTS_DATA_TYPE_TESTS = [
 
 /**
  * Test 4: MoneyWorks Business Rule Compliance
- * Validates canonical business rules and constraints
+ * Validates staging business rules and constraints
  */
 export const CONTACTS_BUSINESS_RULE_TESTS = [
   {

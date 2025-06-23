@@ -1,7 +1,7 @@
 /**
  * MoneyWorks General Classifications Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_account_categories__department_classifications_and_groups.html
  * Authority: MoneyWorks Manual - General File (Account Categories, Department Classifications and Groups)
  * 
@@ -18,7 +18,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks canonical prefix types for General file
+ * MoneyWorks staging prefix types for General file
  * Source: moneyworks_appendix_account_categories__department_classifications_and_groups.html
  */
 export enum MoneyWorksGeneralPrefix {
@@ -33,7 +33,7 @@ export enum MoneyWorksGeneralPrefix {
 }
 
 /**
- * MoneyWorks canonical general classification type enumeration
+ * MoneyWorks staging general classification type enumeration
  * Maps prefixes to their semantic meaning
  */
 export enum MoneyWorksGeneralClassificationType {
@@ -88,7 +88,7 @@ export const MONEYWORKS_GENERAL_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical account category definition
+ * MoneyWorks staging account category definition
  * Source: moneyworks_accounts_account_categories.html
  */
 export interface MoneyWorksAccountCategoryDefinition {
@@ -100,7 +100,7 @@ export interface MoneyWorksAccountCategoryDefinition {
 }
 
 /**
- * Account Categories canonical business rules
+ * Account Categories staging business rules
  * Source: moneyworks_accounts_account_categories.html
  */
 export const MONEYWORKS_ACCOUNT_CATEGORY_RULES = {
@@ -121,7 +121,7 @@ export const MONEYWORKS_ACCOUNT_CATEGORY_RULES = {
 // ============================================================================
 
 /**
- * MoneyWorks canonical department classification definition
+ * MoneyWorks staging department classification definition
  * Source: moneyworks_departments_department_classifications.html
  */
 export interface MoneyWorksDepartmentClassificationDefinition {
@@ -133,7 +133,7 @@ export interface MoneyWorksDepartmentClassificationDefinition {
 }
 
 /**
- * Department Classifications canonical business rules
+ * Department Classifications staging business rules
  * Source: moneyworks_departments_department_classifications.html
  */
 export const MONEYWORKS_DEPARTMENT_CLASSIFICATION_RULES = {
@@ -151,7 +151,7 @@ export const MONEYWORKS_DEPARTMENT_CLASSIFICATION_RULES = {
 // ============================================================================
 
 /**
- * MoneyWorks canonical department group definition
+ * MoneyWorks staging department group definition
  * Source: moneyworks_departments_department_groups.html
  */
 export interface MoneyWorksDepartmentGroupDefinition {
@@ -163,7 +163,7 @@ export interface MoneyWorksDepartmentGroupDefinition {
 }
 
 /**
- * Department Groups canonical business rules
+ * Department Groups staging business rules
  * Source: moneyworks_departments_department_groups.html
  */
 export const MONEYWORKS_DEPARTMENT_GROUP_RULES = {
@@ -182,26 +182,26 @@ export const MONEYWORKS_DEPARTMENT_GROUP_RULES = {
 // ============================================================================
 
 export const MONEYWORKS_GENERAL_CANONICAL_TERMS = {
-  // File structure (MoneyWorks canonical)
+  // File structure (MoneyWorks staging)
   INTERNAL_NAME: "General",                    // MoneyWorks internal file name
   LOGICAL_SEPARATION: "Prefix-based Logical Files", // Three logical files in one physical file
   
-  // Account Categories (MoneyWorks canonical)
+  // Account Categories (MoneyWorks staging)
   ACCOUNT_CATEGORY: "Account Category",        // Grouping mechanism for accounts
   ACCOUNT_GROUPING: "Account Grouping",        // Business purpose of categories
   PREDEFINED_CATEGORY: "Predefined Category",  // First category field type
   FREEFORM_CATEGORY: "Free-form Category",     // Remaining category fields type
   
-  // Department Classifications (MoneyWorks canonical)
+  // Department Classifications (MoneyWorks staging)
   DEPARTMENT_CLASSIFICATION: "Department Classification", // Grouping mechanism for departments
   DEPARTMENT_GROUPING: "Department Grouping",             // Business purpose of classifications
   
-  // Department Groups (MoneyWorks canonical)
+  // Department Groups (MoneyWorks staging)
   DEPARTMENT_GROUP: "Department Group",        // Collection of departments
   SUB_LEDGER: "Sub-ledger",                   // Account association result
   DEPARTMENT_COLLECTION: "Department Collection", // Group composition
   
-  // Universal concepts (MoneyWorks canonical)
+  // Universal concepts (MoneyWorks staging)
   CATEGORY_CODE: "Category Code",              // Identifier with prefix
   CATEGORY_NAME: "Category Name",              // Human-readable description
   LAST_MODIFIED: "Last Modified Time",         // Change tracking
@@ -261,7 +261,7 @@ export function validateGeneralPrefix(code: string): {
 }
 
 /**
- * Get canonical MoneyWorks classification type explanation
+ * Get staging MoneyWorks classification type explanation
  */
 export function getCanonicalClassificationExplanation(
   classificationType: MoneyWorksGeneralClassificationType

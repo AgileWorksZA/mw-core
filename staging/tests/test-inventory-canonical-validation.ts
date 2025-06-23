@@ -1,11 +1,11 @@
 /**
  * MoneyWorks Inventory Entity - Canonical Validation Test Suite
  * 
- * COMPREHENSIVE validation of MoneyWorks Inventory canonical ontology
+ * COMPREHENSIVE validation of MoneyWorks Inventory staging ontology
  * Tests terminological purity, cross-business universality, and entity relationships
  * 
  * Source Authority: moneyworks_appendix_inventory.html
- * Ontology: moneyworks-inventory-canonical-ontology.ts
+ * Ontology: moneyworks-inventory-staging-ontology.ts
  */
 
 import {
@@ -111,7 +111,7 @@ export function testInventoryFieldDefinitionAccuracy(): {
 // ============================================================================
 
 /**
- * Test 3: Ensure no domain pollution in canonical terminology
+ * Test 3: Ensure no domain pollution in staging terminology
  */
 export function testInventoryTerminologyPurity(): {
   isValid: boolean;
@@ -119,13 +119,13 @@ export function testInventoryTerminologyPurity(): {
 } {
   const purityViolations: string[] = [];
   
-  // Check for domain-specific terms that should not appear in canonical layer
+  // Check for domain-specific terms that should not appear in staging layer
   const prohibitedTerms = [
     'warehouse', 'retail', 'store', 'shop',           // Business domain terms
     'item', 'sku', 'upc', 'barcode',                  // Generic inventory terms  
     'cycle count', 'perpetual', 'periodic',          // Inventory methodology terms
     'picking', 'shipping', 'receiving',              // Warehouse operation terms
-    'vendor', 'supplier', 'customer'                 // Replaced by MoneyWorks canonical
+    'vendor', 'supplier', 'customer'                 // Replaced by MoneyWorks staging
   ];
   
   const allTerms = Object.values(MONEYWORKS_INVENTORY_CANONICAL_TERMS).join(' ').toLowerCase();
@@ -143,14 +143,14 @@ export function testInventoryTerminologyPurity(): {
 }
 
 /**
- * Test 4: Validate MoneyWorks canonical terminology usage
+ * Test 4: Validate MoneyWorks staging terminology usage
  */
 export function testMoneyWorksCanonicalTerminologyUsage(): {
   isValid: boolean;
   canonicalTermsFound: string[];
   missingCanonicalTerms: string[];
 } {
-  // MoneyWorks canonical terms that should be used
+  // MoneyWorks staging terms that should be used
   const requiredCanonicalTerms = [
     'Stock On Hand',           // MoneyWorks standard terminology
     'Stock Take',              // MoneyWorks inventory process
@@ -666,7 +666,7 @@ export function testDefaultLocationHandling(): {
 // ============================================================================
 
 /**
- * Run all inventory canonical validation tests
+ * Run all inventory staging validation tests
  */
 export function runInventoryCanonicalValidation(): {
   isValid: boolean;

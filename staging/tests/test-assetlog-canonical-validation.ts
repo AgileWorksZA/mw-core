@@ -1,7 +1,7 @@
 /**
  * MoneyWorks AssetLog Canonical Validation Tests
  * 
- * Comprehensive test suite validating MoneyWorks AssetLog canonical ontology
+ * Comprehensive test suite validating MoneyWorks AssetLog staging ontology
  * across multiple business scenarios with 100% field coverage
  */
 

@@ -1,11 +1,11 @@
 /**
  * MoneyWorks Payments Entity - Canonical Validation Test Suite
  * 
- * Comprehensive validation of MoneyWorks Payments canonical ontology
+ * Comprehensive validation of MoneyWorks Payments staging ontology
  * Tests terminological purity, relationship integrity, and cross-business universality
  * 
  * Source: moneyworks_appendix_payments_file.html
- * Authority: MoneyWorks Manual canonical extraction validation
+ * Authority: MoneyWorks Manual staging extraction validation
  */
 
 import { 
@@ -50,7 +50,7 @@ export const validatePaymentsFieldCoverage = () => {
 // ============================================================================
 
 /**
- * Validates MoneyWorks canonical relationship definitions
+ * Validates MoneyWorks staging relationship definitions
  */
 export const validatePaymentsRelationships = () => {
   const validationResults = [];
@@ -116,7 +116,7 @@ export const validatePaymentsCrossBusiness = () => {
         Date: new Date('2024-01-15'),
         GSTCycle: 202401         // Tax cycle
       },
-      universalityTest: 'Restaurant table payments map to canonical payment allocation'
+      universalityTest: 'Restaurant table payments map to staging payment allocation'
     },
     {
       businessType: 'legal',
@@ -128,7 +128,7 @@ export const validatePaymentsCrossBusiness = () => {
         Date: new Date('2024-01-20'),
         GSTCycle: 202401
       },
-      universalityTest: 'Legal retainer allocations map to canonical payment allocation'
+      universalityTest: 'Legal retainer allocations map to staging payment allocation'
     },
     {
       businessType: 'manufacturing',
@@ -140,7 +140,7 @@ export const validatePaymentsCrossBusiness = () => {
         Date: new Date('2024-01-25'),
         GSTCycle: 202401
       },
-      universalityTest: 'Manufacturing overpayments map to canonical overpayment encoding'
+      universalityTest: 'Manufacturing overpayments map to staging overpayment encoding'
     },
     {
       businessType: 'consulting',
@@ -152,7 +152,7 @@ export const validatePaymentsCrossBusiness = () => {
         Date: new Date('2024-01-30'),
         GSTCycle: 202401
       },
-      universalityTest: 'Consulting partial payments map to canonical allocation tracking'
+      universalityTest: 'Consulting partial payments map to staging allocation tracking'
     }
   ];
   
@@ -180,7 +180,7 @@ export const validatePaymentsCrossBusiness = () => {
 // ============================================================================
 
 /**
- * Validates pure MoneyWorks canonical terminology (no domain pollution)
+ * Validates pure MoneyWorks staging terminology (no domain pollution)
  */
 export const validatePaymentsTerminologyPurity = () => {
   const purityTests = [
@@ -221,7 +221,7 @@ export const validatePaymentsTerminologyPurity = () => {
 // ============================================================================
 
 /**
- * Validates MoneyWorks canonical business rules
+ * Validates MoneyWorks staging business rules
  */
 export const validatePaymentsBusinessRules = () => {
   const ruleTests = [
@@ -294,7 +294,7 @@ export const validatePaymentsBusinessRules = () => {
 // ============================================================================
 
 /**
- * Comprehensive MoneyWorks Payments canonical validation
+ * Comprehensive MoneyWorks Payments staging validation
  */
 export const validatePaymentsCanonicalOntology = () => {
   const fieldValidation = validatePaymentsFieldCoverage();

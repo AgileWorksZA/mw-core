@@ -1,11 +1,11 @@
 /**
  * MoneyWorks Departments Entity - Canonical Validation Test Suite
  * 
- * COMPREHENSIVE validation of departments canonical ontology extraction
+ * COMPREHENSIVE validation of departments staging ontology extraction
  * Validates 100% field coverage, business domain applicability, and MoneyWorks compliance
  * 
  * Source Authority: moneyworks_appendix_departments.html
- * Ontology File: generated/moneyworks-departments-canonical-ontology.ts
+ * Ontology File: generated/moneyworks-departments-staging-ontology.ts
  */
 
 import {
@@ -348,7 +348,7 @@ export function testDepartmentBusinessScenarios(): boolean {
 // ============================================================================
 
 /**
- * Validates a department entity against MoneyWorks canonical rules
+ * Validates a department entity against MoneyWorks staging rules
  */
 function validateDepartmentEntity(dept: MoneyWorksDepartmentEntity): boolean {
   // Required field validation
@@ -386,7 +386,7 @@ function validateDepartmentEntity(dept: MoneyWorksDepartmentEntity): boolean {
 // ============================================================================
 
 /**
- * Runs complete department canonical validation suite
+ * Runs complete department staging validation suite
  * Returns overall validation result
  */
 export function runDepartmentValidationSuite(): boolean {
@@ -428,7 +428,7 @@ export function runDepartmentValidationSuite(): boolean {
   
   if (allTestsPassed) {
     console.log("🎉 ALL DEPARTMENT VALIDATION TESTS PASSED!");
-    console.log("✅ MoneyWorks Departments canonical ontology is VALID");
+    console.log("✅ MoneyWorks Departments staging ontology is VALID");
   } else {
     console.log("❌ Some department validation tests FAILED");
     console.log("🔧 Review and fix the failed validations");

@@ -146,7 +146,11 @@
       "Bash(curl:*)",
       "Bash(npx @biomejs/biome format:*)",
       "Bash(npx @biomejs/biome lint:*)",
-      "mcp__desktop-commander__execute_command"
+      "mcp__desktop-commander__execute_command",
+      "Bash(if [ -f test-source-imports.ts ])",
+      "Bash(then rm test-source-imports.ts)",
+      "Bash(else echo \"test-source-imports.ts not found\")",
+      "Bash(fi)"
     ],
     "deny": []
   }

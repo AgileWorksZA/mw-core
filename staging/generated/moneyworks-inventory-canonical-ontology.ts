@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Inventory Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_inventory.html
  * Authority: MoneyWorks Manual - Inventory Field Descriptions
  * 
@@ -30,7 +30,7 @@ export enum MoneyWorksInventoryRelationshipType {
 }
 
 /**
- * MoneyWorks canonical inventory tracking modes
+ * MoneyWorks staging inventory tracking modes
  * Derived from field structure and manual descriptions
  */
 export enum MoneyWorksInventoryTrackingMode {
@@ -144,7 +144,7 @@ export const MONEYWORKS_INVENTORY_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical inventory calculation functions
+ * MoneyWorks staging inventory calculation functions
  * Source: moneyworks_appendix_inventory.html - Referenced functions
  */
 export const MONEYWORKS_INVENTORY_FUNCTIONS = [
@@ -206,14 +206,14 @@ export const MONEYWORKS_INVENTORY_FUNCTIONS = [
  */
 
 export const MONEYWORKS_INVENTORY_CANONICAL_TERMS = {
-  // Location-based stock management (MoneyWorks canonical)
+  // Location-based stock management (MoneyWorks staging)
   STOCK_LOCATION: "Stock Location",                    // Physical location identifier
   LOCATION_CODE: "Location Code",                      // Location field
-  DEFAULT_LOCATION: "Default Location",                // Empty string location (MoneyWorks canonical)
+  DEFAULT_LOCATION: "Default Location",                // Empty string location (MoneyWorks staging)
   STOCK_ON_HAND: "Stock On Hand",                     // Qty field
   LOCATION_QUANTITY: "Location Quantity",             // Stock at specific location
   
-  // Serial/batch tracking (MoneyWorks canonical)  
+  // Serial/batch tracking (MoneyWorks staging)
   SERIAL_NUMBER: "Serial Number",                     // Individual item identifier
   BATCH_NUMBER: "Batch Number",                       // Batch/lot identifier
   LOT_NUMBER: "Lot Number",                           // Alternative batch term
@@ -221,7 +221,7 @@ export const MONEYWORKS_INVENTORY_CANONICAL_TERMS = {
   BATCH_EXPIRY: "Batch Expiry",                       // Expiry field
   EXPIRY_DATE: "Expiry Date",                         // Expiration tracking
   
-  // Stock take operations (MoneyWorks canonical)
+  // Stock take operations (MoneyWorks staging)
   STOCK_TAKE: "Stock Take",                           // Physical inventory count
   STOCK_COUNT: "Stock Count",                         // Physical counting process
   STARTING_QUANTITY: "Starting Quantity",             // StockTakeStartQty field
@@ -229,25 +229,25 @@ export const MONEYWORKS_INVENTORY_CANONICAL_TERMS = {
   STOCK_VARIANCE: "Stock Variance",                   // Difference calculation
   INVENTORY_ADJUSTMENT: "Inventory Adjustment",       // Correction transactions
   
-  // Product relationships (MoneyWorks canonical)
+  // Product relationships (MoneyWorks staging)
   PRODUCT_SEQUENCE: "Product Sequence",               // ProductSeq field
   PRODUCT_MASTER: "Product Master",                   // Main product record
   INVENTORY_SUBFILE: "Inventory Subfile",             // Relationship type
   STOCK_ITEM: "Stock Item",                           // Individual inventory record
   
-  // Inventory control functions (MoneyWorks canonical)
+  // Inventory control functions (MoneyWorks staging)
   STOCK_INQUIRY: "Stock Inquiry",                     // SOHForLocation function
   LOCATION_STOCK_QUERY: "Location Stock Query",       // Location-specific inquiry
   STOCK_TAKE_INQUIRY: "Stock Take Inquiry",           // Stock take function queries
   INVENTORY_TRACKING: "Inventory Tracking",           // Overall tracking system
   
-  // System operations (MoneyWorks canonical)
+  // System operations (MoneyWorks staging)
   INVENTORY_RECORD: "Inventory Record",               // Individual inventory entry
   STOCK_MOVEMENT: "Stock Movement",                   // Quantity changes
   LAST_MODIFIED: "Last Modified",                     // LastModifiedTime field
   INVENTORY_AUDIT: "Inventory Audit",                 // Change tracking
   
-  // Location management (MoneyWorks canonical)
+  // Location management (MoneyWorks staging)
   WAREHOUSE_LOCATION: "Warehouse Location",           // Storage facility
   STORE_LOCATION: "Store Location",                   // Retail location
   MULTI_LOCATION: "Multi-Location",                   // Multiple location support
@@ -268,7 +268,7 @@ export function validateInventoryLocationCanonical(location: string): {
 } {
   const warnings: string[] = [];
   
-  // MoneyWorks canonical behavior: empty string represents the "default location"
+  // MoneyWorks staging behavior: empty string represents the "default location"
   // Source: moneyworks_serials_locations.html - "The default location is a location with no code"
   // Source: moneyworks_calculations_sohforlocation.html - "For the default location, use an empty string"
   const isDefaultLocation = !location || location.trim().length === 0;
@@ -349,7 +349,7 @@ export function validateStockTakeQuantitiesCanonical(
  * Check if location represents the MoneyWorks default location
  */
 export function isDefaultLocation(location: string): boolean {
-  // MoneyWorks canonical: default location is represented by empty string
+  // MoneyWorks staging: default location is represented by empty string
   // Source: moneyworks_serials_locations.html - "The default location is a location with no code"
   return !location || location.trim().length === 0;
 }
@@ -387,7 +387,7 @@ export function validateProductSequenceRelationship(productSeq: number): {
 }
 
 /**
- * Generate canonical inventory record key
+ * Generate staging inventory record key
  */
 export function generateInventoryRecordKey(
   productSeq: number,
@@ -398,7 +398,7 @@ export function generateInventoryRecordKey(
 }
 
 /**
- * Parse canonical inventory record key
+ * Parse staging inventory record key
  */
 export function parseInventoryRecordKey(key: string): {
   productSeq: number;

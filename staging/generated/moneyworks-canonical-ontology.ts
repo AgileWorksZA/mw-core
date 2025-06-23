@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Canonical Ontology - Pure DSL Foundation
  * 
- * This file contains ONLY canonical MoneyWorks terminology and concepts
+ * This file contains ONLY staging MoneyWorks terminology and concepts
  * as defined in the official MoneyWorks Manual. No business interpretation
  * or domain-specific terminology is included.
  * 
@@ -15,7 +15,7 @@
 // ============================================================================
 
 /** 
- * MoneyWorks canonical transaction type codes as defined in the manual
+ * MoneyWorks staging transaction type codes as defined in the manual
  * Source: moneyworks_appendix_transactions.html - "The transaction type codes are:"
  */
 export enum MoneyWorksTransactionType {
@@ -72,7 +72,7 @@ export enum MoneyWorksTransactionType {
 }
 
 /** 
- * MoneyWorks canonical transaction type definitions with manual explanations
+ * MoneyWorks staging transaction type definitions with manual explanations
  * Source: moneyworks_appendix_transactions.html
  */
 export interface MoneyWorksTransactionTypeDefinition {
@@ -192,7 +192,7 @@ export const MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS: MoneyWorksTransactionTypeD
 // ============================================================================
 
 /**
- * MoneyWorks canonical account type codes as defined in the manual
+ * MoneyWorks staging account type codes as defined in the manual
  * Source: moneyworks_appendix_accounts.html - "The account type. This will be one of..."
  */
 export enum MoneyWorksAccountType {
@@ -228,7 +228,7 @@ export enum MoneyWorksAccountType {
 }
 
 /**
- * MoneyWorks canonical system account types
+ * MoneyWorks staging system account types
  * Source: moneyworks_appendix_accounts.html - "The 'system' account type"
  */
 export enum MoneyWorksSystemAccountType {
@@ -255,7 +255,7 @@ export enum MoneyWorksSystemAccountType {
 }
 
 /**
- * MoneyWorks canonical account type definitions with manual explanations
+ * MoneyWorks staging account type definitions with manual explanations
  * Source: moneyworks_appendix_accounts.html
  */
 export interface MoneyWorksAccountTypeDefinition {
@@ -333,7 +333,7 @@ export const MONEYWORKS_ACCOUNT_TYPE_DEFINITIONS: MoneyWorksAccountTypeDefinitio
 // ============================================================================
 
 /**
- * MoneyWorks canonical field definition from manual
+ * MoneyWorks staging field definition from manual
  * Source: moneyworks_appendix_transactions.html and moneyworks_appendix_accounts.html
  */
 export interface MoneyWorksFieldDefinition {
@@ -480,25 +480,25 @@ export const MONEYWORKS_ACCOUNT_FIELDS: MoneyWorksFieldDefinition[] = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical terminology as used throughout the manual
+ * MoneyWorks staging terminology as used throughout the manual
  * This ensures we use MoneyWorks terms consistently
  */
 export const MONEYWORKS_CANONICAL_TERMS = {
-  // Parties (MoneyWorks canonical terms)
-  CREDITOR: "Creditor",           // Not "Supplier" - MoneyWorks canonical term
-  DEBTOR: "Debtor",               // Not "Customer" - MoneyWorks canonical term
+  // Parties (MoneyWorks staging terms)
+  CREDITOR: "Creditor",           // Not "Supplier" - MoneyWorks staging term
+  DEBTOR: "Debtor",               // Not "Customer" - MoneyWorks staging term
   
-  // Transaction states (MoneyWorks canonical terms)
+  // Transaction states (MoneyWorks staging terms)
   UNPOSTED: "Unposted",           // Status = "U"
   POSTED: "Posted",               // Status = "P"
   INCOMPLETE: "Incomplete",       // Unfinished transaction
   COMPLETE: "Complete",           // Fully processed transaction
   
-  // Account classifications (MoneyWorks canonical terms)
+  // Account classifications (MoneyWorks staging terms)
   SYSTEM_ACCOUNT: "System Account",
   ORDINARY_ACCOUNT: "Ordinary Account",
   
-  // Financial concepts (MoneyWorks canonical terms)
+  // Financial concepts (MoneyWorks staging terms)
   CHART_OF_ACCOUNTS: "Chart of Accounts",
   GENERAL_LEDGER: "General Ledger",
   
@@ -515,7 +515,7 @@ export const MONEYWORKS_CANONICAL_TERMS = {
 // ============================================================================
 
 /**
- * Validate that a concept uses canonical MoneyWorks terminology
+ * Validate that a concept uses staging MoneyWorks terminology
  */
 export function validateCanonicalTerminology(concept: string, context: string): {
   isCanonical: boolean;
@@ -525,19 +525,19 @@ export function validateCanonicalTerminology(concept: string, context: string): 
   const issues: string[] = [];
   const suggestions: string[] = [];
   
-  // Check for non-canonical terms
+  // Check for non-staging terms
   if (concept.toLowerCase().includes("supplier")) {
-    issues.push("Uses 'Supplier' instead of MoneyWorks canonical term 'Creditor'");
+    issues.push("Uses 'Supplier' instead of MoneyWorks staging term 'Creditor'");
     suggestions.push("Replace 'Supplier' with 'Creditor' to match MoneyWorks terminology");
   }
   
   if (concept.toLowerCase().includes("customer")) {
-    issues.push("Uses 'Customer' instead of MoneyWorks canonical term 'Debtor'");
+    issues.push("Uses 'Customer' instead of MoneyWorks staging term 'Debtor'");
     suggestions.push("Replace 'Customer' with 'Debtor' to match MoneyWorks terminology");
   }
   
   if (concept.toLowerCase().includes("vendor")) {
-    issues.push("Uses 'Vendor' instead of MoneyWorks canonical term 'Creditor'");
+    issues.push("Uses 'Vendor' instead of MoneyWorks staging term 'Creditor'");
     suggestions.push("Replace 'Vendor' with 'Creditor' to match MoneyWorks terminology");
   }
   
@@ -549,7 +549,7 @@ export function validateCanonicalTerminology(concept: string, context: string): 
 }
 
 /**
- * Get canonical MoneyWorks definition for a transaction type
+ * Get staging MoneyWorks definition for a transaction type
  */
 export function getCanonicalTransactionTypeDefinition(
   code: string
@@ -558,7 +558,7 @@ export function getCanonicalTransactionTypeDefinition(
 }
 
 /**
- * Get canonical MoneyWorks definition for an account type
+ * Get staging MoneyWorks definition for an account type
  */
 export function getCanonicalAccountTypeDefinition(
   code: string
@@ -567,7 +567,7 @@ export function getCanonicalAccountTypeDefinition(
 }
 
 /**
- * Verify that a field definition matches MoneyWorks canonical specification
+ * Verify that a field definition matches MoneyWorks staging specification
  */
 export function validateFieldDefinition(
   fieldName: string,
@@ -593,7 +593,7 @@ export function validateFieldDefinition(
 // NAMES ENTITY INTEGRATION
 // ============================================================================
 
-// Import Names canonical definitions
+// Import Names staging definitions
 export {
   MoneyWorksCustomerType,
   MoneyWorksSupplierType,
@@ -608,7 +608,7 @@ export {
 // PRODUCTS ENTITY INTEGRATION
 // ============================================================================
 
-// Import Products canonical definitions
+// Import Products staging definitions
 export {
   MoneyWorksProductType,
   MoneyWorksProductStatus,
@@ -624,7 +624,7 @@ export {
 // TAXRATES ENTITY INTEGRATION
 // ============================================================================
 
-// Import TaxRates canonical definitions
+// Import TaxRates staging definitions
 export {
   MoneyWorksTaxCombineMode,
   MONEYWORKS_TAX_RATE_FIELDS,
@@ -635,7 +635,7 @@ export {
 // JOBS ENTITY INTEGRATION
 // ============================================================================
 
-// Import Jobs canonical definitions
+// Import Jobs staging definitions
 export {
   MoneyWorksJobStatus,
   MoneyWorksJobColour,

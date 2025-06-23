@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Jobs Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_jobs.html
  * Authority: MoneyWorks Manual - Jobs Field Descriptions
  * 
@@ -17,7 +17,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks canonical job status classification
+ * MoneyWorks staging job status classification
  * Source: moneyworks_appendix_jobs.html - "Status" field
  */
 export enum MoneyWorksJobStatus {
@@ -32,7 +32,7 @@ export enum MoneyWorksJobStatus {
 }
 
 /**
- * MoneyWorks canonical job colour classification
+ * MoneyWorks staging job colour classification
  * Source: moneyworks_appendix_jobs.html - "Colour" field
  * Note: Colour represented as numeric index 0-7, rendered as textual colour name
  */
@@ -316,7 +316,7 @@ export const MONEYWORKS_JOB_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical job status definitions with manual explanations
+ * MoneyWorks staging job status definitions with manual explanations
  */
 export interface MoneyWorksJobStatusDefinition {
   status: MoneyWorksJobStatus;
@@ -381,40 +381,40 @@ export const MONEYWORKS_JOB_STATUS_DEFINITIONS: MoneyWorksJobStatusDefinition[] 
  */
 
 export const MONEYWORKS_JOB_CANONICAL_TERMS = {
-  // Project classifications (MoneyWorks canonical)
+  // Project classifications (MoneyWorks staging)
   JOB_CODE: "Job Code",                     // Unique identifier for job
   PROJECT_CODE: "Project Code",             // Parent project reference
   CLIENT_CODE: "Client Code",               // Debtor who pays for job
   
-  // Status management (MoneyWorks canonical)
+  // Status management (MoneyWorks staging)
   QUOTED_JOB: "Quoted Job",                 // Status QU - proposal stage
   ACTIVE_JOB: "Active Job",                 // Status OP - work in progress
   COMPLETE_JOB: "Complete Job",             // Status CO - finished
   
-  // Financial tracking (MoneyWorks canonical)
+  // Financial tracking (MoneyWorks staging)
   QUOTED_AMOUNT: "Quoted Amount",           // Initial quote value
   BILLED_AMOUNT: "Billed Amount",           // Amount invoiced to date
   MARKUP_PERCENT: "Markup Percent",        // Cost-plus pricing markup
   PERCENT_COMPLETE: "Percent Complete",     // Progress tracking
   
-  // Project management (MoneyWorks canonical)
+  // Project management (MoneyWorks staging)
   JOB_MANAGER: "Job Manager",               // Responsible manager code
   START_DATE: "Start Date",                 // Project commencement
   END_DATE: "End Date",                     // Expected completion
   TARGET_DATE: "Target Date",               // Target completion
   
-  // Client communication (MoneyWorks canonical)
+  // Client communication (MoneyWorks staging)
   CLIENT_CONTACT: "Client Contact",         // Primary contact person
   CONTACT_PHONE: "Contact Phone",           // Contact phone number
   CLIENT_ORDER_NUMBER: "Client Order Number", // Customer's PO/order reference
   
-  // Analysis & categorization (MoneyWorks canonical)
+  // Analysis & categorization (MoneyWorks staging)
   ANALYSIS_CATEGORY: "Analysis Category",   // Category1-4 for reporting
   CUSTOM_FIELD: "Custom Field",            // Custom1-8 for organization needs
   JOB_COLOUR: "Job Colour",                // Visual categorization
   JOB_COMMENT: "Job Comment",              // Extended job notes
   
-  // System management (MoneyWorks canonical)
+  // System management (MoneyWorks staging)
   USER_DEFINED_NUMBER: "User Defined Number", // UserNum for custom metrics
   USER_DEFINED_TEXT: "User Defined Text",     // UserText for custom data
   SCRIPTABLE_TAGS: "Scriptable Tags",         // TaggedText for automation
@@ -426,7 +426,7 @@ export const MONEYWORKS_JOB_CANONICAL_TERMS = {
 // ============================================================================
 
 /**
- * Validate canonical MoneyWorks job status
+ * Validate staging MoneyWorks job status
  */
 export function validateJobStatusCanonical(status: string): {
   isValid: boolean;
@@ -449,7 +449,7 @@ export function validateJobStatusCanonical(status: string): {
 }
 
 /**
- * Validate canonical MoneyWorks job code format
+ * Validate staging MoneyWorks job code format
  */
 export function validateJobCodeCanonical(code: string): {
   isValid: boolean;
@@ -470,7 +470,7 @@ export function validateJobCodeCanonical(code: string): {
 }
 
 /**
- * Validate canonical MoneyWorks client reference (must be debtor)
+ * Validate staging MoneyWorks client reference (must be debtor)
  */
 export function validateJobClientCanonical(clientCode: string): {
   isValid: boolean;
@@ -493,7 +493,7 @@ export function validateJobClientCanonical(clientCode: string): {
 }
 
 /**
- * Validate canonical MoneyWorks job colour
+ * Validate staging MoneyWorks job colour
  */
 export function validateJobColourCanonical(colour: number): {
   isValid: boolean;
@@ -512,7 +512,7 @@ export function validateJobColourCanonical(colour: number): {
 }
 
 /**
- * Validate canonical MoneyWorks project hierarchy reference
+ * Validate staging MoneyWorks project hierarchy reference
  */
 export function validateProjectHierarchyCanonical(jobCode: string, projectCode?: string): {
   isValid: boolean;
@@ -537,7 +537,7 @@ export function validateProjectHierarchyCanonical(jobCode: string, projectCode?:
 }
 
 /**
- * Get canonical MoneyWorks job status explanation
+ * Get staging MoneyWorks job status explanation
  */
 export function getCanonicalJobStatusExplanation(status: MoneyWorksJobStatus): string {
   const statusDef = MONEYWORKS_JOB_STATUS_DEFINITIONS.find(def => def.status === status);
@@ -545,7 +545,7 @@ export function getCanonicalJobStatusExplanation(status: MoneyWorksJobStatus): s
 }
 
 /**
- * Validate canonical MoneyWorks job financial amounts
+ * Validate staging MoneyWorks job financial amounts
  */
 export function validateJobFinancialsCanonical(quote?: number, billed?: number, markup?: number, percentComplete?: number): {
   isValid: boolean;
@@ -600,7 +600,7 @@ export function validateJobFinancialsCanonical(quote?: number, billed?: number, 
 }
 
 /**
- * Get canonical job entity relationships for validation
+ * Get staging job entity relationships for validation
  */
 export function getCanonicalJobEntityRelationships(): {
   requiredReferences: string[];

@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Products Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_products.html
  * Authority: MoneyWorks Manual - Products Field Descriptions
  * 
@@ -15,7 +15,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks canonical product type classification
+ * MoneyWorks staging product type classification
  * Source: moneyworks_appendix_products.html - "Type" field
  */
 export enum MoneyWorksProductType {
@@ -36,7 +36,7 @@ export enum MoneyWorksProductType {
 }
 
 /**
- * MoneyWorks canonical product status flags
+ * MoneyWorks staging product status flags
  * Source: moneyworks_appendix_products.html - "Hash" field description
  */
 export enum MoneyWorksProductStatus {
@@ -51,7 +51,7 @@ export enum MoneyWorksProductStatus {
 }
 
 /**
- * MoneyWorks canonical sell price discount modes
+ * MoneyWorks staging sell price discount modes
  * Source: moneyworks_appendix_products.html - "SellDiscountMode" field
  */
 export enum MoneyWorksSellDiscountMode {
@@ -69,7 +69,7 @@ export enum MoneyWorksSellDiscountMode {
 }
 
 /**
- * MoneyWorks canonical job pricing modes
+ * MoneyWorks staging job pricing modes
  * Source: moneyworks_appendix_products.html - "JobPricingMode" field
  */
 export enum MoneyWorksJobPricingMode {
@@ -88,7 +88,7 @@ export enum MoneyWorksJobPricingMode {
 // ============================================================================
 
 /**
- * MoneyWorks canonical product flags as defined in manual
+ * MoneyWorks staging product flags as defined in manual
  * Source: moneyworks_appendix_products.html - "Product Flags" table
  */
 export enum MoneyWorksProductFlags {
@@ -660,7 +660,7 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks canonical product type definitions with manual explanations
+ * MoneyWorks staging product type definitions with manual explanations
  */
 export interface MoneyWorksProductTypeDefinition {
   type: MoneyWorksProductType;
@@ -746,62 +746,62 @@ export const MONEYWORKS_PRODUCT_TYPE_DEFINITIONS: MoneyWorksProductTypeDefinitio
  */
 
 export const MONEYWORKS_PRODUCT_CANONICAL_TERMS = {
-  // Product operational states (MoneyWorks canonical)
+  // Product operational states (MoneyWorks staging)
   BUY_PRODUCT: "Buy Product",           // Can purchase this product
   SELL_PRODUCT: "Sell Product",         // Can sell this product  
   INVENTORY_PRODUCT: "Inventory Product", // Track stock on hand
   BUILD_PRODUCT: "Build Product",       // Manufactured/assembled product
   
-  // Product classifications (MoneyWorks canonical)
+  // Product classifications (MoneyWorks staging)
   PRODUCT_TYPE: "Product Type",         // P/R/T/S/O classification
   PRODUCT_CODE: "Product Code",         // Unique identifier
   BARCODE: "Barcode",                   // Alternative identification
   
-  // Unit management (MoneyWorks canonical)
+  // Unit management (MoneyWorks staging)
   BUY_UNIT: "Buy Unit",                 // Units for purchasing (kg, ea, dz)
   SELL_UNIT: "Sell Unit",               // Units for selling (kg, ea, dz)
   CONVERSION_FACTOR: "Conversion Factor", // Buy unit to sell unit conversion
   
-  // Pricing structure (MoneyWorks canonical)
+  // Pricing structure (MoneyWorks staging)
   SELL_PRICE_A: "Sell Price A",         // Primary selling price
   SELL_PRICE_B: "Sell Price B",         // Secondary selling price
   SELL_PRICE_C: "Sell Price C",         // Tertiary selling price
   QUANTITY_BREAK_PRICING: "Quantity Break Pricing", // Volume discounting
   
-  // Cost management (MoneyWorks canonical)
+  // Cost management (MoneyWorks staging)
   BUY_PRICE: "Buy Price",               // Purchase cost
   COST_PRICE: "Cost Price",             // Standard cost (base currency)
   MARGIN_WARNING: "Margin Warning",     // Minimum acceptable margin
   
-  // Inventory control (MoneyWorks canonical)
+  // Inventory control (MoneyWorks staging)
   STOCK_ON_HAND: "Stock On Hand",       // Current inventory quantity
   STOCK_VALUE: "Stock Value",           // Current inventory value
   REORDER_LEVEL: "Reorder Level",       // Minimum stock threshold
   LEAD_TIME: "Lead Time",               // Delivery time in days
   
-  // Account relationships (MoneyWorks canonical)
+  // Account relationships (MoneyWorks staging)
   COST_OF_GOODS_ACCOUNT: "Cost Of Goods Account",   // COGAcct field
   SALES_ACCOUNT: "Sales Account",                   // SalesAcct field  
   STOCK_ACCOUNT: "Stock Account",                   // StockAcct field
   
-  // Supplier relationships (MoneyWorks canonical - note terminology)
+  // Supplier relationships (MoneyWorks staging - note terminology)
   SUPPLIER_CODE: "Supplier Code",       // References Names.Code where SupplierType > 0
   SUPPLIERS_CODE: "Suppliers Code",     // Supplier's product reference
   
-  // Manufacturing and building (MoneyWorks canonical)
+  // Manufacturing and building (MoneyWorks staging)
   BUILD_QUANTITY: "Build Quantity",     // Manufacturing quantity
   AUTO_BUILD: "Auto-Build",             // Automatic manufacturing
   
-  // Job costing integration (MoneyWorks canonical)
+  // Job costing integration (MoneyWorks staging)
   JOB_PRICING_MODE: "Job Pricing Mode", // How job costs are calculated
   JOB_COST_TAX_INCLUSIVE: "Job Cost Tax Inclusive", // Tax treatment in jobs
   
-  // Stock management (MoneyWorks canonical)
+  // Stock management (MoneyWorks staging)
   STOCK_TAKE: "Stock Take",             // Physical inventory count
   SERIAL_NUMBER: "Serial Number",       // Individual item tracking
   BATCH_LOT_NUMBER: "Batch Lot Number", // Batch tracking
   
-  // Analysis and categorization (MoneyWorks canonical)
+  // Analysis and categorization (MoneyWorks staging)
   PRODUCT_CATEGORY: "Product Category", // Category1-4 fields
   PRODUCT_COLOUR: "Product Colour",     // Visual classification
   PRODUCT_COMMENT: "Product Comment"    // Additional information
@@ -812,7 +812,7 @@ export const MONEYWORKS_PRODUCT_CANONICAL_TERMS = {
 // ============================================================================
 
 /**
- * Validate that product operational status uses canonical MoneyWorks hash values
+ * Validate that product operational status uses staging MoneyWorks hash values
  */
 export function validateProductStatusCanonical(hash: number): {
   isValid: boolean;
@@ -827,9 +827,9 @@ export function validateProductStatusCanonical(hash: number): {
   const canSell = !!(hash & MoneyWorksProductStatus.SELL);
   const isInventoried = !!(hash & MoneyWorksProductStatus.INVENTORY);
   
-  // Validate canonical MoneyWorks business rules
+  // Validate staging MoneyWorks business rules
   if (isInventoried && hash < 8) {
-    warnings.push("MoneyWorks canonical rule: All inventoried items must have Hash >= 8");
+    warnings.push("MoneyWorks staging rule: All inventoried items must have Hash >= 8");
   }
   
   if (isInventoried && !canBuy && !canSell) {
@@ -846,7 +846,7 @@ export function validateProductStatusCanonical(hash: number): {
 }
 
 /**
- * Validate canonical MoneyWorks product type
+ * Validate staging MoneyWorks product type
  */
 export function validateProductTypeCanonical(type: string): {
   isValid: boolean;
@@ -868,7 +868,7 @@ export function validateProductTypeCanonical(type: string): {
 }
 
 /**
- * Get canonical MoneyWorks product type explanation
+ * Get staging MoneyWorks product type explanation
  */
 export function getCanonicalProductTypeExplanation(type: MoneyWorksProductType): string {
   const typeDef = MONEYWORKS_PRODUCT_TYPE_DEFINITIONS.find(def => def.type === type);

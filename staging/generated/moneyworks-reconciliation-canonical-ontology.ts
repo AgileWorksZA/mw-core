@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Reconciliation Entity - Canonical Ontology
  * 
- * PURE MoneyWorks canonical definitions extracted from official manual
+ * PURE MoneyWorks staging definitions extracted from official manual
  * Source: moneyworks_appendix_reconciliation_file.html
  * Authority: MoneyWorks Manual - Reconciliation File Field Descriptions
  * 
