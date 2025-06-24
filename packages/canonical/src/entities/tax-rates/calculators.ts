@@ -27,7 +27,7 @@ export function getCurrentTaxRate(
   ratePeriod: 'before_changeover' | 'after_changeover';
   explanation: string;
 } {
-  const isAfterChangeover = currentDate.gte(changeoverDate);
+  const isAfterChangeover = currentDate >= changeoverDate;
   
   return {
     currentRate: isAfterChangeover ? rate2 : rate1,
@@ -181,7 +181,7 @@ export function calculateTaxForRate(
 }
 
 /**
- * Calculate total effective rate for combined taxes
+ * Calculate the total effective rate for combined taxes
  * 
  * @ai-instruction Internal helper for rate calculations
  */
@@ -206,7 +206,7 @@ function calculateTotalEffectiveRate(
 }
 
 /**
- * Calculate GST amounts for finalization
+ * Calculate GST amounts for finalisation
  * 
  * @ai-instruction Use when explaining GST finalisation
  * @ai-term Say "GST finalisation", NEVER "tax filing" or "VAT return"
