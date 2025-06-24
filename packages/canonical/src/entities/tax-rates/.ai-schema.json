@@ -1,0 +1,90 @@
+{
+  "entity": "MoneyWorks Tax Rates",
+  "tableName": "TaxRate",
+  "manualSource": "moneyworks_appendix_tax_rate.html",
+  "instruction": "CRITICAL: Use ONLY MoneyWorks terminology. Never use generic tax terms.",
+  "ubiquitousLanguage": {
+    "ALWAYS_USE": {
+      "entity": "TaxRate (singular) or Tax Rates (plural)",
+      "primaryKey": "TaxCode",
+      "fields": {
+        "TaxCode": "The tax code - NEVER 'tax ID' or 'rate code'",
+        "PaidAccount": "The control account for GST paid out - NEVER 'tax payable'",
+        "RecAccount": "The control account for GST received - NEVER 'tax receivable'",
+        "Date": "Tax rate changeover date - NEVER 'effective date'",
+        "Rate1": "Rate used before changeover date - NEVER 'old rate'",
+        "Rate2": "Rate used on or after changeover date - NEVER 'new rate'",
+        "Combine": "Flags for 2nd tier tax combination - NEVER 'tax method'",
+        "CombineRate1": "2nd tier rate before changeover - NEVER 'secondary rate'",
+        "CombineRate2": "2nd tier rate after changeover - NEVER 'secondary rate'",
+        "GSTPaid": "Total GST paid in last finalisation - NEVER 'tax paid'",
+        "GSTReceived": "Total GST received in last finalisation - NEVER 'tax collected'",
+        "NetPaid": "Net paid in last finalisation - NEVER 'base paid'",
+        "NetReceived": "Net received in last finalisation - NEVER 'base received'"
+      },
+      "concepts": {
+        "GST": "MoneyWorks uses 'GST' for ALL tax types, even VAT or sales tax",
+        "changeover": "The Date when Rate1 switches to Rate2",
+        "finalization": "GST finalisation process that populates GSTPaid/GSTReceived",
+        "two-tier": "Primary tax (Rate1/Rate2) plus secondary tax (CombineRate1/2)"
+      }
+    },
+    "NEVER_USE": [
+      "VAT", "value added tax", "sales tax", "consumption tax",
+      "tax rate ID", "tax identifier", "rate code", "tax code ID",
+      "effective date", "start date", "valid from", "activation date",
+      "tax percentage", "rate percentage", "tax percent",
+      "old rate", "previous rate", "initial rate", "original rate",
+      "new rate", "current rate", "updated rate", "latest rate",
+      "tax payable", "tax liability", "taxes owed",
+      "tax receivable", "tax asset", "taxes collected",
+      "tax method", "calculation method", "combination mode",
+      "secondary tax", "additional tax", "provincial tax", "state tax",
+      "base amount", "net amount", "pre-tax amount"
+    ]
+  },
+  "examples": {
+    "CORRECT": [
+      "Create a TaxCode 'GST10' with Rate1 of 10",
+      "The changeover Date determines when to use Rate2",
+      "GSTPaid shows the total from last GST finalisation",
+      "Set Combine to COMPOUND for 2nd tier tax calculation",
+      "PaidAccount must reference a valid Account Code"
+    ],
+    "INCORRECT": [
+      "❌ Create a tax rate ID 'GST10' with 10% tax",
+      "❌ The effective date determines the current rate",
+      "❌ Tax paid shows the VAT liability",
+      "❌ Set tax method to compound for cascading tax",
+      "❌ Tax payable account must be a valid account"
+    ]
+  },
+  "queryExamples": {
+    "CORRECT": [
+      "Find TaxRate where TaxCode='GST10'",
+      "List all TaxRates where Rate2 > 10",
+      "Get TaxRates with Combine != 0",
+      "Show TaxRates where GSTPaid > 0"
+    ],
+    "INCORRECT": [
+      "❌ Find tax rates where tax ID='GST10'",
+      "❌ List VAT rates above 10%",
+      "❌ Get compound tax methods",
+      "❌ Show rates with tax liability"
+    ]
+  },
+  "aiResponseRules": [
+    "ALWAYS prefix field names with 'TaxRate.' when unclear (e.g., 'TaxRate.Date')",
+    "ALWAYS explain that MW uses 'GST' universally, even for non-GST countries",
+    "ALWAYS mention changeover Date when discussing Rate1 vs Rate2",
+    "NEVER translate MW terms to 'friendly' business language",
+    "NEVER suggest field names not in the official field list"
+  ],
+  "contextualGuidance": {
+    "whenDiscussingTax": "Use 'GST' even if user mentions VAT or sales tax",
+    "whenDiscussingRates": "Always clarify Rate1 (before) vs Rate2 (after) changeover",
+    "whenDiscussingAccounts": "PaidAccount and RecAccount reference Account.Code",
+    "whenDiscussingMultiTier": "Explain Combine modes: NONE, ADDITIVE, COMPOUND, SEPARATE",
+    "whenDiscussingFinalization": "GSTPaid/Received are populated by finalization process"
+  }
+}
