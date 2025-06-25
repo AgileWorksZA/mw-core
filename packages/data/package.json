@@ -1,0 +1,66 @@
+{
+  "name": "@moneyworks/data",
+  "version": "0.1.0",
+  "description": "MoneyWorks data access layer - REST client and repositories",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./client": {
+      "types": "./src/client/index.ts",
+      "import": "./src/client/index.ts"
+    },
+    "./repositories": {
+      "types": "./src/repositories/index.ts",
+      "import": "./src/repositories/index.ts"
+    },
+    "./parsers": {
+      "types": "./src/parsers/index.ts",
+      "import": "./src/parsers/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "test:watch": "bun test --watch"
+  },
+  "dependencies": {
+    "@moneyworks/canonical": "workspace:*",
+    "@moneyworks/utilities": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "bun-types": "latest",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "moneyworks",
+    "data",
+    "repository",
+    "rest",
+    "client"
+  ],
+  "author": "MoneyWorks Core Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moneyworks/mw-core.git",
+    "directory": "packages/data"
+  }
+}

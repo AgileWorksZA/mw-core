@@ -3,29 +3,29 @@
   "version": "0.1.0",
   "description": "Pure MoneyWorks canonical types, enums, and business logic - zero contamination",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
     },
     "./tax-rates": {
-      "types": "./dist/entities/tax-rates/index.d.ts",
-      "import": "./dist/entities/tax-rates/index.js"
+      "types": "./src/entities/tax-rates/index.ts",
+      "import": "./src/entities/tax-rates/index.ts"
     },
     "./transactions": {
-      "types": "./dist/entities/transactions/index.d.ts",
-      "import": "./dist/entities/transactions/index.js"
+      "types": "./src/entities/transactions/index.ts",
+      "import": "./src/entities/transactions/index.ts"
     },
     "./accounts": {
-      "types": "./dist/entities/accounts/index.d.ts",
-      "import": "./dist/entities/accounts/index.js"
+      "types": "./src/entities/accounts/index.ts",
+      "import": "./src/entities/accounts/index.ts"
     },
     "./names": {
-      "types": "./dist/entities/names/index.d.ts",
-      "import": "./dist/entities/names/index.js"
+      "types": "./src/entities/names/index.ts",
+      "import": "./src/entities/names/index.ts"
     }
   },
   "scripts": {

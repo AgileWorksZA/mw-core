@@ -15,15 +15,9 @@
 		"downlevelIteration": true,
 		"baseUrl": ".",
 		"paths": {
-			"@moneyworks/api/*": ["packages/api/src/*"],
-			"@moneyworks/mcp-server/*": ["packages/mcp-server/src/*"],
-			"@moneyworks/utilities": ["packages/utilities/src/index.ts"],
 			"@moneyworks/utilities/*": ["packages/utilities/src/*"],
-			"@moneyworks/canonical": ["packages/canonical/src/index.ts"],
 			"@moneyworks/canonical/*": ["packages/canonical/src/*"],
-			"@moneyworks/core": ["packages/core/src/index.ts"],
-			"@moneyworks/core/*": ["packages/core/src/*"],
-			"@moneyworks/semantic": ["packages/semantic/src/index.ts"],
+			"@moneyworks/data/*": ["packages/data/src/*"],
 			"@moneyworks/semantic/*": ["packages/semantic/src/*"]
 		}
 	}

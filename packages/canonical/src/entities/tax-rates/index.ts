@@ -11,14 +11,14 @@
 export {
   MoneyWorksTaxCombineMode,
   MoneyWorksTaxFinalizationStatus
-} from './enums';
+} from '@moneyworks/canonical/entities/tax-rates/enums';
 
 // Export all types
-export {
+export type {
   MoneyWorksTaxRate,
   MoneyWorksTaxRateCreateInput,
   MoneyWorksTaxRateUpdateInput
-} from './types';
+} from '@moneyworks/canonical/entities/tax-rates/types';
 
 // Export field definitions
 export {
@@ -26,14 +26,14 @@ export {
   getFieldMetadata,
   getRequiredFields,
   getIndexedFields
-} from './fields';
+} from '@moneyworks/canonical/entities/tax-rates/fields';
 
 // Export canonical terms
 export {
   MONEYWORKS_TAX_RATE_CANONICAL_TERMS,
   MONEYWORKS_TAX_ACTIONS,
   getCanonicalTerm
-} from './terms';
+} from '@moneyworks/canonical/entities/tax-rates/terms';
 
 // Export validators
 export {
@@ -41,7 +41,7 @@ export {
   validateTaxRate,
   validateTaxAccountReferences,
   validateRequiredFields
-} from './validators';
+} from '@moneyworks/canonical/entities/tax-rates/validators';
 
 // Export calculators
 export {
@@ -49,19 +49,19 @@ export {
   calculateCombinedTax,
   calculateTaxForRate,
   calculateGSTFinalization
-} from './calculators';
+} from '@moneyworks/canonical/entities/tax-rates/calculators';
 
 // Export business rules
 export {
   MoneyWorksTaxRateBusinessRules,
   MoneyWorksTaxRateRelationships,
-  MoneyWorksTaxRateOperationalRules,
   TaxRateOperationalRules,
-  getApplicableRules
-} from './rules';
+  type MoneyWorksTaxRateOperationalRules,
+  type getApplicableRules
+} from '@moneyworks/canonical/entities/tax-rates/rules';
 
 // Re-export common types that are frequently used with tax rates
-export type { MoneyWorksFieldMetadata, MoneyWorksValidationResult } from '../../common/data-types';
+export type { MoneyWorksFieldMetadata, MoneyWorksValidationResult } from '@moneyworks/canonical/common/data-types';
 
 /**
  * @ai-instruction When working with TaxRates, import like this:
