@@ -3,18 +3,12 @@
  * 
  * @moneyworks-dsl PURE
  * @ai-instruction Export all repository classes and interfaces
+ * 
+ * NOTE: This file should NOT re-export from the same package to avoid circular dependencies.
+ * Instead, consumers should import directly from the specific repository files.
  */
 
-export { 
-  BaseMoneyWorksRepository, 
-  IMoneyWorksRepository,
-  createRepository 
-} from './base.repository';
-
-export { TaxRateRepository } from './tax-rate.repository';
-
-// Future repositories will be added here:
-// export { AccountRepository } from './account.repository';
-// export { TransactionRepository } from './transaction.repository';
-// export { NameRepository } from './name.repository';
-// etc.
+// This file is intentionally left minimal to avoid circular dependencies.
+// Import repositories directly from their files:
+// import { BaseMoneyWorksRepository } from '@moneyworks/data/repositories/base.repository';
+// import { TaxRateRepository } from '@moneyworks/data/repositories/tax-rate.repository';

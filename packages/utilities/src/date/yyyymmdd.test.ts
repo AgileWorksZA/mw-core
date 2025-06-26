@@ -21,7 +21,7 @@ import {
 	tryCreateYYYYMMDD,
 	YYYYMMDDUtils,
 	yyyymmddToDate,
-} from "./yyyymmdd";
+} from "@moneyworks/utilities/date/yyyymmdd";
 
 describe("YYYYMMDD utilities", () => {
 	describe("isYYYYMMDD", () => {

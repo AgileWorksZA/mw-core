@@ -1,4 +1,4 @@
-import { SmartMoneyWorksClient } from "@moneyworks/data";
+import type { SmartMoneyWorksClient, GlobalOptions, ImportResult } from "@moneyworks/data";
 import { TaxRates } from "@moneyworks/canonical";
 import { parseArgs } from "util";
 import { readFile } from "node:fs/promises";
@@ -6,7 +6,7 @@ import { readFile } from "node:fs/promises";
 export async function importCommand(
   client: SmartMoneyWorksClient,
   args: string[],
-  _globalOptions: Record<string, unknown>
+  _globalOptions: GlobalOptions
 ): Promise<void> {
   if (args.length < 2) {
     console.error("Usage: mw import TaxRate <file> [options]");
@@ -59,7 +59,7 @@ export async function importCommand(
 
     // Import records using raw client for now
     // TODO: Add import method to TaxRateRepository
-    const result = await client.import("TaxRate", records, {
+    const result: ImportResult = await client.import("TaxRate", records, {
       mode: values.mode as "create" | "update" | "createOrUpdate",
       workItOut: values.workItOut as boolean,
       calculated: values.calculated as boolean,

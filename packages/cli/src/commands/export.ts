@@ -1,25 +1,46 @@
-import type { SmartMoneyWorksClient } from "@moneyworks/data";
+import type { SmartMoneyWorksClient, GlobalOptions, ExportFormat } from "@moneyworks/data";
 import { TaxRateRepository } from "@moneyworks/data";
+import { TaxRates } from "@moneyworks/canonical";
 import { parseArgs } from "util";
+
+/**
+ * Format array output for display or file
+ * @private
+ */
+function formatArrayOutput(data: any[][]): string {
+  // For arrays, we'll format as TSV for compatibility
+  return data.map(row => 
+    row.map(value => 
+      value === null || value === undefined ? '' : String(value)
+    ).join('\t')
+  ).join('\n');
+}
 
 export async function exportCommand(
   client: SmartMoneyWorksClient,
   args: string[],
-  _globalOptions: Record<string, unknown>
+  _globalOptions: GlobalOptions
 ): Promise<void> {
-  const timing = _globalOptions.timing as boolean;
+  const timing = _globalOptions.timing || false;
   const timingStart = timing ? performance.now() : 0;
   
   if (args.length === 0) {
     console.error("Usage: mw export TaxRate [options]");
     console.error("");
     console.error("Options:");
-    console.error("  -f, --format <format>   Export format: json, xml-terse, xml-verbose, tsv (default: json)");
-    console.error("  --filter <expression>   Filter expression (e.g., \"TaxCode='GST10'\")");
-    console.error("  -l, --limit <number>    Limit number of records");
-    console.error("  -s, --start <number>    Start offset");
-    console.error("  -o, --orderBy <field>   Order by field");
-    console.error("  -O, --output <file>     Output to file");
+    console.error("  -f, --format <format>        MoneyWorks format: json, xml-terse, xml-verbose, tsv (default: json)");
+    console.error("  -e, --exportFormat <format>  Export format: compact, compact-headers, full, schema (default: full)");
+    console.error("  --filter <expression>        Filter expression (e.g., \"TaxCode='GST10'\")");
+    console.error("  -l, --limit <number>         Limit number of records");
+    console.error("  -s, --start <number>         Start offset");
+    console.error("  -o, --orderBy <field>        Order by field");
+    console.error("  -O, --output <file>          Output to file");
+    console.error("");
+    console.error("Export Formats:");
+    console.error("  compact         Raw arrays for minimal overhead");
+    console.error("  compact-headers Arrays with field names in first row");
+    console.error("  full            Complete objects with field names (default)");
+    console.error("  schema          Objects with full field metadata");
     process.exit(1);
   }
 
@@ -39,6 +60,11 @@ export async function exportCommand(
         type: "string",
         short: "f",
         default: "json",
+      },
+      exportFormat: {
+        type: "string",
+        short: "e",
+        default: "full",
       },
       filter: {
         type: "string",
@@ -70,11 +96,12 @@ export async function exportCommand(
     }
 
     const format = values.format as string;
+    const exportFormat = values.exportFormat as 'compact' | 'compact-headers' | 'full' | 'schema';
     const limit = values.limit ? parseInt(values.limit as string) : undefined;
     const start = values.start ? parseInt(values.start as string) : undefined;
 
     if (_globalOptions.debug) {
-      console.log(`Debug: format = ${format}`);
+      console.log(`Debug: format = ${format}, exportFormat = ${exportFormat}`);
     }
     
     const exportStart = timing ? performance.now() : 0;
@@ -84,36 +111,14 @@ export async function exportCommand(
     
     let result: any;
     
-    // Handle different formats
-    if (format === "json") {
-      // Use repository methods for JSON
-      if (values.filter) {
-        // For now, we'll use the raw export until we implement proper filtering in the repository
-        result = await client.export("TaxRate", {
-          format: "json",
-          filter: values.filter as string,
-          limit,
-          start,
-          orderBy: values.orderBy as string,
-        });
-      } else {
-        // Use repository's findAll method
-        result = await taxRateRepo.findAll({
-          limit,
-          offset: start,
-          orderBy: values.orderBy as string,
-        });
-      }
-    } else {
-      // For other formats, use raw export
-      result = await client.export("TaxRate", {
-        format: format as any,
-        filter: values.filter as string,
-        limit,
-        start,
-        orderBy: values.orderBy as string,
-      });
-    }
+    // Use smartExport for all formats to get consistent behavior
+    result = await client.smartExport("TaxRate", {
+      exportFormat,
+      search: values.filter as string,
+      limit,
+      offset: start,
+      sort: values.orderBy as string,
+    });
     
     if (timing) {
       const exportEnd = performance.now();
@@ -127,19 +132,22 @@ export async function exportCommand(
 
     const outputStart = timing ? performance.now() : 0;
     
+    // Format output based on export format
+    let outputContent: string;
+    
+    if (exportFormat === 'compact' || exportFormat === 'compact-headers') {
+      // For array formats, we'll use a custom formatter
+      outputContent = formatArrayOutput(result);
+    } else {
+      // For object formats, use JSON stringify
+      outputContent = JSON.stringify(result, null, 2);
+    }
+    
     if (values.output) {
-      if (typeof result === "string") {
-        await Bun.write(values.output as string, result);
-      } else {
-        await Bun.write(values.output as string, JSON.stringify(result, null, 2));
-      }
+      await Bun.write(values.output as string, outputContent);
       console.log(`Exported to ${values.output}`);
     } else {
-      if (typeof result === "string") {
-        console.log(result);
-      } else {
-        console.log(JSON.stringify(result, null, 2));
-      }
+      console.log(outputContent);
     }
     
     if (timing) {

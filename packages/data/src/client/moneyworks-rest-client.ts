@@ -6,13 +6,17 @@
  * @ai-critical MoneyWorks defaults to TSV format, supports XML and custom formats
  */
 
-import type { MoneyWorksConfig, MoneyWorksResponse, MoneyWorksQueryParams, MoneyWorksError } from '../config/types';
-
-export type ExportFormat = 'tsv' | 'xml-terse' | 'xml-verbose' | { template: string } | { script: string };
+import type { MoneyWorksConfig, MoneyWorksResponse, MoneyWorksQueryParams, MoneyWorksError } from '@moneyworks/data/config/types';
+import type { ImportOptions, ImportResult, ExportFormat } from '@moneyworks/data/client/types';
 
 export interface ExportOptions extends MoneyWorksQueryParams {
   format?: ExportFormat;
   noLinger?: boolean;
+  /** 
+   * Our extended export format option
+   * @ai-instruction This overrides format for our custom formats
+   */
+  exportFormat?: 'compact' | 'compact-headers' | 'full' | 'schema';
 }
 
 /**
@@ -222,6 +226,223 @@ export class MoneyWorksRESTClient {
       }
       throw error;
     }
+  }
+
+  /**
+   * Import records into MoneyWorks table
+   * 
+   * @ai-instruction MoneyWorks import endpoint:
+   * - Endpoint: /import
+   * - Method: POST
+   * - Body: TSV or XML data
+   * - Query params: table, mode, work_it_out, calculated
+   */
+  async import(
+    table: string,
+    records: any[],
+    options: ImportOptions = {}
+  ): Promise<ImportResult> {
+    // Build query parameters
+    const params = new URLSearchParams();
+    params.append('table', table);
+    
+    if (options.mode) {
+      params.append('mode', options.mode);
+    }
+    if (options.workItOut) {
+      params.append('work_it_out', 'true');
+    }
+    if (options.calculated) {
+      params.append('calculated', 'true');
+    }
+
+    // Convert records to TSV format for import
+    // This is a simplified version - real implementation would need proper field mapping
+    const tsvData = this.recordsToTSV(records);
+    
+    const url = `${this.baseUrl}/import?${params.toString()}`;
+    
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          ...this.authHeaders,
+          'Content-Type': 'text/plain'
+        },
+        body: tsvData,
+        signal: AbortSignal.timeout(this.config.timeout || 30000)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw {
+          code: `MW_HTTP_${response.status}`,
+          message: errorText || response.statusText,
+          details: { status: response.status }
+        } as MoneyWorksError;
+      }
+
+      // Parse the response - MoneyWorks typically returns a summary
+      const responseText = await response.text();
+      
+      // This is a simplified parser - actual format depends on MoneyWorks version
+      const result: ImportResult = {
+        processed: records.length,
+        created: 0,
+        updated: 0,
+        errors: 0,
+        errorDetails: []
+      };
+      
+      // Parse response to extract actual counts
+      // MoneyWorks response format varies, this is a basic implementation
+      const lines = responseText.split('\n');
+      for (const line of lines) {
+        if (line.includes('created')) {
+          const match = line.match(/(\d+) created/);
+          if (match) result.created = parseInt(match[1]);
+        }
+        if (line.includes('updated')) {
+          const match = line.match(/(\d+) updated/);
+          if (match) result.updated = parseInt(match[1]);
+        }
+        if (line.includes('error') || line.includes('failed')) {
+          result.errors++;
+        }
+      }
+      
+      return result;
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw {
+          code: 'MW_TIMEOUT',
+          message: 'Request timed out',
+          details: { timeout: this.config.timeout }
+        } as MoneyWorksError;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Get MoneyWorks server version
+   * 
+   * @ai-instruction MoneyWorks version endpoint:
+   * - Endpoint: /version
+   * - Returns plain text version info
+   */
+  async getVersion(): Promise<string> {
+    const url = `${this.baseUrl}/version`;
+    
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: this.authHeaders,
+        signal: AbortSignal.timeout(this.config.timeout || 30000)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw {
+          code: `MW_HTTP_${response.status}`,
+          message: errorText || response.statusText,
+          details: { status: response.status }
+        } as MoneyWorksError;
+      }
+
+      const versionText = await response.text();
+      // Extract version from response
+      // Format typically includes server version, platform, etc.
+      const versionMatch = versionText.match(/MoneyWorks[^\d]*(\d+\.\d+\.\d+)/);
+      return versionMatch ? versionMatch[1] : versionText.trim();
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw {
+          code: 'MW_TIMEOUT',
+          message: 'Request timed out',
+          details: { timeout: this.config.timeout }
+        } as MoneyWorksError;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * List available documents/data files
+   * 
+   * @ai-instruction MoneyWorks list endpoint:
+   * - Endpoint: /list (at server level, not document level)
+   * - Returns list of accessible documents
+   */
+  async listDocuments(): Promise<string[]> {
+    // For listing documents, we need to use the server-level endpoint
+    const serverUrl = `${this.config.protocol}://${this.config.host}:${this.config.port}/REST/list`;
+    
+    try {
+      const response = await fetch(serverUrl, {
+        method: 'GET',
+        headers: this.authHeaders,
+        signal: AbortSignal.timeout(this.config.timeout || 30000)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw {
+          code: `MW_HTTP_${response.status}`,
+          message: errorText || response.statusText,
+          details: { status: response.status }
+        } as MoneyWorksError;
+      }
+
+      const listText = await response.text();
+      // Parse the document list - format varies by MoneyWorks version
+      // Typically returns one document per line
+      const documents = listText
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+      
+      return documents;
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw {
+          code: 'MW_TIMEOUT',
+          message: 'Request timed out',
+          details: { timeout: this.config.timeout }
+        } as MoneyWorksError;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Convert records array to TSV format for import
+   * @private
+   */
+  private recordsToTSV(records: any[]): string {
+    if (records.length === 0) return '';
+    
+    // Get all unique keys from all records
+    const allKeys = new Set<string>();
+    records.forEach(record => {
+      Object.keys(record).forEach(key => allKeys.add(key));
+    });
+    
+    const keys = Array.from(allKeys);
+    const lines: string[] = [];
+    
+    // Add each record as a TSV line
+    for (const record of records) {
+      const values = keys.map(key => {
+        const value = record[key];
+        if (value === null || value === undefined) return '';
+        if (typeof value === 'string') return value;
+        return String(value);
+      });
+      lines.push(values.join('\t'));
+    }
+    
+    return lines.join('\n');
   }
 
   /**

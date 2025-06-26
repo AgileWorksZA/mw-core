@@ -65,16 +65,17 @@ Options:
   -v, --version       Show version
 
 Export Formats:
-  json         JSON format (default)
-  xml-terse    Compact XML format
-  xml-verbose  Detailed XML format with all fields
-  tsv          Tab-separated values
+  -e, --exportFormat:
+    compact         Raw arrays for minimal overhead
+    compact-headers Arrays with field names in first row  
+    full            Complete objects with field names (default)
+    schema          Objects with full field metadata
 
 Examples:
+  mw export TaxRate --exportFormat compact
+  mw export TaxRate --exportFormat schema --output taxrates-schema.json
   mw export TaxRate --filter "TaxCode='GST10'"
-  mw export TaxRate --limit 10 --format xml-verbose
-  mw export TaxRate --format tsv --output taxrates.tsv
-  mw export TaxRate --format xml-terse > taxrates.xml
+  mw export TaxRate --limit 10 --exportFormat compact-headers
   mw eval "Count(TaxRate)"
   mw test-connection
   `);

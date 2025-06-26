@@ -1,9 +1,9 @@
-import type { SmartMoneyWorksClient } from "@moneyworks/data";
+import type { SmartMoneyWorksClient, GlobalOptions } from "@moneyworks/data";
 
 export async function evalCommand(
   client: SmartMoneyWorksClient,
   args: string[],
-  _globalOptions: Record<string, unknown>
+  _globalOptions: GlobalOptions
 ): Promise<void> {
   const timing = _globalOptions.timing as boolean;
   if (args.length === 0) {

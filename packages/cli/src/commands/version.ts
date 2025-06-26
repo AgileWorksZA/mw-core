@@ -1,9 +1,9 @@
-import type { SmartMoneyWorksClient } from "@moneyworks/data";
+import type { SmartMoneyWorksClient, GlobalOptions } from "@moneyworks/data";
 
 export async function versionCommand(
   client: SmartMoneyWorksClient,
   _args: string[],
-  _globalOptions: Record<string, unknown>
+  _globalOptions: GlobalOptions
 ): Promise<void> {
   try {
     const version = await client.getVersion();

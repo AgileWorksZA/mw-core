@@ -1,5 +1,5 @@
-import { describe, it, expect } from "bun:test";
-import { parseXML } from "./parser";
+import { describe, expect, it } from "bun:test";
+import { parseXML } from "/parser";
 
 describe("XMLParser - Transaction with subfiles", () => {
   it("should parse transaction with detail subfile", async () => {
@@ -22,22 +22,22 @@ describe("XMLParser - Transaction with subfiles", () => {
 </export>`;
 
     const result = await parseXML(xml, "Transaction", "xml-verbose");
-    
+
     expect(result).toHaveLength(1);
     expect(result[0].sequenceNumber).toBe("12345");
     expect(result[0].nameCode).toBe("CUST001");
     expect(result[0].transDate).toBe("20250101");
     expect(result[0].gross).toBe(1000);
-    
+
     // Check subfile
     expect(result[0].subfile).toBeDefined();
     expect(Array.isArray(result[0].subfile)).toBe(true);
     expect(result[0].subfile[0].$?.name).toBe("Detail");
-    
+
     // Check detail content
     const detail = result[0].subfile[0].Detail || result[0].subfile[0].detail;
     expect(detail).toBeDefined();
-    
+
     if (Array.isArray(detail)) {
       expect(Number(detail[0].LineNumber || detail[0].lineNumber)).toBe(1);
       expect(Number(detail[0].Gross || detail[0].gross)).toBe(500);
@@ -61,7 +61,7 @@ describe("XMLParser - Transaction with subfiles", () => {
 </transaction>`;
 
     const result = await parseXML(xml, "Transaction", "xml-verbose");
-    
+
     expect(result).toHaveLength(1);
     expect(result[0].sequenceNumber).toBe("12345");
     expect(Number(result[0].gross)).toBe(1000);

@@ -41,3 +41,10 @@ export async function loadConfig(configPath?: string): Promise<MoneyWorksConfig>
     throw new Error(`Failed to load MoneyWorks config from ${path}: ${error}`);
   }
 }
+
+export type {
+  MoneyWorksConfig,
+  MoneyWorksResponse, 
+  MoneyWorksQueryParams,
+  MoneyWorksError
+} from '@moneyworks/data/config/types';

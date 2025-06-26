@@ -5,7 +5,7 @@
  * For example, January 2025 is represented as 202501.
  */
 
-import type { Period, YYYYMMDD } from "../types/branded";
+import type { Period, YYYYMMDD } from "@moneyworks/utilities/types/branded";
 import { createYYYYMMDD } from "./yyyymmdd";
 
 /**

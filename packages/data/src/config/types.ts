@@ -64,6 +64,12 @@ export interface MoneyWorksConfig {
    * @default 30000
    */
   timeout?: number;
+  
+  /**
+   * Enable debug mode
+   * @default false
+   */
+  debug?: boolean;
 }
 
 /**

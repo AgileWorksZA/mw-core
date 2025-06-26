@@ -10,7 +10,7 @@ export {
 	parseMoneyWorksJSON,
 	parseMoneyWorksResponse,
 	type MoneyWorksParseOptions,
-} from "./revivers";
+} from "@moneyworks/utilities/json/revivers";
 
 export {
 	createMoneyWorksReplacer,
@@ -23,4 +23,4 @@ export {
 	type JsonObject,
 	type JsonValue,
 	type MoneyWorksStringifyOptions,
-} from "./stringify";
+} from "@moneyworks/utilities/json/stringify";

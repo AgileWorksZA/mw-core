@@ -6,13 +6,13 @@
  */
 
 // Date utilities
-export * from "./date";
+export * from "@moneyworks/utilities/date";
 
 // JSON utilities
-export * from "./json";
+export * from "@moneyworks/utilities/json";
 
 // Type utilities
-export * from "./types";
+export * from "@moneyworks/utilities/types";
 
 // Version
 export const version = "0.1.0" as const;

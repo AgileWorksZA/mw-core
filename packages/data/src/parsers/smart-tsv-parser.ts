@@ -6,7 +6,7 @@
  * @moneyworks-dsl PURE
  */
 
-import { TableStructure } from './field-discovery';
+import { TableStructure } from '@moneyworks/data/parsers/field-discovery';
 
 /**
  * Parse TSV data using discovered field structure

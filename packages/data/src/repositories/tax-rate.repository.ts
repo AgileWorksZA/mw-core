@@ -7,7 +7,7 @@
  * @ai-critical Use MoneyWorks TaxRate terminology exclusively
  */
 
-import { BaseMoneyWorksRepository } from './base.repository';
+import { BaseMoneyWorksRepository } from '@moneyworks/data/repositories/base.repository';
 import type {
   MoneyWorksTaxRate, 
   MoneyWorksTaxRateCreateInput, 
@@ -15,10 +15,8 @@ import type {
 } from '@moneyworks/canonical/tax-rates';
 import { MoneyWorksTaxCombineMode } from '@moneyworks/canonical/tax-rates';
 import { d, YYYYMMDD, AccountCode } from '@moneyworks/utilities';
-import { 
-  formatMWDate,
-  formatMWNumber
-} from '../parsers';
+import { formatMWDate } from '@moneyworks/data/parsers/date-parser';
+import { formatMWNumber } from '@moneyworks/data/parsers/number-parser';
 
 /**
  * Repository for MoneyWorks TaxRate entity

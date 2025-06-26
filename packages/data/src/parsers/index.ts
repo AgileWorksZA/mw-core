@@ -4,47 +4,12 @@
  * Low-level parsing infrastructure for MoneyWorks data formats
  * 
  * @moneyworks-dsl PURE
+ * 
+ * NOTE: This file should NOT re-export from the same package to avoid circular dependencies.
+ * Instead, consumers should import directly from the specific parser files.
  */
 
-// Field discovery - the foundation
-export {
-  discoverTableStructure,
-  clearFieldCache,
-  getCachedStructure,
-  buildTSVHeaders,
-  type FieldInfo,
-  type TableStructure
-} from './field-discovery';
-
-// Smart TSV parser that uses discovered structure  
-export {
-  parseTSVWithStructure,
-  validateTSVStructure
-} from './smart-tsv-parser';
-
-// XML parsing utilities
-export {
-  parseMoneyWorksXML,
-  extractFieldOrder,
-  xmlFieldToPascalCase,
-  buildFieldMapping
-} from './xml/moneyworks-xml-parser';
-
-// Date/time parsers (existing)
-export {
-  parseMWDate,
-  parseMWTimestamp,
-  formatMWDate
-} from './date-parser';
-
-// Number parser (existing)
-export {
-  parseMWNumber,
-  formatMWNumber
-} from './number-parser';
-
-// Other existing parsers
-export * from './data-parser';
-export * from './account-parser';
-export * from './enum-parser';
-export * from './string-parser';
+// This file is intentionally left minimal to avoid circular dependencies.
+// Import parsers directly from their files:
+// import { parseMWDate } from '@moneyworks/data/parsers/date-parser';
+// import { parseMWNumber } from '@moneyworks/data/parsers/number-parser';

@@ -1,9 +1,9 @@
-import type { SmartMoneyWorksClient } from "@moneyworks/data";
+import type { SmartMoneyWorksClient, GlobalOptions } from "@moneyworks/data";
 
 export async function testConnectionCommand(
   client: SmartMoneyWorksClient,
   _args: string[],
-  _globalOptions: Record<string, unknown>
+  _globalOptions: GlobalOptions
 ): Promise<void> {
   try {
     console.log("Testing connection to MoneyWorks...");

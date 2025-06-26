@@ -1,14 +1,14 @@
 /**
  * TaxRateRepository Unit Tests
- * 
+ *
  * @moneyworks-entity TaxRate
  * @moneyworks-dsl PURE
  */
 
-import { describe, test, expect, beforeAll } from 'bun:test';
-import { loadConfig } from '../config/index';
+import {describe, test, expect, beforeAll} from 'bun:test';
+import {loadConfig} from '../config/index';
 import {TaxRateRepository} from "@moneyworks/data/repositories/tax-rate.repository.ts";
-import {createSmartClient} from "@moneyworks/data/client";
+import {createSmartClient} from "@moneyworks/data/client/moneyworks-smart-client";
 
 describe('TaxRateRepository', () => {
   let repository: TaxRateRepository;
@@ -27,14 +27,14 @@ describe('TaxRateRepository', () => {
     // Assert - Basic validations
     expect(taxRates).toBeDefined();
     expect(Array.isArray(taxRates)).toBe(true);
-    
+
     // Log the results for inspection
     console.log(`Exported ${taxRates.length} tax rates from MoneyWorks`);
-    
+
     // If we have tax rates, verify the structure
     if (taxRates.length > 0) {
       const firstRate = taxRates[0];
-      
+
       // Verify it's a properly typed MoneyWorksTaxRate
       expect(firstRate).toHaveProperty('TaxCode');
       expect(firstRate).toHaveProperty('PaidAccount');
@@ -42,12 +42,12 @@ describe('TaxRateRepository', () => {
       expect(firstRate).toHaveProperty('Date');
       expect(firstRate).toHaveProperty('Rate1');
       expect(firstRate).toHaveProperty('Rate2');
-      
+
       // Verify types
       expect(typeof firstRate.TaxCode).toBe('string');
       expect(typeof firstRate.Rate1).toBe('number');
       expect(typeof firstRate.Rate2).toBe('number');
-      
+
       // Log first rate for debugging
       console.log('First tax rate:', {
         TaxCode: firstRate.TaxCode,

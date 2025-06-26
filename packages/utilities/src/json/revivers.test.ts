@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, test } from "bun:test";
-import type { HHMMSS, Period, YYYYMMDD } from "../types";
+import type { HHMMSS, Period, YYYYMMDD } from "@moneyworks/utilities/json/types";
 import {
 	createMoneyWorksReviver,
 	createTypedParser,

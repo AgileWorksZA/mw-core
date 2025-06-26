@@ -6,9 +6,10 @@
  * @moneyworks-dsl PURE
  */
 
-import { MoneyWorksRESTClient, ExportOptions } from './moneyworks-rest-client.ts';
-import { MoneyWorksConfig } from '../config/types.ts';
-import { discoverTableStructure, getCachedStructure } from '../parsers/field-discovery.ts';
+import { MoneyWorksRESTClient, ExportOptions } from '@moneyworks/data/client/moneyworks-rest-client';
+import { MoneyWorksConfig } from '@moneyworks/data/config/types';
+import { discoverTableStructure, getCachedStructure } from '@moneyworks/data/parsers/field-discovery';
+import { arrayToObject, addHeaders, enrichWithSchema } from '@moneyworks/data/converters';
 
 /**
  * Parse field value based on data type
@@ -41,13 +42,26 @@ export class SmartMoneyWorksClient extends MoneyWorksRESTClient {
    * Smart export that discovers field structure automatically
    * 
    * @param table - Table name to export
-   * @param options - Export options
-   * @returns Parsed records with proper field names
+   * @param options - Export options including exportFormat
+   * @returns Data in the requested format
+   * 
+   * @example
+   * // Get full objects (default)
+   * const data = await client.smartExport('TaxRate');
+   * 
+   * // Get compact arrays
+   * const arrays = await client.smartExport('TaxRate', { exportFormat: 'compact' });
+   * 
+   * // Get arrays with headers
+   * const withHeaders = await client.smartExport('TaxRate', { exportFormat: 'compact-headers' });
+   * 
+   * // Get schema-enriched data
+   * const enriched = await client.smartExport('TaxRate', { exportFormat: 'schema' });
    */
   async smartExport(
     table: string,
     options: ExportOptions = {}
-  ): Promise<any[]> {
+  ): Promise<any[] | any[][] | any> {
     // Ensure we have field structure for this table
     await this.ensureFieldStructure(table);
     
@@ -57,8 +71,11 @@ export class SmartMoneyWorksClient extends MoneyWorksRESTClient {
       throw new Error(`Field structure not found for table ${table}`);
     }
     
+    // Extract our custom format option
+    const { exportFormat = 'full', ...restOptions } = options;
+    
     // Now export as TSV for efficiency
-    const tsvOptions = { ...options, format: 'tsv' as const };
+    const tsvOptions = { ...restOptions, format: 'tsv' as const };
     const rawData = await this.export(table, tsvOptions);
     
     // The REST client returns arrays for TSV format
@@ -66,15 +83,28 @@ export class SmartMoneyWorksClient extends MoneyWorksRESTClient {
       throw new Error('Unexpected response format from TSV export');
     }
     
-    // Convert raw arrays to objects using discovered structure
-    return rawData.map(row => {
-      const record: any = {};
-      structure.fields.forEach(field => {
-        const value = row[field.position] || '';
-        record[field.name] = parseFieldValue(value, field.dataType);
-      });
-      return record;
-    });
+    // Handle different export formats
+    switch (exportFormat) {
+      case 'compact':
+        // Return raw arrays as-is
+        return rawData;
+        
+      case 'compact-headers':
+        // Add headers to the arrays
+        return addHeaders(rawData, structure.fields);
+        
+      case 'full':
+        // Convert to objects (default behavior)
+        return arrayToObject(rawData, structure.fields);
+        
+      case 'schema':
+        // Convert to objects first, then enrich with schema
+        const objects = arrayToObject(rawData, structure.fields);
+        return enrichWithSchema(objects, structure, table);
+        
+      default:
+        throw new Error(`Unsupported export format: ${exportFormat}`);
+    }
   }
 
   /**

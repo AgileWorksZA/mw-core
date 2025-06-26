@@ -184,7 +184,24 @@
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run debug-account-search.ts)",
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run debug-search-syntax.ts)",
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run -e \"\nimport { createSmartClient } from './src/client/moneyworks-smart-client';\nimport { loadConfig } from './src/config/index';\n\nconst config = await loadConfig('./mw-config.json');\nconst client = createSmartClient(config);\n\n// Test OR operator\nconsole.log('Testing OR operator...');\nconst result = await client.export('TaxRate', {\n  search: 'PaidAccount=1400 or RecAccount=1400',\n  format: 'tsv'\n});\n\nconsole.log('Result:', result.length, 'records');\n\")",
-      "Bash(/Users/hgeldenhuys/.bun/bin/bun run test-or.ts)"
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run test-or.ts)",
+      "mcp__filesystem__list_directory",
+      "mcp__filesystem__search_files",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --limit 5)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run src/repositories/index.ts)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run packages/cli/src/index.ts export TaxRate --limit 5)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts version)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts test-connection)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts eval \"Count(TaxRate)\")",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts eval \"Count(Tax)\")",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --filter \"TaxCode='G'\")",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --output test-export.json)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run tsc --noEmit)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --limit 3)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat full --limit 2)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat compact --limit 2)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat compact-headers --limit 2)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat schema --limit 1)"
     ],
     "deny": []
   }

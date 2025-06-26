@@ -9,13 +9,13 @@
  * @ai-instruction This is critical infrastructure for parsing MoneyWorks data
  */
 
-import { MoneyWorksRESTClient } from '../client/moneyworks-rest-client';
+import { MoneyWorksRESTClient } from '@moneyworks/data/client/moneyworks-rest-client';
 import { 
   parseMoneyWorksXML, 
   extractFieldOrder, 
   xmlFieldToPascalCase 
-} from './xml/moneyworks-xml-parser';
-import { getTSVFieldMapping } from './moneyworks-field-mappings';
+} from '@moneyworks/data/parsers/xml/moneyworks-xml-parser';
+import { getTSVFieldMapping } from '@moneyworks/data/parsers/moneyworks-field-mappings';
 
 export interface FieldInfo {
   name: string;
