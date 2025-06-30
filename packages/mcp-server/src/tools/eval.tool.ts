@@ -5,7 +5,7 @@
  */
 
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { MoneyWorksEvalParams, MoneyWorksEvalResult } from '@moneyworks/mcp-server/types';
+import type { MoneyWorksEvalParams, MoneyWorksEvalResult } from '../types/index.js';
 
 export const evalTool = {
   definition: {

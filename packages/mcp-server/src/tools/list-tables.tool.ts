@@ -5,18 +5,37 @@
  */
 
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { MoneyWorksTablesResult } from '@moneyworks/mcp-server/types';
+import type { MoneyWorksTablesResult } from '../types/index.js';
 
 // Currently vetted entities
-const VETTED_ENTITIES = ['TaxRate'];
-
-// Upcoming entities (being worked on)
-const UPCOMING_ENTITIES = [
+const VETTED_ENTITIES = [
+  'TaxRate',
   'Account',
   'Transaction',
   'Name',
   'Product',
   'Job',
+  'Contact',
+  'Department',
+  'General',
+  'Inventory',
+  'Payment'
+];
+
+// Upcoming entities (being worked on)
+const UPCOMING_ENTITIES = [
+  'Asset',
+  'AssetCategory',
+  'AssetLog',
+  'AutoSplit',
+  'Build',
+  'Detail',
+  'JobSheet',
+  'Login',
+  'Memo',
+  'OffLedger',
+  'Reconciliation',
+  'User',
   'Category1',
   'Category2'
 ];

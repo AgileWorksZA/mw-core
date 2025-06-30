@@ -12,8 +12,8 @@ import {
   evalTool, 
   schemaTool, 
   listTablesTool 
-} from '@moneyworks/mcp-server/tools';
-import { moneyworksDocsResource } from '@moneyworks/mcp-server/resources/moneyworks-docs';
+} from './tools/index.js';
+import { moneyworksDocsResource } from './resources/moneyworks-docs.js';
 
 export class MoneyWorksMCPServer {
   private server: Server;

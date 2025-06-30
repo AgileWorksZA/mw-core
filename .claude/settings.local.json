@@ -211,7 +211,8 @@
       "mcp__elysia_Docs__search_elysia_documentation",
       "mcp__elysia_Docs__fetch_elysia_documentation",
       "mcp__elysia_Docs__search_elysia_code",
-      "mcp__elysia_Docs__fetch_generic_url_content"
+      "mcp__elysia_Docs__fetch_generic_url_content",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun --version)"
     ],
     "deny": []
   }

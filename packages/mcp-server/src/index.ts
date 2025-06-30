@@ -6,7 +6,7 @@
  * @moneyworks-dsl PURE
  */
 
-import { startServer } from '@moneyworks/mcp-server/server';
+import { startServer } from './server.js';
 
 // Handle graceful shutdown
 process.on('SIGINT', () => {

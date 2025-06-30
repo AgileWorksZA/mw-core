@@ -5,10 +5,22 @@
  */
 
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { MoneyWorksSchemaParams, MoneyWorksSchemaResult } from '@moneyworks/mcp-server/types';
+import type { MoneyWorksSchemaParams, MoneyWorksSchemaResult } from '../types/index.js';
 
 // Currently vetted entities
-const VETTED_ENTITIES = ['TaxRate'];
+const VETTED_ENTITIES = [
+  'TaxRate',
+  'Account',
+  'Transaction',
+  'Name',
+  'Product',
+  'Job',
+  'Contact',
+  'Department',
+  'General',
+  'Inventory',
+  'Payment'
+];
 
 export const schemaTool = {
   definition: {
