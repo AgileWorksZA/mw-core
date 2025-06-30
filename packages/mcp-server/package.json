@@ -1,0 +1,35 @@
+{
+  "name": "@moneyworks/mcp-server",
+  "version": "0.1.0",
+  "description": "MoneyWorks MCP Server for AI agents",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@moneyworks/data": "workspace:*",
+    "@moneyworks/canonical": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "moneyworks",
+    "mcp",
+    "ai",
+    "agent"
+  ],
+  "author": "MoneyWorks Team",
+  "license": "MIT"
+}

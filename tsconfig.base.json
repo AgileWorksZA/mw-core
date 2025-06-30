@@ -18,7 +18,9 @@
 			"@moneyworks/utilities/*": ["packages/utilities/src/*"],
 			"@moneyworks/canonical/*": ["packages/canonical/src/*"],
 			"@moneyworks/data/*": ["packages/data/src/*"],
-			"@moneyworks/semantic/*": ["packages/semantic/src/*"]
+			"@moneyworks/semantic/*": ["packages/semantic/src/*"],
+			"@moneyworks/mcp-server/*": ["packages/mcp-server/src/*"],
+			"@moneyworks/cli/*": ["packages/cli/src/*"]
 		}
 	}
 }

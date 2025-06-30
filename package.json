@@ -8,10 +8,14 @@
   "private": true,
   "scripts": {
     "build:cli": "bun --cwd packages/cli build",
+    "build:mcp": "bun --cwd packages/mcp-server build",
     "clean": "rm -rf node_modules packages/*/node_modules",
     "test": "bun test",
     "cli": "bun --cwd packages/api cli",
-    "mw": "bun --cwd packages/cli dev"
+    "mw": "bun --cwd packages/cli dev",
+    "mcp": "bun --cwd packages/mcp-server dev",
+    "mcp:build": "bun --cwd packages/mcp-server build",
+    "mcp:start": "bun --cwd packages/mcp-server start"
   },
   "type": "module",
   "workspaces": [

@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "moneyworks": {
+      "command": "/Users/hgeldenhuys/.bun/bin/bun",
+      "args": [
+        "run",
+        "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index-full.ts"
+      ],
+      "env": {
+        "MW_CONFIG_PATH": "/Users/hgeldenhuys/WebstormProjects/mw-core/mw-config.json"
+      }
+    }
+  }
+}

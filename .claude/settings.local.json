@@ -201,7 +201,13 @@
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat full --limit 2)",
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat compact --limit 2)",
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat compact-headers --limit 2)",
-      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat schema --limit 1)"
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/cli/src/index.ts export TaxRate --exportFormat schema --limit 1)",
+      "Bash(./install-deps.sh)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run packages/mcp-server/src/index-standalone.ts)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run packages/mcp-server/src/index-working.ts)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run packages/mcp-server/src/index-full.ts)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index-full.ts 2 >& 1)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun /Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index-full.ts 2 >& 1)"
     ],
     "deny": []
   }
