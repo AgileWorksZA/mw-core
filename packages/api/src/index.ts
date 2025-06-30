@@ -52,12 +52,19 @@ async function startServer() {
 📖 Swagger: http://${host === '0.0.0.0' ? 'localhost' : host}:${port}/api/v1/swagger
 
 Available endpoints:
-- GET  /api/v1/tables           - List available tables
-- GET  /api/v1/tables/:table    - Export table data
+- GET  /api/v1/tables              - List available tables
+- GET  /api/v1/tables/:table       - Export table data
 - GET  /api/v1/tables/:table/schema - Get table schema
-- POST /api/v1/eval             - Evaluate MWScript
-- GET  /api/v1/health           - Health check
-- GET  /api/v1/version          - Version info
+- GET  /api/v1/tables/:table/labels - Get field labels
+- GET  /api/v1/company             - Get company information
+- GET  /api/v1/company/fields      - List company fields
+- POST /api/v1/eval                - Evaluate MWScript
+- POST /api/v1/eval/template/:table - Evaluate template
+- GET  /api/v1/i18n/languages      - List supported languages
+- GET  /api/v1/i18n/translations/:lang - Get UI translations
+- GET  /api/v1/i18n/labels/:lang   - Get all field labels
+- GET  /api/v1/health              - Health check
+- GET  /api/v1/version             - Version info
     `);
     
   } catch (error) {

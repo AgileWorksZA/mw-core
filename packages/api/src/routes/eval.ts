@@ -4,15 +4,19 @@
  * @moneyworks-dsl PURE
  */
 
-import { Elysia } from 'elysia';
+import { Elysia, t } from 'elysia';
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
+import type { CacheService } from '@moneyworks/api/services/cache';
 import { EvalRequestSchema, EvalResponseSchema } from '@moneyworks/api/schemas/eval';
 import { ErrorSchema, SuccessResponse } from '@moneyworks/api/schemas/common';
 
 /**
  * Create eval routes
  */
-export function createEvalRoutes(client: SmartMoneyWorksClient) {
+export function createEvalRoutes(
+  client: SmartMoneyWorksClient,
+  cache?: CacheService
+) {
   return new Elysia({ prefix: '/eval' })
     .post('/', async ({ body, set, headers }) => {
       const requestId = headers['x-request-id'] || 'unknown';
@@ -71,6 +75,155 @@ export function createEvalRoutes(client: SmartMoneyWorksClient) {
       response: {
         200: SuccessResponse(EvalResponseSchema),
         400: ErrorSchema,
+        500: ErrorSchema
+      }
+    })
+    
+    // Template evaluation endpoint
+    .post('/template/:table', async ({ params, body, set, headers }) => {
+      const requestId = headers['x-request-id'] || 'unknown';
+      const { table } = params;
+      const { template, limit = 100, filter } = body;
+
+      if (!template || template.trim().length === 0) {
+        set.status = 400;
+        throw new Error('VALIDATION_ERROR: Template cannot be empty');
+      }
+
+      const startTime = performance.now();
+
+      try {
+        // Create cache key if caching is enabled
+        const cacheKey = cache ? 
+          `eval-template:${table}:${template}:${filter || ''}:${limit}` : 
+          null;
+
+        // Try cache first
+        if (cache && cacheKey) {
+          const cached = cache.get(cacheKey);
+          if (cached) {
+            set.headers['x-cache-status'] = 'HIT';
+            return cached;
+          }
+        }
+
+        // Get field list for the table to validate template
+        const tableInfo = await client.getTableInfo(table);
+        if (!tableInfo) {
+          set.status = 404;
+          throw new Error(`NOT_FOUND: Table '${table}' not found`);
+        }
+
+        // Export with custom template format
+        // Add double newline for splitting results
+        const templateWithDelimiter = `${template}\\n\\n`;
+        
+        const options: any = {
+          format: templateWithDelimiter,
+          limit
+        };
+
+        if (filter) {
+          options.filter = filter;
+        }
+
+        // Use smartExport which handles template format
+        const rawData = await client.smartExport(table, options);
+        
+        // Split results and clean up
+        const results = typeof rawData === 'string' ?
+          rawData.split('\n\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0) :
+          [];
+
+        const executionTime = performance.now() - startTime;
+
+        const response = {
+          data: {
+            table,
+            template,
+            results,
+            count: results.length
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            requestId,
+            executionTime: Math.round(executionTime * 100) / 100,
+            filter: filter || null,
+            limit
+          }
+        };
+
+        // Cache the result
+        if (cache && cacheKey) {
+          cache.set(cacheKey, response, 60 * 1000); // 1 minute TTL
+          set.headers['x-cache-status'] = 'MISS';
+        }
+
+        return response;
+      } catch (error: any) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        
+        if (errorMessage.includes('Unknown field')) {
+          set.status = 400;
+          throw new Error(`TEMPLATE_ERROR: ${errorMessage}. Check that all field names in square brackets exist in the ${table} table.`);
+        }
+        
+        throw error;
+      }
+    }, {
+      params: t.Object({
+        table: t.String({ description: 'MoneyWorks table name' })
+      }),
+      body: t.Object({
+        template: t.String({
+          description: 'Template string with field names in square brackets',
+          examples: [
+            '[Code] - [Description]',
+            '[Name] (Phone: [Phone])',
+            '[TransDate]: [Description] - $[Gross]'
+          ]
+        }),
+        limit: t.Optional(t.Number({ 
+          description: 'Maximum number of records to return',
+          default: 100,
+          minimum: 1,
+          maximum: 1000
+        })),
+        filter: t.Optional(t.String({
+          description: 'MoneyWorks filter expression',
+          examples: [
+            'Code = "ABC"',
+            'Gross > 1000',
+            'TransDate >= "20240101"'
+          ]
+        }))
+      }),
+      detail: {
+        summary: 'Evaluate template against table',
+        description: `Evaluate a custom template against records in a MoneyWorks table.
+
+Templates use MoneyWorks field syntax with field names in square brackets.
+Each record's result is separated by double newlines.
+
+Example templates:
+- Account: \`[Code] - [Description]\`
+- Transaction: \`[TransDate] [Description] @[Gross]\`
+- Name: \`[Code]: [Name] Phone: [Phone]\`
+
+Results are cached for 1 minute to improve performance for repeated queries.`,
+        tags: ['MWScript']
+      },
+      response: {
+        200: SuccessResponse(t.Object({
+          table: t.String(),
+          template: t.String(),
+          results: t.Array(t.String()),
+          count: t.Number()
+        })),
+        400: ErrorSchema,
+        404: ErrorSchema,
         500: ErrorSchema
       }
     });

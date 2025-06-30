@@ -11,11 +11,15 @@ import type { SmartMoneyWorksClient } from '@moneyworks/data';
 import { createTableRegistry } from '@moneyworks/api/registry/table-registry';
 import { createTableRoutes } from '@moneyworks/api/routes/tables';
 import { createEvalRoutes } from '@moneyworks/api/routes/eval';
+import { createCompanyRoutes } from '@moneyworks/api/routes/company';
+import { createI18nRoutes } from '@moneyworks/api/routes/i18n';
 import { createHealthRoutes } from '@moneyworks/api/routes/health';
 import { createVersionRoutes } from '@moneyworks/api/routes/version';
 import { errorHandler } from '@moneyworks/api/middleware/error-handler';
 import { requestId } from '@moneyworks/api/middleware/request-id';
 import { logging } from '@moneyworks/api/middleware/logging';
+import { i18n } from '@moneyworks/api/middleware/i18n';
+import { createCaches } from '@moneyworks/api/services/cache';
 
 export interface APIConfig {
   port?: number;
@@ -24,6 +28,7 @@ export interface APIConfig {
   enableSwagger?: boolean;
   enableCors?: boolean;
   corsOrigins?: string[];
+  enableCacheWarming?: boolean;
 }
 
 /**
@@ -34,11 +39,13 @@ export function createApp(client: SmartMoneyWorksClient, config: APIConfig = {})
     basePath = '/api/v1',
     enableSwagger = true,
     enableCors = true,
-    corsOrigins = ['*']
+    corsOrigins = ['*'],
+    enableCacheWarming = true
   } = config;
   
-  // Create table registry
+  // Create table registry and caches
   const registry = createTableRegistry(client);
+  const caches = createCaches();
   
   // Create base app
   const app = new Elysia({ prefix: basePath })
@@ -46,6 +53,7 @@ export function createApp(client: SmartMoneyWorksClient, config: APIConfig = {})
     .use(requestId)
     .use(errorHandler)
     .use(logging)
+    .use(i18n)
     
     // CORS support
     .use(enableCors ? cors({
@@ -116,7 +124,8 @@ All errors follow a consistent format:
         tags: [
           { name: 'Tables', description: 'Table data operations' },
           { name: 'MWScript', description: 'MWScript evaluation' },
-          { name: 'System', description: 'System information and health' }
+          { name: 'System', description: 'System information and health' },
+          { name: 'I18n', description: 'Internationalization and labels' }
         ],
         servers: [
           { url: 'http://localhost:3000', description: 'Local development server' }
@@ -127,8 +136,10 @@ All errors follow a consistent format:
     }) : (app) => app)
     
     // Mount routes
-    .use(createTableRoutes(registry))
-    .use(createEvalRoutes(client))
+    .use(createTableRoutes(registry, client, caches.labels))
+    .use(createEvalRoutes(client, caches.eval))
+    .use(createCompanyRoutes(client, caches.company))
+    .use(createI18nRoutes(client, caches.labels))
     .use(createHealthRoutes(client))
     .use(createVersionRoutes(client))
     
@@ -140,6 +151,8 @@ All errors follow a consistent format:
       endpoints: {
         tables: `${basePath}/tables`,
         eval: `${basePath}/eval`,
+        company: `${basePath}/company`,
+        i18n: `${basePath}/i18n`,
         health: `${basePath}/health`,
         version: `${basePath}/version`
       }
@@ -151,5 +164,59 @@ All errors follow a consistent format:
       }
     });
   
+  // Warm up caches on startup if enabled
+  if (enableCacheWarming) {
+    warmUpCaches(client, caches).catch(error => {
+      console.error('Cache warming failed:', error);
+    });
+  }
+  
   return app;
+}
+
+/**
+ * Warm up caches with commonly accessed data
+ */
+async function warmUpCaches(
+  client: SmartMoneyWorksClient,
+  caches: ReturnType<typeof createCaches>
+) {
+  console.log('Warming up caches...');
+  
+  const warmUpTasks = [
+    // Warm up company info cache
+    caches.company.warmUp([
+      {
+        key: 'company:Name:nested',
+        factory: async () => {
+          const expression = 'Name';
+          const result = await client.evaluate(expression);
+          return { name: result };
+        }
+      }
+    ]),
+    
+    // Warm up labels cache for TaxRate (currently vetted table)
+    caches.labels.warmUp([
+      {
+        key: 'labels:TaxRate:en',
+        factory: async () => {
+          // This would normally call the labels controller
+          // For now, just cache basic field names
+          return {
+            language: 'en' as const,
+            table: 'TaxRate',
+            labels: {
+              Code: 'Code',
+              Description: 'Description',
+              Rate: 'Rate'
+            }
+          };
+        }
+      }
+    ])
+  ];
+  
+  await Promise.all(warmUpTasks);
+  console.log('Cache warming completed');
 }
