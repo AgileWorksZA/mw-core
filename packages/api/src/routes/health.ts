@@ -1,0 +1,106 @@
+/**
+ * Health Check Routes
+ * 
+ * @moneyworks-dsl PURE
+ */
+
+import { Elysia, t } from 'elysia';
+import type { SmartMoneyWorksClient } from '@moneyworks/data';
+
+export interface HealthStatus {
+  status: 'healthy' | 'degraded' | 'unhealthy';
+  timestamp: string;
+  uptime: number;
+  checks: {
+    api: 'ok' | 'error';
+    moneyworks: 'ok' | 'error' | 'timeout';
+  };
+  version: {
+    api: string;
+    moneyworks?: string;
+  };
+}
+
+const startTime = Date.now();
+
+/**
+ * Create health routes
+ */
+export function createHealthRoutes(client: SmartMoneyWorksClient) {
+  return new Elysia()
+    .get('/health', async () => {
+      const checks = {
+        api: 'ok' as const,
+        moneyworks: 'error' as const
+      };
+      
+      // Check MoneyWorks connection
+      try {
+        const testResult = await Promise.race([
+          client.testConnection(),
+          new Promise<boolean>((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), 5000)
+          )
+        ]);
+        
+        if (testResult) {
+          checks.moneyworks = 'ok';
+        }
+      } catch (error) {
+        checks.moneyworks = error.message === 'Timeout' ? 'timeout' : 'error';
+      }
+      
+      // Determine overall status
+      const status = checks.moneyworks === 'ok' ? 'healthy' : 
+                    checks.moneyworks === 'timeout' ? 'degraded' : 'unhealthy';
+      
+      const health: HealthStatus = {
+        status,
+        timestamp: new Date().toISOString(),
+        uptime: Date.now() - startTime,
+        checks,
+        version: {
+          api: '0.1.0'
+        }
+      };
+      
+      return health;
+    }, {
+      detail: {
+        summary: 'Health check',
+        description: 'Check API and MoneyWorks connection health',
+        tags: ['System']
+      },
+      response: t.Object({
+        status: t.Union([
+          t.Literal('healthy'),
+          t.Literal('degraded'),
+          t.Literal('unhealthy')
+        ]),
+        timestamp: t.String(),
+        uptime: t.Number(),
+        checks: t.Object({
+          api: t.Union([t.Literal('ok'), t.Literal('error')]),
+          moneyworks: t.Union([
+            t.Literal('ok'),
+            t.Literal('error'),
+            t.Literal('timeout')
+          ])
+        }),
+        version: t.Object({
+          api: t.String(),
+          moneyworks: t.Optional(t.String())
+        })
+      })
+    })
+    
+    // Simple health check (for load balancers)
+    .get('/ping', () => 'pong', {
+      detail: {
+        summary: 'Ping',
+        description: 'Simple health check endpoint',
+        tags: ['System']
+      },
+      response: t.String()
+    });
+}

@@ -207,7 +207,11 @@
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run packages/mcp-server/src/index-working.ts)",
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run packages/mcp-server/src/index-full.ts)",
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run /Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index-full.ts 2 >& 1)",
-      "Bash(/Users/hgeldenhuys/.bun/bin/bun /Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index-full.ts 2 >& 1)"
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun /Users/hgeldenhuys/WebstormProjects/mw-core/packages/mcp-server/src/index-full.ts 2 >& 1)",
+      "mcp__elysia_Docs__search_elysia_documentation",
+      "mcp__elysia_Docs__fetch_elysia_documentation",
+      "mcp__elysia_Docs__search_elysia_code",
+      "mcp__elysia_Docs__fetch_generic_url_content"
     ],
     "deny": []
   }

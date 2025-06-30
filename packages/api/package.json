@@ -1,0 +1,31 @@
+{
+  "name": "@moneyworks/api",
+  "version": "0.1.0",
+  "description": "MoneyWorks REST API with ElysiaJS",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "/Users/hgeldenhuys/.bun/bin/bun --watch src/index.ts",
+    "start": "/Users/hgeldenhuys/.bun/bin/bun src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "elysia": "^1.0.0",
+    "@elysiajs/swagger": "^1.0.0",
+    "@elysiajs/cors": "^1.0.0",
+    "@moneyworks/data": "workspace:*",
+    "@moneyworks/canonical": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "moneyworks",
+    "api",
+    "rest",
+    "elysia"
+  ]
+}
