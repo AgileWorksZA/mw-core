@@ -53,7 +53,7 @@ export const listTablesTool = {
 	async handler(
 		_client: SmartMoneyWorksClient,
 		_params: Record<string, never>,
-	): Promise<{ content: MoneyWorksTablesResult[] }> {
+	): Promise<{ content: Array<{ type: "text"; text: string }> }> {
 		const result: MoneyWorksTablesResult = {
 			available: VETTED_ENTITIES,
 			vetted: VETTED_ENTITIES,
@@ -61,7 +61,10 @@ export const listTablesTool = {
 		};
 
 		return {
-			content: [result],
+			content: [{
+				type: "text",
+				text: JSON.stringify(result, null, 2),
+			}],
 		};
 	},
 };

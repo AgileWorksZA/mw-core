@@ -234,7 +234,11 @@
       "mcp__desktop-commander__kill_process",
       "mcp__puppeteer__puppeteer_fill",
       "Bash(tsc --build)",
-      "Bash(tsc:*)"
+      "Bash(tsc:*)",
+      "WebFetch(domain:clerk.com)",
+      "mcp__mcp_Docs__search_typescript_sdk_docs",
+      "mcp__mcp_Docs__search_typescript_sdk_code",
+      "mcp__mcp_Docs__fetch_generic_url_content"
     ],
     "deny": []
   }

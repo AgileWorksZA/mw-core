@@ -71,7 +71,7 @@ export const exportTool = {
 	async handler(
 		client: SmartMoneyWorksClient,
 		params: MoneyWorksExportParams,
-	): Promise<{ content: MoneyWorksExportResult[] }> {
+	): Promise<{ content: Array<{ type: "text"; text: string }> }> {
 		const {
 			table,
 			exportFormat = "full" as const,
@@ -113,7 +113,10 @@ export const exportTool = {
 			};
 
 			return {
-				content: [result],
+				content: [{
+					type: "text",
+					text: JSON.stringify(result, null, 2),
+				}],
 			};
 		} catch (error) {
 			throw new Error(

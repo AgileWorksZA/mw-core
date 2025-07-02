@@ -30,7 +30,7 @@ export const evalTool = {
 	async handler(
 		client: SmartMoneyWorksClient,
 		params: MoneyWorksEvalParams,
-	): Promise<{ content: MoneyWorksEvalResult[] }> {
+	): Promise<{ content: Array<{ type: "text"; text: string }> }> {
 		const { expression } = params;
 
 		if (!expression || expression.trim().length === 0) {
@@ -46,7 +46,10 @@ export const evalTool = {
 			};
 
 			return {
-				content: [evalResult],
+				content: [{
+					type: "text",
+					text: JSON.stringify(evalResult, null, 2),
+				}],
 			};
 		} catch (error) {
 			// Provide helpful context for common MWScript errors

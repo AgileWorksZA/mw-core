@@ -7,6 +7,12 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
+	ListToolsRequestSchema,
+	CallToolRequestSchema,
+	ListResourcesRequestSchema,
+	ReadResourceRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import {
 	type SmartMoneyWorksClient,
 	createSmartClient,
 	loadConfig,
@@ -52,10 +58,9 @@ export class MoneyWorksMCPServer {
 
 	private setupHandlers() {
 		// List available tools
-		// @ts-expect-error MCP SDK types are incorrect
-		this.server.setRequestHandler({
-			method: "tools/list",
-			handler: async () => ({
+		this.server.setRequestHandler(
+			ListToolsRequestSchema,
+			async () => ({
 				tools: [
 					exportTool.definition,
 					evalTool.definition,
@@ -63,15 +68,12 @@ export class MoneyWorksMCPServer {
 					listTablesTool.definition,
 				],
 			}),
-		});
+		);
 
 		// Handle tool calls
-		// @ts-expect-error MCP SDK types are incorrect
-		this.server.setRequestHandler({
-			method: "tools/call",
-			handler: async (request: {
-				params: { name: string; arguments: unknown };
-			}) => {
+		this.server.setRequestHandler(
+			CallToolRequestSchema,
+			async (request) => {
 				const { name, arguments: args } = request.params;
 				const client = await this.getClient();
 
@@ -92,22 +94,20 @@ export class MoneyWorksMCPServer {
 						throw new Error(`Unknown tool: ${name}`);
 				}
 			},
-		});
+		);
 
 		// List available resources
-		// @ts-expect-error MCP SDK types are incorrect
-		this.server.setRequestHandler({
-			method: "resources/list",
-			handler: async () => ({
+		this.server.setRequestHandler(
+			ListResourcesRequestSchema,
+			async () => ({
 				resources: [moneyworksDocsResource.definition],
 			}),
-		});
+		);
 
 		// Handle resource reads
-		// @ts-expect-error MCP SDK types are incorrect
-		this.server.setRequestHandler({
-			method: "resources/read",
-			handler: async (request: { params: { uri: string } }) => {
+		this.server.setRequestHandler(
+			ReadResourceRequestSchema,
+			async (request) => {
 				const { uri } = request.params;
 
 				if (uri === moneyworksDocsResource.definition.uri) {
@@ -116,7 +116,7 @@ export class MoneyWorksMCPServer {
 
 				throw new Error(`Unknown resource: ${uri}`);
 			},
-		});
+		);
 	}
 
 	async start() {

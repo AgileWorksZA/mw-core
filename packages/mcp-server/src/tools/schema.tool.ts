@@ -46,7 +46,7 @@ export const schemaTool = {
 	async handler(
 		client: SmartMoneyWorksClient,
 		params: MoneyWorksSchemaParams,
-	): Promise<{ content: MoneyWorksSchemaResult[] }> {
+	): Promise<{ content: Array<{ type: "text"; text: string }> }> {
 		const { table } = params;
 
 		// Validate table is vetted
@@ -85,7 +85,10 @@ export const schemaTool = {
 			};
 
 			return {
-				content: [result],
+				content: [{
+					type: "text",
+					text: JSON.stringify(result, null, 2),
+				}],
 			};
 		} catch (error) {
 			throw new Error(
