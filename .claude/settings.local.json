@@ -212,7 +212,27 @@
       "mcp__elysia_Docs__fetch_elysia_documentation",
       "mcp__elysia_Docs__search_elysia_code",
       "mcp__elysia_Docs__fetch_generic_url_content",
-      "Bash(/Users/hgeldenhuys/.bun/bin/bun --version)"
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun --version)",
+      "mcp__desktop-commander__create_directory",
+      "mcp__desktop-commander__write_file",
+      "mcp__desktop-commander__edit_block",
+      "mcp__puppeteer__puppeteer_navigate",
+      "mcp__puppeteer__puppeteer_screenshot",
+      "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/packages/web1/test-install.sh:*)",
+      "mcp__puppeteer__puppeteer_evaluate",
+      "mcp__puppeteer__puppeteer_click",
+      "mcp__desktop-commander__force_terminate",
+      "mcp__desktop-commander__read_output",
+      "mcp__desktop-commander__read_file",
+      "mcp__react-router_Docs__search_react_router_documentation",
+      "mcp__react-router_Docs__search_react_router_code",
+      "mcp__react-router_Docs__fetch_generic_url_content",
+      "mcp__desktop-commander__search_code",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run dev)",
+      "Bash(/Users/hgeldenhuys/.bun/bin/bun run --filter=\"web1\" dev)",
+      "mcp__desktop-commander__list_processes",
+      "mcp__desktop-commander__kill_process",
+      "mcp__puppeteer__puppeteer_fill"
     ],
     "deny": []
   }
