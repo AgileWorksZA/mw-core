@@ -6,10 +6,10 @@
  * @moneyworks-dsl PURE
  */
 
-import { MoneyWorksRESTClient, ExportOptions } from '@moneyworks/data/client/moneyworks-rest-client';
-import { MoneyWorksConfig } from '@moneyworks/data/config/types';
-import { discoverTableStructure, getCachedStructure } from '@moneyworks/data/parsers/field-discovery';
-import { arrayToObject, addHeaders, enrichWithSchema } from '@moneyworks/data/converters';
+import { MoneyWorksRESTClient, ExportOptions } from '../client/moneyworks-rest-client';
+import { MoneyWorksConfig } from '../config/types';
+import { discoverTableStructure, getCachedStructure } from '../parsers/field-discovery';
+import { arrayToObject, addHeaders, enrichWithSchema } from '../converters';
 
 /**
  * Parse field value based on data type

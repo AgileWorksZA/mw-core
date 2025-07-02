@@ -232,7 +232,9 @@
       "Bash(/Users/hgeldenhuys/.bun/bin/bun run --filter=\"web1\" dev)",
       "mcp__desktop-commander__list_processes",
       "mcp__desktop-commander__kill_process",
-      "mcp__puppeteer__puppeteer_fill"
+      "mcp__puppeteer__puppeteer_fill",
+      "Bash(tsc --build)",
+      "Bash(tsc:*)"
     ],
     "deny": []
   }

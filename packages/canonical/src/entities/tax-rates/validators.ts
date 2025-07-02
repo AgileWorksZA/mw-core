@@ -46,7 +46,7 @@ export function validateTaxCode(taxCode: string): MoneyWorksValidationResult {
  * @ai-instruction When validating rates, use this function
  * @ai-term Say "Rate1 validation" or "Rate2 validation", NEVER "tax percentage validation"
  */
-export function validateTaxRate(rate: number, fieldName: 'Rate1' | 'Rate2' | 'CombineRate1' | 'CombineRate2'): MoneyWorksValidationResult {
+export function validateTaxRateValue(rate: number, fieldName: 'Rate1' | 'Rate2' | 'CombineRate1' | 'CombineRate2'): MoneyWorksValidationResult {
   const warnings: string[] = [];
   
   if (rate < 0) {
@@ -142,22 +142,22 @@ export function validateTaxRate(taxRate: Partial<MoneyWorksTaxRate>): MoneyWorks
   
   // Validate rates
   if (taxRate.Rate1 !== undefined) {
-    const rate1Validation = validateTaxRate(taxRate.Rate1, 'Rate1');
+    const rate1Validation = validateTaxRateValue(taxRate.Rate1, 'Rate1');
     warnings.push(...rate1Validation.warnings);
   }
   
   if (taxRate.Rate2 !== undefined) {
-    const rate2Validation = validateTaxRate(taxRate.Rate2, 'Rate2');
+    const rate2Validation = validateTaxRateValue(taxRate.Rate2, 'Rate2');
     warnings.push(...rate2Validation.warnings);
   }
   
   if (taxRate.CombineRate1 !== undefined) {
-    const combineRate1Validation = validateTaxRate(taxRate.CombineRate1, 'CombineRate1');
+    const combineRate1Validation = validateTaxRateValue(taxRate.CombineRate1, 'CombineRate1');
     warnings.push(...combineRate1Validation.warnings);
   }
   
   if (taxRate.CombineRate2 !== undefined) {
-    const combineRate2Validation = validateTaxRate(taxRate.CombineRate2, 'CombineRate2');
+    const combineRate2Validation = validateTaxRateValue(taxRate.CombineRate2, 'CombineRate2');
     warnings.push(...combineRate2Validation.warnings);
   }
   

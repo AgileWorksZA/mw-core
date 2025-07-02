@@ -5,7 +5,7 @@
  * @ai-instruction Export configuration types
  */
 
-import type {MoneyWorksConfig} from '@moneyworks/data/config/types';
+import type {MoneyWorksConfig} from '../config/types';
 
 /**
  * Load MoneyWorks configuration from file
@@ -47,4 +47,4 @@ export type {
   MoneyWorksResponse, 
   MoneyWorksQueryParams,
   MoneyWorksError
-} from '@moneyworks/data/config/types';
+} from '../config/types';

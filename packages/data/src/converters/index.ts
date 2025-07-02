@@ -11,6 +11,6 @@ export {
   addHeaders,
   enrichWithSchema,
   convertExportFormat
-} from '@moneyworks/data/converters/export-format-converter';
+} from '../converters/export-format-converter';
 
-export type { SchemaEnrichedExport } from '@moneyworks/data/client/types';
+export type { SchemaEnrichedExport } from '../client/types';

@@ -17,6 +17,7 @@ const resources = {
         error: "Error",
         success: "Success",
         noData: "No data available",
+        actions: "Actions",
       },
       nav: {
         dashboard: "Dashboard",
@@ -36,6 +37,7 @@ const resources = {
         editTaxRate: "Edit Tax Rate",
         deleteTaxRate: "Delete Tax Rate",
         deleteConfirm: "Are you sure you want to delete this tax rate?",
+        noTaxRates: "No tax rates found",
       },
       tools: {
         evaluator: "MWScript Evaluator",

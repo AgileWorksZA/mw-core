@@ -6,8 +6,8 @@
  * @ai-critical Maintain field order and data integrity during conversions
  */
 
-import type { FieldInfo, TableStructure } from '@moneyworks/data/parsers/field-discovery';
-import type { SchemaEnrichedExport } from '@moneyworks/data/client/types';
+import type { FieldInfo, TableStructure } from '../parsers/field-discovery';
+import type { SchemaEnrichedExport } from '../client/types';
 
 /**
  * Convert array data to object format using field information

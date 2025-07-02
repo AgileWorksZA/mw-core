@@ -6,8 +6,8 @@
  * @ai-critical MoneyWorks defaults to TSV format, supports XML and custom formats
  */
 
-import type { MoneyWorksConfig, MoneyWorksResponse, MoneyWorksQueryParams, MoneyWorksError } from '@moneyworks/data/config/types';
-import type { ImportOptions, ImportResult, ExportFormat } from '@moneyworks/data/client/types';
+import type { MoneyWorksConfig, MoneyWorksResponse, MoneyWorksQueryParams, MoneyWorksError } from '../config/types';
+import type { ImportOptions, ImportResult, ExportFormat } from '../client/types';
 
 export interface ExportOptions extends MoneyWorksQueryParams {
   format?: ExportFormat;

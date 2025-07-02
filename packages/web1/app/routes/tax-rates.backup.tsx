@@ -1,5 +1,5 @@
-import { type LoaderFunctionArgs, json } from "react-router";
-import { useLoaderData, Link, useSearchParams } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
+import { useLoaderData, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
@@ -31,7 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { Skeleton } from "~/components/ui/skeleton";
 import { api, type TaxRate } from "~/lib/api";
 import {
   Plus,
@@ -60,25 +59,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
       offset: (page - 1) * pageSize,
     });
     
-    return json({
+    return {
       taxRates: response.data,
       meta: response.metadata || { total: 0, page, pageSize },
       error: null,
-    });
+    };
   } catch (error) {
-    return json({
+    return {
       taxRates: [],
       meta: { total: 0, page: 1, pageSize: 20 },
       error: error instanceof Error ? error.message : "Failed to load tax rates",
-    });
+    };
   }
 }
 
 export default function TaxRates() {
-  const { taxRates, meta, error } = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>();
+  const { taxRates = [], meta, error } = data || {};
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");

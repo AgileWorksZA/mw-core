@@ -4,5 +4,5 @@
  * @moneyworks-dsl PURE
  */
 
-export * from '@moneyworks/data/parsers/date-parser';
-export * from '@moneyworks/data/parsers/number-parser';
+export * from '../parsers/date-parser';
+export * from '../parsers/number-parser';

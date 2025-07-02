@@ -1,10 +1,10 @@
 /**
  * MoneyWorks MCP Tools
- * 
+ *
  * @moneyworks-dsl PURE
  */
 
-export { exportTool } from './export.tool.js';
-export { evalTool } from './eval.tool.js';
-export { schemaTool } from './schema.tool.js';
-export { listTablesTool } from './list-tables.tool.js';
+export { exportTool } from "./export.tool.ts";
+export { evalTool } from "./eval.tool.ts";
+export { schemaTool } from "./schema.tool.ts";
+export { listTablesTool } from "./list-tables.tool.ts";

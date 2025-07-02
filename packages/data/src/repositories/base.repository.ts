@@ -6,8 +6,8 @@
  * @ai-critical Use MoneyWorks terminology in all methods
  */
 
-import type { SmartMoneyWorksClient } from '@moneyworks/data/client/moneyworks-smart-client';
-import type { MoneyWorksQueryParams, MoneyWorksResponse } from '@moneyworks/data/config/types';
+import type { SmartMoneyWorksClient } from '../client/moneyworks-smart-client';
+import type { MoneyWorksQueryParams, MoneyWorksResponse } from '../config/types';
 
 /**
  * Base repository interface for MoneyWorks entities

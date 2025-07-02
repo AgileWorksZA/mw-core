@@ -10,5 +10,5 @@
 
 // This file is intentionally left minimal to avoid circular dependencies.
 // Import repositories directly from their files:
-// import { BaseMoneyWorksRepository } from '@moneyworks/data/repositories/base.repository';
-// import { TaxRateRepository } from '@moneyworks/data/repositories/tax-rate.repository';
+// import { BaseMoneyWorksRepository } from '../repositories/base.repository';
+// import { TaxRateRepository } from '../repositories/tax-rate.repository';

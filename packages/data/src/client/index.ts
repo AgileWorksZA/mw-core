@@ -10,6 +10,6 @@
 
 // This file is intentionally left minimal to avoid circular dependencies.
 // Import clients directly from their files:
-// import { MoneyWorksRESTClient } from '@moneyworks/data/client/moneyworks-rest-client';
-// import { SmartMoneyWorksClient } from '@moneyworks/data/client/moneyworks-smart-client';
-// import type { ImportOptions } from '@moneyworks/data/client/types';
+// import { MoneyWorksRESTClient } from '../client/moneyworks-rest-client';
+// import { SmartMoneyWorksClient } from '../client/moneyworks-smart-client';
+// import type { ImportOptions } from '../client/types';

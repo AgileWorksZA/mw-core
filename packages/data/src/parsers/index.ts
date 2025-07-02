@@ -11,5 +11,5 @@
 
 // This file is intentionally left minimal to avoid circular dependencies.
 // Import parsers directly from their files:
-// import { parseMWDate } from '@moneyworks/data/parsers/date-parser';
-// import { parseMWNumber } from '@moneyworks/data/parsers/number-parser';
+// import { parseMWDate } from '../parsers/date-parser';
+// import { parseMWNumber } from '../parsers/number-parser';

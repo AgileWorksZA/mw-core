@@ -6,12 +6,12 @@
  * @ai-critical Use MoneyWorks terminology throughout
  */
 
-import { createSmartClient } from '@moneyworks/data/client/moneyworks-smart-client';
-import { TaxRateRepository } from '@moneyworks/data/repositories/tax-rate.repository';
+import { createSmartClient } from './client/moneyworks-smart-client';
+import { TaxRateRepository } from './repositories/tax-rate.repository';
 
 // Export clients
-export { MoneyWorksRESTClient } from '@moneyworks/data/client/moneyworks-rest-client';
-export { createSmartClient } from '@moneyworks/data/client/moneyworks-smart-client';
+export { MoneyWorksRESTClient } from './client/moneyworks-rest-client';
+export { createSmartClient } from './client/moneyworks-smart-client';
 export type {
   ImportOptions, 
   ImportResult, 
@@ -25,11 +25,11 @@ export type {
 export {
   BaseMoneyWorksRepository,
   createRepository
-} from '@moneyworks/data/repositories/base.repository';
+} from './repositories/base.repository';
 
 export type {
   IMoneyWorksRepository,
-} from '@moneyworks/data/repositories/base.repository';
+} from './repositories/base.repository';
 
 // Export parsers - directly from files to avoid circular deps
 export {
@@ -39,23 +39,23 @@ export {
   buildTSVHeaders,
   type FieldInfo,
   type TableStructure
-} from '@moneyworks/data/parsers/field-discovery';
+} from './parsers/field-discovery';
 
 export {
   parseTSVWithStructure,
   validateTSVStructure
-} from '@moneyworks/data/parsers/smart-tsv-parser';
+} from './parsers/smart-tsv-parser';
 
 export {
   parseMWDate,
   parseMWTimestamp,
   formatMWDate
-} from '@moneyworks/data/parsers/date-parser';
+} from './parsers/date-parser';
 
 export {
   parseMWNumber,
   formatMWNumber
-} from '@moneyworks/data/parsers/number-parser';
+} from './parsers/number-parser';
 
 // Export configuration
 export type {
@@ -63,8 +63,8 @@ export type {
   MoneyWorksResponse,
   MoneyWorksQueryParams,
   MoneyWorksError
-} from '@moneyworks/data/config/types';
-export { loadConfig } from '@moneyworks/data/config';
+} from './config/types';
+export { loadConfig } from './config';
 
 // Export converters
 export {
@@ -73,12 +73,13 @@ export {
   addHeaders,
   enrichWithSchema,
   convertExportFormat
-} from '@moneyworks/data/converters';
-export type { SchemaEnrichedExport } from '@moneyworks/data/client/types';
+} from './converters';
+export type { SchemaEnrichedExport } from './client/types';
 
 // Re-export types from client and repositories for convenience
-export { SmartMoneyWorksClient } from '@moneyworks/data/client/moneyworks-smart-client';
-export { TaxRateRepository } from '@moneyworks/data/repositories/tax-rate.repository';
+export { SmartMoneyWorksClient } from './client/moneyworks-smart-client';
+export type { SmartMoneyWorksClient as SmartMoneyWorksClientType } from './client/moneyworks-smart-client';
+export { TaxRateRepository } from './repositories/tax-rate.repository';
 
 /**
  * Create a configured MoneyWorks client and repositories
