@@ -6,12 +6,14 @@ import {
   ScrollRestoration,
   useRouteError,
   isRouteErrorResponse,
+  useLoaderData,
 } from "react-router";
-import type { LinksFunction } from "react-router";
-// import { ClerkProvider } from "@clerk/clerk-react";
+import type { LinksFunction, LoaderFunctionArgs } from "react-router";
+import { ClerkProvider } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { I18nextProvider } from "react-i18next";
+import { ConnectionProvider } from "./contexts/connection-context";
 
 import i18n from "./lib/i18n";
 import globalStyles from "./styles/globals.css?url";
@@ -19,6 +21,12 @@ import globalStyles from "./styles/globals.css?url";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: globalStyles },
 ];
+
+export async function loader(args: LoaderFunctionArgs) {
+  // For now, just return empty object
+  // We'll handle auth state client-side with Clerk
+  return {};
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,15 +56,42 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return (
+  const isAutomation = import.meta.env.VITE_AUTOMATION === "true";
+  const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+  
+  // In automation mode, we bypass Clerk authentication
+  if (!isAutomation && !clerkPublishableKey) {
+    throw new Error("Missing VITE_CLERK_PUBLISHABLE_KEY");
+  }
+  
+  const appContent = (
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n}>
-        <div className="min-h-screen bg-background">
-          <Outlet />
-        </div>
-        <Toaster position="bottom-right" />
+        <ConnectionProvider>
+          <div className="min-h-screen bg-background">
+            <Outlet />
+          </div>
+          <Toaster position="bottom-right" />
+        </ConnectionProvider>
       </I18nextProvider>
     </QueryClientProvider>
+  );
+  
+  // In automation mode, skip Clerk provider entirely
+  if (isAutomation) {
+    return appContent;
+  }
+  
+  return (
+    <ClerkProvider 
+      publishableKey={clerkPublishableKey!}
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+      signInFallbackRedirectUrl="/dashboard"
+      signUpFallbackRedirectUrl="/onboarding"
+    >
+      {appContent}
+    </ClerkProvider>
   );
 }
 

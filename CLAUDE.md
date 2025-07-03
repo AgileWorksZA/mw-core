@@ -95,6 +95,45 @@
 - Maintain the canonical DSL purity
 - resume: Remembered the importance of maintaining and updating personal resume regularly
 
+## React Router v7 Changes
+
+### Important API Changes
+- **Use `data` instead of `json`** - React Router v7 replaced the `json` helper with a more general `data` function
+  ```typescript
+  // Old (React Router v6)
+  import { json } from "react-router";
+  return json({ message: "Hello" });
+  
+  // New (React Router v7)
+  import { data } from "react-router";
+  return data({ message: "Hello" });
+  ```
+
+### Running with Bun
+- **Use `bun --bun run` for scripts** - Ensures Bun runtime is used instead of Node.js
+- **Dev server command**: `bun --bun run react-router dev`
+- **bun:sqlite imports** - Only work when running with Bun runtime, not Node.js
+
+### Routing Configuration
+- **Explicit route configuration** - React Router v7 uses `app/routes.ts` file for route definitions
+- **No automatic file-based routing** - Routes must be explicitly registered in `routes.ts`
+  ```typescript
+  import { route, index } from "@react-router/dev/routes";
+  
+  export default [
+    index("routes/_index.tsx"),
+    route("sign-in", "routes/sign-in.tsx"),
+    // ... other routes
+  ];
+  ```
+
+### Tailwind CSS with Bun
+- **Remove `require()` calls** - Use ES modules syntax in tailwind.config.js
+- **Empty plugins array** - If using `require("tailwindcss-animate")`, remove it to avoid ESM issues
+
+### Chrome DevTools
+- **Add `.well-known/appspecific/com.chrome.devtools.json`** to public folder to prevent 404 errors
+
 
 # Appendix
 

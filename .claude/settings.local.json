@@ -238,7 +238,13 @@
       "WebFetch(domain:clerk.com)",
       "mcp__mcp_Docs__search_typescript_sdk_docs",
       "mcp__mcp_Docs__search_typescript_sdk_code",
-      "mcp__mcp_Docs__fetch_generic_url_content"
+      "mcp__mcp_Docs__fetch_generic_url_content",
+      "mcp__filesystem__move_file",
+      "WebFetch(domain:reactrouter.com)",
+      "mcp__desktop-commander__list_directory",
+      "mcp__filesystem__list_allowed_directories",
+      "Bash(/opt/homebrew/bin/bun install)",
+      "mcp__desktop-commander__list_sessions"
     ],
     "deny": []
   }

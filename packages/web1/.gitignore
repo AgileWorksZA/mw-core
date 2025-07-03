@@ -16,6 +16,12 @@
 /build
 /dist
 
+# database
+/data
+*.db
+*.db-wal
+*.db-shm
+
 # MoneyWorks configuration
 packages/api/mw-config.json
 
@@ -688,3 +694,16 @@ package-lock.json
 /packages/data/node_modules/bun-types/sqlite.d.ts
 /packages/data/node_modules/bun-types/test.d.ts
 /packages/data/node_modules/bun-types/wasm.d.ts
+/.react-router/types/app/routes/+types/api.connections.ts
+/.react-router/types/app/routes/+types/api.debug.connections.ts
+/.react-router/types/app/routes/+types/api.moneyworks.ts
+/.react-router/types/app/routes/+types/api.moneyworks-test.ts
+/.react-router/types/app/routes/+types/dashboard.ts
+/.react-router/types/app/routes/+types/onboarding.ts
+/.react-router/types/app/routes/+types/sign-in.ts
+/.react-router/types/app/routes/+types/sign-up.ts
+/.react-router/types/app/routes/+types/test-auth.ts
+/.react-router/types/app/routes/+types/test-create-connection.ts
+/.react-router/types/app/routes/+types/test-routes.ts
+/.react-router/types/app/routes/connections/+types/index.ts
+/.react-router/types/app/routes/connections/+types/new.ts

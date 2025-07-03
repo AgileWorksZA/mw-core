@@ -3,7 +3,10 @@
   "files": [],
   "references": [
     { "path": "./packages/utilities/tsconfig.json" },
-    { "path": "./packages/core/tsconfig.json" },
-    { "path": "./packages/semantic/tsconfig.json" }
+    { "path": "./packages/canonical/tsconfig.json" },
+    { "path": "./packages/data/tsconfig.json" },
+    { "path": "./packages/api/tsconfig.json" },
+    { "path": "./packages/cli/tsconfig.json" },
+    { "path": "./packages/web1/tsconfig.json" }
   ]
 }

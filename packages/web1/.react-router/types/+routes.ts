@@ -13,6 +13,24 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/sign-in": {
+    params: {};
+  };
+  "/sign-up": {
+    params: {};
+  };
+  "/dashboard": {
+    params: {};
+  };
+  "/onboarding": {
+    params: {};
+  };
+  "/connections": {
+    params: {};
+  };
+  "/connections/new": {
+    params: {};
+  };
   "/tax-rates": {
     params: {};
   };
@@ -30,16 +48,61 @@ type Pages = {
   "/settings": {
     params: {};
   };
+  "/test-routes": {
+    params: {};
+  };
+  "/test-auth": {
+    params: {};
+  };
+  "/test-create-connection": {
+    params: {};
+  };
+  "/api/connections": {
+    params: {};
+  };
+  "/api/debug/connections": {
+    params: {};
+  };
+  "/api/moneyworks": {
+    params: {};
+  };
+  "/api/moneyworks-test": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/tax-rates" | "/tax-rates/:code" | "/company" | "/tools/evaluate" | "/settings";
+    page: "/" | "/sign-in" | "/sign-up" | "/dashboard" | "/onboarding" | "/connections" | "/connections/new" | "/tax-rates" | "/tax-rates/:code" | "/company" | "/tools/evaluate" | "/settings" | "/test-routes" | "/test-auth" | "/test-create-connection" | "/api/connections" | "/api/debug/connections" | "/api/moneyworks" | "/api/moneyworks-test";
   };
   "routes/_index.tsx": {
     id: "routes/_index";
     page: "/";
+  };
+  "routes/sign-in.tsx": {
+    id: "routes/sign-in";
+    page: "/sign-in";
+  };
+  "routes/sign-up.tsx": {
+    id: "routes/sign-up";
+    page: "/sign-up";
+  };
+  "routes/dashboard.tsx": {
+    id: "routes/dashboard";
+    page: "/dashboard";
+  };
+  "routes/onboarding.tsx": {
+    id: "routes/onboarding";
+    page: "/onboarding";
+  };
+  "routes/connections/index.tsx": {
+    id: "routes/connections/index";
+    page: "/connections";
+  };
+  "routes/connections/new.tsx": {
+    id: "routes/connections/new";
+    page: "/connections/new";
   };
   "routes/tax-rates.tsx": {
     id: "routes/tax-rates";
@@ -60,5 +123,33 @@ type RouteFiles = {
   "routes/settings.tsx": {
     id: "routes/settings";
     page: "/settings";
+  };
+  "routes/test-routes.tsx": {
+    id: "routes/test-routes";
+    page: "/test-routes";
+  };
+  "routes/test-auth.tsx": {
+    id: "routes/test-auth";
+    page: "/test-auth";
+  };
+  "routes/test-create-connection.tsx": {
+    id: "routes/test-create-connection";
+    page: "/test-create-connection";
+  };
+  "routes/api.connections.tsx": {
+    id: "routes/api.connections";
+    page: "/api/connections";
+  };
+  "routes/api.debug.connections.tsx": {
+    id: "routes/api.debug.connections";
+    page: "/api/debug/connections";
+  };
+  "routes/api.moneyworks.tsx": {
+    id: "routes/api.moneyworks";
+    page: "/api/moneyworks";
+  };
+  "routes/api.moneyworks-test.tsx": {
+    id: "routes/api.moneyworks-test";
+    page: "/api/moneyworks-test";
   };
 };

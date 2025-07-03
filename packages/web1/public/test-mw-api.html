@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MoneyWorks API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .error {
+            background: #fee;
+            border-color: #fcc;
+        }
+        .success {
+            background: #efe;
+            border-color: #cfc;
+        }
+    </style>
+</head>
+<body>
+    <h1>MoneyWorks API Test</h1>
+    
+    <div>
+        <h2>Test Direct MoneyWorks Connection</h2>
+        <button onclick="testDirectMW()">Test Direct MW API</button>
+    </div>
+    
+    <div>
+        <h2>Test API Proxy</h2>
+        <button onclick="testAPIProxy()">Test API Proxy</button>
+    </div>
+    
+    <div id="result" class="result"></div>
+    
+    <script>
+        function showResult(text, isError = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = text;
+            resultDiv.className = 'result ' + (isError ? 'error' : 'success');
+        }
+        
+        async function testDirectMW() {
+            try {
+                showResult('Testing direct MoneyWorks connection...');
+                
+                // Test direct connection to MoneyWorks
+                const url = 'http://localhost:6710/REST/Admin:@acme.moneyworks/export?table=TaxRate&limit=2&format=xml-verbose';
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': 'Basic ' + btoa('Admin:')
+                    }
+                });
+                
+                const text = await response.text();
+                
+                if (response.ok) {
+                    showResult(`Success! Status: ${response.status}\n\nResponse (first 500 chars):\n${text.substring(0, 500)}...`);
+                } else {
+                    showResult(`Error: Status ${response.status}\n\n${text}`, true);
+                }
+            } catch (error) {
+                console.error('Test error:', error);
+                showResult(`Exception: ${error.message}\n\nStack: ${error.stack}`, true);
+            }
+        }
+        
+        async function testAPIProxy() {
+            try {
+                showResult('Testing API proxy...');
+                
+                // Create form data for the proxy
+                const formData = new FormData();
+                formData.append('userId', 'test_user_123');
+                formData.append('connectionId', 'test_connection_123');
+                formData.append('operation', 'export');
+                formData.append('table', 'TaxRate');
+                formData.append('options', JSON.stringify({ format: 'json', limit: 2 }));
+                
+                const response = await fetch('/api/moneyworks-test', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResult(`Success! Status: ${response.status}\n\nResponse:\n${JSON.stringify(result, null, 2)}`);
+                } else {
+                    showResult(`Error: Status ${response.status}\n\n${JSON.stringify(result, null, 2)}`, true);
+                }
+            } catch (error) {
+                console.error('Test error:', error);
+                showResult(`Exception: ${error.message}\n\nStack: ${error.stack}`, true);
+            }
+        }
+    </script>
+</body>
+</html>

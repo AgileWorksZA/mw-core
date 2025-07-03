@@ -1,9 +1,12 @@
-import { Link, useLoaderData } from "react-router";
+import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import { Navigation } from "~/components/navigation";
 import { Button } from "~/components/ui/button";
-import { api } from "~/lib/api";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
+import { useMoneyWorksApi } from "~/lib/moneyworks-api";
+import { AuthGuard } from "~/components/auth-guard";
+import { Alert, AlertDescription } from "~/components/ui/alert";
 import {
   Table,
   TableBody,
@@ -13,24 +16,55 @@ import {
   TableRow,
 } from "~/components/ui/table";
 
-export async function loader() {
-  try {
-    const response = await api.getTaxRates({ format: "full" });
-    return {
-      taxRates: response.data || [],
-      error: null,
-    };
-  } catch (error) {
-    return {
-      taxRates: [],
-      error: error instanceof Error ? error.message : "Failed to fetch tax rates",
-    };
-  }
+interface TaxRate {
+  TaxCode: string;
+  Ratename: string;
+  Rate1: number;
+  Rate2?: number;
+  Type?: number;
+  RecAccount?: string;
+  PaidAccount?: string;
+  [key: string]: any;
 }
 
 export default function TaxRates() {
-  const { taxRates, error } = useLoaderData<typeof loader>();
+  return (
+    <AuthGuard requireConnection={true}>
+      <TaxRatesContent />
+    </AuthGuard>
+  );
+}
+
+function TaxRatesContent() {
   const { t } = useTranslation();
+  const api = useMoneyWorksApi();
+  const [taxRates, setTaxRates] = useState<TaxRate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTaxRates = async () => {
+      if (!api) {
+        setError("No connection selected");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await api.export("TaxRate", { format: "json" });
+        console.log("[TaxRates] API Response:", response);
+        setTaxRates(response || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch tax rates");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTaxRates();
+  }, [api]);
 
   return (
     <>
@@ -53,13 +87,19 @@ export default function TaxRates() {
           </Button>
         </div>
 
-        {error && (
-          <div className="rounded-lg border border-destructive bg-destructive/10 p-4">
-            <p className="text-sm text-destructive">{error}</p>
+        {isLoading && (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
         )}
 
-        {!error && taxRates.length === 0 && (
+        {error && !isLoading && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {!error && !isLoading && taxRates.length === 0 && (
           <div className="rounded-lg border bg-muted/50 p-8 text-center">
             <p className="text-muted-foreground">
               {t("taxRates.noTaxRates")}
@@ -67,7 +107,7 @@ export default function TaxRates() {
           </div>
         )}
 
-        {!error && taxRates.length > 0 && (
+        {!error && !isLoading && taxRates.length > 0 && (
           <div className="rounded-lg border">
             <Table>
               <TableHeader>

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import { useTranslation } from "react-i18next";
-// import { UserButton } from "@clerk/clerk-react";
+import { UserButton } from "@clerk/clerk-react";
 import {
   Home,
   Receipt,
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
+import { ConnectionSwitcher } from "~/components/connection-switcher";
 import { useState, useEffect } from "react";
 
 export function Navigation() {
@@ -37,7 +38,7 @@ export function Navigation() {
   };
 
   const navItems = [
-    { to: "/", label: t("nav.dashboard"), icon: Home },
+    { to: "/dashboard", label: t("nav.dashboard"), icon: Home },
     { to: "/tax-rates", label: t("nav.taxRates"), icon: Receipt },
     { to: "/company", label: t("nav.company"), icon: Building2 },
     { to: "/tools/evaluate", label: t("nav.tools"), icon: Wrench },
@@ -70,6 +71,7 @@ export function Navigation() {
           ))}
         </div>
         <div className="flex items-center gap-4">
+          <ConnectionSwitcher />
           <Button
             variant="ghost"
             size="icon"
@@ -82,7 +84,9 @@ export function Navigation() {
               <Moon className="h-4 w-4" />
             )}
           </Button>
-          {/* <UserButton /> */}
+          {import.meta.env.VITE_AUTOMATION !== "true" && (
+            <UserButton afterSignOutUrl="/sign-in" />
+          )}
         </div>
       </div>
     </nav>
