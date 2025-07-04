@@ -5,6 +5,7 @@ import {
   Home,
   Receipt,
   Building2,
+  FolderTree,
   Wrench,
   Settings,
   Moon,
@@ -39,6 +40,7 @@ export function Navigation() {
 
   const navItems = [
     { to: "/dashboard", label: t("nav.dashboard"), icon: Home },
+    { to: "/groups", label: "Groups", icon: FolderTree },
     { to: "/tax-rates", label: t("nav.taxRates"), icon: Receipt },
     { to: "/company", label: t("nav.company"), icon: Building2 },
     { to: "/tools/evaluate", label: t("nav.tools"), icon: Wrench },

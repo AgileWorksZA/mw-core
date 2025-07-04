@@ -34,6 +34,7 @@ export class ConnectionService {
   }
   
   async getConnectionsByUser(userId: string): Promise<MWConnection[]> {
+    console.log("[ConnectionService] getConnectionsByUser for:", userId);
     const db = await this.getDb();
     const stmt = db.prepare(`
       SELECT * FROM mw_connections 
@@ -42,6 +43,12 @@ export class ConnectionService {
     `);
     
     const connections = stmt.all(userId) as MWConnection[];
+    console.log("[ConnectionService] Raw connections found:", connections.length);
+    
+    if (connections.length === 0) {
+      return [];
+    }
+    
     const crypto = createCryptoService(userId);
     
     // Decrypt sensitive fields

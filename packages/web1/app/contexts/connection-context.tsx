@@ -22,6 +22,7 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
   
   const refreshConnections = async () => {
     if (!userId || !isSignedIn) {
+      console.log("[ConnectionContext] No userId or not signed in, clearing connections");
       setConnections([]);
       setCurrentConnection(null);
       setIsLoading(false);
@@ -29,6 +30,7 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
     }
     
     try {
+      console.log("[ConnectionContext] Loading connections for user:", userId);
       setIsLoading(true);
       setError(null);
       
@@ -39,6 +41,7 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
       
       const data = await response.json();
       const userConnections = data.connections;
+      console.log("[ConnectionContext] Loaded connections:", userConnections.length);
       setConnections(userConnections);
       
       // Set current connection from session storage or use default

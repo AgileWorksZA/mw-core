@@ -244,7 +244,8 @@
       "mcp__desktop-commander__list_directory",
       "mcp__filesystem__list_allowed_directories",
       "Bash(/opt/homebrew/bin/bun install)",
-      "mcp__desktop-commander__list_sessions"
+      "mcp__desktop-commander__list_sessions",
+      "Bash(kill:*)"
     ],
     "deny": []
   }

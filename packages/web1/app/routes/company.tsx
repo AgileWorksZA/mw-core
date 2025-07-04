@@ -431,7 +431,7 @@ function CompanyContent() {
               <InfoRow
                 icon={Clock}
                 label="Current Period"
-                value={formatPeriodInfo()}
+                value={formatPeriodInfo() || undefined}
               />
               <InfoRow
                 icon={Calendar}

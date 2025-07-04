@@ -10,15 +10,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const userId = url.searchParams.get("userId");
   
+  console.log("[API Connections Loader] userId:", userId);
+  
   if (!userId) {
+    console.log("[API Connections Loader] No userId provided");
     return json({ connections: [] });
   }
   
   try {
     const connections = await connectionService.getConnectionsByUser(userId);
+    console.log("[API Connections Loader] Found connections:", connections.length);
     return json({ connections });
   } catch (error) {
-    console.error("Failed to load connections:", error);
+    console.error("[API Connections Loader] Failed to load connections:", error);
     return json({ connections: [] });
   }
 }

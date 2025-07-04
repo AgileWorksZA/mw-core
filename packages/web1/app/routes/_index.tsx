@@ -1,10 +1,18 @@
 import { useAuth } from "~/hooks/use-auth";
 import { Navigate } from "react-router";
+import { useEffect, useState } from "react";
 
 export default function Index() {
   const { isLoaded, isSignedIn } = useAuth();
+  const [shouldNavigate, setShouldNavigate] = useState(false);
   
-  if (!isLoaded) {
+  useEffect(() => {
+    if (isLoaded) {
+      setShouldNavigate(true);
+    }
+  }, [isLoaded]);
+  
+  if (!isLoaded || !shouldNavigate) {
     return null;
   }
   

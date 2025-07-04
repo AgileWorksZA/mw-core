@@ -31,6 +31,18 @@ export function AuthGuard({ children, requireConnection = false }: AuthGuardProp
     return <Navigate to="/sign-in" state={{ from: location }} replace />;
   }
   
+  // Show loading state while connections are loading
+  if (requireConnection && isLoadingConnections) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="space-y-4">
+          <Skeleton className="h-12 w-64" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+      </div>
+    );
+  }
+  
   // Check for connections if required
   if (requireConnection && !isLoadingConnections) {
     // Don't redirect from onboarding or connections pages

@@ -94,6 +94,7 @@
 - Check imports are using full package paths
 - Maintain the canonical DSL purity
 - resume: Remembered the importance of maintaining and updating personal resume regularly
+- Enterprise auth strategy documented in ENTERPRISE-AUTH-STRATEGY.md - currently using Clerk, will add WorkOS when first enterprise client signs
 
 ## React Router v7 Changes
 

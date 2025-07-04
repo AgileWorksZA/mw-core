@@ -12,6 +12,7 @@ export default [
   route("tax-rates", "routes/tax-rates.tsx"),
   route("tax-rates/:code", "routes/tax-rates.$code.tsx"),
   route("company", "routes/company.tsx"),
+  route("groups", "routes/groups.tsx"),
   route("tools/evaluate", "routes/tools.evaluate.tsx"),
   route("settings", "routes/settings.tsx"),
   route("test-routes", "routes/test-routes.tsx"),
@@ -19,6 +20,8 @@ export default [
   route("test-create-connection", "routes/test-create-connection.tsx"),
   route("api/connections", "routes/api.connections.tsx"),
   route("api/debug/connections", "routes/api.debug.connections.tsx"),
+  route("api/groups", "routes/api.groups.tsx"),
+  route("api/groups/members", "routes/api.groups.members.tsx"),
   route("api/moneyworks", "routes/api.moneyworks.tsx"),
   route("api/moneyworks-test", "routes/api.moneyworks-test.tsx"),
 ] satisfies RouteConfig;
