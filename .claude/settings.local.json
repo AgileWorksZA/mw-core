@@ -245,7 +245,10 @@
       "mcp__filesystem__list_allowed_directories",
       "Bash(/opt/homebrew/bin/bun install)",
       "mcp__desktop-commander__list_sessions",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Bash(../../node_modules/.bin/react-router:*)",
+      "Bash(PORT=5174 bun dev:*)",
+      "Bash(VITE_HOST=true bun dev)"
     ],
     "deny": []
   }
