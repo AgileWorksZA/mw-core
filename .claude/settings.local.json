@@ -248,7 +248,10 @@
       "Bash(kill:*)",
       "Bash(../../node_modules/.bin/react-router:*)",
       "Bash(PORT=5174 bun dev:*)",
-      "Bash(VITE_HOST=true bun dev)"
+      "Bash(VITE_HOST=true bun dev)",
+      "mcp__react-router_Docs__fetch_react_router_documentation",
+      "mcp__ui_Docs__fetch_ui_documentation",
+      "WebFetch(domain:shiki.style)"
     ],
     "deny": []
   }
