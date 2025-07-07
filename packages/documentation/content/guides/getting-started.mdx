@@ -1,0 +1,99 @@
+---
+title: "Getting Started with MoneyWorks Core"
+description: "Learn how to set up and use MoneyWorks Core in your projects"
+order: 1
+---
+
+# Getting Started with MoneyWorks Core
+
+MoneyWorks Core is a TypeScript-first SDK for interacting with MoneyWorks accounting software. This guide will help you get started quickly.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- [Bun](https://bun.sh) installed (v1.0 or later)
+- MoneyWorks Data Centre running and accessible
+- Basic knowledge of TypeScript
+
+## Installation
+
+Install the core packages you'll need:
+
+```bash
+bun add @moneyworks/data @moneyworks/utilities
+```
+
+## Setting Up Your Connection
+
+First, create a configuration file for your MoneyWorks connection:
+
+```typescript
+// mw-config.json
+{
+  "connections": [
+    {
+      "name": "production",
+      "host": "http://localhost:6700",
+      "port": 6700,
+      "username": "your-username",
+      "password": "your-password"
+    }
+  ]
+}
+```
+
+## Your First Query
+
+Here's a simple example to fetch tax rates:
+
+<CodeExample>
+```typescript
+import { MoneyWorksClient } from '@moneyworks/data';
+import { TaxRateRepository } from '@moneyworks/data/repositories';
+
+// Initialize the client
+const client = new MoneyWorksClient({
+  host: 'http://localhost:6700',
+  username: 'your-username',
+  password: 'your-password'
+});
+
+// Create a repository instance
+const taxRates = new TaxRateRepository(client);
+
+// Fetch all tax rates
+const allRates = await taxRates.findAll();
+console.log(allRates);
+
+// Find a specific tax rate
+const gstRate = await taxRates.findByKey('GST');
+console.log(gstRate);
+```
+</CodeExample>
+
+## Working with Branded Types
+
+MoneyWorks Core uses branded types to ensure type safety:
+
+```typescript
+import { YYYYMMDD, validateYYYYMMDD } from '@moneyworks/utilities';
+
+// Validate date strings
+const dateString = "20240703";
+if (validateYYYYMMDD(dateString)) {
+  // dateString is now typed as YYYYMMDD
+  processDate(dateString);
+}
+
+// Type-safe date operations
+function processDate(date: YYYYMMDD) {
+  // Only valid YYYYMMDD strings can be passed here
+}
+```
+
+## Next Steps
+
+- Learn about [Working with Groups](/guides/working-with-groups)
+- Explore the [API Reference](/api)
+- Check out [Advanced Patterns](/guides/advanced-patterns)
