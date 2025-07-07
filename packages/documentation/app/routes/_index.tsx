@@ -1,6 +1,6 @@
 import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
-import { Search, BookOpen, Package, Code2, ArrowRight, Terminal } from "lucide-react";
+import { Search, BookOpen, Package, Code2, ArrowRight, Terminal, Server } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -34,6 +34,12 @@ export default function Index() {
       description: "Command-line interface for testing and interacting with MoneyWorks",
       href: "/packages/cli",
       icon: <Terminal className="h-5 w-5" />,
+    },
+    {
+      name: "@moneyworks/api",
+      description: "REST API server for MoneyWorks built with ElysiaJS",
+      href: "/packages/api",
+      icon: <Server className="h-5 w-5" />,
     },
     {
       name: "@moneyworks/web1",

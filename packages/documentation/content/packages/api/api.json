@@ -1,0 +1,373 @@
+{
+  "name": "@moneyworks/api",
+  "version": "0.1.0",
+  "description": "REST API server for MoneyWorks built with ElysiaJS and Bun",
+  "overview": "This package provides a modern REST API server for MoneyWorks accounting software. Built with ElysiaJS for performance and type safety, it offers multiple export formats, caching, MWScript evaluation, and comprehensive Swagger documentation.",
+  "exports": [
+    {
+      "name": "Application Factory",
+      "description": "Main functions for creating and configuring the API server",
+      "category": "Core",
+      "items": [
+        {
+          "name": "createApp",
+          "type": "function",
+          "signature": "(config?: AppConfig): Promise<Elysia>",
+          "description": "Creates and configures an Elysia application instance with all routes and middleware. Returns a configured app ready to listen.",
+          "example": "import { createApp } from '@moneyworks/api';\n\nconst app = await createApp({\n  moneyworks: {\n    host: 'localhost',\n    port: 6710,\n    username: 'Admin',\n    password: 'password',\n    dataFile: 'Acme Widgets'\n  },\n  server: {\n    port: 3000,\n    cors: {\n      origin: '*'\n    }\n  }\n});\n\napp.listen(3000, () => {\n  console.log('API running on http://localhost:3000');\n});",
+          "since": "0.1.0"
+        },
+        {
+          "name": "startServer",
+          "type": "function",
+          "signature": "(): Promise<void>",
+          "description": "Starts the API server with configuration from environment variables. This is the main entry point used by the package.",
+          "example": "// In package.json scripts\n\"start\": \"bun run src/index.ts\"\n\n// Or programmatically\nimport { startServer } from '@moneyworks/api';\nawait startServer();",
+          "since": "0.1.0"
+        }
+      ]
+    },
+    {
+      "name": "Routes",
+      "description": "API route handlers and endpoint definitions",
+      "category": "Routes",
+      "items": [
+        {
+          "name": "tableRoutes",
+          "type": "plugin",
+          "signature": "(app: Elysia) => Elysia",
+          "description": "Registers all table-related endpoints including list, export, schema, and labels. Handles multiple export formats and query parameters.",
+          "example": "// Endpoints registered:\n// GET  /tables\n// GET  /tables/:table\n// GET  /tables/:table/schema\n// GET  /tables/:table/labels\n\n// Usage:\napp.use(tableRoutes);\n\n// Client usage:\nfetch('/api/v1/tables/TaxRate?format=compact&limit=10')",
+          "since": "0.1.0"
+        },
+        {
+          "name": "evalRoutes",
+          "type": "plugin",
+          "signature": "(app: Elysia) => Elysia",
+          "description": "Registers MWScript evaluation endpoints for executing expressions and templates.",
+          "example": "// Endpoints registered:\n// POST /eval\n// POST /eval/template/:table\n\n// Evaluate expression\nfetch('/api/v1/eval', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({\n    expression: 'Count(TaxRate)'\n  })\n});",
+          "since": "0.1.0"
+        },
+        {
+          "name": "companyRoutes",
+          "type": "plugin",
+          "signature": "(app: Elysia) => Elysia",
+          "description": "Registers company information endpoints.",
+          "example": "// Endpoints registered:\n// GET /company\n// GET /company/fields\n\nfetch('/api/v1/company')\n  .then(res => res.json())\n  .then(company => console.log(company.name));",
+          "since": "0.1.0"
+        },
+        {
+          "name": "i18nRoutes",
+          "type": "plugin",
+          "signature": "(app: Elysia) => Elysia",
+          "description": "Registers internationalization endpoints for languages and translations.",
+          "example": "// Endpoints registered:\n// GET /i18n/languages\n// GET /i18n/translations/:lang\n// GET /i18n/labels/:lang\n\n// Get field labels in French\nfetch('/api/v1/i18n/labels/fr-FR')",
+          "since": "0.1.0"
+        }
+      ]
+    },
+    {
+      "name": "Controllers",
+      "description": "Business logic controllers for handling API operations",
+      "category": "Controllers",
+      "items": [
+        {
+          "name": "BaseTableController",
+          "type": "abstract class",
+          "signature": "abstract class BaseTableController<T>",
+          "description": "Abstract base controller providing common functionality for all table controllers. Handles export formats, pagination, and schema operations.",
+          "example": "import { BaseTableController } from '@moneyworks/api/controllers';\n\nexport class AccountController extends BaseTableController<MoneyWorksAccount> {\n  getTableName(): string {\n    return 'Account';\n  }\n  \n  async validateRecord(record: any): Promise<void> {\n    if (!record.AccountCode) {\n      throw new Error('Account code is required');\n    }\n  }\n  \n  async transformRecord(record: any): Promise<MoneyWorksAccount> {\n    return {\n      ...record,\n      AccountCode: record.AccountCode as AccountCode\n    };\n  }\n}",
+          "since": "0.1.0"
+        },
+        {
+          "name": "TaxRateController",
+          "type": "class",
+          "signature": "class TaxRateController extends BaseTableController<MoneyWorksTaxRate>",
+          "description": "Controller for TaxRate table operations. Fully implemented and tested controller serving as reference implementation.",
+          "example": "import { TaxRateController } from '@moneyworks/api/controllers';\n\nconst controller = new TaxRateController(client);\n\n// Export with options\nconst data = await controller.export({\n  format: 'full',\n  filter: 'Rate1 > 10',\n  limit: 50\n});\n\n// Get schema\nconst schema = await controller.getSchema();",
+          "since": "0.1.0"
+        }
+      ]
+    },
+    {
+      "name": "Middleware",
+      "description": "Middleware components for request processing",
+      "category": "Middleware",
+      "items": [
+        {
+          "name": "requestIdMiddleware",
+          "type": "plugin",
+          "signature": "(app: Elysia) => Elysia",
+          "description": "Adds unique request IDs to all requests for tracking and debugging. IDs are included in responses and error messages.",
+          "example": "app.use(requestIdMiddleware);\n\n// Request gets X-Request-ID header\n// Response includes same ID\n// Errors include requestId field",
+          "since": "0.1.0"
+        },
+        {
+          "name": "errorHandler",
+          "type": "plugin",
+          "signature": "(app: Elysia) => Elysia",
+          "description": "Global error handler providing consistent error responses with proper status codes and error details.",
+          "example": "app.use(errorHandler);\n\n// Transforms errors to:\n{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"Invalid filter expression\",\n    \"details\": { ... }\n  },\n  \"requestId\": \"req_abc123\",\n  \"timestamp\": \"2025-01-15T10:30:00Z\"\n}",
+          "since": "0.1.0"
+        },
+        {
+          "name": "loggingMiddleware",
+          "type": "plugin",
+          "signature": "(app: Elysia) => Elysia",
+          "description": "Request/response logging middleware with configurable log levels and formats.",
+          "example": "app.use(loggingMiddleware({\n  level: 'info',\n  format: 'json',\n  includeBody: false\n}));\n\n// Logs:\n// {\"level\":\"info\",\"method\":\"GET\",\"path\":\"/api/v1/tables\",\"status\":200,\"duration\":45}",
+          "since": "0.1.0"
+        },
+        {
+          "name": "i18nMiddleware",
+          "type": "plugin",
+          "signature": "(app: Elysia) => Elysia",
+          "description": "Detects user language from Accept-Language header or lang query parameter. Makes language available in request context.",
+          "example": "app.use(i18nMiddleware);\n\n// In route handler:\napp.get('/endpoint', ({ lang }) => {\n  // lang is detected language code\n  return getLocalizedContent(lang);\n});",
+          "since": "0.1.0"
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "description": "Shared services for caching, data access, and utilities",
+      "category": "Services",
+      "items": [
+        {
+          "name": "CacheService",
+          "type": "class",
+          "signature": "class CacheService",
+          "description": "In-memory caching service with TTL support. Used for caching company info, field labels, and MWScript results.",
+          "example": "import { cacheService } from '@moneyworks/api/services';\n\n// Set with TTL\nawait cacheService.set('company:info', companyData, { ttl: 300 });\n\n// Get from cache\nconst cached = await cacheService.get('company:info');\n\n// Delete specific key\nawait cacheService.delete('company:info');\n\n// Clear all\nawait cacheService.clear();\n\n// Check if exists\nconst exists = await cacheService.has('company:info');",
+          "since": "0.1.0"
+        },
+        {
+          "name": "MoneyWorksService",
+          "type": "class",
+          "signature": "class MoneyWorksService",
+          "description": "Service wrapper around SmartMoneyWorksClient providing high-level operations and error handling.",
+          "example": "import { MoneyWorksService } from '@moneyworks/api/services';\n\nconst mwService = new MoneyWorksService(client);\n\n// Get company info with caching\nconst company = await mwService.getCompanyInfo();\n\n// Export with retries\nconst data = await mwService.exportTable('TaxRate', {\n  retries: 3,\n  timeout: 30000\n});",
+          "since": "0.1.0"
+        },
+        {
+          "name": "ValidationService",
+          "type": "class",
+          "signature": "class ValidationService",
+          "description": "Validates requests against schemas and MoneyWorks business rules.",
+          "example": "import { ValidationService } from '@moneyworks/api/services';\n\nconst validator = new ValidationService();\n\n// Validate filter expression\nconst isValid = validator.validateFilter('Status = \"Active\"');\n\n// Validate table name\nif (!validator.isValidTable(tableName)) {\n  throw new Error('Invalid table');\n}\n\n// Validate export format\nvalidator.validateExportFormat(format);",
+          "since": "0.1.0"
+        }
+      ]
+    },
+    {
+      "name": "Types",
+      "description": "TypeScript type definitions and interfaces",
+      "category": "Types",
+      "items": [
+        {
+          "name": "AppConfig",
+          "type": "interface",
+          "signature": "interface AppConfig",
+          "description": "Complete configuration interface for the API application.",
+          "example": "interface AppConfig {\n  moneyworks: {\n    host: string;\n    port: number;\n    username: string;\n    password: string;\n    dataFile: string;\n  };\n  server: {\n    port: number;\n    cors: {\n      origin: string | string[];\n      credentials?: boolean;\n    };\n  };\n  cache?: {\n    ttl: number;\n    maxSize: number;\n  };\n  features?: {\n    swagger: boolean;\n    cache: boolean;\n  };\n}",
+          "since": "0.1.0"
+        },
+        {
+          "name": "TableQueryParams",
+          "type": "interface",
+          "signature": "interface TableQueryParams",
+          "description": "Query parameters for table export endpoints.",
+          "example": "interface TableQueryParams {\n  format?: 'full' | 'compact' | 'compact-headers' | 'schema';\n  filter?: string;\n  search?: string;\n  orderBy?: string;\n  limit?: number;\n  offset?: number;\n  lang?: string;\n}\n\n// Usage in route\nconst params: TableQueryParams = {\n  format: 'compact',\n  filter: 'Status = \"Active\"',\n  limit: 50\n};",
+          "since": "0.1.0"
+        },
+        {
+          "name": "ApiResponse",
+          "type": "type",
+          "signature": "type ApiResponse<T> = SuccessResponse<T> | ErrorResponse",
+          "description": "Standard API response wrapper supporting both success and error cases.",
+          "example": "// Success response\ntype SuccessResponse<T> = {\n  data: T;\n  metadata?: {\n    count: number;\n    page: number;\n    totalPages: number;\n  };\n};\n\n// Error response\ntype ErrorResponse = {\n  error: {\n    code: string;\n    message: string;\n    details?: any;\n  };\n  requestId: string;\n  timestamp: string;\n};",
+          "since": "0.1.0"
+        },
+        {
+          "name": "ExportResult",
+          "type": "interface",
+          "signature": "interface ExportResult<T>",
+          "description": "Result of a table export operation including data and metadata.",
+          "example": "interface ExportResult<T> {\n  data: T[];\n  format: ExportFormat;\n  metadata: {\n    table: string;\n    recordCount: number;\n    executionTime: number;\n    hasMore: boolean;\n  };\n}\n\n// Usage\nconst result: ExportResult<TaxRate> = {\n  data: taxRates,\n  format: 'full',\n  metadata: {\n    table: 'TaxRate',\n    recordCount: 50,\n    executionTime: 123,\n    hasMore: true\n  }\n};",
+          "since": "0.1.0"
+        },
+        {
+          "name": "TableSchema",
+          "type": "interface",
+          "signature": "interface TableSchema",
+          "description": "Schema definition for a MoneyWorks table.",
+          "example": "interface TableSchema {\n  table: string;\n  fields: Record<string, FieldSchema>;\n  primaryKey: string;\n  indexes?: string[];\n}\n\ninterface FieldSchema {\n  type: 'string' | 'number' | 'boolean' | 'date';\n  required: boolean;\n  maxLength?: number;\n  min?: number;\n  max?: number;\n  enum?: string[];\n  description?: string;\n}",
+          "since": "0.1.0"
+        }
+      ]
+    },
+    {
+      "name": "Configuration",
+      "description": "Configuration utilities and constants",
+      "category": "Config",
+      "items": [
+        {
+          "name": "loadConfig",
+          "type": "function",
+          "signature": "(): AppConfig",
+          "description": "Loads configuration from environment variables with defaults.",
+          "example": "import { loadConfig } from '@moneyworks/api/config';\n\nconst config = loadConfig();\n// Uses process.env with defaults:\n// MW_HOST || 'localhost'\n// MW_PORT || 6710\n// API_PORT || 3000\n// etc.",
+          "since": "0.1.0"
+        },
+        {
+          "name": "AVAILABLE_TABLES",
+          "type": "constant",
+          "signature": "const AVAILABLE_TABLES: Record<string, TableConfig>",
+          "description": "Registry of available tables with their controllers and status.",
+          "example": "export const AVAILABLE_TABLES = {\n  TaxRate: {\n    name: 'TaxRate',\n    controller: TaxRateController,\n    status: 'available',\n    description: 'Tax rates and codes'\n  },\n  Account: {\n    name: 'Account',\n    controller: AccountController,\n    status: 'coming-soon',\n    description: 'Chart of accounts'\n  }\n  // ... more tables\n};",
+          "since": "0.1.0"
+        },
+        {
+          "name": "API_VERSION",
+          "type": "constant",
+          "signature": "const API_VERSION = 'v1'",
+          "description": "Current API version used in URL paths.",
+          "example": "// Used in route definitions\napp.group(`/api/${API_VERSION}`, (app) => {\n  // Routes registered under /api/v1\n});",
+          "since": "0.1.0"
+        }
+      ]
+    },
+    {
+      "name": "Utilities",
+      "description": "Helper functions and utilities",
+      "category": "Utils",
+      "items": [
+        {
+          "name": "formatResponse",
+          "type": "function",
+          "signature": "(data: any, format: ExportFormat, contentType: string): any",
+          "description": "Formats response data based on requested format and content type.",
+          "example": "import { formatResponse } from '@moneyworks/api/utils';\n\n// Format as TSV\nconst tsv = formatResponse(data, 'compact', 'text/tab-separated-values');\n\n// Format as JSON with schema\nconst json = formatResponse(data, 'schema', 'application/json');",
+          "since": "0.1.0"
+        },
+        {
+          "name": "parseAcceptLanguage",
+          "type": "function",
+          "signature": "(header: string): string[]",
+          "description": "Parses Accept-Language header to extract language preferences.",
+          "example": "const languages = parseAcceptLanguage('en-US,en;q=0.9,fr;q=0.8');\n// Returns: ['en-US', 'en', 'fr']",
+          "since": "0.1.0"
+        },
+        {
+          "name": "generateRequestId",
+          "type": "function",
+          "signature": "(): string",
+          "description": "Generates unique request ID for tracking.",
+          "example": "const requestId = generateRequestId();\n// Returns: 'req_1a2b3c4d5e6f'",
+          "since": "0.1.0"
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "examples": [
+      {
+        "title": "Basic API Setup",
+        "description": "Complete example of setting up and running the API",
+        "code": "// server.ts\nimport { createApp } from '@moneyworks/api';\n\n// Load config from environment\nconst config = {\n  moneyworks: {\n    host: process.env.MW_HOST || 'localhost',\n    port: parseInt(process.env.MW_PORT || '6710'),\n    username: process.env.MW_USERNAME || 'Admin',\n    password: process.env.MW_PASSWORD!,\n    dataFile: process.env.MW_DATAFILE || 'Acme Widgets'\n  },\n  server: {\n    port: parseInt(process.env.API_PORT || '3000'),\n    cors: {\n      origin: process.env.API_CORS_ORIGIN || '*'\n    }\n  }\n};\n\n// Create and start server\nconst app = await createApp(config);\n\napp.listen(config.server.port, () => {\n  console.log(`API running on http://localhost:${config.server.port}`);\n  console.log(`Swagger UI: http://localhost:${config.server.port}/api/v1/swagger`);\n});"
+      },
+      {
+        "title": "Client Integration",
+        "description": "Using the API from a client application",
+        "code": "// api-client.ts\nclass MoneyWorksApiClient {\n  constructor(private baseUrl: string) {}\n  \n  async getTaxRates(options?: {\n    format?: string;\n    filter?: string;\n    limit?: number;\n  }) {\n    const params = new URLSearchParams();\n    if (options?.format) params.set('format', options.format);\n    if (options?.filter) params.set('filter', options.filter);\n    if (options?.limit) params.set('limit', options.limit.toString());\n    \n    const response = await fetch(\n      `${this.baseUrl}/api/v1/tables/TaxRate?${params}`\n    );\n    \n    if (!response.ok) {\n      const error = await response.json();\n      throw new Error(error.error.message);\n    }\n    \n    return response.json();\n  }\n  \n  async evaluateScript(expression: string) {\n    const response = await fetch(`${this.baseUrl}/api/v1/eval`, {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify({ expression })\n    });\n    \n    return response.json();\n  }\n  \n  async getCompanyInfo() {\n    const response = await fetch(`${this.baseUrl}/api/v1/company`);\n    return response.json();\n  }\n}\n\n// Usage\nconst client = new MoneyWorksApiClient('http://localhost:3000');\n\nconst taxRates = await client.getTaxRates({\n  format: 'full',\n  filter: 'Rate1 > 10',\n  limit: 50\n});\n\nconst count = await client.evaluateScript('Count(TaxRate)');\nconsole.log(`Total tax rates: ${count.result}`);"
+      },
+      {
+        "title": "Custom Table Controller",
+        "description": "Adding support for a new MoneyWorks table",
+        "code": "// controllers/account.controller.ts\nimport { BaseTableController } from './base';\nimport { MoneyWorksAccount } from '@moneyworks/canonical';\nimport { AccountCode, YYYYMMDD } from '@moneyworks/utilities';\n\nexport class AccountController extends BaseTableController<MoneyWorksAccount> {\n  getTableName(): string {\n    return 'Account';\n  }\n  \n  // Custom validation\n  async validateRecord(record: any): Promise<void> {\n    if (!record.AccountCode) {\n      throw new Error('Account code is required');\n    }\n    \n    // Validate account code format\n    const codePattern = /^\\d{1,2}-\\d{4}$/;\n    if (!codePattern.test(record.AccountCode)) {\n      throw new Error('Invalid account code format');\n    }\n  }\n  \n  // Transform to branded types\n  async transformRecord(record: any): Promise<MoneyWorksAccount> {\n    return {\n      ...record,\n      AccountCode: record.AccountCode as AccountCode,\n      DateCreated: record.DateCreated as YYYYMMDD,\n      DateModified: record.DateModified as YYYYMMDD\n    };\n  }\n  \n  // Custom methods\n  async getAccountsByType(type: string): Promise<MoneyWorksAccount[]> {\n    return this.export({\n      filter: `Type = '${type}'`,\n      format: 'full'\n    });\n  }\n  \n  async getBalanceSheet(): Promise<MoneyWorksAccount[]> {\n    return this.export({\n      filter: 'Type IN (\"Asset\", \"Liability\", \"Equity\")',\n      orderBy: 'Type, AccountCode',\n      format: 'full'\n    });\n  }\n}\n\n// Register in config/tables.ts\nimport { AccountController } from '../controllers/account.controller';\n\nexport const AVAILABLE_TABLES = {\n  // ... existing tables\n  Account: {\n    name: 'Account',\n    controller: AccountController,\n    status: 'available',\n    description: 'Chart of accounts'\n  }\n};"
+      },
+      {
+        "title": "Middleware Extension",
+        "description": "Adding custom middleware for authentication or logging",
+        "code": "// middleware/auth.ts\nimport { Elysia } from 'elysia';\nimport jwt from '@elysiajs/jwt';\n\nexport const authMiddleware = new Elysia()\n  .use(jwt({\n    name: 'jwt',\n    secret: process.env.JWT_SECRET!,\n    exp: '7d'\n  }))\n  .derive(async ({ jwt, headers }) => {\n    const auth = headers.authorization;\n    if (!auth?.startsWith('Bearer ')) {\n      return { user: null };\n    }\n    \n    const token = auth.slice(7);\n    const payload = await jwt.verify(token);\n    \n    if (!payload) {\n      return { user: null };\n    }\n    \n    return {\n      user: {\n        id: payload.sub,\n        email: payload.email,\n        permissions: payload.permissions\n      }\n    };\n  })\n  .onBeforeHandle(({ user, path }) => {\n    // Skip auth for public endpoints\n    const publicPaths = ['/api/v1/health', '/api/v1/swagger'];\n    if (publicPaths.includes(path)) return;\n    \n    if (!user) {\n      throw new Error('Unauthorized');\n    }\n  });\n\n// Apply to app\nimport { createApp } from '@moneyworks/api';\n\nconst app = await createApp(config);\napp.use(authMiddleware);\n\n// Protected route example\napp.get('/api/v1/protected', ({ user }) => {\n  return {\n    message: `Hello ${user.email}`,\n    permissions: user.permissions\n  };\n});"
+      },
+      {
+        "title": "Caching Strategy",
+        "description": "Implementing efficient caching for improved performance",
+        "code": "// services/enhanced-cache.service.ts\nimport { CacheService } from './cache.service';\nimport { createHash } from 'crypto';\n\nexport class EnhancedCacheService extends CacheService {\n  // Generate cache key from request params\n  generateKey(prefix: string, params: any): string {\n    const hash = createHash('md5')\n      .update(JSON.stringify(params))\n      .digest('hex');\n    return `${prefix}:${hash}`;\n  }\n  \n  // Cache with stale-while-revalidate\n  async getOrFetch<T>(\n    key: string,\n    fetcher: () => Promise<T>,\n    options: {\n      ttl: number;\n      staleTime?: number;\n    }\n  ): Promise<T> {\n    const cached = await this.get<{\n      data: T;\n      timestamp: number;\n    }>(key);\n    \n    const now = Date.now();\n    \n    // Return cached if fresh\n    if (cached && (now - cached.timestamp) < options.ttl * 1000) {\n      return cached.data;\n    }\n    \n    // Return stale while revalidating\n    if (cached && options.staleTime && \n        (now - cached.timestamp) < options.staleTime * 1000) {\n      // Revalidate in background\n      fetcher().then(data => {\n        this.set(key, { data, timestamp: now }, { ttl: options.ttl });\n      }).catch(console.error);\n      \n      return cached.data;\n    }\n    \n    // Fetch fresh data\n    const data = await fetcher();\n    await this.set(key, { data, timestamp: now }, { ttl: options.ttl });\n    return data;\n  }\n}\n\n// Usage in route\napp.get('/api/v1/tables/:table', async ({ params, query, cache }) => {\n  const cacheKey = cache.generateKey(\n    `table:${params.table}`,\n    query\n  );\n  \n  return cache.getOrFetch(\n    cacheKey,\n    () => controller.export(query),\n    {\n      ttl: 300,        // 5 minutes fresh\n      staleTime: 3600  // 1 hour stale acceptable\n    }\n  );\n});"
+      }
+    ],
+    "importPatterns": [
+      {
+        "pattern": "import { createApp } from '@moneyworks/api';",
+        "description": "Import the main application factory"
+      },
+      {
+        "pattern": "import { BaseTableController } from '@moneyworks/api/controllers';",
+        "description": "Import base controller for extending"
+      },
+      {
+        "pattern": "import type { AppConfig, TableQueryParams } from '@moneyworks/api/types';",
+        "description": "Import TypeScript types"
+      },
+      {
+        "pattern": "import { cacheService } from '@moneyworks/api/services';",
+        "description": "Import shared services"
+      }
+    ]
+  },
+  "designPrinciples": [
+    {
+      "principle": "RESTful Design",
+      "description": "The API follows REST conventions with proper HTTP methods, status codes, and resource-oriented URLs. Versioning ensures backward compatibility."
+    },
+    {
+      "principle": "Type Safety",
+      "description": "Built with TypeScript and ElysiaJS's type system, providing compile-time safety and runtime validation for all endpoints."
+    },
+    {
+      "principle": "Progressive Enhancement",
+      "description": "Tables are added incrementally as they're vetted, allowing the API to grow safely while maintaining quality."
+    },
+    {
+      "principle": "Performance First",
+      "description": "Built on Bun runtime with ElysiaJS for exceptional performance. Includes caching, efficient formats, and optimized queries."
+    },
+    {
+      "principle": "Developer Experience",
+      "description": "Comprehensive Swagger documentation, consistent error handling, and multiple export formats make integration straightforward."
+    }
+  ],
+  "futurePlans": [
+    {
+      "feature": "Authentication & Authorization",
+      "description": "JWT-based authentication with role-based access control",
+      "status": "Planned"
+    },
+    {
+      "feature": "WebSocket Support",
+      "description": "Real-time updates for data changes using WebSockets",
+      "status": "Researching"
+    },
+    {
+      "feature": "GraphQL Layer",
+      "description": "GraphQL endpoint as alternative to REST",
+      "status": "Considered"
+    },
+    {
+      "feature": "Rate Limiting",
+      "description": "Request rate limiting with configurable tiers",
+      "status": "Planned"
+    },
+    {
+      "feature": "Additional Tables",
+      "description": "Support for all MoneyWorks tables",
+      "status": "In Progress"
+    },
+    {
+      "feature": "Batch Operations",
+      "description": "Bulk create/update/delete operations",
+      "status": "Planned"
+    }
+  ]
+}

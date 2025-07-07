@@ -1,6 +1,6 @@
 import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
-import { Package, Code2, Database, Globe, ArrowRight, Terminal } from "lucide-react";
+import { Package, Code2, Database, Globe, ArrowRight, Terminal, Server } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -62,6 +62,19 @@ export default function PackagesIndex() {
       ],
       icon: <Terminal className="h-6 w-6" />,
       href: "/packages/cli",
+    },
+    {
+      name: "@moneyworks/api",
+      version: "0.1.0",
+      description: "REST API server for MoneyWorks built with ElysiaJS",
+      features: [
+        "RESTful endpoints",
+        "Swagger documentation",
+        "Caching layer",
+        "Multiple export formats"
+      ],
+      icon: <Server className="h-6 w-6" />,
+      href: "/packages/api",
     },
     {
       name: "@moneyworks/web1",

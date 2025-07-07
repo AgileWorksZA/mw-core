@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "PostToolUse": "bun /Users/hgeldenhuys/WebstormProjects/mw-core/simple-file-hook.ts"
+  }
+}
