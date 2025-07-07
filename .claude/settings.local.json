@@ -252,7 +252,9 @@
       "mcp__react-router_Docs__fetch_react_router_documentation",
       "mcp__ui_Docs__fetch_ui_documentation",
       "WebFetch(domain:shiki.style)",
-      "mcp__puppeteer__puppeteer_hover"
+      "mcp__puppeteer__puppeteer_hover",
+      "Bash(git config:*)",
+      "Bash(git restore:*)"
     ],
     "deny": []
   }
