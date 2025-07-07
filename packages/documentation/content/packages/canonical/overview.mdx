@@ -1,51 +1,281 @@
 ---
 title: "@moneyworks/canonical"
 description: "Pure MoneyWorks canonical types, enums, and business logic - zero contamination"
-version: "0.1.0"
+version: "1.0.0"
 package: "canonical"
 ---
 
 # @moneyworks/canonical
 
-<PackageInfo 
-  npm="@moneyworks/canonical"
-  github="moneyworks/core/packages/canonical"
-  version="0.1.0"
-/>
+Pure MoneyWorks canonical types, enums, validators, and business logic. Zero contamination with business domain concepts.
 
-## Overview
+## 🎯 Purpose
 
-Pure MoneyWorks canonical types, enums, and business logic - zero contamination
+This package is the **single source of truth** for MoneyWorks concepts. It ensures:
+
+- **DSL Purity**: Only MoneyWorks terminology, never generic business terms
+- **Type Safety**: Everything that can be an enum or literal type, is
+- **AI Compliance**: Schemas and documentation that force AI to use MW language
+- **Business Logic**: MoneyWorks-specific calculations and validations
+
+## Core Design Principles
+
+### 1. MoneyWorks DSL Purity
+Every type, function, and variable uses **exact MoneyWorks terminology**:
+- ✅ `TaxCode` (not tax_id or taxId)
+- ✅ `PaidAccount` (not tax_payable)
+- ✅ `RecAccount` (not tax_receivable)
+- ✅ `Date` (not effective_date)
+
+### 2. Universal GST Terminology
+MoneyWorks calls ALL tax "GST" regardless of country:
+- 🇺🇸 US Sales Tax → GST
+- 🇬🇧 UK VAT → GST
+- 🇨🇦 Canadian GST → GST
+- 🇦🇺 Australian GST → GST
+
+### 3. AI-Enforced Language
+Every export includes:
+```typescript
+/**
+ * @ai-instruction CRITICAL: Use ONLY MoneyWorks terminology
+ * @ai-forbidden tax-id, sales-tax, VAT, effective-date
+ * @ai-required TaxCode, PaidAccount, RecAccount, Date
+ */
+```
 
 ## Installation
 
-<Tabs defaultValue="bun">
-  <TabsList>
-    <TabsTrigger value="bun">Bun</TabsTrigger>
-    <TabsTrigger value="npm">npm</TabsTrigger>
-    <TabsTrigger value="yarn">Yarn</TabsTrigger>
-  </TabsList>
-  <TabsContent value="bun">
-    ```bash
-    bun add @moneyworks/canonical
-    ```
-  </TabsContent>
-  <TabsContent value="npm">
-    ```bash
-    npm install @moneyworks/canonical
-    ```
-  </TabsContent>
-  <TabsContent value="yarn">
-    ```bash
-    yarn add @moneyworks/canonical
-    ```
-  </TabsContent>
-</Tabs>
+```bash
+bun add @moneyworks/canonical
+```
 
-## API Overview
+## Import Patterns
 
+```typescript
+// Import from entity namespace
+import { TaxRates } from '@moneyworks/canonical';
+const taxRate: TaxRates.MoneyWorksTaxRate = { ... };
 
+// Import directly from entity subpath
+import { MoneyWorksTaxRate, validateTaxRate } from '@moneyworks/canonical/tax-rates';
 
+// Import common types
+import { MoneyWorksDataType } from '@moneyworks/canonical';
+```
 
+## Quick Start
 
-See the [API Reference](/packages/canonical/api) for complete documentation.
+### Working with Tax Rates
+
+```typescript
+import { 
+  MoneyWorksTaxRate, 
+  MoneyWorksTaxCombineMode,
+  validateTaxRate,
+  calculateTaxForRate 
+} from '@moneyworks/canonical/tax-rates';
+import { d } from '@moneyworks/utilities';
+
+// Create a tax rate (using MW terminology)
+const gst10: MoneyWorksTaxRate = {
+  TaxCode: "GST10",
+  Description: "GST @ 10%",
+  PaidAccount: "2-1520",    // NOT "tax payable"
+  RecAccount: "2-1510",     // NOT "tax receivable"  
+  Date: d`20240401`,        // Changeover date
+  Rate1: 10,                // Rate before changeover
+  Rate2: 10,                // Rate after changeover
+  Combine: MoneyWorksTaxCombineMode.NONE
+};
+
+// Validate it
+const validation = validateTaxRate(gst10);
+if (!validation.isValid) {
+  console.error('Validation warnings:', validation.warnings);
+}
+
+// Calculate tax
+const result = calculateTaxForRate(gst10, 100.00, {
+  date: d`20240501`,
+  isTaxInclusive: false
+});
+
+console.log(`Tax for ${result.TaxCode}: $${result.totalTax}`);
+```
+
+## Key MoneyWorks Concepts
+
+### 1. Changeover Date System
+MoneyWorks uses a unique date-based rate switching system:
+
+```typescript
+const taxRate: MoneyWorksTaxRate = {
+  TaxCode: "GST-CHG",
+  Date: d`20240701`,     // Changeover date
+  Rate1: 15,             // Used BEFORE changeover date
+  Rate2: 17.5,           // Used ON/AFTER changeover date
+  // ...
+};
+
+// On 2024-06-30: Uses Rate1 (15%)
+// On 2024-07-01: Uses Rate2 (17.5%)
+```
+
+### 2. Two-Tier Tax System
+MoneyWorks supports only two tax rates that can be combined:
+
+```typescript
+// Tier 1: Federal tax
+const federalTax: MoneyWorksTaxRate = {
+  TaxCode: "FED",
+  Rate1: 5,
+  Rate2: 5,
+  Combine: MoneyWorksTaxCombineMode.ADDITIVE
+};
+
+// Tier 2: State tax (combines with federal)
+const stateTax: MoneyWorksTaxRate = {
+  TaxCode: "STATE", 
+  Rate1: 7,
+  Rate2: 7,
+  Combine: MoneyWorksTaxCombineMode.COMPOUND,
+  Tag: "FED"  // References tier 1
+};
+```
+
+### 3. GST Finalization
+Australian/NZ specific business activity statement process:
+
+```typescript
+const finalization = calculateGSTFinalization({
+  fromDate: d`20240101`,
+  toDate: d`20240331`,
+  taxData: { ... }
+});
+```
+
+## Common Types
+
+### MoneyWorksDataType
+The field type system used throughout MoneyWorks:
+
+```typescript
+enum MoneyWorksDataType {
+  TEXT = "T",           // Text field
+  NUMERIC = "N",        // Numeric field
+  DATE = "D",           // Date field (YYYYMMDD)
+  BOOLEAN = "B",        // Boolean/checkbox
+  SUBTABLE = "S",       // Subtable reference
+  ENUMERATED = "E"      // Enumerated/popup
+}
+```
+
+### MoneyWorksValidationResult
+Consistent validation response format:
+
+```typescript
+interface MoneyWorksValidationResult {
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
+  fieldErrors?: Record<string, string[]>;
+  metadata?: {
+    validatedAt: Date;
+    validatorVersion: string;
+    context?: string;
+  };
+}
+```
+
+## Entity Structure
+
+Each MoneyWorks entity follows this pattern:
+
+```
+entities/[entity-name]/
+├── types.ts         # Core type definitions
+├── enums.ts         # Fixed vocabularies
+├── fields.ts        # Field metadata
+├── validators.ts    # Validation functions
+├── calculators.ts   # Business logic
+├── rules.ts         # Business rules
+├── terms.ts         # Canonical terminology
+└── README-AI.md     # AI language guide
+```
+
+## Best Practices
+
+### ✅ DO
+
+```typescript
+// Use exact MW field names
+const tax: MoneyWorksTaxRate = {
+  TaxCode: "GST10",
+  PaidAccount: "2-1520",
+  RecAccount: "2-1510",
+  Date: d`20240401`
+};
+
+// Use MW terminology in variables
+const gstAmount = calculateTaxForRate(tax, 100);
+const changeoverDate = tax.Date;
+```
+
+### ❌ DON'T
+
+```typescript
+// Don't use generic business terms
+const tax = {
+  taxId: "GST10",          // Wrong: should be TaxCode
+  taxPayable: "2-1520",    // Wrong: should be PaidAccount
+  effectiveDate: "2024-04-01" // Wrong: should be Date
+};
+
+// Don't use non-MW terminology
+const vatAmount = calculateVAT(tax, 100);  // Wrong: should be gst/tax
+const startDate = tax.effectiveDate;       // Wrong: should be Date
+```
+
+## Available Entities
+
+### Currently Implemented
+- **TaxRates** - Complete tax rate management with validation and calculation
+
+### Planned Entities
+- **Transactions** - MW transaction types and posting
+- **Accounts** - Chart of accounts management
+- **Names** - Customer/supplier management
+
+## Development
+
+### Adding New Entities
+
+1. Create entity folder: `src/entities/[entity-name]/`
+2. Add required files following the pattern
+3. Use ONLY MoneyWorks terminology
+4. Include comprehensive JSDoc with @ai-instruction tags
+5. Add to main index.ts exports
+
+### Type Checking
+
+```bash
+cd packages/canonical
+bun run typecheck
+```
+
+### Building
+
+```bash
+cd packages/canonical
+bun run build
+```
+
+## Resources
+
+- [API Reference](/packages/canonical/api) - Complete API documentation
+- [Tax Rates Guide](/packages/canonical/tax-rates) - Deep dive into tax management
+- MoneyWorks Manual - Primary source of truth
+- Architecture docs - System design documentation
+
+Remember: This package is the foundation of semantic accuracy. **Protect its purity!**

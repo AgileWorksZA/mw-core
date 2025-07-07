@@ -1,5 +1,435 @@
 {
-  "functions": [],
-  "types": [],
-  "constants": []
+  "name": "@moneyworks/canonical",
+  "version": "1.0.0",
+  "description": "Pure MoneyWorks canonical types, enums, and business logic - zero contamination",
+  "functions": {
+    "namespaces": [
+      {
+        "name": "TaxRates",
+        "description": "Complete tax rate management namespace with types, validation, and calculations",
+        "category": "Entities",
+        "since": "1.0.0",
+        "functions": [
+          {
+            "name": "validateTaxCode",
+            "signature": "validateTaxCode(taxCode: string): MoneyWorksValidationResult",
+            "description": "Validates a MoneyWorks TaxCode according to MW rules"
+          },
+          {
+            "name": "validateTaxRate",
+            "signature": "validateTaxRate(taxRate: Partial<MoneyWorksTaxRate>): MoneyWorksValidationResult",
+            "description": "Validates a complete MoneyWorks tax rate entity"
+          },
+          {
+            "name": "getCurrentTaxRate",
+            "signature": "getCurrentTaxRate(taxRate: MoneyWorksTaxRate, currentDate: YYYYMMDD): number",
+            "description": "Gets the active tax rate based on changeover date logic"
+          },
+          {
+            "name": "calculateTaxForRate",
+            "signature": "calculateTaxForRate(taxRate: MoneyWorksTaxRate, amount: number, context: TaxCalculationContext): TaxCalculationResult",
+            "description": "Calculates tax for a single rate with full MW business logic"
+          },
+          {
+            "name": "calculateCombinedTax",
+            "signature": "calculateCombinedTax(tier1: MoneyWorksTaxRate, tier2: MoneyWorksTaxRate, amount: number, context: TaxCalculationContext): CombinedTaxResult",
+            "description": "Calculates combined tax for MoneyWorks two-tier tax system"
+          },
+          {
+            "name": "calculateGSTFinalization",
+            "signature": "calculateGSTFinalization(params: GSTFinalizationParams): GSTFinalizationResult",
+            "description": "Calculates GST finalization for Australian/NZ BAS process"
+          },
+          {
+            "name": "getFieldMetadata",
+            "signature": "getFieldMetadata(fieldName: keyof MoneyWorksTaxRate): MoneyWorksFieldMetadata | undefined",
+            "description": "Gets metadata for a specific tax rate field"
+          },
+          {
+            "name": "getRequiredFields",
+            "signature": "getRequiredFields(): Array<keyof MoneyWorksTaxRate>",
+            "description": "Returns list of required fields for tax rates"
+          },
+          {
+            "name": "getCanonicalTerm",
+            "signature": "getCanonicalTerm(concept: string): string",
+            "description": "Maps generic business terms to MoneyWorks canonical terms"
+          }
+        ]
+      }
+    ],
+    "functions": [
+      {
+        "name": "getCanonicalVersion",
+        "signature": "getCanonicalVersion(): string",
+        "description": "Returns the current version of the canonical package",
+        "category": "Package Info",
+        "since": "1.0.0",
+        "returns": {
+          "type": "string",
+          "description": "The semantic version string"
+        },
+        "examples": [
+          {
+            "title": "Get package version",
+            "code": "import { getCanonicalVersion } from '@moneyworks/canonical';\n\nconst version = getCanonicalVersion();\nconsole.log(`Canonical version: ${version}`); // \"1.0.0\""
+          }
+        ]
+      }
+    ]
+  },
+  "types": {
+    "namespaces": [
+      {
+        "name": "TaxRates",
+        "description": "Tax rate types and interfaces namespace",
+        "category": "Entities",
+        "since": "1.0.0"
+      }
+    ],
+    "types": [
+      {
+        "name": "MoneyWorksDataType",
+        "kind": "enum",
+        "description": "MoneyWorks field type system - exact match to MW manual section 3.2",
+        "category": "Common",
+        "since": "1.0.0",
+        "properties": [
+          {
+            "name": "TEXT",
+            "type": "\"T\"",
+            "description": "Text field - variable length string"
+          },
+          {
+            "name": "NUMERIC",
+            "type": "\"N\"",
+            "description": "Numeric field - decimal number"
+          },
+          {
+            "name": "DATE",
+            "type": "\"D\"",
+            "description": "Date field - YYYYMMDD format"
+          },
+          {
+            "name": "BOOLEAN",
+            "type": "\"B\"",
+            "description": "Boolean field - checkbox/flag"
+          },
+          {
+            "name": "SUBTABLE",
+            "type": "\"S\"",
+            "description": "Subtable reference - related records"
+          },
+          {
+            "name": "ENUMERATED",
+            "type": "\"E\"",
+            "description": "Enumerated field - popup/dropdown"
+          }
+        ]
+      },
+      {
+        "name": "MoneyWorksFieldMetadata",
+        "kind": "interface",
+        "description": "Standard metadata structure for MoneyWorks fields",
+        "category": "Common",
+        "since": "1.0.0",
+        "properties": [
+          {
+            "name": "name",
+            "type": "string",
+            "description": "MoneyWorks field name (exact casing)"
+          },
+          {
+            "name": "type",
+            "type": "MoneyWorksDataType",
+            "description": "MW field type"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "Field description from MW manual"
+          },
+          {
+            "name": "required",
+            "type": "boolean",
+            "description": "Whether field is required",
+            "optional": true
+          },
+          {
+            "name": "maxLength",
+            "type": "number",
+            "description": "Maximum length for text fields",
+            "optional": true
+          },
+          {
+            "name": "indexed",
+            "type": "boolean",
+            "description": "Whether field is indexed in MW",
+            "optional": true
+          },
+          {
+            "name": "defaultValue",
+            "type": "any",
+            "description": "Default value if not provided",
+            "optional": true
+          },
+          {
+            "name": "validValues",
+            "type": "string[]",
+            "description": "Valid enumerated values",
+            "optional": true
+          },
+          {
+            "name": "manualRef",
+            "type": "string",
+            "description": "MW manual section reference",
+            "optional": true
+          }
+        ]
+      },
+      {
+        "name": "MoneyWorksValidationResult",
+        "kind": "interface",
+        "description": "Standard validation result format for all MW entities",
+        "category": "Common",
+        "since": "1.0.0",
+        "properties": [
+          {
+            "name": "isValid",
+            "type": "boolean",
+            "description": "Overall validation status"
+          },
+          {
+            "name": "errors",
+            "type": "string[]",
+            "description": "Critical errors that prevent saving"
+          },
+          {
+            "name": "warnings",
+            "type": "string[]",
+            "description": "Non-critical warnings"
+          },
+          {
+            "name": "fieldErrors",
+            "type": "Record<string, string[]>",
+            "description": "Field-specific error messages",
+            "optional": true
+          },
+          {
+            "name": "metadata",
+            "type": "object",
+            "description": "Additional validation metadata",
+            "optional": true
+          }
+        ]
+      },
+      {
+        "name": "MoneyWorksTaxRate",
+        "kind": "interface",
+        "description": "Complete MoneyWorks tax rate entity with all 17 fields",
+        "category": "Tax Rates",
+        "since": "1.0.0",
+        "properties": [
+          {
+            "name": "TaxCode",
+            "type": "string",
+            "description": "Unique tax code identifier (max 7 chars)"
+          },
+          {
+            "name": "Description",
+            "type": "string",
+            "description": "Human-readable tax description",
+            "optional": true
+          },
+          {
+            "name": "PaidAccount",
+            "type": "AccountCode",
+            "description": "Account for tax paid (purchases)",
+            "optional": true
+          },
+          {
+            "name": "RecAccount",
+            "type": "AccountCode",
+            "description": "Account for tax received (sales)",
+            "optional": true
+          },
+          {
+            "name": "Date",
+            "type": "YYYYMMDD",
+            "description": "Changeover date for rate switching",
+            "optional": true
+          },
+          {
+            "name": "Rate1",
+            "type": "number",
+            "description": "Tax rate before changeover date",
+            "optional": true
+          },
+          {
+            "name": "Rate2",
+            "type": "number",
+            "description": "Tax rate on/after changeover date",
+            "optional": true
+          },
+          {
+            "name": "Combine",
+            "type": "MoneyWorksTaxCombineMode",
+            "description": "How this tax combines with others",
+            "optional": true
+          },
+          {
+            "name": "Tag",
+            "type": "string",
+            "description": "References tier 1 tax for combination",
+            "optional": true
+          },
+          {
+            "name": "UserNum",
+            "type": "string",
+            "description": "User-defined field 1",
+            "optional": true
+          },
+          {
+            "name": "UserText",
+            "type": "string",
+            "description": "User-defined field 2",
+            "optional": true
+          }
+        ]
+      },
+      {
+        "name": "MoneyWorksTaxCombineMode",
+        "kind": "enum",
+        "description": "How tax rates combine in MW's two-tier system",
+        "category": "Tax Rates",
+        "since": "1.0.0",
+        "properties": [
+          {
+            "name": "NONE",
+            "type": "0",
+            "description": "No combination (default)"
+          },
+          {
+            "name": "ADDITIVE",
+            "type": "1",
+            "description": "Add percentages: 5% + 7% = 12%"
+          },
+          {
+            "name": "COMPOUND",
+            "type": "2",
+            "description": "Compound calculation: base + (base × tier1) × tier2"
+          },
+          {
+            "name": "SEPARATE",
+            "type": "3",
+            "description": "Calculate separately, sum results"
+          }
+        ]
+      },
+      {
+        "name": "TaxCalculationContext",
+        "kind": "interface",
+        "description": "Context for tax calculations",
+        "category": "Tax Rates",
+        "since": "1.0.0",
+        "properties": [
+          {
+            "name": "date",
+            "type": "YYYYMMDD",
+            "description": "Date for rate determination"
+          },
+          {
+            "name": "isTaxInclusive",
+            "type": "boolean",
+            "description": "Whether amount includes tax"
+          },
+          {
+            "name": "transactionType",
+            "type": "\"sale\" | \"purchase\"",
+            "description": "Transaction direction",
+            "optional": true
+          },
+          {
+            "name": "roundingMode",
+            "type": "\"normal\" | \"bankers\"",
+            "description": "Rounding method",
+            "optional": true
+          }
+        ]
+      },
+      {
+        "name": "TaxCalculationResult",
+        "kind": "interface",
+        "description": "Result of tax calculation",
+        "category": "Tax Rates",
+        "since": "1.0.0",
+        "properties": [
+          {
+            "name": "TaxCode",
+            "type": "string",
+            "description": "Tax code used"
+          },
+          {
+            "name": "baseAmount",
+            "type": "number",
+            "description": "Amount before tax"
+          },
+          {
+            "name": "totalTax",
+            "type": "number",
+            "description": "Total tax amount"
+          },
+          {
+            "name": "totalAmount",
+            "type": "number",
+            "description": "Total including tax"
+          },
+          {
+            "name": "effectiveRate",
+            "type": "number",
+            "description": "Rate used (Rate1 or Rate2)"
+          },
+          {
+            "name": "account",
+            "type": "AccountCode",
+            "description": "PaidAccount or RecAccount used"
+          }
+        ]
+      }
+    ]
+  },
+  "constants": {
+    "constants": [
+      {
+        "name": "MONEYWORKS_TAX_RATE_FIELDS",
+        "type": "Record<keyof MoneyWorksTaxRate, MoneyWorksFieldMetadata>",
+        "description": "Complete field metadata for all tax rate fields",
+        "category": "Tax Rates",
+        "since": "1.0.0",
+        "value": "Object with metadata for all 17 tax rate fields"
+      },
+      {
+        "name": "MONEYWORKS_TAX_RATE_CANONICAL_TERMS",
+        "type": "Record<string, string>",
+        "description": "Maps generic business terms to MoneyWorks canonical terms",
+        "category": "Tax Rates",
+        "since": "1.0.0",
+        "usage": "Use to ensure correct MW terminology in UI and messages",
+        "examples": [
+          {
+            "title": "Correcting terminology",
+            "code": "// User says \"VAT rate\"\nconst mwTerm = MONEYWORKS_TAX_RATE_CANONICAL_TERMS['VAT']; // \"GST\"\nconsole.log(`In MoneyWorks, we call it ${mwTerm}`);)"
+          }
+        ]
+      },
+      {
+        "name": "CANONICAL_VERSION",
+        "type": "string",
+        "description": "Current version of the canonical package",
+        "category": "Package Info",
+        "since": "1.0.0",
+        "value": "\"1.0.0\""
+      }
+    ]
+  }
 }
