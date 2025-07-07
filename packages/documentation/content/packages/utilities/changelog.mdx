@@ -1,0 +1,199 @@
+---
+title: "Changelog"
+description: "Version history and release notes for @moneyworks/utilities"
+---
+
+# Changelog
+
+All notable changes to @moneyworks/utilities will be documented here.
+
+## [0.1.0] - 2025-01-15
+
+### Initial Release 🎉
+
+The first release of @moneyworks/utilities provides comprehensive date, period, and JSON handling utilities specifically designed for MoneyWorks integration.
+
+### Features
+
+#### Date Handling (YYYYMMDD)
+- **Tagged Template Literal** - `d` function for creating dates with fluent API
+- **Type-Safe Operations** - Branded YYYYMMDD type prevents string mix-ups
+- **Fluent API** - Chainable methods for comparisons, arithmetic, and formatting
+- **Comprehensive Utilities** - Full set of functions for date manipulation
+- **Validation** - Robust validation including leap year handling
+- **Format Parsing** - Parse ISO, slash, and other common date formats
+
+#### Period Handling (YYYYMM)
+- **Tagged Template Literal** - `p` function for creating periods
+- **Type-Safe Periods** - Branded Period type for YYYYMM values
+- **Period Arithmetic** - Add/subtract months, calculate differences
+- **Range Generation** - Create period ranges for reporting
+- **Date Boundaries** - Get start/end dates for any period
+
+#### JSON Handling
+- **Automatic Type Conversion** - Parse JSON with MW type awareness
+- **Field Detection** - Automatically convert standard MW date/period/time fields
+- **Custom Field Support** - Add your own fields for conversion
+- **Multiple Format Options** - API format, display format, custom formatting
+- **Response Parsing** - Direct parsing of fetch Response objects
+- **Circular Reference Handling** - Safe stringify for complex objects
+
+#### Branded Types
+- `YYYYMMDD` - Date strings in MW format
+- `Period` - YYYYMM periods as numbers
+- `HHMMSS` - Time strings in MW format
+- `AccountCode` - 4-digit account codes
+- `NameCode` - Customer/supplier codes
+- `ProductCode` - Product/item codes
+- `TransactionSeq` - Transaction sequence numbers
+
+#### Utility Namespaces
+- `YYYYMMDDUtils` - All date functions in one place
+- `PeriodUtils` - All period functions in one place
+- `JSONUtils` - All JSON functions in one place
+
+### Complete Function List
+
+#### Date Functions
+- `d` - Tagged template for dates with fluent API
+- `isYYYYMMDD` - Type guard for YYYYMMDD validation
+- `createYYYYMMDD` - Create YYYYMMDD with validation (throws on invalid)
+- `tryCreateYYYYMMDD` - Safe creation returning null on invalid
+- `parseToYYYYMMDD` - Parse various date formats to YYYYMMDD
+- `dateToYYYYMMDD` - Convert Date object to YYYYMMDD
+- `yyyymmddToDate` - Convert YYYYMMDD to Date object
+- `formatYYYYMMDD` - Format YYYYMMDD with custom separator
+- `todayYYYYMMDD` - Get today's date as YYYYMMDD
+- `addDaysToYYYYMMDD` - Add days to date
+- `addMonthsToYYYYMMDD` - Add months with proper overflow handling
+- `daysBetweenYYYYMMDD` - Calculate days between dates
+- `compareYYYYMMDD` - Compare two dates
+- `isBeforeYYYYMMDD` / `isAfterYYYYMMDD` - Date comparison helpers
+- `startOfMonthYYYYMMDD` / `endOfMonthYYYYMMDD` - Month boundaries
+- `isWeekendYYYYMMDD` - Check if date is Saturday/Sunday
+- `isLeapYear` - Check if year is leap year
+- `withMethods` - Add fluent methods to YYYYMMDD
+
+#### Period Functions
+- `p` - Tagged template for periods
+- `isPeriod` - Type guard for Period validation
+- `createPeriod` - Create Period with validation
+- `tryCreatePeriod` - Safe period creation
+- `periodFromYearMonth` - Create from year and month
+- `currentPeriod` - Get current period
+- `periodYear` / `periodMonth` - Extract components
+- `periodToDate` / `dateToPeriod` - Convert between Period and Date
+- `yyyymmddToPeriod` - Convert YYYYMMDD to Period
+- `periodStartDate` / `periodEndDate` - Get date boundaries
+- `addMonthsToPeriod` - Period arithmetic
+- `monthsBetweenPeriods` - Calculate month difference
+- `formatPeriod` - Format with custom separator
+- `periodRange` - Generate period arrays
+- `comparePeriods` - Compare periods for sorting
+
+#### JSON Functions
+- `parseMoneyWorksJSON` - Parse with automatic type conversion
+- `createMoneyWorksReviver` - Create custom JSON reviver
+- `parseDateJSON` - Parse with date conversion only
+- `createTypedParser` - Type-specific parser factory
+- `parseMoneyWorksResponse` - Parse Response objects
+- `stringifyMoneyWorks` - Stringify with formatting options
+- `stringifyForAPI` - Compact format for APIs
+- `stringifyForDisplay` - Human-readable format
+- `createStringifier` - Create custom stringifier
+- `safeStringify` - Handle circular references
+- `createMoneyWorksReplacer` - Create custom replacer
+
+### Design Principles
+- **Zero Dependencies** - No external runtime dependencies
+- **Tree-Shakeable** - Import only what you need
+- **Type-Safe** - Full TypeScript support with branded types
+- **MW-Native** - Preserves MoneyWorks terminology and patterns
+- **Performance-Focused** - Optimized for common operations
+- **Developer-Friendly** - Intuitive APIs with helpful error messages
+
+### Migration Notes
+
+If you're migrating from manual date/period handling:
+
+1. Replace string dates with YYYYMMDD type
+2. Replace number periods with Period type
+3. Use tagged templates for cleaner syntax
+4. Leverage fluent API for date operations
+5. Use JSON utilities for parsing/stringifying
+
+### Known Limitations
+
+- Date range: 1900-01-01 to 2099-12-31 (MoneyWorks limits)
+- Period range: 190001 to 209912
+- No timezone handling (MoneyWorks uses local dates)
+- No partial date support (must be complete YYYYMMDD)
+
+### Contributors
+
+- Initial implementation by MoneyWorks Core team
+
+---
+
+## Future Releases
+
+### Planned for 0.2.0
+- [ ] Date range types with iterator support
+- [ ] Fiscal year utilities
+- [ ] Holiday calendar integration
+- [ ] Batch date operations
+- [ ] Extended JSON field detection
+
+### Planned for 0.3.0
+- [ ] Custom date format parsing
+- [ ] Period comparison operators
+- [ ] JSON schema validation
+- [ ] Performance optimizations
+- [ ] Additional branded types
+
+### Under Consideration
+- GraphQL scalar types
+- Zod schemas for validation
+- Date arithmetic DSL
+- Internationalization support
+- Custom field naming strategies
+
+---
+
+## Version Conventions
+
+We follow [Semantic Versioning](https://semver.org/):
+
+- **Major** (X.0.0) - Breaking changes to public API
+- **Minor** (0.X.0) - New features, backwards compatible
+- **Patch** (0.0.X) - Bug fixes, performance improvements
+
+### Breaking Change Policy
+
+Breaking changes will be:
+1. Announced in advance via deprecation warnings
+2. Documented with migration guides
+3. Supported with codemods where possible
+4. Batched into major releases
+
+### Deprecation Policy
+
+Deprecated features will:
+1. Log warnings in development
+2. Remain functional for one major version
+3. Include migration instructions
+4. Be clearly marked in documentation
+
+---
+
+## Reporting Issues
+
+Found a bug or have a feature request? Please open an issue on our GitHub repository with:
+
+1. Version of @moneyworks/utilities
+2. Description of the issue
+3. Minimal reproduction code
+4. Expected vs actual behavior
+5. Any error messages
+
+For security vulnerabilities, please see our security policy.
