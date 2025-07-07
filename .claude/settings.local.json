@@ -254,7 +254,9 @@
       "WebFetch(domain:shiki.style)",
       "mcp__puppeteer__puppeteer_hover",
       "Bash(git config:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "mcp__filesystem__read_multiple_files",
+      "mcp__filesystem__edit_file"
     ],
     "deny": []
   }

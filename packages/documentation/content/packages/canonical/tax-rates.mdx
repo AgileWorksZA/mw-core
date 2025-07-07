@@ -1,0 +1,417 @@
+---
+title: "Tax Rates Guide"
+description: "Deep dive into MoneyWorks tax rate management, calculations, and business rules"
+package: "canonical"
+---
+
+# Tax Rates in MoneyWorks
+
+This guide provides a comprehensive understanding of how MoneyWorks handles tax rates, including its unique terminology, calculation methods, and business rules.
+
+## Core Concepts
+
+### GST Terminology
+
+MoneyWorks uses "GST" (Goods and Services Tax) as the universal term for ALL types of tax, regardless of country:
+
+```typescript
+// All of these are called "GST" in MoneyWorks:
+const usSalesTax: MoneyWorksTaxRate = { TaxCode: "SALES8", ... };    // US Sales Tax
+const ukVat: MoneyWorksTaxRate = { TaxCode: "VAT20", ... };          // UK VAT
+const canadianGst: MoneyWorksTaxRate = { TaxCode: "GST5", ... };     // Canadian GST
+const australianGst: MoneyWorksTaxRate = { TaxCode: "GST10", ... };  // Australian GST
+```
+
+### Changeover Date System
+
+MoneyWorks uses a unique date-based rate switching system instead of traditional "effective dates":
+
+```typescript
+import { MoneyWorksTaxRate } from '@moneyworks/canonical/tax-rates';
+import { d } from '@moneyworks/utilities';
+
+const taxRate: MoneyWorksTaxRate = {
+  TaxCode: "GST",
+  Date: d`20240701`,     // Changeover date
+  Rate1: 10,             // Used BEFORE July 1, 2024
+  Rate2: 15,             // Used ON/AFTER July 1, 2024
+  // ... other fields
+};
+
+// Tax calculation automatically uses the correct rate:
+// June 30, 2024: Uses Rate1 (10%)
+// July 1, 2024:  Uses Rate2 (15%)
+```
+
+## Tax Rate Structure
+
+### Required Fields
+
+Every tax rate MUST have these fields:
+
+```typescript
+interface MoneyWorksTaxRateRequired {
+  TaxCode: string;           // Unique identifier (max 5 chars)
+  PaidAccount: AccountCode;  // Control account for tax paid
+  RecAccount: AccountCode;   // Control account for tax received
+  Date: YYYYMMDD;           // Changeover date
+  Rate1: number;            // Rate before changeover
+  Rate2: number;            // Rate on/after changeover
+}
+```
+
+### Account References
+
+Tax rates reference two control accounts:
+
+```typescript
+const taxRate: MoneyWorksTaxRate = {
+  TaxCode: "GST10",
+  PaidAccount: "2-1520",    // Where tax PAID TO suppliers is tracked
+  RecAccount: "2-1510",     // Where tax RECEIVED FROM customers is tracked
+  // ...
+};
+
+// PaidAccount: Used when you pay tax on purchases
+// RecAccount: Used when you collect tax on sales
+```
+
+## Two-Tier Tax System
+
+MoneyWorks supports combining two tax rates (e.g., federal + state/provincial):
+
+### Combine Modes
+
+```typescript
+enum MoneyWorksTaxCombineMode {
+  NO_SECOND_TIER = 0,    // Single tax only
+  ADD_BEFORE = 1,        // Add tier 2 before calculating tier 1
+  SUBTRACT_BEFORE = 2,   // Subtract tier 2 before calculating tier 1
+  ADD_AFTER = 3,         // Add tier 2 after calculating tier 1
+  SUBTRACT_AFTER = 4     // Subtract tier 2 after calculating tier 1
+}
+```
+
+### Example: Canadian GST + PST
+
+```typescript
+// Federal GST (5%)
+const gst: MoneyWorksTaxRate = {
+  TaxCode: "GST5",
+  Rate1: 5,
+  Rate2: 5,
+  Combine: MoneyWorksTaxCombineMode.NO_SECOND_TIER,
+  // ...
+};
+
+// Provincial PST (7%) that compounds on GST
+const pst: MoneyWorksTaxRate = {
+  TaxCode: "PST7",
+  Rate1: 7,
+  Rate2: 7,
+  Combine: MoneyWorksTaxCombineMode.ADD_AFTER,
+  // ...
+};
+
+// Calculate combined tax
+const result = calculateCombinedTax(gst, pst, 1000, {
+  transactionDate: d`20240615`,
+  isInclusive: false
+});
+
+// Result:
+// Base amount: $1,000.00
+// GST (5%):    $50.00
+// PST (7% on $1,050): $73.50
+// Total tax:   $123.50
+// Total amount: $1,123.50
+```
+
+## Tax Calculations
+
+### Basic Tax Calculation
+
+```typescript
+import { calculateTaxForRate } from '@moneyworks/canonical/tax-rates';
+
+const result = calculateTaxForRate(
+  taxRate,
+  1000,  // Amount
+  {
+    transactionDate: d`20240615`,
+    isInclusive: false  // Tax-exclusive amount
+  }
+);
+
+console.log(result);
+// {
+//   netAmount: 1000,
+//   taxAmount: 100,     // 10% of 1000
+//   grossAmount: 1100,
+//   effectiveRate: 10,
+//   TaxCode: "GST10"
+// }
+```
+
+### Tax-Inclusive Calculations
+
+When the amount already includes tax:
+
+```typescript
+const result = calculateTaxForRate(
+  taxRate,
+  1100,  // Tax-inclusive amount
+  {
+    transactionDate: d`20240615`,
+    isInclusive: true
+  }
+);
+
+console.log(result);
+// {
+//   netAmount: 1000,    // Extracted net
+//   taxAmount: 100,     // Extracted tax
+//   grossAmount: 1100,
+//   effectiveRate: 10,
+//   TaxCode: "GST10"
+// }
+```
+
+## Validation Rules
+
+### Tax Code Validation
+
+```typescript
+import { validateTaxCode } from '@moneyworks/canonical/tax-rates';
+
+// Tax codes must be:
+// - Maximum 5 characters
+// - Alphanumeric only
+// - Not empty
+
+const result = validateTaxCode("GST10");
+console.log(result.isValid); // true
+
+const invalid = validateTaxCode("GST-10%");
+console.log(invalid.isValid); // false
+console.log(invalid.warnings); // ["TaxCode contains invalid characters"]
+```
+
+### Complete Tax Rate Validation
+
+```typescript
+import { validateTaxRate } from '@moneyworks/canonical/tax-rates';
+
+const validation = validateTaxRate({
+  TaxCode: "GST10",
+  PaidAccount: "2-1520",
+  RecAccount: "2-1510",
+  Date: d`20240101`,
+  Rate1: 10,
+  Rate2: 10
+});
+
+if (!validation.isValid) {
+  validation.warnings.forEach(warning => {
+    console.error(`Validation warning: ${warning}`);
+  });
+}
+```
+
+### Business Rules
+
+Tax rates must follow these MoneyWorks business rules:
+
+1. **Unique TaxCode**: Each tax code must be unique in the system
+2. **Valid Account References**: PaidAccount and RecAccount must exist
+3. **Account Types**: Referenced accounts should be liability/asset accounts
+4. **Rate Limits**: Rates typically between -100% and 100%
+5. **Date Format**: Changeover date must be valid YYYYMMDD
+
+## GST Finalization (AU/NZ)
+
+For Australian and New Zealand Business Activity Statements:
+
+```typescript
+import { calculateGSTFinalization } from '@moneyworks/canonical/tax-rates';
+
+const finalization = calculateGSTFinalization({
+  fromDate: d`20240101`,
+  toDate: d`20240331`,
+  taxRates: [gst10, gstFree, gstExempt],
+  transactions: [...],  // Transaction data
+  includeAdjustments: true
+});
+
+console.log(finalization);
+// {
+//   totalGSTPaid: 5000,
+//   totalGSTReceived: 12000,
+//   netGSTPayable: 7000,
+//   byTaxCode: {
+//     "GST10": { paid: 4500, received: 11000 },
+//     "GST-FREE": { paid: 500, received: 1000 },
+//     ...
+//   }
+// }
+```
+
+## Field Metadata Access
+
+Get detailed information about tax rate fields:
+
+```typescript
+import { getFieldMetadata, MONEYWORKS_TAX_RATE_FIELDS } from '@moneyworks/canonical/tax-rates';
+
+// Get metadata for a specific field
+const taxCodeMeta = getFieldMetadata('TaxCode');
+console.log(taxCodeMeta);
+// {
+//   fieldName: 'TaxCode',
+//   dataType: MoneyWorksDataType.TEXT,
+//   maxLength: 5,
+//   canonicalDescription: 'The tax code',
+//   manualSource: 'Appendix B, Page 567',
+//   isRequired: true,
+//   isIndexed: true
+// }
+
+// List all numeric fields
+Object.entries(MONEYWORKS_TAX_RATE_FIELDS).forEach(([field, meta]) => {
+  if (meta.dataType === MoneyWorksDataType.NUMERIC) {
+    console.log(`${field} is a numeric field`);
+  }
+});
+```
+
+## Common Patterns
+
+### Creating a Simple Tax Rate
+
+```typescript
+import { MoneyWorksTaxRate } from '@moneyworks/canonical/tax-rates';
+import { d, ac } from '@moneyworks/utilities';
+
+const simpleTax: MoneyWorksTaxRate = {
+  TaxCode: "GST10",
+  PaidAccount: ac`2-1520`,
+  RecAccount: ac`2-1510`,
+  Date: d`20240101`,
+  Rate1: 10,
+  Rate2: 10
+};
+```
+
+### Handling Rate Changes
+
+```typescript
+// Tax rate increasing from 10% to 12.5% on July 1
+const changingRate: MoneyWorksTaxRate = {
+  TaxCode: "GST",
+  PaidAccount: ac`2-1520`,
+  RecAccount: ac`2-1510`,
+  Date: d`20240701`,     // Changeover date
+  Rate1: 10,             // Before July 1
+  Rate2: 12.5            // On/after July 1
+};
+
+// The system automatically uses the correct rate based on transaction date
+```
+
+### Multi-Tier Tax Setup
+
+```typescript
+// Example: Quebec taxes (GST + QST)
+const gstQuebec: MoneyWorksTaxRate = {
+  TaxCode: "GST5",
+  Rate1: 5,
+  Rate2: 5,
+  Combine: MoneyWorksTaxCombineMode.NO_SECOND_TIER,
+  // ...
+};
+
+const qst: MoneyWorksTaxRate = {
+  TaxCode: "QST9.975",
+  Rate1: 9.975,
+  Rate2: 9.975,
+  Combine: MoneyWorksTaxCombineMode.ADD_AFTER,  // Compounds on GST
+  // ...
+};
+```
+
+## Best Practices
+
+### 1. Use Branded Types
+
+```typescript
+import { d, ac } from '@moneyworks/utilities';
+
+// ✅ Good - Type-safe
+const taxRate = {
+  Date: d`20240101`,
+  PaidAccount: ac`2-1520`
+};
+
+// ❌ Bad - No type safety
+const taxRate = {
+  Date: "20240101",
+  PaidAccount: "2-1520"
+};
+```
+
+### 2. Validate Before Saving
+
+```typescript
+// Always validate before persisting
+const validation = validateTaxRate(newTaxRate);
+if (!validation.isValid) {
+  throw new Error(`Invalid tax rate: ${validation.warnings.join(', ')}`);
+}
+```
+
+### 3. Use Canonical Terms
+
+```typescript
+// ✅ Good - MoneyWorks terminology
+const gstPaid = taxRate.GSTPaid;
+const paidAccount = taxRate.PaidAccount;
+
+// ❌ Bad - Generic business terms
+const taxPaid = taxRate.taxPaid;        // Wrong field name
+const payableAccount = taxRate.payable;  // Wrong field name
+```
+
+### 4. Handle Changeover Dates
+
+```typescript
+// Always consider which rate applies
+const currentRate = getCurrentTaxRate(taxRate, transactionDate);
+console.log(`Using rate: ${currentRate}% for date ${transactionDate}`);
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **"Invalid TaxCode" error**
+   - Check length (max 5 characters)
+   - Ensure alphanumeric only
+   - Verify uniqueness
+
+2. **"Account not found" error**
+   - Verify account codes exist in Chart of Accounts
+   - Check account code format matches your system
+
+3. **Wrong tax rate applied**
+   - Check transaction date vs changeover date
+   - Verify Rate1 and Rate2 are set correctly
+
+4. **Combined tax calculations incorrect**
+   - Verify Combine mode is set correctly
+   - Check order of tier 1 and tier 2 rates
+
+## Next Steps
+
+- Review the [API Reference](/packages/canonical/api) for complete function signatures
+- Explore [Multi-Currency Tax](/guides/multi-currency-tax) for international scenarios
+- Learn about [Tax Reporting](/guides/tax-reporting) for compliance requirements

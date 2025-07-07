@@ -8,6 +8,7 @@ export default [
   route("packages", "routes/packages._index.tsx"),
   route("packages/:pkg", "routes/packages.$pkg.tsx"),
   route("packages/:pkg/api", "routes/packages.$pkg.api.tsx"),
+  route("packages/:pkg/:subpage", "routes/packages.$pkg.$subpage.tsx"),
   
   // Guides
   route("guides", "routes/guides._index.tsx"),

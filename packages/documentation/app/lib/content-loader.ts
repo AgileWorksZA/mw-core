@@ -70,41 +70,12 @@ export async function loadPackageContent(packageName: string): Promise<PackageCo
   
   // Load API data
   try {
-    const apiDir = join(packageDir, "api");
-    const api: any = {};
-    
-    // Load functions.json
-    try {
-      const functionsData = await readFile(join(apiDir, "functions.json"), "utf-8");
-      api.functions = JSON.parse(functionsData);
-    } catch {
-      api.functions = { functions: [], namespaces: [] };
-    }
-    
-    // Load types.json
-    try {
-      const typesData = await readFile(join(apiDir, "types.json"), "utf-8");
-      api.types = JSON.parse(typesData);
-    } catch {
-      api.types = { types: [], namespaces: [], constants: [] };
-    }
-    
-    // Load constants.json
-    try {
-      const constantsData = await readFile(join(apiDir, "constants.json"), "utf-8");
-      api.constants = JSON.parse(constantsData);
-    } catch {
-      api.constants = { constants: [] };
-    }
-    
-    content.api = api;
+    const apiPath = join(packageDir, "api.json");
+    const apiData = await readFile(apiPath, "utf-8");
+    content.api = JSON.parse(apiData);
   } catch {
-    // API directory might not exist yet
-    content.api = {
-      functions: { functions: [], namespaces: [] },
-      types: { types: [], namespaces: [], constants: [] },
-      constants: { constants: [] }
-    };
+    // API file might not exist yet
+    content.api = undefined;
   }
   
   // Load guides
@@ -182,4 +153,9 @@ export async function loadAllGuides(): Promise<ContentData[]> {
   } catch {
     return [];
   }
+}
+
+export async function loadPackageSubpageContent(packageName: string, subpage: string): Promise<ContentData | null> {
+  const subpagePath = join(CONTENT_DIR, "packages", packageName, `${subpage}.mdx`);
+  return loadMdxFile(subpagePath);
 }

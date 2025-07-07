@@ -1,51 +1,425 @@
 ---
 title: "@moneyworks/utilities"
-description: "Shared utilities for MoneyWorks packages"
+description: "Type-safe utilities for MoneyWorks date handling, JSON parsing, and branded types"
 version: "0.1.0"
 package: "utilities"
 ---
 
 # @moneyworks/utilities
 
-<PackageInfo 
-  npm="@moneyworks/utilities"
-  github="moneyworks/core/packages/utilities"
-  version="0.1.0"
-/>
+The utilities package provides essential type-safe building blocks for working with MoneyWorks data. It offers a delightful developer experience through branded types, fluent APIs, and automatic type conversions.
 
-## Overview
+## 🚀 Features
 
-Shared utilities for MoneyWorks packages
+- **YYYYMMDD Date Handling**: Type-safe dates with fluent methods for arithmetic and comparisons
+- **Period Management**: Work with MoneyWorks periods (YYYYMM) including ranges and calculations
+- **JSON Type Conversion**: Automatic parsing and stringification of MoneyWorks-specific types
+- **Branded Types**: Compile-time safety for MoneyWorks data formats
+- **Tagged Templates**: Beautiful syntax with `d` and `p` template literals
+- **Zero Dependencies**: Pure TypeScript implementation optimized for Bun
 
 ## Installation
 
-<Tabs defaultValue="bun">
-  <TabsList>
-    <TabsTrigger value="bun">Bun</TabsTrigger>
-    <TabsTrigger value="npm">npm</TabsTrigger>
-    <TabsTrigger value="yarn">Yarn</TabsTrigger>
-  </TabsList>
-  <TabsContent value="bun">
-    ```bash
-    bun add @moneyworks/utilities
-    ```
-  </TabsContent>
-  <TabsContent value="npm">
-    ```bash
-    npm install @moneyworks/utilities
-    ```
-  </TabsContent>
-  <TabsContent value="yarn">
-    ```bash
-    yarn add @moneyworks/utilities
-    ```
-  </TabsContent>
-</Tabs>
+```bash
+bun add @moneyworks/utilities
+# or
+npm install @moneyworks/utilities
+```
 
-## API Overview
+## Quick Start
 
+```typescript
+import { d, p, parseMoneyWorksJSON } from '@moneyworks/utilities';
 
+// Create dates with fluent methods
+const invoiceDate = d`20250115`;
+const dueDate = invoiceDate.addDays(30);
 
+if (dueDate.gt(new Date())) {
+  console.log(`Due in ${dueDate.subtract(d`${new Date()}`)} days`);
+}
 
+// Work with periods
+const currentPeriod = p`${new Date()}`;
+const yearEnd = p`202512`;
 
-See the [API Reference](/packages/utilities/api) for complete documentation.
+// Parse JSON with automatic type conversion
+const transaction = parseMoneyWorksJSON(`{
+  "transDate": "2025-01-15",
+  "period": 202501,
+  "amount": 1500.00
+}`);
+// transaction.transDate is typed as YYYYMMDD
+// transaction.period is typed as Period
+```
+
+## Core Modules
+
+### Date Handling (YYYYMMDD)
+
+MoneyWorks uses YYYYMMDD format for all date fields. This module provides comprehensive utilities for working with these dates:
+
+#### Creating Dates
+
+```typescript
+import { createYYYYMMDD, parseToYYYYMMDD, d } from '@moneyworks/utilities';
+
+// Strict creation (throws on invalid)
+const date1 = createYYYYMMDD("20250115");
+
+// Parse various formats
+const date2 = parseToYYYYMMDD("2025-01-15");  // ISO format
+const date3 = parseToYYYYMMDD("2025/01/15");  // Slash format
+const date4 = parseToYYYYMMDD(new Date());    // From Date object
+
+// Beautiful tagged template syntax
+const date5 = d`20250115`;
+const date6 = d`${new Date()}`;
+const date7 = d`2025-01-15`;  // Auto-parsed!
+```
+
+#### Fluent Date API
+
+The `d` tagged template returns dates with chainable methods:
+
+```typescript
+const invoice = d`20250115`;
+
+// Comparisons
+if (invoice.gt(new Date())) {
+  console.log('Future dated');
+}
+
+// Arithmetic
+const due = invoice.addDays(30);
+const reminder = due.addDays(-7);
+const nextQuarter = invoice.addMonths(3);
+
+// Calculate differences
+const daysUntilDue = due.subtract(d`${new Date()}`);
+
+// Formatting
+console.log(invoice.format());      // "2025/01/15"
+console.log(invoice.format('-'));   // "2025-01-15"
+console.log(invoice.format('.'));   // "2025.01.15"
+
+// Conversions
+const jsDate = invoice.toDate();
+const period = invoice.toPeriod();  // 202501
+
+// Utilities
+if (invoice.isWeekend()) {
+  console.log('Invoice dated on weekend');
+}
+if (invoice.isLeapYear()) {
+  console.log('2025 is not a leap year');
+}
+```
+
+#### Type Guards and Validation
+
+```typescript
+import { isYYYYMMDD, tryCreateYYYYMMDD } from '@moneyworks/utilities';
+
+function processDate(input: string) {
+  // Type guard narrows type
+  if (isYYYYMMDD(input)) {
+    // input is now typed as YYYYMMDD
+    return yyyymmddToDate(input);
+  }
+  
+  // Safe creation
+  const date = tryCreateYYYYMMDD(input);
+  if (date) {
+    return yyyymmddToDate(date);
+  }
+  
+  throw new Error('Invalid date format');
+}
+```
+
+### Period Handling (YYYYMM)
+
+MoneyWorks periods represent accounting months in YYYYMM format:
+
+```typescript
+import { p, addPeriods, periodToDateRange } from '@moneyworks/utilities';
+
+// Create periods
+const jan2025 = p`202501`;
+const current = p`${new Date()}`;
+const yearEnd = p`${2025}${12}`;
+
+// Period arithmetic
+const nextMonth = addPeriods(jan2025, 1);     // 202502
+const lastYear = addPeriods(jan2025, -12);    // 202401
+
+// Get date ranges
+const range = periodToDateRange(jan2025);
+// { start: '20250101', end: '20250131' }
+
+// Check ranges
+if (isPeriodInRange(current, p`202501`, p`202512`)) {
+  console.log('Current period is in 2025');
+}
+```
+
+### JSON Utilities
+
+Specialized JSON parsing and stringification for MoneyWorks data:
+
+```typescript
+import { 
+  parseMoneyWorksJSON, 
+  stringifyMoneyWorks,
+  createTypedParser 
+} from '@moneyworks/utilities';
+
+// Parse with automatic conversions
+const data = parseMoneyWorksJSON(jsonString, {
+  dateFields: ['Date', 'DueDate', 'PaymentDate'],
+  periodFields: ['Period', 'ReportPeriod'],
+  preserveNull: true
+});
+
+// Stringify with MoneyWorks formatting
+const json = stringifyMoneyWorks(data, {
+  dateFormat: 'YYYYMMDD',
+  omitNull: true,
+  pretty: true
+});
+
+// Create typed parsers for API responses
+interface Invoice {
+  InvoiceNumber: string;
+  Date: YYYYMMDD;
+  DueDate: YYYYMMDD;
+  Period: Period;
+  Total: number;
+}
+
+const parseInvoice = createTypedParser<Invoice>({
+  dateFields: ['Date', 'DueDate'],
+  periodFields: ['Period'],
+  numberFields: ['Total', 'GST']
+});
+
+const invoice = parseInvoice(apiResponse);
+// All fields are properly typed!
+```
+
+### Branded Types
+
+Prevent accidental misuse of primitive values:
+
+```typescript
+import { Brand, YYYYMMDD, Period, AccountCode } from '@moneyworks/utilities';
+
+// Built-in branded types
+type YYYYMMDD = Brand<string, 'YYYYMMDD'>;
+type Period = Brand<number, 'Period'>;
+type AccountCode = Brand<string, 'AccountCode'>;
+
+// Create your own
+type InvoiceNumber = Brand<string, 'InvoiceNumber'>;
+type CustomerID = Brand<string, 'CustomerID'>;
+
+// Type safety prevents mixing
+function processInvoice(
+  date: YYYYMMDD,
+  period: Period,
+  account: AccountCode
+) {
+  // Type error - can't pass wrong types
+  // processInvoice(period, date, account);  // Error!
+}
+```
+
+## Advanced Usage
+
+### Working with Business Days
+
+```typescript
+import { d, addDaysToYYYYMMDD } from '@moneyworks/utilities';
+
+function addBusinessDays(start: YYYYMMDD, days: number): YYYYMMDD {
+  let current = start;
+  let remaining = Math.abs(days);
+  const direction = days > 0 ? 1 : -1;
+  
+  while (remaining > 0) {
+    current = addDaysToYYYYMMDD(current, direction);
+    const date = d`${current}`;
+    
+    if (!date.isWeekend()) {
+      remaining--;
+    }
+  }
+  
+  return current;
+}
+
+const invoiceDate = d`20250115`;
+const dueDate = addBusinessDays(invoiceDate, 30);
+```
+
+### Financial Year Handling
+
+```typescript
+import { Period, p, addPeriods, periodToDateRange } from '@moneyworks/utilities';
+
+class FinancialYear {
+  constructor(
+    private startPeriod: Period,
+    private endPeriod: Period
+  ) {}
+  
+  static fromYear(year: number): FinancialYear {
+    return new FinancialYear(
+      p`${year}07`,     // July start
+      p`${year + 1}06`  // June end
+    );
+  }
+  
+  getPeriods(): Period[] {
+    const periods: Period[] = [];
+    let current = this.startPeriod;
+    
+    while (current <= this.endPeriod) {
+      periods.push(current);
+      current = addPeriods(current, 1);
+    }
+    
+    return periods;
+  }
+  
+  getQuarter(period: Period): number {
+    const periods = this.getPeriods();
+    const index = periods.indexOf(period);
+    return Math.floor(index / 3) + 1;
+  }
+}
+
+const fy25 = FinancialYear.fromYear(2024);
+const q1Periods = fy25.getPeriods().slice(0, 3);
+```
+
+### Custom Tagged Templates
+
+Create your own domain-specific tagged templates:
+
+```typescript
+import { Brand, createInvoiceNumber } from './domain';
+
+// Invoice number template
+function inv(strings: TemplateStringsArray, ...values: any[]): InvoiceNumber {
+  const num = String(values[0]).padStart(6, '0');
+  return createInvoiceNumber(`INV-${num}`);
+}
+
+// Usage
+const invoice1 = inv`123`;     // INV-000123
+const invoice2 = inv`${456}`;  // INV-000456
+```
+
+## Best Practices
+
+### 1. Use Tagged Templates
+
+```typescript
+// ✅ Good - concise and type-safe
+const date = d`20250115`;
+const period = p`202501`;
+
+// ❌ Avoid - verbose
+const date2 = createYYYYMMDD('20250115');
+const period2 = createPeriod(202501);
+```
+
+### 2. Leverage Fluent Methods
+
+```typescript
+// ✅ Good - chainable and readable
+const isOverdue = invoice.dueDate.lt(d`${new Date()}`);
+const reminder = invoice.dueDate.addDays(-7);
+
+// ❌ Avoid - procedural
+const today = dateToYYYYMMDD(new Date());
+const isOverdue2 = compareYYYYMMDD(invoice.dueDate, today) < 0;
+```
+
+### 3. Type Early, Type Often
+
+```typescript
+// ✅ Good - parse at the boundary
+const invoice = parseInvoice(apiResponse);
+// All dates are now YYYYMMDD types
+
+// ❌ Avoid - late conversion
+const data = JSON.parse(apiResponse);
+const date = createYYYYMMDD(data.date); // Risky!
+```
+
+### 4. Use Namespaces for Organization
+
+```typescript
+import { YYYYMMDDUtils, PeriodUtils } from '@moneyworks/utilities';
+
+// Group related operations
+const dates = {
+  today: YYYYMMDDUtils.today(),
+  parse: YYYYMMDDUtils.parse,
+  format: YYYYMMDDUtils.format
+};
+
+const periods = {
+  current: PeriodUtils.current(),
+  add: PeriodUtils.add,
+  range: PeriodUtils.toDateRange
+};
+```
+
+## Migration Guide
+
+### From Plain Strings
+
+```typescript
+// Before
+const date = '20250115';
+const nextMonth = moment(date, 'YYYYMMDD').add(1, 'month').format('YYYYMMDD');
+
+// After
+const date = d`20250115`;
+const nextMonth = date.addMonths(1);
+```
+
+### From Date Libraries
+
+```typescript
+// Before (with date-fns)
+import { addDays, format, parseISO } from 'date-fns';
+const date = parseISO('2025-01-15');
+const future = format(addDays(date, 30), 'yyyyMMdd');
+
+// After
+const date = d`2025-01-15`;
+const future = date.addDays(30);
+```
+
+## Resources
+
+- [API Reference](/packages/utilities/api) - Complete API documentation
+- [Type Safety Guide](/guides/type-safety) - Deep dive into branded types
+- [Date Handling Best Practices](/guides/date-handling) - Advanced patterns
+- [JSON Parsing Guide](/guides/json-parsing) - Working with API responses
+
+## Contributing
+
+We welcome contributions! Key areas:
+
+- Additional date/period utilities
+- Timezone handling
+- Locale-specific formatting
+- Performance optimizations
+
+See our [contribution guide](https://github.com/moneyworks/core/contributing) for details.
