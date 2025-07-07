@@ -251,7 +251,8 @@
       "Bash(VITE_HOST=true bun dev)",
       "mcp__react-router_Docs__fetch_react_router_documentation",
       "mcp__ui_Docs__fetch_ui_documentation",
-      "WebFetch(domain:shiki.style)"
+      "WebFetch(domain:shiki.style)",
+      "mcp__puppeteer__puppeteer_hover"
     ],
     "deny": []
   }
