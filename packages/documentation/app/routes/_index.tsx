@@ -1,6 +1,6 @@
 import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
-import { Search, BookOpen, Package, Code2, ArrowRight } from "lucide-react";
+import { Search, BookOpen, Package, Code2, ArrowRight, Terminal } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -28,6 +28,12 @@ export default function Index() {
       description: "Data access layer for MoneyWorks with smart export capabilities",
       href: "/packages/data",
       icon: <Package className="h-5 w-5" />,
+    },
+    {
+      name: "@moneyworks/cli",
+      description: "Command-line interface for testing and interacting with MoneyWorks",
+      href: "/packages/cli",
+      icon: <Terminal className="h-5 w-5" />,
     },
     {
       name: "@moneyworks/web1",

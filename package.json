@@ -2,6 +2,7 @@
   "name": "@moneyworks/monorepo",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@types/node": "^24.0.10",
     "bun-types": "latest",
     "xml2js": "^0.6.2"
   },
@@ -25,5 +26,9 @@
   "type": "module",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.5.0",
+    "elevenlabs": "^1.59.0"
+  }
 }

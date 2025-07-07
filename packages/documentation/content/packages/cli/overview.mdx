@@ -1,0 +1,491 @@
+---
+title: "@moneyworks/cli"
+description: "Command-line interface for testing and interacting with MoneyWorks Core"
+version: "0.1.0"
+package: "cli"
+---
+
+# @moneyworks/cli
+
+A powerful command-line interface for testing and interacting with MoneyWorks servers. Built with Bun for fast execution, this CLI provides developers with essential tools for data export/import, connection testing, and MWScript evaluation.
+
+## 🚀 Features
+
+- **Data Export/Import**: Export and import MoneyWorks data in multiple formats
+- **Connection Testing**: Verify server connectivity and authentication
+- **MWScript Evaluation**: Execute MoneyWorks scripting expressions directly
+- **Multiple Export Formats**: Choose between compact, full, or schema-enriched outputs
+- **Configuration Management**: Flexible config via files or environment variables
+- **Debug & Timing Modes**: Built-in performance analysis and debugging
+- **Type-Safe Operations**: Full TypeScript support with MoneyWorks types
+
+## Installation
+
+```bash
+# Global installation
+bun add -g @moneyworks/cli
+
+# Or use directly with bunx
+bunx @moneyworks/cli test-connection
+
+# Local project installation
+bun add -D @moneyworks/cli
+```
+
+## Quick Start
+
+### 1. Configure Connection
+
+Create a `mw-config.json` file:
+
+```json
+{
+  "host": "localhost",
+  "port": 6710,
+  "username": "Admin",
+  "password": "your-password",
+  "dataFile": "Acme Widgets"
+}
+```
+
+Or use environment variables:
+
+```bash
+export MW_HOST=localhost
+export MW_PORT=6710
+export MW_USERNAME=Admin
+export MW_PASSWORD=your-password
+export MW_DATAFILE="Acme Widgets"
+```
+
+### 2. Test Your Connection
+
+```bash
+mw test-connection
+# ✓ Connected to MoneyWorks 9.1.7
+# ✓ Found 3 documents
+# ✓ Found 5 tax rates
+```
+
+### 3. Export Data
+
+```bash
+# Export all tax rates as JSON
+mw export TaxRate
+
+# Export with filtering
+mw export TaxRate --filter "Rate1 > 10"
+
+# Export in compact format
+mw export TaxRate --exportFormat compact
+
+# Save to file
+mw export TaxRate --output tax-rates.json
+```
+
+## Available Commands
+
+### `test-connection`
+
+Tests connection to MoneyWorks server and displays server information.
+
+```bash
+mw test-connection
+
+# Output:
+# Testing connection to localhost:6710...
+# ✓ Connected to MoneyWorks 9.1.7
+# ✓ Found 3 documents
+# ✓ Found 5 tax rates in Acme Widgets
+```
+
+### `export <table>`
+
+Exports data from specified MoneyWorks table.
+
+```bash
+# Basic export
+mw export TaxRate
+
+# With options
+mw export TaxRate \
+  --filter "Status = 'Active'" \
+  --orderBy "TaxCode DESC" \
+  --limit 10 \
+  --exportFormat schema \
+  --output active-rates.json
+```
+
+**Options:**
+- `-f, --filter <expr>` - MoneyWorks filter expression
+- `-s, --search <text>` - Search text fields
+- `-o, --orderBy <field>` - Sort by field
+- `-l, --limit <n>` - Limit records returned
+- `--offset <n>` - Skip first n records
+- `-e, --exportFormat <format>` - Output format (compact, compact-headers, full, schema)
+- `--format <format>` - MoneyWorks format (json, xml-terse, xml-verbose, tsv)
+- `--output <file>` - Save to file instead of stdout
+
+### `import <table>`
+
+Imports data into MoneyWorks table.
+
+```bash
+# Import from file
+mw import TaxRate --file new-rates.json
+
+# Import with specific mode
+mw import TaxRate --file updates.json --mode update
+
+# Import with field calculation
+mw import TaxRate --file rates.json --work-it-out --calculate "Date=Date()"
+```
+
+**Options:**
+- `--file <path>` - JSON file to import (required)
+- `--mode <mode>` - Import mode: create, update, createOrUpdate
+- `--work-it-out` - Enable automatic field resolution
+- `--calculate <fields>` - Calculate field values
+
+### `eval <expression>`
+
+Evaluates MWScript expressions.
+
+```bash
+# Count records
+mw eval "Count(TaxRate)"
+# Result: 5
+
+# Date calculations
+mw eval "Date() + 30"
+# Result: 20250214
+
+# Complex expressions
+mw eval "Sum(Transaction.Total, Status='Posted' and Period=202501)"
+# Result: 125430.50
+```
+
+### `version`
+
+Shows MoneyWorks server version.
+
+```bash
+mw version
+# MoneyWorks version: 9.1.7
+```
+
+### `list`
+
+Lists available documents on the server.
+
+```bash
+mw list
+# Available documents:
+# 1. Acme Widgets
+# 2. Demo Company
+# 3. Test Database
+```
+
+## Global Options
+
+All commands support these global options:
+
+- `-c, --config <file>` - Path to config file (default: mw-config.json)
+- `-d, --debug` - Enable debug mode with verbose logging
+- `-t, --timing` - Show timing information for operations
+- `-h, --help` - Display help information
+- `-v, --version` - Show CLI version
+
+## Export Formats
+
+### Compact Format (`compact`)
+
+Minimal overhead with raw arrays:
+
+```bash
+mw export TaxRate --exportFormat compact
+# [["GST10","1400","2400","20240101","10","0"]]
+```
+
+### Compact with Headers (`compact-headers`)
+
+Self-documenting with header row:
+
+```bash
+mw export TaxRate --exportFormat compact-headers
+# [
+#   ["TaxCode","PaidAccount","RecAccount","Date","Rate1","Rate2"],
+#   ["GST10","1400","2400","20240101","10","0"]
+# ]
+```
+
+### Full Format (`full`) - Default
+
+Complete objects with field names:
+
+```bash
+mw export TaxRate --exportFormat full
+# [{
+#   "TaxCode": "GST10",
+#   "PaidAccount": "1400",
+#   "RecAccount": "2400",
+#   "Date": "20240101",
+#   "Rate1": 10,
+#   "Rate2": 0
+# }]
+```
+
+### Schema Format (`schema`)
+
+Includes field metadata:
+
+```bash
+mw export TaxRate --exportFormat schema
+# {
+#   "schema": {
+#     "TaxCode": { "type": "string", "required": true },
+#     ...
+#   },
+#   "data": [...],
+#   "metadata": { "table": "TaxRate", "recordCount": 1 }
+# }
+```
+
+## Configuration
+
+### Config File Format
+
+The CLI looks for `mw-config.json` in the current directory:
+
+```json
+{
+  "host": "localhost",
+  "port": 6710,
+  "username": "Admin",
+  "password": "secure-password",
+  "dataFile": "Acme Widgets",
+  "timeout": 30000
+}
+```
+
+### Environment Variables
+
+When no config file is found, environment variables are used:
+
+```bash
+MW_HOST=server.example.com
+MW_PORT=6710
+MW_USERNAME=Admin
+MW_PASSWORD=secure-password
+MW_DATAFILE="Production Data"
+MW_TIMEOUT=30000
+```
+
+### Security Notes
+
+- Passwords in config files are masked when displayed
+- Use environment variables for production environments
+- Consider using a secrets manager for sensitive data
+
+## Advanced Usage
+
+### Debug Mode
+
+Enable detailed logging for troubleshooting:
+
+```bash
+mw export TaxRate --debug
+# [DEBUG] Loading config from mw-config.json
+# [DEBUG] Connecting to localhost:6710
+# [DEBUG] Discovering fields for TaxRate
+# [DEBUG] Found 6 fields
+# [DEBUG] Exporting with filter: undefined
+# ...
+```
+
+### Timing Analysis
+
+Analyze performance with timing mode:
+
+```bash
+mw export TaxRate --timing
+# Timing: Connection: 45ms
+# Timing: Field discovery: 23ms
+# Timing: Export: 67ms
+# Timing: Processing: 12ms
+# Total: 147ms (5 records)
+```
+
+### Filtering and Searching
+
+Use MoneyWorks expressions for precise filtering:
+
+```bash
+# Date range filter
+mw export Transaction --filter "TransDate >= '20250101' and TransDate <= '20250131'"
+
+# Complex conditions
+mw export Account --filter "Type = 'Income' and Balance > 1000"
+
+# Text search
+mw export Name --search "Smith" --filter "Type = 'Customer'"
+```
+
+### Batch Operations
+
+Process multiple operations efficiently:
+
+```bash
+# Export multiple tables
+for table in TaxRate Account Name Product; do
+  mw export $table --output "$table.json"
+done
+
+# Import with validation
+mw export TaxRate --output backup.json
+mw import TaxRate --file updates.json --mode update
+mw export TaxRate --output verify.json
+```
+
+### Pipeline Integration
+
+Use with Unix pipes and jq:
+
+```bash
+# Count active tax rates
+mw export TaxRate --exportFormat full | jq '[.[] | select(.Status == "Active")] | length'
+
+# Extract specific fields
+mw export Account | jq -r '.[] | [.AccountCode, .Description] | @csv'
+
+# Transform and save
+mw export Product | jq '.[] | {code: .ProductCode, name: .Description}' > products.json
+```
+
+## Error Handling
+
+The CLI provides clear error messages:
+
+```bash
+# Connection errors
+mw test-connection
+# Error: Connection refused - is MoneyWorks server running on localhost:6710?
+
+# Authentication errors
+mw export TaxRate
+# Error: Authentication failed - check username and password
+
+# Data errors
+mw import TaxRate --file invalid.json
+# Error: Invalid JSON in file invalid.json
+```
+
+## Best Practices
+
+### 1. Use Config Files for Development
+
+```bash
+# Create project-specific configs
+echo '{"host":"dev-server","port":6710}' > .mw-config.dev.json
+mw export TaxRate --config .mw-config.dev.json
+```
+
+### 2. Script Common Operations
+
+```bash
+#!/bin/bash
+# backup.sh - Daily backup script
+DATE=$(date +%Y%m%d)
+TABLES="TaxRate Account Transaction Name Product"
+
+for table in $TABLES; do
+  mw export $table --output "backup/${table}_${DATE}.json"
+done
+```
+
+### 3. Validate Before Import
+
+```bash
+# Always backup before importing
+mw export TaxRate --output tax-backup.json
+mw import TaxRate --file new-rates.json
+# If something goes wrong, restore from backup
+```
+
+### 4. Use Appropriate Export Formats
+
+```bash
+# For backups - use full format
+mw export Account --exportFormat full --output backup.json
+
+# For data transfer - use compact
+mw export Transaction --exportFormat compact | gzip > transactions.gz
+
+# For documentation - use schema
+mw export TaxRate --exportFormat schema --output schema-docs.json
+```
+
+## Troubleshooting
+
+### Connection Issues
+
+```bash
+# Test basic connectivity
+ping localhost
+telnet localhost 6710
+
+# Check with debug mode
+mw test-connection --debug
+
+# Verify credentials
+mw eval "1+1" --debug
+```
+
+### Performance Problems
+
+```bash
+# Use timing to identify bottlenecks
+mw export Transaction --timing --limit 1000
+
+# Export in batches
+for i in {0..10}; do
+  offset=$((i * 1000))
+  mw export Transaction --limit 1000 --offset $offset --output "batch_$i.json"
+done
+```
+
+### Data Format Issues
+
+```bash
+# Check MoneyWorks format support
+mw export TaxRate --format xml-verbose
+
+# Validate JSON files
+jq . < import-data.json > /dev/null || echo "Invalid JSON"
+
+# Preview import without applying
+mw import TaxRate --file data.json --dry-run  # (if implemented)
+```
+
+## Contributing
+
+The CLI is part of the MoneyWorks Core monorepo. To contribute:
+
+1. Clone the repository
+2. Install dependencies with `bun install`
+3. Make changes in `packages/cli/src`
+4. Test with `bun run test`
+5. Build with `bun run build`
+
+Key areas for contribution:
+- Additional table support
+- New export/import formats
+- Enhanced filtering capabilities
+- Interactive mode
+- Progress indicators for large operations
+
+## Resources
+
+- [API Reference](/packages/cli/api) - Complete CLI API documentation
+- [@moneyworks/data](/packages/data) - Underlying data access layer
+- [@moneyworks/utilities](/packages/utilities) - Type utilities used by CLI

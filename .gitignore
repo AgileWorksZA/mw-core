@@ -52,3 +52,6 @@ package-lock.json
 /cache/Transaction-labels-fr.json
 .DS_Store
 /packages/**/node_modules/
+
+# Claude Code TTS Hook
+.claude/hooks/*.js

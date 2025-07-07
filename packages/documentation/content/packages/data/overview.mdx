@@ -1,51 +1,415 @@
 ---
 title: "@moneyworks/data"
-description: "MoneyWorks data access layer - REST client and repositories"
+description: "Intelligent data access layer for MoneyWorks REST API with automatic field discovery"
 version: "0.1.0"
 package: "data"
 ---
 
 # @moneyworks/data
 
-<PackageInfo 
-  npm="@moneyworks/data"
-  github="moneyworks/core/packages/data"
-  version="0.1.0"
-/>
+The data package provides a sophisticated data access layer for MoneyWorks REST API, featuring automatic field discovery, multiple export formats, and a clean repository pattern. It abstracts away the complexities of MoneyWorks' TSV-based API while maintaining full type safety.
 
-## Overview
+## 🚀 Features
 
-MoneyWorks data access layer - REST client and repositories
+- **Automatic Field Discovery**: Intelligently discovers field names and types from MoneyWorks XML exports
+- **Multiple Export Formats**: Choose between compact arrays, full objects, or schema-enriched data
+- **Repository Pattern**: Clean abstraction with standard CRUD operations
+- **Smart Client**: High-level client that handles field mapping automatically
+- **Type Safety**: Full TypeScript support with branded types from @moneyworks/canonical
+- **Connection Pooling**: Efficient HTTP connection management
+- **Field Caching**: Discovered structures are cached for optimal performance
 
 ## Installation
 
-<Tabs defaultValue="bun">
-  <TabsList>
-    <TabsTrigger value="bun">Bun</TabsTrigger>
-    <TabsTrigger value="npm">npm</TabsTrigger>
-    <TabsTrigger value="yarn">Yarn</TabsTrigger>
-  </TabsList>
-  <TabsContent value="bun">
-    ```bash
-    bun add @moneyworks/data
-    ```
-  </TabsContent>
-  <TabsContent value="npm">
-    ```bash
-    npm install @moneyworks/data
-    ```
-  </TabsContent>
-  <TabsContent value="yarn">
-    ```bash
-    yarn add @moneyworks/data
-    ```
-  </TabsContent>
-</Tabs>
+```bash
+bun add @moneyworks/data
+# or
+npm install @moneyworks/data
+```
 
-## API Overview
+## Quick Start
 
+```typescript
+import { createDataLayer } from '@moneyworks/data';
 
+// Create configured client and repositories
+const { client, repositories } = await createDataLayer({
+  host: 'localhost',
+  port: 6710,
+  dataFile: 'Accounts',
+  username: 'admin',
+  password: 'password'
+});
 
+// Use repository for type-safe operations
+const allTaxRates = await repositories.taxRate.findAll();
+const gst10 = await repositories.taxRate.findByKey('GST10');
 
+// Query with filters
+const activeTaxRates = await repositories.taxRate.find({
+  filter: 'Status = "Active"',
+  orderBy: 'TaxCode'
+});
 
-See the [API Reference](/packages/data/api) for complete documentation.
+// Different export formats
+const compact = await client.smartExport('TaxRate', { 
+  exportFormat: 'compact' 
+});
+const full = await client.smartExport('TaxRate', { 
+  exportFormat: 'full' 
+});
+```
+
+## Core Concepts
+
+### Smart Field Discovery
+
+MoneyWorks REST API exports data in TSV format without headers. The smart client solves this by:
+
+1. Exporting one record as XML to discover field names and order
+2. Caching the discovered structure for future requests
+3. Automatically mapping TSV arrays to properly typed objects
+4. Converting XML field names to MoneyWorks PascalCase convention
+
+```typescript
+// The system automatically discovers this structure
+{
+  TaxCode: { index: 0, type: 'string', xmlName: 'taxcode' },
+  PaidAccount: { index: 1, type: 'string', xmlName: 'paidaccount' },
+  RecAccount: { index: 2, type: 'string', xmlName: 'recaccount' },
+  Date: { index: 3, type: 'string', xmlName: 'date' },
+  Rate1: { index: 4, type: 'number', xmlName: 'rate1' },
+  Rate2: { index: 5, type: 'number', xmlName: 'rate2' }
+}
+```
+
+### Export Formats
+
+The package supports four export formats to suit different use cases:
+
+#### Compact Format (`compact`)
+Minimal overhead with raw arrays - perfect for network efficiency:
+```typescript
+[["GST10", "1400", "2400", "20240101", "10", "0"]]
+```
+
+#### Compact with Headers (`compact-headers`)
+Self-documenting arrays with header row:
+```typescript
+[
+  ["TaxCode", "PaidAccount", "RecAccount", "Date", "Rate1", "Rate2"],
+  ["GST10", "1400", "2400", "20240101", "10", "0"]
+]
+```
+
+#### Full Object Format (`full`)
+Best developer experience with complete objects (default):
+```typescript
+[{
+  TaxCode: "GST10",
+  PaidAccount: "1400",
+  RecAccount: "2400",
+  Date: "20240101",
+  Rate1: 10,
+  Rate2: 0
+}]
+```
+
+#### Schema-Enriched Format (`schema`)
+Complete metadata for LLM understanding and documentation:
+```typescript
+{
+  schema: {
+    TaxCode: { 
+      type: "string", 
+      required: true, 
+      description: "Unique tax code identifier" 
+    },
+    // ... other fields
+  },
+  data: [/* objects */],
+  metadata: { 
+    table: "TaxRate", 
+    exportedAt: "2025-01-15T10:30:00Z", 
+    recordCount: 1 
+  }
+}
+```
+
+### Repository Pattern
+
+Repositories provide a clean abstraction over the data layer:
+
+```typescript
+// Standard CRUD operations
+const taxRate = await repository.findByKey('GST10');
+const all = await repository.findAll();
+const filtered = await repository.find({ filter: 'Status = "Active"' });
+
+// Create new record
+const created = await repository.create({
+  TaxCode: 'GST15',
+  PaidAccount: '1400',
+  RecAccount: '2400',
+  Date: d`20250101`,
+  Rate1: 15,
+  Rate2: 0
+});
+
+// Update existing
+const updated = await repository.update('GST15', {
+  Rate1: 15.5
+});
+
+// Delete
+await repository.delete('GST15');
+```
+
+### Client Architecture
+
+The package provides two client levels:
+
+#### Low-Level REST Client
+Direct access to MoneyWorks REST API:
+```typescript
+const client = new MoneyWorksRESTClient(config);
+
+// Raw TSV export
+const tsv = await client.export('TaxRate');
+// Returns: [["GST10", "1400", "2400", ...], ...]
+
+// XML export
+const xml = await client.export('TaxRate', { format: 'xml' });
+
+// Evaluate MWScript
+const result = await client.evaluate('Date()');
+```
+
+#### Smart Client
+High-level client with automatic field discovery:
+```typescript
+const smartClient = new SmartMoneyWorksClient(config);
+
+// Automatically discovers fields and returns typed objects
+const taxRates = await smartClient.smartExport('TaxRate');
+
+// Clear field cache if structure changes
+await clearFieldCache('TaxRate');
+```
+
+## Advanced Usage
+
+### Custom Repository Implementation
+
+Create repositories for any MoneyWorks entity:
+
+```typescript
+import { BaseMoneyWorksRepository, SmartMoneyWorksClient } from '@moneyworks/data';
+import { MoneyWorksInvoice } from '@moneyworks/canonical';
+
+class InvoiceRepository extends BaseMoneyWorksRepository<MoneyWorksInvoice> {
+  constructor(client: SmartMoneyWorksClient) {
+    super(client, 'Transaction');
+  }
+  
+  // Add custom methods
+  async findOverdue(): Promise<MoneyWorksInvoice[]> {
+    const today = d`${new Date()}`;
+    return this.find({
+      filter: `DueDate < '${today}' AND AmountDue > 0`
+    });
+  }
+  
+  // Post-process to add branded types
+  protected async postProcess(data: any): Promise<MoneyWorksInvoice> {
+    return {
+      ...data,
+      TransDate: data.TransDate as YYYYMMDD,
+      DueDate: data.DueDate as YYYYMMDD,
+      Period: data.Period as Period
+    };
+  }
+}
+```
+
+### Connection Configuration
+
+```typescript
+const config: MoneyWorksConfig = {
+  host: process.env.MW_HOST || 'localhost',
+  port: parseInt(process.env.MW_PORT || '6710'),
+  dataFile: process.env.MW_DATAFILE || 'Accounts',
+  username: process.env.MW_USERNAME || 'admin',
+  password: process.env.MW_PASSWORD || 'password',
+  timeout: 30000,  // 30 second timeout
+  version: '9'     // MoneyWorks version
+};
+
+const { client, repositories } = await createDataLayer(config);
+```
+
+### Batch Operations
+
+```typescript
+// Import multiple records
+const records = [
+  { TaxCode: 'GST15', PaidAccount: '1400', /* ... */ },
+  { TaxCode: 'GST20', PaidAccount: '1400', /* ... */ }
+];
+
+const result = await repositories.taxRate.import(records);
+console.log(`Imported: ${result.imported}, Errors: ${result.errors}`);
+```
+
+### Query Building
+
+```typescript
+// Complex queries with MoneyWorks syntax
+const results = await repository.find({
+  filter: 'Date >= "20240101" AND Rate1 > 10',
+  orderBy: 'TaxCode DESC',
+  limit: 50,
+  offset: 0
+});
+
+// Using search parameter
+const searchResults = await repository.find({
+  search: 'GST',  // Searches all text fields
+  orderBy: 'TaxCode'
+});
+```
+
+### Field Discovery Utilities
+
+```typescript
+import { discoverTableStructure, getFieldInfo } from '@moneyworks/data';
+
+// Manually discover structure
+const structure = await discoverTableStructure(client, 'Account');
+
+// Get cached field info
+const fieldInfo = await getFieldInfo(client, 'Account');
+
+// Clear cache for a table
+await clearFieldCache('Account');
+
+// Clear all field caches
+await clearAllFieldCaches();
+```
+
+## Best Practices
+
+### 1. Use Repositories for Business Logic
+
+```typescript
+// ✅ Good - encapsulated business logic
+const activeTaxRates = await repositories.taxRate.findActive();
+
+// ❌ Avoid - scattered filter logic
+const active = await client.smartExport('TaxRate', {
+  filter: 'Status = "Active"'
+});
+```
+
+### 2. Choose the Right Export Format
+
+```typescript
+// ✅ For development and debugging
+const full = await client.smartExport('TaxRate', { 
+  exportFormat: 'full' 
+});
+
+// ✅ For network efficiency
+const compact = await client.smartExport('TaxRate', { 
+  exportFormat: 'compact' 
+});
+
+// ✅ For LLM/documentation
+const schema = await client.smartExport('TaxRate', { 
+  exportFormat: 'schema' 
+});
+```
+
+### 3. Handle Connection Errors
+
+```typescript
+try {
+  const data = await repository.findAll();
+} catch (error) {
+  if (error.code === 'ECONNREFUSED') {
+    console.error('MoneyWorks server is not running');
+  } else if (error.status === 401) {
+    console.error('Invalid credentials');
+  }
+}
+```
+
+### 4. Use Environment Variables
+
+```typescript
+// .env file
+MW_HOST=localhost
+MW_PORT=6710
+MW_DATAFILE=Accounts
+MW_USERNAME=admin
+MW_PASSWORD=secure_password
+
+// Usage
+const { client, repositories } = await createDataLayer();
+// Automatically uses environment variables
+```
+
+## Migration Guide
+
+### From Direct REST Calls
+
+```typescript
+// Before - manual TSV parsing
+const response = await fetch('http://localhost:6710/REST/admin:password@Accounts/TaxRate');
+const text = await response.text();
+const rows = text.split('\n').map(row => row.split('\t'));
+
+// After - automatic field discovery
+const { repositories } = await createDataLayer();
+const taxRates = await repositories.taxRate.findAll();
+```
+
+### From XML Exports
+
+```typescript
+// Before - XML parsing
+const xml = await client.export('TaxRate', { format: 'xml' });
+const parsed = parseXML(xml);
+
+// After - direct object access
+const taxRates = await repositories.taxRate.findAll();
+// Already parsed and typed!
+```
+
+## API Stability
+
+This package follows semantic versioning. The public API includes:
+
+- `createDataLayer()` - Main entry point
+- `createSmartClient()` - Smart client factory
+- `createRepository()` - Repository factory
+- Repository interface methods
+- Export format types
+
+Internal implementation details may change between minor versions.
+
+## Resources
+
+- [API Reference](/packages/data/api) - Complete API documentation
+- [MoneyWorks REST APIs](https://cognito.co.nz/manual/moneyworks_scripts_moneyworks_rest_apis.html) - Official REST documentation
+- [REST Developer Resources](https://secure.cognito.co.nz/developer/moneyworks-datacentre-rest-api) - Detailed REST API guide
+
+## Contributing
+
+We welcome contributions! Key areas for improvement:
+
+- Additional repository implementations
+- Performance optimizations
+- Better error messages
+- Extended query builder
+- Batch operation enhancements

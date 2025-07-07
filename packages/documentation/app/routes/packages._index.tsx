@@ -1,6 +1,6 @@
 import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
-import { Package, Code2, Database, Globe, ArrowRight } from "lucide-react";
+import { Package, Code2, Database, Globe, ArrowRight, Terminal } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -49,6 +49,19 @@ export default function PackagesIndex() {
       ],
       icon: <Package className="h-6 w-6" />,
       href: "/packages/canonical",
+    },
+    {
+      name: "@moneyworks/cli",
+      version: "0.1.0",
+      description: "Command-line interface for testing and interacting with MoneyWorks",
+      features: [
+        "Data export/import commands",
+        "Connection testing",
+        "MWScript evaluation",
+        "Multiple export formats"
+      ],
+      icon: <Terminal className="h-6 w-6" />,
+      href: "/packages/cli",
     },
     {
       name: "@moneyworks/web1",
