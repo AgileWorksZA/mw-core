@@ -1,7 +1,6 @@
 import { CodeExample } from "./code-example";
 import { cn } from "~/lib/utils";
 import { highlightCode, parseCodeBlockMeta } from "~/lib/syntax-highlighter";
-import { useTheme } from "~/contexts/theme-context";
 
 // Define MDX component types locally since we're not using actual MDX
 type MDXComponents = Record<string, React.ComponentType<any>>;

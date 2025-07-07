@@ -18,16 +18,16 @@ export default function Index() {
       icon: <Code2 className="h-5 w-5" />,
     },
     {
-      name: "@moneyworks/data",
-      description: "Data access layer for MoneyWorks with smart export capabilities",
-      href: "/packages/data",
-      icon: <Package className="h-5 w-5" />,
-    },
-    {
       name: "@moneyworks/canonical",
       description: "Canonical type definitions for MoneyWorks entities",
       href: "/packages/canonical",
       icon: <BookOpen className="h-5 w-5" />,
+    },
+    {
+      name: "@moneyworks/data",
+      description: "Data access layer for MoneyWorks with smart export capabilities",
+      href: "/packages/data",
+      icon: <Package className="h-5 w-5" />,
     },
     {
       name: "@moneyworks/web1",
