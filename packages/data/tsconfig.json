@@ -10,8 +10,6 @@
     "noEmit": false,
     "allowImportingTsExtensions": false,
     "paths": {
-      "@moneyworks/canonical/*": ["../canonical/src/*"],
-      "@moneyworks/utilities/*": ["../utilities/src/*"],
       "@moneyworks/data/*": ["./src/*"]
     },
     "baseUrl": "."
