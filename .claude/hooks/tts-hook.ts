@@ -212,7 +212,7 @@ async function playSessionSummary() {
 
     // Speed up audio using ffmpeg
     const speedFile = path.join(os.tmpdir(), `tts_speed_${Date.now()}.mp3`);
-    const speedFactor = 1.5; // 1.5x speed
+    const speedFactor = 1.3; // 1.5x speed
 
     await new Promise<void>((resolve, reject) => {
       const ffmpeg = spawn("ffmpeg", [

@@ -1,0 +1,669 @@
+---
+title: "Authentication & Security"
+description: "Complete guide to authentication, connection security, and credential management in MoneyWorks Core"
+order: 2
+---
+
+# Authentication & Security
+
+MoneyWorks Core takes security seriously. This guide covers authentication strategies, secure credential storage, and best practices for protecting your MoneyWorks data across different deployment scenarios.
+
+## Overview
+
+MoneyWorks uses a multi-layered authentication approach:
+
+<div className="grid gap-4 md:grid-cols-2 my-6">
+  <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+    <h3 className="font-semibold mb-2">🔐 MoneyWorks Authentication</h3>
+    <ul className="space-y-1 text-sm">
+      <li>✓ Username/password authentication</li>
+      <li>✓ Optional folder-level authentication</li>
+      <li>✓ IP-based access control</li>
+      <li>✓ Session management</li>
+    </ul>
+  </div>
+  
+  <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+    <h3 className="font-semibold mb-2">🛡️ Application Security</h3>
+    <ul className="space-y-1 text-sm">
+      <li>✓ Encrypted credential storage</li>
+      <li>✓ Environment variable support</li>
+      <li>✓ Multi-tenant isolation</li>
+      <li>✓ Audit logging</li>
+    </ul>
+  </div>
+</div>
+
+## MoneyWorks Authentication
+
+### Basic Authentication
+
+MoneyWorks Data Centre uses username and password authentication:
+
+<CodeExample>
+```typescript
+import { MoneyWorksClient } from '@moneyworks/data';
+
+const client = new MoneyWorksClient({
+  host: 'http://localhost',
+  port: 6700,
+  dataFile: 'Acme Widgets.moneyworks',
+  username: 'admin',
+  password: 'secretpassword'
+});
+
+// Test the connection
+const isConnected = await client.testConnection();
+if (!isConnected) {
+  throw new Error('Authentication failed');
+}
+```
+</CodeExample>
+
+### Folder-Level Authentication
+
+For additional security, MoneyWorks supports folder-level authentication:
+
+<CodeExample>
+```typescript
+const client = new MoneyWorksClient({
+  host: 'http://localhost',
+  port: 6700,
+  dataFile: 'Acme Widgets.moneyworks',
+  username: 'admin',
+  password: 'userpassword',
+  // Additional folder authentication
+  folderAuth: {
+    folderName: 'SecureFolder',
+    folderPassword: 'folderpassword'
+  }
+});
+```
+</CodeExample>
+
+### Connection Configuration
+
+Store connection details in a configuration file:
+
+<CodeExample>
+```json
+// mw-config.json
+{
+  "host": "http://localhost",
+  "port": 6700,
+  "dataFile": "Acme Widgets.moneyworks",
+  "username": "admin",
+  "password": "${MW_PASSWORD}",  // Use environment variable
+  "folderAuth": {
+    "folderName": "SecureFolder",
+    "folderPassword": "${MW_FOLDER_PASSWORD}"
+  }
+}
+```
+</CodeExample>
+
+Load configuration with environment variable substitution:
+
+<CodeExample>
+```typescript
+import { loadConfig } from '@moneyworks/data';
+
+// Automatically substitutes ${VAR} with process.env.VAR
+const config = await loadConfig('./mw-config.json');
+const client = new MoneyWorksClient(config);
+```
+</CodeExample>
+
+## Credential Storage
+
+### Environment Variables
+
+The most secure approach for production:
+
+<CodeExample>
+```bash
+# .env (never commit this!)
+MW_HOST=https://mw.company.com
+MW_PORT=443
+MW_USERNAME=api_user
+MW_PASSWORD=super_secret_password
+MW_FOLDER_NAME=Production
+MW_FOLDER_PASSWORD=folder_secret
+
+# Use in your application
+const client = new MoneyWorksClient({
+  host: process.env.MW_HOST!,
+  port: parseInt(process.env.MW_PORT!),
+  dataFile: process.env.MW_DATA_FILE!,
+  username: process.env.MW_USERNAME!,
+  password: process.env.MW_PASSWORD!,
+  folderAuth: process.env.MW_FOLDER_NAME ? {
+    folderName: process.env.MW_FOLDER_NAME,
+    folderPassword: process.env.MW_FOLDER_PASSWORD!
+  } : undefined
+});
+```
+</CodeExample>
+
+### Encrypted Storage (Web Application)
+
+The web application uses AES-256-GCM encryption for storing credentials:
+
+<CodeExample>
+```typescript
+import { encrypt, decrypt } from '@moneyworks/web1/services/crypto';
+
+// Encrypting credentials before storage
+const encryptedPassword = await encrypt(plainPassword);
+
+// Store in database
+await db.insert(connections).values({
+  id: nanoid(),
+  user_id: userId,
+  name: 'Production Server',
+  mw_host: 'https://mw.company.com',
+  mw_port: 443,
+  mw_username: 'api_user',
+  mw_password: encryptedPassword, // Encrypted!
+  mw_data_file: 'Company.moneyworks'
+});
+
+// Decrypting for use
+const connection = await getConnection(connectionId);
+const plainPassword = await decrypt(connection.mw_password);
+```
+</CodeExample>
+
+### Key Management
+
+<div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 my-4">
+  <p className="text-sm">
+    <strong>⚠️ Important:</strong> Never hardcode encryption keys! Use environment variables or a key management service.
+  </p>
+</div>
+
+Generate and store encryption keys securely:
+
+<CodeExample>
+```typescript
+// Generate a secure key
+import { generateKey } from '@moneyworks/web1/services/crypto';
+
+const key = generateKey(); // 32-byte key for AES-256
+console.log('Add to .env: ENCRYPTION_KEY=' + key);
+
+// Use in production
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
+if (!ENCRYPTION_KEY || ENCRYPTION_KEY.length !== 64) {
+  throw new Error('Invalid encryption key');
+}
+```
+</CodeExample>
+
+## Multi-Tenant Security
+
+### Connection Isolation
+
+Each user can only access their own connections:
+
+<CodeExample>
+```typescript
+// API endpoint with user isolation
+export async function action({ request }: ActionFunctionArgs) {
+  const user = await requireAuth(request);
+  
+  // Only fetch connections for authenticated user
+  const connections = await db
+    .select()
+    .from(connectionsTable)
+    .where(eq(connectionsTable.user_id, user.id));
+    
+  return json({ connections });
+}
+```
+</CodeExample>
+
+### Audit Logging
+
+Track all sensitive operations:
+
+<CodeExample>
+```typescript
+import { logAudit } from '@moneyworks/web1/services/audit';
+
+// Log connection creation
+await logAudit({
+  userId: user.id,
+  action: 'connection.create',
+  connectionId: connection.id,
+  details: {
+    name: connection.name,
+    host: connection.mw_host
+    // Never log passwords!
+  },
+  ipAddress: request.headers.get('x-forwarded-for')
+});
+
+// Log access attempts
+await logAudit({
+  userId: user.id,
+  action: 'connection.access',
+  connectionId: connection.id,
+  details: {
+    success: true,
+    operation: 'export_tax_rates'
+  }
+});
+```
+</CodeExample>
+
+## API Security
+
+### Authentication Strategies
+
+#### 1. API Key Authentication
+
+Simple and effective for server-to-server communication:
+
+<CodeExample>
+```typescript
+import { Elysia } from 'elysia';
+
+const apiKeyAuth = new Elysia()
+  .derive(({ headers }) => {
+    const apiKey = headers['x-api-key'];
+    
+    if (!apiKey) {
+      throw new Error('Missing API key');
+    }
+    
+    // Validate against stored keys
+    const validKey = await validateApiKey(apiKey);
+    if (!validKey) {
+      throw new Error('Invalid API key');
+    }
+    
+    return { apiKey, userId: validKey.userId };
+  });
+
+// Apply to your app
+const app = createApp(client)
+  .use(apiKeyAuth);
+```
+</CodeExample>
+
+#### 2. JWT Authentication
+
+For web applications and mobile apps:
+
+<CodeExample>
+```typescript
+import jwt from '@elysiajs/jwt';
+
+const app = new Elysia()
+  .use(jwt({
+    name: 'jwt',
+    secret: process.env.JWT_SECRET!,
+    exp: '7d'
+  }))
+  .derive(async ({ jwt, headers }) => {
+    const auth = headers.authorization;
+    if (!auth?.startsWith('Bearer ')) {
+      throw new Error('Missing token');
+    }
+    
+    const token = auth.slice(7);
+    const payload = await jwt.verify(token);
+    
+    if (!payload) {
+      throw new Error('Invalid token');
+    }
+    
+    return { userId: payload.sub };
+  });
+```
+</CodeExample>
+
+#### 3. OAuth2 / OIDC
+
+For enterprise SSO integration:
+
+<CodeExample>
+```typescript
+// Using Clerk for authentication
+import { ClerkProvider } from '@clerk/clerk-react';
+
+export default function App() {
+  return (
+    <ClerkProvider publishableKey={process.env.VITE_CLERK_PUBLISHABLE_KEY}>
+      <YourApp />
+    </ClerkProvider>
+  );
+}
+
+// In your API
+import { verifyToken } from '@clerk/backend';
+
+const payload = await verifyToken(token, {
+  secretKey: process.env.CLERK_SECRET_KEY
+});
+```
+</CodeExample>
+
+### Rate Limiting
+
+Protect your API from abuse:
+
+<CodeExample>
+```typescript
+import { rateLimit } from '@moneyworks/api/middleware/rate-limit';
+
+const app = createApp(client)
+  .use(rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 100, // 100 requests per minute
+    keyGenerator: (context) => {
+      // Rate limit by API key or IP
+      return context.apiKey || context.ip;
+    }
+  }));
+```
+</CodeExample>
+
+### CORS Configuration
+
+Control which domains can access your API:
+
+<CodeExample>
+```typescript
+import { cors } from '@elysiajs/cors';
+
+const app = createApp(client)
+  .use(cors({
+    origin: process.env.NODE_ENV === 'production'
+      ? ['https://app.example.com', 'https://admin.example.com']
+      : true, // Allow all in development
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key']
+  }));
+```
+</CodeExample>
+
+## Security Best Practices
+
+### 1. Principle of Least Privilege
+
+Create MoneyWorks users with minimal required permissions:
+
+<CodeExample>
+```typescript
+// Create read-only user for reporting
+// In MoneyWorks:
+// - Username: report_viewer
+// - Permissions: View only for required tables
+
+// Use specific user for each service
+const reportingClient = new MoneyWorksClient({
+  ...baseConfig,
+  username: 'report_viewer',
+  password: process.env.MW_REPORT_PASSWORD
+});
+
+const adminClient = new MoneyWorksClient({
+  ...baseConfig,
+  username: 'admin_user',
+  password: process.env.MW_ADMIN_PASSWORD
+});
+```
+</CodeExample>
+
+### 2. Network Security
+
+#### Use HTTPS in Production
+
+<CodeExample>
+```typescript
+// Always use HTTPS for production MoneyWorks servers
+const client = new MoneyWorksClient({
+  host: 'https://mw.company.com', // HTTPS!
+  port: 443,
+  // ... other config
+});
+```
+</CodeExample>
+
+#### IP Whitelisting
+
+Configure MoneyWorks Data Centre to only accept connections from known IPs:
+
+```
+# MoneyWorks Data Centre settings
+Allowed IPs: 203.0.113.0/24, 198.51.100.0/24
+```
+
+### 3. Input Validation
+
+Always validate and sanitize user input:
+
+<CodeExample>
+```typescript
+import { z } from 'zod';
+
+const ExportSchema = z.object({
+  table: z.enum(['TaxRate', 'Account', 'Transaction']),
+  format: z.enum(['full', 'compact', 'compact-headers', 'schema']),
+  filter: z.string().max(500).optional(),
+  limit: z.number().min(1).max(1000).default(100)
+});
+
+// In your API endpoint
+export async function GET({ request }: RequestEvent) {
+  const url = new URL(request.url);
+  const params = Object.fromEntries(url.searchParams);
+  
+  // Validate input
+  const validated = ExportSchema.parse(params);
+  
+  // Safe to use validated input
+  const data = await client.export(validated.table, {
+    format: validated.format,
+    filter: validated.filter,
+    limit: validated.limit
+  });
+}
+```
+</CodeExample>
+
+### 4. Error Handling
+
+Never expose sensitive information in error messages:
+
+<CodeExample>
+```typescript
+try {
+  const data = await client.export('TaxRate');
+  return json({ data });
+} catch (error) {
+  // Log full error internally
+  console.error('Export failed:', error);
+  
+  // Return safe error to client
+  if (error instanceof MoneyWorksAuthError) {
+    return json(
+      { error: 'Authentication failed' },
+      { status: 401 }
+    );
+  }
+  
+  return json(
+    { error: 'Export failed' },
+    { status: 500 }
+  );
+}
+```
+</CodeExample>
+
+### 5. Session Management
+
+Implement proper session handling:
+
+<CodeExample>
+```typescript
+// Set session timeout
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+
+// Track last activity
+app.derive(({ cookie, setCookie }) => {
+  const lastActivity = cookie.lastActivity;
+  
+  if (lastActivity) {
+    const elapsed = Date.now() - parseInt(lastActivity);
+    if (elapsed > SESSION_TIMEOUT) {
+      throw new Error('Session expired');
+    }
+  }
+  
+  // Update activity timestamp
+  setCookie('lastActivity', Date.now().toString());
+});
+```
+</CodeExample>
+
+## Deployment Security
+
+### Docker Security
+
+<CodeExample>
+```dockerfile
+# Use non-root user
+FROM node:20-alpine
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
+
+# Copy files with correct ownership
+COPY --chown=nodejs:nodejs . .
+
+# Switch to non-root user
+USER nodejs
+
+# Don't expose sensitive ports
+EXPOSE 3000
+
+# Use secrets for sensitive data
+RUN --mount=type=secret,id=npmrc \
+    npm ci --production
+```
+</CodeExample>
+
+### Environment Configuration
+
+<CodeExample>
+```bash
+# Production .env.production
+NODE_ENV=production
+LOG_LEVEL=warn
+
+# Use strong passwords
+MW_PASSWORD=<use-password-manager>
+ENCRYPTION_KEY=<32-byte-hex-key>
+JWT_SECRET=<strong-random-secret>
+
+# Enable security features
+ENABLE_RATE_LIMIT=true
+ENABLE_AUDIT_LOG=true
+ALLOWED_ORIGINS=https://app.example.com
+
+# Session configuration  
+SESSION_SECRET=<strong-random-secret>
+SESSION_TIMEOUT=1800000  # 30 minutes
+```
+</CodeExample>
+
+### Monitoring and Alerts
+
+Set up monitoring for security events:
+
+<CodeExample>
+```typescript
+// Monitor failed authentication attempts
+app.onError(({ error, set }) => {
+  if (error.message.includes('Authentication failed')) {
+    // Alert on repeated failures
+    alertSecurityTeam({
+      event: 'auth_failure',
+      details: {
+        timestamp: new Date(),
+        ip: context.ip,
+        // Don't log attempted passwords!
+      }
+    });
+  }
+});
+
+// Monitor unusual activity
+if (exportCount > RATE_LIMIT_THRESHOLD) {
+  await logAudit({
+    userId,
+    action: 'rate_limit_exceeded',
+    details: { count: exportCount }
+  });
+}
+```
+</CodeExample>
+
+## Security Checklist
+
+Before going to production, ensure:
+
+<div className="space-y-2 my-6">
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>All credentials stored in environment variables</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>HTTPS enabled for all connections</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>API authentication implemented</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>Rate limiting configured</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>CORS properly configured</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>Input validation on all endpoints</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>Audit logging enabled</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>Error messages sanitized</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>MoneyWorks users have minimal permissions</span>
+  </label>
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="rounded" />
+    <span>Encryption keys properly managed</span>
+  </label>
+</div>
+
+## Next Steps
+
+- [API Development Guide](/guides/api-development) - Build secure APIs
+- [Multi-Tenant Architecture](/guides/multi-tenant) - Isolate customer data
+- [Deployment Guide](/guides/deployment) - Deploy securely
+- [Monitoring & Logging](/guides/monitoring) - Track security events
+
+Remember: Security is not a one-time setup but an ongoing process. Regularly review and update your security measures as your application grows.
