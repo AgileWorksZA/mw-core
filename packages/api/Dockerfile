@@ -53,8 +53,8 @@ COPY --from=builder /app/package.json /app/bun.lockb ./
 COPY --from=builder /app/packages packages
 COPY --from=builder /app/tsconfig.base.json ./
 
-# Install production dependencies only
-RUN bun install --frozen-lockfile --production
+# Install dependencies (need all dependencies for workspace linking)
+RUN bun install --frozen-lockfile
 
 # Switch to non-root user
 USER nodejs
