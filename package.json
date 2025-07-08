@@ -10,6 +10,7 @@
   "scripts": {
     "build:cli": "bun --cwd packages/cli build",
     "build:mcp": "bun --cwd packages/mcp-server build",
+    "build:deps": "bun --cwd packages/utilities build && bun --cwd packages/canonical build && bun --cwd packages/data build",
     "clean": "rm -rf node_modules packages/*/node_modules",
     "test": "bun test",
     "cli": "bun --cwd packages/api cli",
@@ -19,9 +20,9 @@
     "mcp:start": "bun --cwd packages/mcp-server start",
     "api": "bun --cwd packages/api dev",
     "api:start": "bun --cwd packages/api start",
-    "api:build": "bun --cwd packages/api build",
+    "api:build": "bun run build:deps && bun --cwd packages/api build",
     "web": "bun --bun --cwd packages/web1 dev",
-    "web:build": "bun --cwd packages/web1 build"
+    "web:build": "bun run build:deps && bun --cwd packages/web1 build"
   },
   "type": "module",
   "workspaces": [
