@@ -48,7 +48,7 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy everything from builder (includes built dist and source files)
 COPY --from=builder /app/package.json /app/bun.lockb ./
 COPY --from=builder /app/packages packages
 COPY --from=builder /app/tsconfig.base.json ./
