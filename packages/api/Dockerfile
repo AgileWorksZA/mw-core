@@ -21,6 +21,21 @@ COPY packages/data packages/data
 COPY packages/api packages/api
 COPY tsconfig.base.json ./
 
+# Build all packages in order
+WORKDIR /app/packages/utilities
+RUN bun run build
+
+WORKDIR /app/packages/canonical
+RUN bun run build
+
+WORKDIR /app/packages/data
+RUN bun run build
+
+WORKDIR /app/packages/api
+RUN bun run build
+
+WORKDIR /app
+
 # Production stage
 FROM oven/bun:1-alpine
 
@@ -55,4 +70,4 @@ ENV PORT=3000
 ENTRYPOINT ["dumb-init", "--"]
 
 # Start the application
-CMD ["bun", "run", "packages/api/src/index.ts"]
+CMD ["bun", "run", "--cwd", "packages/api", "start"]

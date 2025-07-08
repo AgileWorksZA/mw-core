@@ -6,8 +6,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "/Users/hgeldenhuys/.bun/bin/bun --watch src/index.ts",
-    "start": "/Users/hgeldenhuys/.bun/bin/bun src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "start": "bun run dist/index.js",
+    "start:dev": "bun src/index.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
