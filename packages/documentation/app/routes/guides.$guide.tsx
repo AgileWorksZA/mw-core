@@ -3,8 +3,11 @@ import { data } from "react-router";
 import { loadGuide } from "~/lib/content-loader";
 import { Link } from "react-router";
 import { ArrowLeft } from "lucide-react";
+import { MDXContent, processMarkdownContent } from "~/components/mdx-components";
+import { getPreferences } from "~/lib/theme.server";
+import { TableOfContents, extractTableOfContents } from "~/components/table-of-contents";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const guideName = params.guide!;
   const guide = await loadGuide(guideName);
   
@@ -12,11 +15,21 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Guide not found", { status: 404 });
   }
   
-  return data({ guide });
+  // Get current theme preference
+  const preferences = await getPreferences(request);
+  const theme = preferences.theme === 'light' ? 'light' : 'dark';
+  
+  // Process markdown with syntax highlighting on the server
+  const processedHtml = await processMarkdownContent(guide.content, theme);
+  
+  // Extract table of contents
+  const tableOfContents = extractTableOfContents(guide.content);
+  
+  return data({ guide, processedHtml, theme, tableOfContents });
 }
 
 export default function GuideDetail() {
-  const { guide } = useLoaderData<typeof loader>();
+  const { guide, processedHtml, tableOfContents } = useLoaderData<typeof loader>();
   
   return (
     <div className="min-h-screen py-12">
@@ -46,11 +59,21 @@ export default function GuideDetail() {
             </div>
           </header>
           
-          {/* Content */}
-          <article className="prose prose-gray dark:prose-invert max-w-none">
-            {/* In a real implementation, we'd render MDX here */}
-            <div dangerouslySetInnerHTML={{ __html: guide.content }} />
-          </article>
+          {/* Content with Table of Contents */}
+          <div className="flex gap-8">
+            <article className="prose prose-gray dark:prose-invert max-w-none flex-1 min-w-0">
+              <MDXContent processedHtml={processedHtml} content={guide.content} />
+            </article>
+            
+            {/* Table of Contents - Sticky Sidebar */}
+            {tableOfContents.length > 0 && (
+              <aside className="hidden lg:block w-64 shrink-0">
+                <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                  <TableOfContents items={tableOfContents} />
+                </div>
+              </aside>
+            )}
+          </div>
         </div>
       </div>
     </div>

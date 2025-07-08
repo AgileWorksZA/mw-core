@@ -66,7 +66,26 @@ export default function Index() {
             
             {/* Search Bar */}
             <div className="mt-10">
-              {/* SearchCommand will be added later */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => {
+                    const event = new KeyboardEvent('keydown', {
+                      key: 'k',
+                      metaKey: true,
+                      ctrlKey: true,
+                      bubbles: true
+                    });
+                    document.dispatchEvent(event);
+                  }}
+                  className="flex items-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 transition-colors w-full max-w-sm"
+                >
+                  <Search className="h-4 w-4" />
+                  <span className="flex-1 text-left">Search documentation...</span>
+                  <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 px-1.5 font-mono text-[10px] font-medium text-gray-600 dark:text-gray-400 opacity-100 sm:flex">
+                    <span className="text-xs">⌘</span>K
+                  </kbd>
+                </button>
+              </div>
             </div>
             
             {/* Quick Links */}

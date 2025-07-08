@@ -13,6 +13,8 @@ import type { Route } from "./+types/root";
 import { getPreferences } from "~/lib/theme.server";
 import { ThemeProvider } from "~/contexts/theme-context";
 import { ThemeToggle } from "~/components/theme-toggle";
+import { useHashScroll } from "~/hooks/use-hash-scroll";
+import { SearchCommand } from "~/components/search-command";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -73,10 +75,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const { preferences } = useLoaderData<typeof loader>();
   
+  // Handle hash scrolling for anchor links
+  useHashScroll();
+  
   return (
     <ThemeProvider theme={preferences.theme}>
       <Navigation />
       <Outlet />
+      <SearchCommand />
     </ThemeProvider>
   );
 }

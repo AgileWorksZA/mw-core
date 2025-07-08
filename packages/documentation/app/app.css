@@ -66,3 +66,30 @@ pre.shiki {
 pre.shiki code {
   @apply block;
 }
+
+/* Hash link target highlighting */
+.target-highlight {
+  @apply relative;
+  animation: highlight 2s ease-out;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: rgb(251 191 36 / 0.3);
+    box-shadow: 0 0 0 4px rgb(251 191 36 / 0.2);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 4px transparent;
+  }
+}
+
+/* Smooth scroll behavior for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset for fixed header when scrolling to anchors */
+[id] {
+  scroll-margin-top: 5rem;
+}

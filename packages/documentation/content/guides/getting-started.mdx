@@ -1,99 +1,468 @@
 ---
 title: "Getting Started with MoneyWorks Core"
-description: "Learn how to set up and use MoneyWorks Core in your projects"
+description: "Your complete guide to setting up and running the MoneyWorks Core monorepo"
 order: 1
 ---
 
 # Getting Started with MoneyWorks Core
 
-MoneyWorks Core is a TypeScript-first SDK for interacting with MoneyWorks accounting software. This guide will help you get started quickly.
+Welcome to MoneyWorks Core! This guide will help you set up the monorepo and get all components running. MoneyWorks Core is a comprehensive TypeScript SDK and application suite for MoneyWorks accounting software.
+
+## What is MoneyWorks Core?
+
+MoneyWorks Core is a monorepo containing multiple packages that work together:
+
+- 🎯 **Utilities** - Core utilities and branded types
+- 📚 **Canonical** - Pure MoneyWorks type definitions
+- 💾 **Data** - Data access layer with smart field discovery
+- 🖥️ **CLI** - Command-line tool for testing
+- 🌐 **API** - REST API server with ElysiaJS
+- 🎨 **Web** - Modern web application
+- 📖 **Documentation** - This documentation site
 
 ## Prerequisites
 
-Before you begin, make sure you have:
+Before we begin, ensure you have:
 
-- [Bun](https://bun.sh) installed (v1.0 or later)
-- MoneyWorks Data Centre running and accessible
-- Basic knowledge of TypeScript
+<div className="grid gap-4 md:grid-cols-2 my-6">
+  <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+    <h3 className="font-semibold mb-2">Development Environment</h3>
+    <ul className="space-y-1 text-sm">
+      <li>✓ Git installed</li>
+      <li>✓ Bun v1.0 or later (<a href="https://bun.sh" className="text-primary-600">install here</a>)</li>
+      <li>✓ Node.js 18+ (for some tools)</li>
+      <li>✓ VS Code or preferred editor</li>
+    </ul>
+  </div>
+  
+  <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+    <h3 className="font-semibold mb-2">MoneyWorks Setup</h3>
+    <ul className="space-y-1 text-sm">
+      <li>✓ MoneyWorks Data Centre running</li>
+      <li>✓ Network access to the server</li>
+      <li>✓ Valid username and password</li>
+      <li>✓ Test data file (optional)</li>
+    </ul>
+  </div>
+</div>
 
-## Installation
+## Quick Start (5 minutes)
 
-Install the core packages you'll need:
+### 1. Clone the Repository
 
 ```bash
-bun add @moneyworks/data @moneyworks/utilities
+# Clone the monorepo
+git clone https://github.com/your-org/mw-core.git
+cd mw-core
+
+# Install dependencies for all packages
+bun install
 ```
 
-## Setting Up Your Connection
+### 2. Set Up Environment Variables
 
-First, create a configuration file for your MoneyWorks connection:
+Create a `.env` file in the root directory:
 
-```typescript
-// mw-config.json
-{
-  "connections": [
-    {
-      "name": "production",
-      "host": "http://localhost:6700",
-      "port": 6700,
-      "username": "your-username",
-      "password": "your-password"
-    }
-  ]
-}
+```bash
+# MoneyWorks Connection
+MW_HOST=http://localhost
+MW_PORT=6700
+MW_DATA_FILE=Acme Widgets.moneyworks
+MW_USERNAME=your-username
+MW_PASSWORD=your-password
+
+# Optional: Folder authentication
+MW_FOLDER_NAME=
+MW_FOLDER_PASSWORD=
+
+# API Server (optional)
+API_PORT=3000
+API_HOST=0.0.0.0
+
+# Web App (for production)
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
+DATABASE_URL=file:./data/app.db
+ENCRYPTION_KEY=your-32-byte-encryption-key
+
+# Development
+NODE_ENV=development
 ```
 
-## Your First Query
+<div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 my-4">
+  <p className="text-sm">
+    <strong>🔐 Security Tip:</strong> Never commit the `.env` file! It's already in `.gitignore`. Use `.env.example` as a template.
+  </p>
+</div>
 
-Here's a simple example to fetch tax rates:
+### 3. Build All Packages
 
-<CodeExample>
-```typescript
-import { MoneyWorksClient } from '@moneyworks/data';
-import { TaxRateRepository } from '@moneyworks/data/repositories';
+```bash
+# Build all packages in dependency order
+bun run build
 
-// Initialize the client
-const client = new MoneyWorksClient({
-  host: 'http://localhost:6700',
-  username: 'your-username',
-  password: 'your-password'
-});
-
-// Create a repository instance
-const taxRates = new TaxRateRepository(client);
-
-// Fetch all tax rates
-const allRates = await taxRates.findAll();
-console.log(allRates);
-
-// Find a specific tax rate
-const gstRate = await taxRates.findByKey('GST');
-console.log(gstRate);
+# Or build specific packages
+bun run build:utilities
+bun run build:canonical
+bun run build:data
 ```
-</CodeExample>
 
-## Working with Branded Types
+### 4. Test Your Connection
 
-MoneyWorks Core uses branded types to ensure type safety:
+Let's verify everything is working with the CLI:
 
-```typescript
-import { YYYYMMDD, validateYYYYMMDD } from '@moneyworks/utilities';
+```bash
+# Run the CLI directly
+bun run cli
 
-// Validate date strings
-const dateString = "20240703";
-if (validateYYYYMMDD(dateString)) {
-  // dateString is now typed as YYYYMMDD
-  processDate(dateString);
-}
+# Or install globally for easier access
+cd packages/cli
+bun link
+mw --help
 
-// Type-safe date operations
-function processDate(date: YYYYMMDD) {
-  // Only valid YYYYMMDD strings can be passed here
-}
+# Test the connection
+mw test-connection
+
+# If successful, try exporting some data
+mw export TaxRate --format=table
+```
+
+You should see output like:
+
+```
+✅ Connected to MoneyWorks successfully!
+Server: MoneyWorks Data Centre 2024.1
+Data File: Acme Widgets.moneyworks
+
+Tax Rates:
+┌──────────┬─────────────────────┬────────┐
+│ Code     │ Description         │ Rate   │
+├──────────┼─────────────────────┼────────┤
+│ GST10    │ GST 10%            │ 10.00% │
+│ GST15    │ GST 15%            │ 15.00% │
+│ EXEMPT   │ Tax Exempt         │ 0.00%  │
+└──────────┴─────────────────────┴────────┘
+```
+
+## Running Different Components
+
+### Command Line Interface (CLI)
+
+The CLI is perfect for testing connections and exploring data:
+
+```bash
+cd packages/cli
+
+# Development mode (auto-reload)
+bun run dev
+
+# Run commands
+bun run cli export TaxRate
+bun run cli eval "GetFieldValue('Company', 'Name')"
+bun run cli shell  # Interactive shell
+```
+
+### REST API Server
+
+Start the API server for web applications:
+
+```bash
+cd packages/api
+
+# Development mode with auto-reload
+bun run dev
+
+# Production mode
+bun run start
+```
+
+The API will be available at:
+- Endpoints: `http://localhost:3000/api/v1`
+- Swagger docs: `http://localhost:3000/api/v1/swagger`
+
+### Web Application
+
+Run the full-featured web interface:
+
+```bash
+cd packages/web1
+
+# Development mode
+bun run dev
+
+# Build for production
+bun run build
+bun run start
+```
+
+Visit `http://localhost:5173` to see the web app.
+
+### Documentation Site
+
+You're reading it! To run locally:
+
+```bash
+cd packages/documentation
+
+# Development mode
+bun run dev
+
+# Build for production
+bun run build
+```
+
+## Project Structure
+
+Understanding the monorepo structure:
+
+```
+mw-core/
+├── packages/
+│   ├── utilities/       # Core utilities and branded types
+│   ├── canonical/       # MoneyWorks type definitions
+│   ├── data/           # Data access layer
+│   ├── cli/            # Command-line interface
+│   ├── api/            # REST API server
+│   ├── web1/           # Web application
+│   └── documentation/  # This documentation site
+├── scripts/            # Build and utility scripts
+├── .env               # Environment variables (create this)
+├── .env.example       # Template for environment variables
+├── package.json       # Root package.json with workspace config
+└── README.md          # Project overview
+```
+
+## Development Workflow
+
+### 1. Making Changes
+
+When developing, work in the appropriate package:
+
+```bash
+# Navigate to a package
+cd packages/data
+
+# Run tests in watch mode
+bun test --watch
+
+# Type checking
+bun run typecheck
+
+# Linting
+bun run lint
+```
+
+### 2. Running Tests
+
+Each package has its own test suite:
+
+```bash
+# Run all tests
+bun test
+
+# Run tests for a specific package
+cd packages/utilities
+bun test
+
+# Run with coverage
+bun test --coverage
+```
+
+### 3. Building Packages
+
+Packages must be built in dependency order:
+
+```bash
+# Build everything
+bun run build
+
+# Build a specific package and its dependencies
+cd packages/data
+bun run build
+```
+
+## Common Tasks
+
+### Connecting to Different MoneyWorks Servers
+
+Update your `.env` file or create environment-specific files:
+
+```bash
+# .env.development
+MW_HOST=http://localhost
+MW_PORT=6700
+
+# .env.production
+MW_HOST=https://mw.company.com
+MW_PORT=443
+```
+
+### Working with Multiple Data Files
+
+The CLI supports multiple configurations:
+
+```bash
+# Create different config files
+cp .env .env.company1
+cp .env .env.company2
+
+# Use specific config
+MW_CONFIG=.env.company1 mw export Account
+MW_CONFIG=.env.company2 mw export Account
+```
+
+### Debugging Connection Issues
+
+<details>
+<summary>Error: "Connection refused" or timeout</summary>
+
+1. **Verify MoneyWorks Data Centre is running**
+   ```bash
+   # Check if the service is running
+   ps aux | grep "MoneyWorks Data Centre"
+   
+   # Test network connectivity
+   curl -I http://localhost:6700
+   ```
+
+2. **Check firewall settings**
+   - Ensure port 6700 (or your custom port) is open
+   - Check both system firewall and MoneyWorks security settings
+
+3. **Verify the data file path**
+   - The path must match exactly (case-sensitive)
+   - Include the `.moneyworks` extension
+</details>
+
+<details>
+<summary>Error: "Invalid username or password"</summary>
+
+1. **Double-check credentials**
+   - Ensure no trailing spaces in username/password
+   - Verify caps lock is off
+
+2. **Test with MoneyWorks client**
+   - Try logging in with the official MoneyWorks client
+   - Verify the user has appropriate permissions
+
+3. **Check folder authentication**
+   - If using folder auth, ensure both folder name and password are correct
+</details>
+
+<details>
+<summary>Build errors or TypeScript issues</summary>
+
+1. **Clean and rebuild**
+   ```bash
+   # Clean all build artifacts
+   bun run clean
+   
+   # Reinstall dependencies
+   rm -rf node_modules bun.lockb
+   bun install
+   
+   # Rebuild everything
+   bun run build
+   ```
+
+2. **Check TypeScript version**
+   ```bash
+   bun pm ls typescript
+   # Should be 5.5.3 or later
+   ```
+</details>
+
+## Environment-Specific Setup
+
+### Development
+
+For local development with hot reload:
+
+```bash
+# Start all development servers
+bun run dev:all
+
+# Or start specific services
+bun run dev:api    # API server
+bun run dev:web    # Web app
+bun run dev:docs   # Documentation
+```
+
+### Production
+
+For production deployment:
+
+```bash
+# Build all packages
+bun run build
+
+# Run production servers
+NODE_ENV=production bun run start:api
+NODE_ENV=production bun run start:web
+```
+
+### Docker
+
+Using Docker for containerized deployment:
+
+```bash
+# Build the image
+docker build -t moneyworks-core .
+
+# Run with environment variables
+docker run -p 3000:3000 \
+  -e MW_HOST=host.docker.internal \
+  -e MW_PORT=6700 \
+  moneyworks-core
 ```
 
 ## Next Steps
 
-- Learn about [Working with Groups](/guides/working-with-groups)
-- Explore the [API Reference](/api)
-- Check out [Advanced Patterns](/guides/advanced-patterns)
+Now that you have everything running, explore these areas:
+
+<div className="grid gap-4 md:grid-cols-2 my-8">
+  <Link to="/guides/using-the-cli" className="block border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:border-primary-500 transition-colors">
+    <h3 className="font-semibold mb-1">Using the CLI</h3>
+    <p className="text-sm text-gray-600 dark:text-gray-400">
+      Master the command-line tool for data exploration
+    </p>
+  </Link>
+  
+  <Link to="/guides/api-development" className="block border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:border-primary-500 transition-colors">
+    <h3 className="font-semibold mb-1">API Development</h3>
+    <p className="text-sm text-gray-600 dark:text-gray-400">
+      Build REST APIs with the ElysiaJS server
+    </p>
+  </Link>
+  
+  <Link to="/guides/web-app-setup" className="block border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:border-primary-500 transition-colors">
+    <h3 className="font-semibold mb-1">Web App Setup</h3>
+    <p className="text-sm text-gray-600 dark:text-gray-400">
+      Configure the multi-tenant web application
+    </p>
+  </Link>
+  
+  <Link to="/guides/type-safety" className="block border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:border-primary-500 transition-colors">
+    <h3 className="font-semibold mb-1">Type Safety Guide</h3>
+    <p className="text-sm text-gray-600 dark:text-gray-400">
+      Understanding branded types and validation
+    </p>
+  </Link>
+</div>
+
+## Contributing
+
+We welcome contributions! See our [Contributing Guide](https://github.com/your-org/mw-core/blob/main/CONTRIBUTING.md) for details on:
+
+- Code style and standards
+- Testing requirements
+- Pull request process
+- Development setup
+
+## Get Help
+
+- 📖 Browse the [API Reference](/api) for detailed documentation
+- 💬 Join our [Discord community](https://discord.gg/moneyworks) for support
+- 🐛 Report issues on [GitHub](https://github.com/your-org/mw-core/issues)
+- 📧 Email support@moneyworks.com for enterprise support
+
+Welcome to the MoneyWorks Core community! We're excited to see what you build. 🚀
