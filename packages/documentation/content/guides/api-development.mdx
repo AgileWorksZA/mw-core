@@ -1,0 +1,666 @@
+---
+title: "API Development"
+description: "Build high-performance REST APIs with MoneyWorks Core using ElysiaJS"
+order: 3
+---
+
+# API Development
+
+Build type-safe, high-performance REST APIs for MoneyWorks using the `@moneyworks/api` package powered by ElysiaJS.
+
+## Overview
+
+The `@moneyworks/api` package provides a complete toolkit for building REST APIs that expose MoneyWorks data:
+
+- **🚀 High Performance** - Built on Bun and ElysiaJS for blazing fast APIs
+- **🔒 Type Safety** - End-to-end TypeScript with automatic OpenAPI generation
+- **🛡️ Security Built-in** - Authentication, rate limiting, and CORS support
+- **📊 Multiple Formats** - Export data in various formats for different use cases
+- **🔍 Advanced Filtering** - MoneyWorks query language support
+- **📚 Auto Documentation** - Swagger UI included
+
+## Quick Start
+
+### Basic API Setup
+
+Create a minimal API server:
+
+<CodeExample>
+```typescript
+import { createApp } from '@moneyworks/api';
+import { MoneyWorksClient } from '@moneyworks/data';
+
+// Initialize MoneyWorks client
+const client = new MoneyWorksClient({
+  host: 'http://localhost',
+  port: 6700,
+  dataFile: 'Acme Widgets.moneyworks',
+  username: process.env.MW_USERNAME!,
+  password: process.env.MW_PASSWORD!
+});
+
+// Create API app
+const app = createApp(client);
+
+// Start server
+app.listen(3000, () => {
+  console.log('API running at http://localhost:3000');
+  console.log('Swagger UI at http://localhost:3000/swagger');
+});
+```
+</CodeExample>
+
+### Available Endpoints
+
+The API automatically creates RESTful endpoints for all MoneyWorks tables:
+
+```
+GET    /api/tax-rates      - List all tax rates
+GET    /api/tax-rates/:id  - Get specific tax rate
+POST   /api/tax-rates      - Create new tax rate
+PUT    /api/tax-rates/:id  - Update tax rate
+DELETE /api/tax-rates/:id  - Delete tax rate
+
+GET    /api/accounts       - List all accounts
+GET    /api/accounts/:id   - Get specific account
+... (similar pattern for all tables)
+```
+
+## Export Formats
+
+### Understanding Export Formats
+
+Different formats serve different purposes:
+
+<CodeExample>
+```typescript
+// 1. Full Format - Best for web apps
+GET /api/tax-rates?format=full
+// Returns: [{ TaxCode: "GST", Description: "Goods and Services Tax", ... }]
+
+// 2. Compact Format - Minimal bandwidth
+GET /api/tax-rates?format=compact
+// Returns: [["GST", "Goods and Services Tax", 10, ...], ...]
+
+// 3. Compact with Headers - Self-documenting arrays
+GET /api/tax-rates?format=compact-headers
+// Returns: { headers: ["TaxCode", "Description", ...], data: [[...], ...] }
+
+// 4. Schema Format - Includes metadata
+GET /api/tax-rates?format=schema
+// Returns: { schema: {...}, data: [...] }
+```
+</CodeExample>
+
+### Choosing the Right Format
+
+| Format | Use Case | Pros | Cons |
+|--------|----------|------|------|
+| `full` | Web applications, APIs | Easy to use, self-documenting | Larger payload |
+| `compact` | High-volume data transfer | Minimal size | Requires position mapping |
+| `compact-headers` | Data imports/exports | Balance of size and clarity | Still positional |
+| `schema` | Documentation, LLMs | Complete metadata | Largest payload |
+
+## Filtering and Querying
+
+### MoneyWorks Query Language
+
+Use MoneyWorks' powerful query syntax:
+
+<CodeExample>
+```typescript
+// Basic equality
+GET /api/tax-rates?filter=TaxCode='GST'
+
+// Numeric comparisons
+GET /api/tax-rates?filter=RatePercent>5
+
+// String matching
+GET /api/accounts?filter=Description~'Sales'
+
+// Complex conditions
+GET /api/transactions?filter=Date>='20240101' AND Amount>1000
+
+// Sorting
+GET /api/accounts?orderBy=AccountCode
+
+// Pagination
+GET /api/transactions?limit=50&offset=100
+```
+</CodeExample>
+
+### Common Query Patterns
+
+<CodeExample>
+```typescript
+// Active items only
+GET /api/products?filter=Inactive=0
+
+// Date ranges
+GET /api/transactions?filter=Date>='20240101' AND Date<='20241231'
+
+// Multiple conditions
+GET /api/accounts?filter=AccountType='Income' AND Active=1
+
+// Partial text matching
+GET /api/names?filter=Name~'Smith' OR Company~'Smith'
+
+// Null checks
+GET /api/products?filter=SupplierCode!=NULL
+```
+</CodeExample>
+
+## Authentication Strategies
+
+### API Key Authentication
+
+Simple and effective for server-to-server:
+
+<CodeExample>
+```typescript
+import { Elysia } from 'elysia';
+import { createApp } from '@moneyworks/api';
+
+const apiKeyAuth = new Elysia()
+  .derive(({ headers }) => {
+    const apiKey = headers['x-api-key'];
+    if (!apiKey || apiKey !== process.env.API_KEY) {
+      throw new Error('Invalid API key');
+    }
+    return { authenticated: true };
+  });
+
+const app = createApp(client)
+  .use(apiKeyAuth);
+
+// Client usage
+fetch('http://localhost:3000/api/tax-rates', {
+  headers: {
+    'X-API-Key': 'your-secret-key'
+  }
+});
+```
+</CodeExample>
+
+### JWT Authentication
+
+For user-based authentication:
+
+<CodeExample>
+```typescript
+import jwt from '@elysiajs/jwt';
+
+const app = createApp(client)
+  .use(jwt({
+    name: 'jwt',
+    secret: process.env.JWT_SECRET!,
+    exp: '7d'
+  }))
+  .derive(async ({ jwt, headers }) => {
+    const auth = headers.authorization;
+    if (!auth?.startsWith('Bearer ')) {
+      throw new Error('Missing token');
+    }
+    
+    const token = auth.slice(7);
+    const payload = await jwt.verify(token);
+    
+    if (!payload) {
+      throw new Error('Invalid token');
+    }
+    
+    return { userId: payload.sub };
+  })
+  // Login endpoint
+  .post('/auth/login', async ({ body, jwt }) => {
+    const { username, password } = body;
+    
+    // Validate credentials
+    const user = await validateUser(username, password);
+    if (!user) {
+      throw new Error('Invalid credentials');
+    }
+    
+    // Generate token
+    const token = await jwt.sign({
+      sub: user.id,
+      exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60)
+    });
+    
+    return { token };
+  });
+```
+</CodeExample>
+
+## Rate Limiting
+
+Protect your API from abuse:
+
+<CodeExample>
+```typescript
+import { rateLimit } from 'elysia-rate-limit';
+
+const app = createApp(client)
+  .use(rateLimit({
+    max: 100,              // 100 requests
+    windowMs: 60 * 1000,   // per minute
+    standardHeaders: true, // Return rate limit info in headers
+    keyGenerator: (req) => {
+      // Rate limit by API key or IP
+      return req.headers['x-api-key'] || req.ip;
+    }
+  }));
+
+// Different limits for different endpoints
+app.group('/api/reports', (app) =>
+  app
+    .use(rateLimit({ max: 10, windowMs: 60 * 1000 }))
+    .get('/heavy-report', async () => {
+      // Expensive operation
+    })
+);
+```
+</CodeExample>
+
+## CORS Configuration
+
+Enable cross-origin requests:
+
+<CodeExample>
+```typescript
+import { cors } from '@elysiajs/cors';
+
+const app = createApp(client)
+  .use(cors({
+    origin: process.env.NODE_ENV === 'production'
+      ? ['https://app.example.com', 'https://admin.example.com']
+      : true, // Allow all origins in development
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
+    exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining']
+  }));
+```
+</CodeExample>
+
+## Error Handling
+
+Implement consistent error responses:
+
+<CodeExample>
+```typescript
+import { Elysia } from 'elysia';
+
+const errorHandler = new Elysia()
+  .onError(({ code, error, set }) => {
+    // MoneyWorks connection errors
+    if (error.message.includes('Authentication failed')) {
+      set.status = 503;
+      return {
+        error: 'Service Unavailable',
+        message: 'Cannot connect to MoneyWorks',
+        code: 'MW_CONNECTION_ERROR'
+      };
+    }
+    
+    // Validation errors
+    if (code === 'VALIDATION') {
+      set.status = 400;
+      return {
+        error: 'Bad Request',
+        message: 'Validation failed',
+        details: error.all
+      };
+    }
+    
+    // Not found
+    if (code === 'NOT_FOUND') {
+      set.status = 404;
+      return {
+        error: 'Not Found',
+        message: error.message
+      };
+    }
+    
+    // Default error
+    console.error('Unhandled error:', error);
+    set.status = 500;
+    return {
+      error: 'Internal Server Error',
+      message: 'An unexpected error occurred'
+    };
+  });
+
+const app = createApp(client)
+  .use(errorHandler);
+```
+</CodeExample>
+
+## Request Validation
+
+Validate incoming data with Zod schemas:
+
+<CodeExample>
+```typescript
+import { z } from 'zod';
+
+// Define schemas
+const CreateTaxRateSchema = z.object({
+  TaxCode: z.string().max(5),
+  Description: z.string().max(255),
+  RatePercent: z.number().min(0).max(100),
+  TaxAccount: z.string().optional()
+});
+
+const UpdateTaxRateSchema = CreateTaxRateSchema.partial();
+
+// Apply to routes
+app.post('/api/tax-rates', 
+  { body: CreateTaxRateSchema },
+  async ({ body }) => {
+    // body is now typed and validated
+    const result = await client.taxRates.create(body);
+    return result;
+  }
+);
+
+app.put('/api/tax-rates/:id',
+  { body: UpdateTaxRateSchema },
+  async ({ body, params }) => {
+    const result = await client.taxRates.update(params.id, body);
+    return result;
+  }
+);
+```
+</CodeExample>
+
+## Response Caching
+
+Improve performance with intelligent caching:
+
+<CodeExample>
+```typescript
+import { Elysia } from 'elysia';
+
+const cache = new Map<string, { data: any; expires: number }>();
+
+const caching = new Elysia()
+  .derive(({ request }) => {
+    const key = request.url;
+    const cached = cache.get(key);
+    
+    if (cached && cached.expires > Date.now()) {
+      return { cached: cached.data };
+    }
+    
+    return {
+      setCached: (data: any, ttl: number = 300) => {
+        cache.set(key, {
+          data,
+          expires: Date.now() + (ttl * 1000)
+        });
+      }
+    };
+  });
+
+app.use(caching)
+  .get('/api/tax-rates', async ({ cached, setCached }) => {
+    // Return cached if available
+    if (cached) return cached;
+    
+    // Fetch fresh data
+    const data = await client.taxRates.findAll();
+    
+    // Cache for 5 minutes
+    setCached(data, 300);
+    
+    return data;
+  });
+```
+</CodeExample>
+
+## Monitoring and Logging
+
+Track API usage and performance:
+
+<CodeExample>
+```typescript
+import { Elysia } from 'elysia';
+
+const monitoring = new Elysia()
+  .onRequest(({ request, store }) => {
+    store.startTime = Date.now();
+    console.log(`${request.method} ${request.url}`);
+  })
+  .onResponse(({ request, store, set }) => {
+    const duration = Date.now() - store.startTime;
+    console.log(`${request.method} ${request.url} - ${set.status} (${duration}ms)`);
+    
+    // Send metrics to monitoring service
+    metrics.histogram('api.request.duration', duration, {
+      method: request.method,
+      path: request.url,
+      status: set.status
+    });
+  });
+
+app.use(monitoring);
+```
+</CodeExample>
+
+## Testing Your API
+
+Write comprehensive tests:
+
+<CodeExample>
+```typescript
+import { describe, test, expect } from 'bun:test';
+import { createApp } from '@moneyworks/api';
+import { createMockClient } from '@moneyworks/data/testing';
+
+describe('Tax Rates API', () => {
+  const client = createMockClient({
+    taxRates: [
+      { TaxCode: 'GST', Description: 'Goods and Services Tax', RatePercent: 10 }
+    ]
+  });
+  
+  const app = createApp(client);
+  
+  test('GET /api/tax-rates returns all tax rates', async () => {
+    const response = await app
+      .handle(new Request('http://localhost/api/tax-rates'))
+      .then(res => res.json());
+    
+    expect(response).toHaveLength(1);
+    expect(response[0].TaxCode).toBe('GST');
+  });
+  
+  test('GET /api/tax-rates?format=compact returns array format', async () => {
+    const response = await app
+      .handle(new Request('http://localhost/api/tax-rates?format=compact'))
+      .then(res => res.json());
+    
+    expect(Array.isArray(response[0])).toBe(true);
+    expect(response[0][0]).toBe('GST'); // First field is TaxCode
+  });
+});
+```
+</CodeExample>
+
+## Production Deployment
+
+### Docker Deployment
+
+<CodeExample>
+```dockerfile
+FROM oven/bun:latest
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json bun.lockb ./
+COPY packages/api/package.json ./packages/api/
+
+# Install dependencies
+RUN bun install --frozen-lockfile --production
+
+# Copy source code
+COPY . .
+
+# Build TypeScript
+RUN bun run build
+
+# Expose port
+EXPOSE 3000
+
+# Run the API
+CMD ["bun", "run", "packages/api/dist/index.js"]
+```
+</CodeExample>
+
+### Environment Configuration
+
+<CodeExample>
+```bash
+# .env.production
+NODE_ENV=production
+PORT=3000
+
+# MoneyWorks connection
+MW_HOST=https://mw.company.com
+MW_PORT=443
+MW_USERNAME=api_user
+MW_PASSWORD=${MW_PASSWORD}
+
+# Security
+JWT_SECRET=${JWT_SECRET}
+API_KEY=${API_KEY}
+CORS_ORIGINS=https://app.example.com,https://admin.example.com
+
+# Rate limiting
+RATE_LIMIT_MAX=100
+RATE_LIMIT_WINDOW_MS=60000
+
+# Monitoring
+LOG_LEVEL=info
+SENTRY_DSN=${SENTRY_DSN}
+```
+</CodeExample>
+
+### Health Checks
+
+<CodeExample>
+```typescript
+app.get('/health', async () => {
+  const checks = {
+    api: 'healthy',
+    moneyworks: 'unknown',
+    timestamp: new Date().toISOString()
+  };
+  
+  try {
+    // Test MoneyWorks connection
+    await client.testConnection();
+    checks.moneyworks = 'connected';
+  } catch (error) {
+    checks.moneyworks = 'disconnected';
+  }
+  
+  const isHealthy = checks.moneyworks === 'connected';
+  
+  return new Response(JSON.stringify(checks), {
+    status: isHealthy ? 200 : 503,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+});
+```
+</CodeExample>
+
+## Best Practices
+
+### 1. Use Consistent Naming
+
+Follow RESTful conventions:
+- `GET /api/tax-rates` - List resources
+- `GET /api/tax-rates/:id` - Get single resource
+- `POST /api/tax-rates` - Create resource
+- `PUT /api/tax-rates/:id` - Update resource
+- `DELETE /api/tax-rates/:id` - Delete resource
+
+### 2. Version Your API
+
+<CodeExample>
+```typescript
+app.group('/api/v1', (app) =>
+  app
+    .get('/tax-rates', getTaxRatesV1)
+    .post('/tax-rates', createTaxRateV1)
+);
+
+app.group('/api/v2', (app) =>
+  app
+    .get('/tax-rates', getTaxRatesV2) // New response format
+    .post('/tax-rates', createTaxRateV2) // New validation rules
+);
+```
+</CodeExample>
+
+### 3. Implement Idempotency
+
+For critical operations:
+
+<CodeExample>
+```typescript
+app.post('/api/invoices',
+  { headers: z.object({ 'idempotency-key': z.string() }) },
+  async ({ headers, body }) => {
+    const key = headers['idempotency-key'];
+    
+    // Check if we've seen this request before
+    const existing = await cache.get(`idempotency:${key}`);
+    if (existing) return existing;
+    
+    // Process the request
+    const result = await createInvoice(body);
+    
+    // Cache the result
+    await cache.set(`idempotency:${key}`, result, 86400); // 24 hours
+    
+    return result;
+  }
+);
+```
+</CodeExample>
+
+### 4. Provide Useful Error Messages
+
+<CodeExample>
+```typescript
+// Bad
+throw new Error('Invalid data');
+
+// Good
+throw new Error('TaxCode must be 5 characters or less, received 7 characters');
+
+// Better
+throw new ValidationError({
+  field: 'TaxCode',
+  constraint: 'maxLength',
+  expected: 5,
+  received: 7,
+  message: 'TaxCode must be 5 characters or less'
+});
+```
+</CodeExample>
+
+## Next Steps
+
+- [Authentication Guide](/guides/authentication) - Secure your API
+- [Type Safety Guide](/guides/type-safety) - Leverage TypeScript
+- [Deployment Guide](/guides/deployment) - Deploy to production
+- [API Reference](/packages/api/api) - Complete API documentation
+
+Start building your MoneyWorks API today with confidence!

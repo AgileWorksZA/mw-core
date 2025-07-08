@@ -1,0 +1,816 @@
+---
+title: "Type Safety Guide"
+description: "Master TypeScript type safety with branded types, type guards, and compile-time validation"
+order: 4
+---
+
+# Type Safety Guide
+
+Learn how MoneyWorks Core leverages TypeScript's advanced type system to provide compile-time safety, prevent runtime errors, and create self-documenting code.
+
+## Overview
+
+Type safety in MoneyWorks Core goes beyond basic TypeScript:
+
+- **🏷️ Branded Types** - Prevent mixing incompatible values
+- **🛡️ Type Guards** - Runtime validation with type narrowing
+- **📝 Self-Documenting** - Types that explain themselves
+- **🚀 Zero Runtime Cost** - All validation at compile time
+- **🔍 IntelliSense** - Rich IDE support and autocomplete
+- **🎯 Domain Modeling** - Types that match business logic
+
+## Understanding Branded Types
+
+### The Problem
+
+Without branded types, these bugs are possible:
+
+<CodeExample>
+```typescript
+// Without branded types - DANGEROUS!
+function processTransaction(date: string, accountCode: string, amount: number) {
+  // Easy to mix up parameters
+}
+
+// Oops! Mixed up date and account code
+processTransaction('1200', '20240115', 500); // No compile error! 💥
+
+// Even worse with multiple string parameters
+function createJournal(
+  date: string,
+  fromAccount: string, 
+  toAccount: string,
+  reference: string,
+  description: string
+) {
+  // Which parameter is which?
+}
+```
+</CodeExample>
+
+### The Solution
+
+Branded types make different kinds of strings incompatible:
+
+<CodeExample>
+```typescript
+import { YYYYMMDD, AccountCode, d, ac } from '@moneyworks/utilities';
+
+function processTransaction(
+  date: YYYYMMDD,
+  accountCode: AccountCode,
+  amount: number
+) {
+  // Type safe!
+}
+
+// This won't compile! 
+// processTransaction('1200', '20240115', 500); // ❌ Type error
+
+// Must use the correct types
+processTransaction(d`20240115`, ac`1200`, 500); // ✅ Correct
+```
+</CodeExample>
+
+## Core Branded Types
+
+### Date Type (YYYYMMDD)
+
+MoneyWorks uses `YYYYMMDD` format for all dates:
+
+<CodeExample>
+```typescript
+import { YYYYMMDD, d } from '@moneyworks/utilities';
+
+// Creating dates
+const invoiceDate = d`20240115`;        // Tagged template
+const dueDate = YYYYMMDD('20240215');   // Constructor function
+
+// Type guards
+if (YYYYMMDD.is(someValue)) {
+  // someValue is now typed as YYYYMMDD
+}
+
+// Validation
+try {
+  const date = YYYYMMDD.parse('2024-01-15'); // Throws if invalid
+} catch (error) {
+  console.error('Invalid date format');
+}
+
+// Working with dates
+const today = YYYYMMDD.today();
+const tomorrow = today.addDays(1);
+const lastMonth = today.addMonths(-1);
+const startOfMonth = today.startOfMonth();
+const endOfMonth = today.endOfMonth();
+
+// Comparisons
+if (dueDate.isAfter(today)) {
+  console.log('Not yet due');
+}
+
+if (invoiceDate.isBetween(startOfMonth, endOfMonth)) {
+  console.log('Invoice is from this month');
+}
+
+// Formatting
+console.log(today.format('DD/MM/YYYY')); // "15/01/2024"
+console.log(today.format('D MMM YYYY')); // "15 Jan 2024"
+console.log(today.toLongDate());         // "15 January 2024"
+```
+</CodeExample>
+
+### Period Type
+
+Periods represent YYYYMM for monthly accounting:
+
+<CodeExample>
+```typescript
+import { Period, p } from '@moneyworks/utilities';
+
+// Creating periods
+const currentPeriod = p`202401`;
+const lastYear = Period('202301');
+
+// Working with periods
+const nextPeriod = currentPeriod.addMonths(1);      // 202402
+const quarterStart = currentPeriod.startOfQuarter(); // 202401
+const yearStart = currentPeriod.startOfYear();      // 202401
+
+// Get all periods in a range
+const year2024 = Period.range(p`202401`, p`202412`);
+// [202401, 202402, ..., 202412]
+
+// Check if date is in period
+const date = d`20240115`;
+if (currentPeriod.contains(date)) {
+  console.log('Date is in current period');
+}
+
+// Comparisons
+if (currentPeriod.isAfter(lastYear)) {
+  console.log('Current period is after last year');
+}
+```
+</CodeExample>
+
+### Account Code Type
+
+Account codes with validation and hierarchy:
+
+<CodeExample>
+```typescript
+import { AccountCode, ac } from '@moneyworks/utilities';
+
+// Creating account codes
+const salesAccount = ac`4000`;
+const bankAccount = AccountCode('1100');
+
+// Type guards
+if (AccountCode.is(value)) {
+  // value is AccountCode
+}
+
+// MoneyWorks account hierarchy
+const parent = ac`1000`;      // Assets
+const child = ac`1100`;       // Bank accounts
+const grandchild = ac`1110`;  // Checking account
+
+// Check hierarchy
+if (child.isChildOf(parent)) {
+  console.log('1100 is under 1000');
+}
+
+// Get parent code
+const parentCode = grandchild.getParent(); // Returns 1100
+
+// Account type detection (based on code ranges)
+if (salesAccount.isIncomeAccount()) {
+  console.log('This is an income account');
+}
+```
+</CodeExample>
+
+## Advanced Type Patterns
+
+### Union Types for Status
+
+Model business states with union types:
+
+<CodeExample>
+```typescript
+// Transaction status in MoneyWorks
+type TransactionStatus = 
+  | 'Entered'
+  | 'Posted' 
+  | 'Locked';
+
+// Order status with more states
+type OrderStatus =
+  | 'Draft'
+  | 'Pending'
+  | 'Approved'
+  | 'Shipped'
+  | 'Completed'
+  | 'Cancelled';
+
+// Type-safe status transitions
+function canShip(status: OrderStatus): boolean {
+  return status === 'Approved';
+}
+
+// Exhaustive checking
+function getStatusColor(status: OrderStatus): string {
+  switch (status) {
+    case 'Draft':     return 'gray';
+    case 'Pending':   return 'yellow';
+    case 'Approved':  return 'green';
+    case 'Shipped':   return 'blue';
+    case 'Completed': return 'purple';
+    case 'Cancelled': return 'red';
+    // TypeScript ensures all cases are handled
+  }
+}
+```
+</CodeExample>
+
+### Discriminated Unions
+
+Model complex business logic with discriminated unions:
+
+<CodeExample>
+```typescript
+// Different types of transactions
+type Transaction = 
+  | {
+      type: 'Invoice';
+      customerCode: string;
+      dueDate: YYYYMMDD;
+      terms: number;
+    }
+  | {
+      type: 'Payment';
+      customerCode: string;
+      paymentMethod: 'Cash' | 'Check' | 'Card';
+      reference: string;
+    }
+  | {
+      type: 'Journal';
+      reference: string;
+      isRecurring: boolean;
+      frequency?: 'Monthly' | 'Quarterly' | 'Yearly';
+    };
+
+// Type-safe handling
+function processTransaction(txn: Transaction) {
+  switch (txn.type) {
+    case 'Invoice':
+      // TypeScript knows txn has dueDate and terms
+      console.log(`Due in ${txn.terms} days`);
+      break;
+      
+    case 'Payment':
+      // TypeScript knows txn has paymentMethod
+      if (txn.paymentMethod === 'Card') {
+        processCreditCard(txn.reference);
+      }
+      break;
+      
+    case 'Journal':
+      // TypeScript knows txn has isRecurring
+      if (txn.isRecurring && txn.frequency) {
+        scheduleRecurring(txn.frequency);
+      }
+      break;
+  }
+}
+```
+</CodeExample>
+
+### Template Literal Types
+
+Create type-safe string patterns:
+
+<CodeExample>
+```typescript
+// Account code patterns
+type AssetCode = `1${string}`;
+type LiabilityCode = `2${string}`;
+type EquityCode = `3${string}`;
+type IncomeCode = `4${string}`;
+type ExpenseCode = `5${string}`;
+
+// Type-safe account categorization
+function getAccountType(code: string): string {
+  if (isAssetCode(code)) return 'Asset';
+  if (isLiabilityCode(code)) return 'Liability';
+  // ...
+}
+
+function isAssetCode(code: string): code is AssetCode {
+  return code.startsWith('1');
+}
+
+// Date patterns
+type ISODate = `${number}-${number}-${number}`;
+type MoneyWorksDate = `${number}${number}${number}${number}${number}${number}${number}${number}`;
+
+// Conversion with type safety
+function convertToMWDate(iso: ISODate): MoneyWorksDate {
+  // TypeScript ensures input matches YYYY-MM-DD pattern
+  const [year, month, day] = iso.split('-');
+  return `${year}${month}${day}` as MoneyWorksDate;
+}
+```
+</CodeExample>
+
+## Type Guards and Validation
+
+### Creating Type Guards
+
+Write functions that narrow types:
+
+<CodeExample>
+```typescript
+import { z } from 'zod';
+
+// Define schema
+const TaxRateSchema = z.object({
+  TaxCode: z.string().max(5),
+  Description: z.string(),
+  RatePercent: z.number().min(0).max(100)
+});
+
+// Infer type from schema
+type TaxRate = z.infer<typeof TaxRateSchema>;
+
+// Type guard function
+function isTaxRate(value: unknown): value is TaxRate {
+  return TaxRateSchema.safeParse(value).success;
+}
+
+// Usage
+const data: unknown = await fetchData();
+
+if (isTaxRate(data)) {
+  // TypeScript knows data is TaxRate
+  console.log(`Tax rate: ${data.RatePercent}%`);
+} else {
+  console.error('Invalid tax rate data');
+}
+
+// Array type guard
+function isTaxRateArray(value: unknown): value is TaxRate[] {
+  return Array.isArray(value) && value.every(isTaxRate);
+}
+```
+</CodeExample>
+
+### Assertion Functions
+
+For cases where you're certain about types:
+
+<CodeExample>
+```typescript
+// Assertion function
+function assertYYYYMMDD(
+  value: unknown,
+  message = 'Invalid date format'
+): asserts value is YYYYMMDD {
+  if (!YYYYMMDD.is(value)) {
+    throw new Error(message);
+  }
+}
+
+// Usage
+function processInvoice(data: { date: unknown }) {
+  assertYYYYMMDD(data.date, 'Invoice date must be YYYYMMDD');
+  
+  // TypeScript now knows data.date is YYYYMMDD
+  const dueDate = data.date.addDays(30);
+}
+
+// Generic assertion
+function assertDefined<T>(
+  value: T | null | undefined,
+  message = 'Value is required'
+): asserts value is T {
+  if (value === null || value === undefined) {
+    throw new Error(message);
+  }
+}
+```
+</CodeExample>
+
+## Working with API Responses
+
+### Type-Safe API Calls
+
+Transform API responses into branded types:
+
+<CodeExample>
+```typescript
+import { YYYYMMDD, AccountCode } from '@moneyworks/utilities';
+
+// API response type (what we receive)
+interface RawInvoice {
+  date: string;
+  customerCode: string;
+  glAccount: string;
+  amount: number;
+}
+
+// Domain type (what we work with)
+interface Invoice {
+  date: YYYYMMDD;
+  customerCode: string;
+  glAccount: AccountCode;
+  amount: number;
+}
+
+// Transform function
+function parseInvoice(raw: RawInvoice): Invoice {
+  return {
+    date: YYYYMMDD.parse(raw.date),
+    customerCode: raw.customerCode,
+    glAccount: AccountCode.parse(raw.glAccount),
+    amount: raw.amount
+  };
+}
+
+// Safe transformation with error handling
+function safeParseInvoice(raw: unknown): Invoice | null {
+  try {
+    const validated = InvoiceSchema.parse(raw);
+    return parseInvoice(validated);
+  } catch (error) {
+    console.error('Invalid invoice data:', error);
+    return null;
+  }
+}
+```
+</CodeExample>
+
+### Type-Safe Database Queries
+
+Ensure database results match expected types:
+
+<CodeExample>
+```typescript
+import { db } from './database';
+
+// Define return type
+interface TaxRateRow {
+  TaxCode: string;
+  Description: string;
+  RatePercent: number;
+  TaxAccount: AccountCode | null;
+}
+
+// Type-safe query
+async function getTaxRate(code: string): Promise<TaxRateRow | null> {
+  const result = await db
+    .selectFrom('TaxRate')
+    .select(['TaxCode', 'Description', 'RatePercent', 'TaxAccount'])
+    .where('TaxCode', '=', code)
+    .executeTakeFirst();
+    
+  if (!result) return null;
+  
+  // Transform database types to domain types
+  return {
+    ...result,
+    TaxAccount: result.TaxAccount 
+      ? AccountCode.parse(result.TaxAccount)
+      : null
+  };
+}
+```
+</CodeExample>
+
+## Generic Type Patterns
+
+### Result Types
+
+Handle success and failure cases:
+
+<CodeExample>
+```typescript
+// Result type for operations that can fail
+type Result<T, E = Error> =
+  | { success: true; value: T }
+  | { success: false; error: E };
+
+// Usage
+async function validateTaxCode(
+  code: string
+): Promise<Result<TaxRate, ValidationError>> {
+  try {
+    const taxRate = await fetchTaxRate(code);
+    
+    if (!taxRate) {
+      return {
+        success: false,
+        error: new ValidationError('Tax code not found')
+      };
+    }
+    
+    return {
+      success: true,
+      value: taxRate
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: new ValidationError('Failed to validate tax code')
+    };
+  }
+}
+
+// Using the result
+const result = await validateTaxCode('GST');
+
+if (result.success) {
+  console.log(`Tax rate: ${result.value.RatePercent}%`);
+} else {
+  console.error(`Error: ${result.error.message}`);
+}
+```
+</CodeExample>
+
+### Builder Pattern with Types
+
+Create type-safe builders:
+
+<CodeExample>
+```typescript
+// Transaction builder with type safety
+class TransactionBuilder<T extends Partial<Transaction> = {}> {
+  private data: T;
+  
+  constructor(data: T = {} as T) {
+    this.data = data;
+  }
+  
+  date(date: YYYYMMDD): TransactionBuilder<T & { date: YYYYMMDD }> {
+    return new TransactionBuilder({ ...this.data, date });
+  }
+  
+  amount(amount: number): TransactionBuilder<T & { amount: number }> {
+    return new TransactionBuilder({ ...this.data, amount });
+  }
+  
+  account(account: AccountCode): TransactionBuilder<T & { account: AccountCode }> {
+    return new TransactionBuilder({ ...this.data, account });
+  }
+  
+  // Build only works when all required fields are set
+  build(this: TransactionBuilder<Required<Transaction>>): Transaction {
+    return this.data;
+  }
+}
+
+// Usage - TypeScript ensures all fields are set
+const transaction = new TransactionBuilder()
+  .date(d`20240115`)
+  .amount(1000)
+  .account(ac`1200`)
+  .build(); // ✅ All required fields present
+
+// This won't compile
+// const incomplete = new TransactionBuilder()
+//   .date(d`20240115`)
+//   .build(); // ❌ Missing required fields
+```
+</CodeExample>
+
+## Best Practices
+
+### 1. Use Branded Types for Domain Concepts
+
+<CodeExample>
+```typescript
+// ❌ Bad - Too generic
+interface Customer {
+  id: string;
+  taxId: string;
+  phone: string;
+  email: string;
+}
+
+// ✅ Good - Domain-specific types
+interface Customer {
+  id: CustomerId;
+  taxId: TaxIdentifier;
+  phone: PhoneNumber;
+  email: EmailAddress;
+}
+
+// Define the branded types
+type CustomerId = Brand<string, 'CustomerId'>;
+type TaxIdentifier = Brand<string, 'TaxIdentifier'>;
+type PhoneNumber = Brand<string, 'PhoneNumber'>;
+type EmailAddress = Brand<string, 'EmailAddress'>;
+```
+</CodeExample>
+
+### 2. Validate at System Boundaries
+
+<CodeExample>
+```typescript
+// API endpoint - validate incoming data
+app.post('/api/invoices', async ({ body }) => {
+  // Parse and validate at the boundary
+  const parsed = InvoiceSchema.parse(body);
+  
+  // Convert to domain types
+  const invoice: Invoice = {
+    date: YYYYMMDD.parse(parsed.date),
+    customerCode: CustomerCode.parse(parsed.customerCode),
+    amount: Money.parse(parsed.amount),
+    // ... rest of fields
+  };
+  
+  // Now work with type-safe domain objects
+  await processInvoice(invoice);
+});
+
+// Internal functions can trust their inputs
+async function processInvoice(invoice: Invoice) {
+  // No need to validate - types guarantee correctness
+  const dueDate = invoice.date.addDays(30);
+  const discount = invoice.amount.multiply(0.02);
+  // ...
+}
+```
+</CodeExample>
+
+### 3. Make Invalid States Unrepresentable
+
+<CodeExample>
+```typescript
+// ❌ Bad - Invalid states possible
+interface Order {
+  status: 'draft' | 'approved' | 'shipped' | 'cancelled';
+  approvedBy?: string;
+  approvedAt?: YYYYMMDD;
+  shippedAt?: YYYYMMDD;
+  trackingNumber?: string;
+}
+
+// ✅ Good - Invalid states impossible
+type Order =
+  | {
+      status: 'draft';
+    }
+  | {
+      status: 'approved';
+      approvedBy: string;
+      approvedAt: YYYYMMDD;
+    }
+  | {
+      status: 'shipped';
+      approvedBy: string;
+      approvedAt: YYYYMMDD;
+      shippedAt: YYYYMMDD;
+      trackingNumber: string;
+    }
+  | {
+      status: 'cancelled';
+      cancelledAt: YYYYMMDD;
+      reason: string;
+    };
+```
+</CodeExample>
+
+### 4. Use Type Inference
+
+Let TypeScript infer types where possible:
+
+<CodeExample>
+```typescript
+// ❌ Overly explicit
+const taxRates: Array<TaxRate> = new Array<TaxRate>();
+const gst: TaxRate = {
+  TaxCode: 'GST' as string,
+  RatePercent: 10 as number
+} as TaxRate;
+
+// ✅ Let TypeScript infer
+const taxRates = [] as TaxRate[];
+const gst = {
+  TaxCode: 'GST',
+  RatePercent: 10
+} satisfies TaxRate; // 'satisfies' ensures type without casting
+
+// Use const assertions for literals
+const CONFIG = {
+  maxRetries: 3,
+  timeout: 5000,
+  endpoints: {
+    taxRates: '/api/tax-rates',
+    accounts: '/api/accounts'
+  }
+} as const;
+
+// TypeScript knows CONFIG.maxRetries is exactly 3, not just number
+```
+</CodeExample>
+
+## Debugging Type Issues
+
+### Understanding Type Errors
+
+<CodeExample>
+```typescript
+// Common type error patterns
+
+// 1. Branded type mismatch
+const date: YYYYMMDD = '20240115'; 
+// ❌ Type 'string' is not assignable to type 'YYYYMMDD'
+// Fix: Use d`20240115` or YYYYMMDD('20240115')
+
+// 2. Missing discriminator
+function processTransaction(txn: Transaction) {
+  console.log(txn.dueDate); 
+  // ❌ Property 'dueDate' does not exist on type 'Transaction'
+  // Fix: Check txn.type first
+  
+  if (txn.type === 'Invoice') {
+    console.log(txn.dueDate); // ✅ Now it works
+  }
+}
+
+// 3. Incorrect type guard
+function isString(value: unknown): value is string {
+  return typeof value === 'string';
+}
+
+const value: unknown = 123;
+if (isString(value)) {
+  value.toUpperCase(); // ✅ TypeScript knows it's string
+}
+
+// 4. Generic constraints
+function processArray<T>(items: T[]) {
+  items[0].TaxCode; 
+  // ❌ Property 'TaxCode' does not exist on type 'T'
+}
+
+// Fix: Add constraint
+function processArray<T extends { TaxCode: string }>(items: T[]) {
+  items[0].TaxCode; // ✅ Now it works
+}
+```
+</CodeExample>
+
+### Type Utilities
+
+Useful TypeScript utilities:
+
+<CodeExample>
+```typescript
+// Extract types from complex structures
+type InvoiceDate = Invoice['date']; // YYYYMMDD
+
+// Make properties optional
+type PartialInvoice = Partial<Invoice>;
+
+// Make properties required
+type RequiredInvoice = Required<Invoice>;
+
+// Pick specific properties
+type InvoiceSummary = Pick<Invoice, 'date' | 'amount'>;
+
+// Omit properties
+type InvoiceWithoutAmount = Omit<Invoice, 'amount'>;
+
+// Get union of property names
+type InvoiceKeys = keyof Invoice; // 'date' | 'amount' | ...
+
+// Get union of property values
+type InvoiceValues = Invoice[keyof Invoice];
+
+// Conditional types
+type IsString<T> = T extends string ? true : false;
+type Test1 = IsString<string>;   // true
+type Test2 = IsString<number>;   // false
+
+// Mapped types
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+
+type ReadonlyInvoice = Readonly<Invoice>;
+```
+</CodeExample>
+
+## Next Steps
+
+- [API Development](/guides/api-development) - Build type-safe APIs
+- [Utilities Package](/packages/utilities/api) - Branded types reference
+- [Canonical Package](/packages/canonical/api) - MoneyWorks type definitions
+- [Testing Guide](/guides/testing) - Type-safe testing strategies
+
+Master type safety to build robust, maintainable MoneyWorks integrations!

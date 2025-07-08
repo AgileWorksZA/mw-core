@@ -1,0 +1,763 @@
+---
+title: "Working with Groups"
+description: "Organize companies into groups for accounting firms and multi-entity organizations"
+order: 5
+---
+
+# Working with Groups
+
+Learn how to organize multiple MoneyWorks companies into groups for efficient management by accounting firms and multi-entity organizations.
+
+## Overview
+
+Groups in MoneyWorks allow you to:
+
+- **🏢 Multi-Company Management** - Handle multiple client files from one interface
+- **👥 User Access Control** - Assign users to specific groups and companies
+- **📊 Consolidated Reporting** - Generate reports across multiple entities
+- **🔐 Segregated Access** - Keep client data isolated and secure
+- **🚀 Efficient Workflows** - Switch between companies seamlessly
+- **📁 Organized Structure** - Hierarchical organization of related entities
+
+## Understanding Groups
+
+### Use Cases
+
+Groups are ideal for:
+
+<div className="grid gap-4 md:grid-cols-2 my-6">
+  <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+    <h3 className="font-semibold mb-2">💼 Accounting Firms</h3>
+    <ul className="space-y-1 text-sm">
+      <li>• Manage multiple client companies</li>
+      <li>• Assign staff to specific clients</li>
+      <li>• Standardize chart of accounts</li>
+      <li>• Bulk operations across clients</li>
+    </ul>
+  </div>
+  
+  <div className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+    <h3 className="font-semibold mb-2">🏭 Multi-Entity Organizations</h3>
+    <ul className="space-y-1 text-sm">
+      <li>• Subsidiary management</li>
+      <li>• Divisional accounting</li>
+      <li>• Consolidated reporting</li>
+      <li>• Inter-company transactions</li>
+    </ul>
+  </div>
+</div>
+
+### Group Structure
+
+<CodeExample>
+```typescript
+interface Group {
+  id: string;
+  name: string;
+  description?: string;
+  type: 'accounting_firm' | 'corporate_group' | 'custom';
+  settings: GroupSettings;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface GroupSettings {
+  defaultChartOfAccounts?: string;
+  standardTaxRates?: boolean;
+  consolidationEnabled?: boolean;
+  interCompanyEnabled?: boolean;
+}
+
+interface GroupMembership {
+  groupId: string;
+  companyId: string;
+  role: 'owner' | 'subsidiary' | 'client';
+  addedAt: Date;
+  addedBy: string;
+}
+```
+</CodeExample>
+
+## Setting Up Groups
+
+### Creating a Group
+
+<CodeExample>
+```typescript
+import { createGroup } from '@moneyworks/groups';
+
+// Create an accounting firm group
+const firmGroup = await createGroup({
+  name: 'Smith & Associates Clients',
+  type: 'accounting_firm',
+  description: 'All client companies managed by our firm',
+  settings: {
+    standardTaxRates: true,
+    defaultChartOfAccounts: 'standard-coa-2024'
+  }
+});
+
+// Create a corporate group
+const corpGroup = await createGroup({
+  name: 'Acme Corporation Group',
+  type: 'corporate_group',
+  description: 'Parent company and subsidiaries',
+  settings: {
+    consolidationEnabled: true,
+    interCompanyEnabled: true
+  }
+});
+```
+</CodeExample>
+
+### Adding Companies to Groups
+
+<CodeExample>
+```typescript
+import { addCompanyToGroup } from '@moneyworks/groups';
+
+// Add client companies to accounting firm group
+await addCompanyToGroup({
+  groupId: firmGroup.id,
+  companyId: 'client-abc-ltd',
+  role: 'client',
+  metadata: {
+    clientSince: '2024-01-01',
+    accountManager: 'john.smith@firm.com',
+    billingType: 'monthly'
+  }
+});
+
+// Add subsidiaries to corporate group
+await addCompanyToGroup({
+  groupId: corpGroup.id,
+  companyId: 'acme-manufacturing',
+  role: 'subsidiary',
+  metadata: {
+    ownershipPercentage: 100,
+    consolidationRequired: true
+  }
+});
+```
+</CodeExample>
+
+## Managing Group Access
+
+### User Permissions
+
+Define granular permissions for group access:
+
+<CodeExample>
+```typescript
+// Permission levels
+type GroupPermission = 
+  | 'group.view'           // View group and member list
+  | 'group.manage'         // Add/remove companies
+  | 'group.settings'       // Modify group settings
+  | 'company.view'         // View company data
+  | 'company.edit'         // Edit company data
+  | 'company.admin';       // Full company access
+
+// Assign user to group
+async function assignUserToGroup(
+  userId: string,
+  groupId: string,
+  permissions: GroupPermission[]
+) {
+  return await db.groupUsers.create({
+    data: {
+      userId,
+      groupId,
+      permissions,
+      assignedAt: new Date(),
+      assignedBy: currentUser.id
+    }
+  });
+}
+
+// Example: Bookkeeper with limited access
+await assignUserToGroup('bookkeeper-123', firmGroup.id, [
+  'group.view',
+  'company.view',
+  'company.edit'
+]);
+
+// Example: Partner with full access
+await assignUserToGroup('partner-456', firmGroup.id, [
+  'group.view',
+  'group.manage',
+  'group.settings',
+  'company.view',
+  'company.edit',
+  'company.admin'
+]);
+```
+</CodeExample>
+
+### Company-Level Restrictions
+
+Further restrict access to specific companies:
+
+<CodeExample>
+```typescript
+// Restrict user to specific companies within group
+async function setCompanyAccess(
+  userId: string,
+  groupId: string,
+  allowedCompanies: string[]
+) {
+  return await db.userCompanyAccess.create({
+    data: {
+      userId,
+      groupId,
+      allowedCompanies,
+      restrictionType: 'whitelist'
+    }
+  });
+}
+
+// Example: Junior staff only sees assigned clients
+await setCompanyAccess('junior-789', firmGroup.id, [
+  'client-abc-ltd',
+  'client-xyz-inc'
+]);
+```
+</CodeExample>
+
+## Working with Multiple Companies
+
+### Company Switching
+
+Implement seamless switching between companies:
+
+<CodeExample>
+```typescript
+import { MoneyWorksClient } from '@moneyworks/data';
+
+class MultiCompanyManager {
+  private connections = new Map<string, MoneyWorksClient>();
+  private currentCompany?: string;
+  
+  async switchToCompany(companyId: string) {
+    // Check if user has access
+    const hasAccess = await this.checkAccess(companyId);
+    if (!hasAccess) {
+      throw new Error('Access denied to company');
+    }
+    
+    // Get or create connection
+    let client = this.connections.get(companyId);
+    
+    if (!client) {
+      const config = await this.getCompanyConfig(companyId);
+      client = new MoneyWorksClient(config);
+      await client.connect();
+      this.connections.set(companyId, client);
+    }
+    
+    this.currentCompany = companyId;
+    return client;
+  }
+  
+  getCurrentClient(): MoneyWorksClient {
+    if (!this.currentCompany) {
+      throw new Error('No company selected');
+    }
+    
+    const client = this.connections.get(this.currentCompany);
+    if (!client) {
+      throw new Error('Company not connected');
+    }
+    
+    return client;
+  }
+  
+  async closeAll() {
+    for (const [companyId, client] of this.connections) {
+      await client.disconnect();
+    }
+    this.connections.clear();
+  }
+}
+```
+</CodeExample>
+
+### Batch Operations
+
+Perform operations across multiple companies:
+
+<CodeExample>
+```typescript
+// Export tax rates from all companies in a group
+async function exportGroupTaxRates(groupId: string) {
+  const companies = await getCompaniesInGroup(groupId);
+  const results = new Map<string, any>();
+  
+  for (const company of companies) {
+    try {
+      const client = await switchToCompany(company.id);
+      const taxRates = await client.export('TaxRate', {
+        format: 'full'
+      });
+      
+      results.set(company.id, {
+        companyName: company.name,
+        taxRates,
+        exportedAt: new Date()
+      });
+    } catch (error) {
+      results.set(company.id, {
+        companyName: company.name,
+        error: error.message
+      });
+    }
+  }
+  
+  return results;
+}
+
+// Standardize chart of accounts across group
+async function standardizeChartOfAccounts(
+  groupId: string,
+  templateCompanyId: string
+) {
+  // Get template accounts
+  const templateClient = await switchToCompany(templateCompanyId);
+  const templateAccounts = await templateClient.export('Account', {
+    format: 'full'
+  });
+  
+  const companies = await getCompaniesInGroup(groupId);
+  const results = [];
+  
+  for (const company of companies) {
+    if (company.id === templateCompanyId) continue;
+    
+    try {
+      const client = await switchToCompany(company.id);
+      
+      // Import accounts (implementation depends on MW API)
+      await client.import('Account', templateAccounts, {
+        updateExisting: false,
+        skipDuplicates: true
+      });
+      
+      results.push({
+        companyId: company.id,
+        status: 'success',
+        accountsImported: templateAccounts.length
+      });
+    } catch (error) {
+      results.push({
+        companyId: company.id,
+        status: 'error',
+        error: error.message
+      });
+    }
+  }
+  
+  return results;
+}
+```
+</CodeExample>
+
+## Consolidated Reporting
+
+### Cross-Company Reports
+
+Generate reports across multiple entities:
+
+<CodeExample>
+```typescript
+interface ConsolidatedReport {
+  groupId: string;
+  reportType: string;
+  period: Period;
+  companies: CompanyReport[];
+  totals: ReportTotals;
+  generatedAt: Date;
+}
+
+interface CompanyReport {
+  companyId: string;
+  companyName: string;
+  data: any;
+  errors?: string[];
+}
+
+async function generateConsolidatedPL(
+  groupId: string,
+  period: Period
+) {
+  const companies = await getCompaniesInGroup(groupId);
+  const report: ConsolidatedReport = {
+    groupId,
+    reportType: 'profit_loss',
+    period,
+    companies: [],
+    totals: {
+      revenue: 0,
+      expenses: 0,
+      netIncome: 0
+    },
+    generatedAt: new Date()
+  };
+  
+  // Fetch P&L for each company
+  for (const company of companies) {
+    try {
+      const client = await switchToCompany(company.id);
+      const plData = await client.runReport('ProfitLoss', {
+        period: period.toString(),
+        format: 'json'
+      });
+      
+      report.companies.push({
+        companyId: company.id,
+        companyName: company.name,
+        data: plData
+      });
+      
+      // Aggregate totals
+      report.totals.revenue += plData.revenue;
+      report.totals.expenses += plData.expenses;
+      report.totals.netIncome += plData.netIncome;
+      
+    } catch (error) {
+      report.companies.push({
+        companyId: company.id,
+        companyName: company.name,
+        data: null,
+        errors: [error.message]
+      });
+    }
+  }
+  
+  return report;
+}
+```
+</CodeExample>
+
+### Inter-Company Eliminations
+
+Handle inter-company transactions for consolidated reporting:
+
+<CodeExample>
+```typescript
+interface InterCompanyTransaction {
+  fromCompany: string;
+  toCompany: string;
+  date: YYYYMMDD;
+  amount: number;
+  description: string;
+  fromAccount: AccountCode;
+  toAccount: AccountCode;
+}
+
+async function identifyInterCompanyTransactions(
+  groupId: string,
+  period: Period
+): Promise<InterCompanyTransaction[]> {
+  const companies = await getCompaniesInGroup(groupId);
+  const icTransactions: InterCompanyTransaction[] = [];
+  
+  // Define inter-company account codes
+  const icAccountPattern = /^2[89]\d{2}/; // 28xx, 29xx accounts
+  
+  for (const company of companies) {
+    const client = await switchToCompany(company.id);
+    
+    // Find transactions to IC accounts
+    const transactions = await client.export('Transaction', {
+      filter: `Date >= '${period.startDate()}' AND Date <= '${period.endDate()}'`,
+      format: 'full'
+    });
+    
+    for (const txn of transactions) {
+      if (icAccountPattern.test(txn.AccountCode)) {
+        // Extract counterparty from account description
+        const counterparty = extractCounterparty(txn.Description);
+        
+        if (counterparty && companies.some(c => c.id === counterparty)) {
+          icTransactions.push({
+            fromCompany: company.id,
+            toCompany: counterparty,
+            date: YYYYMMDD(txn.Date),
+            amount: txn.Amount,
+            description: txn.Description,
+            fromAccount: AccountCode(txn.AccountCode),
+            toAccount: getCounterpartyAccount(txn.AccountCode)
+          });
+        }
+      }
+    }
+  }
+  
+  return icTransactions;
+}
+
+// Eliminate inter-company transactions from consolidated report
+function eliminateInterCompany(
+  consolidatedData: any,
+  icTransactions: InterCompanyTransaction[]
+) {
+  // Remove inter-company revenues and expenses
+  for (const txn of icTransactions) {
+    // Reduce revenue in selling company
+    consolidatedData[txn.fromCompany].revenue -= txn.amount;
+    
+    // Reduce expense in buying company
+    consolidatedData[txn.toCompany].expenses -= txn.amount;
+  }
+  
+  return consolidatedData;
+}
+```
+</CodeExample>
+
+## Group Templates
+
+### Chart of Accounts Templates
+
+Maintain standard charts of accounts:
+
+<CodeExample>
+```typescript
+interface ChartTemplate {
+  id: string;
+  name: string;
+  description: string;
+  industry?: string;
+  accounts: AccountTemplate[];
+  version: string;
+  createdAt: Date;
+}
+
+interface AccountTemplate {
+  code: AccountCode;
+  name: string;
+  type: AccountType;
+  parentCode?: AccountCode;
+  taxCode?: string;
+  description?: string;
+}
+
+// Create industry-specific templates
+const retailTemplate: ChartTemplate = {
+  id: 'retail-standard-2024',
+  name: 'Retail Industry Standard COA',
+  description: 'Standard chart of accounts for retail businesses',
+  industry: 'retail',
+  version: '2024.1',
+  accounts: [
+    // Assets
+    { code: ac`1000`, name: 'Assets', type: 'Asset' },
+    { code: ac`1100`, name: 'Current Assets', type: 'Asset', parentCode: ac`1000` },
+    { code: ac`1110`, name: 'Cash and Cash Equivalents', type: 'Asset', parentCode: ac`1100` },
+    { code: ac`1200`, name: 'Inventory', type: 'Asset', parentCode: ac`1100` },
+    { code: ac`1210`, name: 'Merchandise Inventory', type: 'Asset', parentCode: ac`1200` },
+    
+    // Liabilities
+    { code: ac`2000`, name: 'Liabilities', type: 'Liability' },
+    { code: ac`2100`, name: 'Current Liabilities', type: 'Liability', parentCode: ac`2000` },
+    { code: ac`2110`, name: 'Accounts Payable', type: 'Liability', parentCode: ac`2100` },
+    
+    // Income
+    { code: ac`4000`, name: 'Revenue', type: 'Income' },
+    { code: ac`4100`, name: 'Sales Revenue', type: 'Income', parentCode: ac`4000` },
+    { code: ac`4110`, name: 'Retail Sales', type: 'Income', parentCode: ac`4100`, taxCode: 'GST' },
+    
+    // Expenses
+    { code: ac`5000`, name: 'Expenses', type: 'Expense' },
+    { code: ac`5100`, name: 'Cost of Goods Sold', type: 'Expense', parentCode: ac`5000` },
+    { code: ac`5200`, name: 'Operating Expenses', type: 'Expense', parentCode: ac`5000` }
+  ],
+  createdAt: new Date()
+};
+
+// Apply template to new company
+async function applyChartTemplate(
+  companyId: string,
+  templateId: string
+) {
+  const template = await getChartTemplate(templateId);
+  const client = await switchToCompany(companyId);
+  
+  for (const account of template.accounts) {
+    await client.create('Account', {
+      AccountCode: account.code.toString(),
+      AccountName: account.name,
+      AccountType: account.type,
+      ParentAccount: account.parentCode?.toString(),
+      TaxCode: account.taxCode,
+      Description: account.description
+    });
+  }
+}
+```
+</CodeExample>
+
+## Best Practices
+
+### 1. Group Organization
+
+Structure groups logically:
+
+- **By Client Type** - Separate retail, manufacturing, service clients
+- **By Size** - Group by revenue or complexity
+- **By Service Level** - Premium vs standard service clients
+- **By Location** - Geographic grouping for multi-office firms
+
+### 2. Security Considerations
+
+<CodeExample>
+```typescript
+// Implement audit logging for group operations
+async function logGroupActivity(
+  userId: string,
+  groupId: string,
+  action: string,
+  details: any
+) {
+  await db.groupAuditLog.create({
+    data: {
+      userId,
+      groupId,
+      action,
+      details,
+      ipAddress: getCurrentUserIP(),
+      timestamp: new Date()
+    }
+  });
+}
+
+// Example: Log company access
+await logGroupActivity(userId, groupId, 'company.access', {
+  companyId: 'client-abc-ltd',
+  accessType: 'read'
+});
+```
+</CodeExample>
+
+### 3. Performance Optimization
+
+<CodeExample>
+```typescript
+// Connection pooling for multi-company operations
+class ConnectionPool {
+  private maxConnections = 10;
+  private connections = new Map<string, MoneyWorksClient>();
+  private lastUsed = new Map<string, number>();
+  
+  async getConnection(companyId: string): Promise<MoneyWorksClient> {
+    // Reuse existing connection
+    if (this.connections.has(companyId)) {
+      this.lastUsed.set(companyId, Date.now());
+      return this.connections.get(companyId)!;
+    }
+    
+    // Clean up old connections if at limit
+    if (this.connections.size >= this.maxConnections) {
+      await this.evictOldest();
+    }
+    
+    // Create new connection
+    const config = await getCompanyConfig(companyId);
+    const client = new MoneyWorksClient(config);
+    await client.connect();
+    
+    this.connections.set(companyId, client);
+    this.lastUsed.set(companyId, Date.now());
+    
+    return client;
+  }
+  
+  private async evictOldest() {
+    let oldestTime = Date.now();
+    let oldestId = '';
+    
+    for (const [id, time] of this.lastUsed) {
+      if (time < oldestTime) {
+        oldestTime = time;
+        oldestId = id;
+      }
+    }
+    
+    if (oldestId) {
+      const client = this.connections.get(oldestId);
+      await client?.disconnect();
+      this.connections.delete(oldestId);
+      this.lastUsed.delete(oldestId);
+    }
+  }
+}
+```
+</CodeExample>
+
+### 4. Error Handling
+
+Handle multi-company errors gracefully:
+
+<CodeExample>
+```typescript
+interface BatchOperationResult {
+  successful: string[];
+  failed: Array<{
+    companyId: string;
+    error: string;
+  }>;
+  summary: {
+    total: number;
+    succeeded: number;
+    failed: number;
+  };
+}
+
+async function batchOperation(
+  groupId: string,
+  operation: (client: MoneyWorksClient, companyId: string) => Promise<any>
+): Promise<BatchOperationResult> {
+  const companies = await getCompaniesInGroup(groupId);
+  const result: BatchOperationResult = {
+    successful: [],
+    failed: [],
+    summary: {
+      total: companies.length,
+      succeeded: 0,
+      failed: 0
+    }
+  };
+  
+  for (const company of companies) {
+    try {
+      const client = await getConnection(company.id);
+      await operation(client, company.id);
+      
+      result.successful.push(company.id);
+      result.summary.succeeded++;
+      
+    } catch (error) {
+      result.failed.push({
+        companyId: company.id,
+        error: error.message
+      });
+      result.summary.failed++;
+      
+      // Log error but continue with other companies
+      console.error(`Operation failed for ${company.id}:`, error);
+    }
+  }
+  
+  return result;
+}
+```
+</CodeExample>
+
+## Next Steps
+
+- [Authentication Guide](/guides/authentication) - Secure group access
+- [API Development](/guides/api-development) - Build group management APIs
+- [Type Safety Guide](/guides/type-safety) - Type-safe group operations
+- [Multi-Tenant Architecture](/guides/multi-tenant) - Advanced isolation strategies
+
+Master group management to efficiently handle multiple MoneyWorks companies!
