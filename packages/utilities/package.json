@@ -18,6 +18,7 @@
   },
   "scripts": {
     "test": "bun test",
+    "build": "tsc",
     "typecheck": "tsc --noEmit",
     "typecheck:all": "tsc -p tsconfig.dev.json --noEmit"
   },

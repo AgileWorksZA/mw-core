@@ -44,7 +44,8 @@ export function createCompanyRoutes(
             timestamp: new Date().toISOString(),
             requestId,
             format: query.format || 'nested',
-            fieldCount: query.fields?.length || CompanyFields.length
+            fieldCount: query.fields?.length || CompanyFields.length,
+            count: 1
           }
         };
       } catch (error: any) {

@@ -211,7 +211,7 @@ export class LabelsController {
 
         // Fetch labels for each table
         await Promise.all(
-          tables.map(async (tableName) => {
+          tables.map(async (tableName: string) => {
             try {
               allLabels[tableName] = await this.getTableLabels(tableName, language);
             } catch (error) {

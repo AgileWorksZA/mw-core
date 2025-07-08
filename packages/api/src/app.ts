@@ -56,15 +56,15 @@ export function createApp(client: SmartMoneyWorksClient, config: APIConfig = {})
     .use(i18n)
     
     // CORS support
-    .use(enableCors ? cors({
+    .use((app) => enableCors ? app.use(cors({
       origin: corsOrigins,
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID']
-    }) : (app) => app)
+    })) : app)
     
     // Swagger documentation
-    .use(enableSwagger ? swagger({
+    .use((app) => enableSwagger ? app.use(swagger({
       documentation: {
         info: {
           title: 'MoneyWorks REST API',
@@ -133,7 +133,7 @@ All errors follow a consistent format:
       },
       path: '/swagger',
       exclude: ['/swagger', '/swagger/json']
-    }) : (app) => app)
+    })) : app)
     
     // Mount routes
     .use(createTableRoutes(registry, client, caches.labels))

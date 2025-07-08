@@ -48,7 +48,8 @@ export function createEvalRoutes(
           },
           metadata: {
             timestamp: new Date().toISOString(),
-            requestId
+            requestId,
+            count: 1
           }
         };
       } catch (error: any) {
@@ -80,7 +81,7 @@ export function createEvalRoutes(
     })
     
     // Template evaluation endpoint
-    .post('/template/:table', async ({ params, body, set, headers }) => {
+    .post('/template/:table', async ({ params, body, set, headers }): Promise<any> => {
       const requestId = headers['x-request-id'] || 'unknown';
       const { table } = params;
       const { template, limit = 100, filter } = body;
@@ -119,7 +120,7 @@ export function createEvalRoutes(
         const templateWithDelimiter = `${template}\\n\\n`;
         
         const options: any = {
-          format: templateWithDelimiter,
+          format: { template: templateWithDelimiter },
           limit
         };
 
@@ -151,7 +152,8 @@ export function createEvalRoutes(
             requestId,
             executionTime: Math.round(executionTime * 100) / 100,
             filter: filter || null,
-            limit
+            limit,
+            count: results.length
           }
         };
 

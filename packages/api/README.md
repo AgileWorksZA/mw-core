@@ -37,6 +37,64 @@ DISABLE_SWAGGER=false            # Disable Swagger UI
 DISABLE_CORS=false               # Disable CORS
 ```
 
+See `.env.example` for all available environment variables.
+
+## Deployment
+
+### Railway
+
+The API is configured for easy deployment on Railway:
+
+1. Push your code to GitHub
+2. Create a new Railway project
+3. Add environment variables:
+   - `MW_HOST` - Your MoneyWorks server
+   - `MW_USERNAME` - MoneyWorks username
+   - `MW_PASSWORD` - MoneyWorks password  
+   - `MW_COMPANY` - Company file name
+4. Deploy directly from GitHub
+
+Railway will automatically detect the Dockerfile and deploy the API.
+
+### Docker
+
+Build and run with Docker:
+
+```bash
+# Build from monorepo root
+docker build -f packages/api/Dockerfile -t mw-api .
+
+# Run with environment variables
+docker run -p 3000:3000 \
+  -e MW_HOST=your-server \
+  -e MW_USERNAME=your-user \
+  -e MW_PASSWORD=your-pass \
+  -e MW_COMPANY=your-company \
+  mw-api
+```
+
+### Manual Deployment
+
+For manual deployment on a VPS:
+
+```bash
+# Clone the repository
+git clone https://github.com/your-org/mw-core.git
+cd mw-core
+
+# Install dependencies
+bun install
+
+# Set environment variables
+export MW_HOST=your-server
+export MW_USERNAME=your-user
+export MW_PASSWORD=your-pass
+export MW_COMPANY=your-company
+
+# Start the API
+bun run api:start
+```
+
 ## API Endpoints
 
 ### Tables

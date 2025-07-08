@@ -156,6 +156,57 @@ export class SmartMoneyWorksClient extends MoneyWorksRESTClient {
       await this.ensureFieldStructure(table);
     }
   }
+
+  /**
+   * Test connection to MoneyWorks
+   * @returns true if connection is successful
+   */
+  async testConnection(): Promise<boolean> {
+    try {
+      const result = await this.evaluate('1 + 1');
+      return result.trim() === '2';
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Get table information
+   * @param table - Table name
+   * @returns Table metadata
+   */
+  async getTableInfo(table: string): Promise<any> {
+    // MoneyWorks doesn't have a direct table info endpoint
+    // We'll use field discovery instead
+    const structure = await discoverTableStructure(this, table);
+    return {
+      table,
+      fields: structure.fields.map(f => f.name),
+      fieldCount: structure.fields.length,
+      structure
+    };
+  }
+
+  /**
+   * List available tables
+   * @returns Array of table names
+   */
+  async listTables(): Promise<string[]> {
+    // Return the known tables - MoneyWorks doesn't have a tables list endpoint
+    return [
+      'TaxRate',
+      'Account', 
+      'Transaction',
+      'Name',
+      'Product',
+      'Job',
+      'Contact',
+      'Department',
+      'General',
+      'Inventory',
+      'Payment'
+    ];
+  }
 }
 
 /**

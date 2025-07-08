@@ -75,7 +75,7 @@ export const errorHandler = new Elysia({ name: 'error-handler' })
     }
     
     // Handle 404 - Not Found
-    if (error.message?.includes('NOT_FOUND')) {
+    if ('message' in error && error.message?.includes('NOT_FOUND')) {
       set.status = 404;
       return createErrorResponse(
         'NOT_FOUND',
@@ -88,12 +88,15 @@ export const errorHandler = new Elysia({ name: 'error-handler' })
     console.error(`[${requestId}] Unhandled error:`, error);
     set.status = 500;
     
+    const errorMessage = 'message' in error ? error.message : 'An unexpected error occurred';
+    const errorStack = 'stack' in error ? error.stack : undefined;
+    
     return createErrorResponse(
       'INTERNAL_ERROR',
       process.env.NODE_ENV === 'production' 
         ? 'An unexpected error occurred'
-        : error.message,
+        : errorMessage,
       requestId,
-      process.env.NODE_ENV !== 'production' ? { stack: error.stack } : undefined
+      process.env.NODE_ENV !== 'production' && errorStack ? { stack: errorStack } : undefined
     );
   });

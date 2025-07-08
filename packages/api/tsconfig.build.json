@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
+    "paths": {
+      "@moneyworks/utilities": ["../utilities/dist"],
+      "@moneyworks/utilities/*": ["../utilities/dist/*"],
+      "@moneyworks/canonical": ["../canonical/dist"],
+      "@moneyworks/canonical/*": ["../canonical/dist/*"],
+      "@moneyworks/data": ["../data/dist"],
+      "@moneyworks/data/*": ["../data/dist/*"]
+    }
+  }
+}

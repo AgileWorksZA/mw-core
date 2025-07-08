@@ -259,7 +259,9 @@
       "mcp__filesystem__edit_file",
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(say:*)",
-      "Bash(claude config list --global)"
+      "Bash(claude config list --global)",
+      "Bash(docker build:*)",
+      "Bash(/opt/homebrew/bin/npm run build)"
     ],
     "deny": []
   }

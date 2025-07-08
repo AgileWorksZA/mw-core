@@ -21,6 +21,9 @@ export interface FieldInfo {
   name: string;
   position: number;
   dataType: 'string' | 'number' | 'boolean' | 'date';
+  maxLength?: number;
+  required?: boolean;
+  description?: string;
 }
 
 export interface TableStructure {

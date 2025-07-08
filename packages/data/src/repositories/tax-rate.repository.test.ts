@@ -7,7 +7,7 @@
 
 import {describe, test, expect, beforeAll} from 'bun:test';
 import {loadConfig} from '../config/index';
-import {TaxRateRepository} from "@moneyworks/data/repositories/tax-rate.repository.ts";
+import {TaxRateRepository} from "@moneyworks/data/repositories/tax-rate.repository";
 import {createSmartClient} from "@moneyworks/data/client/moneyworks-smart-client";
 
 describe('TaxRateRepository', () => {

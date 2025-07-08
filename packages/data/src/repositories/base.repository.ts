@@ -112,7 +112,7 @@ export abstract class BaseMoneyWorksRepository<T, TCreate = Partial<T>, TUpdate 
     });
 
     // Apply post-processing to add branded types if needed
-    return data.map(record => this.postProcess(record));
+    return data.map((record: any) => this.postProcess(record));
   }
 
   /**
@@ -146,7 +146,7 @@ export abstract class BaseMoneyWorksRepository<T, TCreate = Partial<T>, TUpdate 
    */
   async findAll(params: MoneyWorksQueryParams = {}): Promise<T[]> {
     const data = await this.client.smartExport(this.tableName, params);
-    return data.map(record => this.postProcess(record));
+    return data.map((record: any) => this.postProcess(record));
   }
 
   /**

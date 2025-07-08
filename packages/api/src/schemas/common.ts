@@ -4,7 +4,7 @@
  * @moneyworks-dsl PURE
  */
 
-import { t } from 'elysia';
+import { t, type TSchema } from 'elysia';
 
 /**
  * Standard error response schema
@@ -62,7 +62,7 @@ export const MetadataSchema = t.Object({
 /**
  * Success response wrapper
  */
-export const SuccessResponse = <T extends ReturnType<typeof t.Any>>(dataSchema: T) => 
+export const SuccessResponse = <T extends TSchema>(dataSchema: T) => 
   t.Object({
     data: dataSchema,
     metadata: MetadataSchema

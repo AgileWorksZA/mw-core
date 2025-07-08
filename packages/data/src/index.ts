@@ -12,6 +12,7 @@ import { TaxRateRepository } from './repositories/tax-rate.repository';
 // Export clients
 export { MoneyWorksRESTClient } from './client/moneyworks-rest-client';
 export { createSmartClient } from './client/moneyworks-smart-client';
+export type { ExportOptions } from './client/moneyworks-rest-client';
 export type {
   ImportOptions, 
   ImportResult, 

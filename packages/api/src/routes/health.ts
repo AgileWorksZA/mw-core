@@ -29,9 +29,12 @@ const startTime = Date.now();
 export function createHealthRoutes(client: SmartMoneyWorksClient) {
   return new Elysia()
     .get('/health', async () => {
-      const checks = {
-        api: 'ok' as const,
-        moneyworks: 'error' as const
+      const checks: {
+        api: 'ok' | 'error';
+        moneyworks: 'ok' | 'error' | 'timeout';
+      } = {
+        api: 'ok',
+        moneyworks: 'error'
       };
       
       // Check MoneyWorks connection
@@ -46,13 +49,14 @@ export function createHealthRoutes(client: SmartMoneyWorksClient) {
         if (testResult) {
           checks.moneyworks = 'ok';
         }
-      } catch (error) {
+      } catch (error: any) {
         checks.moneyworks = error.message === 'Timeout' ? 'timeout' : 'error';
       }
       
-      // Determine overall status
-      const status = checks.moneyworks === 'ok' ? 'healthy' : 
-                    checks.moneyworks === 'timeout' ? 'degraded' : 'unhealthy';
+      // Determine overall status based on the current moneyworks check status
+      const mwStatus = checks.moneyworks;
+      const status = mwStatus === 'ok' ? 'healthy' : 
+                    mwStatus === 'timeout' ? 'degraded' : 'unhealthy';
       
       const health: HealthStatus = {
         status,

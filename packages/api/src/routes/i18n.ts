@@ -214,7 +214,8 @@ export function createI18nRoutes(
         metadata: {
           timestamp: new Date().toISOString(),
           requestId,
-          keyCount: Object.keys(UI_TRANSLATIONS[language]).length
+          keyCount: Object.keys(UI_TRANSLATIONS[language]).length,
+          count: Object.keys(UI_TRANSLATIONS[language]).length
         }
       };
     }, {
@@ -270,7 +271,8 @@ Supported languages: ${SUPPORTED_LANGUAGES.join(', ')}`,
             timestamp: new Date().toISOString(),
             requestId,
             language,
-            tableCount: Object.keys(allLabels).length
+            tableCount: Object.keys(allLabels).length,
+            count: Object.keys(allLabels).length
           }
         };
       } catch (error: any) {

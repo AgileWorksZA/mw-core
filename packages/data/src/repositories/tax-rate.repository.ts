@@ -106,7 +106,7 @@ export class TaxRateRepository extends BaseMoneyWorksRepository<
     }
     
     // User fields (only if provided)
-    if ('UserNum' in data && data.UserNum !== undefined) {
+    if ('UserNum' in data && data.UserNum !== undefined && typeof data.UserNum === 'number') {
       prepared.UserNum = formatMWNumber(data.UserNum, 0);
     }
     if ('UserText' in data && data.UserText !== undefined) {

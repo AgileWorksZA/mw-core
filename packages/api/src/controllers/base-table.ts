@@ -102,8 +102,18 @@ export abstract class BaseTableController implements TableController {
     
     // Validate format
     const validFormats = ['compact', 'compact-headers', 'full', 'schema'];
-    if (params.format && !validFormats.includes(params.format)) {
-      throw new ValidationError('INVALID_FORMAT', `Format must be one of: ${validFormats.join(', ')}`);
+    if (params.format) {
+      // Check if format is a string and one of our custom formats
+      if (typeof params.format === 'string' && !validFormats.includes(params.format)) {
+        // Also allow MoneyWorks native formats
+        if (!['tsv', 'xml-terse', 'xml-verbose'].includes(params.format)) {
+          throw new ValidationError('INVALID_FORMAT', `Format must be one of: ${validFormats.join(', ')}, tsv, xml-terse, xml-verbose, or an object with template/script`);
+        }
+      }
+      // Allow object formats with template or script
+      else if (typeof params.format === 'object' && !('template' in params.format || 'script' in params.format)) {
+        throw new ValidationError('INVALID_FORMAT', 'Object format must have either template or script property');
+      }
     }
     
     // Subclasses can add table-specific validation

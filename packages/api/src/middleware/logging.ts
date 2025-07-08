@@ -27,7 +27,10 @@ export const logging = new Elysia({ name: 'logging' })
     const startTime = performance.now();
     return { startTime };
   })
-  .onAfterHandle(({ request, set, requestId, startTime }) => {
+  .onAfterHandle((context) => {
+    const { request, set } = context;
+    const requestId = (context as any).requestId || 'unknown';
+    const startTime = (context as any).startTime || 0;
     const duration = performance.now() - startTime;
     
     const log: LogEntry = {
@@ -36,15 +39,18 @@ export const logging = new Elysia({ name: 'logging' })
       method: request.method,
       path: new URL(request.url).pathname,
       query: Object.fromEntries(new URL(request.url).searchParams),
-      statusCode: set.status || 200,
+      statusCode: typeof set.status === 'number' ? set.status : 200,
       duration: Math.round(duration * 100) / 100,
       userAgent: request.headers.get('user-agent') || undefined
     };
     
     console.log(JSON.stringify(log));
   })
-  .onError(({ request, error, requestId, startTime }) => {
-    const duration = performance.now() - startTime;
+  .onError((context) => {
+    const { request, error } = context;
+    const requestId = (context as any).requestId || 'unknown';
+    const startTime = (context as any).startTime || 0;
+    const duration = startTime ? performance.now() - startTime : 0;
     
     const log: LogEntry = {
       timestamp: new Date().toISOString(),
@@ -53,7 +59,7 @@ export const logging = new Elysia({ name: 'logging' })
       path: new URL(request.url).pathname,
       query: Object.fromEntries(new URL(request.url).searchParams),
       duration: Math.round(duration * 100) / 100,
-      error: error.message,
+      error: 'message' in error ? error.message : String(error),
       userAgent: request.headers.get('user-agent') || undefined
     };
     

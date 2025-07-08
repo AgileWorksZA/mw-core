@@ -77,7 +77,8 @@ export function createTableRoutes(
         metadata: {
           table,
           timestamp: new Date().toISOString(),
-          requestId
+          requestId,
+          count: schema.fields ? schema.fields.length : 0
         }
       };
     }, {
@@ -172,7 +173,9 @@ export function createTableRoutes(
     })
     
     // Get field labels for a table
-    .get('/:table/labels', async ({ params: { table }, language, set, headers }) => {
+    .get('/:table/labels', async (context) => {
+      const { params: { table }, set, headers } = context;
+      const language = (context as any).language;
       if (!labelsController) {
         set.status = 501;
         throw new Error('NOT_IMPLEMENTED: Labels endpoint requires client and cache configuration');
@@ -192,7 +195,8 @@ export function createTableRoutes(
           metadata: {
             timestamp: new Date().toISOString(),
             requestId,
-            cached: false // Will be updated when we add cache status tracking
+            cached: false, // Will be updated when we add cache status tracking
+            count: labels.labels ? Object.keys(labels.labels).length : 0
           }
         };
       } catch (error: any) {
