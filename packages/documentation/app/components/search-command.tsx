@@ -16,23 +16,23 @@ const searchData = [
   { id: "pkg-web1", type: "package", title: "@moneyworks/web1", description: "Web application", url: "/packages/web1", category: "Packages", icon: "globe" },
   
   // Utilities API Methods
-  { id: "api-validateYYYYMMDD", type: "api", title: "validateYYYYMMDD", description: "Validate date in YYYYMMDD format", url: "/packages/utilities/api#validation", category: "Utilities API", icon: "code" },
-  { id: "api-formatYYYYMMDD", type: "api", title: "formatYYYYMMDD", description: "Format Date to YYYYMMDD string", url: "/packages/utilities/api#date-utilities", category: "Utilities API", icon: "code" },
-  { id: "api-parseYYYYMMDD", type: "api", title: "parseYYYYMMDD", description: "Parse YYYYMMDD to Date object", url: "/packages/utilities/api#date-utilities", category: "Utilities API", icon: "code" },
-  { id: "api-d-template", type: "api", title: "d`` template literal", description: "Tagged template for YYYYMMDD dates", url: "/packages/utilities/api#tagged-template-literals", category: "Utilities API", icon: "code" },
-  { id: "api-p-template", type: "api", title: "p`` template literal", description: "Tagged template for periods", url: "/packages/utilities/api#tagged-template-literals", category: "Utilities API", icon: "code" },
-  { id: "api-ac-template", type: "api", title: "ac`` template literal", description: "Tagged template for account codes", url: "/packages/utilities/api#tagged-template-literals", category: "Utilities API", icon: "code" },
-  { id: "api-parseJSON", type: "api", title: "parseJSON", description: "Parse JSON preserving number precision", url: "/packages/utilities/api#json-parsing", category: "Utilities API", icon: "code" },
-  { id: "api-YYYYMMDD", type: "api", title: "YYYYMMDD type", description: "Branded type for MoneyWorks dates", url: "/packages/utilities/api#branded-types", category: "Utilities API", icon: "hash" },
-  { id: "api-AccountCode", type: "api", title: "AccountCode type", description: "Branded type for account codes", url: "/packages/utilities/api#branded-types", category: "Utilities API", icon: "hash" },
-  { id: "api-Period", type: "api", title: "Period type", description: "Branded type for periods", url: "/packages/utilities/api#branded-types", category: "Utilities API", icon: "hash" },
+  { id: "api-validateYYYYMMDD", type: "api", title: "validateYYYYMMDD", description: "Validate date in YYYYMMDD format", url: "/packages/utilities/api#export-date-validators", category: "Utilities API", icon: "code" },
+  { id: "api-formatYYYYMMDD", type: "api", title: "formatYYYYMMDD", description: "Format Date to YYYYMMDD string", url: "/packages/utilities/api#export-formatters", category: "Utilities API", icon: "code" },
+  { id: "api-parseYYYYMMDD", type: "api", title: "parseYYYYMMDD", description: "Parse YYYYMMDD to Date object", url: "/packages/utilities/api#export-date-factory-functions", category: "Utilities API", icon: "code" },
+  { id: "api-d-template", type: "api", title: "d`` template literal", description: "Tagged template for YYYYMMDD dates", url: "/packages/utilities/api#export-tagged-template-literals", category: "Utilities API", icon: "code" },
+  { id: "api-p-template", type: "api", title: "p`` template literal", description: "Tagged template for periods", url: "/packages/utilities/api#export-tagged-template-literals", category: "Utilities API", icon: "code" },
+  { id: "api-ac-template", type: "api", title: "ac`` template literal", description: "Tagged template for account codes", url: "/packages/utilities/api#export-tagged-template-literals", category: "Utilities API", icon: "code" },
+  { id: "api-parseJSON", type: "api", title: "parseJSON", description: "Parse JSON preserving number precision", url: "/packages/utilities/api#export-json-parsing", category: "Utilities API", icon: "code" },
+  { id: "api-YYYYMMDD", type: "api", title: "YYYYMMDD type", description: "Branded type for MoneyWorks dates", url: "/packages/utilities/api#export-branded-types", category: "Utilities API", icon: "hash" },
+  { id: "api-AccountCode", type: "api", title: "AccountCode type", description: "Branded type for account codes", url: "/packages/utilities/api#export-branded-types", category: "Utilities API", icon: "hash" },
+  { id: "api-Period", type: "api", title: "Period type", description: "Branded type for periods", url: "/packages/utilities/api#export-branded-types", category: "Utilities API", icon: "hash" },
   
   // Data API Methods
-  { id: "api-createSmartClient", type: "api", title: "createSmartClient", description: "Create client with field discovery", url: "/packages/data/api#export-smart-client", category: "Data API", icon: "code" },
-  { id: "api-MoneyWorksClient", type: "api", title: "MoneyWorksClient", description: "Core client for MoneyWorks", url: "/packages/data/api#export-client", category: "Data API", icon: "code" },
-  { id: "api-loadConfig", type: "api", title: "loadConfig", description: "Load configuration from file", url: "/packages/data/api#export-configuration", category: "Data API", icon: "code" },
-  { id: "api-export", type: "api", title: "export method", description: "Export data from MoneyWorks", url: "/packages/data/api#export-smart-client", category: "Data API", icon: "code" },
-  { id: "api-testConnection", type: "api", title: "testConnection", description: "Test MoneyWorks connection", url: "/packages/data/api#export-client", category: "Data API", icon: "code" },
+  { id: "api-createSmartClient", type: "api", title: "createSmartClient", description: "Create client with field discovery", url: "/packages/data/api#export-main-entry-points", category: "Data API", icon: "code" },
+  { id: "api-MoneyWorksClient", type: "api", title: "MoneyWorksClient", description: "Core client for MoneyWorks", url: "/packages/data/api#export-client-classes", category: "Data API", icon: "code" },
+  { id: "api-loadConfig", type: "api", title: "loadConfig", description: "Load configuration from file", url: "/packages/data/api#export-main-entry-points", category: "Data API", icon: "code" },
+  { id: "api-export", type: "api", title: "export method", description: "Export data from MoneyWorks", url: "/packages/data/api#export-client-classes", category: "Data API", icon: "code" },
+  { id: "api-testConnection", type: "api", title: "testConnection", description: "Test MoneyWorks connection", url: "/packages/data/api#export-client-classes", category: "Data API", icon: "code" },
   
   // Canonical API
   { id: "api-TaxRates", type: "api", title: "TaxRates namespace", description: "Tax rate calculations and constants", url: "/packages/canonical/api#export-taxrates-namespace", category: "Canonical API", icon: "code" },
@@ -52,10 +52,10 @@ const searchData = [
   { id: "guide-type-safety", type: "guide", title: "Type Safety Guide", description: "Understanding branded types", url: "/guides/type-safety", category: "Guides", icon: "book" },
   
   // Common searches
-  { id: "search-dates", type: "search", title: "Date handling", description: "YYYYMMDD format, validation, parsing", url: "/packages/utilities/api#date-utilities", category: "Common Topics", icon: "search" },
-  { id: "search-export", type: "search", title: "Export formats", description: "full, compact, compact-headers, schema", url: "/packages/data/api#export-formats", category: "Common Topics", icon: "search" },
+  { id: "search-dates", type: "search", title: "Date handling", description: "YYYYMMDD format, validation, parsing", url: "/packages/utilities/api#export-date-manipulation", category: "Common Topics", icon: "search" },
+  { id: "search-export", type: "search", title: "Export formats", description: "full, compact, compact-headers, schema", url: "/packages/data/api#export-export-format-converters", category: "Common Topics", icon: "search" },
   { id: "search-auth", type: "search", title: "Authentication", description: "Connection setup, credentials", url: "/guides/getting-started#environment-variables", category: "Common Topics", icon: "search" },
-  { id: "search-types", type: "search", title: "Branded types", description: "Type safety with branded types", url: "/packages/utilities/api#branded-types", category: "Common Topics", icon: "search" },
+  { id: "search-types", type: "search", title: "Branded types", description: "Type safety with branded types", url: "/packages/utilities/api#export-branded-types", category: "Common Topics", icon: "search" },
 ];
 
 const fuse = new Fuse(searchData, {
@@ -160,9 +160,33 @@ export function SearchCommand() {
                     key={item.id}
                     value={`${item.title} ${item.description}`}
                     onSelect={() => {
-                      navigate(item.url);
                       setOpen(false);
                       setSearch("");
+                      
+                      // Handle navigation with hash
+                      const [pathname, hash] = item.url.split('#');
+                      const currentPath = window.location.pathname;
+                      
+                      if (pathname === currentPath && hash) {
+                        // Same page, just update hash and scroll
+                        window.location.hash = hash;
+                        
+                        // Manually trigger scroll after a brief delay
+                        setTimeout(() => {
+                          const element = document.getElementById(hash);
+                          if (element) {
+                            const rect = element.getBoundingClientRect();
+                            const absoluteTop = window.pageYOffset + rect.top;
+                            window.scrollTo({
+                              top: absoluteTop - 80, // Account for header
+                              behavior: 'smooth'
+                            });
+                          }
+                        }, 100);
+                      } else {
+                        // Different page, navigate normally
+                        navigate(item.url);
+                      }
                     }}
                     className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none hover:bg-gray-100 dark:hover:bg-gray-800 aria-selected:bg-gray-100 dark:aria-selected:bg-gray-800"
                   >

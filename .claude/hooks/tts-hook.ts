@@ -1,26 +1,8 @@
-// tts-posttooluse-fixed.ts
-// Fixed TTS hook for PostToolUse - handles the actual data format
-// Save as: .claude/hooks/tts-hook.ts
-
 import {ElevenLabsClient} from "@elevenlabs/elevenlabs-js";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as os from "node:os";
 import {spawn} from "node:child_process";
-
-// const sampleInput = [{"parentUuid":null,"isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","type":"user","message":{"role":"user","content":"hi"},"uuid":"c273d269-569a-4c30-9faf-477c3e2cdf67","timestamp":"2025-07-08T02:59:35.514Z"}
-//   {"parentUuid":"c273d269-569a-4c30-9faf-477c3e2cdf67","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","message":{"id":"msg_01SJNBkAiWLQMz8svWdTBNy9","type":"message","role":"assistant","model":"claude-opus-4-20250514","content":[{"type":"text","text":"Hello! How can I help you today?"}],"stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":34321,"cache_read_input_tokens":0,"output_tokens":1,"service_tier":"standard"}},"requestId":"req_011CQtoaPmksbS2M4DVF4Rdc","type":"assistant","uuid":"64752e5c-d2f9-4da0-9593-83ff0c784d8d","timestamp":"2025-07-08T02:59:43.936Z"}
-//   {"parentUuid":"64752e5c-d2f9-4da0-9593-83ff0c784d8d","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","type":"system","content":"\u001b[1mStop\u001b[22m [bun --bun .claude/hooks/tts-hook.ts >> _stop.log] completed successfully","isMeta":false,"timestamp":"2025-07-08T02:59:45.005Z","uuid":"47517ef5-ecde-4a65-91a8-ebef581fbfcf","toolUseID":"8437b76a-6c99-49dd-a74a-657a81f854f9","level":"info"}
-//   {"parentUuid":"47517ef5-ecde-4a65-91a8-ebef581fbfcf","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","type":"user","message":{"role":"user","content":"hi"},"uuid":"f2a3bd62-c1f8-4b53-8131-99eb927be6d2","timestamp":"2025-07-08T03:03:00.250Z"}
-//   {"parentUuid":"f2a3bd62-c1f8-4b53-8131-99eb927be6d2","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","message":{"id":"msg_01WXAa7fDTkBbwRtZTJ1ZaSL","type":"message","role":"assistant","model":"claude-opus-4-20250514","content":[{"type":"text","text":"Hi! What can I assist you with?"}],"stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":16,"cache_read_input_tokens":34321,"output_tokens":1,"service_tier":"standard"}},"requestId":"req_011CQtoqV2gQDrr9Vg418ePF","type":"assistant","uuid":"d03d9575-3622-4e5d-a05e-3c2cb151a6fd","timestamp":"2025-07-08T03:03:03.522Z"}
-//   {"parentUuid":"d03d9575-3622-4e5d-a05e-3c2cb151a6fd","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","type":"system","content":"\u001b[1mStop\u001b[22m [bun --bun .claude/hooks/tts-hook.ts >> _stop.log] completed successfully","isMeta":false,"timestamp":"2025-07-08T03:03:04.064Z","uuid":"d1307a48-515b-49a4-b0bb-7f45c1106ae7","toolUseID":"c4293a2f-31ec-4c78-a9a4-9efbdc4033a5","level":"info"}
-//   {"parentUuid":"d1307a48-515b-49a4-b0bb-7f45c1106ae7","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","type":"user","message":{"role":"user","content":"hi"},"uuid":"d2b859ca-0005-41ea-95a7-49e3e84a38fb","timestamp":"2025-07-08T03:03:49.301Z"}
-//   {"parentUuid":"d2b859ca-0005-41ea-95a7-49e3e84a38fb","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","message":{"id":"msg_011F1cyJox6AQmpdfZQHcbGL","type":"message","role":"assistant","model":"claude-opus-4-20250514","content":[{"type":"text","text":"Hello! Is there something specific you'd like help with?"}],"stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":16,"cache_read_input_tokens":34337,"output_tokens":15,"service_tier":"standard"}},"requestId":"req_011CQtou6kqhEf17Rh73i68K","type":"assistant","uuid":"6fe9302b-f1dc-49a8-9c1a-fd3e991d4dbd","timestamp":"2025-07-08T03:03:52.760Z"}
-//   {"parentUuid":"6fe9302b-f1dc-49a8-9c1a-fd3e991d4dbd","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","type":"system","content":"\u001b[1mStop\u001b[22m [bun --bun .claude/hooks/tts-hook.ts >> _stop.log] completed successfully","isMeta":false,"timestamp":"2025-07-08T03:03:53.919Z","uuid":"2508c625-6ddc-482f-a2a1-9968c35578ca","toolUseID":"fec5759d-9707-450a-9909-7be0951ddff4","level":"info"}
-//   {"parentUuid":"2508c625-6ddc-482f-a2a1-9968c35578ca","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","type":"user","message":{"role":"user","content":"hi"},"uuid":"bdb115d2-7cd3-4853-a80d-c8b05a85f72e","timestamp":"2025-07-08T03:08:30.935Z"}
-//   {"parentUuid":"bdb115d2-7cd3-4853-a80d-c8b05a85f72e","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","message":{"id":"msg_01BSFEn8AM19fn8jnPzvj1VQ","type":"message","role":"assistant","model":"claude-opus-4-20250514","content":[{"type":"text","text":"Hi there! Feel free to let me know if you need any help with coding or development tasks."}],"stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":4,"cache_creation_input_tokens":19,"cache_read_input_tokens":34353,"output_tokens":1,"service_tier":"standard"}},"requestId":"req_011CQtpFrr1pZY6p3JF58ifh","type":"assistant","uuid":"5dced815-04d5-494c-9a1c-427de4387f87","timestamp":"2025-07-08T03:08:34.777Z"}
-//   {"parentUuid":"5dced815-04d5-494c-9a1c-427de4387f87","isSidechain":false,"userType":"external","cwd":"/Users/hgeldenhuys/WebstormProjects/mw-core","sessionId":"2f15cdea-38cb-451e-9c60-923e33de353d","version":"1.0.44","type":"system","content":"\u001b[1mStop\u001b[22m [bun --bun .claude/hooks/tts-hook.ts >> _stop.log] failed with non-blocking status code 1: 15 | const STATE_FILE = path.join(os.tmpdir(), \"claude-tts-state.json\");\n     ^\nerror: Unexpected const\n    at /Users/hgeldenhuys/WebstormProjects/mw-core/.claude/hooks/tts-hook.ts:15:1\n\nBun v1.2.15 (macOS arm64)\n","isMeta":false,"timestamp":"2025-07-08T03:08:34.896Z","uuid":"060247cd-1e6f-4444-9397-00938d10ccc8","toolUseID":"7ffcfd07-ed8c-4f58-8921-907488436097","level":"warning"}
-// ]
 
 type Message = {
   "parentUuid": string,
@@ -191,7 +173,8 @@ async function playSessionSummary() {
     }
 
     // Clean up state file
-    await fs.unlink(STATE_FILE).catch(() => {});
+    await fs.unlink(STATE_FILE).catch(() => {
+    });
 
     // Generate and play audio
     const apiKey = process.env.ELEVENLABS_API_KEY;
@@ -237,7 +220,7 @@ async function playSessionSummary() {
         "-filter:a", `atempo=${speedFactor}`,
         "-y", // overwrite output file
         speedFile
-      ], { stdio: "pipe" });
+      ], {stdio: "pipe"});
 
       ffmpeg.on("close", (code) => {
         if (code === 0) resolve();
@@ -256,8 +239,10 @@ async function playSessionSummary() {
 
     // Cleanup audio files after 10 seconds
     setTimeout(() => {
-      fs.unlink(originalFile).catch(() => {});
-      fs.unlink(speedFile).catch(() => {});
+      fs.unlink(originalFile).catch(() => {
+      });
+      fs.unlink(speedFile).catch(() => {
+      });
     }, 10000);
 
   } catch (error) {

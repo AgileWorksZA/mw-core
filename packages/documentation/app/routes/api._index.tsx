@@ -13,6 +13,7 @@ import {
   Layers,
   Sparkles
 } from "lucide-react";
+import { HashLink } from "~/components/hash-link";
 
 export default function ApiIndex() {
   const packages = [
@@ -108,9 +109,9 @@ export default function ApiIndex() {
       icon: <Shield className="h-5 w-5" />,
       description: "Branded types, validation, and type guards",
       links: [
-        { label: "Branded Types", href: "/packages/utilities/api#branded-types" },
-        { label: "Type Guards", href: "/packages/utilities/api#type-guards" },
-        { label: "Validation", href: "/packages/utilities/api#validation" }
+        { label: "Branded Types", href: "/packages/utilities/api#export-branded-types" },
+        { label: "Date Validators", href: "/packages/utilities/api#export-date-validators" },
+        { label: "Tagged Templates", href: "/packages/utilities/api#export-tagged-template-literals" }
       ]
     },
     {
@@ -118,9 +119,9 @@ export default function ApiIndex() {
       icon: <Layers className="h-5 w-5" />,
       description: "Clients, repositories, and export formats",
       links: [
-        { label: "Smart Client", href: "/packages/data/api#smart-client" },
-        { label: "Export Formats", href: "/packages/data/api#export-formats" },
-        { label: "Field Discovery", href: "/packages/data/api#field-discovery" }
+        { label: "Client Classes", href: "/packages/data/api#export-client-classes" },
+        { label: "Field Discovery", href: "/packages/data/api#export-field-discovery" },
+        { label: "Export Formats", href: "/packages/data/api#export-export-format-converters" }
       ]
     },
     {
@@ -128,9 +129,9 @@ export default function ApiIndex() {
       icon: <Sparkles className="h-5 w-5" />,
       description: "MoneyWorks-specific calculations and rules",
       links: [
-        { label: "Tax Calculations", href: "/packages/canonical/api#tax-calculations" },
-        { label: "Date Operations", href: "/packages/utilities/api#date-operations" },
-        { label: "Constants", href: "/packages/canonical/api#constants" }
+        { label: "Tax Calculations", href: "/packages/canonical/api#export-taxrates-namespace" },
+        { label: "Date Operations", href: "/packages/utilities/api#export-date-utilities" },
+        { label: "Constants", href: "/packages/canonical/api#export-package-constants" }
       ]
     }
   ];
@@ -185,13 +186,13 @@ export default function ApiIndex() {
                   </p>
                   <div className="space-y-2">
                     {api.links.map((link) => (
-                      <Link
+                      <HashLink
                         key={link.href}
                         to={link.href}
                         className="block text-sm text-primary-600 dark:text-primary-400 hover:underline"
                       >
                         {link.label} →
-                      </Link>
+                      </HashLink>
                     ))}
                   </div>
                 </div>

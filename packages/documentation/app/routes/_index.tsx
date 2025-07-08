@@ -1,6 +1,6 @@
 import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
-import { Search, BookOpen, Package, Code2, ArrowRight, Terminal, Server } from "lucide-react";
+import { Search, BookOpen, Package, Code2, ArrowRight, Terminal, Server, Zap, Database, Globe } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,37 +15,49 @@ export default function Index() {
       name: "@moneyworks/utilities",
       description: "Core utilities and branded types for type-safe MoneyWorks development",
       href: "/packages/utilities",
-      icon: <Code2 className="h-5 w-5" />,
+      icon: <Zap className="h-5 w-5" />,
+      color: "text-blue-600 dark:text-blue-400",
+      bgColor: "bg-blue-50 dark:bg-blue-900/20"
     },
     {
       name: "@moneyworks/canonical",
       description: "Canonical type definitions for MoneyWorks entities",
       href: "/packages/canonical",
       icon: <BookOpen className="h-5 w-5" />,
+      color: "text-purple-600 dark:text-purple-400",
+      bgColor: "bg-purple-50 dark:bg-purple-900/20"
     },
     {
       name: "@moneyworks/data",
       description: "Data access layer for MoneyWorks with smart export capabilities",
       href: "/packages/data",
-      icon: <Package className="h-5 w-5" />,
+      icon: <Database className="h-5 w-5" />,
+      color: "text-green-600 dark:text-green-400",
+      bgColor: "bg-green-50 dark:bg-green-900/20"
     },
     {
       name: "@moneyworks/cli",
       description: "Command-line interface for testing and interacting with MoneyWorks",
       href: "/packages/cli",
       icon: <Terminal className="h-5 w-5" />,
+      color: "text-orange-600 dark:text-orange-400",
+      bgColor: "bg-orange-50 dark:bg-orange-900/20"
     },
     {
       name: "@moneyworks/api",
       description: "REST API server for MoneyWorks built with ElysiaJS",
       href: "/packages/api",
       icon: <Server className="h-5 w-5" />,
+      color: "text-red-600 dark:text-red-400",
+      bgColor: "bg-red-50 dark:bg-red-900/20"
     },
     {
       name: "@moneyworks/web1",
       description: "Web application for MoneyWorks with React Router v7",
       href: "/packages/web1",
-      icon: <Package className="h-5 w-5" />,
+      icon: <Globe className="h-5 w-5" />,
+      color: "text-indigo-600 dark:text-indigo-400",
+      bgColor: "bg-indigo-50 dark:bg-indigo-900/20"
     },
   ];
 
@@ -305,10 +317,10 @@ export default function Index() {
               <Link
                 key={pkg.name}
                 to={pkg.href}
-                className="group relative rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 hover:border-primary-500 dark:hover:border-primary-400 transition-all hover:shadow-lg"
+                className="group relative rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 hover:border-primary-500 dark:hover:border-primary-400 transition-all hover:shadow-lg overflow-hidden"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400 group-hover:scale-110 transition-transform">
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${pkg.bgColor} ${pkg.color} group-hover:scale-110 transition-transform`}>
                     {pkg.icon}
                   </div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">
@@ -318,9 +330,11 @@ export default function Index() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {pkg.description}
                 </p>
-                <div className="mt-4 flex items-center text-sm font-medium text-primary-600 dark:text-primary-400">
-                  View docs <ArrowRight className="ml-1 h-4 w-4" />
+                <div className={`mt-4 flex items-center text-sm font-medium ${pkg.color} group-hover:gap-2 transition-all`}>
+                  View docs <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </div>
+                {/* Hover gradient effect */}
+                <div className={`absolute inset-0 ${pkg.bgColor} opacity-0 group-hover:opacity-5 transition-opacity pointer-events-none`} />
               </Link>
             ))}
           </div>
