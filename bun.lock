@@ -6,6 +6,8 @@
       "dependencies": {
         "@elevenlabs/elevenlabs-js": "^2.5.0",
         "elevenlabs": "^1.59.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
       },
       "devDependencies": {
         "@biomejs/biome": "^1.9.4",
@@ -163,8 +165,6 @@
         "clsx": "^2.1.1",
         "i18next": "^23.8.2",
         "lucide-react": "^0.408.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
         "react-i18next": "^14.0.0",
         "react-router": "^7.0.2",
         "sonner": "^1.7.1",

@@ -6,7 +6,6 @@ import {
   ScrollRestoration,
   useRouteError,
   isRouteErrorResponse,
-  useLoaderData,
 } from "react-router";
 import type { LinksFunction, LoaderFunctionArgs } from "react-router";
 import { ClerkProvider } from "@clerk/clerk-react";
@@ -88,7 +87,7 @@ export default function App() {
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
       signInFallbackRedirectUrl="/dashboard"
-      signUpFallbackRedirectUrl="/onboarding"
+      signUpFallbackRedirectUrl="/dashboard"
     >
       {appContent}
     </ClerkProvider>

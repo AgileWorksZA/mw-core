@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { UserButton } from "@clerk/clerk-react";
 import {
@@ -10,15 +10,20 @@ import {
   Settings,
   Moon,
   Sun,
+  LogOut,
 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { ConnectionSwitcher } from "~/components/connection-switcher";
 import { useState, useEffect } from "react";
+import { useAuth } from "~/hooks/use-auth";
 
 export function Navigation() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const isAutomation = import.meta.env.VITE_AUTOMATION === "true";
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
@@ -36,6 +41,28 @@ export function Navigation() {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
+  };
+
+  const handleLogout = async () => {
+    try {
+      if (isAutomation) {
+        // In automation mode, set a flag and redirect to sign-in
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("isLoggedOut", "true");
+          // Use window.location for a clean navigation
+          window.location.href = "/sign-in";
+        }
+      } else {
+        // Use Clerk's signOut
+        await signOut();
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Fallback to window navigation
+      if (typeof window !== "undefined") {
+        window.location.href = "/sign-in";
+      }
+    }
   };
 
   const navItems = [
@@ -86,7 +113,17 @@ export function Navigation() {
               <Moon className="h-4 w-4" />
             )}
           </Button>
-          {import.meta.env.VITE_AUTOMATION !== "true" && (
+          {isAutomation ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleLogout}
+              className="h-9 w-9"
+              title="Logout"
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+          ) : (
             <UserButton afterSignOutUrl="/sign-in" />
           )}
         </div>

@@ -11,18 +11,30 @@ export function useAuth() {
   const isAutomation = import.meta.env.VITE_AUTOMATION === "true";
   
   if (isAutomation) {
+    // Check if we're on the client side
+    const isClient = typeof window !== "undefined";
+    
+    // Check if user is logged out (only on client)
+    const isLoggedOut = isClient ? sessionStorage.getItem("isLoggedOut") === "true" : false;
+    
     // Return mock auth data for automation
     return {
       isLoaded: true,
-      isSignedIn: true,
-      userId: AUTOMATION_USER_ID,
-      user: {
+      isSignedIn: !isLoggedOut,
+      userId: !isLoggedOut ? AUTOMATION_USER_ID : null,
+      user: !isLoggedOut ? {
         id: AUTOMATION_USER_ID,
         emailAddresses: [{ emailAddress: "automation@test.com" }],
         firstName: "Automation",
         lastName: "User",
+      } : null,
+      signOut: () => {
+        if (isClient) {
+          sessionStorage.setItem("isLoggedOut", "true");
+          window.location.href = "/sign-in";
+        }
+        return Promise.resolve();
       },
-      signOut: () => Promise.resolve(),
     };
   }
   
