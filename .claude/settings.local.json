@@ -258,7 +258,8 @@
       "mcp__filesystem__read_multiple_files",
       "mcp__filesystem__edit_file",
       "WebFetch(domain:docs.anthropic.com)",
-      "Bash(say:*)"
+      "Bash(say:*)",
+      "Bash(claude config list --global)"
     ],
     "deny": []
   }

@@ -1,637 +1,448 @@
----
-title: "@moneyworks/api"
-description: "REST API server for MoneyWorks built with ElysiaJS and Bun"
-version: "0.1.0"
-package: "api"
----
-
 # @moneyworks/api
 
-A modern REST API server for MoneyWorks accounting software, built with ElysiaJS and optimized for Bun runtime. Provides a clean, versioned API with multiple export formats, caching, and comprehensive documentation.
-
-## 🚀 Features
-
-- **RESTful Design**: Clean, versioned endpoints following REST conventions
-- **Multiple Export Formats**: Choose between full objects, compact arrays, or schema-enriched data
-- **ElysiaJS Framework**: Fast, type-safe web framework designed for Bun
-- **Swagger Documentation**: Auto-generated API docs with interactive testing
-- **Caching Layer**: In-memory caching for improved performance
-- **MWScript Evaluation**: Execute MoneyWorks scripting directly via API
-- **Internationalization**: Multi-language support for field labels
-- **Progressive Enhancement**: Tables added incrementally as they're vetted
-
-## Installation
-
-```bash
-# Clone the monorepo
-git clone https://github.com/moneyworks/core.git
-cd core/packages/api
-
-# Install dependencies
-bun install
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your MoneyWorks connection details
-
-# Start the development server
-bun run dev
-```
+A comprehensive REST API for MoneyWorks accounting software, built with ElysiaJS for blazing-fast performance and exceptional developer experience. The API provides type-safe access to MoneyWorks data with progressive enhancement - new tables are added as they're vetted and tested.
 
 ## Quick Start
 
-### 1. Configure Connection
-
-Create a `.env` file with your MoneyWorks connection details:
-
-```env
-MW_HOST=localhost
-MW_PORT=6710
-MW_USERNAME=Admin
-MW_PASSWORD=your-password
-MW_DATAFILE=Acme Widgets
-
-# API Configuration
-API_PORT=3000
-API_CORS_ORIGIN=*
-```
-
-### 2. Start the Server
+### Installation
 
 ```bash
-# Development mode with hot reload
-bun run dev
-
-# Production mode
-bun run start
+bun add @moneyworks/api
 ```
 
-### 3. Test the API
-
-```bash
-# Check health
-curl http://localhost:3000/api/v1/health
-
-# Get API info
-curl http://localhost:3000/api/v1/
-
-# Export tax rates
-curl http://localhost:3000/api/v1/tables/TaxRate
-```
-
-## API Endpoints
-
-### Core Information
-
-#### `GET /api/v1/`
-Returns API information and available endpoints.
-
-```bash
-curl http://localhost:3000/api/v1/
-
-# Response:
-{
-  "name": "@moneyworks/api",
-  "version": "0.1.0",
-  "endpoints": [
-    "GET /api/v1/tables",
-    "GET /api/v1/tables/:table",
-    // ... more endpoints
-  ]
-}
-```
-
-#### `GET /api/v1/health`
-Health check endpoint for monitoring.
-
-```bash
-curl http://localhost:3000/api/v1/health
-
-# Response:
-{
-  "status": "healthy",
-  "timestamp": "2025-01-15T10:30:00Z",
-  "uptime": 3600,
-  "moneyworks": {
-    "connected": true,
-    "version": "9.1.7"
-  }
-}
-```
-
-### Table Operations
-
-#### `GET /api/v1/tables`
-Lists all available tables.
-
-```bash
-curl http://localhost:3000/api/v1/tables
-
-# Response:
-{
-  "tables": [
-    {
-      "name": "TaxRate",
-      "status": "available",
-      "description": "Tax rates and codes"
-    }
-    // More tables as they're added
-  ]
-}
-```
-
-#### `GET /api/v1/tables/:table`
-Exports data from specified table with query options.
-
-```bash
-# Basic export
-curl http://localhost:3000/api/v1/tables/TaxRate
-
-# With filtering and format
-curl "http://localhost:3000/api/v1/tables/TaxRate?filter=Rate1>10&format=compact"
-
-# With pagination
-curl "http://localhost:3000/api/v1/tables/TaxRate?limit=10&offset=20"
-
-# Different content types
-curl -H "Accept: text/tab-separated-values" \
-  http://localhost:3000/api/v1/tables/TaxRate
-```
-
-**Query Parameters:**
-- `format` - Export format: `full` (default), `compact`, `compact-headers`, `schema`
-- `filter` - MoneyWorks filter expression
-- `search` - Text search across fields
-- `orderBy` - Sort field and direction
-- `limit` - Maximum records to return
-- `offset` - Number of records to skip
-
-#### `GET /api/v1/tables/:table/schema`
-Returns schema information for a table.
-
-```bash
-curl http://localhost:3000/api/v1/tables/TaxRate/schema
-
-# Response:
-{
-  "table": "TaxRate",
-  "fields": {
-    "TaxCode": {
-      "type": "string",
-      "required": true,
-      "maxLength": 10,
-      "description": "Unique tax code identifier"
-    },
-    // ... more fields
-  }
-}
-```
-
-#### `GET /api/v1/tables/:table/labels`
-Returns localized field labels.
-
-```bash
-# Default language
-curl http://localhost:3000/api/v1/tables/TaxRate/labels
-
-# Specific language
-curl "http://localhost:3000/api/v1/tables/TaxRate/labels?lang=en-US"
-```
-
-### MWScript Evaluation
-
-#### `POST /api/v1/eval`
-Evaluates MWScript expressions.
-
-```bash
-# Simple expression
-curl -X POST http://localhost:3000/api/v1/eval \
-  -H "Content-Type: application/json" \
-  -d '{"expression": "Count(TaxRate)"}'
-
-# Response:
-{
-  "result": 5,
-  "type": "number",
-  "executionTime": 23
-}
-
-# Complex expression
-curl -X POST http://localhost:3000/api/v1/eval \
-  -H "Content-Type: application/json" \
-  -d '{
-    "expression": "Sum(Transaction.Total, Period=202501 and Status=\"Posted\")"
-  }'
-```
-
-#### `POST /api/v1/eval/template/:table`
-Evaluates template-based extraction.
-
-```bash
-curl -X POST http://localhost:3000/api/v1/eval/template/TaxRate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "fields": ["TaxCode", "Rate1", "Description"],
-    "filter": "Rate1 > 10"
-  }'
-```
-
-### Company Information
-
-#### `GET /api/v1/company`
-Returns company information.
-
-```bash
-curl http://localhost:3000/api/v1/company
-
-# Response:
-{
-  "name": "Acme Widgets Ltd",
-  "address": "123 Main St",
-  "phone": "+1-555-0123",
-  // ... more fields
-}
-```
-
-### Internationalization
-
-#### `GET /api/v1/i18n/languages`
-Lists available languages.
-
-```bash
-curl http://localhost:3000/api/v1/i18n/languages
-
-# Response:
-{
-  "languages": [
-    { "code": "en-US", "name": "English (US)" },
-    { "code": "en-GB", "name": "English (UK)" },
-    // ... more languages
-  ]
-}
-```
-
-## Export Formats
-
-### Full Format (Default)
-Complete objects with field names - best for development.
-
-```json
-[
-  {
-    "TaxCode": "GST10",
-    "PaidAccount": "1400",
-    "RecAccount": "2400",
-    "Date": "20240101",
-    "Rate1": 10,
-    "Rate2": 0
-  }
-]
-```
-
-### Compact Format
-Raw arrays for minimal overhead.
-
-```json
-[
-  ["GST10", "1400", "2400", "20240101", "10", "0"]
-]
-```
-
-### Compact with Headers
-Self-documenting arrays.
-
-```json
-[
-  ["TaxCode", "PaidAccount", "RecAccount", "Date", "Rate1", "Rate2"],
-  ["GST10", "1400", "2400", "20240101", "10", "0"]
-]
-```
-
-### Schema Format
-Includes complete metadata - best for documentation and LLMs.
-
-```json
-{
-  "schema": {
-    "TaxCode": {
-      "type": "string",
-      "required": true,
-      "description": "Unique tax code"
-    }
-    // ... more fields
-  },
-  "data": [/* records */],
-  "metadata": {
-    "table": "TaxRate",
-    "exportedAt": "2025-01-15T10:30:00Z",
-    "recordCount": 5
-  }
-}
-```
-
-## Configuration
-
-### Environment Variables
-
-```env
-# MoneyWorks Connection
-MW_HOST=localhost
-MW_PORT=6710
-MW_USERNAME=Admin
-MW_PASSWORD=secure-password
-MW_DATAFILE=Acme Widgets
-
-# API Server
-API_PORT=3000
-API_CORS_ORIGIN=*
-API_CACHE_TTL=300
-API_REQUEST_TIMEOUT=30000
-
-# Features
-API_ENABLE_SWAGGER=true
-API_ENABLE_CACHE=true
-API_LOG_LEVEL=info
-```
-
-### Programmatic Configuration
+### Basic Usage
 
 ```typescript
-import { createApp } from '@moneyworks/api';
+import { createApp } from '@moneyworks/api/app';
+import { createSmartClient, loadConfig } from '@moneyworks/data';
 
-const app = await createApp({
-  moneyworks: {
-    host: 'localhost',
-    port: 6710,
-    username: 'Admin',
-    password: 'password',
-    dataFile: 'Acme Widgets'
-  },
-  server: {
-    port: 3000,
-    cors: {
-      origin: ['https://app.example.com']
-    }
-  }
+// Load MoneyWorks configuration
+const mwConfig = await loadConfig('./mw-config.json');
+
+// Create MoneyWorks client
+const client = createSmartClient(mwConfig);
+
+// Create and start API server
+const app = createApp(client, {
+  port: 3000,
+  enableSwagger: true,
+  enableCors: true
 });
 
-app.listen(3000);
+app.listen({ port: 3000, hostname: '0.0.0.0' });
+```
+
+### Docker Deployment
+
+```dockerfile
+FROM oven/bun:1-alpine
+WORKDIR /app
+COPY . .
+RUN bun install --production
+EXPOSE 3000
+CMD ["bun", "run", "start"]
+```
+
+## Core Features
+
+### 🚀 High Performance
+Built on ElysiaJS and Bun runtime for exceptional performance:
+- Sub-millisecond response times
+- Efficient memory usage
+- Native TypeScript execution
+- WebSocket support (future)
+
+### 📊 Multiple Export Formats
+All table endpoints support multiple formats via the `format` query parameter:
+
+```typescript
+// Full objects (default) - Best for development
+GET /api/v1/tables/TaxRate?format=full
+[
+  { "Code": "GST10", "Description": "GST 10%", "Rate": 0.1 }
+]
+
+// Compact arrays - Minimal network overhead
+GET /api/v1/tables/TaxRate?format=compact
+[
+  ["GST10", "GST 10%", 0.1]
+]
+
+// Compact with headers - Self-documenting arrays
+GET /api/v1/tables/TaxRate?format=compact-headers
+[
+  ["Code", "Description", "Rate"],
+  ["GST10", "GST 10%", 0.1]
+]
+
+// Schema-enriched - Complete metadata
+GET /api/v1/tables/TaxRate?format=schema
+{
+  "data": [...],
+  "schema": {
+    "fields": {
+      "Code": { "type": "string", "maxLength": 8 },
+      "Description": { "type": "string", "maxLength": 100 },
+      "Rate": { "type": "number", "precision": 6 }
+    }
+  }
+}
+```
+
+### 🔍 Progressive Enhancement
+Tables are added progressively as they're vetted:
+- Currently supported: `TaxRate`
+- Coming soon: `Account`, `Transaction`, `Name`, `Product`
+- Future: All MoneyWorks tables
+
+### 🛡️ Type Safety
+Full TypeScript support with runtime validation:
+
+```typescript
+import type { TableExportResponse, ExportFormat } from '@moneyworks/api/schemas/table';
+
+// Type-safe API responses
+const response: TableExportResponse<'TaxRate'> = await fetch('/api/v1/tables/TaxRate')
+  .then(r => r.json());
+
+// Compile-time format checking
+const format: ExportFormat = 'full'; // ✅
+const badFormat: ExportFormat = 'csv'; // ❌ Type error
+```
+
+### 🌐 Internationalization
+Built-in i18n support for field labels:
+
+```typescript
+// Get field labels in different languages
+GET /api/v1/i18n/labels/en
+GET /api/v1/i18n/labels/de
+GET /api/v1/i18n/labels/fr
+
+// Table-specific labels
+GET /api/v1/tables/TaxRate/labels?lang=de
+```
+
+### 📝 MWScript Evaluation
+Execute MWScript expressions safely:
+
+```typescript
+POST /api/v1/eval
+{
+  "expression": "Date()",
+  "format": "YYYYMMDD"
+}
+
+// Response
+{
+  "data": { "result": "20241215" },
+  "metadata": { "executionTime": 0.5 }
+}
+```
+
+### 🏢 Company Information
+Access company data and metadata:
+
+```typescript
+// Get company info
+GET /api/v1/company
+
+// List available company fields
+GET /api/v1/company/fields
+```
+
+### 📚 Auto-Generated Documentation
+Swagger/OpenAPI documentation available at `/api/v1/swagger`:
+- Interactive API explorer
+- Type definitions
+- Example requests/responses
+- Authentication details
+
+## Architecture
+
+### Layered Design
+
+```
+┌─────────────────────────────────────┐
+│           API Routes                │
+│  (Tables, Eval, Company, I18n)      │
+├─────────────────────────────────────┤
+│          Controllers                │
+│  (Business Logic, Validation)       │
+├─────────────────────────────────────┤
+│          Middleware                 │
+│  (Auth, Logging, Errors, i18n)      │
+├─────────────────────────────────────┤
+│         Table Registry              │
+│  (Progressive Enhancement)          │
+├─────────────────────────────────────┤
+│      MoneyWorks Client              │
+│     (@moneyworks/data)              │
+└─────────────────────────────────────┘
+```
+
+### Request Flow
+
+1. **Request arrives** → Request ID assigned
+2. **Middleware pipeline** → Auth, i18n, logging
+3. **Route handler** → Parameter validation
+4. **Controller** → Business logic
+5. **MoneyWorks client** → Data access
+6. **Response formatting** → Based on requested format
+7. **Error handling** → Consistent error format
+
+### Caching Strategy
+
+Smart caching for improved performance:
+
+```typescript
+// Cache configuration
+const caches = createCaches();
+
+// Warm up common data on startup
+await caches.company.warmUp([...]);
+await caches.labels.warmUp([...]);
+
+// TTL-based cache invalidation
+const labelCache = new TTLCache<LabelData>({
+  ttl: 300_000, // 5 minutes
+  maxSize: 100
+});
 ```
 
 ## Advanced Usage
 
-### Custom Middleware
+### Custom Table Controllers
 
-Add custom middleware to the API:
+Extend the API with custom table controllers:
+
+```typescript
+import { BaseTableController } from '@moneyworks/api/controllers/base-table';
+import type { SmartMoneyWorksClient } from '@moneyworks/data';
+
+export class AccountController extends BaseTableController {
+  constructor(client: SmartMoneyWorksClient) {
+    super(client, 'Account');
+  }
+  
+  // Add custom business logic
+  async getChartOfAccounts() {
+    const accounts = await this.export({
+      filter: 'Active = true',
+      orderBy: 'Code'
+    });
+    
+    // Build hierarchical structure
+    return this.buildAccountTree(accounts);
+  }
+}
+```
+
+### Middleware Customization
+
+Add custom middleware for specific needs:
 
 ```typescript
 import { Elysia } from 'elysia';
 
-app.use((app) => 
-  app.derive(({ request }) => {
-    // Custom logic
-    return {
-      customData: 'value'
-    };
-  })
-);
-```
+// API key authentication
+const apiKeyAuth = new Elysia()
+  .derive(({ headers }) => {
+    const apiKey = headers['x-api-key'];
+    if (!apiKey || !isValidApiKey(apiKey)) {
+      throw new Error('Invalid API key');
+    }
+    return { apiKey };
+  });
 
-### Adding New Tables
-
-To add support for a new table:
-
-1. Create a controller in `src/controllers/`:
-
-```typescript
-import { BaseTableController } from './base';
-
-export class AccountController extends BaseTableController {
-  getTableName(): string {
-    return 'Account';
-  }
-  
-  // Optional: Override methods for custom behavior
-  async validateRecord(record: any): Promise<void> {
-    // Custom validation
-  }
-}
-```
-
-2. Register in `src/config/tables.ts`:
-
-```typescript
-export const AVAILABLE_TABLES = {
-  TaxRate: {
-    name: 'TaxRate',
-    controller: TaxRateController,
-    status: 'available'
-  },
-  Account: {
-    name: 'Account',
-    controller: AccountController,
-    status: 'available'
-  }
-};
-```
-
-### Caching Strategy
-
-The API includes an in-memory cache for:
-- Company information
-- Field labels and schemas
-- MWScript evaluation results
-
-```typescript
-// Cache configuration
-const cacheConfig = {
-  ttl: 300, // 5 minutes
-  maxSize: 1000, // Maximum entries
-  warmOnStartup: true
-};
-
-// Manual cache operations
-import { cacheService } from '@moneyworks/api/services';
-
-// Set cache
-await cacheService.set('key', value, { ttl: 600 });
-
-// Get from cache
-const cached = await cacheService.get('key');
-
-// Clear cache
-await cacheService.clear();
+// Apply to app
+const app = createApp(client)
+  .use(apiKeyAuth);
 ```
 
 ### Error Handling
 
-The API provides consistent error responses:
+Consistent error responses across all endpoints:
 
-```json
+```typescript
+// All errors follow this format
 {
   "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Invalid filter expression",
+    "code": "TABLE_NOT_FOUND",
+    "message": "Table Account is not yet available",
     "details": {
-      "field": "filter",
-      "value": "InvalidExpression",
-      "suggestion": "Use MoneyWorks filter syntax"
-    }
-  },
-  "requestId": "req_123abc",
-  "timestamp": "2025-01-15T10:30:00Z"
+      "available": ["TaxRate"],
+      "requested": "Account"
+    },
+    "requestId": "mw-12345-abcdef"
+  }
 }
+
+// Custom error handling
+app.onError(({ code, error, set }) => {
+  if (error instanceof MoneyWorksError) {
+    set.status = 400;
+    return {
+      error: {
+        code: 'MW_ERROR',
+        message: error.message,
+        details: error.details,
+        requestId: context.requestId
+      }
+    };
+  }
+});
 ```
 
-Common error codes:
-- `CONNECTION_ERROR` - Can't connect to MoneyWorks
-- `VALIDATION_ERROR` - Invalid request parameters
-- `NOT_FOUND` - Resource not found
-- `INTERNAL_ERROR` - Server error
+### Rate Limiting
 
-### Performance Optimization
+Built-in rate limiting with informative headers:
 
-#### Response Compression
-```bash
-# Request compressed response
-curl -H "Accept-Encoding: gzip" \
-  http://localhost:3000/api/v1/tables/Transaction
-```
+```typescript
+// Response headers
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1703001600
 
-#### Field Selection
-```bash
-# Select specific fields (coming soon)
-curl "http://localhost:3000/api/v1/tables/Account?fields=AccountCode,Description,Balance"
-```
-
-#### Streaming Large Datasets
-```bash
-# Stream response (coming soon)
-curl "http://localhost:3000/api/v1/tables/Transaction?stream=true"
-```
-
-## Development
-
-### Running Tests
-
-```bash
-# Run all tests
-bun test
-
-# Run with coverage
-bun test --coverage
-
-# Watch mode
-bun test --watch
-```
-
-### Debugging
-
-```bash
-# Start with debug logging
-DEBUG=* bun run dev
-
-# Inspect with Bun debugger
-bun --inspect run dev
-```
-
-### API Documentation
-
-Swagger UI is available at:
-```
-http://localhost:3000/api/v1/swagger
-```
-
-### Project Structure
-
-```
-packages/api/
-├── src/
-│   ├── index.ts          # Entry point
-│   ├── app.ts            # App factory
-│   ├── routes/           # API routes
-│   ├── controllers/      # Business logic
-│   ├── middleware/       # Custom middleware
-│   ├── services/         # Shared services
-│   └── types/            # TypeScript types
-├── tests/                # Test files
-├── .env.example          # Environment template
-└── package.json          # Dependencies
+// Configure limits
+const rateLimiter = createRateLimiter({
+  windowMs: 60_000, // 1 minute
+  max: 100,
+  keyGenerator: (context) => context.ip
+});
 ```
 
 ## Deployment
 
-### Docker
+### Environment Variables
 
-```dockerfile
-FROM oven/bun:1-alpine
+```bash
+# Server configuration
+PORT=3000
+HOST=0.0.0.0
 
-WORKDIR /app
+# MoneyWorks configuration
+MW_CONFIG_PATH=./mw-config.json
 
-# Copy package files
-COPY package.json bun.lockb ./
-COPY packages/api/package.json ./packages/api/
+# Feature flags
+DISABLE_SWAGGER=false
+DISABLE_CORS=false
+ENABLE_CACHE_WARMING=true
 
-# Install dependencies
-RUN bun install --frozen-lockfile
-
-# Copy source
-COPY . .
-
-# Build
-RUN bun run build
-
-# Expose port
-EXPOSE 3000
-
-# Start server
-CMD ["bun", "run", "start"]
+# Security
+API_KEY_HEADER=x-api-key
+ALLOWED_ORIGINS=https://app.example.com
 ```
 
 ### Production Checklist
 
-- [ ] Set `NODE_ENV=production`
-- [ ] Configure proper CORS origins
-- [ ] Enable rate limiting
-- [ ] Set up monitoring/logging
-- [ ] Configure SSL/TLS
-- [ ] Set secure authentication
-- [ ] Review cache settings
-- [ ] Test with production data
+- [ ] Configure rate limiting
+- [ ] Set up authentication
+- [ ] Enable HTTPS/TLS
+- [ ] Configure CORS origins
+- [ ] Set up monitoring
+- [ ] Enable request logging
+- [ ] Configure error tracking
+- [ ] Set cache TTLs appropriately
+- [ ] Disable Swagger in production
 
-## Troubleshooting
+### Monitoring
 
-### Connection Issues
+Built-in health checks and metrics:
 
-```bash
-# Test MoneyWorks connection
-curl http://localhost:3000/api/v1/health
+```typescript
+// Health check endpoint
+GET /api/v1/health
 
-# Check logs
-tail -f logs/api.log
+// Version information
+GET /api/v1/version
 
-# Verify MW server
-telnet localhost 6710
+// Prometheus metrics (future)
+GET /metrics
 ```
 
-### Performance Issues
+## Best Practices
 
-- Enable caching: `API_ENABLE_CACHE=true`
-- Increase cache TTL for stable data
-- Use compact format for large datasets
-- Implement pagination for large queries
-- Monitor with `/api/v1/health` endpoint
+### 1. Use Appropriate Export Formats
+- Development: Use `full` format for readability
+- Production: Use `compact` for minimal overhead
+- Data pipelines: Use `compact-headers` for self-documenting arrays
+- Documentation: Use `schema` format for complete metadata
 
-### Common Errors
+### 2. Implement Pagination
+Always paginate large result sets:
 
-1. **"Connection refused"** - Check MoneyWorks server is running
-2. **"Authentication failed"** - Verify credentials in .env
-3. **"Table not found"** - Check table name and availability
-4. **"Invalid filter"** - Use MoneyWorks filter syntax
+```typescript
+GET /api/v1/tables/Transaction?limit=100&offset=0
+```
 
-## Resources
+### 3. Filter at the Source
+Use MoneyWorks filters to reduce data transfer:
 
-- [API Reference](/packages/api/api) - Complete API documentation
-- [ElysiaJS Documentation](https://elysiajs.com) - Framework documentation
-- [@moneyworks/data](/packages/data) - Underlying data access layer
-- [MoneyWorks REST APIs](https://cognito.co.nz/manual/moneyworks_scripts_moneyworks_rest_apis.html) - Native API docs
+```typescript
+GET /api/v1/tables/TaxRate?filter=Rate>0
+```
+
+### 4. Cache Strategically
+- Cache company information (changes rarely)
+- Cache field labels (static per version)
+- Don't cache transactional data
+
+### 5. Handle Errors Gracefully
+Always check for error responses and handle appropriately:
+
+```typescript
+const response = await fetch('/api/v1/tables/TaxRate');
+const data = await response.json();
+
+if ('error' in data) {
+  console.error(`API Error: ${data.error.code} - ${data.error.message}`);
+  return;
+}
+
+// Process successful response
+```
+
+## API Endpoints Reference
+
+### Table Operations
+- `GET /api/v1/tables` - List available tables
+- `GET /api/v1/tables/:table` - Export table data
+- `GET /api/v1/tables/:table/schema` - Get table schema
+- `GET /api/v1/tables/:table/labels` - Get field labels
+
+### MWScript Evaluation
+- `POST /api/v1/eval` - Evaluate expression
+- `POST /api/v1/eval/template/:table` - Evaluate with template
+
+### Company Information
+- `GET /api/v1/company` - Get company info
+- `GET /api/v1/company/fields` - List company fields
+
+### Internationalization
+- `GET /api/v1/i18n/languages` - List supported languages
+- `GET /api/v1/i18n/translations/:lang` - Get UI translations
+- `GET /api/v1/i18n/labels/:lang` - Get all field labels
+
+### System
+- `GET /api/v1/health` - Health check
+- `GET /api/v1/version` - Version info
+- `GET /api/v1/swagger` - API documentation
+
+## Future Enhancements
+
+### Coming Soon
+- WebSocket support for real-time updates
+- GraphQL endpoint
+- Batch operations
+- Webhook subscriptions
+- Advanced filtering DSL
+- Field selection/projection
+- Aggregation endpoints
+
+### Under Consideration
+- gRPC support
+- Server-sent events
+- Long polling for changes
+- Offline sync protocol
+- Multi-tenant support
