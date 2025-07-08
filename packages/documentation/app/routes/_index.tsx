@@ -88,6 +88,187 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Philosophy Section */}
+      <section className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+        <div className="container mx-auto px-4 py-20">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white text-center mb-12">
+              Philosophy & Design Principles
+            </h2>
+            
+            <div className="prose prose-lg dark:prose-invert mx-auto">
+              <p className="lead">
+                MoneyWorks Core is built on a foundation of principles that guide every decision we make. 
+                These aren't just ideals—they're practical guidelines that shape our code, APIs, and developer experience.
+              </p>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2 mt-12">
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-2xl">🎯</span> Developer Experience First
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Clear, intuitive APIs</strong> - Method names should be self-explanatory</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Comprehensive type safety</strong> - Full TypeScript types for all interfaces</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Rich documentation</strong> - Every function has examples and clear explanations</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Helpful error messages</strong> - Errors guide developers to solutions</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-2xl">🤖</span> LLM-Optimized Context
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Self-documenting code</strong> - Code structure tells the story</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Explicit schemas</strong> - All data structures clearly defined</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Rich metadata</strong> - Include descriptions, constraints, relationships</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>AI-friendly comments</strong> - Use @ai-instruction and @ai-critical tags</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-2xl">🛡️</span> Type Safety & Validation
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Branded types</strong> - YYYYMMDD, AccountCode prevent mixing types</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Compile-time safety</strong> - Catch errors before runtime</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Runtime validation</strong> - Validate data from MoneyWorks</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Clear type hierarchies</strong> - Input types, output types, internal types</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-2xl">📚</span> Canonical MoneyWorks DSL
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Preserve MW terminology</strong> - GST stays GST, never tax_id</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Use exact field names</strong> - TaxCode, not tax_code</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Maintain MW concepts</strong> - RecAccount, PaidAccount patterns</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Pure DSL approach</strong> - No contamination from other systems</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-2xl">⚡</span> Performance & Flexibility
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Multiple export formats</strong> - Compact arrays to schema-enriched</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Lazy loading</strong> - Field discovery only when needed</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Efficient caching</strong> - Cache discovered structures</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Extensible design</strong> - New formats can be added easily</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span className="text-2xl">🏗️</span> Progressive Enhancement
+                  </h3>
+                  <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Start simple</strong> - Basic features work immediately</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Add complexity gradually</strong> - Advanced features when needed</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Backward compatibility</strong> - Never break existing code</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary-600 mt-1">•</span>
+                      <span><strong>Feature discovery</strong> - Clear upgrade paths</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-16 p-8 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Our Commitment
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                These principles aren't just words—they're embedded in every line of code we write. 
+                When you use MoneyWorks Core, you're not just getting a library; you're getting a 
+                thoughtfully designed ecosystem that respects your time, enhances your productivity, 
+                and grows with your needs. We believe that great developer tools should be a joy to use, 
+                and we're committed to maintaining these standards as the project evolves.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Package Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">

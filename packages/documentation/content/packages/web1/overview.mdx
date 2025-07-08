@@ -1,51 +1,600 @@
----
-title: "@moneyworks/web1"
-description: ""
-version: "0.1.0"
-package: "web1"
----
-
 # @moneyworks/web1
 
-<PackageInfo 
-  npm="@moneyworks/web1"
-  github="moneyworks/core/packages/web1"
-  version="0.1.0"
+A modern, type-safe web application for MoneyWorks built with React Router v7, React Query, and Radix UI. Features multi-tenant connection management, secure credential storage, and a beautiful UI powered by Tailwind CSS and shadcn/ui components.
+
+## Quick Start
+
+### Installation
+
+```bash
+bun add @moneyworks/web1
+```
+
+### Development
+
+```bash
+# Start development server
+bun dev
+
+# Type checking
+bun typecheck
+
+# Build for production
+bun build
+
+# Start production server
+bun start
+```
+
+### Environment Variables
+
+```bash
+# Required
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
+
+# Optional
+VITE_AUTOMATION=true  # Bypass auth for testing
+```
+
+## Core Features
+
+### 🔐 Enterprise Authentication
+Powered by Clerk for secure, scalable authentication:
+- Magic link and social sign-in
+- Multi-factor authentication
+- Session management
+- Role-based access control
+- SSO support (Enterprise)
+
+### 🏢 Multi-Tenant Architecture
+Sophisticated connection management system:
+- Multiple MoneyWorks connections per user
+- Secure credential encryption (AES-256-GCM)
+- Connection grouping and organization
+- Quick connection switching
+- Folder-level authentication support
+
+### 🎨 Modern UI Components
+Built with Radix UI and shadcn/ui:
+- Accessible by default (WCAG 2.1 AA)
+- Keyboard navigation
+- Beautiful animations
+- Dark mode support (coming soon)
+- Responsive design
+
+### 🌐 Internationalization
+Full i18n support with react-i18next:
+- Multiple language support
+- Dynamic locale switching
+- Pluralization and formatting
+- TypeScript integration
+
+### ⚡ Optimized Performance
+- Server-side rendering with React Router v7
+- Intelligent data prefetching
+- React Query caching
+- Code splitting
+- Lazy loading
+
+### 🛡️ Security First
+- Encrypted credential storage
+- CSRF protection
+- Content Security Policy
+- Secure session handling
+- Audit logging
+
+## Architecture
+
+### Application Structure
+
+```
+app/
+├── components/        # Reusable UI components
+│   ├── ui/           # Base UI components (shadcn/ui)
+│   └── ...           # Feature components
+├── contexts/         # React contexts
+├── db/              # Database models and queries
+├── hooks/           # Custom React hooks
+├── lib/             # Utilities and helpers
+├── routes/          # Route handlers
+├── services/        # Business logic services
+└── styles/          # Global styles
+```
+
+### Key Components
+
+#### Authentication Flow
+```typescript
+// Clerk handles auth automatically
+import { useAuth } from "~/hooks/use-auth";
+
+function ProtectedRoute() {
+  const { isSignedIn, user } = useAuth();
+  
+  if (!isSignedIn) {
+    return <Navigate to="/sign-in" />;
+  }
+  
+  return <YourComponent />;
+}
+```
+
+#### Connection Management
+```typescript
+import { useConnection } from "~/contexts/connection-context";
+
+function MyComponent() {
+  const { 
+    currentConnection,
+    connections,
+    switchConnection,
+    createConnection,
+    updateConnection,
+    deleteConnection
+  } = useConnection();
+  
+  // Use current connection
+  if (!currentConnection) {
+    return <NoConnectionSelected />;
+  }
+  
+  return <ConnectionDetails connection={currentConnection} />;
+}
+```
+
+#### MoneyWorks Integration
+```typescript
+import { useMoneyWorks } from "~/hooks/use-moneyworks";
+
+function TaxRatesList() {
+  const { client } = useMoneyWorks();
+  
+  const { data, isLoading } = useQuery({
+    queryKey: ['taxRates'],
+    queryFn: async () => {
+      if (!client) throw new Error('No connection');
+      return client.export('TaxRate', { format: 'full' });
+    },
+    enabled: !!client
+  });
+  
+  if (isLoading) return <Skeleton />;
+  
+  return <TaxRatesTable data={data} />;
+}
+```
+
+### Data Flow
+
+```
+┌─────────────────────────────────────┐
+│         User Interface              │
+│    (React Components + Radix UI)    │
+├─────────────────────────────────────┤
+│          Route Handlers             │
+│     (Data Loading + Actions)        │
+├─────────────────────────────────────┤
+│         React Query                 │
+│    (Caching + Synchronization)      │
+├─────────────────────────────────────┤
+│      Business Logic Layer           │
+│  (Services + Hooks + Contexts)      │
+├─────────────────────────────────────┤
+│       Data Access Layer             │
+│    (SQLite + Drizzle ORM)          │
+├─────────────────────────────────────┤
+│      MoneyWorks Client              │
+│     (@moneyworks/data)              │
+└─────────────────────────────────────┘
+```
+
+## Component Library
+
+### Base UI Components
+
+All components follow the shadcn/ui pattern with full customization:
+
+```typescript
+// Button with variants
+import { Button } from "~/components/ui/button";
+
+<Button variant="default">Default</Button>
+<Button variant="destructive">Delete</Button>
+<Button variant="outline">Cancel</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link</Button>
+
+// With sizes
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+<Button size="icon"><Icon /></Button>
+```
+
+### Complex Components
+
+#### Connection Switcher
+```typescript
+import { ConnectionSwitcher } from "~/components/connection-switcher";
+
+// Dropdown for switching between connections
+<ConnectionSwitcher 
+  currentConnection={connection}
+  onSwitch={handleSwitch}
 />
+```
 
-## Overview
+#### Group Tree
+```typescript
+import { GroupTree } from "~/components/group-tree";
 
+// Hierarchical group/connection display
+<GroupTree 
+  groups={groups}
+  onSelectConnection={handleSelect}
+  onCreateGroup={handleCreate}
+/>
+```
 
+#### Add Company Dialog
+```typescript
+import { AddCompanyDialog } from "~/components/add-company-dialog";
 
-## Installation
+// Modal for adding new connections
+<AddCompanyDialog 
+  open={open}
+  onOpenChange={setOpen}
+  onSuccess={handleSuccess}
+/>
+```
 
-<Tabs defaultValue="bun">
-  <TabsList>
-    <TabsTrigger value="bun">Bun</TabsTrigger>
-    <TabsTrigger value="npm">npm</TabsTrigger>
-    <TabsTrigger value="yarn">Yarn</TabsTrigger>
-  </TabsList>
-  <TabsContent value="bun">
-    ```bash
-    bun add @moneyworks/web1
-    ```
-  </TabsContent>
-  <TabsContent value="npm">
-    ```bash
-    npm install @moneyworks/web1
-    ```
-  </TabsContent>
-  <TabsContent value="yarn">
-    ```bash
-    yarn add @moneyworks/web1
-    ```
-  </TabsContent>
-</Tabs>
+## Routing
 
-## API Overview
+### Route Structure
 
+React Router v7 file-based routing with explicit configuration:
 
+```typescript
+// app/routes.ts
+export default [
+  // Public routes
+  index("routes/_index.tsx"),
+  route("sign-in", "routes/sign-in.tsx"),
+  route("sign-up", "routes/sign-up.tsx"),
+  
+  // Protected routes
+  route("dashboard", "routes/dashboard.tsx"),
+  route("connections", "routes/connections/index.tsx"),
+  route("tax-rates", "routes/tax-rates.tsx"),
+  route("company", "routes/company.tsx"),
+  
+  // API routes
+  route("api/connections", "routes/api.connections.tsx"),
+  route("api/moneyworks", "routes/api.moneyworks.tsx"),
+];
+```
 
+### Data Loading
 
+Leverage React Router's data loading pattern:
 
-See the [API Reference](/packages/web1/api) for complete documentation.
+```typescript
+// routes/tax-rates.tsx
+export async function loader({ request }: LoaderFunctionArgs) {
+  const user = await requireAuth(request);
+  const connection = await getActiveConnection(user.id);
+  
+  if (!connection) {
+    throw redirect("/connections");
+  }
+  
+  return { connection };
+}
+
+export default function TaxRates() {
+  const { connection } = useLoaderData<typeof loader>();
+  // Component implementation
+}
+```
+
+### Actions
+
+Handle form submissions and mutations:
+
+```typescript
+// routes/connections/new.tsx
+export async function action({ request }: ActionFunctionArgs) {
+  const user = await requireAuth(request);
+  const formData = await request.formData();
+  
+  const result = await createConnection({
+    userId: user.id,
+    name: formData.get("name"),
+    host: formData.get("host"),
+    // ... other fields
+  });
+  
+  if (result.success) {
+    return redirect("/connections");
+  }
+  
+  return { errors: result.errors };
+}
+```
+
+## State Management
+
+### React Query Configuration
+
+```typescript
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes
+      retry: 3,
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+    },
+  },
+});
+```
+
+### Connection Context
+
+Global connection state management:
+
+```typescript
+export const ConnectionProvider = ({ children }) => {
+  const [currentConnectionId, setCurrentConnectionId] = useState<string | null>();
+  const { data: connections } = useConnections();
+  
+  const currentConnection = useMemo(() => 
+    connections?.find(c => c.id === currentConnectionId),
+    [connections, currentConnectionId]
+  );
+  
+  const switchConnection = useCallback((id: string) => {
+    setCurrentConnectionId(id);
+    queryClient.invalidateQueries();
+  }, []);
+  
+  return (
+    <ConnectionContext.Provider value={{
+      connections,
+      currentConnection,
+      switchConnection,
+      // ... other methods
+    }}>
+      {children}
+    </ConnectionContext.Provider>
+  );
+};
+```
+
+## Database Schema
+
+### SQLite with Drizzle ORM
+
+```typescript
+// Connections table
+export const connections = sqliteTable("connections", {
+  id: text("id").primaryKey(),
+  user_id: text("user_id").notNull(),
+  name: text("name").notNull(),
+  
+  // MoneyWorks connection details
+  mw_host: text("mw_host").notNull(),
+  mw_port: integer("mw_port").notNull(),
+  mw_data_file: text("mw_data_file").notNull(),
+  mw_username: text("mw_username").notNull(),
+  mw_password: text("mw_password").notNull(), // Encrypted
+  
+  // Optional folder auth
+  mw_folder_name: text("mw_folder_name"),
+  mw_folder_password: text("mw_folder_password"), // Encrypted
+  
+  // Metadata
+  is_active: integer("is_active").default(1),
+  created_at: integer("created_at").notNull(),
+  updated_at: integer("updated_at").notNull(),
+});
+
+// Groups for organizing connections
+export const groups = sqliteTable("groups", {
+  id: text("id").primaryKey(),
+  user_id: text("user_id").notNull(),
+  name: text("name").notNull(),
+  parent_id: text("parent_id"),
+  created_at: integer("created_at").notNull(),
+});
+
+// Group members (many-to-many)
+export const group_members = sqliteTable("group_members", {
+  group_id: text("group_id").notNull(),
+  connection_id: text("connection_id").notNull(),
+  added_at: integer("added_at").notNull(),
+});
+
+// Audit logs
+export const audit_logs = sqliteTable("audit_logs", {
+  id: text("id").primaryKey(),
+  user_id: text("user_id").notNull(),
+  connection_id: text("connection_id"),
+  action: text("action").notNull(),
+  details: text("details"), // JSON
+  ip_address: text("ip_address"),
+  created_at: integer("created_at").notNull(),
+});
+```
+
+## Security
+
+### Credential Encryption
+
+All sensitive data is encrypted using AES-256-GCM:
+
+```typescript
+import { encrypt, decrypt } from "~/services/crypto";
+
+// Encrypting credentials before storage
+const encryptedPassword = await encrypt(plainPassword);
+
+// Decrypting for use
+const plainPassword = await decrypt(encryptedPassword);
+```
+
+### Audit Logging
+
+Track all sensitive operations:
+
+```typescript
+import { logAudit } from "~/services/audit";
+
+// Log connection creation
+await logAudit({
+  userId,
+  action: "connection.create",
+  connectionId: connection.id,
+  details: { name: connection.name },
+  ipAddress: request.headers.get("x-forwarded-for"),
+});
+```
+
+## Testing
+
+### Unit Tests
+
+```typescript
+// __tests__/components/button.test.tsx
+import { render, screen } from "@testing-library/react";
+import { Button } from "~/components/ui/button";
+
+test("renders button with text", () => {
+  render(<Button>Click me</Button>);
+  expect(screen.getByRole("button")).toHaveTextContent("Click me");
+});
+```
+
+### Integration Tests
+
+```typescript
+// __tests__/routes/tax-rates.test.tsx
+import { createRemixStub } from "@remix-run/testing";
+
+test("loads tax rates", async () => {
+  const RemixStub = createRemixStub([
+    {
+      path: "/tax-rates",
+      Component: TaxRates,
+      loader: taxRatesLoader,
+    },
+  ]);
+  
+  render(<RemixStub initialEntries={["/tax-rates"]} />);
+  
+  await waitFor(() => {
+    expect(screen.getByText("Tax Rates")).toBeInTheDocument();
+  });
+});
+```
+
+### E2E Tests with Puppeteer
+
+```typescript
+// e2e/connection-flow.test.ts
+test("create new connection", async () => {
+  await page.goto("/connections/new");
+  
+  await page.type('[name="name"]', "Test Company");
+  await page.type('[name="host"]', "localhost");
+  await page.type('[name="port"]', "6005");
+  
+  await page.click('[type="submit"]');
+  
+  await page.waitForNavigation();
+  expect(page.url()).toContain("/connections");
+});
+```
+
+## Deployment
+
+### Docker
+
+```dockerfile
+FROM oven/bun:1-alpine as builder
+WORKDIR /app
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
+COPY . .
+RUN bun run build
+
+FROM oven/bun:1-alpine
+WORKDIR /app
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/public ./public
+EXPOSE 3000
+CMD ["bun", "run", "start"]
+```
+
+### Environment Configuration
+
+```bash
+# Production .env
+NODE_ENV=production
+VITE_CLERK_PUBLISHABLE_KEY=pk_live_...
+DATABASE_URL=file:./data/app.db
+ENCRYPTION_KEY=your-32-byte-key
+PORT=3000
+```
+
+## Best Practices
+
+### 1. Connection Management
+- Always check for active connection before MoneyWorks operations
+- Handle connection errors gracefully
+- Implement connection health checks
+- Cache connection status
+
+### 2. Performance
+- Use React Query for all data fetching
+- Implement optimistic updates for better UX
+- Lazy load heavy components
+- Prefetch data on route transitions
+
+### 3. Security
+- Never expose encryption keys
+- Validate all user inputs
+- Implement rate limiting on API routes
+- Use HTTPS in production
+- Regular security audits
+
+### 4. Error Handling
+- Provide clear error messages
+- Log errors for debugging
+- Implement error boundaries
+- Show fallback UI for errors
+
+### 5. Accessibility
+- Test with screen readers
+- Ensure keyboard navigation works
+- Provide proper ARIA labels
+- Maintain color contrast ratios
+
+## Future Roadmap
+
+### Coming Soon
+- Dark mode support
+- Advanced filtering and search
+- Bulk operations
+- Export functionality
+- Keyboard shortcuts
+- Mobile app
+
+### Under Consideration
+- Offline support
+- Real-time collaboration
+- Advanced reporting
+- Workflow automation
+- API access
+- Plugin system
