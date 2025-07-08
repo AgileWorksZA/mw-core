@@ -1,6 +1,6 @@
 import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
-import { Package, Code2, Database, Globe, ArrowRight, Terminal, Server, Download, GitBranch, Users, Zap } from "lucide-react";
+import { Package, Code2, Database, Globe, ArrowRight, Terminal, Server, GitBranch, Users, Zap } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,7 +9,42 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+type PackageColor = 'blue' | 'green' | 'purple' | 'gray' | 'orange' | 'cyan';
+
 export default function PackagesIndex() {
+  const colorClasses: Record<PackageColor, { accent: string; bg: string; text: string }> = {
+    blue: {
+      accent: "bg-blue-500",
+      bg: "bg-blue-100 dark:bg-blue-900/20",
+      text: "text-blue-600 dark:text-blue-400"
+    },
+    green: {
+      accent: "bg-green-500", 
+      bg: "bg-green-100 dark:bg-green-900/20",
+      text: "text-green-600 dark:text-green-400"
+    },
+    purple: {
+      accent: "bg-purple-500",
+      bg: "bg-purple-100 dark:bg-purple-900/20", 
+      text: "text-purple-600 dark:text-purple-400"
+    },
+    gray: {
+      accent: "bg-gray-600",
+      bg: "bg-gray-100 dark:bg-gray-900/20",
+      text: "text-gray-600 dark:text-gray-400"
+    },
+    orange: {
+      accent: "bg-orange-500",
+      bg: "bg-orange-100 dark:bg-orange-900/20",
+      text: "text-orange-600 dark:text-orange-400"
+    },
+    cyan: {
+      accent: "bg-cyan-500",
+      bg: "bg-cyan-100 dark:bg-cyan-900/20",
+      text: "text-cyan-600 dark:text-cyan-400"
+    }
+  };
+
   const packages = [
     {
       name: "@moneyworks/utilities",
@@ -23,14 +58,9 @@ export default function PackagesIndex() {
       ],
       icon: <Code2 className="h-6 w-6" />,
       href: "/packages/utilities",
-      npm: "@moneyworks/utilities",
-      stats: {
-        size: "12KB",
-        deps: 0,
-        weekly: "1.2K"
-      },
+      location: "packages/utilities",
       tags: ["core", "typescript", "utilities"],
-      color: "bg-blue-500",
+      color: "blue" as PackageColor,
     },
     {
       name: "@moneyworks/data",
@@ -44,14 +74,9 @@ export default function PackagesIndex() {
       ],
       icon: <Database className="h-6 w-6" />,
       href: "/packages/data",
-      npm: "@moneyworks/data",
-      stats: {
-        size: "28KB",
-        deps: 2,
-        weekly: "850"
-      },
+      location: "packages/data",
       tags: ["data", "export", "streaming"],
-      color: "bg-green-500",
+      color: "green" as PackageColor,
       dependencies: ["@moneyworks/utilities", "@moneyworks/canonical"],
     },
     {
@@ -66,14 +91,9 @@ export default function PackagesIndex() {
       ],
       icon: <Package className="h-6 w-6" />,
       href: "/packages/canonical",
-      npm: "@moneyworks/canonical",
-      stats: {
-        size: "45KB",
-        deps: 1,
-        weekly: "1.5K"
-      },
+      location: "packages/canonical",
       tags: ["types", "schema", "canonical"],
-      color: "bg-purple-500",
+      color: "purple" as PackageColor,
       dependencies: ["@moneyworks/utilities"],
     },
     {
@@ -88,14 +108,9 @@ export default function PackagesIndex() {
       ],
       icon: <Terminal className="h-6 w-6" />,
       href: "/packages/cli",
-      npm: "@moneyworks/cli",
-      stats: {
-        size: "156KB",
-        deps: 5,
-        weekly: "320"
-      },
+      location: "packages/cli",
       tags: ["cli", "tools", "testing"],
-      color: "bg-gray-600",
+      color: "gray" as PackageColor,
       dependencies: ["@moneyworks/data", "@moneyworks/canonical"],
     },
     {
@@ -110,14 +125,9 @@ export default function PackagesIndex() {
       ],
       icon: <Server className="h-6 w-6" />,
       href: "/packages/api",
-      npm: "@moneyworks/api",
-      stats: {
-        size: "89KB",
-        deps: 8,
-        weekly: "425"
-      },
+      location: "packages/api",
       tags: ["api", "rest", "server"],
-      color: "bg-orange-500",
+      color: "orange" as PackageColor,
       dependencies: ["@moneyworks/data", "@moneyworks/canonical"],
     },
     {
@@ -132,14 +142,9 @@ export default function PackagesIndex() {
       ],
       icon: <Globe className="h-6 w-6" />,
       href: "/packages/web1",
-      npm: "@moneyworks/web1",
-      stats: {
-        size: "2.1MB",
-        deps: 24,
-        weekly: "180"
-      },
+      location: "packages/web1",
       tags: ["web", "react", "ui"],
-      color: "bg-cyan-500",
+      color: "cyan" as PackageColor,
       dependencies: ["@moneyworks/api"],
     },
   ];
@@ -159,27 +164,33 @@ export default function PackagesIndex() {
             </p>
           </div>
 
-          {/* Quick Install */}
+          {/* Quick Start */}
           <div className="mb-12 max-w-4xl mx-auto">
             <div className="rounded-lg bg-gray-900 dark:bg-gray-950 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-gray-400">Quick Install</h3>
+                <h3 className="text-sm font-medium text-gray-400">Quick Start</h3>
                 <button className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
-                  Copy all
+                  Copy
                 </button>
               </div>
               <div className="space-y-2">
                 <code className="block text-sm text-gray-300">
-                  <span className="text-gray-500"># Install core packages</span>
+                  <span className="text-gray-500"># Clone the monorepo</span>
                 </code>
                 <code className="block text-sm text-gray-300">
-                  bun add @moneyworks/utilities @moneyworks/canonical @moneyworks/data
+                  git clone https://github.com/your-org/mw-core.git
+                </code>
+                <code className="block text-sm text-gray-300">
+                  cd mw-core
                 </code>
                 <code className="block text-sm text-gray-300 mt-4">
-                  <span className="text-gray-500"># For API development</span>
+                  <span className="text-gray-500"># Install dependencies and build all packages</span>
                 </code>
                 <code className="block text-sm text-gray-300">
-                  bun add @moneyworks/api
+                  bun install
+                </code>
+                <code className="block text-sm text-gray-300">
+                  bun run build
                 </code>
               </div>
             </div>
@@ -193,14 +204,14 @@ export default function PackagesIndex() {
                 className="group relative rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden hover:shadow-lg transition-all duration-300"
               >
                 {/* Color accent bar */}
-                <div className={`h-1 ${pkg.color}`} />
+                <div className={`h-1 ${colorClasses[pkg.color].accent}`} />
                 
                 <div className="p-6">
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${pkg.color} bg-opacity-10`}>
-                        <div className={`${pkg.color} bg-opacity-100 bg-clip-text text-transparent`}>
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${colorClasses[pkg.color].bg}`}>
+                        <div className={colorClasses[pkg.color].text}>
                           {pkg.icon}
                         </div>
                       </div>
@@ -220,20 +231,10 @@ export default function PackagesIndex() {
                     {pkg.description}
                   </p>
 
-                  {/* Stats */}
-                  <div className="flex items-center gap-4 mb-4 text-xs text-gray-500 dark:text-gray-400">
-                    <div className="flex items-center gap-1">
-                      <Package className="h-3 w-3" />
-                      <span>{pkg.stats.size}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <GitBranch className="h-3 w-3" />
-                      <span>{pkg.stats.deps} deps</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Download className="h-3 w-3" />
-                      <span>{pkg.stats.weekly}/week</span>
-                    </div>
+                  {/* Location */}
+                  <div className="flex items-center gap-2 mb-4 text-xs text-gray-500 dark:text-gray-400">
+                    <GitBranch className="h-3 w-3" />
+                    <code className="font-mono">{pkg.location}</code>
                   </div>
 
                   {/* Tags */}
@@ -281,20 +282,50 @@ export default function PackagesIndex() {
                       to={pkg.href}
                       className="inline-flex items-center text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
                     >
-                      Documentation <ArrowRight className="ml-1 h-3 w-3" />
+                      View Documentation <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
-                    <a
-                      href={`https://www.npmjs.com/package/${pkg.npm}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                    >
-                      <Package className="h-4 w-4" />
-                    </a>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Using Packages */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Using Packages in the Monorepo
+              </h3>
+              <div className="space-y-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 text-xs font-semibold text-primary-600 dark:text-primary-400">1</div>
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-900 dark:text-white font-medium">Import directly from packages</p>
+                    <code className="text-xs text-gray-600 dark:text-gray-400 font-mono">import {"{ YYYYMMDD }"} from '@moneyworks/utilities';</code>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 text-xs font-semibold text-primary-600 dark:text-primary-400">2</div>
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-900 dark:text-white font-medium">Run specific package commands</p>
+                    <code className="text-xs text-gray-600 dark:text-gray-400 font-mono">bun run --filter @moneyworks/api dev</code>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900 text-xs font-semibold text-primary-600 dark:text-primary-400">3</div>
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-900 dark:text-white font-medium">Build all packages</p>
+                    <code className="text-xs text-gray-600 dark:text-gray-400 font-mono">bun run build</code>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4">
+                <p className="text-sm text-amber-900 dark:text-amber-100">
+                  <strong className="font-semibold">Note:</strong> All packages are part of this monorepo and are built together. 
+                  They're not published to NPM separately - use them by importing directly within your project.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Dependency Graph */}
@@ -307,11 +338,11 @@ export default function PackagesIndex() {
                 <div className="flex items-center gap-4">
                   <div className="w-32 text-sm text-right text-gray-600 dark:text-gray-400">Foundation</div>
                   <div className="flex-1 flex items-center gap-2">
-                    <div className="px-3 py-1 rounded bg-blue-500 bg-opacity-10 text-blue-600 dark:text-blue-400 text-sm">
+                    <div className="px-3 py-1 rounded bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-sm">
                       utilities
                     </div>
                     <span className="text-gray-400">→</span>
-                    <div className="px-3 py-1 rounded bg-purple-500 bg-opacity-10 text-purple-600 dark:text-purple-400 text-sm">
+                    <div className="px-3 py-1 rounded bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 text-sm">
                       canonical
                     </div>
                   </div>
@@ -319,7 +350,7 @@ export default function PackagesIndex() {
                 <div className="flex items-center gap-4">
                   <div className="w-32 text-sm text-right text-gray-600 dark:text-gray-400">Data Layer</div>
                   <div className="flex-1 flex items-center gap-2">
-                    <div className="px-3 py-1 rounded bg-green-500 bg-opacity-10 text-green-600 dark:text-green-400 text-sm">
+                    <div className={`px-3 py-1 rounded ${colorClasses.green.bg} ${colorClasses.green.text} text-sm`}>
                       data
                     </div>
                   </div>
@@ -327,13 +358,13 @@ export default function PackagesIndex() {
                 <div className="flex items-center gap-4">
                   <div className="w-32 text-sm text-right text-gray-600 dark:text-gray-400">Applications</div>
                   <div className="flex-1 flex items-center gap-2">
-                    <div className="px-3 py-1 rounded bg-orange-500 bg-opacity-10 text-orange-600 dark:text-orange-400 text-sm">
+                    <div className={`px-3 py-1 rounded ${colorClasses.orange.bg} ${colorClasses.orange.text} text-sm`}>
                       api
                     </div>
-                    <div className="px-3 py-1 rounded bg-gray-600 bg-opacity-10 text-gray-600 dark:text-gray-400 text-sm">
+                    <div className={`px-3 py-1 rounded ${colorClasses.gray.bg} ${colorClasses.gray.text} text-sm`}>
                       cli
                     </div>
-                    <div className="px-3 py-1 rounded bg-cyan-500 bg-opacity-10 text-cyan-600 dark:text-cyan-400 text-sm">
+                    <div className={`px-3 py-1 rounded ${colorClasses.cyan.bg} ${colorClasses.cyan.text} text-sm`}>
                       web1
                     </div>
                   </div>
@@ -388,31 +419,31 @@ export default function PackagesIndex() {
           <div className="max-w-4xl mx-auto">
             <div className="rounded-lg bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 p-8">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                Design Philosophy
+                Monorepo Philosophy
               </h3>
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">🎯 Single Responsibility</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">🏗️ Unified Development</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Each package has one clear purpose and does it well.
+                    All packages developed and versioned together for consistency.
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">🔗 Composable</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">🔄 Seamless Integration</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Mix and match packages based on your needs.
+                    Packages work together without version conflicts.
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">📦 Zero Config</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">🎯 Single Source of Truth</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Sensible defaults with powerful customization options.
+                    One repository for all MoneyWorks integration needs.
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">🚀 Production Ready</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-1">⚡ Rapid Development</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Battle-tested with comprehensive error handling.
+                    Changes propagate immediately across all packages.
                   </p>
                 </div>
               </div>

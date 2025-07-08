@@ -21,6 +21,18 @@ export default function GuidesIndex() {
       icon: <Users className="h-5 w-5" />,
       href: "/guides/groups",
     },
+    {
+      title: "API Development",
+      description: "Build robust APIs with MoneyWorks Core",
+      icon: <BookOpen className="h-5 w-5" />,
+      href: "/guides/api-development",
+    },
+    {
+      title: "Type Safety",
+      description: "Leverage TypeScript for bulletproof integrations",
+      icon: <Shield className="h-5 w-5" />,
+      href: "/guides/type-safety",
+    },
   ];
 
   return (
