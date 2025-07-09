@@ -6,8 +6,7 @@
  */
 
 import { Elysia, t } from 'elysia';
-import type { TableRegistry } from '../registry/table-registry';
-import type { SmartMoneyWorksClient } from '@moneyworks/data';
+import { createTableRegistry } from '../registry/table-registry';
 import type { CacheService } from '../services/cache';
 import { LabelsController } from '../controllers/labels';
 import { 
@@ -26,17 +25,12 @@ import { SUPPORTED_LANGUAGES } from '../middleware/i18n';
 /**
  * Create table routes
  */
-export function createTableRoutes(
-  registry: TableRegistry,
-  client?: SmartMoneyWorksClient,
-  cache?: CacheService
-) {
-  const labelsController = client && cache ? 
-    new LabelsController(client, cache) : null;
-
+export function createTableRoutes(cache?: CacheService) {
   return new Elysia({ prefix: '/tables' })
     // List available tables
-    .get('/', ({ headers }) => {
+    .get('/', ({ headers, mwClient }) => {
+      if (!mwClient) throw new Error('No authenticated client');
+      const registry = createTableRegistry(mwClient);
       const requestId = headers['x-request-id'] || 'unknown';
       const tables = registry.getTableStatus();
       
@@ -61,7 +55,9 @@ export function createTableRoutes(
     })
     
     // Get table schema
-    .get('/:table/schema', async ({ params: { table }, set, headers }) => {
+    .get('/:table/schema', async ({ params: { table }, set, headers, mwClient }) => {
+      if (!mwClient) throw new Error('No authenticated client');
+      const registry = createTableRegistry(mwClient);
       const requestId = headers['x-request-id'] || 'unknown';
       const controller = registry.getTable(table);
       
@@ -98,7 +94,9 @@ export function createTableRoutes(
     })
     
     // Export table data
-    .get('/:table', async ({ params: { table }, query, set, headers }) => {
+    .get('/:table', async ({ params: { table }, query, set, headers, mwClient }) => {
+      if (!mwClient) throw new Error('No authenticated client');
+      const registry = createTableRegistry(mwClient);
       const requestId = headers['x-request-id'] || 'unknown';
       const controller = registry.getTable(table);
       
@@ -174,13 +172,14 @@ export function createTableRoutes(
     
     // Get field labels for a table
     .get('/:table/labels', async (context) => {
-      const { params: { table }, set, headers } = context;
+      const { params: { table }, set, headers, mwClient } = context;
       const language = (context as any).language;
-      if (!labelsController) {
+      if (!mwClient || !cache) {
         set.status = 501;
-        throw new Error('NOT_IMPLEMENTED: Labels endpoint requires client and cache configuration');
+        throw new Error('NOT_IMPLEMENTED: Labels endpoint requires authenticated client');
       }
 
+      const labelsController = new LabelsController(mwClient, cache);
       const requestId = headers['x-request-id'] || 'unknown';
 
       try {

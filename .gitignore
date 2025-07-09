@@ -18,6 +18,12 @@
 
 # MoneyWorks configuration
 packages/api/mw-config.json
+mw-config.json
+
+# API databases
+connections.db
+*.db-wal
+*.db-shm
 
 # misc
 .DS_Store

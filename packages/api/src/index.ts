@@ -6,50 +6,17 @@
  * @moneyworks-dsl PURE
  */
 
-import { createSmartClient, loadConfig } from '@moneyworks/data';
 import { createApp } from './app';
-import { resolve } from 'path';
 
 async function startServer() {
   const port = parseInt(process.env.PORT || '3000');
   const host = process.env.HOST || '0.0.0.0';
   
-  console.log('🚀 Starting MoneyWorks API Server...');
+  console.log('🚀 Starting MoneyWorks API Server with Token Authentication...');
   
   try {
-    // Load MoneyWorks configuration
-    let mwConfig;
-    
-    // Check if we have environment variables (Railway)
-    if (process.env.MW_HOSTNAME) {
-      mwConfig = {
-        host: process.env.MW_HOSTNAME,
-        port: parseInt(process.env.MW_PORT || '6710'),
-        dataFile: process.env.MW_DATAFILE || '',
-        username: process.env.MW_USERNAME || '',
-        password: process.env.MW_PASSWORD || '',
-        folderName: process.env.MW_FOLDER_NAME,
-        folderPassword: process.env.MW_FOLDER_PASSWORD
-      };
-    } else {
-      // Fall back to config file
-      const configPath = process.env.MW_CONFIG_PATH || resolve(__dirname, '../../mw-config.json');
-      mwConfig = await loadConfig(configPath);
-    }
-    
-    // Create MoneyWorks client
-    const client = createSmartClient(mwConfig);
-    
-    // Test connection
-    console.log('📡 Testing MoneyWorks connection...');
-    const connected = await client.testConnection();
-    if (!connected) {
-      throw new Error('Failed to connect to MoneyWorks');
-    }
-    console.log('✅ Connected to MoneyWorks');
-    
     // Create and start API
-    const app = createApp(client, {
+    const app = createApp({
       port,
       host,
       enableSwagger: process.env.DISABLE_SWAGGER !== 'true',
@@ -69,6 +36,11 @@ async function startServer() {
 📖 Swagger: http://${host === '0.0.0.0' ? 'localhost' : host}:${port}/api/v1/swagger
 
 Available endpoints:
+- POST /api/v1/auth/token          - Exchange MW credentials for token
+- POST /api/v1/auth/refresh        - Refresh access token
+- DELETE /api/v1/auth/token/:id    - Revoke token
+
+Protected endpoints (require Authorization: Bearer <token>):
 - GET  /api/v1/tables              - List available tables
 - GET  /api/v1/tables/:table       - Export table data
 - GET  /api/v1/tables/:table/schema - Get table schema

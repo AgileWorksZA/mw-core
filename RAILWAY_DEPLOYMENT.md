@@ -6,6 +6,17 @@ This guide explains how to deploy MoneyWorks Core to Railway without Docker or b
 
 MoneyWorks Core runs directly from TypeScript using Bun, eliminating the need for build steps. Only the web frontend requires building for production.
 
+## API Authentication
+
+The API uses token-based authentication:
+
+1. **Get Token**: POST to `/api/v1/auth/token` with MoneyWorks credentials
+2. **Use Token**: Include `Authorization: Bearer <token>` header in requests
+3. **Refresh Token**: POST to `/api/v1/auth/refresh` when token expires
+4. **Revoke Token**: DELETE to `/api/v1/auth/token/:id` to logout
+
+Connection details are encrypted and stored in SQLite database.
+
 ## Prerequisites
 
 - Railway account
@@ -53,16 +64,16 @@ VITE_AUTOMATION=false
 
 ### API Service
 ```env
-# MoneyWorks Connection
-MW_USERNAME=your-username
-MW_PASSWORD=your-password
-MW_DATAFILE=your-datafile
-MW_HOSTNAME=your-hostname
-MW_PORT=6710
+# API Security
+API_ENCRYPTION_SECRET=your-secret-key-for-encrypting-connections
 
 # Server Config
 PORT=3000
 NODE_ENV=production
+
+# Optional
+DISABLE_SWAGGER=false
+DISABLE_CORS=false
 ```
 
 ## Build Process
