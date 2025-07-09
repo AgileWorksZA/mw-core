@@ -2,4 +2,4 @@
 nixPkgs = ["bun"]
 
 [start]
-cmd = "bun run start:web"
+cmd = "bun run start:api"

@@ -1,26 +1,28 @@
 # Railway Deployment Guide
 
-This guide explains how to deploy MoneyWorks Core to Railway without Docker.
+This guide explains how to deploy MoneyWorks Core to Railway without Docker or builds.
+
+## Overview
+
+MoneyWorks Core runs directly from TypeScript using Bun, eliminating the need for build steps. Only the web frontend requires building for production.
 
 ## Prerequisites
 
 - Railway account
 - Environment variables configured in Railway
+- Bun runtime (provided by Railway Nixpacks)
 
-## Deployment Options
+## Deployment Architecture
 
-### Option 1: Single Service (Web + API)
+### TypeScript-First Approach
+- All packages run directly from TypeScript source
+- No transpilation or bundling needed for API/backend services
+- Only web1 (React Router) requires a production build
+- Bun handles TypeScript execution natively
 
-Use the default `railway.json` configuration which runs both services.
+### Separate Services
 
-```bash
-# Railway will use railway.json by default
-railway up
-```
-
-### Option 2: Separate Services
-
-Deploy web and API as separate Railway services for better scaling:
+Deploy web and API as separate Railway services:
 
 #### Web Service
 ```bash
@@ -63,40 +65,32 @@ PORT=3000
 NODE_ENV=production
 ```
 
-## Build Commands
+## Build Process
 
-The build process uses Bun and TypeScript:
+Since we run TypeScript directly:
 
-1. **Dependencies Build**: `bun run build:deps`
-   - Builds utilities → canonical → data packages in order
-
-2. **API Build**: `bun run build:api`
-   - Builds dependencies first, then API
-
-3. **Web Build**: `bun run build:all`
-   - Builds dependencies first, then web1
+1. **API Service**: No build needed - runs directly from TypeScript
+2. **Web Service**: Only requires `bun --cwd packages/web1 build` for React Router production build
 
 ## Start Commands
 
 - **Web**: `bun run start:web` (serves React Router build)
 - **API**: `bun run start:api` (runs Elysia server)
 
-## Nixpacks Configuration
+## Package Resolution
 
-The `nixpacks.toml` file ensures Bun is available in the Railway environment.
+All packages use TypeScript path mappings pointing to source files:
+- `@moneyworks/data` → `packages/data/src/index.ts`
+- `@moneyworks/canonical` → `packages/canonical/src/index.ts`
+- `@moneyworks/utilities` → `packages/utilities/src/index.ts`
 
 ## Troubleshooting
 
-### Build Failures
+### Import Errors
 
-1. Check that all TypeScript packages build successfully:
-   ```bash
-   bun run build:deps
-   ```
-
-2. Verify no path mapping issues in production builds
-
-3. Ensure all internal package imports use relative paths
+1. Ensure all tsconfig.json files have correct path mappings
+2. Verify package.json exports point to .ts source files
+3. Check that Bun is running (not Node.js)
 
 ### Runtime Issues
 
@@ -106,26 +100,16 @@ The `nixpacks.toml` file ensures Bun is available in the Railway environment.
    - API: `/api/v1/health`
    - Web: `/`
 
-### TypeScript Errors
-
-Production builds use `tsconfig.build.json` files which:
-- Disable path mappings
-- Use relative imports
-- Exclude test files
-- Generate declaration files
-
 ## Local Testing
 
-Test the production build locally:
+Test the deployment locally:
 
 ```bash
-# Build everything
-bun run build:all
-
-# Test API
+# Test API (runs directly from TypeScript)
 bun run start:api
 
-# Test Web (in another terminal)
+# Build and test Web (in another terminal)
+bun --cwd packages/web1 build
 bun run start:web
 ```
 

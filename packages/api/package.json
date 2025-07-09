@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "MoneyWorks REST API with ElysiaJS",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",

@@ -10,7 +10,9 @@
     "noEmit": false,
     "allowImportingTsExtensions": false,
     "paths": {
+      "@moneyworks/canonical": ["./src/index.ts"],
       "@moneyworks/canonical/*": ["./src/*"],
+      "@moneyworks/utilities": ["../utilities/src/index.ts"],
       "@moneyworks/utilities/*": ["../utilities/src/*"]
     },
     "baseUrl": "."

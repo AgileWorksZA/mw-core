@@ -262,7 +262,11 @@
       "Bash(claude config list --global)",
       "Bash(docker build:*)",
       "Bash(/opt/homebrew/bin/npm run build)",
-      "Bash(./fix-api-imports.sh)"
+      "Bash(./fix-api-imports.sh)",
+      "Bash(./test-packages.sh:*)",
+      "Bash(./test-railway-deployment.sh:*)",
+      "Bash(./verify-deployment.sh:*)",
+      "Bash(./final-test.sh:*)"
     ],
     "deny": []
   }

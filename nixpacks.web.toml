@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["bun", "nodejs"]
+
+[phases.build]
+cmds = ["bun install", "bun --cwd packages/web1 build"]
+
+[start]
+cmd = "bun run start:web"
