@@ -6,14 +6,14 @@
 
 import { Elysia } from 'elysia';
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { CacheService } from '@moneyworks/api/services/cache';
-import { CompanyController } from '@moneyworks/api/controllers/company';
+import type { CacheService } from '../services/cache';
+import { CompanyController } from '../controllers/company';
 import { 
   CompanyInfoSchema, 
   CompanyQuerySchema, 
   CompanyFields 
-} from '@moneyworks/api/schemas/company';
-import { ErrorSchema, SuccessResponse } from '@moneyworks/api/schemas/common';
+} from '../schemas/company';
+import { ErrorSchema, SuccessResponse } from '../schemas/common';
 
 /**
  * Create company routes

@@ -6,8 +6,8 @@
  */
 
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { TableController } from '@moneyworks/api/controllers/base-table';
-import { TaxRateController } from '@moneyworks/api/controllers/tax-rate';
+import type { TableController } from '../controllers/base-table';
+import { TaxRateController } from '../controllers/tax-rate';
 
 export class TableRegistry {
   private tables = new Map<string, TableController>();

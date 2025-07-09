@@ -7,14 +7,14 @@
 
 import { Elysia, t } from 'elysia';
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { CacheService } from '@moneyworks/api/services/cache';
-import { LabelsController } from '@moneyworks/api/controllers/labels';
+import type { CacheService } from '../services/cache';
+import { LabelsController } from '../controllers/labels';
 import { 
   SUPPORTED_LANGUAGES, 
   LANGUAGE_NAMES,
   type SupportedLanguage 
-} from '@moneyworks/api/middleware/i18n';
-import { ErrorSchema, SuccessResponse } from '@moneyworks/api/schemas/common';
+} from '../middleware/i18n';
+import { ErrorSchema, SuccessResponse } from '../schemas/common';
 
 /**
  * UI translations for frontend applications

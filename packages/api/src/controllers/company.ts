@@ -6,8 +6,8 @@
  */
 
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { CacheService } from '@moneyworks/api/services/cache';
-import { CompanyFields, type CompanyField } from '@moneyworks/api/schemas/company';
+import type { CacheService } from '../services/cache';
+import { CompanyFields, type CompanyField } from '../schemas/company';
 
 export interface CompanyInfo {
   name?: string;

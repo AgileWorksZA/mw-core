@@ -6,22 +6,22 @@
  */
 
 import { Elysia, t } from 'elysia';
-import type { TableRegistry } from '@moneyworks/api/registry/table-registry';
+import type { TableRegistry } from '../registry/table-registry';
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { CacheService } from '@moneyworks/api/services/cache';
-import { LabelsController } from '@moneyworks/api/controllers/labels';
+import type { CacheService } from '../services/cache';
+import { LabelsController } from '../controllers/labels';
 import { 
   TableExportQuerySchema, 
   TableListSchema,
   TableSchemaSchema,
   TableExportResponseSchema 
-} from '@moneyworks/api/schemas/table';
+} from '../schemas/table';
 import { 
   ErrorSchema, 
   SuccessResponse,
   MetadataSchema 
-} from '@moneyworks/api/schemas/common';
-import { SUPPORTED_LANGUAGES } from '@moneyworks/api/middleware/i18n';
+} from '../schemas/common';
+import { SUPPORTED_LANGUAGES } from '../middleware/i18n';
 
 /**
  * Create table routes

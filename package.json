@@ -11,6 +11,8 @@
     "build:cli": "bun --cwd packages/cli build",
     "build:mcp": "bun --cwd packages/mcp-server build",
     "build:deps": "bun --cwd packages/utilities build && bun --cwd packages/canonical build && bun --cwd packages/data build",
+    "build:all": "bun run build:deps && bun --cwd packages/web1 build",
+    "build:api": "bun run build:deps && bun --cwd packages/api build",
     "clean": "rm -rf node_modules packages/*/node_modules",
     "test": "bun test",
     "cli": "bun --cwd packages/api cli",
@@ -22,7 +24,9 @@
     "api:start": "bun --cwd packages/api start",
     "api:build": "bun run build:deps && bun --cwd packages/api build",
     "web": "bun --bun --cwd packages/web1 dev",
-    "web:build": "bun run build:deps && bun --cwd packages/web1 build"
+    "web:build": "bun run build:deps && bun --cwd packages/web1 build",
+    "start:web": "bun --cwd packages/web1 start",
+    "start:api": "bun --cwd packages/api start"
   },
   "type": "module",
   "workspaces": [

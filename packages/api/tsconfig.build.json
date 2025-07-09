@@ -1,15 +1,20 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "allowImportingTsExtensions": false,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo",
     "noEmit": false,
-    "paths": {
-      "@moneyworks/utilities": ["../utilities/dist"],
-      "@moneyworks/utilities/*": ["../utilities/dist/*"],
-      "@moneyworks/canonical": ["../canonical/dist"],
-      "@moneyworks/canonical/*": ["../canonical/dist/*"],
-      "@moneyworks/data": ["../data/dist"],
-      "@moneyworks/data/*": ["../data/dist/*"]
-    }
-  }
+    "allowImportingTsExtensions": false,
+    "baseUrl": "."
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"],
+  "references": [
+    { "path": "../canonical/tsconfig.build.json" },
+    { "path": "../data/tsconfig.build.json" }
+  ]
 }

@@ -6,9 +6,9 @@
 
 import { Elysia, t } from 'elysia';
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { CacheService } from '@moneyworks/api/services/cache';
-import { EvalRequestSchema, EvalResponseSchema } from '@moneyworks/api/schemas/eval';
-import { ErrorSchema, SuccessResponse } from '@moneyworks/api/schemas/common';
+import type { CacheService } from '../services/cache';
+import { EvalRequestSchema, EvalResponseSchema } from '../schemas/eval';
+import { ErrorSchema, SuccessResponse } from '../schemas/common';
 
 /**
  * Create eval routes

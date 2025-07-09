@@ -9,7 +9,7 @@
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",
     "start:compiled": "bun dist/index.js",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

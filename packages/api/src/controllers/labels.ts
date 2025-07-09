@@ -6,9 +6,9 @@
  */
 
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
-import type { CacheService } from '@moneyworks/api/services/cache';
-import type { SupportedLanguage } from '@moneyworks/api/middleware/i18n';
-import { getMoneyWorksLanguage } from '@moneyworks/api/middleware/i18n';
+import type { CacheService } from '../services/cache';
+import type { SupportedLanguage } from '../middleware/i18n';
+import { getMoneyWorksLanguage } from '../middleware/i18n';
 
 export interface FieldLabels {
   [fieldName: string]: string;

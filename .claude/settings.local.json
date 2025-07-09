@@ -261,7 +261,8 @@
       "Bash(say:*)",
       "Bash(claude config list --global)",
       "Bash(docker build:*)",
-      "Bash(/opt/homebrew/bin/npm run build)"
+      "Bash(/opt/homebrew/bin/npm run build)",
+      "Bash(./fix-api-imports.sh)"
     ],
     "deny": []
   }

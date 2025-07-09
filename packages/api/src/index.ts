@@ -7,7 +7,7 @@
  */
 
 import { createSmartClient, loadConfig } from '@moneyworks/data';
-import { createApp } from '@moneyworks/api/app';
+import { createApp } from './app';
 
 async function startServer() {
   const port = parseInt(process.env.PORT || '3000');

@@ -5,7 +5,7 @@
  * @moneyworks-dsl PURE
  */
 
-import { BaseTableController, type TableExportParams } from '@moneyworks/api/controllers/base-table';
+import { BaseTableController, type TableExportParams } from '../controllers/base-table';
 
 export class TaxRateController extends BaseTableController {
   readonly tableName = 'TaxRate';

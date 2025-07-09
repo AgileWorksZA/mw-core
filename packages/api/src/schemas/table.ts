@@ -5,7 +5,7 @@
  */
 
 import { t } from 'elysia';
-import { ExportFormatEnum } from '@moneyworks/api/schemas/common';
+import { ExportFormatEnum } from '../schemas/common';
 
 /**
  * Table export query parameters

@@ -5,7 +5,7 @@
  */
 
 import { Elysia } from 'elysia';
-import { ValidationError, MoneyWorksError } from '@moneyworks/api/controllers/base-table';
+import { ValidationError, MoneyWorksError } from '../controllers/base-table';
 
 export interface APIError {
   error: {
