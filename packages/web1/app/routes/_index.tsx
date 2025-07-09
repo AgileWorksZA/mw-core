@@ -1,21 +1,21 @@
 import { useAuth } from "~/hooks/use-auth";
-import { Navigate, useSearchParams } from "react-router";
+import { Navigate } from "react-router";
 import { useEffect, useState } from "react";
 
 export default function Index() {
   const { isLoaded, isSignedIn } = useAuth();
-  const [searchParams] = useSearchParams();
   const [shouldNavigate, setShouldNavigate] = useState(false);
-  
-  // Check if this is a fresh visit (no referrer from within the app)
-  const isFreshVisit = searchParams.get("fresh") === "true";
+  const [checkedAuth, setCheckedAuth] = useState(false);
   
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && !checkedAuth) {
       // Add a small delay to ensure Clerk has fully initialized
-      setTimeout(() => setShouldNavigate(true), 100);
+      setTimeout(() => {
+        setCheckedAuth(true);
+        setShouldNavigate(true);
+      }, 100);
     }
-  }, [isLoaded]);
+  }, [isLoaded, checkedAuth]);
   
   // Show loading state while Clerk is initializing
   if (!isLoaded || !shouldNavigate) {
@@ -28,8 +28,9 @@ export default function Index() {
     );
   }
   
-  // For fresh visits or unauthenticated users, go to welcome page
-  if (isFreshVisit || !isSignedIn) {
+  // ALWAYS redirect unauthenticated users to welcome/sign-in
+  if (!isSignedIn) {
+    // Use welcome page as the landing page for all unauthenticated users
     return <Navigate to="/welcome" replace />;
   }
   

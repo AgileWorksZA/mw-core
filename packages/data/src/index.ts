@@ -93,6 +93,8 @@ export { TaxRateRepository } from './repositories/tax-rate.repository';
  * const { client, repositories } = await createDataLayer();
  * const taxRates = await repositories.taxRate.findAll();
  * ```
+ * 
+ * @deprecated Use token-based authentication with the API instead
  */
 export async function createDataLayer(configPath?: string) {
   const { loadConfig } = await import('./config');

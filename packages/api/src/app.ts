@@ -93,29 +93,19 @@ All table endpoints support multiple export formats via the \`format\` query par
 
 ## Authentication
 
-Use the `/auth/token` endpoint to exchange MoneyWorks credentials for an API token.
-Include the token in the `Authorization: Bearer <token>` header for all other requests.
+Use the /auth/token endpoint to exchange MoneyWorks credentials for an API token.
+Include the token in the Authorization: Bearer <token> header for all other requests.
 
 ## Rate Limiting
 
 Rate limiting headers are included in all responses:
-- \`X-RateLimit-Limit\` - Request limit per window
-- \`X-RateLimit-Remaining\` - Requests remaining
-- \`X-RateLimit-Reset\` - Window reset time
+- X-RateLimit-Limit - Request limit per window
+- X-RateLimit-Remaining - Requests remaining
+- X-RateLimit-Reset - Window reset time
 
 ## Error Handling
 
-All errors follow a consistent format:
-\`\`\`json
-{
-  "error": {
-    "code": "ERROR_CODE",
-    "message": "Human readable message",
-    "details": {},
-    "requestId": "mw-12345-abcdef"
-  }
-}
-\`\`\`
+All errors follow a consistent format with error code, message, details, and request ID.
           `,
           contact: {
             name: 'MoneyWorks Team',

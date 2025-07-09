@@ -5,7 +5,7 @@
     "buildCommand": "bun install"
   },
   "deploy": {
-    "startCommand": "cd packages/api && bun src/index.ts",
+    "startCommand": "cd packages/api && MW_API_MODE=token-auth bun src/index.ts",
     "healthcheckPath": "/api/v1/health",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE",
