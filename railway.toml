@@ -1,0 +1,10 @@
+[build]
+builder = "DOCKERFILE"
+
+[[services]]
+name = "web"
+dockerfilePath = "Dockerfile.web"
+
+[[services]]
+name = "api"
+dockerfilePath = "Dockerfile.api"
