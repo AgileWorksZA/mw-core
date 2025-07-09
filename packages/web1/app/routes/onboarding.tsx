@@ -294,6 +294,7 @@ function OnboardingContent() {
                 <Button
                   variant="outline"
                   onClick={() => navigate("/dashboard")}
+                  type="button"
                 >
                   Skip for now
                 </Button>
