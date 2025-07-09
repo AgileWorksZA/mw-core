@@ -2,7 +2,7 @@
 nixPkgs = ["bun", "nodejs"]
 
 [phases.build]
-cmds = ["bun install", "bun --cwd packages/web1 build"]
+cmds = ["bun install", "cd packages/web1 && bun run build"]
 
 [start]
-cmd = "bun run start:web"
+cmd = "cd packages/web1 && bun run start"

@@ -8,6 +8,7 @@
 
 import { createSmartClient, loadConfig } from '@moneyworks/data';
 import { createApp } from './app';
+import { resolve } from 'path';
 
 async function startServer() {
   const port = parseInt(process.env.PORT || '3000');
@@ -17,8 +18,24 @@ async function startServer() {
   
   try {
     // Load MoneyWorks configuration
-    const configPath = process.env.MW_CONFIG_PATH || './mw-config.json';
-    const mwConfig = await loadConfig(configPath);
+    let mwConfig;
+    
+    // Check if we have environment variables (Railway)
+    if (process.env.MW_HOSTNAME) {
+      mwConfig = {
+        host: process.env.MW_HOSTNAME,
+        port: parseInt(process.env.MW_PORT || '6710'),
+        dataFile: process.env.MW_DATAFILE || '',
+        username: process.env.MW_USERNAME || '',
+        password: process.env.MW_PASSWORD || '',
+        folderName: process.env.MW_FOLDER_NAME,
+        folderPassword: process.env.MW_FOLDER_PASSWORD
+      };
+    } else {
+      // Fall back to config file
+      const configPath = process.env.MW_CONFIG_PATH || resolve(__dirname, '../../mw-config.json');
+      mwConfig = await loadConfig(configPath);
+    }
     
     // Create MoneyWorks client
     const client = createSmartClient(mwConfig);

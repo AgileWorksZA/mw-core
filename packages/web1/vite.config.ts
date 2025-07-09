@@ -18,10 +18,15 @@ export default defineConfig({
   },
   resolve: {
     dedupe: ["react", "react-dom"],
-    alias: {
-      "@moneyworks/data": resolve(__dirname, "../data/src/index.ts"),
-      "@moneyworks/canonical": resolve(__dirname, "../canonical/src/index.ts"),
-      "@moneyworks/utilities": resolve(__dirname, "../utilities/src/index.ts")
-    }
+    alias: [
+      // Main package exports
+      { find: /^@moneyworks\/data$/, replacement: resolve(__dirname, "../data/src/index.ts") },
+      { find: /^@moneyworks\/canonical$/, replacement: resolve(__dirname, "../canonical/src/index.ts") },
+      { find: /^@moneyworks\/utilities$/, replacement: resolve(__dirname, "../utilities/src/index.ts") },
+      // Subpath exports
+      { find: /^@moneyworks\/canonical\/(.+)$/, replacement: resolve(__dirname, "../canonical/src/entities/$1/index.ts") },
+      { find: /^@moneyworks\/data\/(.+)$/, replacement: resolve(__dirname, "../data/src/$1.ts") },
+      { find: /^@moneyworks\/utilities\/(.+)$/, replacement: resolve(__dirname, "../utilities/src/$1.ts") }
+    ]
   }
 });
