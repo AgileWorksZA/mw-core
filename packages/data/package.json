@@ -11,97 +11,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./client": {
-      "types": "./src/client/index.ts",
-      "import": "./src/client/index.ts"
-    },
-    "./client/types": {
-      "types": "./src/client/types.ts",
-      "import": "./src/client/types.ts"
-    },
-    "./client/moneyworks-rest-client": {
-      "types": "./src/client/moneyworks-rest-client.ts",
-      "import": "./src/client/moneyworks-rest-client.ts"
-    },
-    "./client/moneyworks-smart-client": {
-      "types": "./src/client/moneyworks-smart-client.ts",
-      "import": "./src/client/moneyworks-smart-client.ts"
-    },
-    "./config": {
-      "types": "./src/config/index.ts",
-      "import": "./src/config/index.ts"
-    },
-    "./config/types": {
-      "types": "./src/config/types.ts",
-      "import": "./src/config/types.ts"
-    },
-    "./repositories": {
-      "types": "./src/repositories/index.ts",
-      "import": "./src/repositories/index.ts"
-    },
-    "./repositories/base.repository": {
-      "types": "./src/repositories/base.repository.ts",
-      "import": "./src/repositories/base.repository.ts"
-    },
-    "./repositories/tax-rate.repository": {
-      "types": "./src/repositories/tax-rate.repository.ts",
-      "import": "./src/repositories/tax-rate.repository.ts"
-    },
-    "./parsers": {
-      "types": "./src/parsers/index.ts",
-      "import": "./src/parsers/index.ts"
-    },
-    "./parsers/field-discovery": {
-      "types": "./src/parsers/field-discovery.ts",
-      "import": "./src/parsers/field-discovery.ts"
-    },
-    "./parsers/xml/moneyworks-xml-parser": {
-      "types": "./src/parsers/xml/moneyworks-xml-parser.ts",
-      "import": "./src/parsers/xml/moneyworks-xml-parser.ts"
-    },
-    "./parsers/moneyworks-field-mappings": {
-      "types": "./src/parsers/moneyworks-field-mappings.ts",
-      "import": "./src/parsers/moneyworks-field-mappings.ts"
-    },
-    "./parsers/smart-tsv-parser": {
-      "types": "./src/parsers/smart-tsv-parser.ts",
-      "import": "./src/parsers/smart-tsv-parser.ts"
-    },
-    "./parsers/date-parser": {
-      "types": "./src/parsers/date-parser.ts",
-      "import": "./src/parsers/date-parser.ts"
-    },
-    "./parsers/number-parser": {
-      "types": "./src/parsers/number-parser.ts",
-      "import": "./src/parsers/number-parser.ts"
-    },
-    "./parsers/data-parser": {
-      "types": "./src/parsers/data-parser.ts",
-      "import": "./src/parsers/data-parser.ts"
-    },
-    "./parsers/account-parser": {
-      "types": "./src/parsers/account-parser.ts",
-      "import": "./src/parsers/account-parser.ts"
-    },
-    "./parsers/enum-parser": {
-      "types": "./src/parsers/enum-parser.ts",
-      "import": "./src/parsers/enum-parser.ts"
-    },
-    "./parsers/string-parser": {
-      "types": "./src/parsers/string-parser.ts",
-      "import": "./src/parsers/string-parser.ts"
-    },
-    "./converters": {
-      "types": "./src/converters/index.ts",
-      "import": "./src/converters/index.ts"
-    },
-    "./converters/export-format-converter": {
-      "types": "./src/converters/export-format-converter.ts",
-      "import": "./src/converters/export-format-converter.ts"
-    }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
+    "build:dev": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",

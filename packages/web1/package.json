@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "dev": "bun --bun run react-router dev",
-    "prebuild": "cd ../.. && ./scripts/build-deps.sh",
     "build": "react-router build",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
