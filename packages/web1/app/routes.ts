@@ -3,6 +3,7 @@ import { route, index } from "@react-router/dev/routes";
 
 export default [
   index("routes/_index.tsx"),
+  route("welcome", "routes/welcome.tsx"),
   route("sign-in", "routes/sign-in.tsx"),
   route("sign-up", "routes/sign-up.tsx"),
   route("dashboard", "routes/dashboard.tsx"),
@@ -24,4 +25,5 @@ export default [
   route("api/groups/members", "routes/api.groups.members.tsx"),
   route("api/moneyworks", "routes/api.moneyworks.tsx"),
   route("api/moneyworks-test", "routes/api.moneyworks-test.tsx"),
+  route("debug-auth", "routes/debug-auth.tsx"),
 ] satisfies RouteConfig;

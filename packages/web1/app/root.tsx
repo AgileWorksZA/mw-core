@@ -88,6 +88,7 @@ export default function App() {
       signUpUrl="/sign-up"
       signInFallbackRedirectUrl="/dashboard"
       signUpFallbackRedirectUrl="/dashboard"
+      afterSignOutUrl="/sign-in"
     >
       {appContent}
     </ClerkProvider>
