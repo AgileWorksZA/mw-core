@@ -16,7 +16,8 @@ import {
   Edit, 
   Trash2,
   MoreVertical,
-  RefreshCw
+  RefreshCw,
+  Cloud
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -106,12 +107,20 @@ function ConnectionsContent() {
               Manage your MoneyWorks server connections
             </p>
           </div>
-          <Button asChild>
-            <Link to="/connections/new">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Connection
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button asChild variant="outline">
+              <Link to="/connections/now/new">
+                <Cloud className="mr-2 h-4 w-4" />
+                Connect to NOW
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link to="/connections/new">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Data Centre
+              </Link>
+            </Button>
+          </div>
         </div>
         
         {error && (
@@ -162,12 +171,19 @@ function ConnectionsContent() {
                 
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center gap-2">
-                    <Database className="h-5 w-5" />
+                    {connection.connection_type === 'now' ? (
+                      <Cloud className="h-5 w-5" />
+                    ) : (
+                      <Database className="h-5 w-5" />
+                    )}
                     {connection.connection_name}
                   </CardTitle>
                   <CardDescription className="flex items-center gap-2 text-xs">
                     <Server className="h-3 w-3" />
                     {connection.mw_host}:{connection.mw_port}
+                    {connection.connection_type === 'now' && (
+                      <span className="ml-2 text-primary">(NOW)</span>
+                    )}
                   </CardDescription>
                 </CardHeader>
                 

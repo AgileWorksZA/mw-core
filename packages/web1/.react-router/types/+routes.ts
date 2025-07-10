@@ -34,6 +34,12 @@ type Pages = {
   "/connections/new": {
     params: {};
   };
+  "/connections/now/new": {
+    params: {};
+  };
+  "/connections/now/select-files": {
+    params: {};
+  };
   "/tax-rates": {
     params: {};
   };
@@ -66,6 +72,9 @@ type Pages = {
   "/api/connections": {
     params: {};
   };
+  "/api/now-accounts": {
+    params: {};
+  };
   "/api/debug/connections": {
     params: {};
   };
@@ -89,7 +98,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/welcome" | "/sign-in" | "/sign-up" | "/dashboard" | "/onboarding" | "/connections" | "/connections/new" | "/tax-rates" | "/tax-rates/:code" | "/company" | "/groups" | "/tools/evaluate" | "/settings" | "/test-routes" | "/test-auth" | "/test-create-connection" | "/api/connections" | "/api/debug/connections" | "/api/groups" | "/api/groups/members" | "/api/moneyworks" | "/api/moneyworks-test" | "/debug-auth";
+    page: "/" | "/welcome" | "/sign-in" | "/sign-up" | "/dashboard" | "/onboarding" | "/connections" | "/connections/new" | "/connections/now/new" | "/connections/now/select-files" | "/tax-rates" | "/tax-rates/:code" | "/company" | "/groups" | "/tools/evaluate" | "/settings" | "/test-routes" | "/test-auth" | "/test-create-connection" | "/api/connections" | "/api/now-accounts" | "/api/debug/connections" | "/api/groups" | "/api/groups/members" | "/api/moneyworks" | "/api/moneyworks-test" | "/debug-auth";
   };
   "routes/_index.tsx": {
     id: "routes/_index";
@@ -122,6 +131,14 @@ type RouteFiles = {
   "routes/connections/new.tsx": {
     id: "routes/connections/new";
     page: "/connections/new";
+  };
+  "routes/connections.now.new.tsx": {
+    id: "routes/connections.now.new";
+    page: "/connections/now/new";
+  };
+  "routes/connections.now.select-files.tsx": {
+    id: "routes/connections.now.select-files";
+    page: "/connections/now/select-files";
   };
   "routes/tax-rates.tsx": {
     id: "routes/tax-rates";
@@ -162,6 +179,10 @@ type RouteFiles = {
   "routes/api.connections.tsx": {
     id: "routes/api.connections";
     page: "/api/connections";
+  };
+  "routes/api.now-accounts.tsx": {
+    id: "routes/api.now-accounts";
+    page: "/api/now-accounts";
   };
   "routes/api.debug.connections.tsx": {
     id: "routes/api.debug.connections";

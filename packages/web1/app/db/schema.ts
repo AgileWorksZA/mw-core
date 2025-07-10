@@ -5,6 +5,7 @@ export interface MWConnection {
   clerk_user_id: string;
   organization_id?: string; // Added for group support
   connection_name: string;
+  connection_type: 'datacentre' | 'now'; // NEW: Type of connection
   mw_username: string; // encrypted
   mw_password: string; // encrypted
   mw_folder_name?: string; // encrypted
@@ -12,8 +13,24 @@ export interface MWConnection {
   mw_data_file: string; // encrypted
   mw_host: string;
   mw_port: number;
+  mw_now_account_id?: string; // NEW: Reference to parent NOW account
+  mw_now_file_id?: string; // NEW: Unique identifier from NOW
+  mw_now_metadata?: string; // NEW: JSON for NOW-specific data
   is_default: boolean;
   last_used_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MWNowAccount {
+  id: string;
+  clerk_user_id: string;
+  account_name: string;
+  mw_now_username: string; // encrypted
+  mw_now_password: string; // encrypted
+  mw_now_token?: string; // encrypted, if NOW uses tokens
+  mw_now_refresh_token?: string; // encrypted, if NOW uses OAuth
+  last_synced_at?: string;
   created_at: string;
   updated_at: string;
 }
@@ -129,12 +146,28 @@ export interface GroupSyncLog {
 }
 
 export const SCHEMA_SQL = `
+-- MoneyWorks NOW Accounts
+CREATE TABLE IF NOT EXISTS mw_now_accounts (
+  id TEXT PRIMARY KEY,
+  clerk_user_id TEXT NOT NULL,
+  account_name TEXT NOT NULL,
+  mw_now_username TEXT NOT NULL, -- encrypted
+  mw_now_password TEXT NOT NULL, -- encrypted
+  mw_now_token TEXT, -- encrypted, if NOW uses tokens
+  mw_now_refresh_token TEXT, -- encrypted, if NOW uses OAuth
+  last_synced_at TEXT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(clerk_user_id, account_name)
+);
+
 -- MoneyWorks Connections
 CREATE TABLE IF NOT EXISTS mw_connections (
   id TEXT PRIMARY KEY,
   clerk_user_id TEXT NOT NULL,
   organization_id TEXT, -- For group support
   connection_name TEXT NOT NULL,
+  connection_type TEXT NOT NULL DEFAULT 'datacentre', -- 'datacentre' or 'now'
   mw_username TEXT NOT NULL, -- encrypted
   mw_password TEXT NOT NULL, -- encrypted
   mw_folder_name TEXT, -- encrypted
@@ -142,11 +175,15 @@ CREATE TABLE IF NOT EXISTS mw_connections (
   mw_data_file TEXT NOT NULL, -- encrypted
   mw_host TEXT NOT NULL,
   mw_port INTEGER NOT NULL DEFAULT 6710,
+  mw_now_account_id TEXT, -- Reference to parent NOW account
+  mw_now_file_id TEXT, -- Unique identifier from NOW
+  mw_now_metadata TEXT, -- JSON for NOW-specific data
   is_default BOOLEAN NOT NULL DEFAULT 0,
   last_used_at TEXT,
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE(clerk_user_id, connection_name)
+  UNIQUE(clerk_user_id, connection_name),
+  FOREIGN KEY (mw_now_account_id) REFERENCES mw_now_accounts(id) ON DELETE CASCADE
 );
 
 -- Audit Logs
@@ -178,6 +215,8 @@ CREATE TABLE IF NOT EXISTS user_preferences (
 
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_connections_user ON mw_connections(clerk_user_id);
+CREATE INDEX IF NOT EXISTS idx_connections_now_account ON mw_connections(mw_now_account_id);
+CREATE INDEX IF NOT EXISTS idx_now_accounts_user ON mw_now_accounts(clerk_user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_logs(clerk_user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_timestamp ON audit_logs(timestamp);
 CREATE INDEX IF NOT EXISTS idx_audit_event ON audit_logs(event_type);
@@ -195,6 +234,13 @@ AFTER UPDATE ON user_preferences
 FOR EACH ROW
 BEGIN
   UPDATE user_preferences SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
+
+CREATE TRIGGER IF NOT EXISTS update_mw_now_accounts_timestamp
+AFTER UPDATE ON mw_now_accounts
+FOR EACH ROW
+BEGIN
+  UPDATE mw_now_accounts SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
 END;
 
 -- =====================================================

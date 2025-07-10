@@ -58,6 +58,7 @@ async function initDatabase() {
           id: "mock-connection-1",
           clerk_user_id: "automation_user",
           connection_name: "Test Connection (Mock)",
+          connection_type: "datacentre",
           mw_username: "encrypted-username",
           mw_password: "encrypted-password",
           mw_folder_name: null,
@@ -65,6 +66,9 @@ async function initDatabase() {
           mw_data_file: "encrypted-datafile",
           mw_host: "localhost",
           mw_port: 6710,
+          mw_now_account_id: null,
+          mw_now_file_id: null,
+          mw_now_metadata: null,
           is_default: true,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
@@ -131,6 +135,10 @@ async function initDatabase() {
   
   // Create tables
   db.exec(SCHEMA_SQL);
+  
+  // Run migrations
+  const { runMigrations } = await import("./migrate");
+  await runMigrations();
   
   // Set WAL mode for better concurrency
   db.exec("PRAGMA journal_mode = WAL");

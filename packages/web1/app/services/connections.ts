@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 export interface CreateConnectionInput {
   clerk_user_id: string;
   connection_name: string;
+  connection_type?: 'datacentre' | 'now';
   mw_username: string;
   mw_password: string;
   mw_folder_name?: string;
@@ -13,6 +14,9 @@ export interface CreateConnectionInput {
   mw_data_file: string;
   mw_host: string;
   mw_port?: number;
+  mw_now_account_id?: string;
+  mw_now_file_id?: string;
+  mw_now_metadata?: Record<string, any>;
   is_default?: boolean;
 }
 
@@ -121,10 +125,11 @@ export class ConnectionService {
     
     const stmt = db.prepare(`
       INSERT INTO mw_connections (
-        id, clerk_user_id, connection_name, mw_username, mw_password,
+        id, clerk_user_id, connection_name, connection_type, mw_username, mw_password,
         mw_folder_name, mw_folder_password, mw_data_file, mw_host, mw_port, 
+        mw_now_account_id, mw_now_file_id, mw_now_metadata,
         is_default, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     
     const now = new Date().toISOString();
@@ -134,6 +139,7 @@ export class ConnectionService {
         id,
         input.clerk_user_id,
         input.connection_name,
+        input.connection_type || 'datacentre',
         encryptedData.mw_username,
         encryptedData.mw_password,
         encryptedData.mw_folder_name,
@@ -141,6 +147,9 @@ export class ConnectionService {
         encryptedData.mw_data_file,
         input.mw_host,
         input.mw_port || 6710,
+        input.mw_now_account_id || null,
+        input.mw_now_file_id || null,
+        input.mw_now_metadata ? JSON.stringify(input.mw_now_metadata) : null,
         isDefault ? 1 : 0,
         now,
         now
@@ -258,6 +267,72 @@ export class ConnectionService {
     `);
     
     stmt.run(connectionId, userId);
+  }
+  
+  async getConnectionsByNowAccount(userId: string, nowAccountId: string): Promise<MWConnection[]> {
+    console.log("[ConnectionService] getConnectionsByNowAccount for:", nowAccountId);
+    const db = await this.getDb();
+    const stmt = db.prepare(`
+      SELECT * FROM mw_connections 
+      WHERE clerk_user_id = ? AND mw_now_account_id = ?
+      ORDER BY connection_name ASC
+    `);
+    
+    const connections = stmt.all(userId, nowAccountId) as MWConnection[];
+    
+    if (connections.length === 0) {
+      return [];
+    }
+    
+    const crypto = createCryptoService(userId);
+    
+    // Decrypt sensitive fields and parse metadata
+    return connections.map(conn => ({
+      ...conn,
+      mw_username: crypto.decrypt(conn.mw_username),
+      mw_password: crypto.decrypt(conn.mw_password),
+      mw_folder_name: conn.mw_folder_name ? crypto.decrypt(conn.mw_folder_name) : undefined,
+      mw_folder_password: conn.mw_folder_password ? crypto.decrypt(conn.mw_folder_password) : undefined,
+      mw_data_file: crypto.decrypt(conn.mw_data_file),
+      mw_now_metadata: conn.mw_now_metadata ? JSON.parse(conn.mw_now_metadata) : undefined,
+    }));
+  }
+  
+  async createNowConnections(userId: string, nowAccountId: string, files: Array<{
+    file: { 
+      id: string; 
+      name: string; 
+      companyName: string; 
+      dataFile: string; 
+      host: string; 
+      port: number; 
+      metadata?: any;
+    };
+    username: string;
+    password: string;
+  }>): Promise<MWConnection[]> {
+    const createdConnections: MWConnection[] = [];
+    
+    for (const { file, username, password } of files) {
+      const connection = await this.createConnection({
+        clerk_user_id: userId,
+        connection_name: `${file.companyName} (NOW)`,
+        connection_type: 'now',
+        mw_username: username,
+        mw_password: password,
+        mw_data_file: file.dataFile,
+        mw_host: file.host,
+        mw_port: file.port,
+        mw_now_account_id: nowAccountId,
+        mw_now_file_id: file.id,
+        mw_now_metadata: file.metadata,
+        is_default: false,
+      });
+      
+      createdConnections.push(connection);
+    }
+    
+    return createdConnections;
   }
   
   async testConnection(connection: MWConnection): Promise<{ success: boolean; error?: string }> {

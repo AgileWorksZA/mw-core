@@ -266,7 +266,8 @@
       "Bash(./test-packages.sh:*)",
       "Bash(./test-railway-deployment.sh:*)",
       "Bash(./verify-deployment.sh:*)",
-      "Bash(./final-test.sh:*)"
+      "Bash(./final-test.sh:*)",
+      "mcp__moneyworks__mw_eval"
     ],
     "deny": []
   }
