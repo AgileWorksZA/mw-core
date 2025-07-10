@@ -264,10 +264,16 @@ function ConnectionsContent() {
           </div>
         )}
         
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center gap-4">
           <Button variant="outline" onClick={refreshConnections}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh Connections
+          </Button>
+          <Button variant="outline" asChild>
+            <Link to="/connections/now">
+              <Cloud className="mr-2 h-4 w-4" />
+              Manage NOW Accounts
+            </Link>
           </Button>
         </div>
       </main>

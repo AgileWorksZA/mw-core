@@ -34,10 +34,16 @@ type Pages = {
   "/connections/new": {
     params: {};
   };
+  "/connections/now": {
+    params: {};
+  };
   "/connections/now/new": {
     params: {};
   };
   "/connections/now/select-files": {
+    params: {};
+  };
+  "/connections/now/refresh": {
     params: {};
   };
   "/tax-rates": {
@@ -98,7 +104,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/welcome" | "/sign-in" | "/sign-up" | "/dashboard" | "/onboarding" | "/connections" | "/connections/new" | "/connections/now/new" | "/connections/now/select-files" | "/tax-rates" | "/tax-rates/:code" | "/company" | "/groups" | "/tools/evaluate" | "/settings" | "/test-routes" | "/test-auth" | "/test-create-connection" | "/api/connections" | "/api/now-accounts" | "/api/debug/connections" | "/api/groups" | "/api/groups/members" | "/api/moneyworks" | "/api/moneyworks-test" | "/debug-auth";
+    page: "/" | "/welcome" | "/sign-in" | "/sign-up" | "/dashboard" | "/onboarding" | "/connections" | "/connections/new" | "/connections/now" | "/connections/now/new" | "/connections/now/select-files" | "/connections/now/refresh" | "/tax-rates" | "/tax-rates/:code" | "/company" | "/groups" | "/tools/evaluate" | "/settings" | "/test-routes" | "/test-auth" | "/test-create-connection" | "/api/connections" | "/api/now-accounts" | "/api/debug/connections" | "/api/groups" | "/api/groups/members" | "/api/moneyworks" | "/api/moneyworks-test" | "/debug-auth";
   };
   "routes/_index.tsx": {
     id: "routes/_index";
@@ -132,6 +138,10 @@ type RouteFiles = {
     id: "routes/connections/new";
     page: "/connections/new";
   };
+  "routes/connections.now.tsx": {
+    id: "routes/connections.now";
+    page: "/connections/now";
+  };
   "routes/connections.now.new.tsx": {
     id: "routes/connections.now.new";
     page: "/connections/now/new";
@@ -139,6 +149,10 @@ type RouteFiles = {
   "routes/connections.now.select-files.tsx": {
     id: "routes/connections.now.select-files";
     page: "/connections/now/select-files";
+  };
+  "routes/connections.now.refresh.tsx": {
+    id: "routes/connections.now.refresh";
+    page: "/connections/now/refresh";
   };
   "routes/tax-rates.tsx": {
     id: "routes/tax-rates";
