@@ -148,7 +148,10 @@
       "Bash(git checkout:*)",
       "Bash(find:*)",
       "Bash(mv:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(/extract-moneyworks-entity transactions)",
+      "Bash(/extract-moneyworks-entity products)"
     ],
     "deny": []
   }

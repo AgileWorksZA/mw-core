@@ -28,13 +28,6 @@ You are continuing the MoneyWorks Semantic Vocabulary Distillation project.
 - Progress Tracking: `docs/COMPLETE-CANONICAL-ONTOLOGY-STRATEGY.md`
 - Read these documents before reading the Moneyworks entity source
 
-**Foundational Entities Complete (6/17-20, ~35% progress):**
-1. ✅ Transactions (17 types) - Financial transaction system
-2. ✅ Accounts (10 types) - Chart of accounts with system accounts  
-3. ✅ Names (Customer/Debtor, Supplier/Creditor) - Hierarchical classification
-4. ✅ Products (Enterprise inventory, 69 fields) - Complex pricing matrices
-5. ✅ TaxRates (International compliance, 17 fields) - Dual-rate, multi-tier
-6. ✅ Jobs (Project management, 34 fields) - Hierarchical structure, client integration
 
 **Key Architectural Discoveries:**
 - MoneyWorks canonical terminology (Creditor not Supplier, Debtor not Customer)
@@ -132,6 +125,7 @@ Now extract the **{{entity_name}}** entity canonical ontology from MoneyWorks ma
 Follow the exact patterns established in our foundational phases. If multi-entity file detected, prioritize DSL purity through separation over file consolidation. Document all discoveries and ensure 100% compliance with MoneyWorks semantic purity framework. Think deeply at each step.
 
 ## Success Criteria:
+✅ After generating the `generated/moneyworks-{{entity_name}}-canonical-ontology.ts` read the manual again and verify if you have covered the entity definition completely
 ✅ Complete field extraction with 100% coverage
 ✅ Cross-business universality validation
 ✅ Entity relationship mapping documented

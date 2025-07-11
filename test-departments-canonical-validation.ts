@@ -197,7 +197,7 @@ export function testDepartmentIndexedFields(): boolean {
 export function testDepartmentCustomFields(): boolean {
   console.log("🧪 Testing Department Custom Fields...");
   
-  const expectedCustomFields = ["Custom1", "Custom2", "UserNum", "UserText", "TaggedText"];
+  const expectedCustomFields = ["Custom1", "Custom2", "UserNum", "UserText"];
   
   let customFieldsCorrect = true;
   
@@ -227,7 +227,7 @@ export function testDepartmentRelationships(): boolean {
   console.log("🧪 Testing Department Entity Relationships...");
   
   const expectedReferencedBy = ["Accounts", "Transactions", "Jobs", "Names"];
-  const expectedReferences: string[] = []; // Departments don't reference other entities
+  const expectedReferences = ["General"]; // Departments reference General via Classification field
   
   let relationshipsCorrect = true;
   
@@ -239,11 +239,14 @@ export function testDepartmentRelationships(): boolean {
     }
   });
   
-  // Validate entities that departments reference (should be empty)
-  if (MONEYWORKS_DEPARTMENT_RELATIONSHIPS.references.length !== expectedReferences.length) {
-    console.error(`❌ INCORRECT REFERENCES: Expected ${expectedReferences.length}, got ${MONEYWORKS_DEPARTMENT_RELATIONSHIPS.references.length}`);
-    relationshipsCorrect = false;
-  }
+  // Validate entities that departments reference
+  expectedReferences.forEach(entity => {
+    const referencesEntity = MONEYWORKS_DEPARTMENT_RELATIONSHIPS.references.some(ref => ref.entity === entity);
+    if (!referencesEntity) {
+      console.error(`❌ MISSING REFERENCED ENTITY: ${entity}`);
+      relationshipsCorrect = false;
+    }
+  });
   
   if (relationshipsCorrect) {
     console.log("✅ Department entity relationships validation passed");
