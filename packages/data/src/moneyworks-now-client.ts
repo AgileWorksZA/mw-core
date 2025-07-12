@@ -30,6 +30,33 @@ export interface MoneyWorksNOWAuthResponse {
   expiresAt?: string;
 }
 
+// Internal types for API responses
+interface NOWApiAuthResponse {
+  token?: string;
+  refreshToken?: string;
+  files?: unknown[];
+  databases?: unknown[];
+  expiresAt?: string;
+}
+
+interface NOWApiFilesResponse {
+  files?: unknown[];
+  databases?: unknown[];
+}
+
+// Type guard functions
+function isNOWApiAuthResponse(data: unknown): data is NOWApiAuthResponse {
+  return typeof data === 'object' && data !== null;
+}
+
+function isNOWApiFilesResponse(data: unknown): data is NOWApiFilesResponse {
+  return typeof data === 'object' && data !== null;
+}
+
+function isValidFileArray(arr: unknown): arr is any[] {
+  return Array.isArray(arr);
+}
+
 export class MoneyWorksNOWClient {
   private config: MoneyWorksNOWConfig;
   private token?: string;
@@ -65,17 +92,28 @@ export class MoneyWorksNOWClient {
         throw new Error(`Authentication failed: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data: unknown = await response.json();
+      
+      // Type guard and validate response
+      if (!isNOWApiAuthResponse(data)) {
+        throw new Error('Invalid authentication response format');
+      }
       
       // Store tokens if provided
       this.token = data.token;
       this.refreshToken = data.refreshToken;
 
+      // Get files array, defaulting to empty array if not present
+      const filesArray = data.files || data.databases || [];
+      if (!isValidFileArray(filesArray)) {
+        throw new Error('Invalid files array in authentication response');
+      }
+
       // Transform the response to our expected format
       return {
         token: data.token,
         refreshToken: data.refreshToken,
-        files: this.transformFileList(data.files || data.databases || []),
+        files: this.transformFileList(filesArray),
         expiresAt: data.expiresAt,
       };
     } catch (error) {
@@ -107,16 +145,27 @@ export class MoneyWorksNOWClient {
         throw new Error(`Token refresh failed: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data: unknown = await response.json();
+      
+      // Type guard and validate response
+      if (!isNOWApiAuthResponse(data)) {
+        throw new Error('Invalid refresh token response format');
+      }
       
       // Update tokens
       this.token = data.token;
       this.refreshToken = data.refreshToken;
 
+      // Get files array, defaulting to empty array if not present
+      const filesArray = data.files || data.databases || [];
+      if (!isValidFileArray(filesArray)) {
+        throw new Error('Invalid files array in refresh token response');
+      }
+
       return {
         token: data.token,
         refreshToken: data.refreshToken,
-        files: this.transformFileList(data.files || data.databases || []),
+        files: this.transformFileList(filesArray),
         expiresAt: data.expiresAt,
       };
     } catch (error) {
@@ -144,8 +193,20 @@ export class MoneyWorksNOWClient {
         throw new Error(`Failed to list files: ${response.statusText}`);
       }
 
-      const data = await response.json();
-      return this.transformFileList(data.files || data.databases || []);
+      const data: unknown = await response.json();
+      
+      // Type guard and validate response
+      if (!isNOWApiFilesResponse(data)) {
+        throw new Error('Invalid files list response format');
+      }
+      
+      // Get files array, defaulting to empty array if not present
+      const filesArray = data.files || data.databases || [];
+      if (!isValidFileArray(filesArray)) {
+        throw new Error('Invalid files array in list files response');
+      }
+      
+      return this.transformFileList(filesArray);
     } catch (error) {
       console.error('[MoneyWorksNOWClient] List files error:', error);
       throw error;

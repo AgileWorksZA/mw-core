@@ -8,6 +8,7 @@
 
 import { createSmartClient } from './client/moneyworks-smart-client';
 import { TaxRateRepository } from './repositories/tax-rate.repository';
+import { CompanyInformationRepository } from './repositories/company-information.repository';
 
 // Export clients
 export { MoneyWorksRESTClient } from './client/moneyworks-rest-client';
@@ -87,6 +88,53 @@ export type { SchemaEnrichedExport } from './client/types';
 export { SmartMoneyWorksClient } from './client/moneyworks-smart-client';
 export type { SmartMoneyWorksClient as SmartMoneyWorksClientType } from './client/moneyworks-smart-client';
 export { TaxRateRepository } from './repositories/tax-rate.repository';
+export { 
+  CompanyInformationRepository,
+  type CompanyInformation,
+  COMPANY_INFORMATION_FIELDS
+} from './repositories/company-information.repository';
+
+/**
+ * Create a MoneyWorks client with repositories from a connection object
+ * 
+ * @ai-instruction Use this to create clients and repositories from connection details
+ */
+export function createMoneyWorksClient(connection: {
+  mw_host: string;
+  mw_port: number;
+  mw_data_file: string;
+  mw_username: string;
+  mw_password: string;
+  mw_folder_name?: string;
+  mw_folder_password?: string;
+}) {
+  const config: any = {
+    host: connection.mw_host,
+    port: connection.mw_port,
+    dataFile: connection.mw_data_file,
+    username: connection.mw_username,
+    password: connection.mw_password,
+    debug: false
+  };
+  
+  // Add folder auth if present
+  if (connection.mw_folder_name && connection.mw_folder_password) {
+    config.folderAuth = {
+      folderName: connection.mw_folder_name,
+      folderPassword: connection.mw_folder_password
+    };
+  }
+  
+  const client = createSmartClient(config);
+  
+  return {
+    client,
+    repositories: {
+      taxRate: new TaxRateRepository(client),
+      companyInformation: new CompanyInformationRepository(client),
+    }
+  };
+}
 
 /**
  * Create a configured MoneyWorks client and repositories
@@ -111,6 +159,7 @@ export async function createDataLayer(configPath?: string) {
     client,
     repositories: {
       taxRate: new TaxRateRepository(client),
+      companyInformation: new CompanyInformationRepository(client),
       // Future repositories will be added here
       // account: new AccountRepository(client),
       // transaction: new TransactionRepository(client),
