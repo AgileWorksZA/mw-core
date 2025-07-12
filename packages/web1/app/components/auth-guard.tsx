@@ -45,12 +45,13 @@ export function AuthGuard({ children, requireConnection = false }: AuthGuardProp
   
   // Check for connections if required
   if (requireConnection && !isLoadingConnections) {
-    // Don't redirect from onboarding or connections pages
-    const isOnboardingOrConnections = 
+    // Don't redirect from onboarding, connections, or chat pages
+    const isAllowedWithoutConnection = 
       location.pathname === "/onboarding" || 
-      location.pathname.startsWith("/connections");
+      location.pathname.startsWith("/connections") ||
+      location.pathname === "/chat";
     
-    if (connections.length === 0 && !isOnboardingOrConnections) {
+    if (connections.length === 0 && !isAllowedWithoutConnection) {
       return <Navigate to="/onboarding" replace />;
     }
   }

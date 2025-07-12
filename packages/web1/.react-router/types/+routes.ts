@@ -63,6 +63,12 @@ type Pages = {
   "/tools/evaluate": {
     params: {};
   };
+  "/chat": {
+    params: {};
+  };
+  "/test-chat": {
+    params: {};
+  };
   "/settings": {
     params: {};
   };
@@ -73,6 +79,12 @@ type Pages = {
     params: {};
   };
   "/test-create-connection": {
+    params: {};
+  };
+  "/test-connection-context": {
+    params: {};
+  };
+  "/debug-connections-api": {
     params: {};
   };
   "/api/connections": {
@@ -96,6 +108,9 @@ type Pages = {
   "/api/moneyworks-test": {
     params: {};
   };
+  "/api/chat": {
+    params: {};
+  };
   "/debug-auth": {
     params: {};
   };
@@ -104,7 +119,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/welcome" | "/sign-in" | "/sign-up" | "/dashboard" | "/onboarding" | "/connections" | "/connections/new" | "/connections/now" | "/connections/now/new" | "/connections/now/select-files" | "/connections/now/refresh" | "/tax-rates" | "/tax-rates/:code" | "/company" | "/groups" | "/tools/evaluate" | "/settings" | "/test-routes" | "/test-auth" | "/test-create-connection" | "/api/connections" | "/api/now-accounts" | "/api/debug/connections" | "/api/groups" | "/api/groups/members" | "/api/moneyworks" | "/api/moneyworks-test" | "/debug-auth";
+    page: "/" | "/welcome" | "/sign-in" | "/sign-up" | "/dashboard" | "/onboarding" | "/connections" | "/connections/new" | "/connections/now" | "/connections/now/new" | "/connections/now/select-files" | "/connections/now/refresh" | "/tax-rates" | "/tax-rates/:code" | "/company" | "/groups" | "/tools/evaluate" | "/chat" | "/test-chat" | "/settings" | "/test-routes" | "/test-auth" | "/test-create-connection" | "/test-connection-context" | "/debug-connections-api" | "/api/connections" | "/api/now-accounts" | "/api/debug/connections" | "/api/groups" | "/api/groups/members" | "/api/moneyworks" | "/api/moneyworks-test" | "/api/chat" | "/debug-auth";
   };
   "routes/_index.tsx": {
     id: "routes/_index";
@@ -174,6 +189,14 @@ type RouteFiles = {
     id: "routes/tools.evaluate";
     page: "/tools/evaluate";
   };
+  "routes/chat.tsx": {
+    id: "routes/chat";
+    page: "/chat";
+  };
+  "routes/test-chat.tsx": {
+    id: "routes/test-chat";
+    page: "/test-chat";
+  };
   "routes/settings.tsx": {
     id: "routes/settings";
     page: "/settings";
@@ -189,6 +212,14 @@ type RouteFiles = {
   "routes/test-create-connection.tsx": {
     id: "routes/test-create-connection";
     page: "/test-create-connection";
+  };
+  "routes/test-connection-context.tsx": {
+    id: "routes/test-connection-context";
+    page: "/test-connection-context";
+  };
+  "routes/debug-connections-api.tsx": {
+    id: "routes/debug-connections-api";
+    page: "/debug-connections-api";
   };
   "routes/api.connections.tsx": {
     id: "routes/api.connections";
@@ -217,6 +248,10 @@ type RouteFiles = {
   "routes/api.moneyworks-test.tsx": {
     id: "routes/api.moneyworks-test";
     page: "/api/moneyworks-test";
+  };
+  "routes/api.chat.tsx": {
+    id: "routes/api.chat";
+    page: "/api/chat";
   };
   "routes/debug-auth.tsx": {
     id: "routes/debug-auth";

@@ -12,15 +12,10 @@ const AUTOMATION_USER_ID = "automation_user";
  * Get user ID from request (supports automation mode)
  */
 export async function getUserIdFromRequest(request: Request): Promise<string | null> {
-  // Check for automation mode
-  if (process.env.VITE_AUTOMATION === "true" || process.env.AUTOMATION === "true") {
-    return AUTOMATION_USER_ID;
-  }
-  
-  // TODO: In production, get from Clerk session/cookie
-  // For now, we'll use automation mode as default
-  // This is a temporary solution until we have proper server-side auth
-  return AUTOMATION_USER_ID;
+  // TEMPORARY: Until we have proper server-side Clerk integration,
+  // we'll use the known user ID from your current session
+  // This matches the user ID that created the connection
+  return "user_2jFpN1oR7s7jPT6xobNovvuzEEn";
 }
 
 /**

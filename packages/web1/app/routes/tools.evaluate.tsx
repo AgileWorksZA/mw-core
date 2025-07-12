@@ -1,11 +1,12 @@
-import { type ActionFunctionArgs } from "react-router";
+import { type ActionFunctionArgs, data as json } from "react-router";
 import { Form, useActionData, useNavigation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { Navigation } from "~/components/navigation";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
-import { api } from "~/lib/api";
+import { AuthGuard } from "~/components/auth-guard";
+import { requireAuthAndConnection, createMoneyWorksClient } from "~/lib/server-utils";
 import {
   Play,
   Copy,
@@ -21,22 +22,37 @@ export async function action({ request }: ActionFunctionArgs) {
   const expression = formData.get("expression") as string;
 
   try {
-    const response = await api.evaluateExpression(expression);
-    return {
-      result: response.data || response,
+    const { userId, connection } = await requireAuthAndConnection(request);
+    const client = createMoneyWorksClient(connection);
+    
+    const result = await client.evaluate(expression);
+    
+    return json({
+      result,
       expression,
       error: null,
-    };
+    });
   } catch (error) {
-    return {
+    if (error instanceof Response) {
+      throw error;
+    }
+    return json({
       result: null,
       expression,
       error: error instanceof Error ? error.message : "Evaluation failed",
-    };
+    });
   }
 }
 
 export default function MWScriptEvaluator() {
+  return (
+    <AuthGuard requireConnection={true}>
+      <MWScriptEvaluatorContent />
+    </AuthGuard>
+  );
+}
+
+function MWScriptEvaluatorContent() {
   const { t } = useTranslation();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();

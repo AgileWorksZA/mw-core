@@ -529,17 +529,6 @@ function CompanyContent() {
           </Card>
         </div>
 
-        {/* Raw Data (for debugging) */}
-        {process.env.NODE_ENV === "development" && (
-          <details className="mt-8 rounded-lg border p-4">
-            <summary className="cursor-pointer text-sm font-medium">
-              Raw Company Data
-            </summary>
-            <pre className="mt-4 overflow-auto text-xs">
-              {JSON.stringify(company, null, 2)}
-            </pre>
-          </details>
-        )}
       </main>
     </>
   );

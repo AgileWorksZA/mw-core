@@ -88,7 +88,6 @@ export default function NewNowAccountPage() {
                 id="mw_now_password"
                 name="mw_now_password"
                 type="password"
-                required
                 disabled={isLoading}
               />
             </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "~/hooks/use-auth";
 import { AuthGuard } from "~/components/auth-guard";
@@ -22,10 +22,17 @@ export default function Onboarding() {
 function OnboardingContent() {
   const { userId } = useAuth();
   const navigate = useNavigate();
-  const { refreshConnections } = useConnection();
+  const { refreshConnections, connections, isLoading: isLoadingConnections } = useConnection();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Redirect to dashboard if user already has connections
+  useEffect(() => {
+    if (!isLoadingConnections && connections.length > 0) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isLoadingConnections, connections, navigate]);
   
   const [formData, setFormData] = useState({
     connection_name: "My MoneyWorks",

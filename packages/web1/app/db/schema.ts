@@ -58,6 +58,31 @@ export interface UserPreference {
   updated_at: string;
 }
 
+// Chat History Interfaces
+export interface ChatSession {
+  id: string;
+  connection_id: string;
+  clerk_user_id: string;
+  title: string;
+  summary?: string;
+  last_message_at?: string;
+  message_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  session_id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  // Store tool invocations and MW data as JSON
+  tool_invocations?: string;
+  mw_data?: string;
+  tokens_used?: number;
+  created_at: string;
+}
+
 // Company Grouping Interfaces
 export interface Organization {
   id: string;
@@ -360,4 +385,50 @@ CREATE INDEX IF NOT EXISTS idx_group_invitations_token ON group_invitations(toke
 CREATE INDEX IF NOT EXISTS idx_sync_log_group ON group_sync_log(group_id);
 CREATE INDEX IF NOT EXISTS idx_sync_log_status ON group_sync_log(status);
 -- Note: Index on mw_connections.organization_id will be created after migration
+
+-- =====================================================
+-- Chat History Schema
+-- =====================================================
+
+-- Chat sessions table - one per conversation thread
+CREATE TABLE IF NOT EXISTS chat_sessions (
+    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+    connection_id TEXT NOT NULL,
+    clerk_user_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    summary TEXT,
+    last_message_at DATETIME,
+    message_count INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (connection_id) REFERENCES mw_connections(id) ON DELETE CASCADE
+);
+
+-- Chat messages table - individual messages within a session
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+    session_id TEXT NOT NULL,
+    role TEXT NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    tool_invocations TEXT, -- JSON array of tool calls
+    mw_data TEXT, -- JSON for MoneyWorks data attachments
+    tokens_used INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES chat_sessions(id) ON DELETE CASCADE
+);
+
+-- Indexes for chat tables
+CREATE INDEX IF NOT EXISTS idx_chat_sessions_connection ON chat_sessions(connection_id);
+CREATE INDEX IF NOT EXISTS idx_chat_sessions_user ON chat_sessions(clerk_user_id);
+CREATE INDEX IF NOT EXISTS idx_chat_sessions_last_message ON chat_sessions(last_message_at DESC);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_session ON chat_messages(session_id);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_created ON chat_messages(created_at);
+
+-- Trigger to update chat session timestamp
+CREATE TRIGGER IF NOT EXISTS update_chat_sessions_timestamp
+AFTER UPDATE ON chat_sessions
+FOR EACH ROW
+BEGIN
+  UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
 `;

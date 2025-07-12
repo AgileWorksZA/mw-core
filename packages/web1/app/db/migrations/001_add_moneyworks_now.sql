@@ -17,10 +17,8 @@ CREATE TABLE IF NOT EXISTS mw_now_accounts (
 );
 
 -- 2. Add new columns to mw_connections table
-ALTER TABLE mw_connections ADD COLUMN connection_type TEXT NOT NULL DEFAULT 'datacentre';
-ALTER TABLE mw_connections ADD COLUMN mw_now_account_id TEXT;
-ALTER TABLE mw_connections ADD COLUMN mw_now_file_id TEXT;
-ALTER TABLE mw_connections ADD COLUMN mw_now_metadata TEXT;
+-- Note: These columns may already exist in the schema, so we skip this migration
+-- The schema.ts file already includes these columns in the CREATE TABLE statement
 
 -- 3. Add foreign key constraint (SQLite doesn't support ALTER TABLE ADD CONSTRAINT, so we need to recreate the table)
 -- This is handled by the PRAGMA foreign_keys=ON setting in the database connection

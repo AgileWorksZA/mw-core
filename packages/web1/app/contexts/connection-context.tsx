@@ -34,13 +34,24 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       setError(null);
       
-      const response = await fetch(`/api/connections?userId=${userId}`);
+      // Add timeout to fetch
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      const response = await fetch(`/api/connections?userId=${userId}`, {
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      console.log("[ConnectionContext] Response status:", response.status);
+      
       if (!response.ok) {
-        throw new Error("Failed to load connections");
+        const errorText = await response.text();
+        console.error("[ConnectionContext] Response error:", errorText);
+        throw new Error(`Failed to load connections: ${response.status} ${errorText}`);
       }
       
       const data = await response.json();
-      const userConnections = data.connections;
+      const userConnections = data.connections || [];
       console.log("[ConnectionContext] Loaded connections:", userConnections.length);
       setConnections(userConnections);
       
@@ -61,7 +72,9 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
         setCurrentConnection(defaultConnection || null);
       }
     } catch (err) {
+      console.error("[ConnectionContext] Error loading connections:", err);
       setError(err instanceof Error ? err.message : "Failed to load connections");
+      setConnections([]); // Ensure we have an empty array on error
     } finally {
       setIsLoading(false);
     }

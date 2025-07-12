@@ -30,7 +30,11 @@
       "@moneyworks/canonical/tax-rates": ["../canonical/src/entities/tax-rates/index.ts"],
       "@moneyworks/canonical/*": ["../canonical/src/*"],
       "@moneyworks/utilities": ["../utilities/src/index.ts"],
-      "@moneyworks/utilities/*": ["../utilities/src/*"]
+      "@moneyworks/utilities/*": ["../utilities/src/*"],
+      "@moneyworks/chat": ["../chat/src/index.ts"],
+      "@moneyworks/chat/client": ["../chat/src/client/index.ts"],
+      "@moneyworks/chat/server": ["../chat/src/server/index.ts"],
+      "@moneyworks/chat/*": ["../chat/src/*"]
     }
   }
 }

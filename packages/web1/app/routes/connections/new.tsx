@@ -227,7 +227,7 @@ function NewConnectionContent() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="mw_password">Password *</Label>
+                  <Label htmlFor="mw_password">Password</Label>
                   <Input
                     id="mw_password"
                     name="mw_password"
@@ -237,7 +237,6 @@ function NewConnectionContent() {
                     placeholder="MoneyWorks password"
                     className="mt-1"
                     autoComplete="current-password"
-                    required
                   />
                 </div>
               </div>

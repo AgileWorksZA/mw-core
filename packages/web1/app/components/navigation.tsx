@@ -2,7 +2,6 @@ import { NavLink, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { UserButton } from "@clerk/clerk-react";
 import {
-  Home,
   Receipt,
   Building2,
   FolderTree,
@@ -11,6 +10,7 @@ import {
   Moon,
   Sun,
   LogOut,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
@@ -66,7 +66,7 @@ export function Navigation() {
   };
 
   const navItems = [
-    { to: "/dashboard", label: t("nav.dashboard"), icon: Home },
+    { to: "/chat", label: "Assistant", icon: MessageSquare },
     { to: "/groups", label: "Groups", icon: FolderTree },
     { to: "/tax-rates", label: t("nav.taxRates"), icon: Receipt },
     { to: "/company", label: t("nav.company"), icon: Building2 },
@@ -78,7 +78,12 @@ export function Navigation() {
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
         <div className="mr-4 flex">
-          <span className="font-semibold">MoneyWorks</span>
+          <NavLink 
+            to="/dashboard" 
+            className="font-bold text-lg hover:text-primary transition-colors"
+          >
+            MoneyWorks
+          </NavLink>
         </div>
         <div className="flex flex-1 items-center space-x-6">
           {navItems.map((item) => (

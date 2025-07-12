@@ -1,11 +1,9 @@
-import { getDatabaseAsync } from "./client";
 import { readFileSync, readdirSync, existsSync } from "fs";
 import { join } from "path";
+import type { Database } from "bun:sqlite";
 
-export async function runMigrations() {
+export async function runMigrations(db: Database) {
   console.log("[Migration] Starting database migrations...");
-  
-  const db = await getDatabaseAsync();
   
   // Create migrations table if it doesn't exist
   db.exec(`
@@ -49,14 +47,48 @@ export async function runMigrations() {
       
       // Run migration in a transaction
       db.transaction(() => {
-        // Split by semicolons and run each statement
-        const statements = sql
-          .split(';')
-          .map(s => s.trim())
-          .filter(s => s.length > 0);
+        // Handle SQL statements - don't split triggers
+        const statements: string[] = [];
+        let currentStatement = '';
+        let inTrigger = false;
         
+        // Split by lines to detect triggers
+        const lines = sql.split('\n');
+        
+        for (const line of lines) {
+          const trimmedLine = line.trim().toUpperCase();
+          
+          // Check if we're starting a trigger
+          if (trimmedLine.includes('CREATE TRIGGER')) {
+            inTrigger = true;
+          }
+          
+          currentStatement += line + '\n';
+          
+          // Check if statement ends with semicolon
+          if (line.trim().endsWith(';')) {
+            // If we're in a trigger, check for END;
+            if (inTrigger && trimmedLine.endsWith('END;')) {
+              statements.push(currentStatement.trim());
+              currentStatement = '';
+              inTrigger = false;
+            } else if (!inTrigger) {
+              statements.push(currentStatement.trim());
+              currentStatement = '';
+            }
+          }
+        }
+        
+        // Add any remaining statement
+        if (currentStatement.trim()) {
+          statements.push(currentStatement.trim());
+        }
+        
+        // Execute each statement
         for (const statement of statements) {
-          db.exec(statement);
+          if (statement.length > 0 && !statement.startsWith('--')) {
+            db.exec(statement);
+          }
         }
         
         // Record migration
@@ -77,5 +109,9 @@ export async function runMigrations() {
 
 // Run migrations on import if this is the main module
 if (import.meta.main) {
-  runMigrations().catch(console.error);
+  import("./client").then(({ getDatabaseAsync }) => {
+    getDatabaseAsync().then(db => {
+      runMigrations(db).catch(console.error);
+    });
+  });
 }

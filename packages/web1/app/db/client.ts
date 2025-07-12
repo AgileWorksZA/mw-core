@@ -138,7 +138,7 @@ async function initDatabase() {
   
   // Run migrations
   const { runMigrations } = await import("./migrate");
-  await runMigrations();
+  await runMigrations(db);
   
   // Set WAL mode for better concurrency
   db.exec("PRAGMA journal_mode = WAL");
