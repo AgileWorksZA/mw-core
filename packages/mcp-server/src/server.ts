@@ -17,13 +17,14 @@ import {
 	createSmartClient,
 	loadConfig,
 } from "@moneyworks/data";
-import { moneyworksDocsResource } from "./resources/moneyworks-docs.ts";
+import { moneyworksDocsResource } from "./resources/moneyworks-docs";
 import {
 	evalTool,
 	exportTool,
 	listTablesTool,
 	schemaTool,
-} from "./tools/index.ts";
+	companyInfoTool,
+} from "./tools/index";
 
 export class MoneyWorksMCPServer {
 	private server: Server;
@@ -66,6 +67,7 @@ export class MoneyWorksMCPServer {
 					evalTool.definition,
 					schemaTool.definition,
 					listTablesTool.definition,
+					companyInfoTool.definition,
 				],
 			}),
 		);
@@ -89,6 +91,9 @@ export class MoneyWorksMCPServer {
 
 					case "mw_list_tables":
 						return await listTablesTool.handler(client, args as any);
+
+					case "mw_company_info":
+						return await companyInfoTool.handler(client, args as any);
 
 					default:
 						throw new Error(`Unknown tool: ${name}`);

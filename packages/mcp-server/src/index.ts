@@ -6,7 +6,7 @@
  * @moneyworks-dsl PURE
  */
 
-import { startServer } from "./server.ts";
+import { startServer } from "./server";
 
 // Handle graceful shutdown
 process.on("SIGINT", () => {
