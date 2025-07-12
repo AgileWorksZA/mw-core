@@ -19,6 +19,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   
   console.log("[TEST-CHAT] Loading chat page...");
   
+  // Check if we should force a new session
+  const url = new URL(request.url);
+  const forceNew = url.searchParams.has('new');
+  
   // Ensure test connection exists
   try {
     db.prepare(`
@@ -37,7 +41,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
   
   // Get or create a chat session
-  const session = await ChatService.getOrCreateSession(connectionId, userId);
+  let session;
+  if (forceNew) {
+    // Force create a new session
+    session = await ChatService.createSession(connectionId, userId);
+  } else {
+    session = await ChatService.getOrCreateSession(connectionId, userId);
+  }
   
   // Load existing messages for the session
   const messages = await ChatService.getSessionMessages(session.id);
@@ -91,7 +101,9 @@ What would you like to test?`;
             <h2 className="font-semibold mb-4">Chat History</h2>
             <Button 
               className="w-full mb-4"
-              onClick={() => window.location.reload()} // Simple new chat for now
+              onClick={() => {
+                window.location.href = `/test-chat?new=${Date.now()}`;
+              }}
             >
               <Plus className="mr-2 h-4 w-4" />
               New Chat

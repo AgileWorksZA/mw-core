@@ -20,6 +20,7 @@ export default [
   route("groups", "routes/groups.tsx"),
   route("tools/evaluate", "routes/tools.evaluate.tsx"),
   route("chat", "routes/chat.tsx"),
+  route("chat/:sessionId", "routes/chat.$sessionId.tsx"),
   route("test-chat", "routes/test-chat.tsx"),
   route("settings", "routes/settings.tsx"),
   route("test-routes", "routes/test-routes.tsx"),
@@ -35,5 +36,6 @@ export default [
   route("api/moneyworks", "routes/api.moneyworks.tsx"),
   route("api/moneyworks-test", "routes/api.moneyworks-test.tsx"),
   route("api/chat", "routes/api.chat.tsx"),
+  route("api/chat/clear", "routes/api.chat.clear.tsx"),
   route("debug-auth", "routes/debug-auth.tsx"),
 ] satisfies RouteConfig;

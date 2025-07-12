@@ -3,7 +3,7 @@
  */
 
 import { connectionService } from "~/services/connections";
-import { SmartMoneyWorksClient } from "@moneyworks/data";
+import { createMoneyWorksClient } from "@moneyworks/data";
 import type { MWConnection } from "~/db/schema";
 
 const AUTOMATION_USER_ID = "automation_user";
@@ -40,28 +40,16 @@ export async function getCurrentConnection(
 }
 
 /**
- * Create MoneyWorks client from connection
+ * Create MoneyWorks client and repositories from connection
  */
-export function createMoneyWorksClient(connection: MWConnection): SmartMoneyWorksClient {
-  const config: any = {
-    host: connection.mw_host,
-    port: connection.mw_port,
-    dataFile: connection.mw_data_file,
-    username: connection.mw_username,
-    password: connection.mw_password,
-    debug: false
-  };
-  
-  // Add folder auth if present
-  if (connection.mw_folder_name && connection.mw_folder_password) {
-    config.folderAuth = {
-      folderName: connection.mw_folder_name,
-      folderPassword: connection.mw_folder_password
-    };
-  }
-  
-  return new SmartMoneyWorksClient(config);
+export function createMoneyWorksClientWithRepositories(connection: MWConnection) {
+  return createMoneyWorksClient(connection);
 }
+
+/**
+ * Re-export createMoneyWorksClient for convenience
+ */
+export { createMoneyWorksClient };
 
 /**
  * Require authentication and connection

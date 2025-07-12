@@ -51,7 +51,7 @@ interface LoaderData {
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const { userId, connection } = await requireAuthAndConnection(request);
-    const client = createMoneyWorksClient(connection);
+    const { client } = createMoneyWorksClient(connection);
     
     // Parse URL search params for filtering/sorting
     const url = new URL(request.url);

@@ -46,6 +46,7 @@ export async function action({ request }: ActionFunctionArgs) {
       folderPassword: connection.mw_folder_password
     } : undefined
   };
+  
 
   // Create chat context
   const chatContext: MoneyWorksChatContext = {

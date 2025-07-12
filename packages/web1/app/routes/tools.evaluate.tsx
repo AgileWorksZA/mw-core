@@ -23,7 +23,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   try {
     const { userId, connection } = await requireAuthAndConnection(request);
-    const client = createMoneyWorksClient(connection);
+    const { client } = createMoneyWorksClient(connection);
     
     const result = await client.evaluate(expression);
     

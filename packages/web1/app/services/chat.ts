@@ -17,12 +17,18 @@ export class ChatService {
     
     const sessionTitle = title || `Chat - ${new Date().toLocaleDateString()}`;
     
-    db.prepare(`
-      INSERT INTO chat_sessions (
-        id, connection_id, clerk_user_id, title,
-        created_at, updated_at, message_count
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
-    `).run(id, connectionId, userId, sessionTitle, now, now, 0);
+    try {
+      db.prepare(`
+        INSERT INTO chat_sessions (
+          id, connection_id, clerk_user_id, title,
+          created_at, updated_at, message_count
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+      `).run(id, connectionId, userId, sessionTitle, now, now, 0);
+      console.log(`[ChatService] Created session ${id} for connection ${connectionId}`);
+    } catch (error) {
+      console.error('[ChatService] Error creating session:', error);
+      throw error;
+    }
     
     return {
       id,

@@ -19,7 +19,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { data as json, type LoaderFunctionArgs, useLoaderData } from "react-router";
-import { requireAuthAndConnection, createMoneyWorksClient } from "~/lib/server-utils";
+import { requireAuthAndConnection, createMoneyWorksClientWithRepositories } from "~/lib/server-utils";
 
 interface CompanyData {
   Company?: {
@@ -85,108 +85,20 @@ interface LoaderData {
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const { userId, connection } = await requireAuthAndConnection(request);
-    const client = createMoneyWorksClient(connection);
+    const { repositories } = createMoneyWorksClientWithRepositories(connection);
     
-    // Fetch only fields that are confirmed to exist in MoneyWorks
-    const allFields = [
-      // Basic Information (confirmed fields)
-      "Name", "Address1", "Address2", "Address3", "Address4",
-      "Phone", "Fax", "Email", "WebURL",
-      
-      // Tax & Legal (confirmed fields)
-      "GstNum",
-      
-      // Accounting Periods (confirmed fields)
-      "PeriodsInYear", "CurrentPer",
-      
-      // Currency & Settings (confirmed fields)
-      "BaseCurrency", "MultiCurrencyEnabled", "ExtendedJobCosting",
-      
-      // System Information (confirmed fields)
-      "Version", "Locale",
-      
-      // GST/Tax Settings (confirmed fields)
-      "GSTCycleMonths"
-    ];
+    // Use the company information repository
+    const companyData = await repositories.companyInformation.getCompanyInformation();
     
-    // Fetch fields in batches to avoid expression length limits
-    const batchSize = 15;
-    const companyData: any = {};
-    const errors: string[] = [];
-    
-    for (let i = 0; i < allFields.length; i += batchSize) {
-      const batchFields = allFields.slice(i, i + batchSize);
-      const expression = `ConcatAllWith("\\t", ${batchFields.join(", ")})`;
-      
-      try {
-        console.log(`[Company Loader] Fetching batch ${Math.floor(i/batchSize) + 1}:`, batchFields);
-        const response = await client.evaluate(expression);
-        
-        if (response && typeof response === 'string') {
-          const values = response.split("\t");
-          batchFields.forEach((field, index) => {
-            const value = values[index];
-            if (value !== undefined && value !== null && value !== "") {
-              // Map fields and convert types
-              if (field === "PeriodsInYear") {
-                companyData["PeriodLength"] = parseInt(value) || 12;
-                companyData["PeriodsInYear"] = parseInt(value) || 12;
-              } else if (field === "CurrentPer") {
-                companyData["CurrentPeriod"] = parseInt(value) || 0;
-                companyData["CurrentPer"] = parseInt(value) || 0;
-              } else if (field === "WebURL") {
-                companyData["Web"] = value;
-                companyData["WebURL"] = value;
-              } else if (field === "GstNum") {
-                companyData["TaxNumber"] = value;
-                companyData["GstNum"] = value;
-              } else if (field === "MultiCurrencyEnabled" || field === "ExtendedJobCosting" || field === "GSTEnabled" || field === "GSTCashBasis") {
-                // Boolean fields
-                companyData[field] = value === "true" || value === "1";
-              } else if (field === "GSTCycleMonths") {
-                companyData[field] = parseInt(value) || 0;
-              } else {
-                companyData[field] = value;
-              }
-            }
-          });
-        }
-      } catch (err) {
-        // Some fields might not exist, continue with others
-        console.warn(`[Company Loader] Failed to fetch batch:`, err);
-        errors.push(`Some fields in batch ${Math.floor(i/batchSize) + 1} could not be fetched`);
-      }
-    }
-    
-    // Try to get additional individual fields
-    const additionalFields = [
-      { expr: "Version", field: "Version" },
-      { expr: "Date()", field: "CurrentDate" },
-      { expr: "Time()", field: "CurrentTime" },
-      { expr: "MonthName(CurrentPer)", field: "CurrentPeriodName" },
-      { expr: "Year(Date())", field: "CurrentYear" }
-    ];
-    
-    for (const { expr, field } of additionalFields) {
-      try {
-        const value = await client.evaluate(expr);
-        if (value) {
-          companyData[field] = value;
-        }
-      } catch (err) {
-        console.warn(`[Company Loader] Could not fetch ${field}`);
-      }
-    }
+    console.log("[Company Loader] Company data from repository:", companyData);
     
     // If we got no data at all, show an error
     if (Object.keys(companyData).length === 0) {
       throw new Error("Unable to fetch any company information");
     }
     
-    console.log("[Company Loader] Final company data:", companyData);
-    
     return json<LoaderData>({ 
-      company: { Company: companyData, errors },
+      company: { Company: companyData },
       connectionId: connection.id
     });
     
