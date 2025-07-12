@@ -10,6 +10,7 @@ import {
   getAccountSchema,
   searchNamesSchema,
   runReportSchema,
+  getCompanyInfoSchema,
   MoneyWorksTools
 } from '../shared/types/tools';
 
@@ -158,6 +159,61 @@ export function createMoneyWorksTools(
           }
         } catch (error) {
           throw new Error(`Failed to generate report: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
+    }),
+
+    [MoneyWorksTools.GET_COMPANY_INFO]: tool({
+      description: 'Get comprehensive company information from MoneyWorks',
+      parameters: getCompanyInfoSchema,
+      execute: async () => {
+        try {
+          const { CompanyInformationRepository } = await import('@moneyworks/data');
+          const repository = new CompanyInformationRepository(client);
+          const companyData = await repository.getCompanyInformation();
+          
+          // Return structured data that's easy for the AI to work with
+          return {
+            company: companyData,
+            summary: {
+              name: companyData.Name || 'Not specified',
+              address: [
+                companyData.Address1,
+                companyData.Address2,
+                companyData.Address3,
+                companyData.Address4,
+                companyData.State,
+                companyData.PostCode
+              ].filter(Boolean).join(', ') || 'Not specified',
+              contact: {
+                phone: companyData.Phone || 'Not specified',
+                mobile: companyData.Mobile,
+                fax: companyData.Fax,
+                email: companyData.Email,
+                website: companyData.WebURL
+              },
+              tax: {
+                gstNumber: companyData.GstNum,
+                registrationNumber: companyData.RegNum,
+                taxName: companyData.TaxName,
+                gstCycle: companyData.GSTCycleMonths ? `${companyData.GSTCycleMonths} months` : undefined
+              },
+              accounting: {
+                currentPeriod: companyData.CurrentPer,
+                periodsInYear: companyData.PeriodsInYear,
+                baseCurrency: companyData.BaseCurrency,
+                multiCurrency: companyData.MultiCurrencyEnabled,
+                extendedJobCosting: companyData.ExtendedJobCosting
+              },
+              system: {
+                version: companyData.Version,
+                locale: companyData.Locale,
+                localeName: companyData.LocaleFriendlyName
+              }
+            }
+          };
+        } catch (error) {
+          throw new Error(`Failed to fetch company information: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
     }),

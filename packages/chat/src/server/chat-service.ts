@@ -39,6 +39,8 @@ export class MoneyWorksChatService {
         tools,
         maxTokens: this.config.maxTokens || 16384,
         temperature: 0.7,
+        toolChoice: 'auto', // Explicitly allow the model to choose when to use tools
+        maxSteps: 3 // Enable multi-step generation to allow text after tool calls
       });
 
       // Use fullStream which includes both text and tool calls
@@ -103,10 +105,10 @@ export class MoneyWorksChatService {
   }
 
   private detectMWDataType(toolName: string): any | null {
-    const typeMap: Record<string, MoneyWorksDataAttachment['type']> = {
+    const typeMap: Record<string, any> = {
       'getTransactions': 'transaction',
       'getTaxRate': 'taxRate',
-      'listTaxRates': 'taxRate',
+      'listTaxRates': null, // Don't attach structured data for list of tax rates
       'getAccount': 'account',
       'searchNames': 'name',
       'runReport': 'report',

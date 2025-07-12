@@ -16,6 +16,7 @@ export interface MoneyWorksChatProps {
   placeholder?: string;
   welcomeMessage?: string;
   initialMessages?: MoneyWorksMessage[];
+  onMessagesChange?: (messages: MoneyWorksMessage[]) => void;
 }
 
 export function MoneyWorksChat({
@@ -25,7 +26,8 @@ export function MoneyWorksChat({
   showHeader = true,
   placeholder = "Ask about transactions, tax rates, or financial reports...",
   welcomeMessage,
-  initialMessages = []
+  initialMessages = [],
+  onMessagesChange
 }: MoneyWorksChatProps) {
   const {
     messages,
@@ -57,6 +59,11 @@ export function MoneyWorksChat({
     }
   }, [messages]);
 
+  // Notify parent of messages changes
+  useEffect(() => {
+    onMessagesChange?.(messages);
+  }, [messages, onMessagesChange]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !isLoading) {
@@ -71,19 +78,20 @@ export function MoneyWorksChat({
 
   return (
     <div className={cn(
-      "flex flex-col h-full bg-white rounded-lg shadow-sm border",
+      "flex flex-col h-full bg-white",
       className
     )}>
       {showHeader && (
         <ChatHeader 
           onClear={clearMessages}
           messagesCount={messages.length}
+          messages={messages}
         />
       )}
 
       <div 
         ref={scrollAreaRef}
-        className="flex-1 overflow-y-auto px-4 py-6"
+        className="flex-1 overflow-y-auto px-6 py-8 bg-gradient-to-b from-gray-50/30 to-white"
       >
         <MessageList 
           messages={messages}
@@ -99,7 +107,7 @@ export function MoneyWorksChat({
         )}
       </div>
 
-      <div className="border-t px-4 py-4 space-y-3">
+      <div className="border-t px-6 py-6 space-y-4 bg-gray-50/50">
         {showQuickActions && messages.length === 1 && (
           <QuickActions onAction={handleQuickAction} />
         )}

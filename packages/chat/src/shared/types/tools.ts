@@ -42,6 +42,10 @@ export const runReportSchema = z.object({
   dateTo: z.string().optional(),
 });
 
+export const getCompanyInfoSchema = z.object({
+  // No parameters needed - retrieves company info for current connection
+});
+
 // Tool names enum for type safety
 export enum MoneyWorksTools {
   GET_TRANSACTIONS = 'getTransactions',
@@ -50,6 +54,7 @@ export enum MoneyWorksTools {
   GET_ACCOUNT = 'getAccount',
   SEARCH_NAMES = 'searchNames',
   RUN_REPORT = 'runReport',
+  GET_COMPANY_INFO = 'getCompanyInfo',
   EVALUATE_EXPRESSION = 'evaluateExpression',
 }
 
@@ -61,4 +66,5 @@ export type ToolSchemas = {
   [MoneyWorksTools.GET_ACCOUNT]: typeof getAccountSchema;
   [MoneyWorksTools.SEARCH_NAMES]: typeof searchNamesSchema;
   [MoneyWorksTools.RUN_REPORT]: typeof runReportSchema;
+  [MoneyWorksTools.GET_COMPANY_INFO]: typeof getCompanyInfoSchema;
 };
