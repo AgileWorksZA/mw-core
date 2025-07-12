@@ -9,6 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/docs" />
       <excludeFolder url="file://$MODULE_DIR$/mirror" />
       <excludeFolder url="file://$MODULE_DIR$/packages/documentation/.react-router" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/web1/.react-router" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

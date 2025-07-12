@@ -15,7 +15,7 @@ async function main() {
     
     // Play system notification sound
     // Using macOS built-in sounds
-    const soundFile = "/System/Library/Sounds/Hero.aiff";
+    const soundFile = "/System/Library/Sounds/Pop.aiff";
     
     spawn("afplay", [soundFile], { detached: true }).unref();
     

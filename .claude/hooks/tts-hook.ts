@@ -1,3 +1,5 @@
+#!/Users/hgeldenhuys/.bun/bin/bun
+
 import {ElevenLabsClient} from "@elevenlabs/elevenlabs-js";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
@@ -189,7 +191,7 @@ async function playSessionSummary() {
       "Bj9UqZbhQsanLzgalpEG",
       {
         text: summary,
-        modelId: "eleven_flash_v2_5",
+        modelId: "eleven_ttv_v3",
         voiceSettings: {
           stability: 0.7,
           similarityBoost: 0.8
