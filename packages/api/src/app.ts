@@ -120,7 +120,7 @@ All errors follow a consistent format with error code, message, details, and req
           { name: 'I18n', description: 'Internationalization and labels' }
         ],
         servers: [
-          { url: 'http://localhost:3000', description: 'Local development server' }
+          { url: 'http://localhost:3002', description: 'Local development server' }
         ]
       },
       path: '/swagger',
