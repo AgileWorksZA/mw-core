@@ -263,7 +263,17 @@
       "mcp__ajv_Docs__search_ajv_documentation",
       "Bash(echo:*)",
       "Bash(claude doctor)",
-      "Bash(ffmpeg:*)"
+      "Bash(ffmpeg:*)",
+      "mcp__moneyworks__mw_get_suppliers",
+      "mcp__moneyworks__mw_search_names",
+      "WebFetch(domain:localhost)",
+      "Bash(vm_stat:*)",
+      "Bash(npx react-router:*)",
+      "Bash(react-router dev:*)",
+      "Bash(ulimit:*)",
+      "Bash(gtimeout:*)",
+      "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/node_modules/.bin/react-router dev)",
+      "Bash(declare -f)"
     ],
     "deny": []
   }

@@ -21,10 +21,12 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: globalStyles },
 ];
 
-export async function loader(args: LoaderFunctionArgs) {
-  // For now, just return empty object
-  // We'll handle auth state client-side with Clerk
-  return {};
+export async function loader({ request }: LoaderFunctionArgs) {
+  // For now, just return the publishable key
+  // We'll handle auth in individual routes
+  return {
+    publishableKey: process.env.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+  };
 }
 
 const queryClient = new QueryClient({
@@ -55,42 +57,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const isAutomation = import.meta.env.VITE_AUTOMATION === "true";
   const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
   
-  // In automation mode, we bypass Clerk authentication
-  if (!isAutomation && !clerkPublishableKey) {
+  if (!clerkPublishableKey) {
     throw new Error("Missing VITE_CLERK_PUBLISHABLE_KEY");
-  }
-  
-  const appContent = (
-    <QueryClientProvider client={queryClient}>
-      <I18nextProvider i18n={i18n}>
-        <ConnectionProvider>
-          <div className="min-h-screen bg-background">
-            <Outlet />
-          </div>
-          <Toaster position="bottom-right" />
-        </ConnectionProvider>
-      </I18nextProvider>
-    </QueryClientProvider>
-  );
-  
-  // In automation mode, skip Clerk provider entirely
-  if (isAutomation) {
-    return appContent;
   }
   
   return (
     <ClerkProvider 
-      publishableKey={clerkPublishableKey!}
+      publishableKey={clerkPublishableKey}
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
       signInFallbackRedirectUrl="/dashboard"
       signUpFallbackRedirectUrl="/dashboard"
       afterSignOutUrl="/sign-in"
     >
-      {appContent}
+      <QueryClientProvider client={queryClient}>
+        <I18nextProvider i18n={i18n}>
+          <ConnectionProvider>
+            <div className="min-h-screen bg-background">
+              <Outlet />
+            </div>
+            <Toaster position="bottom-right" />
+          </ConnectionProvider>
+        </I18nextProvider>
+      </QueryClientProvider>
     </ClerkProvider>
   );
 }

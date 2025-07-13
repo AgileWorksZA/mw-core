@@ -488,7 +488,7 @@ export interface AccountSituation {
 export interface ContextualHelp {
   help: string;                     // Contextual guidance
   relatedAccounts: string[];        // Related account codes
-  documentation: string[];          // Relevant docs
+  documentation: string[];          // Relevant notes
   examples: string[];               // Usage examples
 }
 

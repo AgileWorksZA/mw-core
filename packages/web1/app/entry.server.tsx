@@ -9,6 +9,7 @@ import { PassThrough } from "node:stream";
 import { createReadableStreamFromReadable } from "@react-router/node";
 import { ServerRouter } from "react-router";
 import { renderToPipeableStream } from "react-dom/server";
+import { createClerkClient } from "@clerk/react-router/ssr.server";
 
 const ABORT_DELAY = 5_000;
 

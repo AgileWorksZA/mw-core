@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "bun --bun run react-router dev",
+    "dev": "react-router dev",
     "build": "react-router build",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.17.2",
+    "@clerk/react-router": "^1.7.0",
     "@moneyworks/chat": "workspace:*",
     "@moneyworks/data": "workspace:*",
     "@radix-ui/react-checkbox": "^1.0.4",

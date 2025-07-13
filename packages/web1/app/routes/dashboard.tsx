@@ -73,7 +73,7 @@ function DashboardContent() {
         </div>
 
         {!hasConnections && !isLoading && (
-          <Alert className="mb-6 border-orange-200 bg-orange-50">
+          <Alert className="mb-6 border-orange-200 bg-orange-50 dark:border-orange-900 dark:bg-orange-900/20 items-center justify-between">
             <Database className="h-4 w-4" />
             <AlertDescription className="flex items-center justify-between">
               <span>

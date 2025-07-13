@@ -6,7 +6,7 @@
 
 export const moneyworksDocsResource = {
 	definition: {
-		uri: "moneyworks://docs/overview",
+		uri: "moneyworks://notes/overview",
 		name: "MoneyWorks DSL Documentation",
 		description: "Core concepts and canonical DSL for MoneyWorks development",
 		mimeType: "text/markdown",
@@ -112,7 +112,7 @@ Each entity will be added to the MCP server as it completes the vetting process.
 		return {
 			contents: [
 				{
-					uri: "moneyworks://docs/overview",
+					uri: "moneyworks://notes/overview",
 					mimeType: "text/markdown",
 					text: content,
 				},

@@ -499,7 +499,7 @@ export interface BusinessSituation {
 export interface ContextualHelp {
   help: string;                     // Contextual guidance
   relatedActions: string[];         // Available actions
-  documentation: string[];          // Relevant docs
+  documentation: string[];          // Relevant notes
   examples: string[];               // Usage examples
 }
 

@@ -3,6 +3,7 @@ import { requireAuthAndConnection } from "~/lib/server-utils";
 import { createChatStreamHandler, createSSEResponse } from "@moneyworks/chat/server";
 import type { ChatRequest, MoneyWorksChatContext, MoneyWorksMessage, StreamingChunk } from "@moneyworks/chat";
 import { ChatService } from "~/services/chat";
+import { createMockMoneyWorksClient } from "~/services/mock-moneyworks";
 
 // This handler will be created per request with the proper config
 
@@ -34,18 +35,30 @@ export async function action({ request }: ActionFunctionArgs) {
   const requestJson = formData.get('request') as string;
   const chatRequest: ChatRequest = JSON.parse(requestJson);
 
+  // Check if this is a mock connection (encrypted test data)
+  const isMockConnection = connection.mw_username === 'encrypted-username' || 
+                          connection.mw_password === 'encrypted-password' ||
+                          connection.mw_data_file === 'encrypted-datafile';
+
   // Create MoneyWorks client config
-  const mwClientConfig = {
-    host: connection.mw_host,
-    port: connection.mw_port,
-    dataFile: connection.mw_data_file,
-    username: connection.mw_username,
-    password: connection.mw_password,
-    folderAuth: connection.mw_folder_name ? {
-      folderName: connection.mw_folder_name,
-      folderPassword: connection.mw_folder_password
-    } : undefined
-  };
+  let mwClientConfig;
+  if (isMockConnection) {
+    // Use mock client for test connections
+    console.log("[API CHAT] Using mock MoneyWorks client for test connection");
+    mwClientConfig = createMockMoneyWorksClient();
+  } else {
+    mwClientConfig = {
+      host: connection.mw_host,
+      port: connection.mw_port,
+      dataFile: connection.mw_data_file,
+      username: connection.mw_username,
+      password: connection.mw_password,
+      folderAuth: connection.mw_folder_name ? {
+        folderName: connection.mw_folder_name,
+        folderPassword: connection.mw_folder_password
+      } : undefined
+    };
+  }
   
 
   // Create chat context

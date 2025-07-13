@@ -1,10 +1,9 @@
-import { UserButton, useClerk } from "@clerk/clerk-react";
+import { UserButton } from "@clerk/clerk-react";
 import {
 	Building2,
 	Calculator,
 	ChevronDown,
 	FolderTree,
-	LogOut,
 	MessageSquare,
 	Moon,
 	Receipt,
@@ -30,9 +29,6 @@ import { cn } from "~/lib/utils";
 export function Navigation() {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const isAutomation = import.meta.env.VITE_AUTOMATION === "true";
-	// Only use Clerk hooks when not in automation mode
-	const { signOut: clerkSignOut } = isAutomation ? { signOut: null } : useClerk();
 	const [theme, setTheme] = useState<"light" | "dark">("light");
 
 	useEffect(() => {
@@ -53,29 +49,6 @@ export function Navigation() {
 		document.documentElement.classList.toggle("dark", newTheme === "dark");
 	};
 
-	const handleLogout = async () => {
-		try {
-			if (isAutomation) {
-				// In automation mode, set a flag and redirect to sign-in
-				if (typeof window !== "undefined") {
-					sessionStorage.setItem("isLoggedOut", "true");
-					// Use window.location for a clean navigation
-					window.location.href = "/sign-in";
-				}
-			} else {
-				// Use Clerk's signOut with redirect
-				if (clerkSignOut) {
-					await clerkSignOut({ redirectUrl: "/sign-in" });
-				}
-			}
-		} catch (error) {
-			console.error("Logout error:", error);
-			// Fallback to window navigation
-			if (typeof window !== "undefined") {
-				window.location.href = "/sign-in";
-			}
-		}
-	};
 
 	const navItems = [
 		{ to: "/chat", label: "Assistant", icon: MessageSquare },
@@ -170,19 +143,7 @@ export function Navigation() {
 							<Moon className="h-4 w-4" />
 						)}
 					</Button>
-					{isAutomation ? (
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={handleLogout}
-							className="h-9 w-9"
-							title="Logout"
-						>
-							<LogOut className="h-4 w-4" />
-						</Button>
-					) : (
-						<UserButton afterSignOutUrl="/sign-in" />
-					)}
+					<UserButton afterSignOutUrl="/sign-in" />
 				</div>
 			</div>
 		</nav>

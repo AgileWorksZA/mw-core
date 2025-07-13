@@ -8,6 +8,7 @@ export default defineConfig({
   ssr: {
     noExternal: [
       "@clerk/clerk-react",
+      "@clerk/react-router",
       "@moneyworks/data",
       "@moneyworks/canonical",
       "@moneyworks/utilities",

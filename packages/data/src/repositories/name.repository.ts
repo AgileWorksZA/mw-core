@@ -120,6 +120,74 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 		search?: string,
 		params?: MoneyWorksQueryParams,
 	): Promise<MoneyWorksName[]> {
+		// Check if we're in mock mode
+		if (process.env.MONEYWORKS_MOCK_MODE === 'true') {
+			console.log("[NameRepository] Using mock mode for search:", search);
+			
+			// Return mock supplier data if search indicates suppliers
+			if (search?.toLowerCase().includes('supplier') || 
+			    search?.toLowerCase().includes('creditor') ||
+			    params?.filter?.toLowerCase().includes('supplier')) {
+				const mockSuppliers = [
+					{
+						Code: "SUP001",
+						Name: "Acme Supplies Ltd",
+						Phone: "+1 555-0100",
+						Email: "orders@acmesupplies.com",
+						CustomerType: 0,
+						SupplierType: 1,
+						Kind: 1,
+						Hold: false
+					},
+					{
+						Code: "SUP002", 
+						Name: "Global Materials Inc",
+						Phone: "+1 555-0200",
+						Email: "sales@globalmaterials.com",
+						CustomerType: 0,
+						SupplierType: 1,
+						Kind: 1,
+						Hold: false
+					},
+					{
+						Code: "SUP003",
+						Name: "Premium Parts Co",
+						Phone: "+1 555-0300",
+						Email: "info@premiumparts.com",
+						CustomerType: 0,
+						SupplierType: 1,
+						Kind: 1,
+						Hold: false
+					},
+					{
+						Code: "CRED001",
+						Name: "Tech Solutions Provider",
+						Phone: "+1 555-0400",
+						Email: "billing@techsolutions.com",
+						CustomerType: 0,
+						SupplierType: 2,
+						Kind: 1,
+						Hold: false
+					},
+					{
+						Code: "CRED002",
+						Name: "Office Essentials Direct",
+						Phone: "+1 555-0500",
+						Email: "accounts@officeessentials.com",
+						CustomerType: 0,
+						SupplierType: 2,
+						Kind: 1,
+						Hold: false
+					}
+				];
+				
+				return mockSuppliers.map((record) => this.postProcess(record));
+			}
+			
+			// Return empty array for other searches in mock mode
+			return [];
+		}
+		
 		// Use smartExport which returns objects by default
 		const result = await this.client.smartExport(this.tableName, {
 			search,

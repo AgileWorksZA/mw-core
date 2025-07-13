@@ -14,11 +14,6 @@ export function AuthGuard({ children, requireConnection = false }: AuthGuardProp
   const location = useLocation();
   const { connections, isLoading: isLoadingConnections } = useConnection();
   
-  // Check if we're in automation mode and user just logged out
-  const isAutomation = import.meta.env.VITE_AUTOMATION === "true";
-  const isLoggedOut = typeof window !== "undefined" ? 
-    sessionStorage.getItem("isLoggedOut") === "true" : false;
-  
   // Show loading state while Clerk is loading
   if (!isLoaded) {
     return (
@@ -31,21 +26,9 @@ export function AuthGuard({ children, requireConnection = false }: AuthGuardProp
     );
   }
   
-  // Redirect to sign-in if not authenticated (but not if user just logged out)
+  // Redirect to sign-in if not authenticated
   if (!isSignedIn) {
-    // In automation mode, if user is logged out and on sign-in page, let them stay
-    if (isAutomation && isLoggedOut && location.pathname === "/sign-in") {
-      // Let them stay on sign-in page, don't redirect
-      return <>{children}</>;
-    }
-    // In automation mode, if user is logged out, redirect to sign-in
-    if (isAutomation && isLoggedOut && location.pathname !== "/sign-in") {
-      return <Navigate to="/sign-in" state={{ from: location }} replace />;
-    }
-    // Normal mode or not logged out - redirect to sign-in
-    if (!isAutomation) {
-      return <Navigate to="/sign-in" state={{ from: location }} replace />;
-    }
+    return <Navigate to="/sign-in" state={{ from: location }} replace />;
   }
   
   // Show loading state while connections are loading
