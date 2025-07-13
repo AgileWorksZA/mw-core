@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 
 import { spawn } from "node:child_process";
+import * as fs from "node:fs/promises";
 
 async function main() {
   try {
@@ -9,6 +10,11 @@ async function main() {
     for await (const chunk of process.stdin) {
       input += chunk;
     }
+
+    if (!(await fs.exists('./temp'))) {
+      await fs.mkdir('./temp');
+    }
+    await fs.writeFile(`./temp/post-tool-${Date.now()}.json`, input);
     
     const data = JSON.parse(input);
     console.error(`Notification hook received: ${data.type}`);

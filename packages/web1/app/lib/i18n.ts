@@ -25,6 +25,7 @@ const resources = {
         company: "Company",
         tools: "Tools",
         settings: "Settings",
+        accounting: "Accounting",
       },
       taxRates: {
         title: "Tax Rates",
@@ -77,6 +78,7 @@ const resources = {
         company: "Maatskappy",
         tools: "Gereedskap",
         settings: "Instellings",
+        accounting: "Rekeningkunde",
       },
       taxRates: {
         title: "Belastingkoerse",
@@ -128,6 +130,7 @@ const resources = {
         company: "Entreprise",
         tools: "Outils",
         settings: "Paramètres",
+        accounting: "Comptabilité",
       },
       taxRates: {
         title: "Taux de taxe",

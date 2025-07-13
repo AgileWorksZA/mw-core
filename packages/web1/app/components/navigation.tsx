@@ -11,9 +11,17 @@ import {
   Sun,
   LogOut,
   MessageSquare,
+  Calculator,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { ConnectionSwitcher } from "~/components/connection-switcher";
 import { useState, useEffect } from "react";
 import { useAuth } from "~/hooks/use-auth";
@@ -68,11 +76,20 @@ export function Navigation() {
   const navItems = [
     { to: "/chat", label: "Assistant", icon: MessageSquare },
     { to: "/groups", label: "Groups", icon: FolderTree },
-    { to: "/tax-rates", label: t("nav.taxRates"), icon: Receipt },
     { to: "/company", label: t("nav.company"), icon: Building2 },
     { to: "/tools/evaluate", label: t("nav.tools"), icon: Wrench },
     { to: "/settings", label: t("nav.settings"), icon: Settings },
   ];
+
+  const accountingMenuItems = [
+    { to: "/tax-rates", label: t("nav.taxRates"), icon: Receipt },
+    // Add more accounting menu items here as they're implemented
+  ];
+
+  // Check if any accounting menu item is active
+  const isAccountingActive = accountingMenuItems.some(
+    item => window.location.pathname === item.to
+  );
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -103,6 +120,37 @@ export function Navigation() {
               {item.label}
             </NavLink>
           ))}
+          
+          {/* Accounting Dropdown Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className={cn(
+                  "flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary",
+                  isAccountingActive 
+                    ? "text-foreground" 
+                    : "text-muted-foreground data-[state=open]:text-foreground"
+                )}
+              >
+                <Calculator className="h-4 w-4" />
+                {t("nav.accounting")}
+                <ChevronDown className="h-3 w-3 ml-1" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-48">
+              {accountingMenuItems.map((item) => (
+                <DropdownMenuItem
+                  key={item.to}
+                  onClick={() => navigate(item.to)}
+                  className="cursor-pointer"
+                >
+                  <item.icon className="h-4 w-4 mr-2" />
+                  {item.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div className="flex items-center gap-4">
           <ConnectionSwitcher />

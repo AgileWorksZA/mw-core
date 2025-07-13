@@ -6,6 +6,9 @@ import * as path from "node:path";
 import * as os from "node:os";
 import {spawn} from "node:child_process";
 
+const ELEVENLABS_API_KEY = "sk_45dad12925dcbb8b01707df6980f159d0b33edea72e9e79d"
+const VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+
 type Message = {
   "parentUuid": string,
   "isSidechain": boolean,
@@ -55,6 +58,13 @@ async function findLastAssistantMessage(input: Input): Promise<Message | undefin
   return lastAssistantMessages[lastAssistantMessages.length - 1];
 }
 
+function extractSummaryFromMessage(message: Message): string | null {
+  const content = message.message.content.map((c) => c.text).join(" ");
+  // @ts-ignore
+  const summaryMatch = content.match(/<summary>(.*?)<\/summary>/s);
+  return summaryMatch ? summaryMatch[1].trim() : null;
+}
+
 // Simple in-memory state for the current session
 const STATE_FILE = path.join(os.tmpdir(), "claude-tts-state.json");
 const DEBOUNCE_MS = 3000; // Wait 3 seconds of inactivity before playing summary
@@ -87,18 +97,28 @@ async function processToolUse() {
       console.error("Failed to parse input:", e);
       process.exit(0);
     }
+    if (!(await fs.exists('./temp'))) {
+      await fs.mkdir('./temp');
+    }
+    await fs.writeFile(`./temp/stop-${Date.now()}.json`, input);
 
     // Extract accomplishment
     const accomplishment = await findLastAssistantMessage(toolData);
     if (!accomplishment) {
-      await updateSessionState("No accomplishment");
-      console.log("Accomplishment:", accomplishment);
-    } else {
-
-      // Update session state
-      await updateSessionState(accomplishment.message.content.map((c) => c.text).join(". "));
-      console.log("Accomplishment:", accomplishment);
+      console.log("No assistant message found");
+      return;
     }
+
+    // Extract summary from the message
+    const summary = extractSummaryFromMessage(accomplishment);
+    if (!summary) {
+      console.log("No summary tag found in assistant message");
+      return;
+    }
+
+    // Update session state with the summary
+    await updateSessionState(summary);
+    console.log("Summary extracted:", summary);
   } catch (error) {
     console.error("Hook error:", error);
     process.exit(1);
@@ -161,25 +181,16 @@ async function playSessionSummary() {
       return;
     }
 
-    // Create summary
+    // Create summary - just join all the summaries collected
     const unique = Array.from(new Set(state.accomplishments));
-    let summary: string;
-
-    if (unique.length === 1) {
-      summary = unique[0];
-    } else if (unique.length === 2) {
-      summary = `${unique[0]} and ${unique[1].toLowerCase()}`;
-    } else {
-      const last = unique.pop()!;
-      summary = `${unique.join(", ")}, and ${last.toLowerCase()}`;
-    }
+    const summary = unique.join(". ");
 
     // Clean up state file
     await fs.unlink(STATE_FILE).catch(() => {
     });
 
     // Generate and play audio
-    const apiKey = process.env.ELEVENLABS_API_KEY;
+      const apiKey = ELEVENLABS_API_KEY;
     if (!apiKey) {
       console.error("ELEVENLABS_API_KEY not set");
       return;
@@ -188,13 +199,13 @@ async function playSessionSummary() {
     const client = new ElevenLabsClient({apiKey});
 
     const audio = await client.textToSpeech.convert(
-      "Bj9UqZbhQsanLzgalpEG",
+      VOICE_ID,
       {
         text: summary,
-        modelId: "eleven_ttv_v3",
+        modelId: "eleven_turbo_v2",
         voiceSettings: {
-          stability: 0.7,
-          similarityBoost: 0.8
+          stability: 1,
+          similarityBoost: 1
         }
       }
     );
@@ -214,7 +225,7 @@ async function playSessionSummary() {
 
     // Speed up audio using ffmpeg
     const speedFile = path.join(os.tmpdir(), `tts_speed_${Date.now()}.mp3`);
-    const speedFactor = 1.3; // 1.5x speed
+    const speedFactor = 1.1; // 1.5x speed
 
     await new Promise<void>((resolve, reject) => {
       const ffmpeg = spawn("ffmpeg", [
@@ -231,12 +242,16 @@ async function playSessionSummary() {
     });
 
     // Play sped-up audio
+    console.log(`Playing audio file: ${speedFile}`);
     if (process.platform === "darwin") {
       const player = spawn("afplay", [speedFile], {
         stdio: "ignore",
         detached: true
       });
       player.unref();
+      console.log("Audio playback started");
+    } else {
+      console.log(`Platform ${process.platform} not supported for audio playback`);
     }
 
     // Cleanup audio files after 10 seconds

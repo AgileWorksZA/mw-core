@@ -78,7 +78,7 @@ export function MoneyWorksChat({
 
   return (
     <div className={cn(
-      "flex flex-col h-full bg-white",
+      "flex flex-col h-full bg-background dark:bg-background",
       className
     )}>
       {showHeader && (
@@ -91,7 +91,7 @@ export function MoneyWorksChat({
 
       <div 
         ref={scrollAreaRef}
-        className="flex-1 overflow-y-auto px-6 py-8 bg-gradient-to-b from-gray-50/30 to-white"
+        className="flex-1 overflow-y-auto px-6 py-8 bg-gradient-to-b from-muted/30 to-background dark:from-muted/20 dark:to-background"
       >
         <MessageList 
           messages={messages}
@@ -99,15 +99,15 @@ export function MoneyWorksChat({
         />
         
         {error && (
-          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-sm text-red-800">
+          <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md dark:bg-destructive/20 dark:border-destructive/30">
+            <p className="text-sm text-destructive dark:text-destructive-foreground">
               Error: {error.message}
             </p>
           </div>
         )}
       </div>
 
-      <div className="border-t px-6 py-6 space-y-4 bg-gray-50/50">
+      <div className="border-t px-6 p-6 space-y-4 bg-muted/50 dark:bg-muted/20">
         {showQuickActions && messages.length === 1 && (
           <QuickActions onAction={handleQuickAction} />
         )}

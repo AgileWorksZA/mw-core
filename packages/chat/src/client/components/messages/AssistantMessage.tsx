@@ -34,30 +34,30 @@ export function AssistantMessage({ message }: AssistantMessageProps) {
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
-      <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-        <Bot className="w-4 h-4 text-gray-600" />
+      <div className="flex-shrink-0 w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+        <Bot className="w-4 h-4 text-muted-foreground" />
       </div>
       
       <div className="flex-1 max-w-[80%] space-y-2">
         {hasContent && (
           <div 
             className={cn(
-              "bg-gray-100 px-4 py-4 rounded-2xl shadow",
+              "bg-muted px-4 py-4 rounded-2xl shadow-sm dark:shadow-none",
               message.streaming && "animate-pulse"
             )}
           >
-            <div className="prose prose-sm max-w-none dark:prose-invert prose-pre:bg-gray-800 prose-pre:text-gray-100">
+            <div className="prose prose-sm max-w-none dark:prose-invert prose-pre:bg-zinc-900 prose-pre:text-zinc-100 dark:prose-pre:bg-zinc-800">
               <ReactMarkdown 
                 remarkPlugins={[remarkGfm]}
                 components={{
                   pre: ({ node, ...props }) => (
-                    <pre className="overflow-x-auto p-3 rounded-md bg-gray-800 text-gray-100" {...props} />
+                    <pre className="overflow-x-auto p-3 rounded-md bg-zinc-900 dark:bg-zinc-800 text-zinc-100" {...props} />
                   ),
                   code: ({ node, className, children, ...props }) => {
                     const match = /language-(\w+)/.exec(className || '');
                     const inline = !match;
                     return inline ? (
-                      <code className="px-1 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-sm" {...props}>
+                      <code className="px-1 py-0.5 rounded bg-muted-foreground/20 text-sm" {...props}>
                         {children}
                       </code>
                     ) : (
@@ -101,13 +101,13 @@ export function AssistantMessage({ message }: AssistantMessageProps) {
         {hovering && !message.streaming && hasContent && (
           <button
             onClick={handleCopy}
-            className="flex-shrink-0 p-1.5 bg-white border border-gray-200 hover:bg-gray-50 rounded shadow-sm hover:shadow-md transition-all self-start"
+            className="flex-shrink-0 p-1.5 bg-background border border-border hover:bg-muted rounded shadow-sm hover:shadow-md transition-all self-start"
             title="Copy raw markdown"
           >
             {copied ? (
-              <Check className="w-3 h-3 text-green-600" />
+              <Check className="w-3 h-3 text-green-600 dark:text-green-400" />
             ) : (
-              <Copy className="w-3 h-3 text-gray-600" />
+              <Copy className="w-3 h-3 text-muted-foreground" />
             )}
           </button>
         )}

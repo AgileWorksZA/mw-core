@@ -262,7 +262,8 @@
       "Bash(./run-dev.sh:*)",
       "mcp__ajv_Docs__search_ajv_documentation",
       "Bash(echo:*)",
-      "Bash(claude doctor)"
+      "Bash(claude doctor)",
+      "Bash(ffmpeg:*)"
     ],
     "deny": []
   }

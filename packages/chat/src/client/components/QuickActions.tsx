@@ -54,9 +54,9 @@ export function QuickActions({ onAction }: QuickActionsProps) {
           <button
             key={index}
             onClick={() => onAction(item.action)}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-foreground bg-muted hover:bg-muted/80 rounded-lg transition-colors"
           >
-            <Icon className="w-4 h-4 text-gray-500" />
+            <Icon className="w-4 h-4 text-muted-foreground" />
             <span>{item.label}</span>
           </button>
         );

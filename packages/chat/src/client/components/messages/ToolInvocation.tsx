@@ -10,15 +10,15 @@ export function ToolInvocation({ invocation }: ToolInvocationProps) {
   const getIcon = () => {
     switch (invocation.state) {
       case 'pending':
-        return <Loader2 className="w-4 h-4 animate-spin text-blue-500" />;
+        return <Loader2 className="w-4 h-4 animate-spin text-primary" />;
       case 'completed':
         return invocation.result?.success 
-          ? <CheckCircle className="w-4 h-4 text-green-500" />
-          : <XCircle className="w-4 h-4 text-red-500" />;
+          ? <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400" />
+          : <XCircle className="w-4 h-4 text-destructive" />;
       case 'failed':
-        return <XCircle className="w-4 h-4 text-red-500" />;
+        return <XCircle className="w-4 h-4 text-destructive" />;
       default:
-        return <Wrench className="w-4 h-4 text-gray-500" />;
+        return <Wrench className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -36,13 +36,13 @@ export function ToolInvocation({ invocation }: ToolInvocationProps) {
   };
 
   return (
-    <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-md text-sm">
+    <div className="flex items-center gap-2 px-3 py-2 bg-primary/10 dark:bg-primary/20 rounded-md text-sm">
       {getIcon()}
-      <span className="text-gray-700">
+      <span className="text-foreground">
         {getToolDisplayName(invocation.toolName)}
       </span>
       {invocation.state === 'completed' && invocation.result?.error && (
-        <span className="text-red-600 text-xs ml-2">
+        <span className="text-destructive text-xs ml-2">
           ({invocation.result.error})
         </span>
       )}

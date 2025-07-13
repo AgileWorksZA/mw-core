@@ -29,9 +29,12 @@ export function MessageInput({
         disabled={disabled}
         className={cn(
           "flex-1 px-4 py-2 border rounded-lg",
-          "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+          "bg-background text-foreground",
+          "border-input",
+          "focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent",
           "disabled:opacity-50 disabled:cursor-not-allowed",
-          "text-sm"
+          "text-sm",
+          "placeholder:text-muted-foreground"
         )}
       />
       
@@ -39,7 +42,7 @@ export function MessageInput({
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          className="px-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive/90 transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
@@ -48,8 +51,8 @@ export function MessageInput({
           type="submit"
           disabled={disabled || !value.trim()}
           className={cn(
-            "px-4 py-2 bg-blue-500 text-white rounded-lg",
-            "hover:bg-blue-600 transition-colors",
+            "px-4 py-2 bg-primary text-primary-foreground rounded-lg",
+            "hover:bg-primary/90 transition-colors",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             "flex items-center gap-2"
           )}

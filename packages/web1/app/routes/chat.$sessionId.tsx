@@ -132,10 +132,10 @@ How can I help you today?`;
       <Navigation />
       <div className="flex h-[calc(100vh-3.5rem)]">
         {/* Chat History Sidebar */}
-        <div className="w-64 border-r bg-gray-50 dark:bg-gray-900 overflow-y-auto">
+        <div className="w-64 border-r bg-muted/50 dark:bg-muted/20 overflow-y-auto">
           <div className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold">Chat History</h2>
+              <h2 className="font-semibold text-foreground">Chat History</h2>
               <Button 
                 variant="ghost" 
                 size="icon" 
@@ -161,13 +161,13 @@ How can I help you today?`;
                   key={s.id}
                   className={cn(
                     "w-full text-left p-3 rounded-lg transition-colors",
-                    "hover:bg-gray-100 dark:hover:bg-gray-800",
-                    s.id === sessionId && "bg-gray-100 dark:bg-gray-800 ring-2 ring-primary"
+                    "hover:bg-muted",
+                    s.id === sessionId && "bg-muted ring-2 ring-primary"
                   )}
                   onClick={() => handleSessionClick(s.id)}
                 >
-                  <div className="font-medium text-sm truncate">{s.title}</div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="font-medium text-sm truncate text-foreground">{s.title}</div>
+                  <div className="text-xs text-muted-foreground mt-1">
                     {s.message_count} messages • {
                       s.last_message_at 
                         ? new Date(s.last_message_at).toLocaleDateString()
@@ -182,11 +182,11 @@ How can I help you today?`;
 
         {/* Main Chat Area */}
         <div className="flex-1 flex flex-col">
-          <div className="border-b p-6 bg-white">
+          <div className="border-b p-6 bg-background">
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">MoneyWorks Assistant</h1>
-                <p className="text-sm text-gray-600 mt-1">
+                <h1 className="text-2xl font-bold text-foreground">MoneyWorks Assistant</h1>
+                <p className="text-sm text-muted-foreground mt-1">
                   {chatContext.companyName} • {session.title}
                 </p>
               </div>
@@ -210,7 +210,7 @@ How can I help you today?`;
                     variant="outline"
                     size="sm"
                     onClick={handleClearSession}
-                    className="flex items-center gap-1.5 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    className="flex items-center gap-1.5 text-destructive hover:text-destructive/90 hover:bg-destructive/10"
                   >
                     <Trash2 className="w-4 h-4" />
                     Clear Session
