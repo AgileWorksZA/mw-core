@@ -7,9 +7,9 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
-	ListToolsRequestSchema,
 	CallToolRequestSchema,
 	ListResourcesRequestSchema,
+	ListToolsRequestSchema,
 	ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import {
@@ -19,11 +19,22 @@ import {
 } from "@moneyworks/data";
 import { moneyworksDocsResource } from "./resources/moneyworks-docs";
 import {
+	companyInfoTool,
 	evalTool,
 	exportTool,
+	getBalancesSummaryTool,
+	getCreditorsTool,
+	getCustomersTool,
+	getDebtorsTool,
+	getNameByCodeTool,
+	getNamesByCategoryTool,
+	getOverdueDebtorsTool,
+	getSuppliersTool,
 	listTablesTool,
 	schemaTool,
-	companyInfoTool,
+	searchNamesTool,
+	updateCreditLimitTool,
+	updateNameHoldStatusTool,
 } from "./tools/index";
 
 export class MoneyWorksMCPServer {
@@ -59,23 +70,31 @@ export class MoneyWorksMCPServer {
 
 	private setupHandlers() {
 		// List available tools
-		this.server.setRequestHandler(
-			ListToolsRequestSchema,
-			async () => ({
-				tools: [
-					exportTool.definition,
-					evalTool.definition,
-					schemaTool.definition,
-					listTablesTool.definition,
-					companyInfoTool.definition,
-				],
-			}),
-		);
+		this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
+			tools: [
+				exportTool.definition,
+				evalTool.definition,
+				schemaTool.definition,
+				listTablesTool.definition,
+				companyInfoTool.definition,
+				// Name tools
+				searchNamesTool.definition,
+				getCustomersTool.definition,
+				getDebtorsTool.definition,
+				getSuppliersTool.definition,
+				getCreditorsTool.definition,
+				getOverdueDebtorsTool.definition,
+				getBalancesSummaryTool.definition,
+				getNameByCodeTool.definition,
+				getNamesByCategoryTool.definition,
+				updateNameHoldStatusTool.definition,
+				updateCreditLimitTool.definition,
+			],
+		}));
 
 		// Handle tool calls
-		this.server.setRequestHandler(
-			CallToolRequestSchema,
-			async (request) => {
+		this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+			try {
 				const { name, arguments: args } = request.params;
 				const client = await this.getClient();
 
@@ -95,19 +114,69 @@ export class MoneyWorksMCPServer {
 					case "mw_company_info":
 						return await companyInfoTool.handler(client, args as any);
 
+					// Name tools
+					case "mw_search_names":
+						return await searchNamesTool.handler(client, args as any);
+
+					case "mw_get_customers":
+						return await getCustomersTool.handler(client, args as any);
+
+					case "mw_get_debtors":
+						return await getDebtorsTool.handler(client, args as any);
+
+					case "mw_get_suppliers":
+						return await getSuppliersTool.handler(client, args as any);
+
+					case "mw_get_creditors":
+						return await getCreditorsTool.handler(client, args as any);
+
+					case "mw_get_overdue_debtors":
+						return await getOverdueDebtorsTool.handler(client, args as any);
+
+					case "mw_get_balances_summary":
+						return await getBalancesSummaryTool.handler(client, args as any);
+
+					case "mw_get_name_by_code":
+						return await getNameByCodeTool.handler(client, args as any);
+
+					case "mw_get_names_by_category":
+						return await getNamesByCategoryTool.handler(client, args as any);
+
+					case "mw_update_name_hold_status":
+						return await updateNameHoldStatusTool.handler(client, args as any);
+
+					case "mw_update_credit_limit":
+						return await updateCreditLimitTool.handler(client, args as any);
+
 					default:
 						throw new Error(`Unknown tool: ${name}`);
 				}
-			},
-		);
+			} catch (error) {
+				// Log the error for debugging
+				console.error(`Error in tool ${request.params.name}:`, error);
+				
+				// Return a structured error response
+				return {
+					content: [
+						{
+							type: "text",
+							text: JSON.stringify({
+								error: true,
+								message: error instanceof Error ? error.message : "Unknown error occurred",
+								tool: request.params.name,
+								details: error instanceof Error ? error.stack : undefined,
+							}, null, 2),
+						},
+					],
+					isError: true,
+				};
+			}
+		});
 
 		// List available resources
-		this.server.setRequestHandler(
-			ListResourcesRequestSchema,
-			async () => ({
-				resources: [moneyworksDocsResource.definition],
-			}),
-		);
+		this.server.setRequestHandler(ListResourcesRequestSchema, async () => ({
+			resources: [moneyworksDocsResource.definition],
+		}));
 
 		// Handle resource reads
 		this.server.setRequestHandler(

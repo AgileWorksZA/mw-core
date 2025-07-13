@@ -95,6 +95,12 @@
 - Maintain the canonical DSL purity
 - resume: Remembered the importance of maintaining and updating personal resume regularly
 - Enterprise auth strategy documented in ENTERPRISE-AUTH-STRATEGY.md - currently using Clerk, will add WorkOS when first enterprise client signs
+- Remember to remind yourself after each /compact, to apply this part of the /prime command: ```## INFORMATION: In your responses, I've coded a hook on Stop hook, to read out via text-to-speech the last assistant message.
+
+So to keep the audio short and simple, include a short audio summary in your response, but wrap it in an XML element,
+like this:
+```xml
+<summary>Okay, I fixed the ${description}</summary>```
 
 ## React Router v7 Changes
 

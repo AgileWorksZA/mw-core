@@ -9,3 +9,16 @@ export { evalTool } from "./eval.tool";
 export { schemaTool } from "./schema.tool";
 export { listTablesTool } from "./list-tables.tool";
 export { companyInfoTool } from "./company-info.tool";
+export {
+	searchNamesTool,
+	getCustomersTool,
+	getDebtorsTool,
+	getSuppliersTool,
+	getCreditorsTool,
+	getOverdueDebtorsTool,
+	getBalancesSummaryTool,
+	getNameByCodeTool,
+	getNamesByCategoryTool,
+	updateNameHoldStatusTool,
+	updateCreditLimitTool,
+} from "./names.tool";

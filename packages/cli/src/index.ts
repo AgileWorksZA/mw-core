@@ -56,6 +56,7 @@ Commands:
   version            Get MoneyWorks server version
   list               List available documents
   test-connection    Test connection to MoneyWorks
+  names <command>    Manage names (customers, suppliers, debtors, creditors)
 
 Options:
   -c, --config <file>  Config file path (default: ./mw-config.json)

@@ -100,7 +100,7 @@ async function processToolUse() {
     if (!(await fs.exists('./temp'))) {
       await fs.mkdir('./temp');
     }
-    await fs.writeFile(`./temp/stop-${Date.now()}.json`, input);
+    await fs.writeFile(`./temp/stop-${Date.now()}.json`, JSON.stringify(toolData, null, 2));
 
     // Extract accomplishment
     const accomplishment = await findLastAssistantMessage(toolData);

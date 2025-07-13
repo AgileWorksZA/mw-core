@@ -9,6 +9,7 @@
 import { createSmartClient } from './client/moneyworks-smart-client';
 import { TaxRateRepository } from './repositories/tax-rate.repository';
 import { CompanyInformationRepository } from './repositories/company-information.repository';
+import { NameRepository } from './repositories/name.repository';
 
 // Export clients
 export { MoneyWorksRESTClient } from './client/moneyworks-rest-client';
@@ -93,6 +94,7 @@ export {
   type CompanyInformation,
   COMPANY_INFORMATION_FIELDS
 } from './repositories/company-information.repository';
+export { NameRepository } from './repositories/name.repository';
 
 /**
  * Create a MoneyWorks client with repositories from a connection object
@@ -132,6 +134,7 @@ export function createMoneyWorksClient(connection: {
     repositories: {
       taxRate: new TaxRateRepository(client),
       companyInformation: new CompanyInformationRepository(client),
+      name: new NameRepository(client),
     }
   };
 }
@@ -160,10 +163,11 @@ export async function createDataLayer(configPath?: string) {
     repositories: {
       taxRate: new TaxRateRepository(client),
       companyInformation: new CompanyInformationRepository(client),
+      name: new NameRepository(client),
       // Future repositories will be added here
       // account: new AccountRepository(client),
       // transaction: new TransactionRepository(client),
-      // name: new NameRepository(client),
+      // contact: new ContactRepository(client),
     }
   };
 }

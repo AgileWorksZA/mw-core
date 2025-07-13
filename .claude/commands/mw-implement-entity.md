@@ -84,3 +84,7 @@ Implements a MoneyWorks entity from staging ontology through all packages
 - Check relationships and dependencies
 - Follow existing patterns from TaxRate implementation
 - Each phase builds on previous phases
+- After a phase is completed, check it for errors and linting issues and fix as much as possible
+- Ensure all packages are compatible with each other
+- Always check for compatibility issues before merging into staging
+- Make notes of any new requirements or changes that we need to address at the end of each cycle

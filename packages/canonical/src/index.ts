@@ -16,11 +16,12 @@ export * from './common/business-rules';
 // Export entity modules
 // Each entity has its own namespace to avoid conflicts
 export * as TaxRates from './entities/tax-rates';
+export * as Names from './entities/names';
 
 // Future entities will be added here:
 // export * as Transactions from './entities/transactions';
 // export * as Accounts from './entities/accounts';
-// export * as Names from './entities/names';
+// export * as Contacts from './entities/contacts';
 // etc.
 
 /**
@@ -30,8 +31,13 @@ export * as TaxRates from './entities/tax-rates';
  * import { TaxRates } from '@moneyworks/canonical';
  * const taxRate: TaxRates.MoneyWorksTaxRate = { ... };
  * 
+ * // Import specific name types
+ * import { Names } from '@moneyworks/canonical';
+ * const name: Names.MoneyWorksName = { ... };
+ * 
  * // Or import directly from subpath
  * import { MoneyWorksTaxRate, validateTaxRate } from '@moneyworks/canonical/tax-rates';
+ * import { MoneyWorksName, validateName } from '@moneyworks/canonical/names';
  * 
  * // Import common types
  * import { MoneyWorksDataType, MoneyWorksValidationResult } from '@moneyworks/canonical';
@@ -47,8 +53,9 @@ export const CANONICAL_VERSION = {
   lastUpdated: '2024-01-18',
   entities: {
     taxRates: { status: 'complete', fields: 17 },
+    names: { status: 'complete', fields: 94 },
     transactions: { status: 'pending', fields: 0 },
     accounts: { status: 'pending', fields: 0 },
-    names: { status: 'pending', fields: 0 }
+    contacts: { status: 'pending', fields: 0 }
   }
 } as const;

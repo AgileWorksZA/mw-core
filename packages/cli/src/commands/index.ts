@@ -5,6 +5,7 @@ import { evalCommand } from "@moneyworks/cli/commands/eval";
 import { versionCommand } from "@moneyworks/cli/commands/version";
 import { listCommand } from "@moneyworks/cli/commands/list";
 import { testConnectionCommand } from "@moneyworks/cli/commands/test-connection";
+import { namesCommand } from "@moneyworks/cli/commands/names";
 
 export type CommandHandler = (
   client: SmartMoneyWorksClient,
@@ -19,4 +20,5 @@ export const commands: Record<string, CommandHandler> = {
   version: versionCommand,
   list: listCommand,
   "test-connection": testConnectionCommand,
+  names: namesCommand,
 };

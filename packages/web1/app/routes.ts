@@ -16,6 +16,7 @@ export default [
   route("connections/now/refresh", "routes/connections.now.refresh.tsx"),
   route("tax-rates", "routes/tax-rates.tsx"),
   route("tax-rates/:code", "routes/tax-rates.$code.tsx"),
+  route("names", "routes/names.tsx"),
   route("company", "routes/company.tsx"),
   route("groups", "routes/groups.tsx"),
   route("tools/evaluate", "routes/tools.evaluate.tsx"),

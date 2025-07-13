@@ -60,4 +60,5 @@ package-lock.json
 /packages/**/node_modules/
 
 **/.react-router/**
-/temp/**
+**/temp/**
+**/dist/**
