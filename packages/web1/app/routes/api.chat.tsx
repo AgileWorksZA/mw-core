@@ -69,7 +69,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   // Create handler with connection config
   console.log("[API CHAT] Creating chat handler with config:", {
-    model: 'gpt-4o',
+    model: 'gpt-4o-mini',
     hasApiKey: !!process.env.OPENAI_API_KEY,
     mwClientType: 'real'
   });
@@ -77,7 +77,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const handler = createChatStreamHandler(
     {
       openaiApiKey: process.env.OPENAI_API_KEY!,
-      model: 'gpt-4o', // Upgraded to full GPT-4o for better tool usage
+      model: 'gpt-4o-mini', // Upgraded to full GPT-4o for better tool usage
       maxTokens: 16384
     },
     mwClientConfig

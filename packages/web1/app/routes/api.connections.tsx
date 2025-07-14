@@ -153,6 +153,7 @@ export async function action({ request }: ActionFunctionArgs) {
           id: "test",
           clerk_user_id: userId,
           connection_name: formData.get("connection_name") as string,
+          connection_type: 'datacenter' as const,
           mw_username: formData.get("mw_username") as string,
           mw_password: formData.get("mw_password") as string,
           mw_folder_name: formData.get("mw_folder_name") as string || undefined,

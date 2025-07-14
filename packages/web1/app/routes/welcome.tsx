@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { ArrowRight, LogIn } from "lucide-react";
 
 export default function Welcome() {
-  const { isLoaded, isSignedIn, user, signOut } = useAuth();
+  const { isLoaded, isSignedIn, signOut } = useAuth();
   
   if (!isLoaded) {
     return (
@@ -29,7 +29,7 @@ export default function Welcome() {
         {isSignedIn ? (
           <div className="space-y-4">
             <p className="text-muted-foreground">
-              Welcome back, {user?.firstName || user?.emailAddresses?.[0]?.emailAddress || 'User'}!
+              Welcome back!
             </p>
             <div className="space-y-2">
               <Button asChild className="w-full">

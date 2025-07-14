@@ -14,18 +14,17 @@ import {
   CompanyFields 
 } from '../schemas/company';
 import { ErrorSchema, SuccessResponse } from '../schemas/common';
+import '../types/context';
 
 /**
  * Create company routes
  */
-export function createCompanyRoutes(
-  client: SmartMoneyWorksClient, 
-  cache: CacheService
-) {
-  const controller = new CompanyController(client, cache);
-
+export function createCompanyRoutes(cache: CacheService) {
   return new Elysia({ prefix: '/company' })
-    .get('/', async ({ query, set, headers }) => {
+    .get('/', async (context) => {
+      const { query, set, headers, mwClient } = context as any;
+      if (!mwClient) throw new Error('No authenticated client');
+      const controller = new CompanyController(mwClient, cache);
       const requestId = headers['x-request-id'] || 'unknown';
 
       try {

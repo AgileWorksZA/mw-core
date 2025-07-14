@@ -26,7 +26,6 @@ export async function action({ request }: ActionFunctionArgs) {
         group_id: body.group_id,
         connection_id: body.connection_id,
         company_code: body.company_code,
-        sync_enabled: body.sync_enabled ?? true,
       });
       
       return json(member);

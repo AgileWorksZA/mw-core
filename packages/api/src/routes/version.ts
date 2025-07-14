@@ -8,6 +8,7 @@ import { Elysia, t } from 'elysia';
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import '../types/context';
 
 export interface VersionInfo {
   api: {
@@ -27,7 +28,7 @@ export interface VersionInfo {
 /**
  * Create version routes
  */
-export function createVersionRoutes(client: SmartMoneyWorksClient) {
+export function createVersionRoutes() {
   // Read package.json for API info
   let apiInfo = {
     version: '0.1.0',
@@ -48,7 +49,8 @@ export function createVersionRoutes(client: SmartMoneyWorksClient) {
   }
   
   return new Elysia()
-    .get('/version', async () => {
+    .get('/version', async (context) => {
+      const { mwClient } = context as any;
       const version: VersionInfo = {
         api: apiInfo,
         node: process.version,
@@ -56,14 +58,16 @@ export function createVersionRoutes(client: SmartMoneyWorksClient) {
         timestamp: new Date().toISOString()
       };
       
-      // Try to get MoneyWorks version
-      try {
-        const mwVersion = await client.getVersion();
-        version.moneyworks = {
-          version: mwVersion
-        };
-      } catch {
-        // MoneyWorks version unavailable
+      // Try to get MoneyWorks version if client is available
+      if (mwClient) {
+        try {
+          const mwVersion = await mwClient.getVersion();
+          version.moneyworks = {
+            version: mwVersion
+          };
+        } catch {
+          // MoneyWorks version unavailable
+        }
       }
       
       return version;

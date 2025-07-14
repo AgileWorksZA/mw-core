@@ -127,7 +127,8 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 			// Return mock supplier data if search indicates suppliers
 			if (search?.toLowerCase().includes('supplier') || 
 			    search?.toLowerCase().includes('creditor') ||
-			    params?.filter?.toLowerCase().includes('supplier')) {
+			    params?.search?.toLowerCase().includes('supplier') ||
+			    params?.search?.toLowerCase().includes('creditor')) {
 				const mockSuppliers = [
 					{
 						Code: "SUP001",

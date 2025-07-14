@@ -71,8 +71,8 @@ export async function action({ request }: ActionFunctionArgs) {
       case "export":
         // console.log("[API MoneyWorks] Calling export with:", { table, options });
         // If format is "json", use smartExport to get objects
-        if (options.format === "json") {
-          const { format, ...restOptions } = options;
+        if ((options as any).format === "json") {
+          const { format, ...restOptions } = options as any;
           console.log("[API MoneyWorks] Using smartExport for JSON format");
           result = await client.smartExport(table, {
             ...restOptions,

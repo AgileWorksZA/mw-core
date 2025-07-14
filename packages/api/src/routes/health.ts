@@ -6,6 +6,7 @@
 
 import { Elysia, t } from 'elysia';
 import type { SmartMoneyWorksClient } from '@moneyworks/data';
+import '../types/context';
 
 export interface HealthStatus {
   status: 'healthy' | 'degraded' | 'unhealthy';
@@ -26,9 +27,10 @@ const startTime = Date.now();
 /**
  * Create health routes
  */
-export function createHealthRoutes(client: SmartMoneyWorksClient) {
+export function createHealthRoutes() {
   return new Elysia()
-    .get('/health', async () => {
+    .get('/health', async (context) => {
+      const { mwClient } = context as any;
       const checks: {
         api: 'ok' | 'error';
         moneyworks: 'ok' | 'error' | 'timeout';
@@ -37,20 +39,22 @@ export function createHealthRoutes(client: SmartMoneyWorksClient) {
         moneyworks: 'error'
       };
       
-      // Check MoneyWorks connection
-      try {
-        const testResult = await Promise.race([
-          client.testConnection(),
-          new Promise<boolean>((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000)
-          )
-        ]);
-        
-        if (testResult) {
-          checks.moneyworks = 'ok';
+      // Check MoneyWorks connection if client is available
+      if (mwClient) {
+        try {
+          const testResult = await Promise.race([
+            mwClient.testConnection(),
+            new Promise<boolean>((_, reject) => 
+              setTimeout(() => reject(new Error('Timeout')), 5000)
+            )
+          ]);
+          
+          if (testResult) {
+            checks.moneyworks = 'ok';
+          }
+        } catch (error: any) {
+          checks.moneyworks = error.message === 'Timeout' ? 'timeout' : 'error';
         }
-      } catch (error: any) {
-        checks.moneyworks = error.message === 'Timeout' ? 'timeout' : 'error';
       }
       
       // Determine overall status based on the current moneyworks check status

@@ -31,13 +31,14 @@ export function ReportDisplay({ data }: ReportDisplayProps) {
   };
 
   if (data.reportType === 'aged_receivables' || data.reportType === 'aged_payables') {
-    const isReceivables = data.reportType === 'aged_receivables';
-    const totalAmount = Object.values(data.summary).reduce(
-      (sum, bucket) => sum + bucket.total, 
+    const typedData = data as AgedReceivablesReport;
+    const isReceivables = typedData.reportType === 'aged_receivables';
+    const totalAmount = Object.values(typedData.summary).reduce(
+      (sum: number, bucket: { count: number; total: number }) => sum + bucket.total, 
       0
     );
-    const totalCount = Object.values(data.summary).reduce(
-      (sum, bucket) => sum + bucket.count, 
+    const totalCount = Object.values(typedData.summary).reduce(
+      (sum: number, bucket: { count: number; total: number }) => sum + bucket.count, 
       0
     );
 
@@ -52,7 +53,7 @@ export function ReportDisplay({ data }: ReportDisplayProps) {
               </span>
             </div>
             <span className="text-sm text-gray-500">
-              Period: {data.period}
+              Period: {typedData.period}
             </span>
           </div>
         </div>
@@ -70,7 +71,7 @@ export function ReportDisplay({ data }: ReportDisplayProps) {
           </div>
 
           <div className="space-y-3">
-            {Object.entries(data.summary).map(([key, bucket]) => {
+            {Object.entries(typedData.summary).map(([key, bucket]: [string, { count: number; total: number }]) => {
               const percentage = totalAmount > 0 
                 ? (bucket.total / totalAmount) * 100 
                 : 0;

@@ -283,7 +283,7 @@ async function generateAgedReceivables(
   if (!Array.isArray(invoices)) return { error: 'No data returned' };
 
   // Group by aging buckets
-  const buckets = {
+  const buckets: Record<string, any[]> = {
     current: [],
     days30: [],
     days60: [],

@@ -7,14 +7,7 @@
 import { Elysia } from 'elysia';
 import { connectionService } from '../services/connection-service';
 import { createSmartClient, type SmartMoneyWorksClient } from '@moneyworks/data';
-
-// Extend context type
-declare module 'elysia' {
-  interface Context {
-    mwClient?: SmartMoneyWorksClient;
-    connectionId?: string;
-  }
-}
+import '../types/context';
 
 // Cache of active clients to avoid recreating
 const clientCache = new Map<string, { client: SmartMoneyWorksClient; lastUsed: number }>();

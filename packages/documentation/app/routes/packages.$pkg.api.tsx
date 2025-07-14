@@ -69,6 +69,17 @@ async function highlightApiData(api: any, theme: 'light' | 'dark'): Promise<any>
   return highlighted;
 }
 
+interface APIData {
+  name: string;
+  version?: string;
+  description?: string;
+  overview?: string;
+  exports?: any[];
+  usage?: { examples?: any[]; importPatterns?: any[] };
+  designPrinciples?: any[];
+  futurePlans?: any[];
+}
+
 function extractApiTableOfContents(api: any) {
   const items: Array<{ id: string; text: string; level: number }> = [];
   
@@ -95,6 +106,7 @@ function extractApiTableOfContents(api: any) {
 
 export default function PackageAPIReference() {
   const { packageName, api, highlightedApi } = useLoaderData<typeof loader>();
+  const apiData = api as unknown as APIData;
   
   // Extract table of contents
   const tableOfContents = extractApiTableOfContents(api);
@@ -111,13 +123,13 @@ export default function PackageAPIReference() {
       />
       <div className="mb-8">
         <h1 className="text-4xl font-bold mt-2">
-          {api.name} API Reference
+          {apiData.name} API Reference
         </h1>
         <p className="text-lg text-muted-foreground mt-2">
-          {api.description}
+          {apiData.description}
         </p>
-        {api.version && (
-          <Badge variant="secondary" className="mt-2">v{api.version}</Badge>
+        {apiData.version && (
+          <Badge variant="secondary" className="mt-2">v{apiData.version}</Badge>
         )}
       </div>
       
@@ -125,9 +137,9 @@ export default function PackageAPIReference() {
         {/* Main Content */}
         <div className="flex-1 min-w-0 space-y-12">
           {/* Overview if present */}
-          {api.overview && (
+          {apiData.overview && (
             <section className="prose prose-gray dark:prose-invert max-w-none">
-              <p className="text-lg">{api.overview}</p>
+              <p className="text-lg">{apiData.overview}</p>
             </section>
           )}
 
@@ -156,11 +168,11 @@ export default function PackageAPIReference() {
           )}
           
           {/* Import Patterns */}
-          {api.usage?.importPatterns?.length > 0 && (
+          {apiData.usage?.importPatterns && apiData.usage.importPatterns.length > 0 && (
             <section>
               <h2 className="text-2xl font-bold mb-4">Import Patterns</h2>
               <div className="space-y-4">
-                {api.usage.importPatterns.map((pattern: any, index: number) => (
+                {apiData.usage?.importPatterns?.map((pattern: any, index: number) => (
                   <div key={index} className="border rounded-lg p-4">
                     <pre className="text-sm bg-muted p-2 rounded overflow-x-auto mb-2">
                       <code>{pattern.pattern}</code>
@@ -173,11 +185,11 @@ export default function PackageAPIReference() {
           )}
           
           {/* Design Principles */}
-          {api.designPrinciples?.length > 0 && (
+          {apiData.designPrinciples && apiData.designPrinciples.length > 0 && (
             <section id="design-principles">
               <h2 className="text-3xl font-bold mb-6 scroll-mt-20">Design Principles</h2>
               <div className="grid gap-4">
-                {api.designPrinciples.map((principle: any, index: number) => (
+                {apiData.designPrinciples.map((principle: any, index: number) => (
                   <div key={index} className="border rounded-lg p-4">
                     <h3 className="font-semibold mb-2">{principle.principle}</h3>
                     <p className="text-sm text-muted-foreground">{principle.description}</p>
@@ -188,11 +200,11 @@ export default function PackageAPIReference() {
           )}
           
           {/* Future Plans */}
-          {api.futurePlans?.length > 0 && (
+          {apiData.futurePlans && apiData.futurePlans.length > 0 && (
             <section>
               <h2 className="text-2xl font-bold mb-4">Future Plans</h2>
               <div className="space-y-2">
-                {api.futurePlans.map((plan: any, index: number) => (
+                {apiData.futurePlans.map((plan: any, index: number) => (
                   <div key={index} className="flex items-start gap-2">
                     <Badge variant={plan.status === 'Planned' ? 'secondary' : 'default'}>
                       {plan.status}

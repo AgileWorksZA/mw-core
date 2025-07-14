@@ -21,6 +21,7 @@ import {
   MetadataSchema 
 } from '../schemas/common';
 import { SUPPORTED_LANGUAGES } from '../middleware/i18n';
+import '../types/context';
 
 /**
  * Create table routes
@@ -28,7 +29,8 @@ import { SUPPORTED_LANGUAGES } from '../middleware/i18n';
 export function createTableRoutes(cache?: CacheService) {
   return new Elysia({ prefix: '/tables' })
     // List available tables
-    .get('/', ({ headers, mwClient }) => {
+    .get('/', (context) => {
+      const { headers, mwClient } = context as any;
       if (!mwClient) throw new Error('No authenticated client');
       const registry = createTableRegistry(mwClient);
       const requestId = headers['x-request-id'] || 'unknown';
@@ -55,7 +57,8 @@ export function createTableRoutes(cache?: CacheService) {
     })
     
     // Get table schema
-    .get('/:table/schema', async ({ params: { table }, set, headers, mwClient }) => {
+    .get('/:table/schema', async (context) => {
+      const { params: { table }, set, headers, mwClient } = context as any;
       if (!mwClient) throw new Error('No authenticated client');
       const registry = createTableRegistry(mwClient);
       const requestId = headers['x-request-id'] || 'unknown';
@@ -94,7 +97,8 @@ export function createTableRoutes(cache?: CacheService) {
     })
     
     // Export table data
-    .get('/:table', async ({ params: { table }, query, set, headers, mwClient }) => {
+    .get('/:table', async (context) => {
+      const { params: { table }, query, set, headers, mwClient } = context as any;
       if (!mwClient) throw new Error('No authenticated client');
       const registry = createTableRegistry(mwClient);
       const requestId = headers['x-request-id'] || 'unknown';
@@ -172,7 +176,7 @@ export function createTableRoutes(cache?: CacheService) {
     
     // Get field labels for a table
     .get('/:table/labels', async (context) => {
-      const { params: { table }, set, headers, mwClient } = context;
+      const { params: { table }, set, headers, mwClient } = context as any;
       const language = (context as any).language;
       if (!mwClient || !cache) {
         set.status = 501;
