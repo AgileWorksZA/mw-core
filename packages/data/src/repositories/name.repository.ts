@@ -189,18 +189,27 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 		}
 		
 		// Use smartExport which returns objects by default
-		const result = await this.client.smartExport(this.tableName, {
-			search,
-			...params,
-			exportFormat: "full",
-		});
+		console.log("[NameRepository.find] Calling smartExport with search:", search, "params:", params);
+		
+		try {
+			const result = await this.client.smartExport(this.tableName, {
+				search,
+				...params,
+				exportFormat: "full",
+			});
 
-		// smartExport returns an array of objects when exportFormat is 'full'
-		if (!Array.isArray(result)) {
-			throw new Error("Unexpected response format");
+			// smartExport returns an array of objects when exportFormat is 'full'
+			if (!Array.isArray(result)) {
+				console.error("[NameRepository.find] Unexpected response format:", result);
+				throw new Error("Unexpected response format");
+			}
+
+			console.log("[NameRepository.find] Got", result.length, "records from MoneyWorks");
+			return result.map((record) => this.postProcess(record));
+		} catch (error) {
+			console.error("[NameRepository.find] Error from smartExport:", error);
+			throw error;
 		}
-
-		return result.map((record) => this.postProcess(record));
 	}
 
 	/**
@@ -449,35 +458,67 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 			offset?: number;
 		} = {},
 	): Promise<MoneyWorksName[]> {
-		const searchFields = options.searchFields || ["Code", "Name"];
-		const searchConditions = searchFields
-			.map((field) => `${field} CONTAINS[c] "${searchText}"`)
-			.join(" OR ");
-
-		let filter = `(${searchConditions})`;
-
+		// MoneyWorks search expressions are very limited - only exact matches work
+		// For text search, we need to fetch data and filter in JavaScript
+		
+		let baseFilter = "";
+		
+		// Build MoneyWorks filter for type constraints only
+		const typeFilters = [];
+		
 		// Add customer type filter
 		if (options.customerType === "customers") {
-			filter += " AND (CustomerType=1 OR CustomerType=2)";
+			typeFilters.push("(CustomerType=1 OR CustomerType=2)");
 		} else if (options.customerType === "debtors") {
-			filter += " AND CustomerType=2";
+			typeFilters.push("CustomerType=2");
 		} else if (options.customerType === "none") {
-			filter += " AND CustomerType=0";
+			typeFilters.push("CustomerType=0");
 		}
 
 		// Add supplier type filter
 		if (options.supplierType === "suppliers") {
-			filter += " AND (SupplierType=1 OR SupplierType=2)";
+			typeFilters.push("(SupplierType=1 OR SupplierType=2)");
 		} else if (options.supplierType === "creditors") {
-			filter += " AND SupplierType=2";
+			typeFilters.push("SupplierType=2");
 		} else if (options.supplierType === "none") {
-			filter += " AND SupplierType=0";
+			typeFilters.push("SupplierType=0");
+		}
+		
+		if (typeFilters.length > 0) {
+			baseFilter = typeFilters.join(" AND ");
 		}
 
-		return this.find(filter, {
-			limit: options.limit,
-			offset: options.offset,
+		// Fetch records with type filter only
+		// Use a reasonable limit to avoid fetching too many records
+		const fetchLimit = Math.max(options.limit || 100, 1000);
+		const allRecords = await this.find(baseFilter || undefined, {
+			limit: fetchLimit
 		});
+
+		// Now filter by search text in JavaScript
+		const searchFields = options.searchFields || ["Code", "Name"];
+		const searchTextLower = searchText.toLowerCase();
+		
+		let filteredRecords = allRecords;
+		
+		// Only apply text search if searchText is provided
+		if (searchText.trim()) {
+			filteredRecords = allRecords.filter(record => {
+				return searchFields.some(field => {
+					const fieldValue = record[field as keyof MoneyWorksName];
+					if (typeof fieldValue === 'string') {
+						return fieldValue.toLowerCase().includes(searchTextLower);
+					}
+					return false;
+				});
+			});
+		}
+
+		// Apply offset and limit
+		const offset = options.offset || 0;
+		const limit = options.limit || filteredRecords.length;
+		
+		return filteredRecords.slice(offset, offset + limit);
 	}
 
 	/**

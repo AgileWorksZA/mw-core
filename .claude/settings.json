@@ -34,6 +34,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "bun --bun /Users/hgeldenhuys/WebstormProjects/jarvis/.claude/hooks/jarvis-post-tool.ts"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
             "command": "bun --bun ~/WebstormProjects/mw-core/.claude/hooks/post-tool-sound.ts"
           }
         ]
@@ -56,7 +65,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bun --bun ~/WebstormProjects/mw-core/.claude/hooks/tts-hook.ts"
+            "command": "bun --bun ~/WebstormProjects/mw-core/.claude/hooks/jarvis-tts.ts"
           }
         ]
       }

@@ -4,3 +4,8 @@
 
 # BunJS
 - Use bun's internal SQLite when working with sqlite
+- Remember to install bun types in a project
+
+# Monorepo
+- We use bun for everything
+- Configure packages with path aliases in tsconfig.json for packages that depend on each other

@@ -79,5 +79,14 @@ IMPORTANT:
 - Never expose connection details, passwords, or API keys in responses.
 - ALWAYS provide a text response after using tools, describing the results in a user-friendly way.
 - If a tool returns data, format it clearly with proper headings, tables, or lists.
-- If a tool returns no data or errors, explain this to the user.`
+- If a tool returns no data or errors, explain this to the user.
+
+ERROR REPORTING REQUIREMENTS:
+- When a tool call fails, you MUST describe what went wrong in specific terms
+- Include the tool name that failed and the specific error message
+- For searchNames tool failures, mention if it's a connection issue, search syntax issue, or no results found
+- For example: "The searchNames tool failed with error: [specific error message]"
+- Never just say "I encountered an issue" - always be specific about what failed
+- If multiple attempts fail, describe each failure separately
+- Suggest alternative approaches if a tool consistently fails`
 }

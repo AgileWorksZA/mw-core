@@ -3,8 +3,6 @@ import { requireAuthAndConnection } from "~/lib/server-utils";
 import { createChatStreamHandler, createSSEResponse } from "@moneyworks/chat/server";
 import type { ChatRequest, MoneyWorksChatContext, MoneyWorksMessage, StreamingChunk } from "@moneyworks/chat";
 import { ChatService } from "~/services/chat";
-import { createMockMoneyWorksClient } from "~/services/mock-moneyworks";
-
 // This handler will be created per request with the proper config
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -34,31 +32,24 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const requestJson = formData.get('request') as string;
   const chatRequest: ChatRequest = JSON.parse(requestJson);
-
-  // Check if this is a mock connection (encrypted test data)
-  const isMockConnection = connection.mw_username === 'encrypted-username' || 
-                          connection.mw_password === 'encrypted-password' ||
-                          connection.mw_data_file === 'encrypted-datafile';
+  
+  console.log("[API CHAT] Connection check:", {
+    host: connection.mw_host,
+    dataFile: connection.mw_data_file
+  });
 
   // Create MoneyWorks client config
-  let mwClientConfig;
-  if (isMockConnection) {
-    // Use mock client for test connections
-    console.log("[API CHAT] Using mock MoneyWorks client for test connection");
-    mwClientConfig = createMockMoneyWorksClient();
-  } else {
-    mwClientConfig = {
-      host: connection.mw_host,
-      port: connection.mw_port,
-      dataFile: connection.mw_data_file,
-      username: connection.mw_username,
-      password: connection.mw_password,
-      folderAuth: connection.mw_folder_name ? {
-        folderName: connection.mw_folder_name,
-        folderPassword: connection.mw_folder_password
-      } : undefined
-    };
-  }
+  const mwClientConfig = {
+    host: connection.mw_host,
+    port: connection.mw_port,
+    dataFile: connection.mw_data_file,
+    username: connection.mw_username,
+    password: connection.mw_password,
+    folderAuth: connection.mw_folder_name ? {
+      folderName: connection.mw_folder_name,
+      folderPassword: connection.mw_folder_password
+    } : undefined
+  };
   
 
   // Create chat context
@@ -77,11 +68,17 @@ export async function action({ request }: ActionFunctionArgs) {
   };
 
   // Create handler with connection config
+  console.log("[API CHAT] Creating chat handler with config:", {
+    model: 'gpt-4o',
+    hasApiKey: !!process.env.OPENAI_API_KEY,
+    mwClientType: 'real'
+  });
+  
   const handler = createChatStreamHandler(
     {
       openaiApiKey: process.env.OPENAI_API_KEY!,
-      model: 'gpt-4o-mini',
-      maxTokens: 16384 // Extended context for gpt-4o-mini
+      model: 'gpt-4o', // Upgraded to full GPT-4o for better tool usage
+      maxTokens: 16384
     },
     mwClientConfig
   );
@@ -117,7 +114,9 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // Handle the stream and collect response for persistence
+  console.log("[API CHAT] Calling handler with messages:", chatRequest.messages.length);
   const stream = await handler(chatRequest, chatContext);
+  console.log("[API CHAT] Got stream from handler");
   
   // Create a transform stream to intercept and save messages
   let assistantContent = '';

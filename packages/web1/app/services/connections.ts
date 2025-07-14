@@ -55,15 +55,45 @@ export class ConnectionService {
     
     const crypto = createCryptoService(userId);
     
-    // Decrypt sensitive fields
-    return connections.map(conn => ({
-      ...conn,
-      mw_username: crypto.decrypt(conn.mw_username),
-      mw_password: crypto.decrypt(conn.mw_password),
-      mw_folder_name: conn.mw_folder_name ? crypto.decrypt(conn.mw_folder_name) : undefined,
-      mw_folder_password: conn.mw_folder_password ? crypto.decrypt(conn.mw_folder_password) : undefined,
-      mw_data_file: crypto.decrypt(conn.mw_data_file),
-    }));
+    // Decrypt sensitive fields, filter out corrupted connections
+    const validConnections: MWConnection[] = [];
+    
+    for (const conn of connections) {
+      try {
+        console.log(`[ConnectionService] Decrypting connection ${conn.id}:`, {
+          usernameLength: conn.mw_username?.length,
+          passwordLength: conn.mw_password?.length,
+          dataFileLength: conn.mw_data_file?.length
+        });
+        
+        const decryptedUsername = crypto.decrypt(conn.mw_username);
+        const decryptedPassword = crypto.decrypt(conn.mw_password);
+        const decryptedDataFile = crypto.decrypt(conn.mw_data_file);
+        
+        console.log(`[ConnectionService] Decryption successful:`, {
+          username: decryptedUsername,
+          dataFile: decryptedDataFile
+        });
+        
+        const decryptedConn = {
+          ...conn,
+          mw_username: decryptedUsername,
+          mw_password: decryptedPassword,
+          mw_folder_name: conn.mw_folder_name ? crypto.decrypt(conn.mw_folder_name) : undefined,
+          mw_folder_password: conn.mw_folder_password ? crypto.decrypt(conn.mw_folder_password) : undefined,
+          mw_data_file: decryptedDataFile,
+        };
+        validConnections.push(decryptedConn);
+      } catch (error) {
+        console.error(`[ConnectionService] Failed to decrypt connection ${conn.id}:`, error);
+        console.log(`[ConnectionService] Skipping corrupted connection: ${conn.connection_name}`);
+        
+        // TODO: Consider auto-deleting corrupted connections
+        // await this.deleteConnection(userId, conn.id);
+      }
+    }
+    
+    return validConnections;
   }
   
   async getConnection(userId: string, connectionId: string): Promise<MWConnection | null> {

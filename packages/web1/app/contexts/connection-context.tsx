@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { useAuth } from "~/hooks/use-auth";
 import type { MWConnection } from "~/db/schema";
 
@@ -20,7 +20,7 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  const refreshConnections = async () => {
+  const refreshConnections = useCallback(async () => {
     if (!userId || !isSignedIn) {
       console.log("[ConnectionContext] No userId or not signed in, clearing connections");
       setConnections([]);
@@ -78,11 +78,11 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userId, isSignedIn]);
   
   useEffect(() => {
     refreshConnections();
-  }, [userId, isSignedIn]);
+  }, [refreshConnections]);
   
   const handleSetCurrentConnection = async (connection: MWConnection) => {
     setCurrentConnection(connection);

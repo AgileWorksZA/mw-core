@@ -42,22 +42,39 @@ export class CryptoService {
    * Expects base64 encoded string containing: IV + authTag + encrypted data
    */
   decrypt(encryptedData: string): string {
-    const combined = Buffer.from(encryptedData, 'base64');
-    
-    // Extract components
-    const iv = combined.subarray(0, IV_LENGTH);
-    const authTag = combined.subarray(IV_LENGTH, IV_LENGTH + TAG_LENGTH);
-    const encrypted = combined.subarray(IV_LENGTH + TAG_LENGTH);
-    
-    const decipher = createDecipheriv(ALGORITHM, this.key, iv);
-    decipher.setAuthTag(authTag);
-    
-    const decrypted = Buffer.concat([
-      decipher.update(encrypted),
-      decipher.final()
-    ]);
-    
-    return decrypted.toString('utf8');
+    try {
+      const combined = Buffer.from(encryptedData, 'base64');
+      
+      // Validate minimum length
+      const minLength = IV_LENGTH + TAG_LENGTH;
+      if (combined.length < minLength) {
+        throw new Error(`Invalid encrypted data: too short (${combined.length} bytes, need at least ${minLength})`);
+      }
+      
+      // Extract components
+      const iv = combined.subarray(0, IV_LENGTH);
+      const authTag = combined.subarray(IV_LENGTH, IV_LENGTH + TAG_LENGTH);
+      const encrypted = combined.subarray(IV_LENGTH + TAG_LENGTH);
+      
+      // Validate auth tag length
+      if (authTag.length !== TAG_LENGTH) {
+        throw new Error(`Invalid auth tag length: ${authTag.length}, expected ${TAG_LENGTH}`);
+      }
+      
+      const decipher = createDecipheriv(ALGORITHM, this.key, iv);
+      decipher.setAuthTag(authTag);
+      
+      const decrypted = Buffer.concat([
+        decipher.update(encrypted),
+        decipher.final()
+      ]);
+      
+      return decrypted.toString('utf8');
+    } catch (error) {
+      console.error('[CRYPTO] Decryption failed for data:', encryptedData.substring(0, 50) + '...');
+      console.error('[CRYPTO] Error:', error);
+      throw error;
+    }
   }
   
   /**

@@ -18,6 +18,8 @@ export function createMoneyWorksTools(
   client: SmartMoneyWorksClient,
   context: MoneyWorksChatContext
 ) {
+  console.log('[TOOLS] Creating MoneyWorks tools with client:', client.constructor.name);
+  
   return {
     [MoneyWorksTools.GET_TRANSACTIONS]: tool({
       description: 'Search and retrieve MoneyWorks transactions with filtering',
@@ -114,27 +116,57 @@ export function createMoneyWorksTools(
       description: 'Search for customers or suppliers by name or code',
       parameters: searchNamesSchema,
       execute: async ({ query, type, limit }) => {
-        const filters: string[] = [
-          `(Name CONTAINS '${query}' OR Code CONTAINS '${query}')`
-        ];
+        const filters: string[] = [];
         
+        // MoneyWorks doesn't support CONTAINS, so we'll filter by type only
+        // and do the text search in JavaScript
         if (type === 'customer') {
           filters.push('CustomerType > 0');
         } else if (type === 'supplier') {
           filters.push('SupplierType > 0');
         }
         
-        const filterQuery = filters.join(' AND ');
+        const filterQuery = filters.length > 0 ? filters.join(' AND ') : undefined;
         
         try {
+          console.log('[SEARCH_NAMES] Starting search with:', { query, type, limit, filterQuery });
+          
+          // Fetch more records to filter in memory
+          const fetchLimit = Math.max(limit || 100, 500);
           const result = await client.smartExport('Name', {
             search: filterQuery,
-            limit,
+            limit: fetchLimit,
             exportFormat: 'full'
           });
           
-          return Array.isArray(result) ? result : [];
+          console.log('[SEARCH_NAMES] smartExport result:', { 
+            isArray: Array.isArray(result), 
+            length: Array.isArray(result) ? result.length : 0,
+            sample: Array.isArray(result) && result.length > 0 ? result[0] : null
+          });
+          
+          if (!Array.isArray(result)) {
+            return [];
+          }
+          
+          // If no query provided, return all results
+          if (!query || query.trim() === '') {
+            console.log('[SEARCH_NAMES] No query, returning all results');
+            return result.slice(0, limit || 100);
+          }
+          
+          // Filter by search text in JavaScript
+          const queryLower = query.toLowerCase();
+          const filtered = result.filter(name => {
+            const nameStr = (name.Name || '').toLowerCase();
+            const codeStr = (name.Code || '').toLowerCase();
+            return nameStr.includes(queryLower) || codeStr.includes(queryLower);
+          });
+          
+          console.log('[SEARCH_NAMES] Filtered results:', filtered.length);
+          return filtered.slice(0, limit || 100);
         } catch (error) {
+          console.error('[SEARCH_NAMES] Error:', error);
           throw new Error(`Failed to search names: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }

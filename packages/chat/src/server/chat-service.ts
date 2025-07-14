@@ -25,12 +25,17 @@ export class MoneyWorksChatService {
     });
     
     this.model = openai(config.model || 'gpt-4o-mini');
+    // Always use real MoneyWorks client
     this.mwClient = new SmartMoneyWorksClient(mwClientConfig);
   }
 
   async *streamChat(messages: CoreMessage[]): AsyncGenerator<StreamingChunk> {
     try {
       const tools = createMoneyWorksTools(this.mwClient, this.context);
+      
+      console.log('[ChatService] Available tools:', Object.keys(tools));
+      console.log('[ChatService] Starting stream with messages:', messages.length);
+      console.log('[ChatService] Last message:', messages[messages.length - 1]);
       
       const result = await streamText({
         model: this.model,
@@ -54,6 +59,7 @@ export class MoneyWorksChatService {
             break;
             
           case 'tool-call':
+            console.log('[ChatService] Tool call:', chunk.toolName, chunk.args);
             yield {
               type: 'tool_start',
               toolName: chunk.toolName,
@@ -85,6 +91,7 @@ export class MoneyWorksChatService {
             break;
             
           case 'error':
+            console.log('[ChatService] Stream error:', chunk.error);
             yield {
               type: 'error',
               error: chunk.error instanceof Error ? chunk.error.message : 'An error occurred'

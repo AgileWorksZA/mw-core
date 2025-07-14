@@ -237,7 +237,7 @@
       "mcp__desktop-commander__list_sessions",
       "Bash(kill:*)",
       "Bash(../../node_modules/.bin/react-router:*)",
-      "Bash(PORT=5174 bun dev:*)",
+      "Bash(PORT=4000 bun dev:*)",
       "Bash(VITE_HOST=true bun dev)",
       "mcp__react-router_Docs__fetch_react_router_documentation",
       "mcp__ui_Docs__fetch_ui_documentation",
@@ -273,7 +273,10 @@
       "Bash(ulimit:*)",
       "Bash(gtimeout:*)",
       "Bash(/Users/hgeldenhuys/WebstormProjects/mw-core/node_modules/.bin/react-router dev)",
-      "Bash(declare -f)"
+      "Bash(declare -f)",
+      "mcp__moneyworks__mw_list_tables",
+      "mcp__moneyworks__mw_export",
+      "Bash(#!/usr/bin/env bun\n// Register with JARVIS\nconsole.log(\"\"🤖 Registering Claude agent with JARVIS...\"\");\n\nconst JARVIS_SERVER = process.env.JARVIS_SERVER || \"\"http://localhost:5173\"\";\n\ntry {\n  const response = await fetch(`${JARVIS_SERVER}/api/agents/register`, {\n    method: ''POST'',\n    headers: {\n      ''Content-Type'': ''application/json'',\n    },\n    body: JSON.stringify({\n      agentId: ''claude-code'',\n      name: ''Claude Code Assistant'',\n      type: ''coding-assistant'',\n      capabilities: [''file-ops'', ''code-analysis'', ''debugging'', ''documentation''],\n      status: ''active'',\n      timestamp: new Date().toISOString()\n    })\n  });\n\n  if (response.ok) {\n    const result = await response.json();\n    console.log(\"\"✅ Successfully registered with JARVIS\"\");\n    console.log(`📡 Server: ${JARVIS_SERVER}`);\n    console.log(`🆔 Agent ID: ${result.agentId}`);\n  } else {\n    console.log(`❌ Registration failed: ${response.status} ${response.statusText}`);\n  }\n} catch (error) {\n  console.log(`🔌 Could not connect to JARVIS server at ${JARVIS_SERVER}`);\n  console.log(`   Error: ${error.message}`);\n})"
     ],
     "deny": []
   }

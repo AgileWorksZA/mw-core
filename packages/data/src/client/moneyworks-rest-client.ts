@@ -48,6 +48,8 @@ export class MoneyWorksRESTClient {
     const encodedPassword = encodeURIComponent(this.config.password || '');
     this.baseUrl = `${this.config.protocol}://${this.config.host}:${this.config.port}/REST/${encodedUsername}:${encodedPassword}@${encodedDataFile}`;
     
+    console.log('[MoneyWorksRESTClient] Base URL:', this.baseUrl);
+    
     // Build headers (no auth in headers when using URL auth)
     this.authHeaders = {
       'Accept': 'text/plain' // MoneyWorks defaults to TSV
@@ -131,6 +133,9 @@ export class MoneyWorksRESTClient {
     }
 
     const url = `${this.baseUrl}/export?${params.toString()}`;
+    
+    console.log('[MoneyWorksRESTClient] Export URL:', url);
+    console.log('[MoneyWorksRESTClient] Export params:', Object.fromEntries(params.entries()));
     
     try {
       const response = await fetch(url, {
