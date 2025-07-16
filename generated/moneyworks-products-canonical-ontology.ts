@@ -442,6 +442,13 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
     manualSource: "moneyworks_appendix_products.html"
   },
   {
+    fieldName: "AverageValue",
+    dataType: "N" as const,
+    canonicalDescription: "Average per-unit stock value; you cannot alter this",
+    manualSource: "moneyworks_export_import_field_descriptions_for_products.html",
+    isRequired: false
+  },
+  {
     fieldName: "ReorderLevel",
     dataType: "N" as const,
     canonicalDescription: "The stock level at which a reordering warning should be given. (in selling units)",
