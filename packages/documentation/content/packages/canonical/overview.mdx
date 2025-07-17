@@ -104,6 +104,39 @@ const result = calculateTaxForRate(gst10, 100.00, {
 console.log(`Tax for ${result.TaxCode}: $${result.totalTax}`);
 ```
 
+### Working with Names
+
+```typescript
+import { 
+  MoneyWorksName,
+  validateName,
+  isDebtor,
+  isCreditor 
+} from '@moneyworks/canonical/names';
+
+// Create a debtor (using exact MW terminology)
+const debtor: MoneyWorksName = {
+  Code: "DEBT001",
+  Name: "ABC Corporation",
+  CustomerType: 2,          // Debtor (NOT just customer)
+  SupplierType: 0,          // Not a supplier
+  RecAccount: "1-1200",     // REQUIRED for debtors (NOT "AR Account")
+  CreditLimit: 50000,
+  Hold: false,
+  Kind: 1                   // Normal (not template)
+};
+
+// Validate it
+const validation = validateName(debtor);
+if (!validation.isValid) {
+  console.error('Validation errors:', validation.errors);
+}
+
+// Check business types
+console.log(`Is debtor: ${isDebtor(debtor)}`);      // true
+console.log(`Is creditor: ${isCreditor(debtor)}`);  // false
+```
+
 ## Key MoneyWorks Concepts
 
 ### 1. Changeover Date System
@@ -241,11 +274,12 @@ const startDate = tax.effectiveDate;       // Wrong: should be Date
 
 ### Currently Implemented
 - **TaxRates** - Complete tax rate management with validation and calculation
+- **Names** - Customer/supplier/debtor/creditor management with business rules
 
 ### Planned Entities
 - **Transactions** - MW transaction types and posting
 - **Accounts** - Chart of accounts management
-- **Names** - Customer/supplier management
+- **Products** - Product and inventory management
 
 ## Development
 
@@ -273,8 +307,9 @@ bun run build
 
 ## Resources
 
-- [API Reference](/packages/canonical/api) - Complete API documentation
+- [API Reference](/packages/canonical/api) - Complete API documentation  
 - [Tax Rates Guide](/packages/canonical/tax-rates) - Deep dive into tax management
+- [Names Guide](/packages/canonical/names) - Customer/supplier/debtor/creditor management
 - MoneyWorks Manual - Primary source of truth
 - Architecture docs - System design documentation
 

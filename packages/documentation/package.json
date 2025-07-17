@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "dev": "bun --bun run ../../node_modules/.bin/react-router dev",
+    "dev": "bun --bun run react-router dev --port 3030",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "generate-docs": "bun run ./scripts/generate-docs.ts"

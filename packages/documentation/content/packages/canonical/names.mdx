@@ -1,0 +1,605 @@
+---
+title: "Names Guide"
+description: "Comprehensive guide to MoneyWorks Names - customers, suppliers, debtors, and creditors"
+package: "canonical"
+---
+
+# Names in MoneyWorks
+
+This guide provides a comprehensive understanding of how MoneyWorks handles Names, including the critical distinctions between customers/debtors and suppliers/creditors, business rules, and implementation patterns.
+
+## Core Concepts
+
+### Customer vs Debtor Hierarchy
+
+MoneyWorks makes a crucial distinction between Customers and Debtors that must be preserved:
+
+```typescript
+import { MoneyWorksName, isDebtor, isCustomer } from '@moneyworks/canonical/names';
+
+// Customer (Type 1): Can make purchases, appears in sales transactions
+const customer: MoneyWorksName = {
+  Code: "CUST001",
+  Name: "ABC Corp",
+  CustomerType: 1,  // Customer only
+  SupplierType: 0,  // Not a supplier
+  // No RecAccount required
+};
+
+// Debtor (Type 2): Full AR functionality - receivables, credit limits, aging
+const debtor: MoneyWorksName = {
+  Code: "DEBT001", 
+  Name: "XYZ Industries",
+  CustomerType: 2,     // Debtor (includes customer capabilities)
+  SupplierType: 0,
+  RecAccount: "1-1200", // REQUIRED for debtors
+  CreditLimit: 50000,
+  DCurrent: 15000,     // Current receivables balance
+};
+
+console.log(isCustomer(customer)); // true
+console.log(isCustomer(debtor));   // true (debtor IS a customer)
+console.log(isDebtor(customer));   // false
+console.log(isDebtor(debtor));     // true
+```
+
+### Supplier vs Creditor Hierarchy
+
+Similarly, MoneyWorks distinguishes between Suppliers and Creditors:
+
+```typescript
+// Supplier (Type 1): Can provide goods/services, appears in purchase transactions
+const supplier: MoneyWorksName = {
+  Code: "SUPP001",
+  Name: "Parts Unlimited",
+  CustomerType: 0,
+  SupplierType: 1,  // Supplier only
+  // No PayAccount required
+};
+
+// Creditor (Type 2): Full AP functionality - payables, payment terms, aging
+const creditor: MoneyWorksName = {
+  Code: "CRED001",
+  Name: "Office Supplies Ltd", 
+  CustomerType: 0,
+  SupplierType: 2,     // Creditor (includes supplier capabilities)
+  PayAccount: "2-2100", // REQUIRED for creditors
+  CreditorTerms: 30,   // Payment terms
+  CCurrent: 8500,      // Current payables balance
+};
+
+console.log(isSupplier(supplier)); // true
+console.log(isSupplier(creditor)); // true (creditor IS a supplier)
+console.log(isCreditor(supplier)); // false
+console.log(isCreditor(creditor)); // true
+```
+
+## Name Structure
+
+### Required Fields
+
+Every name MUST have these fields:
+
+```typescript
+interface MoneyWorksNameRequired {
+  Code: string;        // Unique identifier (primary key)
+  Name: string;        // Display name
+  CustomerType: 0 | 1 | 2;  // 0=None, 1=Customer, 2=Debtor
+  SupplierType: 0 | 1 | 2;  // 0=None, 1=Supplier, 2=Creditor
+  Kind: number;        // 1=Normal, 0=Template (usually 1)
+}
+```
+
+### Control Account Requirements
+
+Names that handle money MUST have appropriate control accounts:
+
+```typescript
+// Debtors require a Receivables Account
+const debtor: MoneyWorksName = {
+  Code: "DEBT001",
+  CustomerType: 2,           // Debtor
+  RecAccount: "1-1200",      // Required: where receivables are tracked
+  // ...
+};
+
+// Creditors require a Payables Account  
+const creditor: MoneyWorksName = {
+  Code: "CRED001", 
+  SupplierType: 2,           // Creditor
+  PayAccount: "2-2100",      // Required: where payables are tracked
+  // ...
+};
+```
+
+## Field Preservation
+
+### Critical MoneyWorks Terminology
+
+NEVER translate these MoneyWorks field names:
+
+```typescript
+// ✅ ALWAYS use exact MoneyWorks field names
+const name: MoneyWorksName = {
+  RecAccount: "1-1200",     // NOT "ReceivablesAccount" or "ARAccount"
+  PayAccount: "2-2100",     // NOT "PayablesAccount" or "APAccount"  
+  DCurrent: 15000,          // NOT "currentReceivables" or "arBalance"
+  D30Plus: 2000,            // Debtor aging bucket: 30+ days
+  D60Plus: 500,             // Debtor aging bucket: 60+ days
+  D90Plus: 100,             // Debtor aging bucket: 90+ days
+  CCurrent: 8500,           // NOT "currentPayables" or "apBalance"
+  email: "contact@company.com", // lowercase 'e' is correct
+  "Account Name": "ABC Bank",   // WITH space for bank account name
+};
+```
+
+### Contact Architecture
+
+MoneyWorks has TWO contact systems:
+
+```typescript
+// Built-in contact fields (in Names table)
+const nameWithContacts: MoneyWorksName = {
+  Code: "COMP001",
+  Name: "ABC Corporation",
+  Contact: "John Smith",      // Primary contact name
+  Contact2: "Jane Doe",       // Secondary contact name  
+  Phone: "+1-555-0100",
+  Fax: "+1-555-0101", 
+  email: "info@abc.com",
+  // ...
+};
+
+// Plus unlimited contacts via Contacts subfile (separate table)
+// Linked by ParentSeq → Name.SequenceNumber
+```
+
+## Business Rules & Validation
+
+### Payment Terms Logic
+
+Payment terms use a special positive/negative system:
+
+```typescript
+import { interpretPaymentTerms } from '@moneyworks/canonical/names';
+
+const paymentTerms = {
+  within30Days: 30,        // Positive: within N days
+  tenthOfNextMonth: -10,   // Negative: Nth day of following month
+  immediate: 0             // Zero: no specific terms
+};
+
+// Examples:
+// DebtorTerms: 30   → Payment due within 30 days
+// DebtorTerms: -15  → Payment due on 15th of next month
+// DebtorTerms: 0    → No specific payment terms
+```
+
+### Flags Field (Bit-mapped)
+
+```typescript
+enum NameFlags {
+  REQUIRES_ORDER_NUMBER = 0x0001,  // Bit 1: Requires PO number
+  // Other bits reserved for future use
+}
+
+// Check if name requires order numbers
+const requiresPO = (name.Flags & NameFlags.REQUIRES_ORDER_NUMBER) !== 0;
+```
+
+### Validation Rules
+
+```typescript
+import { validateName } from '@moneyworks/canonical/names';
+
+const validation = validateName({
+  Code: "DEBT001",
+  Name: "ABC Corporation", 
+  CustomerType: 2,    // Debtor
+  RecAccount: "1-1200" // Required for debtors
+});
+
+if (!validation.isValid) {
+  validation.errors.forEach(error => {
+    console.error(`Validation error: ${error.message}`);
+  });
+}
+
+// Validation checks:
+// 1. Code is unique and not empty
+// 2. Name is not empty
+// 3. Debtors have RecAccount
+// 4. Creditors have PayAccount  
+// 5. Account codes exist in Chart of Accounts
+// 6. Credit limits are non-negative
+```
+
+## Repository Operations
+
+### Finding Names by Type
+
+```typescript
+import { NameRepository } from '@moneyworks/data';
+
+const repo = new NameRepository(client);
+
+// Get all customers (including debtors)
+const customers = await repo.getCustomers({
+  includeOnHold: false,
+  orderBy: "Name",
+  limit: 50
+});
+
+// Get debtors only (those with receivables capability)
+const debtors = await repo.getDebtors({
+  withBalancesOnly: true,  // Only those with outstanding balances
+  includeOnHold: false
+});
+
+// Get all suppliers (including creditors)
+const suppliers = await repo.getSuppliers({
+  orderBy: "Name"
+});
+
+// Get creditors only (those with payables capability)
+const creditors = await repo.getCreditors({
+  withBalancesOnly: true   // Only those with outstanding balances
+});
+```
+
+### Text Search Across Fields
+
+```typescript
+// Search across multiple name fields
+const results = await repo.search("ABC", {
+  searchFields: ["Code", "Name", "Contact", "Phone", "email"],
+  customerType: "all",      // "all" | "customers" | "debtors" | "none"
+  supplierType: "suppliers", // "all" | "suppliers" | "creditors" | "none"
+  limit: 20
+});
+
+// Find names by category
+const retailCustomers = await repo.getByCategory("Retail", 1); // Category1
+```
+
+### Managing Credit and Hold Status
+
+```typescript
+// Put a name on hold
+const updatedName = await repo.putOnHold("DEBT001", true);
+
+// Update credit limit for a debtor
+const nameWithNewLimit = await repo.updateCreditLimit("DEBT001", 75000);
+
+// Get overdue debtors
+const overdueDebtors = await repo.getOverdueDebtors(30); // 30+ days overdue
+```
+
+## Financial Information
+
+### Aging Balances
+
+```typescript
+const name: MoneyWorksName = {
+  Code: "DEBT001",
+  DCurrent: 15000,    // Current (0-30 days)
+  D30Plus: 2000,      // 30-59 days overdue
+  D60Plus: 500,       // 60-89 days overdue  
+  D90Plus: 100,       // 90+ days overdue
+  CCurrent: 0,        // Creditor balance (if any)
+};
+
+// Calculate total receivables
+const totalReceivables = (name.DCurrent || 0) + 
+                        (name.D30Plus || 0) + 
+                        (name.D60Plus || 0) + 
+                        (name.D90Plus || 0);
+
+// Calculate overdue amount
+const overdueAmount = (name.D30Plus || 0) + 
+                     (name.D60Plus || 0) + 
+                     (name.D90Plus || 0);
+```
+
+### Balances Summary
+
+```typescript
+// Get system-wide balances overview
+const summary = await repo.getBalancesSummary();
+
+console.log(summary);
+// {
+//   totalDebtors: 150,
+//   totalCreditors: 75,
+//   debtorsCurrent: 125000,
+//   debtors30Plus: 15000,
+//   debtors60Plus: 5000,
+//   debtors90Plus: 2000,
+//   creditorsTotal: 45000
+// }
+```
+
+## MCP Tools Integration
+
+MoneyWorks Core provides specialized MCP tools for AI agents:
+
+```typescript
+// Available MCP tools:
+// - mw_search_names          - Text search across fields
+// - mw_get_customers         - Get all customers
+// - mw_get_debtors          - Get debtors with receivables
+// - mw_get_suppliers        - Get all suppliers  
+// - mw_get_creditors        - Get creditors with payables
+// - mw_get_overdue_debtors  - Find overdue accounts
+// - mw_get_balances_summary - System balances overview
+// - mw_get_name_by_code     - Get specific name
+// - mw_get_names_by_category - Filter by category
+// - mw_update_name_hold_status - Put on/off hold
+// - mw_update_credit_limit   - Update credit limits
+```
+
+## UI Implementation
+
+### Type Badges and Indicators
+
+```typescript
+// Display appropriate badges based on name type
+const getNameTypeBadges = (name: MoneyWorksName) => {
+  const badges = [];
+  
+  if (name.CustomerType === 1) {
+    badges.push({ type: "customer", label: "Customer" });
+  } else if (name.CustomerType === 2) {
+    badges.push({ type: "debtor", label: "Debtor" }); 
+  }
+  
+  if (name.SupplierType === 1) {
+    badges.push({ type: "supplier", label: "Supplier" });
+  } else if (name.SupplierType === 2) {
+    badges.push({ type: "creditor", label: "Creditor" });
+  }
+  
+  if (name.Hold) {
+    badges.push({ type: "hold", label: "On Hold" });
+  }
+  
+  return badges;
+};
+```
+
+### Balance Display
+
+```typescript
+// Format balance display with proper accounting conventions
+const formatBalance = (name: MoneyWorksName) => {
+  const receivables = {
+    current: name.DCurrent || 0,
+    overdue: (name.D30Plus || 0) + (name.D60Plus || 0) + (name.D90Plus || 0),
+    total: (name.DCurrent || 0) + (name.D30Plus || 0) + 
+           (name.D60Plus || 0) + (name.D90Plus || 0)
+  };
+  
+  const payables = name.CCurrent || 0;
+  
+  return { receivables, payables };
+};
+```
+
+## Common Patterns
+
+### Creating a Complete Customer/Debtor
+
+```typescript
+import { MoneyWorksName } from '@moneyworks/canonical/names';
+import { validateName } from '@moneyworks/canonical/names';
+
+const newDebtor: MoneyWorksName = {
+  Code: "DEBT001",
+  Name: "ABC Corporation",
+  CustomerType: 2,           // Debtor (full AR functionality)
+  SupplierType: 0,          // Not a supplier
+  Kind: 1,                  // Normal (not template)
+  RecAccount: "1-1200",     // Required receivables control account
+  CreditLimit: 50000,       // Credit limit
+  DebtorTerms: 30,          // Net 30 payment terms
+  Hold: false,              // Active account
+  Currency: "",             // Local currency
+  
+  // Contact information
+  Contact: "John Smith",
+  Phone: "+1-555-0100",
+  email: "john@abc.com",
+  
+  // Address
+  "Postal Address": "123 Main St\nAnytown, ST 12345",
+  "Delivery Address": "456 Industrial Blvd\nAnytown, ST 12345",
+  
+  // Categories for reporting
+  Category1: "Commercial",
+  Category2: "Large Account"
+};
+
+// Always validate before saving
+const validation = validateName(newDebtor);
+if (!validation.isValid) {
+  throw new Error(validation.errors.map(e => e.message).join(', '));
+}
+```
+
+### Handling Dual-Type Names
+
+```typescript
+// A name can be both customer AND supplier
+const dualTypeName: MoneyWorksName = {
+  Code: "DUAL001",
+  Name: "ABC Trading Co",
+  CustomerType: 2,          // Debtor (we sell to them)
+  SupplierType: 1,          // Supplier (we buy from them)
+  RecAccount: "1-1200",     // For receivables
+  PayAccount: "2-2100",     // NOT required (supplier, not creditor)
+  CreditLimit: 25000,
+  DCurrent: 5000,           // We owe us money
+  CCurrent: 0,              // No payables (they're a supplier, not creditor)
+};
+```
+
+### Managing Categories
+
+```typescript
+// Names support 4 category fields for flexible classification
+const categorizedName: MoneyWorksName = {
+  Code: "CAT001",
+  Name: "Retail Customer Inc",
+  Category1: "Retail",        // Industry type
+  Category2: "Large",         // Size classification  
+  Category3: "West Coast",    // Geographic region
+  Category4: "Priority",      // Service level
+};
+
+// Find names by category
+const retailNames = await repo.getByCategory("Retail", 1);
+const westCoastNames = await repo.getByCategory("West Coast", 3);
+```
+
+## Best Practices
+
+### 1. Preserve MoneyWorks Terminology
+
+```typescript
+// ✅ Good - Exact MoneyWorks field names
+const name = {
+  RecAccount: "1-1200",
+  PayAccount: "2-2100", 
+  DCurrent: 15000,
+  email: "contact@company.com"  // lowercase 'e'
+};
+
+// ❌ Bad - Translated/generic terms
+const name = {
+  receivablesAccount: "1-1200",    // Wrong field name
+  payablesAccount: "2-2100",       // Wrong field name
+  currentReceivables: 15000,       // Wrong field name
+  Email: "contact@company.com"     // Wrong casing
+};
+```
+
+### 2. Understand Type Hierarchies
+
+```typescript
+// ✅ Good - Understand the relationships
+if (isDebtor(name)) {
+  // Has full AR functionality
+  console.log(`Credit limit: ${name.CreditLimit}`);
+  console.log(`Current balance: ${name.DCurrent}`);
+}
+
+if (isCustomer(name)) {
+  // Can appear in sales transactions (includes debtors)
+  console.log("Can make purchases");
+}
+
+// ❌ Bad - Confusing customer with debtor
+if (name.CustomerType === 1) {
+  // This is ONLY regular customers, NOT debtors!
+  console.log(name.CreditLimit); // May be undefined
+}
+```
+
+### 3. Validate Control Accounts
+
+```typescript
+// ✅ Good - Check requirements before saving
+if (name.CustomerType === 2 && !name.RecAccount) {
+  throw new Error("Debtors must have a RecAccount");
+}
+
+if (name.SupplierType === 2 && !name.PayAccount) {
+  throw new Error("Creditors must have a PayAccount");
+}
+
+// ❌ Bad - Missing control account validation
+await repo.create(name); // May fail in MoneyWorks
+```
+
+### 4. Handle Optional Balance Fields
+
+```typescript
+// ✅ Good - Handle undefined/null balance fields
+const totalReceivables = (name.DCurrent || 0) + 
+                        (name.D30Plus || 0) + 
+                        (name.D60Plus || 0) + 
+                        (name.D90Plus || 0);
+
+// ❌ Bad - Assuming fields exist
+const totalReceivables = name.DCurrent + name.D30Plus + 
+                        name.D60Plus + name.D90Plus; // May be NaN
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **"RecAccount required" error**
+   - Occurs when creating a Debtor (CustomerType=2) without RecAccount
+   - Solution: Provide a valid receivables control account code
+
+2. **"PayAccount required" error** 
+   - Occurs when creating a Creditor (SupplierType=2) without PayAccount
+   - Solution: Provide a valid payables control account code
+
+3. **Search returns no results**
+   - MoneyWorks search is limited - use the repository's search() method
+   - Check that search fields contain the expected data
+
+4. **Balance calculations seem wrong**
+   - Remember that balance fields may be undefined/null
+   - Always use `|| 0` when summing balance fields
+
+5. **Type confusion (Customer vs Debtor)**
+   - Customer (Type 1): Basic sales capability only
+   - Debtor (Type 2): Full AR functionality (includes customer capability)
+   - Use helper functions: `isCustomer()`, `isDebtor()`, etc.
+
+## Field Metadata Access
+
+Get detailed information about name fields:
+
+```typescript
+import { 
+  getNameField, 
+  getRequiredNameFields, 
+  MONEYWORKS_NAME_FIELDS 
+} from '@moneyworks/canonical/names';
+
+// Get metadata for a specific field
+const codeMeta = getNameField('Code');
+console.log(codeMeta);
+// {
+//   fieldName: 'Code',
+//   dataType: MoneyWorksDataType.TEXT,
+//   maxLength: 15,
+//   description: 'Unique name code',
+//   required: true,
+//   indexed: true
+// }
+
+// List all required fields
+const requiredFields = getRequiredNameFields();
+requiredFields.forEach(field => {
+  console.log(`${field.fieldName} is required`);
+});
+
+// Find all indexed fields for efficient searching
+Object.entries(MONEYWORKS_NAME_FIELDS).forEach(([field, meta]) => {
+  if (meta.indexed) {
+    console.log(`${field} can be used for efficient lookups`);
+  }
+});
+```
+
+## Next Steps
+
+- Review the [API Reference](/packages/canonical/api) for complete function signatures
+- Explore [Contacts Management](/guides/contacts) for handling the Contacts subfile
+- Learn about [Account Integration](/guides/accounts) for control account setup
+- Study [Transaction Integration](/guides/transactions) for name usage in transactions
