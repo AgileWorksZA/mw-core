@@ -46,6 +46,24 @@
             "command": "bun --bun ~/WebstormProjects/mw-core/.claude/hooks/post-tool-sound.ts"
           }
         ]
+      },
+      {
+        "matcher": "TodoWrite",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/jarvis/post/task-tracker.ts"
+          }
+        ]
+      },
+      {
+        "matcher": "TodoWrite",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/cloudios/post/task-tracker.ts"
+          }
+        ]
       }
     ],
     "Notification": [
@@ -55,6 +73,24 @@
           {
             "type": "command",
             "command": "bun --bun ~/WebstormProjects/mw-core/.claude/hooks/notification-sound.ts"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/jarvis/notification/sound.ts"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/cloudios/notification/sound.ts"
           }
         ]
       }
@@ -68,6 +104,24 @@
             "command": "bun --bun ~/WebstormProjects/mw-core/.claude/hooks/jarvis-tts.ts"
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/jarvis/stop/audio-summary.ts"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/cloudios/stop/audio-summary.ts"
+          }
+        ]
       }
     ],
     "SubagentStop": [
@@ -77,6 +131,46 @@
           {
             "type": "command",
             "command": "bun -e \"console.log(123)\" >> _subagent-stop.log"
+          }
+        ]
+      }
+    ],
+    "PreExecute": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/jarvis/pre/tool-use-guard.ts"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/cloudios/pre/tool-use-guard.ts"
+          }
+        ]
+      }
+    ],
+    "PostExecute": [
+      {
+        "matcher": "register.ts",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/jarvis/post/setup-session-id.ts"
+          }
+        ]
+      },
+      {
+        "matcher": "register.ts",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun --bun ${PWD}/.claude/hooks/cloudios/post/setup-session-id.ts"
           }
         ]
       }
