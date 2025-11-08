@@ -1,3 +1,8 @@
+Resolving dependencies
+Resolved, downloaded and extracted [2]
+Saved lockfile
+```typescript
+// Product enums based on MoneyWorks product semantics
 export enum ProductType {
   Stockable = 'ST',
   Service = 'SV',
@@ -323,3 +328,4 @@ export function getReorderQuantity(product: Product): number | undefined {
 export function formatProductDisplay(product: Product): string {
   return `${product.Code} - ${product.Description} (${product.Type})`;
 }
+```

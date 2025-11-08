@@ -1,7 +1,7 @@
 /**
  * MoneyWorks TaxRates Entity - Canonical Ontology
  * 
- * PURE MoneyWorks staging definitions extracted from official manual
+ * PURE MoneyWorks canonical definitions extracted from official manual
  * Source: moneyworks_appendix_tax_rate.html
  * Authority: MoneyWorks Manual - Tax Rate Field Descriptions
  * 
@@ -15,7 +15,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks staging tax combination modes for 2nd tier tax
+ * MoneyWorks canonical tax combination modes for 2nd tier tax
  * Source: moneyworks_appendix_tax_rate.html - "Combine" field description
  * Note: The manual indicates "Flags (how 2nd tier tax is combined)" but doesn't 
  * specify the exact flag values - these would need to be determined from 
@@ -165,7 +165,7 @@ export const MONEYWORKS_TAX_RATE_FIELDS = [
 // ============================================================================
 
 /**
- * MoneyWorks staging tax rate business rules interface
+ * MoneyWorks canonical tax rate business rules interface
  */
 export interface MoneyWorksTaxRateBusinessRules {
   /** Tax code must be unique within the system */
@@ -221,48 +221,48 @@ export interface MoneyWorksTaxRateBusinessRules {
  */
 
 export const MONEYWORKS_TAX_RATE_CANONICAL_TERMS = {
-  // Tax code management (MoneyWorks staging)
+  // Tax code management (MoneyWorks canonical)
   TAX_CODE: "Tax Code",                     // Unique identifier for tax rate
   TAX_RATE: "Tax Rate",                     // Percentage rate value
   CHANGEOVER_DATE: "Changeover Date",       // Date when rate changes
   
-  // Dual rate system (MoneyWorks staging)
+  // Dual rate system (MoneyWorks canonical)
   RATE_BEFORE_CHANGEOVER: "Rate Before Changeover",   // Rate1 field
   RATE_AFTER_CHANGEOVER: "Rate After Changeover",     // Rate2 field
   HISTORICAL_RATE: "Historical Rate",                 // Rate1 when past changeover
   CURRENT_RATE: "Current Rate",                       // Rate2 when past changeover
   
-  // Multi-tier taxation (MoneyWorks staging)
+  // Multi-tier taxation (MoneyWorks canonical)
   PRIMARY_TAX_RATE: "Primary Tax Rate",               // Main tax (GST/VAT)
   SECONDARY_TAX_RATE: "Secondary Tax Rate",           // Additional tax (PST)
   TAX_COMBINATION_MODE: "Tax Combination Mode",       // How taxes are combined
   COMBINED_TAX_CALCULATION: "Combined Tax Calculation", // Total tax calculation
   
-  // Account relationships (MoneyWorks staging)
+  // Account relationships (MoneyWorks canonical)
   GST_PAID_ACCOUNT: "GST Paid Account",               // PaidAccount field
   GST_RECEIVED_ACCOUNT: "GST Received Account",       // RecAccount field
   TAX_CONTROL_ACCOUNT: "Tax Control Account",         // General term for both
   
-  // GST finalization (MoneyWorks staging)
+  // GST finalization (MoneyWorks canonical)
   GST_FINALIZATION: "GST Finalization",               // Tax period closing
   GST_PAID_TOTAL: "GST Paid Total",                   // GSTPaid field
   GST_RECEIVED_TOTAL: "GST Received Total",           // GSTReceived field
   NET_TAX_PAID: "Net Tax Paid",                       // NetPaid field
   NET_TAX_RECEIVED: "Net Tax Received",               // NetReceived field
   
-  // International tax terms (MoneyWorks staging usage)
+  // International tax terms (MoneyWorks canonical usage)
   GST: "GST",                                         // Goods and Services Tax
   PST: "PST",                                         // Provincial Sales Tax
   VAT: "VAT",                                         // Value Added Tax
   SALES_TAX: "Sales Tax",                             // General sales tax
   
-  // Tax calculation concepts (MoneyWorks staging)
+  // Tax calculation concepts (MoneyWorks canonical)
   TAX_INCLUSIVE: "Tax Inclusive",                     // Price includes tax
   TAX_EXCLUSIVE: "Tax Exclusive",                     // Tax added to price
   TAX_BASIS: "Tax Basis",                             // Amount tax is calculated on
   TAX_AMOUNT: "Tax Amount",                           // Calculated tax value
   
-  // Compliance and reporting (MoneyWorks staging)
+  // Compliance and reporting (MoneyWorks canonical)
   BAS_REPORTING: "BAS Reporting",                     // Business Activity Statement
   VAT_RETURN: "VAT Return",                           // VAT return preparation
   TAX_PERIOD: "Tax Period",                           // Reporting period
@@ -274,7 +274,7 @@ export const MONEYWORKS_TAX_RATE_CANONICAL_TERMS = {
 // ============================================================================
 
 /**
- * Validate staging MoneyWorks tax code format
+ * Validate canonical MoneyWorks tax code format
  */
 export function validateTaxCodeCanonical(taxCode: string): {
   isValid: boolean;
@@ -302,7 +302,7 @@ export function validateTaxCodeCanonical(taxCode: string): {
 }
 
 /**
- * Validate staging MoneyWorks tax rate values
+ * Validate canonical MoneyWorks tax rate values
  */
 export function validateTaxRateCanonical(rate: number): {
   isValid: boolean;
@@ -437,7 +437,7 @@ function calculateTotalRate(primaryRate: number, secondaryRate: number, combineM
 }
 
 /**
- * Get staging MoneyWorks account relationships for tax rates
+ * Get canonical MoneyWorks account relationships for tax rates
  */
 export function getCanonicalTaxAccountRelationships(): {
   needsPaidAccount: boolean;

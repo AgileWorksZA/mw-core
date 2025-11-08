@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Departments Entity - Canonical Ontology
  * 
- * PURE MoneyWorks staging definitions extracted from official manual
+ * PURE MoneyWorks canonical definitions extracted from official manual
  * Source: moneyworks_appendix_departments.html
  * Authority: MoneyWorks Manual - Departments Field Descriptions
  * 
@@ -23,7 +23,7 @@
 // ============================================================================
 
 /**
- * MoneyWorks staging department data type definitions
+ * MoneyWorks canonical department data type definitions
  * Source: moneyworks_appendix_departments.html - Field specifications
  */
 export type MoneyWorksDepartmentDataType = 
@@ -230,7 +230,7 @@ export const MONEYWORKS_DEPARTMENT_RELATIONSHIPS = {
 
 /**
  * MoneyWorks department business validation rules
- * Based on staging manual specifications
+ * Based on canonical manual specifications
  */
 export const MONEYWORKS_DEPARTMENT_VALIDATION_RULES = {
   codeUniqueness: "Department codes must be unique across all departments",

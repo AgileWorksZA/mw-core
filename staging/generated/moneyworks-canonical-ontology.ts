@@ -1,13 +1,22 @@
 /**
  * MoneyWorks Canonical Ontology - Pure DSL Foundation
  * 
- * This file contains ONLY staging MoneyWorks terminology and concepts
+ * This file contains ONLY canonical MoneyWorks terminology and concepts
  * as defined in the official MoneyWorks Manual. No business interpretation
  * or domain-specific terminology is included.
  * 
  * Source: MoneyWorks Manual - Appendix Field Descriptions
  * Authority: /Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror/manual/manual/
  * Validation: Each concept verified against manual source
+ * 
+ * FOUNDATIONAL PHASES COMPLETE (20/20+ Entities):
+ * - Transactions, Accounts, Names, Products, TaxRates, Jobs
+ * - Departments, General Classifications, Assets, AssetLog, Contacts  
+ * - Inventory, Payments, Reconciliation
+ * - User, User2, Login (User Management trilogy)
+ * - Allocations (Auto-allocation rule system)
+ * - Build Records (Manufacturing/assembly recipe system)
+ * - Memo (Names subfile CRM note-taking and reminders)
  */
 
 // ============================================================================
@@ -15,7 +24,7 @@
 // ============================================================================
 
 /** 
- * MoneyWorks staging transaction type codes as defined in the manual
+ * MoneyWorks canonical transaction type codes as defined in the manual
  * Source: moneyworks_appendix_transactions.html - "The transaction type codes are:"
  */
 export enum MoneyWorksTransactionType {
@@ -72,7 +81,7 @@ export enum MoneyWorksTransactionType {
 }
 
 /** 
- * MoneyWorks staging transaction type definitions with manual explanations
+ * MoneyWorks canonical transaction type definitions with manual explanations
  * Source: moneyworks_appendix_transactions.html
  */
 export interface MoneyWorksTransactionTypeDefinition {
@@ -192,7 +201,7 @@ export const MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS: MoneyWorksTransactionTypeD
 // ============================================================================
 
 /**
- * MoneyWorks staging account type codes as defined in the manual
+ * MoneyWorks canonical account type codes as defined in the manual
  * Source: moneyworks_appendix_accounts.html - "The account type. This will be one of..."
  */
 export enum MoneyWorksAccountType {
@@ -228,7 +237,7 @@ export enum MoneyWorksAccountType {
 }
 
 /**
- * MoneyWorks staging system account types
+ * MoneyWorks canonical system account types
  * Source: moneyworks_appendix_accounts.html - "The 'system' account type"
  */
 export enum MoneyWorksSystemAccountType {
@@ -255,7 +264,7 @@ export enum MoneyWorksSystemAccountType {
 }
 
 /**
- * MoneyWorks staging account type definitions with manual explanations
+ * MoneyWorks canonical account type definitions with manual explanations
  * Source: moneyworks_appendix_accounts.html
  */
 export interface MoneyWorksAccountTypeDefinition {
@@ -333,7 +342,7 @@ export const MONEYWORKS_ACCOUNT_TYPE_DEFINITIONS: MoneyWorksAccountTypeDefinitio
 // ============================================================================
 
 /**
- * MoneyWorks staging field definition from manual
+ * MoneyWorks canonical field definition from manual
  * Source: moneyworks_appendix_transactions.html and moneyworks_appendix_accounts.html
  */
 export interface MoneyWorksFieldDefinition {
@@ -480,25 +489,25 @@ export const MONEYWORKS_ACCOUNT_FIELDS: MoneyWorksFieldDefinition[] = [
 // ============================================================================
 
 /**
- * MoneyWorks staging terminology as used throughout the manual
+ * MoneyWorks canonical terminology as used throughout the manual
  * This ensures we use MoneyWorks terms consistently
  */
 export const MONEYWORKS_CANONICAL_TERMS = {
-  // Parties (MoneyWorks staging terms)
-  CREDITOR: "Creditor",           // Not "Supplier" - MoneyWorks staging term
-  DEBTOR: "Debtor",               // Not "Customer" - MoneyWorks staging term
+  // Parties (MoneyWorks canonical terms)
+  CREDITOR: "Creditor",           // Not "Supplier" - MoneyWorks canonical term
+  DEBTOR: "Debtor",               // Not "Customer" - MoneyWorks canonical term
   
-  // Transaction states (MoneyWorks staging terms)
+  // Transaction states (MoneyWorks canonical terms)
   UNPOSTED: "Unposted",           // Status = "U"
   POSTED: "Posted",               // Status = "P"
   INCOMPLETE: "Incomplete",       // Unfinished transaction
   COMPLETE: "Complete",           // Fully processed transaction
   
-  // Account classifications (MoneyWorks staging terms)
+  // Account classifications (MoneyWorks canonical terms)
   SYSTEM_ACCOUNT: "System Account",
   ORDINARY_ACCOUNT: "Ordinary Account",
   
-  // Financial concepts (MoneyWorks staging terms)
+  // Financial concepts (MoneyWorks canonical terms)
   CHART_OF_ACCOUNTS: "Chart of Accounts",
   GENERAL_LEDGER: "General Ledger",
   
@@ -515,7 +524,7 @@ export const MONEYWORKS_CANONICAL_TERMS = {
 // ============================================================================
 
 /**
- * Validate that a concept uses staging MoneyWorks terminology
+ * Validate that a concept uses canonical MoneyWorks terminology
  */
 export function validateCanonicalTerminology(concept: string, context: string): {
   isCanonical: boolean;
@@ -525,19 +534,19 @@ export function validateCanonicalTerminology(concept: string, context: string): 
   const issues: string[] = [];
   const suggestions: string[] = [];
   
-  // Check for non-staging terms
+  // Check for non-canonical terms
   if (concept.toLowerCase().includes("supplier")) {
-    issues.push("Uses 'Supplier' instead of MoneyWorks staging term 'Creditor'");
+    issues.push("Uses 'Supplier' instead of MoneyWorks canonical term 'Creditor'");
     suggestions.push("Replace 'Supplier' with 'Creditor' to match MoneyWorks terminology");
   }
   
   if (concept.toLowerCase().includes("customer")) {
-    issues.push("Uses 'Customer' instead of MoneyWorks staging term 'Debtor'");
+    issues.push("Uses 'Customer' instead of MoneyWorks canonical term 'Debtor'");
     suggestions.push("Replace 'Customer' with 'Debtor' to match MoneyWorks terminology");
   }
   
   if (concept.toLowerCase().includes("vendor")) {
-    issues.push("Uses 'Vendor' instead of MoneyWorks staging term 'Creditor'");
+    issues.push("Uses 'Vendor' instead of MoneyWorks canonical term 'Creditor'");
     suggestions.push("Replace 'Vendor' with 'Creditor' to match MoneyWorks terminology");
   }
   
@@ -549,7 +558,7 @@ export function validateCanonicalTerminology(concept: string, context: string): 
 }
 
 /**
- * Get staging MoneyWorks definition for a transaction type
+ * Get canonical MoneyWorks definition for a transaction type
  */
 export function getCanonicalTransactionTypeDefinition(
   code: string
@@ -558,7 +567,7 @@ export function getCanonicalTransactionTypeDefinition(
 }
 
 /**
- * Get staging MoneyWorks definition for an account type
+ * Get canonical MoneyWorks definition for an account type
  */
 export function getCanonicalAccountTypeDefinition(
   code: string
@@ -567,7 +576,7 @@ export function getCanonicalAccountTypeDefinition(
 }
 
 /**
- * Verify that a field definition matches MoneyWorks staging specification
+ * Verify that a field definition matches MoneyWorks canonical specification
  */
 export function validateFieldDefinition(
   fieldName: string,
@@ -593,7 +602,7 @@ export function validateFieldDefinition(
 // NAMES ENTITY INTEGRATION
 // ============================================================================
 
-// Import Names staging definitions
+// Import Names canonical definitions including dual-layer contact architecture
 export {
   MoneyWorksCustomerType,
   MoneyWorksSupplierType,
@@ -601,14 +610,17 @@ export {
   MONEYWORKS_CUSTOMER_TYPE_DEFINITIONS,
   MONEYWORKS_SUPPLIER_TYPE_DEFINITIONS,
   MONEYWORKS_NAME_FIELDS,
-  MONEYWORKS_NAME_CANONICAL_TERMS
+  MONEYWORKS_NAME_CANONICAL_TERMS,
+  MONEYWORKS_DUAL_CONTACT_BUSINESS_RULES,
+  MONEYWORKS_DUAL_CONTACT_USAGE_PATTERNS,
+  MONEYWORKS_CONTACT_FIELD_CAPACITY_MATRIX
 } from "./moneyworks-names-canonical-ontology";
 
 // ============================================================================
 // PRODUCTS ENTITY INTEGRATION
 // ============================================================================
 
-// Import Products staging definitions
+// Import Products canonical definitions
 export {
   MoneyWorksProductType,
   MoneyWorksProductStatus,
@@ -624,7 +636,7 @@ export {
 // TAXRATES ENTITY INTEGRATION
 // ============================================================================
 
-// Import TaxRates staging definitions
+// Import TaxRates canonical definitions
 export {
   MoneyWorksTaxCombineMode,
   MONEYWORKS_TAX_RATE_FIELDS,
@@ -635,7 +647,7 @@ export {
 // JOBS ENTITY INTEGRATION
 // ============================================================================
 
-// Import Jobs staging definitions
+// Import Jobs canonical definitions
 export {
   MoneyWorksJobStatus,
   MoneyWorksJobColour,
@@ -643,6 +655,244 @@ export {
   MONEYWORKS_JOB_FIELDS,
   MONEYWORKS_JOB_CANONICAL_TERMS
 } from "./moneyworks-jobs-canonical-ontology";
+
+// ============================================================================
+// DEPARTMENTS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Departments canonical definitions
+export {
+  MONEYWORKS_DEPARTMENT_FIELDS,
+  MONEYWORKS_DEPARTMENT_REQUIRED_FIELDS,
+  MONEYWORKS_DEPARTMENT_INDEXED_FIELDS,
+  MONEYWORKS_DEPARTMENT_CUSTOM_FIELDS,
+  MONEYWORKS_DEPARTMENT_SYSTEM_FIELDS,
+  MONEYWORKS_DEPARTMENT_RELATIONSHIPS,
+  MONEYWORKS_DEPARTMENT_VALIDATION_RULES,
+  MONEYWORKS_DEPARTMENT_BUSINESS_MAPPINGS,
+  MoneyWorksDepartmentEntity,
+  MoneyWorksDepartmentDataType
+} from "./moneyworks-departments-canonical-ontology";
+
+// ============================================================================
+// GENERAL CLASSIFICATIONS ENTITY INTEGRATION
+// ============================================================================
+
+// Import General Classifications canonical definitions (Account Categories, Department Classifications, Department Groups)
+export {
+  MoneyWorksGeneralPrefix,
+  MoneyWorksGeneralClassificationType,
+  MoneyWorksAccountCategoryDefinition,
+  MoneyWorksDepartmentClassificationDefinition,
+  MoneyWorksDepartmentGroupDefinition,
+  MONEYWORKS_GENERAL_FIELDS,
+  MONEYWORKS_GENERAL_CANONICAL_TERMS,
+  MONEYWORKS_ACCOUNT_CATEGORY_RULES,
+  MONEYWORKS_DEPARTMENT_CLASSIFICATION_RULES,
+  MONEYWORKS_DEPARTMENT_GROUP_RULES,
+  validateGeneralPrefix,
+  getCanonicalClassificationExplanation,
+  parseGeneralCode,
+  createGeneralCode,
+  validateGeneralUniversality
+} from "./moneyworks-general-classifications-canonical-ontology";
+
+// ============================================================================
+// ASSETS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Assets canonical definitions
+export {
+  MoneyWorksAssetStatus,
+  MoneyWorksDepreciationType,
+  MONEYWORKS_ASSET_FIELDS,
+  MONEYWORKS_ASSET_CANONICAL_TERMS,
+  validateAssetStatus,
+  validateDepreciationType,
+  calculateCanonicalBookValue,
+  requiresDepreciation,
+  getCanonicalAssetLifecycle,
+  validateAssetRelationships
+} from "./moneyworks-assets-canonical-ontology";
+
+// ============================================================================
+// ASSETLOG ENTITY INTEGRATION
+// ============================================================================
+
+// Import AssetLog canonical definitions
+export {
+  MoneyWorksAssetLogAction,
+  MONEYWORKS_ASSETLOG_FIELDS,
+  MONEYWORKS_ASSETLOG_CANONICAL_TERMS,
+  validateAssetLogAction,
+  isDepreciationAction,
+  affectsQuantity,
+  requiresTransaction,
+  getCanonicalActionExplanation,
+  validateAssetLogRelationships,
+  calculateActionImpact
+} from "./moneyworks-assetlog-canonical-ontology";
+
+// ============================================================================
+// CONTACTS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Contacts canonical definitions
+export {
+  MONEYWORKS_CONTACTS_FIELDS,
+  MONEYWORKS_CONTACTS_BUSINESS_RULES,
+  MONEYWORKS_CONTACTS_RELATIONSHIPS,
+  MONEYWORKS_CONTACTS_CANONICAL_SUMMARY,
+  CONTACTS_FIELDS,
+  CONTACTS_BUSINESS_RULES,
+  CONTACTS_RELATIONSHIPS,
+  CONTACTS_CANONICAL_SUMMARY
+} from "./moneyworks-contacts-canonical-ontology";
+
+// ============================================================================
+// INVENTORY ENTITY INTEGRATION
+// ============================================================================
+
+// Import Inventory canonical definitions
+export {
+  MoneyWorksInventoryRelationshipType,
+  MoneyWorksInventoryTrackingMode,
+  MoneyWorksStockTakeState,
+  MONEYWORKS_INVENTORY_FIELDS,
+  MONEYWORKS_INVENTORY_FUNCTIONS,
+  MONEYWORKS_INVENTORY_CANONICAL_TERMS,
+  validateInventoryLocationCanonical,
+  validateInventoryIdentifierCanonical,
+  validateStockTakeQuantitiesCanonical,
+  validateProductSequenceRelationship,
+  generateInventoryRecordKey,
+  parseInventoryRecordKey,
+  calculateStockVariance,
+  isDefaultLocation,
+  supportsExpiryTracking
+} from "./moneyworks-inventory-canonical-ontology";
+
+// ============================================================================
+// PAYMENTS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Payments canonical definitions
+export {
+  MONEYWORKS_PAYMENTS_FIELDS,
+  MONEYWORKS_PAYMENTS_BUSINESS_RULES,
+  MONEYWORKS_PAYMENTS_RELATIONSHIPS,
+  MONEYWORKS_PAYMENTS_VALIDATION
+} from "./moneyworks-payments-canonical-ontology";
+
+// ============================================================================
+// RECONCILIATION ENTITY INTEGRATION
+// ============================================================================
+
+// Import Reconciliation canonical definitions
+export {
+  MONEYWORKS_RECONCILIATION_FIELDS,
+  MONEYWORKS_RECONCILIATION_ENTITY,
+  RECONCILIATION_FIELD_COUNT,
+  RECONCILIATION_FIELD_NAMES,
+  RECONCILIATION_REQUIRED_FIELDS,
+  RECONCILIATION_INDEXED_FIELDS,
+  RECONCILIATION_RELATIONSHIP_FIELDS
+} from "./moneyworks-reconciliation-canonical-ontology";
+
+// ============================================================================
+// USER MANAGEMENT ENTITY INTEGRATION
+// ============================================================================
+
+// Import User canonical definitions (persistent script storage)
+export {
+  MONEYWORKS_USER_FIELDS,
+  MONEYWORKS_USER_BUSINESS_RULES,
+  USER_UNIVERSALITY_EXAMPLES,
+  USER_ENTITY_RELATIONSHIPS,
+  validateUserKey,
+  validateUserData,
+  validateUserRecord,
+  type MoneyWorksUser,
+  type MoneyWorksUserField,
+  type MoneyWorksUserBusinessRule
+} from "./moneyworks-user-canonical-ontology";
+
+// Import User2 canonical definitions (enhanced persistent storage)
+export {
+  MONEYWORKS_USER2_FIELDS,
+  MONEYWORKS_USER2_BUSINESS_RULES,
+  USER2_UNIVERSALITY_EXAMPLES,
+  USER2_ENTITY_RELATIONSHIPS,
+  validateUser2DevKey,
+  validateUser2Key,
+  validateUser2TextField,
+  validateUser2Record,
+  type MoneyWorksUser2,
+  type MoneyWorksUser2Field,
+  type MoneyWorksUser2BusinessRule
+} from "./moneyworks-user2-canonical-ontology";
+
+// Import Login canonical definitions (authentication and authorization)
+export {
+  MONEYWORKS_LOGIN_FIELDS,
+  MONEYWORKS_LOGIN_BUSINESS_RULES,
+  LOGIN_UNIVERSALITY_EXAMPLES,
+  LOGIN_ENTITY_RELATIONSHIPS,
+  validateLoginName,
+  validateLoginEmail,
+  validateLoginSecurityLevel,
+  validateLoginRecord,
+  type MoneyWorksLogin,
+  type MoneyWorksLoginField,
+  type MoneyWorksLoginBusinessRule
+} from "./moneyworks-login-canonical-ontology";
+
+// ============================================================================
+// ALLOCATIONS ENTITY INTEGRATION
+// ============================================================================
+
+// Import Allocations canonical definitions (auto-allocation rule system)
+export {
+  MoneyWorksAllocationSplitMode,
+  MONEYWORKS_ALLOCATION_FIELDS,
+  MONEYWORKS_ALLOCATION_CANONICAL_TERMS,
+  MONEYWORKS_ALLOCATION_BUSINESS_RULES,
+  MONEYWORKS_ALLOCATION_USAGE_PATTERNS,
+  validateAllocationRuleCanonical,
+  getCanonicalAllocationExplanation,
+  getAllocationComplexityLevel
+} from "./moneyworks-allocations-canonical-ontology";
+
+// Build Records Entity - Manufacturing/assembly recipe system
+export {
+  MONEYWORKS_BUILD_RECORDS_FIELDS,
+  MONEYWORKS_BUILD_RECORDS_CANONICAL_TERMS,
+  MONEYWORKS_BUILD_RECORDS_RELATIONSHIPS,
+  MONEYWORKS_BUILD_RECORDS_BUSINESS_RULES,
+  MONEYWORKS_BUILD_RECORDS_USAGE_PATTERNS,
+  validateBuildRecordCanonical,
+  getCanonicalBuildRecordExplanation,
+  validateBuildRecordRelationships,
+  getManufacturingRecipeSummary
+} from "./moneyworks-build-records-canonical-ontology";
+
+// ============================================================================
+// MEMO ENTITY INTEGRATION
+// ============================================================================
+
+// Import Memo canonical definitions (Names subfile CRM functionality)
+export {
+  MONEYWORKS_MEMO_FIELDS,
+  MONEYWORKS_MEMO_CANONICAL_TERMS,
+  validateMemoDateCanonical,
+  validateMemoTextCanonical,
+  validateMemoNameRelationshipCanonical,
+  getCanonicalMemoEntityRelationships,
+  getCanonicalMemoBusinessContext,
+  hasMemoReminder,
+  isMemoOverdue,
+  getMemoAgeInDays
+} from "./moneyworks-memo-canonical-ontology";
 
 export default {
   MONEYWORKS_TRANSACTION_TYPE_DEFINITIONS,

@@ -1,7 +1,7 @@
 /**
  * MoneyWorks Contacts Entity - Canonical Ontology
  * 
- * PURE MoneyWorks staging definitions extracted from official manual
+ * PURE MoneyWorks canonical definitions extracted from official manual
  * Source: moneyworks_appendix_contacts.html
  * Authority: MoneyWorks Manual - Contacts Field Descriptions
  * 
@@ -37,7 +37,7 @@
 // ============================================================================
 
 /**
- * Complete staging field definition for MoneyWorks Contacts entity
+ * Complete canonical field definition for MoneyWorks Contacts entity
  * Source: moneyworks_appendix_contacts.html - Field descriptions table
  */
 export interface MoneyWorksCanonicalContactField {
@@ -57,7 +57,7 @@ export interface MoneyWorksCanonicalContactField {
 // ============================================================================
 
 /**
- * All staging Contact fields extracted from MoneyWorks manual
+ * All canonical Contact fields extracted from MoneyWorks manual
  * Source: moneyworks_appendix_contacts.html
  * 
  * ARCHITECTURAL INSIGHT: Contacts represent communication endpoints
@@ -190,7 +190,7 @@ export const MONEYWORKS_CONTACTS_FIELDS: MoneyWorksCanonicalContactField[] = [
 // ============================================================================
 
 /**
- * MoneyWorks staging business rules for Contacts entity
+ * MoneyWorks canonical business rules for Contacts entity
  * Source: moneyworks_appendix_contacts.html + dual-layer architecture analysis
  */
 export const MONEYWORKS_CONTACTS_BUSINESS_RULES = [
@@ -268,7 +268,7 @@ export const MONEYWORKS_CONTACTS_BUSINESS_RULES = [
 // ============================================================================
 
 /**
- * MoneyWorks staging entity relationships for Contacts
+ * MoneyWorks canonical entity relationships for Contacts
  * Source: moneyworks_appendix_contacts.html
  */
 export const MONEYWORKS_CONTACTS_RELATIONSHIPS = [
@@ -289,7 +289,7 @@ export const MONEYWORKS_CONTACTS_RELATIONSHIPS = [
 // ============================================================================
 
 /**
- * Complete staging summary of MoneyWorks Contacts entity
+ * Complete canonical summary of MoneyWorks Contacts entity
  * Enhanced with dual-layer contact architecture analysis
  */
 export const MONEYWORKS_CONTACTS_CANONICAL_SUMMARY = {
@@ -389,7 +389,7 @@ export const MONEYWORKS_CONTACTS_CANONICAL_SUMMARY = {
 };
 
 /**
- * Export all Contact staging definitions for integration
+ * Export all Contact canonical definitions for integration
  */
 export {
   MONEYWORKS_CONTACTS_FIELDS as CONTACTS_FIELDS,
