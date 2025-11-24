@@ -35,7 +35,6 @@ export default [
 	route("test-connection-context", "routes/test-connection-context.tsx"),
 	route("debug-connections-api", "routes/debug-connections-api.tsx"),
 	route("api/connections", "routes/api.connections.tsx"),
-	route("api/now-accounts", "routes/api.now-accounts.tsx"),
 	route("api/debug/connections", "routes/api.debug.connections.tsx"),
 	route("api/groups", "routes/api.groups.tsx"),
 	route("api/groups/members", "routes/api.groups.members.tsx"),
