@@ -1,0 +1,17 @@
+{
+  "$schema": "./SCHEMA.md#modality",
+  "title": "Modality (Μ)",
+  "description": "What could be - alternatives, rejected options, possible futures",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-23T07:39:57.493Z",
+  "alternatives": {},
+  "rejectedOptions": {},
+  "possibleFutures": {},
+  "metadata": {
+    "totalAlternatives": 0,
+    "totalRejectedOptions": 0,
+    "totalPossibleFutures": 0,
+    "averageConfidence": 0,
+    "lastCompaction": null
+  }
+}

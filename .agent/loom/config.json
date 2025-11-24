@@ -1,0 +1,58 @@
+{
+  "version": "1.0.0",
+  "initialized": "2025-11-24T01:02:21.846Z",
+  "project": {
+    "name": "@moneyworks/monorepo",
+    "path": "/Users/hgeldenhuys/WebstormProjects/mw-core"
+  },
+  "stack": {
+    "runtime": "bun",
+    "packageManager": "bun",
+    "backend": [
+      "ElysiaJS"
+    ],
+    "frontend": [
+      "React",
+      "React Router"
+    ],
+    "database": [],
+    "testing": [],
+    "other": [
+      "TanStack Query"
+    ]
+  },
+  "patterns": {
+    "cqrs": true,
+    "sse": true,
+    "workers": false,
+    "adapters": false,
+    "realtime": true
+  },
+  "wayOfWorking": {
+    "testingApproach": "test-after",
+    "prReviewProcess": "optional",
+    "workflowStyle": "autonomous",
+    "documentationLevel": "standard"
+  },
+  "definitionOfDone": [
+    "All tasks completed",
+    "All acceptance criteria tested and passing",
+    "Code committed to repository",
+    "Documentation updated",
+    "Tests written and passing",
+    "Retrospective generated",
+    "Learnings extracted to Weave"
+  ],
+  "roles": [
+    "main-agent",
+    "backend-dev",
+    "backend-qa",
+    "frontend-dev",
+    "frontend-qa",
+    "system-architect",
+    "requirements-planner",
+    "spec-writer"
+  ],
+  "storyCounter": 0,
+  "taskCounter": 0
+}

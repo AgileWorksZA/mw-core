@@ -1,0 +1,127 @@
+{
+  "$schema": "./SCHEMA.md#mereology",
+  "title": "Mereology",
+  "description": "How parts compose - components, compositions, hierarchy",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-23T08:00:00.000Z",
+  "components": {
+    "api-layer": {
+      "id": "api-layer",
+      "name": "API Layer",
+      "type": "layer",
+      "description": "REST API layer with ElysiaJS providing HTTP endpoints for MoneyWorks access",
+      "parts": ["api-application", "auth-middleware", "routes", "controllers", "schemas"],
+      "confidence": 0.95
+    },
+    "data-access-layer": {
+      "id": "data-access-layer",
+      "name": "Data Access Layer",
+      "type": "layer",
+      "description": "Data access layer with smart client, parsers, and repository pattern",
+      "parts": ["smart-moneyworks-client", "field-discovery", "parsers", "repositories"],
+      "confidence": 0.95
+    },
+    "canonical-layer": {
+      "id": "canonical-layer",
+      "name": "Canonical Layer",
+      "type": "layer",
+      "description": "Pure MoneyWorks type definitions preserving exact terminology",
+      "parts": ["tax-rate-entity", "branded-types", "field-metadata"],
+      "confidence": 1.0
+    }
+  },
+  "compositions": {
+    "middleware-chain": {
+      "id": "middleware-chain",
+      "whole": "api-application",
+      "parts": ["requestId", "errorHandler", "logging", "i18n", "auth-middleware"],
+      "relationship": "middleware-pipeline",
+      "order": ["requestId", "errorHandler", "logging", "i18n", "auth-middleware"],
+      "confidence": 0.95
+    },
+    "export-pipeline": {
+      "id": "export-pipeline",
+      "whole": "smart-moneyworks-client",
+      "parts": ["field-discovery", "tsv-export", "format-converter"],
+      "relationship": "data-flow",
+      "description": "Discovery → Export → Conversion pipeline for flexible data formats",
+      "confidence": 0.9
+    },
+    "monorepo-structure": {
+      "id": "monorepo-structure",
+      "whole": "moneyworks-core",
+      "parts": ["canonical-layer", "data-access-layer", "api-layer", "utilities", "cli", "mcp-server"],
+      "relationship": "package-hierarchy",
+      "confidence": 0.95
+    }
+  },
+  "hierarchy": {
+    "root": "moneyworks-core",
+    "layers": [
+      {
+        "name": "canonical",
+        "level": 0,
+        "dependencies": ["utilities"]
+      },
+      {
+        "name": "data-access",
+        "level": 1,
+        "dependencies": ["canonical", "utilities"]
+      },
+      {
+        "name": "api",
+        "level": 2,
+        "dependencies": ["data-access", "canonical", "utilities"]
+      },
+      {
+        "name": "cli",
+        "level": 2,
+        "dependencies": ["data-access", "canonical"]
+      },
+      {
+        "name": "mcp-server",
+        "level": 2,
+        "dependencies": ["data-access", "canonical"]
+      }
+    ],
+    "modules": [
+      "packages/canonical",
+      "packages/data",
+      "packages/api",
+      "packages/utilities",
+      "packages/cli",
+      "packages/mcp-server"
+    ]
+  },
+  "partWholeRelations": {
+    "api-contains-middleware": {
+      "id": "api-contains-middleware",
+      "whole": "api-application",
+      "part": "auth-middleware",
+      "type": "containment",
+      "confidence": 0.95
+    },
+    "client-contains-cache": {
+      "id": "client-contains-cache",
+      "whole": "smart-moneyworks-client",
+      "part": "discovery-cache",
+      "type": "containment",
+      "confidence": 0.95
+    },
+    "middleware-contains-cache": {
+      "id": "middleware-contains-cache",
+      "whole": "auth-middleware",
+      "part": "client-cache",
+      "type": "containment",
+      "confidence": 0.95
+    }
+  },
+  "metadata": {
+    "totalComponents": 3,
+    "totalCompositions": 3,
+    "totalParts": 18,
+    "maxDepth": 2,
+    "averageConfidence": 0.95,
+    "lastCompaction": null
+  }
+}

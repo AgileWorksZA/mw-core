@@ -1,0 +1,17 @@
+{
+  "$schema": "./SCHEMA.md#praxeology",
+  "title": "Praxeology (Π)",
+  "description": "How we work - WoW patterns, delegation strategies, best practices",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-23T07:39:57.493Z",
+  "wowPatterns": {},
+  "delegationStrategies": {},
+  "bestPractices": {},
+  "metadata": {
+    "totalWowPatterns": 0,
+    "totalDelegationStrategies": 0,
+    "totalBestPractices": 0,
+    "averageConfidence": 0,
+    "lastCompaction": null
+  }
+}

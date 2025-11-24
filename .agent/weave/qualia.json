@@ -1,0 +1,130 @@
+{
+  "$schema": "./SCHEMA.md#qualia",
+  "title": "Qualia",
+  "description": "What it's like - experiential knowledge, pain points, solutions",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-23T08:00:00.000Z",
+  "experiences": {},
+  "painPoints": {
+    "tsv-no-headers": {
+      "id": "tsv-no-headers",
+      "title": "TSV exports have no headers",
+      "description": "MoneyWorks TSV format doesn't include field names, making parsing difficult without prior knowledge",
+      "severity": "high",
+      "impact": "Must use XML exports to discover field structure before parsing TSV",
+      "observedIn": ["packages/data/src/parsers/field-discovery.ts"],
+      "frequency": "always"
+    },
+    "client-recreation-overhead": {
+      "id": "client-recreation-overhead",
+      "title": "Client recreation overhead",
+      "description": "Creating new MoneyWorks clients for each request is expensive",
+      "severity": "medium",
+      "impact": "Performance degradation with high request volume",
+      "observedIn": ["packages/api/src/middleware/auth.ts"],
+      "frequency": "per-request without caching"
+    }
+  },
+  "solutions": {
+    "xml-field-discovery": {
+      "id": "xml-field-discovery",
+      "painPointId": "tsv-no-headers",
+      "title": "XML-based Field Discovery",
+      "description": "Use XML exports (which include field names) to discover table structure, then use efficient TSV for data",
+      "implementation": "packages/data/src/parsers/field-discovery.ts",
+      "effectiveness": "high",
+      "tradeoffs": [
+        "One-time XML fetch overhead",
+        "Caching required for performance"
+      ]
+    },
+    "client-caching-with-ttl": {
+      "id": "client-caching-with-ttl",
+      "painPointId": "client-recreation-overhead",
+      "title": "LRU Client Caching",
+      "description": "Cache clients by token with 10-minute TTL and periodic cleanup",
+      "implementation": "packages/api/src/middleware/auth.ts",
+      "effectiveness": "high",
+      "tradeoffs": [
+        "Memory usage for cached clients",
+        "Stale client possibility (mitigated by TTL)"
+      ]
+    }
+  },
+  "workflows": {
+    "export-workflow": {
+      "id": "export-workflow",
+      "name": "MoneyWorks Data Export",
+      "description": "Complete workflow for exporting MoneyWorks data in multiple formats",
+      "steps": [
+        "Authenticate with Bearer token",
+        "Create/retrieve cached SmartMoneyWorksClient",
+        "Discover field structure (if not cached)",
+        "Export as TSV for efficiency",
+        "Convert to requested format (compact/full/schema)",
+        "Return formatted data"
+      ],
+      "complexity": "medium",
+      "frequency": "per-request",
+      "automation": "fully automated"
+    }
+  },
+  "bestPractices": {
+    "preserve-canonical-dsl": {
+      "id": "preserve-canonical-dsl",
+      "title": "Always Preserve MoneyWorks Terminology",
+      "description": "NEVER translate MoneyWorks field names - use GST not VAT, TaxCode not taxId, etc.",
+      "category": "naming",
+      "importance": "critical",
+      "rationale": "Maintains semantic integrity and API consistency across all MoneyWorks installations globally",
+      "examples": [
+        "Use 'GST' for all tax types (even US sales tax or EU VAT)",
+        "Use 'TaxCode' not 'taxId' or 'rateCode'",
+        "Use 'RecAccount' not 'receivableAccount'"
+      ]
+    },
+    "use-branded-types": {
+      "id": "use-branded-types",
+      "title": "Use Branded Types for Domain Primitives",
+      "description": "Wrap domain primitives in branded types to prevent misuse",
+      "category": "type-safety",
+      "importance": "high",
+      "rationale": "Compile-time prevention of passing wrong types (e.g., ISO date where YYYYMMDD expected)",
+      "examples": ["YYYYMMDD", "AccountCode", "NameCode"]
+    },
+    "multi-format-support": {
+      "id": "multi-format-support",
+      "title": "Support Multiple Export Formats",
+      "description": "Provide compact (arrays), compact-headers, full (objects), and schema (enriched) formats",
+      "category": "api-design",
+      "importance": "high",
+      "rationale": "Different use cases need different trade-offs between bandwidth, DX, and metadata",
+      "applicableTo": ["API endpoints", "data access layer"]
+    },
+    "cache-clients": {
+      "id": "cache-clients",
+      "title": "Cache MoneyWorks Clients",
+      "description": "Cache clients by token with TTL to avoid recreation overhead",
+      "category": "performance",
+      "importance": "high",
+      "rationale": "Creating new MoneyWorks clients for each request is expensive",
+      "implementation": "Map<token, {client, lastUsed}> with periodic cleanup"
+    }
+  },
+  "contextualKnowledge": {},
+  "patterns": {
+    "development": [],
+    "debugging": [],
+    "collaboration": []
+  },
+  "cognitiveLoad": {},
+  "metadata": {
+    "totalExperiences": 0,
+    "totalPainPoints": 2,
+    "totalSolutions": 2,
+    "totalWorkflows": 1,
+    "totalBestPractices": 4,
+    "totalPatterns": 0,
+    "lastUpdated": "2025-11-23T08:00:00.000Z"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "$schema": "./SCHEMA.md#epistemology",
+  "title": "Epistemology",
+  "description": "How we know - knowledge confidence and provenance",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-23T08:00:00.000Z",
+  "knowledge": {},
+  "patterns": {
+    "canonical-dsl-pattern": {
+      "id": "canonical-dsl-pattern",
+      "name": "Canonical DSL Preservation",
+      "description": "NEVER translate MoneyWorks terminology - preserve exact field names to maintain semantic integrity",
+      "type": "naming-convention",
+      "confidence": 1.0,
+      "observedIn": ["packages/canonical/src/entities/tax-rates/types.ts"],
+      "examples": [
+        "GST (not VAT or sales tax)",
+        "TaxCode (not taxId or rateCode)",
+        "RecAccount (not receivableAccount)",
+        "PaidAccount (not payableAccount)"
+      ],
+      "rationale": "MoneyWorks uses GST for ALL tax types globally. Preserving exact terminology prevents semantic drift and maintains API consistency."
+    },
+    "field-discovery-pattern": {
+      "id": "field-discovery-pattern",
+      "name": "XML-based Field Discovery",
+      "description": "Since TSV exports lack headers, use XML exports to discover field names and structure",
+      "type": "data-access-pattern",
+      "confidence": 0.95,
+      "observedIn": ["packages/data/src/parsers/field-discovery.ts"],
+      "rationale": "MoneyWorks TSV format has no header row, making XML the only way to discover field names and order dynamically."
+    },
+    "client-caching-pattern": {
+      "id": "client-caching-pattern",
+      "name": "LRU Client Caching",
+      "description": "Cache MoneyWorks clients with TTL-based cleanup to avoid recreation overhead",
+      "type": "performance-pattern",
+      "confidence": 0.95,
+      "observedIn": ["packages/api/src/middleware/auth.ts"],
+      "implementation": {
+        "structure": "Map<token, {client, lastUsed}>",
+        "ttl": "10 minutes",
+        "cleanupInterval": "5 minutes"
+      }
+    },
+    "multi-format-export-pattern": {
+      "id": "multi-format-export-pattern",
+      "name": "Multiple Export Formats",
+      "description": "Support 4 export formats for different use cases: compact (arrays), compact-headers, full (objects), schema (enriched)",
+      "type": "api-design-pattern",
+      "confidence": 0.95,
+      "observedIn": ["packages/data/src/client/moneyworks-smart-client.ts"],
+      "formats": {
+        "compact": "Raw arrays for minimal bandwidth",
+        "compact-headers": "Arrays with headers for self-documentation",
+        "full": "Complete objects for best DX",
+        "schema": "Objects with field metadata for LLM understanding"
+      }
+    },
+    "middleware-pipeline-pattern": {
+      "id": "middleware-pipeline-pattern",
+      "name": "Elysia Middleware Chain",
+      "description": "Ordered middleware chain: requestId → errorHandler → logging → i18n → auth",
+      "type": "architectural-pattern",
+      "confidence": 0.95,
+      "observedIn": ["packages/api/src/app.ts"],
+      "order": ["requestId", "errorHandler", "logging", "i18n", "auth"]
+    },
+    "branded-types-pattern": {
+      "id": "branded-types-pattern",
+      "name": "Branded Type Safety",
+      "description": "Use branded types for domain primitives to prevent misuse (YYYYMMDD, AccountCode, etc.)",
+      "type": "type-safety-pattern",
+      "confidence": 1.0,
+      "observedIn": ["packages/canonical/src/entities/tax-rates/types.ts"],
+      "examples": ["YYYYMMDD", "AccountCode", "NameCode"],
+      "benefit": "Compile-time prevention of passing wrong string types (e.g., can't pass ISO date where YYYYMMDD expected)"
+    }
+  },
+  "validations": {},
+  "confidenceModel": {
+    "scale": {
+      "speculative": "0.0-0.3",
+      "uncertain": "0.3-0.5",
+      "probable": "0.5-0.7",
+      "confident": "0.7-0.85",
+      "highly_confident": "0.85-0.95",
+      "certain": "0.95-1.0"
+    },
+    "updateRules": {
+      "observation": "Bayesian update with prior=0.3, evidence=0.7",
+      "validation": "Increase confidence by validation factor",
+      "contradiction": "Decrease confidence, add uncertainty"
+    },
+    "bayesianParameters": {
+      "priorWeight": 0.3,
+      "evidenceWeight": 0.7,
+      "minObservations": 1
+    }
+  },
+  "knowledgeGaps": [],
+  "metadata": {
+    "totalConcepts": 0,
+    "totalPatterns": 6,
+    "totalValidations": 0,
+    "averageConfidence": 0.96,
+    "highConfidenceConcepts": 6,
+    "lowConfidenceConcepts": 0,
+    "knowledgeGaps": 0,
+    "lastValidation": "2025-11-23T08:00:00.000Z"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "feature": "loom-test",
+  "code": "LT",
+  "epic": "EPIC-LOOM-TEST",
+  "description": "Testing Loom installation and workflows",
+  "status": "planning",
+  "phase": "MVP",
+  "stories": [
+    "LT-001"
+  ],
+  "storyCounter": 1,
+  "storyDependencies": {},
+  "startDate": "2025-11-24",
+  "targetDate": null,
+  "completedDate": null,
+  "notes": []
+}
