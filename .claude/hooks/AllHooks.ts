@@ -25,10 +25,23 @@ try {
   const date = new Date().toISOString().split('T')[0];
   const logFile = join(logsDir, `hooks-${date}.jsonl`);
 
-  // Just log the ENTIRE event payload - no filtering
+  // Read the transcript file to get the conversation
+  let conversation = null;
+  if (hookData.transcript_path && existsSync(hookData.transcript_path)) {
+    try {
+      const transcriptContent = await Bun.file(hookData.transcript_path).text();
+      const lines = transcriptContent.trim().split('\n').filter(l => l);
+      conversation = lines.map(line => JSON.parse(line));
+    } catch (err) {
+      // Transcript might be locked or unreadable, skip
+    }
+  }
+
+  // Log the ENTIRE event payload + full conversation from transcript
   const logEntry = {
     timestamp: new Date().toISOString(),
-    ...hookData  // Spread the entire payload - conversation, transcript, context, EVERYTHING
+    ...hookData,  // All hook metadata
+    conversation  // Full conversation from transcript file
   };
 
   // Append to log file (JSONL format)
