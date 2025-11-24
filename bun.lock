@@ -7,7 +7,7 @@
         "@elevenlabs/elevenlabs-js": "^2.5.0",
         "add": "^2.0.6",
         "bun": "^1.2.19",
-        "claude-hooks-sdk": "^0.8.0",
+        "claude-hooks-sdk": "^0.8.1",
         "elevenlabs": "^1.59.0",
         "eventsource": "^4.0.0",
         "react": "^18.3.1",
@@ -835,7 +835,7 @@
 
     "classnames": ["classnames@2.5.1", "", {}, "sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow=="],
 
-    "claude-hooks-sdk": ["claude-hooks-sdk@0.8.0", "", { "dependencies": { "better-sqlite3": "^12.4.6", "unique-names-generator": "^4.7.1" } }, "sha512-COjZJBMH3XGtBwBlcMnv21Zx4s4jdy1CvsY36eQBTghj3k9awv8hWVtfyWKEWI0wYeW1Rs/4unaXvKJVtmRjaA=="],
+    "claude-hooks-sdk": ["claude-hooks-sdk@0.8.1", "", { "dependencies": { "better-sqlite3": "^12.4.6", "unique-names-generator": "^4.7.1" } }, "sha512-QWF+wY05Nx6lGQhmTe1QqnkvVmjwef75FerNKrWsa73y4bNcIbxu5gWJvbo4w1F1vt4GdnZ9Y5EKkxU/4esHyA=="],
 
     "cliui": ["cliui@8.0.1", "", { "dependencies": { "string-width": "^4.2.0", "strip-ansi": "^6.0.1", "wrap-ansi": "^7.0.0" } }, "sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ=="],
 
