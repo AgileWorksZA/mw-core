@@ -141,13 +141,36 @@ export function createTableRoutes(cache?: CacheService) {
 						set.headers["content-type"] = "application/json";
 					}
 
-					const data = await controller.export({
-						format: query.format as any,
-						filter: query.filter,
-						limit: query.limit,
-						offset: query.offset,
-						orderBy: query.orderBy,
-					});
+					let data;
+					try {
+						data = await controller.export({
+							format: query.format as any,
+							filter: query.filter,
+							limit: query.limit,
+							offset: query.offset,
+							orderBy: query.orderBy,
+						});
+					} catch (error: any) {
+						// Handle MoneyWorks query/expression errors
+						if (
+							error?.message?.includes("could not understand") ||
+							error?.message?.includes("Bad search expression")
+						) {
+							set.status = 400;
+							return {
+								error: {
+									code: "INVALID_QUERY",
+									message: error.message,
+									details: {
+										hint: 'MoneyWorks uses function-based syntax. Example: left(Code,2)="BA" instead of Code CONTAINS "BA"',
+									},
+									requestId,
+								},
+							};
+						}
+						// Re-throw other errors for global handler
+						throw error;
+					}
 
 					// For compact formats, return raw data
 					if (format === "compact" || format === "compact-headers") {

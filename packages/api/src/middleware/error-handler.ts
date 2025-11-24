@@ -63,7 +63,23 @@ export const errorHandler = new Elysia({ name: "error-handler" }).onError(
 				"VALIDATION_ERROR",
 				"Invalid request parameters",
 				requestId,
-				error,
+				// Safely serialize error details
+				error.message || "Validation failed",
+			);
+		}
+
+		// Handle MoneyWorks query/expression errors
+		if (
+			"message" in error &&
+			(error.message?.includes("could not understand") ||
+				error.message?.includes("Bad search expression"))
+		) {
+			set.status = 400;
+			return createErrorResponse(
+				"INVALID_QUERY",
+				error.message,
+				requestId,
+				{ hint: "MoneyWorks uses function-based syntax. Example: left(Code,2)=\"BA\" instead of Code CONTAINS \"BA\"" },
 			);
 		}
 
