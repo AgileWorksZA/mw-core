@@ -164,7 +164,7 @@ All errors follow a consistent format with error code, message, details, and req
 								],
 								servers: [
 									{
-										url: "http://localhost:3002",
+										url: "http://localhost:3400",
 										description: "Local development server",
 									},
 								],
