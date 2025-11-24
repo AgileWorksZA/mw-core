@@ -7,6 +7,7 @@ import {
 	FolderTree,
 	MessageSquare,
 	Moon,
+	Package,
 	Receipt,
 	Settings,
 	Sun,
@@ -61,6 +62,7 @@ export function Navigation() {
 	const accountingMenuItems = [
 		{ to: "/accounts", label: "Chart of Accounts", icon: BookOpen },
 		{ to: "/names", label: "Names", icon: Users },
+		{ to: "/products", label: "Products", icon: Package },
 		{ to: "/tax-rates", label: t("nav.taxRates"), icon: Receipt },
 		// Add more accounting menu items here as they're implemented
 	];
