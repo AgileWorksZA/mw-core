@@ -19,14 +19,22 @@ interface HookInput {
   context?: Record<string, any>;
 }
 
-// Parse input from stdin or environment
-const input: HookInput = {
-  hook_event_name: 'SessionStart',
-  session_id: process.env.SESSION_ID || 'unknown',
-  cwd: process.env.CLAUDE_PROJECT_DIR || process.cwd(),
-  timestamp: new Date().toISOString(),
-  context: {}
-};
+// Read input from stdin
+const stdinText = await Bun.stdin.text();
+let input: HookInput;
+
+try {
+  input = JSON.parse(stdinText);
+} catch (error) {
+  // Fallback if JSON parsing fails
+  input = {
+    hook_event_name: 'SessionStart',
+    session_id: process.env.SESSION_ID || 'unknown',
+    cwd: process.env.CLAUDE_PROJECT_DIR || process.cwd(),
+    timestamp: new Date().toISOString(),
+    context: {}
+  };
+}
 
 try {
   // Assign session name automatically
