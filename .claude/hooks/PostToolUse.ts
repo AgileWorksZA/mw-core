@@ -29,12 +29,17 @@ const TRACKED_TOOLS = [
   'Task'
 ];
 
-// Parse input
+// Read hook input from stdin
+const stdinText = await Bun.stdin.text();
+const hookData = stdinText ? JSON.parse(stdinText) : {};
+
 const input: HookInput = {
-  hook_event_name: 'PostToolUse',
-  session_id: process.env.SESSION_ID || 'unknown',
-  cwd: process.env.CLAUDE_PROJECT_DIR || process.cwd(),
-  tool_name: process.env.TOOL_NAME,
+  hook_event_name: hookData.hook_event_name || 'PostToolUse',
+  session_id: hookData.session_id || process.env.SESSION_ID || 'unknown',
+  cwd: hookData.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd(),
+  tool_name: hookData.tool_name,
+  tool_input: hookData.tool_input,
+  tool_output: hookData.tool_output,
   timestamp: new Date().toISOString()
 };
 
