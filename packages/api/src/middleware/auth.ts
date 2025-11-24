@@ -29,9 +29,12 @@ export function authMiddleware(options?: { required?: boolean }) {
 
   return new Elysia()
     .derive(async ({ headers, set, store }) => {
+      console.log('[Auth] Processing request, headers:', Object.keys(headers));
       const authHeader = headers.authorization;
-      
+      console.log('[Auth] Authorization header:', authHeader?.substring(0, 20) + '...');
+
       if (!authHeader?.startsWith('Bearer ')) {
+        console.log('[Auth] Missing or invalid authorization header');
         if (required) {
           set.status = 401;
           throw new Error('Missing authorization header');
@@ -40,11 +43,13 @@ export function authMiddleware(options?: { required?: boolean }) {
       }
 
       const token = authHeader.substring(7);
-      
+      console.log('[Auth] Extracted token:', token.substring(0, 20) + '...');
+
       try {
         // Get connection config from token
         const config = await connectionService.getConnectionByToken(token);
-        
+        console.log('[Auth] Config from token:', config ? 'found' : 'not found');
+
         if (!config) {
           if (required) {
             set.status = 401;

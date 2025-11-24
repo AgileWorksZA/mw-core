@@ -19,8 +19,24 @@ import { errorHandler } from './middleware/error-handler';
 import { requestId } from './middleware/request-id';
 import { logging } from './middleware/logging';
 import { i18n } from './middleware/i18n';
-import { authMiddleware } from './middleware/auth';
+import { connectionService } from './services/connection-service';
+import { createSmartClient, type SmartMoneyWorksClient } from '@moneyworks/data';
 import { createCaches } from './services/cache';
+
+// Cache of active clients to avoid recreating
+const clientCache = new Map<string, { client: SmartMoneyWorksClient; lastUsed: number }>();
+
+// Cleanup old clients every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  const maxAge = 10 * 60 * 1000; // 10 minutes
+
+  for (const [key, value] of clientCache.entries()) {
+    if (now - value.lastUsed > maxAge) {
+      clientCache.delete(key);
+    }
+  }
+}, 5 * 60 * 1000);
 
 export interface APIConfig {
   port?: number;
@@ -129,9 +145,56 @@ All errors follow a consistent format with error code, message, details, and req
     
     // Mount auth routes (no auth required)
     .use(createAuthRoutes())
-    
+
+    // Apply auth middleware directly
+    .derive(async ({ headers }) => {
+      const authHeader = headers.authorization;
+
+      if (!authHeader?.startsWith('Bearer ')) {
+        return {};
+      }
+
+      const token = authHeader.substring(7);
+
+      try {
+        // Get connection config from token
+        const config = await connectionService.getConnectionByToken(token);
+
+        if (!config) {
+          return {};
+        }
+
+        // Check cache for existing client
+        const cached = clientCache.get(token);
+
+        if (cached) {
+          cached.lastUsed = Date.now();
+          return {
+            mwClient: cached.client,
+            connectionId: token
+          };
+        }
+
+        // Create new client
+        const client = createSmartClient(config);
+
+        // Cache it
+        clientCache.set(token, {
+          client,
+          lastUsed: Date.now()
+        });
+
+        return {
+          mwClient: client,
+          connectionId: token
+        };
+      } catch (error) {
+        console.error('Auth error:', error);
+        return {};
+      }
+    })
+
     // Mount protected routes (auth required)
-    .use(authMiddleware())
     .use(createTableRoutes(caches.labels))
     .use(createEvalRoutes(caches.eval))
     .use(createCompanyRoutes(caches.company))

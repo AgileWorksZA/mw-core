@@ -6,7 +6,7 @@
 
 import { Elysia, t } from 'elysia';
 import { connectionService } from '../services/connection-service';
-import { createSmartClient } from '@moneyworks/data';
+import { createSmartClient, CompanyInformationRepository } from '@moneyworks/data';
 import type { MoneyWorksConfig } from '@moneyworks/data';
 
 // Token schema
@@ -48,7 +48,7 @@ export function createAuthRoutes() {
         // Test connection
         const client = createSmartClient(config);
         const isConnected = await client.testConnection();
-        
+
         if (!isConnected) {
           set.status = 401;
           return {
@@ -58,12 +58,13 @@ export function createAuthRoutes() {
         }
 
         // Get company info for the connection
-        const companyInfo = await client.getCompanyInfo();
+        const companyRepo = new CompanyInformationRepository(client);
+        const companyInfo = await companyRepo.getCompanyInformation(['Name']);
 
         // Store connection and get tokens
         const { accessToken, refreshToken, connectionId } = await connectionService.createConnection({
           ...config,
-          description: body.description || `${companyInfo.name} - ${body.dataFile}`
+          description: body.description || `${companyInfo.Name || body.dataFile} - ${body.dataFile}`
         });
 
         return {
@@ -71,7 +72,7 @@ export function createAuthRoutes() {
           refreshToken,
           connectionId,
           company: {
-            name: companyInfo.name,
+            name: companyInfo.Name || body.dataFile,
             dataFile: body.dataFile
           }
         };
