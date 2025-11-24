@@ -40,10 +40,9 @@ try {
   // Initialize session namer
   const namer = new SessionNamer();
 
-  // Assign session name automatically
-  const sessionName = namer.assignName(input.session_id, {
-    source: input.context?.resumedFrom ? 'resume' : 'new'
-  });
+  // Get or create session name
+  const source = input.context?.resumedFrom ? 'resume' : 'startup';
+  const sessionName = namer.getOrCreateName(input.session_id, source);
 
   // Output success message with session name
   console.error(JSON.stringify({

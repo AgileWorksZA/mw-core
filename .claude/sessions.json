@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "sessions": {
+    "test-session-456": {
+      "name": "brilliant-wildcat",
+      "created": "2025-11-24T01:46:33.326Z",
+      "source": "startup",
+      "manual": false
+    }
+  }
+}
