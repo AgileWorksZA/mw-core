@@ -44,6 +44,9 @@ const input: HookInput = {
 };
 
 try {
+  // Log for debugging (visible in Claude output)
+  console.error(`[PostToolUse] tool=${input.tool_name}, tracked=${TRACKED_TOOLS.includes(input.tool_name || '')}`);
+
   // Only track significant tools
   if (!input.tool_name || !TRACKED_TOOLS.includes(input.tool_name)) {
     console.error(JSON.stringify({ continue: true }));
@@ -59,6 +62,8 @@ try {
     apiUrl = config.agiosUrl || config.apiUrl || apiUrl;
   }
 
+  console.error(`[PostToolUse] Sending ${input.tool_name} to ${apiUrl}`);
+
   // Prepare event payload
   const eventPayload = {
     sessionId: input.session_id,
@@ -73,13 +78,13 @@ try {
   };
 
   // Send to agios (fire and forget)
-  fetch(apiUrl, {
+  const response = await fetch(apiUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(eventPayload)
-  }).catch(() => {
-    // Silently fail - don't block Claude if agios is down
   });
+
+  console.error(`[PostToolUse] Response: ${response.status} ${response.statusText}`);
 
   // Always continue
   console.error(JSON.stringify({ continue: true }));
