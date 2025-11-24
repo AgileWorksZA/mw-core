@@ -1,0 +1,6 @@
+{
+  "code": "PROD",
+  "name": "Products",
+  "description": "Product entity features - inventory, pricing, and catalog management",
+  "storyCounter": 1
+}

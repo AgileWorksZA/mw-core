@@ -1,0 +1,257 @@
+[
+  {
+    "id": "T-001",
+    "storyId": "PROD-001",
+    "title": "Create Product TypeScript Type Definitions",
+    "description": "Create packages/canonical/src/entities/products/types.ts with MoneyWorksProduct, MoneyWorksProductCreateInput, MoneyWorksProductUpdateInput, and MoneyWorksProductFilter interfaces. Use branded types (AccountCode) for COGAcct, SalesAcct, StockAcct fields. Reference existing ontology at /generated/moneyworks-products-canonical-ontology.ts for field definitions.",
+    "acceptanceCriteria": ["AC-002"],
+    "status": "pending",
+    "assignedAgent": "backend-dev",
+    "dependencies": [],
+    "estimatedComplexity": "low",
+    "referenceFiles": [
+      "/generated/moneyworks-products-canonical-ontology.ts",
+      "packages/canonical/src/entities/names/types.ts",
+      "packages/canonical/src/entities/tax-rates/types.ts"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-002",
+    "storyId": "PROD-001",
+    "title": "Create ProductRepository with Base CRUD",
+    "description": "Create packages/data/src/repositories/product.repository.ts extending BaseMoneyWorksRepository. Implement tableName='Product', primaryKey='Code', postProcess() method to parse MW data (flags, hash, numeric fields) and add branded types, prepare() method to convert typed data to MW format. Follow exact pattern from name.repository.ts and tax-rate.repository.ts.",
+    "acceptanceCriteria": ["AC-003"],
+    "status": "pending",
+    "assignedAgent": "backend-dev",
+    "dependencies": ["T-001"],
+    "estimatedComplexity": "medium",
+    "referenceFiles": [
+      "packages/data/src/repositories/name.repository.ts",
+      "packages/data/src/repositories/tax-rate.repository.ts",
+      "packages/data/src/repositories/base.repository.ts"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-003",
+    "storyId": "PROD-001",
+    "title": "Implement Specialized ProductRepository Query Methods",
+    "description": "Add 6 specialized query methods to ProductRepository: findByCode (find by product code), findByType (filter by P/R/T/S/O), findInventoried (Hash & 0x0008), findBySupplier (filter by Supplier field), searchByCategory (search Category1-4), findLowStock (StockOnHand < ReorderLevel). Each method should leverage MW search expressions where possible, fall back to JS filtering when needed.",
+    "acceptanceCriteria": ["AC-004"],
+    "status": "pending",
+    "assignedAgent": "backend-dev",
+    "dependencies": ["T-002"],
+    "estimatedComplexity": "medium",
+    "referenceFiles": [
+      "packages/data/src/repositories/name.repository.ts"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-004",
+    "storyId": "PROD-001",
+    "title": "Add JSDoc Documentation to ProductRepository",
+    "description": "Add comprehensive JSDoc comments to all public methods in ProductRepository following project standards: clear description, @param tags, @returns description, @example for complex methods, @ai-instruction for AI guidance. Reference name.repository.ts and tax-rate.repository.ts for documentation style.",
+    "acceptanceCriteria": ["AC-014"],
+    "status": "pending",
+    "assignedAgent": "backend-dev",
+    "dependencies": ["T-003"],
+    "estimatedComplexity": "low",
+    "referenceFiles": [
+      "packages/data/src/repositories/name.repository.ts",
+      "packages/data/src/repositories/tax-rate.repository.ts"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-005",
+    "storyId": "PROD-001",
+    "title": "Export ProductRepository from Data Package",
+    "description": "Add ProductRepository export to packages/data/src/repositories/index.ts to make it available for import by other packages. Follow existing export pattern.",
+    "acceptanceCriteria": ["AC-005"],
+    "status": "pending",
+    "assignedAgent": "backend-dev",
+    "dependencies": ["T-004"],
+    "estimatedComplexity": "trivial",
+    "referenceFiles": [
+      "packages/data/src/repositories/index.ts"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-006",
+    "storyId": "PROD-001",
+    "title": "Create ProductController",
+    "description": "Create packages/api/src/controllers/product.ts extending BaseTableController with tableName='Product', displayName='Products', description='Products, inventory, and pricing in MoneyWorks', getPrimaryKey() returns 'Code'. Follow exact pattern from name.ts and tax-rate.ts controllers.",
+    "acceptanceCriteria": ["AC-006"],
+    "status": "pending",
+    "assignedAgent": "backend-dev",
+    "dependencies": ["T-005"],
+    "estimatedComplexity": "low",
+    "referenceFiles": [
+      "packages/api/src/controllers/name.ts",
+      "packages/api/src/controllers/tax-rate.ts",
+      "packages/api/src/controllers/base-table.ts"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-007",
+    "storyId": "PROD-001",
+    "title": "Register ProductController in TableRegistry (CRITICAL)",
+    "description": "CRITICAL TASK: Register ProductController in packages/api/src/registry/table-registry.ts by importing controller, adding this.register(new ProductController(this.client)) to registerTables() method, removing 'Product' from 'upcoming' array if present. This is mandatory for Product to become 'available' per Weave painpoint Q:painpoint-table-registry.",
+    "acceptanceCriteria": ["AC-007"],
+    "status": "pending",
+    "assignedAgent": "backend-dev",
+    "dependencies": ["T-006"],
+    "estimatedComplexity": "low",
+    "criticality": "CRITICAL",
+    "referenceFiles": [
+      "packages/api/src/registry/table-registry.ts"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-008",
+    "storyId": "PROD-001",
+    "title": "Create Product List React Route",
+    "description": "Create packages/web1/app/routes/products.tsx with server-side loader fetching products via smartExport, search/filter controls (search by code/description, filter by type), pagination (page, limit), table display showing Code, Description, Type, SellPrice, StockOnHand, click navigation to detail view. Follow pattern from tax-rates.tsx.",
+    "acceptanceCriteria": ["AC-008"],
+    "status": "pending",
+    "assignedAgent": "frontend-dev",
+    "dependencies": ["T-007"],
+    "estimatedComplexity": "medium",
+    "referenceFiles": [
+      "packages/web1/app/routes/tax-rates.tsx",
+      "packages/web1/app/routes/names.tsx"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-009",
+    "storyId": "PROD-001",
+    "title": "Create Product Detail React Route",
+    "description": "Create packages/web1/app/routes/products.$code.tsx with server-side loader fetching specific product by code, edit form for key fields (Code, Description, Type, BuyPrice, SellPrice, StockOnHand, COGAcct, SalesAcct, StockAcct), Save/Delete actions, back to list navigation. Follow pattern from tax-rates.$code.tsx.",
+    "acceptanceCriteria": ["AC-008"],
+    "status": "pending",
+    "assignedAgent": "frontend-dev",
+    "dependencies": ["T-007"],
+    "estimatedComplexity": "medium",
+    "referenceFiles": [
+      "packages/web1/app/routes/tax-rates.$code.tsx"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-010",
+    "storyId": "PROD-001",
+    "title": "Register Product Routes in Routes Config",
+    "description": "Add route('products', 'routes/products.tsx') and route('products/:code', 'routes/products.$code.tsx') to packages/web1/app/routes.ts following existing route registration pattern.",
+    "acceptanceCriteria": ["AC-009"],
+    "status": "pending",
+    "assignedAgent": "frontend-dev",
+    "dependencies": ["T-008", "T-009"],
+    "estimatedComplexity": "trivial",
+    "referenceFiles": [
+      "packages/web1/app/routes.ts"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-011",
+    "storyId": "PROD-001",
+    "title": "Add Products Link to Navigation",
+    "description": "Add Products navigation link to main navigation menu pointing to /products route. Use Package or Box icon from lucide-react. Find Navigation component and add link following existing pattern.",
+    "acceptanceCriteria": ["AC-010"],
+    "status": "pending",
+    "assignedAgent": "frontend-dev",
+    "dependencies": ["T-010"],
+    "estimatedComplexity": "trivial",
+    "referenceFiles": [
+      "packages/web1/app/components/navigation.tsx"
+    ],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-012",
+    "storyId": "PROD-001",
+    "title": "Verify TypeScript Compilation",
+    "description": "Run 'bun run typecheck' from repository root and verify zero type errors in canonical, data, api, and web1 packages. Fix any type errors found. Collect compiler output as evidence for AC-011.",
+    "acceptanceCriteria": ["AC-011"],
+    "status": "pending",
+    "assignedAgent": "backend-qa",
+    "dependencies": ["T-011"],
+    "estimatedComplexity": "low",
+    "referenceFiles": [],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-013",
+    "storyId": "PROD-001",
+    "title": "Test API Endpoints",
+    "description": "Start API server and test: GET /api/v1/tables (verify Product in 'available' array), GET /api/v1/tables/Product (verify metadata), GET /api/v1/tables/Product/export (verify products returned if data exists), GET /api/v1/tables/Product/{code} (verify specific product retrieval). Collect curl/fetch responses as evidence for AC-012.",
+    "acceptanceCriteria": ["AC-012"],
+    "status": "pending",
+    "assignedAgent": "backend-qa",
+    "dependencies": ["T-012"],
+    "estimatedComplexity": "low",
+    "referenceFiles": [],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  },
+  {
+    "id": "T-014",
+    "storyId": "PROD-001",
+    "title": "Test Web UI Functionality",
+    "description": "Start web server and test: navigate to /products (verify list displays), use search/filter controls, click product to navigate to /products/{code}, verify detail view shows key fields, test edit form if permissions allow. Collect screenshots or browser testing notes as evidence for AC-013.",
+    "acceptanceCriteria": ["AC-013"],
+    "status": "pending",
+    "assignedAgent": "frontend-qa",
+    "dependencies": ["T-013"],
+    "estimatedComplexity": "medium",
+    "referenceFiles": [],
+    "sessionId": null,
+    "transactionId": null,
+    "createdAt": "2025-11-24T12:00:00Z",
+    "completedAt": null
+  }
+]

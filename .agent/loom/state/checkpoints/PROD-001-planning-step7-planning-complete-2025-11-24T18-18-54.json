@@ -1,0 +1,82 @@
+{
+  "storyId": "PROD-001",
+  "workflow": "planning",
+  "startedAt": "2025-11-24T18:09:42.954Z",
+  "currentStep": 7,
+  "totalSteps": 7,
+  "steps": [
+    {
+      "id": 1,
+      "name": "Load Story",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:09:55.941Z",
+      "progress": "Loading story...",
+      "completedAt": "2025-11-24T18:10:11.518Z",
+      "output": "Story loaded: PROD-001"
+    },
+    {
+      "id": 2,
+      "name": "Consult Librarian (Optional)",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:10:13.243Z",
+      "progress": "Consulting Librarian...",
+      "completedAt": "2025-11-24T18:10:57.963Z",
+      "output": "Librarian consulted (patterns don't match - using Name/TaxRate references)"
+    },
+    {
+      "id": 3,
+      "name": "Decompose Tasks",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:10:59.501Z",
+      "progress": "Decomposing tasks...",
+      "completedAt": "2025-11-24T18:12:21.602Z",
+      "output": "14 tasks created"
+    },
+    {
+      "id": 4,
+      "name": "Assign Roles",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:12:23.155Z",
+      "progress": "Assigning roles to tasks...",
+      "completedAt": "2025-11-24T18:12:40.262Z",
+      "output": "Roles assigned to all tasks"
+    },
+    {
+      "id": 5,
+      "name": "Sequence Tasks",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:12:42.292Z",
+      "progress": "Sequencing tasks...",
+      "completedAt": "2025-11-24T18:12:56.548Z",
+      "output": "Task sequence determined: 3 phases (7 sequential + 2 parallel + 5 sequential)"
+    },
+    {
+      "id": 6,
+      "name": "User Approval",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:12:58.317Z",
+      "progress": "Awaiting user approval...",
+      "completedAt": "2025-11-24T18:18:31.910Z",
+      "output": "User approved plan"
+    },
+    {
+      "id": 7,
+      "name": "Finalize Plan",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:18:33.564Z",
+      "progress": "Finalizing plan...",
+      "completedAt": "2025-11-24T18:18:52.674Z",
+      "output": "Planning complete"
+    }
+  ],
+  "artifacts": {},
+  "metadata": {
+    "sessionId": "gothic-boa"
+  },
+  "completedAt": "2025-11-24T18:18:52.674Z",
+  "checkpoint": {
+    "createdAt": "2025-11-24T18:18:54.329Z",
+    "stepId": 7,
+    "label": "planning-complete"
+  }
+}

@@ -8,11 +8,18 @@
 	"stack": {
 		"runtime": "bun",
 		"packageManager": "bun",
-		"backend": ["ElysiaJS"],
-		"frontend": ["React", "React Router"],
+		"backend": [
+			"ElysiaJS"
+		],
+		"frontend": [
+			"React",
+			"React Router"
+		],
 		"database": [],
 		"testing": [],
-		"other": ["TanStack Query"]
+		"other": [
+			"TanStack Query"
+		]
 	},
 	"patterns": {
 		"cqrs": true,
@@ -46,7 +53,14 @@
 		"requirements-planner",
 		"spec-writer"
 	],
-	"features": [],
-	"storyCounter": 0,
-	"taskCounter": 0
+	"features": [
+		{
+			"code": "PROD",
+			"name": "Products",
+			"description": "Product entity features - inventory, pricing, and catalog management",
+			"storyCount": 1
+		}
+	],
+	"storyCounter": 1,
+	"taskCounter": 14
 }

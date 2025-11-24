@@ -1,0 +1,62 @@
+{
+  "storyId": "PROD-001",
+  "workflow": "execution",
+  "startedAt": "2025-11-24T18:19:43.398Z",
+  "currentStep": 3,
+  "totalSteps": 7,
+  "steps": [
+    {
+      "id": 0,
+      "name": "Pre-flight Checks & Planning",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:19:45.564Z",
+      "progress": "Running pre-flight checks...",
+      "completedAt": "2025-11-24T18:25:17.485Z",
+      "output": "Pre-flight checks passed, user approved execution"
+    },
+    {
+      "id": 1,
+      "name": "Session Initialization",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:25:20.611Z",
+      "progress": "Initializing session...",
+      "completedAt": "2025-11-24T18:25:39.682Z",
+      "output": "Session initialized"
+    },
+    {
+      "id": 2,
+      "name": "Hydrate Agents",
+      "status": "completed",
+      "startedAt": "2025-11-24T18:25:41.194Z",
+      "progress": "Hydrating agents...",
+      "completedAt": "2025-11-24T18:25:42.911Z",
+      "output": "Agents hydrated"
+    },
+    {
+      "id": 3,
+      "name": "Execute Tasks (Main Loop)",
+      "status": "in_progress",
+      "startedAt": "2025-11-24T18:25:44.051Z",
+      "progress": "Executing tasks..."
+    },
+    {
+      "id": 4,
+      "name": "Track Events (Automatic)",
+      "status": "pending"
+    },
+    {
+      "id": 5,
+      "name": "Validate Acceptance Criteria",
+      "status": "pending"
+    },
+    {
+      "id": 6,
+      "name": "Iterate on Failures",
+      "status": "pending"
+    }
+  ],
+  "artifacts": {},
+  "metadata": {
+    "sessionId": "gothic-boa"
+  }
+}
