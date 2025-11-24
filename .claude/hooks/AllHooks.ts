@@ -7,7 +7,7 @@
  * for debugging and tracking purposes.
  */
 
-import { EventRecorder } from 'claude-hooks-sdk';
+import { enrichEvent } from 'claude-hooks-sdk';
 import { existsSync, mkdirSync, appendFileSync } from 'fs';
 import { join } from 'path';
 
@@ -21,34 +21,19 @@ if (!existsSync(logsDir)) {
 }
 
 try {
+  // Use SDK helper to enrich event with conversation + git context
+  const enriched = await enrichEvent(hookData, {
+    includeConversation: true,  // Get last conversation message
+    includeGit: true,            // Get git context
+    conversationLines: 1         // Just the last message
+  });
+
   // Log to daily file
   const date = new Date().toISOString().split('T')[0];
   const logFile = join(logsDir, `hooks-${date}.jsonl`);
 
-  // Read the transcript file to get the LAST message
-  let conversation = null;
-  if (hookData.transcript_path && existsSync(hookData.transcript_path)) {
-    try {
-      const transcriptContent = await Bun.file(hookData.transcript_path).text();
-      const lines = transcriptContent.trim().split('\n').filter(l => l);
-      if (lines.length > 0) {
-        // Get the LAST message from the transcript
-        conversation = JSON.parse(lines[lines.length - 1]);
-      }
-    } catch (err) {
-      // Transcript might be locked or unreadable, skip
-    }
-  }
-
-  // Log with event + timestamp + last conversation message
-  const logEntry = {
-    event: hookData,      // All hook metadata
-    timestamp: new Date().toISOString(),
-    conversation          // Last message from transcript
-  };
-
   // Append to log file (JSONL format)
-  appendFileSync(logFile, JSON.stringify(logEntry) + '\n');
+  appendFileSync(logFile, JSON.stringify(enriched) + '\n');
 
   // Also send to agios if it's a significant event
   const SIGNIFICANT_HOOKS = ['PostToolUse', 'SessionStart', 'SessionEnd', 'Stop'];
@@ -76,8 +61,8 @@ try {
         project: 'mw-core',
         hookEvent: hookEvent,
         toolName: hookData.tool_name,
-        metadata: hookData,
-        timestamp: logEntry.timestamp
+        metadata: enriched,  // Send the enriched payload
+        timestamp: enriched.timestamp
       })
     }).catch(() => {
       // Silently fail
