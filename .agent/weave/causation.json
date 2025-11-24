@@ -1,17 +1,65 @@
 {
-  "$schema": "./SCHEMA.md#causation",
-  "title": "Causation (Etiology)",
-  "description": "What caused what - causal chains, root causes, mechanisms",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T07:39:57.492Z",
-  "causalChains": {},
-  "rootCauses": {},
-  "mechanisms": {},
-  "metadata": {
-    "totalCausalChains": 0,
-    "totalRootCauses": 0,
-    "totalMechanisms": 0,
-    "averageConfidence": 0,
-    "lastCompaction": null
-  }
+	"$schema": "./SCHEMA.md#causation",
+	"title": "Causation (Etiology)",
+	"description": "What caused what - causal chains, root causes, mechanisms",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"causalChains": {
+		"missing-registration-causes-unavailability": {
+			"id": "missing-registration-causes-unavailability",
+			"cause": "Controller created but not registered in TableRegistry",
+			"effect": "Entity stuck in 'upcoming' status, inaccessible via REST API",
+			"description": "Creating an API controller without registering it in TableRegistry.register() leaves the entity inaccessible",
+			"confidence": 1.0,
+			"evidence": [
+				"US-001: ProductController exists but Product in 'upcoming' array",
+				"US-002: AccountController registered and Account in 'available' array"
+			],
+			"mechanism": "TableRegistry.registerTables() populates available list; unregistered controllers never added",
+			"observedIn": ["US-001 (Product)", "US-002 (Account)"]
+		}
+	},
+	"rootCauses": {
+		"us-001-incomplete-api-layer": {
+			"id": "us-001-incomplete-api-layer",
+			"problem": "Product entity not available via REST API despite controller existing",
+			"rootCause": "Story scope stopped at canonical + data layers, API layer registration not included",
+			"description": "US-001 delivered ProductController but didn't complete the final registration step in TableRegistry",
+			"confidence": 1.0,
+			"fix": "US-002 included full API layer with TableRegistry registration as core story requirement",
+			"evidence": ["Product in 'upcoming' array", "AccountController registration completed in US-002"]
+		},
+		"dev-server-memory-crashes": {
+			"id": "dev-server-memory-crashes",
+			"problem": "React Router dev server crashes with exit code 137",
+			"rootCause": "Multiple Bun processes consuming system memory with dev server as final straw triggering OOM killer",
+			"description": "System running many background Bun processes (hot reload servers from other projects) exhausts available memory",
+			"confidence": 0.9,
+			"fix": "Kill background processes before starting new dev servers, or use static validation as testing fallback",
+			"evidence": ["exit code 137 (SIGKILL)", "ps aux showing multiple bun --hot processes", "48GB RAM but under memory pressure"]
+		}
+	},
+	"mechanisms": {
+		"table-registry-population": {
+			"id": "table-registry-population",
+			"what": "How TableRegistry determines which tables are available via API",
+			"how": "registerTables() method calls this.register() for each controller, which adds to available Map",
+			"confidence": 1.0,
+			"observedIn": ["packages/api/src/registry/table-registry.ts"],
+			"steps": [
+				"Constructor initializes empty Map<string, TableController>",
+				"registerTables() called during initialization",
+				"Each this.register(controller) adds controller to Map by table name",
+				"getAvailableTables() returns Array.from(this.tables.keys())",
+				"GET /tables endpoint serializes available, vetted, upcoming arrays"
+			]
+		}
+	},
+	"metadata": {
+		"totalCausalChains": 1,
+		"totalRootCauses": 2,
+		"totalMechanisms": 1,
+		"averageConfidence": 0.97,
+		"lastCompaction": null
+	}
 }

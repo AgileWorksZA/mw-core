@@ -1,17 +1,76 @@
 {
-  "$schema": "./SCHEMA.md#teleology",
-  "title": "Teleology (Purpose)",
-  "description": "What is this for - intent, goals, purposes, functions",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T07:39:57.492Z",
-  "purposes": {},
-  "goals": {},
-  "intents": {},
-  "metadata": {
-    "totalPurposes": 0,
-    "totalGoals": 0,
-    "totalIntents": 0,
-    "averageConfidence": 0,
-    "lastCompaction": null
-  }
+	"$schema": "./SCHEMA.md#teleology",
+	"title": "Teleology (Purpose)",
+	"description": "What is this for - intent, goals, purposes, functions",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"purposes": {
+		"table-registry-purpose": {
+			"id": "table-registry-purpose",
+			"what": "TableRegistry in API layer",
+			"purpose": "Central registry determining which MoneyWorks entities are available via REST API",
+			"how": "Controllers register during initialization, populating available Map<string, TableController>",
+			"why": "Single source of truth for API availability, enables dynamic table discovery",
+			"confidence": 1.0,
+			"observedIn": ["packages/api/src/registry/table-registry.ts"],
+			"criticality": "HIGH - unregistered controllers make entities inaccessible"
+		},
+		"loom-completion-workflow-purpose": {
+			"id": "loom-completion-workflow-purpose",
+			"what": "7-step /loom:complete workflow",
+			"purpose": "Systematic story completion with validation, documentation, learning extraction, commit creation",
+			"steps": [
+				"Verify all acceptance criteria",
+				"Update documentation",
+				"Generate retrospective",
+				"Extract learnings via Shadow Advisor",
+				"Update Weave knowledge base",
+				"Create comprehensive commit",
+				"Mark story complete"
+			],
+			"why": "Ensures thorough completion, captures learnings for institutional knowledge",
+			"confidence": 0.95,
+			"observedIn": ["US-002 completion"]
+		}
+	},
+	"goals": {
+		"us-002-primary-goal": {
+			"id": "us-002-primary-goal",
+			"goal": "Implement complete Account entity with full-stack CRUD interface",
+			"subgoals": [
+				"Canonical layer: Types, enums, fields, validators",
+				"Data layer: Repository with specialized queries + tests",
+				"API layer: Controller registered in TableRegistry",
+				"UI layer: List + detail routes, navigation"
+			],
+			"achieved": true,
+			"evidence": [
+				"All 4 layers implemented",
+				"25/27 ACs validated",
+				"Account in 'available' status"
+			],
+			"confidence": 1.0
+		}
+	},
+	"intents": {
+		"fix-us-001-mistake-intent": {
+			"id": "fix-us-001-mistake-intent",
+			"intent": "Ensure US-002 doesn't repeat US-001's incomplete API layer mistake",
+			"manifestedAs": [
+				"TableRegistry registration tracked as T-026 with CRITICAL importance",
+				"5-step registration checklist created",
+				"Explicit validation: Account in 'available' list (AC-014)"
+			],
+			"outcome": "Success - Account immediately usable, unlike Product",
+			"confidence": 1.0,
+			"evidence": ["Product in 'upcoming'", "Account in 'available'"]
+		}
+	},
+	"metadata": {
+		"totalPurposes": 2,
+		"totalGoals": 1,
+		"totalIntents": 1,
+		"averageConfidence": 0.99,
+		"lastCompaction": null
+	}
 }

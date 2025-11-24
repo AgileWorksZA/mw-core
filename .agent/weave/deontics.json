@@ -1,17 +1,111 @@
 {
-  "$schema": "./SCHEMA.md#deontics",
-  "title": "Deontics (Δ)",
-  "description": "What must/can/cannot be done - obligations, permissions, prohibitions",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T07:39:57.493Z",
-  "obligations": {},
-  "permissions": {},
-  "prohibitions": {},
-  "metadata": {
-    "totalObligations": 0,
-    "totalPermissions": 0,
-    "totalProhibitions": 0,
-    "averageConfidence": 0,
-    "lastCompaction": null
-  }
+	"$schema": "./SCHEMA.md#deontics",
+	"title": "Deontics (Δ)",
+	"description": "What must/can/cannot be done - obligations, permissions, prohibitions",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"obligations": {
+		"table-registry-registration-obligation": {
+			"id": "table-registry-registration-obligation",
+			"what": "Register all API controllers in TableRegistry",
+			"why": "Unregistered controllers make entities inaccessible via REST API",
+			"when": "After creating controller extending BaseTableController",
+			"how": "Add 'this.register(new Controller(this.client))' to registerTables() method",
+			"severity": "CRITICAL",
+			"confidence": 1.0,
+			"evidence": [
+				"US-001: Product not registered → still in 'upcoming'",
+				"US-002: Account registered → now in 'available'"
+			],
+			"enforcedBy": "5-step registration checklist in Praxeology"
+		},
+		"evidence-collection-obligation": {
+			"id": "evidence-collection-obligation",
+			"what": "Collect concrete evidence for each acceptance criterion",
+			"why": "Objective validation prevents false positives, provides audit trail",
+			"when": "During story validation phase",
+			"how": "File paths with line numbers, test output, API responses, TypeScript compilation results",
+			"severity": "HIGH",
+			"confidence": 0.95,
+			"evidence": ["US-002: Created validation report with evidence for all 27 ACs"]
+		},
+		"full-stack-completion-obligation": {
+			"id": "full-stack-completion-obligation",
+			"what": "Include all 4 layers (canonical, data, API, UI) in entity stories",
+			"why": "Partial implementations leave features incomplete and require follow-up",
+			"when": "Planning new MoneyWorks entity stories",
+			"severity": "HIGH",
+			"confidence": 0.95,
+			"evidence": ["US-001 incomplete", "US-002 complete and immediately usable"]
+		},
+		"retrospective-generation-obligation": {
+			"id": "retrospective-generation-obligation",
+			"what": "Generate comprehensive retrospective for all completed stories",
+			"why": "Captures learnings, feeds Weave knowledge base, improves future execution",
+			"when": "During /loom:complete workflow",
+			"how": "Document: what went well, what could improve, decisions, learnings, Weave recommendations",
+			"severity": "MEDIUM",
+			"confidence": 0.9,
+			"enforcedBy": "/loom:complete Step 3"
+		}
+	},
+	"permissions": {
+		"static-validation-permission": {
+			"id": "static-validation-permission",
+			"what": "Accept static validation when browser testing is blocked by environment",
+			"when": "Dev server crashes, memory pressure, or other environmental issues",
+			"conditions": [
+				"TypeScript compiles with zero errors",
+				"All tests passing",
+				"API endpoints accessible",
+				"Routes registered via grep verification",
+				"Issue is environmental, not implementation"
+			],
+			"confidence": 0.9,
+			"evidence": ["US-002: 25/27 ACs validated via static analysis, 2 blocked by environment"]
+		},
+		"parallel-task-execution-permission": {
+			"id": "parallel-task-execution-permission",
+			"what": "Execute independent tasks in parallel via multiple Task tool calls",
+			"when": "Tasks have no dependencies and can run concurrently",
+			"benefits": ["30% reduction in execution time"],
+			"confidence": 0.9,
+			"evidence": ["US-002: T-016/T-017 parallel, T-028/T-029 parallel"]
+		}
+	},
+	"prohibitions": {
+		"incomplete-api-layer-prohibition": {
+			"id": "incomplete-api-layer-prohibition",
+			"what": "NEVER create controller without registering in TableRegistry",
+			"why": "Makes entity inaccessible via API, leaves it in 'upcoming' status",
+			"severity": "CRITICAL",
+			"confidence": 1.0,
+			"violation": "US-001 created ProductController but didn't register it",
+			"enforcement": "5-step registration checklist, explicit AC for registration"
+		},
+		"mock-data-only-testing-prohibition": {
+			"id": "mock-data-only-testing-prohibition",
+			"what": "NEVER rely solely on mock data without real integration testing",
+			"why": "Mock tests can pass while real integration fails",
+			"severity": "HIGH",
+			"confidence": 0.9,
+			"correctApproach": "Mock mode enables testing, but validate with real API endpoints when possible"
+		},
+		"partial-entity-delivery-prohibition": {
+			"id": "partial-entity-delivery-prohibition",
+			"what": "NEVER deliver entity stories with only canonical + data layers",
+			"why": "Leaves features incomplete, requires follow-up stories, users cannot use feature",
+			"severity": "HIGH",
+			"confidence": 0.95,
+			"violation": "US-001 stopped at canonical + data",
+			"correctApproach": "Full-stack delivery (US-002 pattern)"
+		}
+	},
+	"metadata": {
+		"totalObligations": 4,
+		"totalPermissions": 2,
+		"totalProhibitions": 3,
+		"averageConfidence": 0.94,
+		"lastCompaction": null
+	}
 }

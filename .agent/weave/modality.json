@@ -1,17 +1,100 @@
 {
-  "$schema": "./SCHEMA.md#modality",
-  "title": "Modality (Μ)",
-  "description": "What could be - alternatives, rejected options, possible futures",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T07:39:57.493Z",
-  "alternatives": {},
-  "rejectedOptions": {},
-  "possibleFutures": {},
-  "metadata": {
-    "totalAlternatives": 0,
-    "totalRejectedOptions": 0,
-    "totalPossibleFutures": 0,
-    "averageConfidence": 0,
-    "lastCompaction": null
-  }
+	"$schema": "./SCHEMA.md#modality",
+	"title": "Modality (Μ)",
+	"description": "What could be - alternatives, rejected options, possible futures",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"alternatives": {
+		"partial-vs-full-stack-scope": {
+			"id": "partial-vs-full-stack-scope",
+			"decision": "Full-stack story scope for US-002",
+			"alternatives": [
+				{
+					"option": "Partial scope (canonical + data only, like US-001)",
+					"pros": ["Smaller story", "Faster initial delivery (~30 minutes)"],
+					"cons": ["Incomplete feature", "Requires follow-up story", "Entity stuck in 'upcoming'"],
+					"rejected": true,
+					"reason": "US-001 demonstrated this leaves features incomplete"
+				},
+				{
+					"option": "Full-stack scope (canonical + data + API + UI)",
+					"pros": ["Complete feature", "Immediately usable", "Clear done criteria"],
+					"cons": ["Larger story", "Longer execution (~1.5 hours)"],
+					"rejected": false,
+					"reason": "Chosen - delivers immediate user value"
+				}
+			],
+			"confidence": 0.95,
+			"observedIn": "US-002 planning"
+		},
+		"browser-vs-static-validation": {
+			"id": "browser-vs-static-validation",
+			"decision": "Accept static validation when browser testing blocked",
+			"alternatives": [
+				{
+					"option": "Block story completion until browser testing works",
+					"pros": ["Complete UI validation", "Visual regression testing"],
+					"cons": ["Blocked by environment", "Implementation already correct"],
+					"rejected": true,
+					"reason": "Environmental issue shouldn't block completion when code is correct"
+				},
+				{
+					"option": "Accept static validation (TypeScript + API + grep)",
+					"pros": ["Validates implementation correctness", "Not blocked by environment"],
+					"cons": ["Cannot verify visual rendering", "Cannot test user interactions"],
+					"rejected": false,
+					"reason": "Chosen - sufficient evidence of implementation correctness"
+				}
+			],
+			"confidence": 0.9,
+			"observedIn": "US-002 Phase 5 validation"
+		}
+	},
+	"rejectedOptions": {
+		"automatic-controller-registration": {
+			"id": "automatic-controller-registration",
+			"option": "Automatically register all controllers via file scanning",
+			"rejectedBecause": "Explicit registration provides clear control and visibility",
+			"currentApproach": "Manual registration in TableRegistry.registerTables()",
+			"tradeoff": "Manual step required, but clear and auditable",
+			"confidence": 0.8,
+			"context": "After US-001 missed registration, considered automatic approach but rejected"
+		}
+	},
+	"possibleFutures": {
+		"complete-moneyworks-entity-coverage": {
+			"id": "complete-moneyworks-entity-coverage",
+			"future": "All 20+ MoneyWorks entities implemented with full-stack pattern",
+			"likelihood": "high",
+			"timeline": "Next 3-6 months",
+			"dependencies": [
+				"US-002 establishes pattern",
+				"Transaction entity (depends on Account)",
+				"Product entity API completion (fix US-001)",
+				"15+ more entities following same pattern"
+			],
+			"enabledBy": [
+				"Full-stack story pattern proven",
+				"Parallel execution strategy validated",
+				"Loom autonomous execution mature"
+			],
+			"confidence": 0.9
+		},
+		"product-controller-completion": {
+			"id": "product-controller-completion",
+			"future": "Complete US-001 by registering ProductController",
+			"likelihood": "very high",
+			"timeline": "Next sprint",
+			"blockers": "None - just needs registration in TableRegistry",
+			"outcome": "Product moves from 'upcoming' to 'available' status",
+			"confidence": 1.0
+		}
+	},
+	"metadata": {
+		"totalAlternatives": 2,
+		"totalRejectedOptions": 1,
+		"totalPossibleFutures": 2,
+		"averageConfidence": 0.91,
+		"lastCompaction": null
+	}
 }

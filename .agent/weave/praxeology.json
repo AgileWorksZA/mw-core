@@ -1,17 +1,110 @@
 {
-  "$schema": "./SCHEMA.md#praxeology",
-  "title": "Praxeology (Π)",
-  "description": "How we work - WoW patterns, delegation strategies, best practices",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T07:39:57.493Z",
-  "wowPatterns": {},
-  "delegationStrategies": {},
-  "bestPractices": {},
-  "metadata": {
-    "totalWowPatterns": 0,
-    "totalDelegationStrategies": 0,
-    "totalBestPractices": 0,
-    "averageConfidence": 0,
-    "lastCompaction": null
-  }
+	"$schema": "./SCHEMA.md#praxeology",
+	"title": "Praxeology (Π)",
+	"description": "How we work - WoW patterns, delegation strategies, best practices",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"wowPatterns": {
+		"full-stack-story-pattern": {
+			"id": "full-stack-story-pattern",
+			"what": "Include all 4 layers (canonical, data, API, UI) in single story for complete feature delivery",
+			"when": "Implementing new MoneyWorks entities or any user-facing feature",
+			"how": "Break story into phases: Phase 1 (Canonical) → Phase 2 (Data) → Phase 3 (API) → Phase 4 (UI) → Phase 5 (Testing)",
+			"why": "Partial implementations (e.g., US-001 with only canonical + data) leave features incomplete and require follow-up stories",
+			"benefits": [
+				"Feature immediately usable by end-users",
+				"No lingering 'upcoming' status",
+				"Clear completion criteria",
+				"Reduced context switching between stories"
+			],
+			"tradeoffs": [
+				"Larger story scope",
+				"Longer execution time (~1.5 hours vs ~30 minutes for partial)"
+			],
+			"confidence": 0.95,
+			"evidence": ["US-002: Account in 'available' status immediately", "US-001: Product requires follow-up story for API layer"]
+		},
+		"parallel-task-execution-pattern": {
+			"id": "parallel-task-execution-pattern",
+			"what": "Execute independent tasks in parallel using multiple Task tool calls in single message",
+			"when": "Tasks have no dependencies and can run concurrently",
+			"how": "Identify dependency graph, group independent tasks, send single message with multiple Task tool calls",
+			"why": "Sequential execution wastes time when tasks could run concurrently",
+			"benefits": ["30% reduction in total execution time"],
+			"tradeoffs": ["Requires careful dependency analysis"],
+			"confidence": 0.9,
+			"evidence": ["US-002: T-016/T-017 parallel, T-028/T-029 parallel reduced time from ~2h to ~1.5h"]
+		},
+		"reference-implementation-lookup": {
+			"id": "reference-implementation-lookup",
+			"what": "Use Librarian agent to find existing patterns before implementing new entities",
+			"when": "Starting implementation of new entity following established patterns",
+			"how": "Query Librarian for similar implementations (e.g., 'find TaxRate and Name patterns for Account')",
+			"why": "Leverages proven patterns, ensures consistency, reduces decision-making time",
+			"benefits": [
+				"Pattern consistency across entities",
+				"Faster implementation",
+				"Fewer architectural decisions"
+			],
+			"confidence": 0.95,
+			"evidence": ["US-002: Consulted TaxRate and Name patterns for Account implementation"]
+		}
+	},
+	"delegationStrategies": {
+		"specialized-agent-delegation": {
+			"id": "specialized-agent-delegation",
+			"what": "Delegate tasks to specialized agents (backend-dev, backend-qa, frontend-dev, frontend-qa) via Task tool",
+			"when": "Executing multi-task stories autonomously",
+			"agents": {
+				"backend-dev": "Canonical + data + API layer implementation",
+				"backend-qa": "Unit tests + TypeScript compilation verification",
+				"frontend-dev": "React components + routes + navigation",
+				"frontend-qa": "Browser testing + UI validation"
+			},
+			"why": "Specialization improves code quality and maintains clear separation of concerns",
+			"confidence": 0.9,
+			"evidence": ["US-002: 25 tasks delegated across 4 agent types"]
+		}
+	},
+	"bestPractices": {
+		"evidence-based-validation": {
+			"id": "evidence-based-validation",
+			"what": "Collect concrete evidence (file paths, line numbers, test output, API responses) for each acceptance criterion",
+			"when": "Validating story completion",
+			"how": "For each AC, gather specific evidence: TypeScript compilation output, test results, API endpoint responses, grep-based verification",
+			"why": "Objective validation prevents false positives and provides clear audit trail",
+			"confidence": 0.95,
+			"evidence": ["US-002: Created validation report with evidence for all 27 ACs"]
+		},
+		"static-validation-fallback": {
+			"id": "static-validation-fallback",
+			"what": "Use TypeScript compilation + API testing + grep validation when browser testing blocked",
+			"when": "Dev server crashes or environment prevents browser testing",
+			"how": "Verify: (1) TypeScript compiles with zero errors, (2) Routes registered via grep, (3) API endpoints accessible, (4) Navigation updated",
+			"why": "Environmental issues shouldn't block story completion when implementation is correct",
+			"confidence": 0.9,
+			"evidence": ["US-002: 25/27 ACs validated via static analysis despite dev server crashes"]
+		},
+		"table-registry-registration-checklist": {
+			"id": "table-registry-registration-checklist",
+			"what": "Mandatory checklist for API layer completion",
+			"steps": [
+				"1. Create controller extending BaseTableController",
+				"2. Import controller in table-registry.ts",
+				"3. Add this.register(new Controller(this.client)) to registerTables()",
+				"4. Remove entity from 'upcoming' array",
+				"5. Verify entity in 'available' list via GET /tables"
+			],
+			"why": "Prevents US-001 mistake where Product was left in 'upcoming' status",
+			"confidence": 1.0,
+			"evidence": ["US-002: Account in 'available' after following checklist", "US-001: Product in 'upcoming' without registration"]
+		}
+	},
+	"metadata": {
+		"totalWowPatterns": 3,
+		"totalDelegationStrategies": 1,
+		"totalBestPractices": 3,
+		"averageConfidence": 0.94,
+		"lastCompaction": null
+	}
 }

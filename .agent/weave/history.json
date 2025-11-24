@@ -1,17 +1,106 @@
 {
-  "$schema": "./SCHEMA.md#history",
-  "title": "History (Η)",
-  "description": "How we got here - evolutions, timelines, legacy patterns",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T07:39:57.492Z",
-  "evolutions": {},
-  "timelines": {},
-  "legacyPatterns": {},
-  "metadata": {
-    "totalEvolutions": 0,
-    "totalTimelines": 0,
-    "totalLegacyPatterns": 0,
-    "averageConfidence": 0,
-    "lastCompaction": null
-  }
+	"$schema": "./SCHEMA.md#history",
+	"title": "History (Η)",
+	"description": "How we got here - evolutions, timelines, legacy patterns",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"evolutions": {
+		"us-001-to-us-002-evolution": {
+			"id": "us-001-to-us-002-evolution",
+			"from": "US-001: Partial entity implementation (canonical + data only)",
+			"to": "US-002: Full-stack entity implementation (canonical + data + API + UI)",
+			"change": "Scope expanded to include API registration and UI layer",
+			"trigger": "US-001 left Product in 'upcoming' status, not immediately usable",
+			"timeline": [
+				{
+					"event": "US-001 completed",
+					"date": "2025-11-23",
+					"state": "Product entity: canonical + data layers only, ProductController exists but not registered"
+				},
+				{
+					"event": "US-001 retrospective identified gap",
+					"date": "2025-11-23",
+					"insight": "Partial implementation creates incomplete features"
+				},
+				{
+					"event": "US-002 planned with full-stack scope",
+					"date": "2025-11-24",
+					"decision": "Include all 4 layers from the start"
+				},
+				{
+					"event": "US-002 completed",
+					"date": "2025-11-24",
+					"state": "Account entity: canonical + data + API (registered) + UI, immediately usable"
+				}
+			],
+			"confidence": 1.0,
+			"impact": "HIGH - establishes full-stack story pattern for future entities"
+		},
+		"loom-autonomous-execution-maturity": {
+			"id": "loom-autonomous-execution-maturity",
+			"from": "Manual story execution with human intervention",
+			"to": "Fully autonomous execution with parallel task strategy",
+			"change": "25 tasks completed autonomously across 4 specialized agents",
+			"timeline": [
+				{
+					"event": "Early Loom stories required frequent human decisions",
+					"date": "pre-2025-11",
+					"state": "Limited autonomous execution"
+				},
+				{
+					"event": "US-002: First full autonomous execution",
+					"date": "2025-11-24",
+					"state": "25/25 tasks completed without human intervention, parallel execution strategy"
+				}
+			],
+			"confidence": 0.9,
+			"impact": "HIGH - demonstrates Loom system maturity"
+		}
+	},
+	"timelines": {
+		"us-002-execution-timeline": {
+			"id": "us-002-execution-timeline",
+			"title": "US-002 Account Entity Implementation",
+			"startDate": "2025-11-24T06:00:00Z",
+			"endDate": "2025-11-24T07:30:00Z",
+			"duration": "~1.5 hours",
+			"phases": [
+				{
+					"phase": "Phase 1: Canonical Layer",
+					"tasks": ["T-014", "T-015", "T-016", "T-017", "T-018"],
+					"outcome": "5 files, 1,413 lines, zero TypeScript errors"
+				},
+				{
+					"phase": "Phase 2: Data Layer",
+					"tasks": ["T-019", "T-020", "T-021"],
+					"outcome": "Repository + tests, 1,369 lines, 37 tests passing"
+				},
+				{
+					"phase": "Phase 3: API Layer",
+					"tasks": ["T-025", "T-026", "T-027"],
+					"outcome": "AccountController registered, Account in 'available' status"
+				},
+				{
+					"phase": "Phase 4: UI Layer",
+					"tasks": ["T-028", "T-029", "T-030", "T-031"],
+					"outcome": "List + detail routes, navigation updated"
+				},
+				{
+					"phase": "Phase 5: Testing & Validation",
+					"tasks": ["T-033", "T-034", "T-035", "T-036", "T-037", "T-038"],
+					"outcome": "25/27 ACs validated (2 blocked by environment)"
+				}
+			],
+			"sessions": ["square-giraffe (27f7e922)"],
+			"confidence": 1.0
+		}
+	},
+	"legacyPatterns": {},
+	"metadata": {
+		"totalEvolutions": 2,
+		"totalTimelines": 1,
+		"totalLegacyPatterns": 0,
+		"averageConfidence": 0.97,
+		"lastCompaction": null
+	}
 }

@@ -1,112 +1,186 @@
 {
-  "$schema": "./SCHEMA.md#epistemology",
-  "title": "Epistemology",
-  "description": "How we know - knowledge confidence and provenance",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T08:00:00.000Z",
-  "knowledge": {},
-  "patterns": {
-    "canonical-dsl-pattern": {
-      "id": "canonical-dsl-pattern",
-      "name": "Canonical DSL Preservation",
-      "description": "NEVER translate MoneyWorks terminology - preserve exact field names to maintain semantic integrity",
-      "type": "naming-convention",
-      "confidence": 1.0,
-      "observedIn": ["packages/canonical/src/entities/tax-rates/types.ts"],
-      "examples": [
-        "GST (not VAT or sales tax)",
-        "TaxCode (not taxId or rateCode)",
-        "RecAccount (not receivableAccount)",
-        "PaidAccount (not payableAccount)"
-      ],
-      "rationale": "MoneyWorks uses GST for ALL tax types globally. Preserving exact terminology prevents semantic drift and maintains API consistency."
-    },
-    "field-discovery-pattern": {
-      "id": "field-discovery-pattern",
-      "name": "XML-based Field Discovery",
-      "description": "Since TSV exports lack headers, use XML exports to discover field names and structure",
-      "type": "data-access-pattern",
-      "confidence": 0.95,
-      "observedIn": ["packages/data/src/parsers/field-discovery.ts"],
-      "rationale": "MoneyWorks TSV format has no header row, making XML the only way to discover field names and order dynamically."
-    },
-    "client-caching-pattern": {
-      "id": "client-caching-pattern",
-      "name": "LRU Client Caching",
-      "description": "Cache MoneyWorks clients with TTL-based cleanup to avoid recreation overhead",
-      "type": "performance-pattern",
-      "confidence": 0.95,
-      "observedIn": ["packages/api/src/middleware/auth.ts"],
-      "implementation": {
-        "structure": "Map<token, {client, lastUsed}>",
-        "ttl": "10 minutes",
-        "cleanupInterval": "5 minutes"
-      }
-    },
-    "multi-format-export-pattern": {
-      "id": "multi-format-export-pattern",
-      "name": "Multiple Export Formats",
-      "description": "Support 4 export formats for different use cases: compact (arrays), compact-headers, full (objects), schema (enriched)",
-      "type": "api-design-pattern",
-      "confidence": 0.95,
-      "observedIn": ["packages/data/src/client/moneyworks-smart-client.ts"],
-      "formats": {
-        "compact": "Raw arrays for minimal bandwidth",
-        "compact-headers": "Arrays with headers for self-documentation",
-        "full": "Complete objects for best DX",
-        "schema": "Objects with field metadata for LLM understanding"
-      }
-    },
-    "middleware-pipeline-pattern": {
-      "id": "middleware-pipeline-pattern",
-      "name": "Elysia Middleware Chain",
-      "description": "Ordered middleware chain: requestId → errorHandler → logging → i18n → auth",
-      "type": "architectural-pattern",
-      "confidence": 0.95,
-      "observedIn": ["packages/api/src/app.ts"],
-      "order": ["requestId", "errorHandler", "logging", "i18n", "auth"]
-    },
-    "branded-types-pattern": {
-      "id": "branded-types-pattern",
-      "name": "Branded Type Safety",
-      "description": "Use branded types for domain primitives to prevent misuse (YYYYMMDD, AccountCode, etc.)",
-      "type": "type-safety-pattern",
-      "confidence": 1.0,
-      "observedIn": ["packages/canonical/src/entities/tax-rates/types.ts"],
-      "examples": ["YYYYMMDD", "AccountCode", "NameCode"],
-      "benefit": "Compile-time prevention of passing wrong string types (e.g., can't pass ISO date where YYYYMMDD expected)"
-    }
-  },
-  "validations": {},
-  "confidenceModel": {
-    "scale": {
-      "speculative": "0.0-0.3",
-      "uncertain": "0.3-0.5",
-      "probable": "0.5-0.7",
-      "confident": "0.7-0.85",
-      "highly_confident": "0.85-0.95",
-      "certain": "0.95-1.0"
-    },
-    "updateRules": {
-      "observation": "Bayesian update with prior=0.3, evidence=0.7",
-      "validation": "Increase confidence by validation factor",
-      "contradiction": "Decrease confidence, add uncertainty"
-    },
-    "bayesianParameters": {
-      "priorWeight": 0.3,
-      "evidenceWeight": 0.7,
-      "minObservations": 1
-    }
-  },
-  "knowledgeGaps": [],
-  "metadata": {
-    "totalConcepts": 0,
-    "totalPatterns": 6,
-    "totalValidations": 0,
-    "averageConfidence": 0.96,
-    "highConfidenceConcepts": 6,
-    "lowConfidenceConcepts": 0,
-    "knowledgeGaps": 0,
-    "lastValidation": "2025-11-23T08:00:00.000Z"
-  }
+	"$schema": "./SCHEMA.md#epistemology",
+	"title": "Epistemology",
+	"description": "How we know - knowledge confidence and provenance",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"knowledge": {},
+	"patterns": {
+		"canonical-dsl-pattern": {
+			"id": "canonical-dsl-pattern",
+			"name": "Canonical DSL Preservation",
+			"description": "NEVER translate MoneyWorks terminology - preserve exact field names to maintain semantic integrity",
+			"type": "naming-convention",
+			"confidence": 1.0,
+			"observedIn": ["packages/canonical/src/entities/tax-rates/types.ts", "packages/canonical/src/entities/accounts/types.ts"],
+			"examples": [
+				"GST (not VAT or sales tax)",
+				"TaxCode (not taxId or rateCode)",
+				"RecAccount (not receivableAccount)",
+				"PaidAccount (not payableAccount)"
+			],
+			"rationale": "MoneyWorks uses GST for ALL tax types globally. Preserving exact terminology prevents semantic drift and maintains API consistency."
+		},
+		"field-discovery-pattern": {
+			"id": "field-discovery-pattern",
+			"name": "XML-based Field Discovery",
+			"description": "Since TSV exports lack headers, use XML exports to discover field names and structure",
+			"type": "data-access-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/data/src/parsers/field-discovery.ts"],
+			"rationale": "MoneyWorks TSV format has no header row, making XML the only way to discover field names and order dynamically."
+		},
+		"client-caching-pattern": {
+			"id": "client-caching-pattern",
+			"name": "LRU Client Caching",
+			"description": "Cache MoneyWorks clients with TTL-based cleanup to avoid recreation overhead",
+			"type": "performance-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/api/src/middleware/auth.ts"],
+			"implementation": {
+				"structure": "Map<token, {client, lastUsed}>",
+				"ttl": "10 minutes",
+				"cleanupInterval": "5 minutes"
+			}
+		},
+		"multi-format-export-pattern": {
+			"id": "multi-format-export-pattern",
+			"name": "Multiple Export Formats",
+			"description": "Support 4 export formats for different use cases: compact (arrays), compact-headers, full (objects), schema (enriched)",
+			"type": "api-design-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/data/src/client/moneyworks-smart-client.ts"],
+			"formats": {
+				"compact": "Raw arrays for minimal bandwidth",
+				"compact-headers": "Arrays with headers for self-documentation",
+				"full": "Complete objects for best DX",
+				"schema": "Objects with field metadata for LLM understanding"
+			}
+		},
+		"middleware-pipeline-pattern": {
+			"id": "middleware-pipeline-pattern",
+			"name": "Elysia Middleware Chain",
+			"description": "Ordered middleware chain: requestId → errorHandler → logging → i18n → auth",
+			"type": "architectural-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/api/src/app.ts"],
+			"order": ["requestId", "errorHandler", "logging", "i18n", "auth"]
+		},
+		"branded-types-pattern": {
+			"id": "branded-types-pattern",
+			"name": "Branded Type Safety",
+			"description": "Use branded types for domain primitives to prevent misuse (YYYYMMDD, AccountCode, etc.)",
+			"type": "type-safety-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/canonical/src/entities/tax-rates/types.ts", "packages/canonical/src/entities/accounts/types.ts"],
+			"examples": ["YYYYMMDD", "AccountCode", "NameCode"],
+			"benefit": "Compile-time prevention of passing wrong string types (e.g., can't pass ISO date where YYYYMMDD expected)"
+		},
+		"table-registry-registration-pattern": {
+			"id": "table-registry-registration-pattern",
+			"name": "TableRegistry Registration Pattern",
+			"description": "API controllers MUST be registered in TableRegistry.register() to be available via REST API - registration is NOT optional",
+			"type": "architectural-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/api/src/registry/table-registry.ts"],
+			"criticalImportance": "HIGH - determines whether entity is 'available' or stuck in 'upcoming' status",
+			"examples": [
+				"AccountController registered (US-002) → Account in 'available' list",
+				"ProductController NOT registered (US-001) → Product still in 'upcoming' list"
+			],
+			"evidence": [
+				"US-002: Account in 'available' array after registration",
+				"US-001: Product in 'upcoming' array without registration"
+			],
+			"implementation": "this.register(new AccountController(this.client)) in registerTables() method",
+			"antipattern": "Creating controller without registering it - makes entity inaccessible via API"
+		},
+		"5-file-canonical-pattern": {
+			"id": "5-file-canonical-pattern",
+			"name": "5-File Canonical Entity Structure",
+			"description": "Canonical entities follow enums → types → fields → validators → index structure for consistency",
+			"type": "code-organization-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/canonical/src/entities/tax-rates/", "packages/canonical/src/entities/accounts/"],
+			"structure": {
+				"enums.ts": "Canonical enumerations with MW values",
+				"types.ts": "TypeScript interfaces with exact MW field names",
+				"fields.ts": "Field metadata (dataType, maxLength, description, validation rules)",
+				"validators.ts": "Business rule validators and predicates",
+				"index.ts": "Barrel exports + MW_*_TERMS constants"
+			},
+			"rationale": "Consistent structure improves discoverability and reduces cognitive load when working across entities"
+		},
+		"repository-mock-mode-pattern": {
+			"id": "repository-mock-mode-pattern",
+			"name": "Repository Mock Mode Pattern",
+			"description": "Repositories support MONEYWORKS_MOCK_MODE env variable with realistic sample data for autonomous testing",
+			"type": "testing-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/data/src/repositories/tax-rate.repository.ts", "packages/data/src/repositories/account.repository.ts"],
+			"rationale": "Enables autonomous testing without live MoneyWorks connection",
+			"evidence": ["US-002: 37 tests passing with MONEYWORKS_MOCK_MODE=true"]
+		},
+		"specialized-repository-methods-pattern": {
+			"id": "specialized-repository-methods-pattern",
+			"name": "Specialized Repository Query Methods",
+			"description": "Repositories provide domain-specific query methods beyond generic CRUD for better DX",
+			"type": "api-design-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/data/src/repositories/account.repository.ts"],
+			"examples": [
+				"getByType(type) instead of find({Type: type})",
+				"getActiveAccounts() instead of find({Status: 'ACTIVE'})",
+				"getBalanceSheetAccounts() instead of find({Type: ['CA','FA','TA','CL','TL','SF']})"
+			],
+			"rationale": "Domain-specific methods improve code readability and reduce cognitive load compared to generic filters",
+			"evidence": ["US-002: AccountRepository has 11 specialized query methods"]
+		}
+	},
+	"validations": {
+		"us-002-table-registry-validation": {
+			"id": "us-002-table-registry-validation",
+			"pattern": "table-registry-registration-pattern",
+			"description": "Verified Account appears in 'available' list after TableRegistry registration",
+			"confidence": 1.0,
+			"evidence": [
+				"API response: {available: ['TaxRate', 'Name', 'Account']}",
+				"AccountController registered at line 35 of table-registry.ts",
+				"Account removed from 'upcoming' array"
+			],
+			"provenBy": "GET /api/v1/tables endpoint test",
+			"timestamp": "2025-11-24T07:29:51.765Z"
+		}
+	},
+	"confidenceModel": {
+		"scale": {
+			"speculative": "0.0-0.3",
+			"uncertain": "0.3-0.5",
+			"probable": "0.5-0.7",
+			"confident": "0.7-0.85",
+			"highly_confident": "0.85-0.95",
+			"certain": "0.95-1.0"
+		},
+		"updateRules": {
+			"observation": "Bayesian update with prior=0.3, evidence=0.7",
+			"validation": "Increase confidence by validation factor",
+			"contradiction": "Decrease confidence, add uncertainty"
+		},
+		"bayesianParameters": {
+			"priorWeight": 0.3,
+			"evidenceWeight": 0.7,
+			"minObservations": 1
+		}
+	},
+	"knowledgeGaps": [],
+	"metadata": {
+		"totalConcepts": 0,
+		"totalPatterns": 10,
+		"totalValidations": 1,
+		"averageConfidence": 0.97,
+		"highConfidenceConcepts": 10,
+		"lowConfidenceConcepts": 0,
+		"knowledgeGaps": 0,
+		"lastValidation": "2025-11-24T07:40:00.000Z"
+	}
 }

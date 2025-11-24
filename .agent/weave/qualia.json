@@ -1,130 +1,199 @@
 {
-  "$schema": "./SCHEMA.md#qualia",
-  "title": "Qualia",
-  "description": "What it's like - experiential knowledge, pain points, solutions",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T08:00:00.000Z",
-  "experiences": {},
-  "painPoints": {
-    "tsv-no-headers": {
-      "id": "tsv-no-headers",
-      "title": "TSV exports have no headers",
-      "description": "MoneyWorks TSV format doesn't include field names, making parsing difficult without prior knowledge",
-      "severity": "high",
-      "impact": "Must use XML exports to discover field structure before parsing TSV",
-      "observedIn": ["packages/data/src/parsers/field-discovery.ts"],
-      "frequency": "always"
-    },
-    "client-recreation-overhead": {
-      "id": "client-recreation-overhead",
-      "title": "Client recreation overhead",
-      "description": "Creating new MoneyWorks clients for each request is expensive",
-      "severity": "medium",
-      "impact": "Performance degradation with high request volume",
-      "observedIn": ["packages/api/src/middleware/auth.ts"],
-      "frequency": "per-request without caching"
-    }
-  },
-  "solutions": {
-    "xml-field-discovery": {
-      "id": "xml-field-discovery",
-      "painPointId": "tsv-no-headers",
-      "title": "XML-based Field Discovery",
-      "description": "Use XML exports (which include field names) to discover table structure, then use efficient TSV for data",
-      "implementation": "packages/data/src/parsers/field-discovery.ts",
-      "effectiveness": "high",
-      "tradeoffs": [
-        "One-time XML fetch overhead",
-        "Caching required for performance"
-      ]
-    },
-    "client-caching-with-ttl": {
-      "id": "client-caching-with-ttl",
-      "painPointId": "client-recreation-overhead",
-      "title": "LRU Client Caching",
-      "description": "Cache clients by token with 10-minute TTL and periodic cleanup",
-      "implementation": "packages/api/src/middleware/auth.ts",
-      "effectiveness": "high",
-      "tradeoffs": [
-        "Memory usage for cached clients",
-        "Stale client possibility (mitigated by TTL)"
-      ]
-    }
-  },
-  "workflows": {
-    "export-workflow": {
-      "id": "export-workflow",
-      "name": "MoneyWorks Data Export",
-      "description": "Complete workflow for exporting MoneyWorks data in multiple formats",
-      "steps": [
-        "Authenticate with Bearer token",
-        "Create/retrieve cached SmartMoneyWorksClient",
-        "Discover field structure (if not cached)",
-        "Export as TSV for efficiency",
-        "Convert to requested format (compact/full/schema)",
-        "Return formatted data"
-      ],
-      "complexity": "medium",
-      "frequency": "per-request",
-      "automation": "fully automated"
-    }
-  },
-  "bestPractices": {
-    "preserve-canonical-dsl": {
-      "id": "preserve-canonical-dsl",
-      "title": "Always Preserve MoneyWorks Terminology",
-      "description": "NEVER translate MoneyWorks field names - use GST not VAT, TaxCode not taxId, etc.",
-      "category": "naming",
-      "importance": "critical",
-      "rationale": "Maintains semantic integrity and API consistency across all MoneyWorks installations globally",
-      "examples": [
-        "Use 'GST' for all tax types (even US sales tax or EU VAT)",
-        "Use 'TaxCode' not 'taxId' or 'rateCode'",
-        "Use 'RecAccount' not 'receivableAccount'"
-      ]
-    },
-    "use-branded-types": {
-      "id": "use-branded-types",
-      "title": "Use Branded Types for Domain Primitives",
-      "description": "Wrap domain primitives in branded types to prevent misuse",
-      "category": "type-safety",
-      "importance": "high",
-      "rationale": "Compile-time prevention of passing wrong types (e.g., ISO date where YYYYMMDD expected)",
-      "examples": ["YYYYMMDD", "AccountCode", "NameCode"]
-    },
-    "multi-format-support": {
-      "id": "multi-format-support",
-      "title": "Support Multiple Export Formats",
-      "description": "Provide compact (arrays), compact-headers, full (objects), and schema (enriched) formats",
-      "category": "api-design",
-      "importance": "high",
-      "rationale": "Different use cases need different trade-offs between bandwidth, DX, and metadata",
-      "applicableTo": ["API endpoints", "data access layer"]
-    },
-    "cache-clients": {
-      "id": "cache-clients",
-      "title": "Cache MoneyWorks Clients",
-      "description": "Cache clients by token with TTL to avoid recreation overhead",
-      "category": "performance",
-      "importance": "high",
-      "rationale": "Creating new MoneyWorks clients for each request is expensive",
-      "implementation": "Map<token, {client, lastUsed}> with periodic cleanup"
-    }
-  },
-  "contextualKnowledge": {},
-  "patterns": {
-    "development": [],
-    "debugging": [],
-    "collaboration": []
-  },
-  "cognitiveLoad": {},
-  "metadata": {
-    "totalExperiences": 0,
-    "totalPainPoints": 2,
-    "totalSolutions": 2,
-    "totalWorkflows": 1,
-    "totalBestPractices": 4,
-    "totalPatterns": 0,
-    "lastUpdated": "2025-11-23T08:00:00.000Z"
-  }
+	"$schema": "./SCHEMA.md#qualia",
+	"title": "Qualia",
+	"description": "What it's like - experiential knowledge, pain points, solutions",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"experiences": {},
+	"painPoints": {
+		"tsv-no-headers": {
+			"id": "tsv-no-headers",
+			"title": "TSV exports have no headers",
+			"description": "MoneyWorks TSV format doesn't include field names, making parsing difficult without prior knowledge",
+			"severity": "high",
+			"impact": "Must use XML exports to discover field structure before parsing TSV",
+			"observedIn": ["packages/data/src/parsers/field-discovery.ts"],
+			"frequency": "always"
+		},
+		"client-recreation-overhead": {
+			"id": "client-recreation-overhead",
+			"title": "Client recreation overhead",
+			"description": "Creating new MoneyWorks clients for each request is expensive",
+			"severity": "medium",
+			"impact": "Performance degradation with high request volume",
+			"observedIn": ["packages/api/src/middleware/auth.ts"],
+			"frequency": "per-request without caching"
+		},
+		"dev-server-memory-pressure": {
+			"id": "dev-server-memory-pressure",
+			"title": "Dev server crashes under memory pressure",
+			"description": "React Router dev server crashes with exit code 137 (SIGKILL) when system memory is constrained by multiple Bun processes",
+			"severity": "medium",
+			"impact": "Blocks browser testing for UI validation, requires static validation workarounds",
+			"observedIn": ["US-002 execution", "packages/web1"],
+			"frequency": "when multiple dev servers running",
+			"resolution": "Use static validation (TypeScript compilation, API testing, grep-based validation) instead of browser testing",
+			"evidence": ["AC-026 and AC-027 blocked by exit code 137"]
+		}
+	},
+	"solutions": {
+		"xml-field-discovery": {
+			"id": "xml-field-discovery",
+			"painPointId": "tsv-no-headers",
+			"title": "XML-based Field Discovery",
+			"description": "Use XML exports (which include field names) to discover table structure, then use efficient TSV for data",
+			"implementation": "packages/data/src/parsers/field-discovery.ts",
+			"effectiveness": "high",
+			"tradeoffs": [
+				"One-time XML fetch overhead",
+				"Caching required for performance"
+			]
+		},
+		"client-caching-with-ttl": {
+			"id": "client-caching-with-ttl",
+			"painPointId": "client-recreation-overhead",
+			"title": "LRU Client Caching",
+			"description": "Cache clients by token with 10-minute TTL and periodic cleanup",
+			"implementation": "packages/api/src/middleware/auth.ts",
+			"effectiveness": "high",
+			"tradeoffs": [
+				"Memory usage for cached clients",
+				"Stale client possibility (mitigated by TTL)"
+			]
+		},
+		"static-validation-for-blocked-tests": {
+			"id": "static-validation-for-blocked-tests",
+			"painPointId": "dev-server-memory-pressure",
+			"title": "Static Validation as Testing Fallback",
+			"description": "When browser testing is blocked by environment, use TypeScript compilation, API endpoint checks, and grep-based validation to verify implementation correctness",
+			"implementation": "US-002 Phase 5",
+			"effectiveness": "high",
+			"tradeoffs": [
+				"Cannot verify visual UI rendering",
+				"Cannot test user interactions",
+				"Can verify routes registered, types compile, API endpoints available"
+			],
+			"evidence": ["US-002: 25/27 ACs validated via static analysis, 2 blocked by environment"]
+		}
+	},
+	"workflows": {
+		"export-workflow": {
+			"id": "export-workflow",
+			"name": "MoneyWorks Data Export",
+			"description": "Complete workflow for exporting MoneyWorks data in multiple formats",
+			"steps": [
+				"Authenticate with Bearer token",
+				"Create/retrieve cached SmartMoneyWorksClient",
+				"Discover field structure (if not cached)",
+				"Export as TSV for efficiency",
+				"Convert to requested format (compact/full/schema)",
+				"Return formatted data"
+			],
+			"complexity": "medium",
+			"frequency": "per-request",
+			"automation": "fully automated"
+		},
+		"full-stack-entity-workflow": {
+			"id": "full-stack-entity-workflow",
+			"name": "Complete Entity Implementation",
+			"description": "Autonomous workflow for implementing full-stack MoneyWorks entity from canonical types through UI",
+			"steps": [
+				"Phase 1: Canonical Layer (enums → types → fields → validators → index)",
+				"Phase 2: Data Layer (repository + specialized queries + tests)",
+				"Phase 3: API Layer (controller + TableRegistry registration)",
+				"Phase 4: UI Layer (routes + navigation + list/detail views)",
+				"Phase 5: Integration Testing (static validation + browser testing)"
+			],
+			"complexity": "high",
+			"frequency": "per-entity",
+			"automation": "fully automated via Task tool + specialized agents",
+			"parallelization": "Independent tasks run in parallel (e.g., fields + validators, list route + detail route)",
+			"evidence": ["US-002: 25 tasks completed autonomously in ~1.5 hours"]
+		}
+	},
+	"bestPractices": {
+		"preserve-canonical-dsl": {
+			"id": "preserve-canonical-dsl",
+			"title": "Always Preserve MoneyWorks Terminology",
+			"description": "NEVER translate MoneyWorks field names - use GST not VAT, TaxCode not taxId, etc.",
+			"category": "naming",
+			"importance": "critical",
+			"rationale": "Maintains semantic integrity and API consistency across all MoneyWorks installations globally",
+			"examples": [
+				"Use 'GST' for all tax types (even US sales tax or EU VAT)",
+				"Use 'TaxCode' not 'taxId' or 'rateCode'",
+				"Use 'RecAccount' not 'receivableAccount'"
+			]
+		},
+		"use-branded-types": {
+			"id": "use-branded-types",
+			"title": "Use Branded Types for Domain Primitives",
+			"description": "Wrap domain primitives in branded types to prevent misuse",
+			"category": "type-safety",
+			"importance": "high",
+			"rationale": "Compile-time prevention of passing wrong types (e.g., ISO date where YYYYMMDD expected)",
+			"examples": ["YYYYMMDD", "AccountCode", "NameCode"]
+		},
+		"multi-format-support": {
+			"id": "multi-format-support",
+			"title": "Support Multiple Export Formats",
+			"description": "Provide compact (arrays), compact-headers, full (objects), and schema (enriched) formats",
+			"category": "api-design",
+			"importance": "high",
+			"rationale": "Different use cases need different trade-offs between bandwidth, DX, and metadata",
+			"applicableTo": ["API endpoints", "data access layer"]
+		},
+		"cache-clients": {
+			"id": "cache-clients",
+			"title": "Cache MoneyWorks Clients",
+			"description": "Cache clients by token with TTL to avoid recreation overhead",
+			"category": "performance",
+			"importance": "high",
+			"rationale": "Creating new MoneyWorks clients for each request is expensive",
+			"implementation": "Map<token, {client, lastUsed}> with periodic cleanup"
+		},
+		"parallel-task-execution": {
+			"id": "parallel-task-execution",
+			"title": "Execute Independent Tasks in Parallel",
+			"description": "When using Task tool, identify independent tasks and execute in parallel to reduce total time",
+			"category": "performance",
+			"importance": "high",
+			"rationale": "Parallel execution reduces total story time by ~30%",
+			"examples": [
+				"T-016 (fields) + T-017 (validators) in parallel",
+				"T-028 (list route) + T-029 (detail route) in parallel"
+			],
+			"evidence": ["US-002: Reduced execution time from ~2 hours to ~1.5 hours"]
+		},
+		"evidence-based-ac-validation": {
+			"id": "evidence-based-ac-validation",
+			"title": "Collect Concrete Evidence for Each AC",
+			"description": "For every acceptance criterion, collect specific evidence: file paths, line numbers, test output, API responses",
+			"category": "testing",
+			"importance": "high",
+			"rationale": "Objective validation provides clear audit trail and prevents false positives",
+			"examples": [
+				"AC-014: Account in 'available' list (API response: {available: ['TaxRate', 'Name', 'Account']})",
+				"AC-012: TypeScript compilation zero errors (bun run tsc --noEmit output)",
+				"AC-011: 37 tests passing, 183 assertions"
+			],
+			"evidence": ["US-002: Created comprehensive validation report with evidence for all 27 ACs"]
+		}
+	},
+	"contextualKnowledge": {},
+	"patterns": {
+		"development": [],
+		"debugging": [],
+		"collaboration": []
+	},
+	"cognitiveLoad": {},
+	"metadata": {
+		"totalExperiences": 0,
+		"totalPainPoints": 3,
+		"totalSolutions": 3,
+		"totalWorkflows": 2,
+		"totalBestPractices": 6,
+		"totalPatterns": 0,
+		"lastUpdated": "2025-11-24T07:40:00.000Z"
+	}
 }
