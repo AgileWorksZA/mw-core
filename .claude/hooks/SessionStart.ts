@@ -9,7 +9,7 @@
  * Names are stored in .claude/sessions.json for bidirectional lookup.
  */
 
-import { assignSessionName } from 'claude-hooks-sdk';
+import { SessionNamer } from 'claude-hooks-sdk';
 
 interface HookInput {
   hook_event_name: string;
@@ -37,8 +37,11 @@ try {
 }
 
 try {
+  // Initialize session namer
+  const namer = new SessionNamer();
+
   // Assign session name automatically
-  const sessionName = assignSessionName(input.session_id, {
+  const sessionName = namer.assignName(input.session_id, {
     source: input.context?.resumedFrom ? 'resume' : 'new'
   });
 
