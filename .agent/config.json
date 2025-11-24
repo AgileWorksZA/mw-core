@@ -1,0 +1,5 @@
+{
+  "project": "mw-core",
+  "agiosUrl": "http://localhost:5173/api/v1/hook-events",
+  "description": "MoneyWorks Core - Hook events sent to agios for tracking"
+}
