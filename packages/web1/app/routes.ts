@@ -21,6 +21,8 @@ export default [
 	route("accounts/:code", "routes/accounts.$code.tsx"),
 	route("tax-rates", "routes/tax-rates.tsx"),
 	route("tax-rates/:code", "routes/tax-rates.$code.tsx"),
+	route("products", "routes/products.tsx"),
+	route("products/:code", "routes/products.$code.tsx"),
 	route("names", "routes/names.tsx"),
 	route("company", "routes/company.tsx"),
 	route("groups", "routes/groups.tsx"),
