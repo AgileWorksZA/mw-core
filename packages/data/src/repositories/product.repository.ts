@@ -321,7 +321,20 @@ export class ProductRepository extends BaseMoneyWorksRepository<
 	}
 
 	/**
-	 * Find product by code (primary key)
+	 * Find product by code (primary key lookup)
+	 *
+	 * @param code - The product code to search for
+	 * @returns The product if found, null otherwise
+	 *
+	 * @example
+	 * ```typescript
+	 * const product = await repo.findByCode("PROD-001");
+	 * if (product) {
+	 *   console.log(`Found: ${product.Description}`);
+	 * }
+	 * ```
+	 *
+	 * @ai-instruction Use this for single product lookups by Code
 	 */
 	async findByCode(code: string): Promise<MoneyWorksProduct | null> {
 		const records = await this.find(`Code="${code}"`);
@@ -329,14 +342,49 @@ export class ProductRepository extends BaseMoneyWorksRepository<
 	}
 
 	/**
-	 * Find products by type
+	 * Find products by type classification
+	 *
+	 * @param type - The product type (P=product, R=resource, T=time, S=ship method, O=other)
+	 * @returns Array of products matching the type
+	 *
+	 * @example
+	 * ```typescript
+	 * import { MoneyWorksProductType } from "@moneyworks/canonical/products";
+	 *
+	 * // Find all standard products
+	 * const products = await repo.findByType(MoneyWorksProductType.PRODUCT);
+	 *
+	 * // Find all time-based services
+	 * const services = await repo.findByType(MoneyWorksProductType.TIME);
+	 * ```
+	 *
+	 * @ai-instruction Use this to filter products by their Type field
 	 */
 	async findByType(type: MoneyWorksProductType): Promise<MoneyWorksProduct[]> {
 		return this.find(`Type="${type}"`);
 	}
 
 	/**
-	 * Find inventoried products (Hash & 0x0008)
+	 * Find all products with inventory tracking enabled
+	 *
+	 * Products are considered inventoried when their Hash field has the inventory bit set (0x0008).
+	 * Per MoneyWorks canonical: all inventoried items have Hash >= 8.
+	 *
+	 * @returns Array of products that are tracked in inventory
+	 *
+	 * @example
+	 * ```typescript
+	 * const inventoried = await repo.findInventoried();
+	 * console.log(`${inventoried.length} products tracked in inventory`);
+	 *
+	 * // Check stock levels
+	 * for (const product of inventoried) {
+	 *   console.log(`${product.Code}: ${product.StockOnHand} units`);
+	 * }
+	 * ```
+	 *
+	 * @ai-instruction Use this to find products with StockOnHand tracking
+	 * @ai-context Hash field bit flags: buy=#0002, sell=#0004, inventory=#0008
 	 */
 	async findInventoried(): Promise<MoneyWorksProduct[]> {
 		// MoneyWorks Hash field: inventory bit is 0x0008
@@ -345,14 +393,50 @@ export class ProductRepository extends BaseMoneyWorksRepository<
 	}
 
 	/**
-	 * Find products by supplier
+	 * Find all products from a specific supplier
+	 *
+	 * @param supplierCode - The supplier's code from the Names table
+	 * @returns Array of products supplied by this supplier
+	 *
+	 * @example
+	 * ```typescript
+	 * // Find all products from a specific supplier
+	 * const products = await repo.findBySupplier("SUP001");
+	 * console.log(`Supplier SUP001 provides ${products.length} products`);
+	 *
+	 * // Show supplier's product codes
+	 * products.forEach(p => {
+	 *   console.log(`${p.Code}: ${p.SuppliersCode} (their code)`);
+	 * });
+	 * ```
+	 *
+	 * @ai-instruction Use this to find products by their usual supplier
+	 * @ai-context Supplier field references Names.Code where SupplierType > 0
 	 */
 	async findBySupplier(supplierCode: string): Promise<MoneyWorksProduct[]> {
 		return this.find(`Supplier="${supplierCode}"`);
 	}
 
 	/**
-	 * Search products by category
+	 * Search products by category field
+	 *
+	 * MoneyWorks provides 4 category fields (Category1 through Category4) for custom classification.
+	 *
+	 * @param categoryNumber - Which category field to search (1, 2, 3, or 4)
+	 * @param value - The category value to match
+	 * @returns Array of products in this category
+	 *
+	 * @example
+	 * ```typescript
+	 * // Find all products in "Electronics" category
+	 * const electronics = await repo.searchByCategory(1, "Electronics");
+	 *
+	 * // Find all products in "Clearance" (Category2)
+	 * const clearance = await repo.searchByCategory(2, "Clearance");
+	 * ```
+	 *
+	 * @ai-instruction Use this for custom product classification
+	 * @ai-context Category fields are user-defined for analysis purposes
 	 */
 	async searchByCategory(
 		categoryNumber: 1 | 2 | 3 | 4,
@@ -363,7 +447,32 @@ export class ProductRepository extends BaseMoneyWorksRepository<
 	}
 
 	/**
-	 * Find products with low stock (below reorder level)
+	 * Find products with low stock levels (below reorder threshold)
+	 *
+	 * Returns inventoried products where StockOnHand < ReorderLevel.
+	 * Only includes products that:
+	 * - Are inventoried (Hash >= 8)
+	 * - Have a reorder level set (ReorderLevel > 0)
+	 * - Have stock below that level
+	 *
+	 * @returns Array of products needing reorder
+	 *
+	 * @example
+	 * ```typescript
+	 * const lowStock = await repo.findLowStock();
+	 *
+	 * if (lowStock.length > 0) {
+	 *   console.log("Products needing reorder:");
+	 *   lowStock.forEach(product => {
+	 *     const needed = product.ReorderLevel! - (product.StockOnHand || 0);
+	 *     console.log(`${product.Code}: ${product.StockOnHand} in stock, ` +
+	 *                 `reorder level ${product.ReorderLevel} (need ${needed})`);
+	 *   });
+	 * }
+	 * ```
+	 *
+	 * @ai-instruction Use this for inventory reorder alerts
+	 * @ai-context Filtered in JavaScript since MW search doesn't support field comparisons
 	 */
 	async findLowStock(): Promise<MoneyWorksProduct[]> {
 		// Get all inventoried products
