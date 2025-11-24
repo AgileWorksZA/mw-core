@@ -17,8 +17,6 @@ export default [
 		"routes/connections.now.select-files.tsx",
 	),
 	route("connections/now/refresh", "routes/connections.now.refresh.tsx"),
-	route("accounts", "routes/accounts.tsx"),
-	route("accounts/:code", "routes/accounts.$code.tsx"),
 	route("tax-rates", "routes/tax-rates.tsx"),
 	route("tax-rates/:code", "routes/tax-rates.$code.tsx"),
 	route("products", "routes/products.tsx"),
