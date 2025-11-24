@@ -162,7 +162,16 @@ export abstract class BaseTableController implements TableController {
 			}
 			throw error;
 		}
-		throw new Error(String(error));
+		// Handle plain objects thrown by the REST client
+		if (error && typeof error === "object" && "message" in error) {
+			throw new MoneyWorksError(
+				error.code || "MW_ERROR",
+				error.message,
+			);
+		}
+		throw new Error(
+			typeof error === "string" ? error : JSON.stringify(error),
+		);
 	}
 }
 

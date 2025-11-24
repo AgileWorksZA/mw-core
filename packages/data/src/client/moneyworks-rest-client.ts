@@ -180,13 +180,24 @@ export class MoneyWorksRESTClient {
 				return responseText;
 			}
 
-			// Check if response is a single word (likely an error)
+			// Check if response is an error message from MoneyWorks
+			// Single word errors (like "error", "failed", etc.)
 			if (
 				trimmed.indexOf(" ") === -1 &&
 				trimmed.indexOf("<") === -1 &&
 				trimmed.indexOf("\t") === -1
 			) {
 				throw new Error(`MoneyWorks error response: ${trimmed}`);
+			}
+
+			// Multi-word error messages from MoneyWorks
+			if (
+				trimmed.startsWith("could not understand") ||
+				trimmed.includes("Bad search expression") ||
+				trimmed.includes("Expression optimisation failed") ||
+				trimmed.startsWith("Malformed REST request")
+			) {
+				throw new Error(trimmed);
 			}
 
 			// Parse based on format
