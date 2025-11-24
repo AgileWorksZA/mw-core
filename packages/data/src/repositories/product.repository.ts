@@ -12,8 +12,9 @@ import type {
 	MoneyWorksProductCreateInput,
 	MoneyWorksProductUpdateInput,
 	MoneyWorksProductType,
-} from "@moneyworks/canonical/products";
-import { type AccountCode, formatMWNumber } from "@moneyworks/utilities";
+} from "@moneyworks/canonical/entities/products";
+import { type AccountCode } from "@moneyworks/utilities";
+import { formatMWNumber } from "../parsers/number-parser";
 import { BaseMoneyWorksRepository } from "./base.repository";
 
 /**
