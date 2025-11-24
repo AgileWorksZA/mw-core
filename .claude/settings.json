@@ -7,7 +7,12 @@
           {
             "type": "command",
             "command": "bun \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/SessionStart.ts"
-          },
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
           {
             "type": "command",
             "command": "bun \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/AllHooks.ts"
@@ -33,7 +38,12 @@
           {
             "type": "command",
             "command": "bun \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/UserPromptSubmit.ts"
-          },
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
           {
             "type": "command",
             "command": "bun \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/AllHooks.ts"
@@ -48,7 +58,12 @@
           {
             "type": "command",
             "command": "bun \"$CLAUDE_PROJECT_DIR\"/.agent/hooks/Stop.ts"
-          },
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
           {
             "type": "command",
             "command": "bun \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/AllHooks.ts"
