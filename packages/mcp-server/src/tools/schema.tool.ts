@@ -85,10 +85,12 @@ export const schemaTool = {
 			};
 
 			return {
-				content: [{
-					type: "text",
-					text: JSON.stringify(result, null, 2),
-				}],
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(result, null, 2),
+					},
+				],
 			};
 		} catch (error) {
 			throw new Error(

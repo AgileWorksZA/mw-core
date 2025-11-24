@@ -1,846 +1,846 @@
 {
-  "name": "@moneyworks/api",
-  "version": "0.1.0",
-  "description": "MoneyWorks REST API with ElysiaJS - High-performance, type-safe access to MoneyWorks data",
-  "exports": [
-    {
-      "name": "Application Factory",
-      "items": [
-        {
-          "name": "createApp",
-          "type": "function",
-          "description": "Create the MoneyWorks API application with Elysia",
-          "signature": "function createApp(client: SmartMoneyWorksClient, config?: APIConfig): Elysia",
-          "parameters": [
-            {
-              "name": "client",
-              "type": "SmartMoneyWorksClient",
-              "description": "MoneyWorks client instance from @moneyworks/data"
-            },
-            {
-              "name": "config",
-              "type": "APIConfig",
-              "optional": true,
-              "description": "API configuration options"
-            }
-          ],
-          "returns": {
-            "type": "Elysia",
-            "description": "Configured Elysia application instance"
-          },
-          "usage": [
-            "```typescript",
-            "import { createApp } from '@moneyworks/api/app';",
-            "import { createSmartClient } from '@moneyworks/data';",
-            "",
-            "const client = createSmartClient(config);",
-            "const app = createApp(client, {",
-            "  port: 3000,",
-            "  enableSwagger: true,",
-            "  enableCors: true",
-            "});",
-            "",
-            "app.listen({ port: 3000 });",
-            "```"
-          ],
-          "examples": [
-            {
-              "title": "Basic API server",
-              "code": [
-                "// Minimal setup",
-                "const app = createApp(client);",
-                "app.listen({ port: 3000 });"
-              ]
-            },
-            {
-              "title": "Production configuration",
-              "code": [
-                "const app = createApp(client, {",
-                "  basePath: '/api/v1',",
-                "  enableSwagger: false,",
-                "  enableCors: true,",
-                "  corsOrigins: ['https://app.example.com'],",
-                "  enableCacheWarming: true",
-                "});"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "APIConfig",
-          "type": "interface",
-          "description": "Configuration options for the API application",
-          "signature": "interface APIConfig",
-          "properties": [
-            {
-              "name": "port",
-              "type": "number",
-              "optional": true,
-              "description": "Port to listen on (default: from environment)"
-            },
-            {
-              "name": "host",
-              "type": "string",
-              "optional": true,
-              "description": "Host to bind to (default: '0.0.0.0')"
-            },
-            {
-              "name": "basePath",
-              "type": "string",
-              "optional": true,
-              "description": "Base path for API routes (default: '/api/v1')"
-            },
-            {
-              "name": "enableSwagger",
-              "type": "boolean",
-              "optional": true,
-              "description": "Enable Swagger documentation (default: true)"
-            },
-            {
-              "name": "enableCors",
-              "type": "boolean",
-              "optional": true,
-              "description": "Enable CORS support (default: true)"
-            },
-            {
-              "name": "corsOrigins",
-              "type": "string[]",
-              "optional": true,
-              "description": "Allowed CORS origins (default: ['*'])"
-            },
-            {
-              "name": "enableCacheWarming",
-              "type": "boolean",
-              "optional": true,
-              "description": "Warm up caches on startup (default: true)"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Controllers",
-      "items": [
-        {
-          "name": "BaseTableController",
-          "type": "class",
-          "description": "Base controller for MoneyWorks table operations",
-          "signature": "abstract class BaseTableController",
-          "usage": [
-            "```typescript",
-            "import { BaseTableController } from '@moneyworks/api/controllers/base-table';",
-            "",
-            "export class AccountController extends BaseTableController {",
-            "  constructor(client: SmartMoneyWorksClient) {",
-            "    super(client, 'Account');",
-            "  }",
-            "}",
-            "```"
-          ],
-          "methods": [
-            {
-              "name": "export",
-              "description": "Export table data with filtering and formatting",
-              "signature": "async export(params: ExportParams): Promise<ExportResult>"
-            },
-            {
-              "name": "getSchema",
-              "description": "Get table schema with field metadata",
-              "signature": "async getSchema(): Promise<TableSchema>"
-            },
-            {
-              "name": "getLabels",
-              "description": "Get localized field labels",
-              "signature": "async getLabels(language: string): Promise<FieldLabels>"
-            }
-          ]
-        },
-        {
-          "name": "TaxRateController",
-          "type": "class",
-          "description": "Controller for TaxRate table operations",
-          "signature": "class TaxRateController extends BaseTableController",
-          "usage": [
-            "```typescript",
-            "import { TaxRateController } from '@moneyworks/api/controllers/tax-rate';",
-            "",
-            "const controller = new TaxRateController(client);",
-            "const taxRates = await controller.export({",
-            "  format: 'full',",
-            "  filter: 'Rate > 0'",
-            "});",
-            "```"
-          ]
-        },
-        {
-          "name": "CompanyController",
-          "type": "class",
-          "description": "Controller for company information operations",
-          "signature": "class CompanyController",
-          "methods": [
-            {
-              "name": "getInfo",
-              "description": "Get company information",
-              "signature": "async getInfo(fields?: string[]): Promise<CompanyInfo>"
-            },
-            {
-              "name": "listFields",
-              "description": "List available company fields",
-              "signature": "async listFields(): Promise<CompanyField[]>"
-            }
-          ]
-        },
-        {
-          "name": "LabelsController",
-          "type": "class",
-          "description": "Controller for field label operations",
-          "signature": "class LabelsController",
-          "methods": [
-            {
-              "name": "getLanguages",
-              "description": "Get supported languages",
-              "signature": "async getLanguages(): Promise<Language[]>"
-            },
-            {
-              "name": "getTranslations",
-              "description": "Get UI translations for a language",
-              "signature": "async getTranslations(lang: string): Promise<Translations>"
-            },
-            {
-              "name": "getAllLabels",
-              "description": "Get all field labels for a language",
-              "signature": "async getAllLabels(lang: string): Promise<AllLabels>"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Middleware",
-      "items": [
-        {
-          "name": "errorHandler",
-          "type": "function",
-          "description": "Global error handling middleware",
-          "signature": "function errorHandler(): Elysia",
-          "usage": [
-            "```typescript",
-            "import { errorHandler } from '@moneyworks/api/middleware/error-handler';",
-            "",
-            "app.use(errorHandler());",
-            "```"
-          ],
-          "features": [
-            "Consistent error format",
-            "MoneyWorks error mapping",
-            "Request ID tracking",
-            "Stack trace in development"
-          ]
-        },
-        {
-          "name": "requestId",
-          "type": "function",
-          "description": "Request ID generation and tracking middleware",
-          "signature": "function requestId(): Elysia",
-          "usage": [
-            "```typescript",
-            "import { requestId } from '@moneyworks/api/middleware/request-id';",
-            "",
-            "app.use(requestId());",
-            "// Adds context.requestId to all requests",
-            "```"
-          ]
-        },
-        {
-          "name": "logging",
-          "type": "function",
-          "description": "Request/response logging middleware",
-          "signature": "function logging(): Elysia",
-          "features": [
-            "Request method and path",
-            "Response status and timing",
-            "Error logging",
-            "Structured log format"
-          ]
-        },
-        {
-          "name": "i18n",
-          "type": "function",
-          "description": "Internationalization middleware",
-          "signature": "function i18n(): Elysia",
-          "usage": [
-            "```typescript",
-            "import { i18n } from '@moneyworks/api/middleware/i18n';",
-            "",
-            "app.use(i18n());",
-            "// Parses Accept-Language header",
-            "// Adds context.language",
-            "```"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Routes",
-      "items": [
-        {
-          "name": "createTableRoutes",
-          "type": "function",
-          "description": "Create routes for table operations",
-          "signature": "function createTableRoutes(registry: TableRegistry, client: SmartMoneyWorksClient, labelCache: TTLCache): Elysia",
-          "endpoints": [
-            {
-              "method": "GET",
-              "path": "/tables",
-              "description": "List available tables"
-            },
-            {
-              "method": "GET",
-              "path": "/tables/:table",
-              "description": "Export table data"
-            },
-            {
-              "method": "GET",
-              "path": "/tables/:table/schema",
-              "description": "Get table schema"
-            },
-            {
-              "method": "GET",
-              "path": "/tables/:table/labels",
-              "description": "Get field labels"
-            }
-          ]
-        },
-        {
-          "name": "createEvalRoutes",
-          "type": "function",
-          "description": "Create routes for MWScript evaluation",
-          "signature": "function createEvalRoutes(client: SmartMoneyWorksClient, cache: TTLCache): Elysia",
-          "endpoints": [
-            {
-              "method": "POST",
-              "path": "/eval",
-              "description": "Evaluate MWScript expression"
-            },
-            {
-              "method": "POST",
-              "path": "/eval/template/:table",
-              "description": "Evaluate with table template"
-            }
-          ]
-        },
-        {
-          "name": "createCompanyRoutes",
-          "type": "function",
-          "description": "Create routes for company operations",
-          "signature": "function createCompanyRoutes(client: SmartMoneyWorksClient, cache: TTLCache): Elysia",
-          "endpoints": [
-            {
-              "method": "GET",
-              "path": "/company",
-              "description": "Get company information"
-            },
-            {
-              "method": "GET",
-              "path": "/company/fields",
-              "description": "List company fields"
-            }
-          ]
-        },
-        {
-          "name": "createI18nRoutes",
-          "type": "function",
-          "description": "Create routes for internationalization",
-          "signature": "function createI18nRoutes(client: SmartMoneyWorksClient, cache: TTLCache): Elysia",
-          "endpoints": [
-            {
-              "method": "GET",
-              "path": "/i18n/languages",
-              "description": "List supported languages"
-            },
-            {
-              "method": "GET",
-              "path": "/i18n/translations/:lang",
-              "description": "Get UI translations"
-            },
-            {
-              "method": "GET",
-              "path": "/i18n/labels/:lang",
-              "description": "Get all field labels"
-            }
-          ]
-        },
-        {
-          "name": "createHealthRoutes",
-          "type": "function",
-          "description": "Create routes for health checks",
-          "signature": "function createHealthRoutes(client: SmartMoneyWorksClient): Elysia",
-          "endpoints": [
-            {
-              "method": "GET",
-              "path": "/health",
-              "description": "Health check endpoint"
-            }
-          ]
-        },
-        {
-          "name": "createVersionRoutes",
-          "type": "function",
-          "description": "Create routes for version information",
-          "signature": "function createVersionRoutes(client: SmartMoneyWorksClient): Elysia",
-          "endpoints": [
-            {
-              "method": "GET",
-              "path": "/version",
-              "description": "Get API and MoneyWorks version"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Schemas",
-      "items": [
-        {
-          "name": "ErrorSchema",
-          "type": "schema",
-          "description": "Standard error response schema",
-          "signature": "const ErrorSchema: TObject",
-          "structure": {
-            "error": {
-              "code": "string",
-              "message": "string",
-              "details": "any (optional)",
-              "requestId": "string"
-            }
-          },
-          "usage": [
-            "```typescript",
-            "import { ErrorSchema } from '@moneyworks/api/schemas/common';",
-            "",
-            "// Use in route definition",
-            ".get('/endpoint', handler, {",
-            "  response: {",
-            "    400: ErrorSchema,",
-            "    404: ErrorSchema",
-            "  }",
-            "})",
-            "```"
-          ]
-        },
-        {
-          "name": "ExportFormatEnum",
-          "type": "schema",
-          "description": "Available export formats",
-          "signature": "const ExportFormatEnum: TUnion",
-          "values": ["compact", "compact-headers", "full", "schema"],
-          "usage": [
-            "```typescript",
-            "import { ExportFormatEnum } from '@moneyworks/api/schemas/common';",
-            "",
-            "// Validate format parameter",
-            "query: t.Object({",
-            "  format: ExportFormatEnum",
-            "})",
-            "```"
-          ]
-        },
-        {
-          "name": "TableExportSchema",
-          "type": "schema",
-          "description": "Table export request schema",
-          "signature": "const TableExportSchema: TObject",
-          "properties": [
-            {
-              "name": "format",
-              "type": "ExportFormat",
-              "description": "Export format"
-            },
-            {
-              "name": "filter",
-              "type": "string",
-              "optional": true,
-              "description": "MoneyWorks filter expression"
-            },
-            {
-              "name": "orderBy",
-              "type": "string",
-              "optional": true,
-              "description": "Sort field(s)"
-            },
-            {
-              "name": "limit",
-              "type": "number",
-              "optional": true,
-              "description": "Maximum records"
-            },
-            {
-              "name": "offset",
-              "type": "number",
-              "optional": true,
-              "description": "Skip records"
-            }
-          ]
-        },
-        {
-          "name": "MetadataSchema",
-          "type": "schema",
-          "description": "Standard metadata for responses",
-          "signature": "const MetadataSchema: TObject",
-          "properties": [
-            {
-              "name": "table",
-              "type": "string",
-              "optional": true
-            },
-            {
-              "name": "format",
-              "type": "string",
-              "optional": true
-            },
-            {
-              "name": "count",
-              "type": "number"
-            },
-            {
-              "name": "timestamp",
-              "type": "string"
-            },
-            {
-              "name": "requestId",
-              "type": "string"
-            },
-            {
-              "name": "pagination",
-              "type": "PaginationSchema",
-              "optional": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Services",
-      "items": [
-        {
-          "name": "createCaches",
-          "type": "function",
-          "description": "Create cache instances for various data types",
-          "signature": "function createCaches(): Caches",
-          "returns": {
-            "type": "Caches",
-            "properties": [
-              {
-                "name": "labels",
-                "type": "TTLCache<LabelData>",
-                "description": "Cache for field labels"
-              },
-              {
-                "name": "eval",
-                "type": "TTLCache<EvalResult>",
-                "description": "Cache for evaluation results"
-              },
-              {
-                "name": "company",
-                "type": "TTLCache<CompanyData>",
-                "description": "Cache for company information"
-              }
-            ]
-          },
-          "usage": [
-            "```typescript",
-            "import { createCaches } from '@moneyworks/api/services/cache';",
-            "",
-            "const caches = createCaches();",
-            "",
-            "// Use in controllers",
-            "const cached = await caches.labels.get(key);",
-            "if (!cached) {",
-            "  const data = await fetchLabels();",
-            "  await caches.labels.set(key, data);",
-            "}",
-            "```"
-          ]
-        },
-        {
-          "name": "TTLCache",
-          "type": "class",
-          "description": "Time-to-live cache implementation",
-          "signature": "class TTLCache<T>",
-          "parameters": [
-            {
-              "name": "options",
-              "type": "TTLCacheOptions",
-              "properties": [
-                {
-                  "name": "ttl",
-                  "type": "number",
-                  "description": "Time to live in milliseconds"
-                },
-                {
-                  "name": "maxSize",
-                  "type": "number",
-                  "description": "Maximum cache entries"
-                }
-              ]
-            }
-          ],
-          "methods": [
-            {
-              "name": "get",
-              "signature": "async get(key: string): Promise<T | null>"
-            },
-            {
-              "name": "set",
-              "signature": "async set(key: string, value: T): Promise<void>"
-            },
-            {
-              "name": "delete",
-              "signature": "async delete(key: string): Promise<void>"
-            },
-            {
-              "name": "clear",
-              "signature": "async clear(): Promise<void>"
-            },
-            {
-              "name": "warmUp",
-              "signature": "async warmUp(entries: WarmUpEntry[]): Promise<void>"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Registry",
-      "items": [
-        {
-          "name": "createTableRegistry",
-          "type": "function",
-          "description": "Create a registry of available table controllers",
-          "signature": "function createTableRegistry(client: SmartMoneyWorksClient): TableRegistry",
-          "usage": [
-            "```typescript",
-            "import { createTableRegistry } from '@moneyworks/api/registry/table-registry';",
-            "",
-            "const registry = createTableRegistry(client);",
-            "",
-            "// Check if table is available",
-            "if (registry.has('Account')) {",
-            "  const controller = registry.get('Account');",
-            "  const data = await controller.export();",
-            "}",
-            "```"
-          ]
-        },
-        {
-          "name": "TableRegistry",
-          "type": "class",
-          "description": "Registry for table controllers",
-          "signature": "class TableRegistry",
-          "methods": [
-            {
-              "name": "register",
-              "description": "Register a table controller",
-              "signature": "register(table: string, controller: BaseTableController): void"
-            },
-            {
-              "name": "get",
-              "description": "Get a table controller",
-              "signature": "get(table: string): BaseTableController | undefined"
-            },
-            {
-              "name": "has",
-              "description": "Check if table is registered",
-              "signature": "has(table: string): boolean"
-            },
-            {
-              "name": "list",
-              "description": "List all registered tables",
-              "signature": "list(): string[]"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Type Definitions",
-      "items": [
-        {
-          "name": "ExportFormat",
-          "type": "type",
-          "description": "Available export formats for table data",
-          "signature": "type ExportFormat = 'compact' | 'compact-headers' | 'full' | 'schema'",
-          "values": [
-            {
-              "value": "compact",
-              "description": "Raw arrays for minimal overhead"
-            },
-            {
-              "value": "compact-headers",
-              "description": "Arrays with field names in first row"
-            },
-            {
-              "value": "full",
-              "description": "Complete objects with field names"
-            },
-            {
-              "value": "schema",
-              "description": "Objects with complete field metadata"
-            }
-          ]
-        },
-        {
-          "name": "TableExportParams",
-          "type": "interface",
-          "description": "Parameters for table export operations",
-          "signature": "interface TableExportParams",
-          "properties": [
-            {
-              "name": "format",
-              "type": "ExportFormat",
-              "description": "Export format (default: 'full')"
-            },
-            {
-              "name": "filter",
-              "type": "string",
-              "optional": true,
-              "description": "MoneyWorks filter expression"
-            },
-            {
-              "name": "orderBy",
-              "type": "string",
-              "optional": true,
-              "description": "Sort by field(s)"
-            },
-            {
-              "name": "limit",
-              "type": "number",
-              "optional": true,
-              "description": "Maximum number of records"
-            },
-            {
-              "name": "offset",
-              "type": "number",
-              "optional": true,
-              "description": "Number of records to skip"
-            }
-          ]
-        },
-        {
-          "name": "TableExportResponse",
-          "type": "interface",
-          "description": "Response structure for table exports",
-          "signature": "interface TableExportResponse<T extends TableName>",
-          "properties": [
-            {
-              "name": "data",
-              "type": "T[] | any[]",
-              "description": "Exported data in requested format"
-            },
-            {
-              "name": "metadata",
-              "type": "ResponseMetadata",
-              "description": "Response metadata"
-            }
-          ]
-        },
-        {
-          "name": "MoneyWorksError",
-          "type": "class",
-          "description": "Custom error class for MoneyWorks-specific errors",
-          "signature": "class MoneyWorksError extends Error",
-          "properties": [
-            {
-              "name": "code",
-              "type": "string",
-              "description": "Error code for programmatic handling"
-            },
-            {
-              "name": "details",
-              "type": "any",
-              "description": "Additional error context"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Utilities",
-      "items": [
-        {
-          "name": "formatExportData",
-          "type": "function",
-          "description": "Format export data according to requested format",
-          "signature": "function formatExportData(data: any[], format: ExportFormat, schema?: TableSchema): any",
-          "parameters": [
-            {
-              "name": "data",
-              "type": "any[]",
-              "description": "Raw data from MoneyWorks"
-            },
-            {
-              "name": "format",
-              "type": "ExportFormat",
-              "description": "Desired export format"
-            },
-            {
-              "name": "schema",
-              "type": "TableSchema",
-              "optional": true,
-              "description": "Table schema for schema format"
-            }
-          ]
-        },
-        {
-          "name": "parseFilter",
-          "type": "function",
-          "description": "Parse and validate MoneyWorks filter expressions",
-          "signature": "function parseFilter(filter: string): ParsedFilter",
-          "usage": [
-            "```typescript",
-            "import { parseFilter } from '@moneyworks/api/utils/filter';",
-            "",
-            "const parsed = parseFilter('Rate > 0 AND Active = true');",
-            "// Validates syntax and returns parsed AST",
-            "```"
-          ]
-        },
-        {
-          "name": "buildPaginationMetadata",
-          "type": "function",
-          "description": "Build pagination metadata for responses",
-          "signature": "function buildPaginationMetadata(params: PaginationParams, total?: number): PaginationMetadata"
-        }
-      ]
-    },
-    {
-      "name": "Constants",
-      "items": [
-        {
-          "name": "DEFAULT_PAGE_SIZE",
-          "type": "constant",
-          "description": "Default number of records per page",
-          "signature": "const DEFAULT_PAGE_SIZE = 100"
-        },
-        {
-          "name": "MAX_PAGE_SIZE",
-          "type": "constant",
-          "description": "Maximum allowed page size",
-          "signature": "const MAX_PAGE_SIZE = 1000"
-        },
-        {
-          "name": "CACHE_TTL",
-          "type": "constant",
-          "description": "Default cache time-to-live",
-          "signature": "const CACHE_TTL = 5 * 60 * 1000 // 5 minutes"
-        },
-        {
-          "name": "API_VERSION",
-          "type": "constant",
-          "description": "Current API version",
-          "signature": "const API_VERSION = '0.1.0'"
-        }
-      ]
-    }
-  ]
+	"name": "@moneyworks/api",
+	"version": "0.1.0",
+	"description": "MoneyWorks REST API with ElysiaJS - High-performance, type-safe access to MoneyWorks data",
+	"exports": [
+		{
+			"name": "Application Factory",
+			"items": [
+				{
+					"name": "createApp",
+					"type": "function",
+					"description": "Create the MoneyWorks API application with Elysia",
+					"signature": "function createApp(client: SmartMoneyWorksClient, config?: APIConfig): Elysia",
+					"parameters": [
+						{
+							"name": "client",
+							"type": "SmartMoneyWorksClient",
+							"description": "MoneyWorks client instance from @moneyworks/data"
+						},
+						{
+							"name": "config",
+							"type": "APIConfig",
+							"optional": true,
+							"description": "API configuration options"
+						}
+					],
+					"returns": {
+						"type": "Elysia",
+						"description": "Configured Elysia application instance"
+					},
+					"usage": [
+						"```typescript",
+						"import { createApp } from '@moneyworks/api/app';",
+						"import { createSmartClient } from '@moneyworks/data';",
+						"",
+						"const client = createSmartClient(config);",
+						"const app = createApp(client, {",
+						"  port: 3000,",
+						"  enableSwagger: true,",
+						"  enableCors: true",
+						"});",
+						"",
+						"app.listen({ port: 3000 });",
+						"```"
+					],
+					"examples": [
+						{
+							"title": "Basic API server",
+							"code": [
+								"// Minimal setup",
+								"const app = createApp(client);",
+								"app.listen({ port: 3000 });"
+							]
+						},
+						{
+							"title": "Production configuration",
+							"code": [
+								"const app = createApp(client, {",
+								"  basePath: '/api/v1',",
+								"  enableSwagger: false,",
+								"  enableCors: true,",
+								"  corsOrigins: ['https://app.example.com'],",
+								"  enableCacheWarming: true",
+								"});"
+							]
+						}
+					]
+				},
+				{
+					"name": "APIConfig",
+					"type": "interface",
+					"description": "Configuration options for the API application",
+					"signature": "interface APIConfig",
+					"properties": [
+						{
+							"name": "port",
+							"type": "number",
+							"optional": true,
+							"description": "Port to listen on (default: from environment)"
+						},
+						{
+							"name": "host",
+							"type": "string",
+							"optional": true,
+							"description": "Host to bind to (default: '0.0.0.0')"
+						},
+						{
+							"name": "basePath",
+							"type": "string",
+							"optional": true,
+							"description": "Base path for API routes (default: '/api/v1')"
+						},
+						{
+							"name": "enableSwagger",
+							"type": "boolean",
+							"optional": true,
+							"description": "Enable Swagger documentation (default: true)"
+						},
+						{
+							"name": "enableCors",
+							"type": "boolean",
+							"optional": true,
+							"description": "Enable CORS support (default: true)"
+						},
+						{
+							"name": "corsOrigins",
+							"type": "string[]",
+							"optional": true,
+							"description": "Allowed CORS origins (default: ['*'])"
+						},
+						{
+							"name": "enableCacheWarming",
+							"type": "boolean",
+							"optional": true,
+							"description": "Warm up caches on startup (default: true)"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Controllers",
+			"items": [
+				{
+					"name": "BaseTableController",
+					"type": "class",
+					"description": "Base controller for MoneyWorks table operations",
+					"signature": "abstract class BaseTableController",
+					"usage": [
+						"```typescript",
+						"import { BaseTableController } from '@moneyworks/api/controllers/base-table';",
+						"",
+						"export class AccountController extends BaseTableController {",
+						"  constructor(client: SmartMoneyWorksClient) {",
+						"    super(client, 'Account');",
+						"  }",
+						"}",
+						"```"
+					],
+					"methods": [
+						{
+							"name": "export",
+							"description": "Export table data with filtering and formatting",
+							"signature": "async export(params: ExportParams): Promise<ExportResult>"
+						},
+						{
+							"name": "getSchema",
+							"description": "Get table schema with field metadata",
+							"signature": "async getSchema(): Promise<TableSchema>"
+						},
+						{
+							"name": "getLabels",
+							"description": "Get localized field labels",
+							"signature": "async getLabels(language: string): Promise<FieldLabels>"
+						}
+					]
+				},
+				{
+					"name": "TaxRateController",
+					"type": "class",
+					"description": "Controller for TaxRate table operations",
+					"signature": "class TaxRateController extends BaseTableController",
+					"usage": [
+						"```typescript",
+						"import { TaxRateController } from '@moneyworks/api/controllers/tax-rate';",
+						"",
+						"const controller = new TaxRateController(client);",
+						"const taxRates = await controller.export({",
+						"  format: 'full',",
+						"  filter: 'Rate > 0'",
+						"});",
+						"```"
+					]
+				},
+				{
+					"name": "CompanyController",
+					"type": "class",
+					"description": "Controller for company information operations",
+					"signature": "class CompanyController",
+					"methods": [
+						{
+							"name": "getInfo",
+							"description": "Get company information",
+							"signature": "async getInfo(fields?: string[]): Promise<CompanyInfo>"
+						},
+						{
+							"name": "listFields",
+							"description": "List available company fields",
+							"signature": "async listFields(): Promise<CompanyField[]>"
+						}
+					]
+				},
+				{
+					"name": "LabelsController",
+					"type": "class",
+					"description": "Controller for field label operations",
+					"signature": "class LabelsController",
+					"methods": [
+						{
+							"name": "getLanguages",
+							"description": "Get supported languages",
+							"signature": "async getLanguages(): Promise<Language[]>"
+						},
+						{
+							"name": "getTranslations",
+							"description": "Get UI translations for a language",
+							"signature": "async getTranslations(lang: string): Promise<Translations>"
+						},
+						{
+							"name": "getAllLabels",
+							"description": "Get all field labels for a language",
+							"signature": "async getAllLabels(lang: string): Promise<AllLabels>"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Middleware",
+			"items": [
+				{
+					"name": "errorHandler",
+					"type": "function",
+					"description": "Global error handling middleware",
+					"signature": "function errorHandler(): Elysia",
+					"usage": [
+						"```typescript",
+						"import { errorHandler } from '@moneyworks/api/middleware/error-handler';",
+						"",
+						"app.use(errorHandler());",
+						"```"
+					],
+					"features": [
+						"Consistent error format",
+						"MoneyWorks error mapping",
+						"Request ID tracking",
+						"Stack trace in development"
+					]
+				},
+				{
+					"name": "requestId",
+					"type": "function",
+					"description": "Request ID generation and tracking middleware",
+					"signature": "function requestId(): Elysia",
+					"usage": [
+						"```typescript",
+						"import { requestId } from '@moneyworks/api/middleware/request-id';",
+						"",
+						"app.use(requestId());",
+						"// Adds context.requestId to all requests",
+						"```"
+					]
+				},
+				{
+					"name": "logging",
+					"type": "function",
+					"description": "Request/response logging middleware",
+					"signature": "function logging(): Elysia",
+					"features": [
+						"Request method and path",
+						"Response status and timing",
+						"Error logging",
+						"Structured log format"
+					]
+				},
+				{
+					"name": "i18n",
+					"type": "function",
+					"description": "Internationalization middleware",
+					"signature": "function i18n(): Elysia",
+					"usage": [
+						"```typescript",
+						"import { i18n } from '@moneyworks/api/middleware/i18n';",
+						"",
+						"app.use(i18n());",
+						"// Parses Accept-Language header",
+						"// Adds context.language",
+						"```"
+					]
+				}
+			]
+		},
+		{
+			"name": "Routes",
+			"items": [
+				{
+					"name": "createTableRoutes",
+					"type": "function",
+					"description": "Create routes for table operations",
+					"signature": "function createTableRoutes(registry: TableRegistry, client: SmartMoneyWorksClient, labelCache: TTLCache): Elysia",
+					"endpoints": [
+						{
+							"method": "GET",
+							"path": "/tables",
+							"description": "List available tables"
+						},
+						{
+							"method": "GET",
+							"path": "/tables/:table",
+							"description": "Export table data"
+						},
+						{
+							"method": "GET",
+							"path": "/tables/:table/schema",
+							"description": "Get table schema"
+						},
+						{
+							"method": "GET",
+							"path": "/tables/:table/labels",
+							"description": "Get field labels"
+						}
+					]
+				},
+				{
+					"name": "createEvalRoutes",
+					"type": "function",
+					"description": "Create routes for MWScript evaluation",
+					"signature": "function createEvalRoutes(client: SmartMoneyWorksClient, cache: TTLCache): Elysia",
+					"endpoints": [
+						{
+							"method": "POST",
+							"path": "/eval",
+							"description": "Evaluate MWScript expression"
+						},
+						{
+							"method": "POST",
+							"path": "/eval/template/:table",
+							"description": "Evaluate with table template"
+						}
+					]
+				},
+				{
+					"name": "createCompanyRoutes",
+					"type": "function",
+					"description": "Create routes for company operations",
+					"signature": "function createCompanyRoutes(client: SmartMoneyWorksClient, cache: TTLCache): Elysia",
+					"endpoints": [
+						{
+							"method": "GET",
+							"path": "/company",
+							"description": "Get company information"
+						},
+						{
+							"method": "GET",
+							"path": "/company/fields",
+							"description": "List company fields"
+						}
+					]
+				},
+				{
+					"name": "createI18nRoutes",
+					"type": "function",
+					"description": "Create routes for internationalization",
+					"signature": "function createI18nRoutes(client: SmartMoneyWorksClient, cache: TTLCache): Elysia",
+					"endpoints": [
+						{
+							"method": "GET",
+							"path": "/i18n/languages",
+							"description": "List supported languages"
+						},
+						{
+							"method": "GET",
+							"path": "/i18n/translations/:lang",
+							"description": "Get UI translations"
+						},
+						{
+							"method": "GET",
+							"path": "/i18n/labels/:lang",
+							"description": "Get all field labels"
+						}
+					]
+				},
+				{
+					"name": "createHealthRoutes",
+					"type": "function",
+					"description": "Create routes for health checks",
+					"signature": "function createHealthRoutes(client: SmartMoneyWorksClient): Elysia",
+					"endpoints": [
+						{
+							"method": "GET",
+							"path": "/health",
+							"description": "Health check endpoint"
+						}
+					]
+				},
+				{
+					"name": "createVersionRoutes",
+					"type": "function",
+					"description": "Create routes for version information",
+					"signature": "function createVersionRoutes(client: SmartMoneyWorksClient): Elysia",
+					"endpoints": [
+						{
+							"method": "GET",
+							"path": "/version",
+							"description": "Get API and MoneyWorks version"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Schemas",
+			"items": [
+				{
+					"name": "ErrorSchema",
+					"type": "schema",
+					"description": "Standard error response schema",
+					"signature": "const ErrorSchema: TObject",
+					"structure": {
+						"error": {
+							"code": "string",
+							"message": "string",
+							"details": "any (optional)",
+							"requestId": "string"
+						}
+					},
+					"usage": [
+						"```typescript",
+						"import { ErrorSchema } from '@moneyworks/api/schemas/common';",
+						"",
+						"// Use in route definition",
+						".get('/endpoint', handler, {",
+						"  response: {",
+						"    400: ErrorSchema,",
+						"    404: ErrorSchema",
+						"  }",
+						"})",
+						"```"
+					]
+				},
+				{
+					"name": "ExportFormatEnum",
+					"type": "schema",
+					"description": "Available export formats",
+					"signature": "const ExportFormatEnum: TUnion",
+					"values": ["compact", "compact-headers", "full", "schema"],
+					"usage": [
+						"```typescript",
+						"import { ExportFormatEnum } from '@moneyworks/api/schemas/common';",
+						"",
+						"// Validate format parameter",
+						"query: t.Object({",
+						"  format: ExportFormatEnum",
+						"})",
+						"```"
+					]
+				},
+				{
+					"name": "TableExportSchema",
+					"type": "schema",
+					"description": "Table export request schema",
+					"signature": "const TableExportSchema: TObject",
+					"properties": [
+						{
+							"name": "format",
+							"type": "ExportFormat",
+							"description": "Export format"
+						},
+						{
+							"name": "filter",
+							"type": "string",
+							"optional": true,
+							"description": "MoneyWorks filter expression"
+						},
+						{
+							"name": "orderBy",
+							"type": "string",
+							"optional": true,
+							"description": "Sort field(s)"
+						},
+						{
+							"name": "limit",
+							"type": "number",
+							"optional": true,
+							"description": "Maximum records"
+						},
+						{
+							"name": "offset",
+							"type": "number",
+							"optional": true,
+							"description": "Skip records"
+						}
+					]
+				},
+				{
+					"name": "MetadataSchema",
+					"type": "schema",
+					"description": "Standard metadata for responses",
+					"signature": "const MetadataSchema: TObject",
+					"properties": [
+						{
+							"name": "table",
+							"type": "string",
+							"optional": true
+						},
+						{
+							"name": "format",
+							"type": "string",
+							"optional": true
+						},
+						{
+							"name": "count",
+							"type": "number"
+						},
+						{
+							"name": "timestamp",
+							"type": "string"
+						},
+						{
+							"name": "requestId",
+							"type": "string"
+						},
+						{
+							"name": "pagination",
+							"type": "PaginationSchema",
+							"optional": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Services",
+			"items": [
+				{
+					"name": "createCaches",
+					"type": "function",
+					"description": "Create cache instances for various data types",
+					"signature": "function createCaches(): Caches",
+					"returns": {
+						"type": "Caches",
+						"properties": [
+							{
+								"name": "labels",
+								"type": "TTLCache<LabelData>",
+								"description": "Cache for field labels"
+							},
+							{
+								"name": "eval",
+								"type": "TTLCache<EvalResult>",
+								"description": "Cache for evaluation results"
+							},
+							{
+								"name": "company",
+								"type": "TTLCache<CompanyData>",
+								"description": "Cache for company information"
+							}
+						]
+					},
+					"usage": [
+						"```typescript",
+						"import { createCaches } from '@moneyworks/api/services/cache';",
+						"",
+						"const caches = createCaches();",
+						"",
+						"// Use in controllers",
+						"const cached = await caches.labels.get(key);",
+						"if (!cached) {",
+						"  const data = await fetchLabels();",
+						"  await caches.labels.set(key, data);",
+						"}",
+						"```"
+					]
+				},
+				{
+					"name": "TTLCache",
+					"type": "class",
+					"description": "Time-to-live cache implementation",
+					"signature": "class TTLCache<T>",
+					"parameters": [
+						{
+							"name": "options",
+							"type": "TTLCacheOptions",
+							"properties": [
+								{
+									"name": "ttl",
+									"type": "number",
+									"description": "Time to live in milliseconds"
+								},
+								{
+									"name": "maxSize",
+									"type": "number",
+									"description": "Maximum cache entries"
+								}
+							]
+						}
+					],
+					"methods": [
+						{
+							"name": "get",
+							"signature": "async get(key: string): Promise<T | null>"
+						},
+						{
+							"name": "set",
+							"signature": "async set(key: string, value: T): Promise<void>"
+						},
+						{
+							"name": "delete",
+							"signature": "async delete(key: string): Promise<void>"
+						},
+						{
+							"name": "clear",
+							"signature": "async clear(): Promise<void>"
+						},
+						{
+							"name": "warmUp",
+							"signature": "async warmUp(entries: WarmUpEntry[]): Promise<void>"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Registry",
+			"items": [
+				{
+					"name": "createTableRegistry",
+					"type": "function",
+					"description": "Create a registry of available table controllers",
+					"signature": "function createTableRegistry(client: SmartMoneyWorksClient): TableRegistry",
+					"usage": [
+						"```typescript",
+						"import { createTableRegistry } from '@moneyworks/api/registry/table-registry';",
+						"",
+						"const registry = createTableRegistry(client);",
+						"",
+						"// Check if table is available",
+						"if (registry.has('Account')) {",
+						"  const controller = registry.get('Account');",
+						"  const data = await controller.export();",
+						"}",
+						"```"
+					]
+				},
+				{
+					"name": "TableRegistry",
+					"type": "class",
+					"description": "Registry for table controllers",
+					"signature": "class TableRegistry",
+					"methods": [
+						{
+							"name": "register",
+							"description": "Register a table controller",
+							"signature": "register(table: string, controller: BaseTableController): void"
+						},
+						{
+							"name": "get",
+							"description": "Get a table controller",
+							"signature": "get(table: string): BaseTableController | undefined"
+						},
+						{
+							"name": "has",
+							"description": "Check if table is registered",
+							"signature": "has(table: string): boolean"
+						},
+						{
+							"name": "list",
+							"description": "List all registered tables",
+							"signature": "list(): string[]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Type Definitions",
+			"items": [
+				{
+					"name": "ExportFormat",
+					"type": "type",
+					"description": "Available export formats for table data",
+					"signature": "type ExportFormat = 'compact' | 'compact-headers' | 'full' | 'schema'",
+					"values": [
+						{
+							"value": "compact",
+							"description": "Raw arrays for minimal overhead"
+						},
+						{
+							"value": "compact-headers",
+							"description": "Arrays with field names in first row"
+						},
+						{
+							"value": "full",
+							"description": "Complete objects with field names"
+						},
+						{
+							"value": "schema",
+							"description": "Objects with complete field metadata"
+						}
+					]
+				},
+				{
+					"name": "TableExportParams",
+					"type": "interface",
+					"description": "Parameters for table export operations",
+					"signature": "interface TableExportParams",
+					"properties": [
+						{
+							"name": "format",
+							"type": "ExportFormat",
+							"description": "Export format (default: 'full')"
+						},
+						{
+							"name": "filter",
+							"type": "string",
+							"optional": true,
+							"description": "MoneyWorks filter expression"
+						},
+						{
+							"name": "orderBy",
+							"type": "string",
+							"optional": true,
+							"description": "Sort by field(s)"
+						},
+						{
+							"name": "limit",
+							"type": "number",
+							"optional": true,
+							"description": "Maximum number of records"
+						},
+						{
+							"name": "offset",
+							"type": "number",
+							"optional": true,
+							"description": "Number of records to skip"
+						}
+					]
+				},
+				{
+					"name": "TableExportResponse",
+					"type": "interface",
+					"description": "Response structure for table exports",
+					"signature": "interface TableExportResponse<T extends TableName>",
+					"properties": [
+						{
+							"name": "data",
+							"type": "T[] | any[]",
+							"description": "Exported data in requested format"
+						},
+						{
+							"name": "metadata",
+							"type": "ResponseMetadata",
+							"description": "Response metadata"
+						}
+					]
+				},
+				{
+					"name": "MoneyWorksError",
+					"type": "class",
+					"description": "Custom error class for MoneyWorks-specific errors",
+					"signature": "class MoneyWorksError extends Error",
+					"properties": [
+						{
+							"name": "code",
+							"type": "string",
+							"description": "Error code for programmatic handling"
+						},
+						{
+							"name": "details",
+							"type": "any",
+							"description": "Additional error context"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Utilities",
+			"items": [
+				{
+					"name": "formatExportData",
+					"type": "function",
+					"description": "Format export data according to requested format",
+					"signature": "function formatExportData(data: any[], format: ExportFormat, schema?: TableSchema): any",
+					"parameters": [
+						{
+							"name": "data",
+							"type": "any[]",
+							"description": "Raw data from MoneyWorks"
+						},
+						{
+							"name": "format",
+							"type": "ExportFormat",
+							"description": "Desired export format"
+						},
+						{
+							"name": "schema",
+							"type": "TableSchema",
+							"optional": true,
+							"description": "Table schema for schema format"
+						}
+					]
+				},
+				{
+					"name": "parseFilter",
+					"type": "function",
+					"description": "Parse and validate MoneyWorks filter expressions",
+					"signature": "function parseFilter(filter: string): ParsedFilter",
+					"usage": [
+						"```typescript",
+						"import { parseFilter } from '@moneyworks/api/utils/filter';",
+						"",
+						"const parsed = parseFilter('Rate > 0 AND Active = true');",
+						"// Validates syntax and returns parsed AST",
+						"```"
+					]
+				},
+				{
+					"name": "buildPaginationMetadata",
+					"type": "function",
+					"description": "Build pagination metadata for responses",
+					"signature": "function buildPaginationMetadata(params: PaginationParams, total?: number): PaginationMetadata"
+				}
+			]
+		},
+		{
+			"name": "Constants",
+			"items": [
+				{
+					"name": "DEFAULT_PAGE_SIZE",
+					"type": "constant",
+					"description": "Default number of records per page",
+					"signature": "const DEFAULT_PAGE_SIZE = 100"
+				},
+				{
+					"name": "MAX_PAGE_SIZE",
+					"type": "constant",
+					"description": "Maximum allowed page size",
+					"signature": "const MAX_PAGE_SIZE = 1000"
+				},
+				{
+					"name": "CACHE_TTL",
+					"type": "constant",
+					"description": "Default cache time-to-live",
+					"signature": "const CACHE_TTL = 5 * 60 * 1000 // 5 minutes"
+				},
+				{
+					"name": "API_VERSION",
+					"type": "constant",
+					"description": "Current API version",
+					"signature": "const API_VERSION = '0.1.0'"
+				}
+			]
+		}
+	]
 }

@@ -1,240 +1,240 @@
 {
-  "name": "@moneyworks/canonical",
-  "version": "0.1.0",
-  "description": "Pure MoneyWorks canonical types, enums, and business logic - zero contamination from business domains",
-  "overview": "The canonical package is the foundation of MoneyWorks semantic accuracy. It contains ONLY pure MoneyWorks types, terminology, and logic directly from the MoneyWorks manual. This package ensures that MoneyWorks' specific DSL (Domain Specific Language) is preserved throughout the system without contamination from generic business terms.",
-  "exports": [
-    {
-      "name": "Common Types",
-      "description": "Core MoneyWorks data types and validation interfaces used across all entities",
-      "category": "Core",
-      "items": [
-        {
-          "name": "MoneyWorksDataType",
-          "type": "enum",
-          "signature": "enum MoneyWorksDataType { TEXT = 'T', NUMERIC = 'N', DATE = 'D', BOOLEAN = 'B', TIMESTAMP = 'S', ENUMERATED = 'E' }",
-          "description": "MoneyWorks field data types using single-letter codes from the manual",
-          "example": "const fieldType = MoneyWorksDataType.TEXT; // 'T'\nconst isNumeric = fieldType === MoneyWorksDataType.NUMERIC;",
-          "since": "0.1.0"
-        },
-        {
-          "name": "MoneyWorksFieldMetadata",
-          "type": "interface",
-          "signature": "interface MoneyWorksFieldMetadata {\n  fieldName: string;\n  dataType: MoneyWorksDataType;\n  maxLength?: number;\n  canonicalDescription: string;\n  manualSource: string;\n  isRequired?: boolean;\n  isIndexed?: boolean;\n}",
-          "description": "Metadata structure for MoneyWorks fields including type, constraints, and documentation",
-          "example": "const taxCodeMeta: MoneyWorksFieldMetadata = {\n  fieldName: 'TaxCode',\n  dataType: MoneyWorksDataType.TEXT,\n  maxLength: 5,\n  canonicalDescription: 'The tax code',\n  manualSource: 'Appendix B - Tax Rates',\n  isRequired: true,\n  isIndexed: true\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "MoneyWorksValidationResult",
-          "type": "interface",
-          "signature": "interface MoneyWorksValidationResult {\n  isValid: boolean;\n  warnings: string[];\n  context?: Record<string, unknown>;\n}",
-          "description": "Standard validation result structure for all MoneyWorks canonical validation",
-          "example": "const result: MoneyWorksValidationResult = {\n  isValid: false,\n  warnings: ['TaxCode must not exceed 5 characters'],\n  context: { providedLength: 7, maxLength: 5 }\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "MoneyWorksBusinessRules",
-          "type": "interface",
-          "signature": "interface MoneyWorksBusinessRules {\n  validationRules: Record<string, boolean>;\n  relationshipRules?: Record<string, boolean>;\n  calculationRules?: Record<string, boolean>;\n}",
-          "description": "Base interface for entity-specific MoneyWorks business rules",
-          "example": "const taxRules: MoneyWorksBusinessRules = {\n  validationRules: {\n    taxCodeUnique: true,\n    accountsExist: true\n  },\n  relationshipRules: {\n    accountsAreControlAccounts: true\n  }\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "MoneyWorksFieldRelationship",
-          "type": "interface",
-          "signature": "interface MoneyWorksFieldRelationship {\n  sourceField: string;\n  targetEntity: string;\n  targetField: string;\n  relationshipType: 'references' | 'subfile_of' | 'linked_to';\n  isRequired: boolean;\n}",
-          "description": "Defines relationships between MoneyWorks entities using MW terminology",
-          "example": "const relationship: MoneyWorksFieldRelationship = {\n  sourceField: 'PaidAccount',\n  targetEntity: 'Account',\n  targetField: 'Code',\n  relationshipType: 'references',\n  isRequired: true\n};",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "TaxRates Namespace",
-      "description": "Complete tax rate management with MoneyWorks-specific types, validation, and calculations",
-      "category": "Entities",
-      "items": [
-        {
-          "name": "MoneyWorksTaxRate",
-          "type": "interface",
-          "signature": "interface MoneyWorksTaxRate {\n  TaxCode: string;\n  PaidAccount: AccountCode;\n  RecAccount: AccountCode;\n  Date: YYYYMMDD;\n  Rate1: number;\n  Rate2: number;\n  Combine?: MoneyWorksTaxCombineMode;\n  CombineRate1?: number;\n  CombineRate2?: number;\n  GSTPaid?: number;\n  GSTReceived?: number;\n  NetPaid?: number;\n  NetReceived?: number;\n  LastModifiedTime?: string;\n  UserNum?: number;\n  UserText?: string;\n  TaggedText?: string;\n}",
-          "description": "Complete MoneyWorks tax rate entity with all fields from the manual. Uses GST terminology for all tax types.",
-          "example": "const taxRate: MoneyWorksTaxRate = {\n  TaxCode: 'GST10',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 10,\n  Rate2: 10,\n  Combine: MoneyWorksTaxCombineMode.NO_SECOND_TIER\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "MoneyWorksTaxCombineMode",
-          "type": "enum",
-          "signature": "enum MoneyWorksTaxCombineMode {\n  NO_SECOND_TIER = 0,\n  ADD_BEFORE = 1,\n  SUBTRACT_BEFORE = 2,\n  ADD_AFTER = 3,\n  SUBTRACT_AFTER = 4\n}",
-          "description": "How second-tier tax (PST) combines with GST in MoneyWorks tax calculations",
-          "example": "// Canadian HST (combined GST+PST)\nconst hst: MoneyWorksTaxRate = {\n  TaxCode: 'HST13',\n  Rate1: 5,  // GST portion\n  CombineRate1: 8,  // PST portion\n  Combine: MoneyWorksTaxCombineMode.ADD_BEFORE\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "MoneyWorksTaxFinalizationStatus",
-          "type": "enum",
-          "signature": "enum MoneyWorksTaxFinalizationStatus {\n  UNFINALISED = 0,\n  FINALISED = 1,\n  FINALISED_REVERSED = 2\n}",
-          "description": "GST finalization status for Australian/NZ BAS processing",
-          "example": "if (status === MoneyWorksTaxFinalizationStatus.FINALISED) {\n  console.log('Tax period is locked for BAS submission');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "validateTaxCode",
-          "type": "function",
-          "signature": "(taxCode: string) => MoneyWorksValidationResult",
-          "description": "Validates a MoneyWorks TaxCode according to MW rules (max 5 chars, alphanumeric)",
-          "example": "const result = validateTaxCode('GST10');\nif (result.isValid) {\n  console.log('Tax code is valid');\n} else {\n  console.log('Warnings:', result.warnings);\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "validateTaxRate",
-          "type": "function",
-          "signature": "(taxRate: Partial<MoneyWorksTaxRate>) => MoneyWorksValidationResult",
-          "description": "Validates a complete MoneyWorks tax rate entity including required fields and business rules",
-          "example": "const result = validateTaxRate({\n  TaxCode: 'GST10',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 10,\n  Rate2: 10\n});\n\nif (!result.isValid) {\n  console.error('Validation failed:', result.warnings);\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "getCurrentTaxRate",
-          "type": "function",
-          "signature": "(taxRate: MoneyWorksTaxRate, currentDate: YYYYMMDD) => number",
-          "description": "Gets the active tax rate (Rate1 or Rate2) based on changeover date logic",
-          "example": "const rate = getCurrentTaxRate(taxRate, '20240615' as YYYYMMDD);\n// Returns Rate1 if currentDate < taxRate.Date\n// Returns Rate2 if currentDate >= taxRate.Date",
-          "since": "0.1.0"
-        },
-        {
-          "name": "calculateTaxForRate",
-          "type": "function",
-          "signature": "(taxRate: MoneyWorksTaxRate, amount: number, context: TaxCalculationContext) => TaxCalculationResult",
-          "description": "Calculates tax for a single rate with full MoneyWorks business logic including rounding",
-          "example": "const result = calculateTaxForRate(\n  taxRate,\n  1000,\n  { transactionDate: '20240615' as YYYYMMDD, isInclusive: false }\n);\n// result.taxAmount = 100 (for 10% rate)\n// result.netAmount = 1000\n// result.grossAmount = 1100",
-          "since": "0.1.0"
-        },
-        {
-          "name": "calculateCombinedTax",
-          "type": "function",
-          "signature": "(tier1: MoneyWorksTaxRate, tier2: MoneyWorksTaxRate, amount: number, context: TaxCalculationContext) => CombinedTaxResult",
-          "description": "Calculates combined tax for MoneyWorks two-tier tax system (e.g., Canadian GST+PST)",
-          "example": "const result = calculateCombinedTax(\n  gstRate,  // 5% GST\n  pstRate,  // 7% PST\n  1000,\n  { transactionDate: '20240615' as YYYYMMDD, isInclusive: false }\n);\n// result.tier1Tax = 50\n// result.tier2Tax = 70 or 73.50 depending on Combine mode\n// result.totalTax = 120 or 123.50",
-          "since": "0.1.0"
-        },
-        {
-          "name": "getFieldMetadata",
-          "type": "function",
-          "signature": "(fieldName: keyof MoneyWorksTaxRate) => MoneyWorksFieldMetadata | undefined",
-          "description": "Gets complete metadata for a specific tax rate field including type and constraints",
-          "example": "const meta = getFieldMetadata('TaxCode');\n// Returns: {\n//   fieldName: 'TaxCode',\n//   dataType: MoneyWorksDataType.TEXT,\n//   maxLength: 5,\n//   canonicalDescription: 'The tax code',\n//   manualSource: 'Appendix B, Page 567',\n//   isRequired: true,\n//   isIndexed: true\n// }",
-          "since": "0.1.0"
-        },
-        {
-          "name": "MONEYWORKS_TAX_RATE_FIELDS",
-          "type": "constant",
-          "signature": "Record<keyof MoneyWorksTaxRate, MoneyWorksFieldMetadata>",
-          "description": "Complete field definitions for all MoneyWorks tax rate fields",
-          "example": "// Access field metadata\nconst taxCodeMeta = MONEYWORKS_TAX_RATE_FIELDS.TaxCode;\nconsole.log(taxCodeMeta.maxLength); // 5\n\n// Iterate all fields\nObject.entries(MONEYWORKS_TAX_RATE_FIELDS).forEach(([field, meta]) => {\n  console.log(`${field}: ${meta.dataType}`);\n});",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Package Constants",
-      "description": "Version and status information for the canonical package",
-      "category": "Meta",
-      "items": [
-        {
-          "name": "CANONICAL_VERSION",
-          "type": "constant",
-          "signature": "{\n  packageVersion: string;\n  moneyWorksManualVersion: string;\n  lastUpdated: string;\n  entities: {\n    taxRates: { status: 'complete' | 'pending', fields: number };\n    transactions: { status: 'complete' | 'pending', fields: number };\n    accounts: { status: 'complete' | 'pending', fields: number };\n    names: { status: 'complete' | 'pending', fields: number };\n  };\n}",
-          "description": "Version information tracking which MoneyWorks manual version was used and entity completion status",
-          "example": "console.log(CANONICAL_VERSION.moneyWorksManualVersion); // '9.0'\nconsole.log(CANONICAL_VERSION.entities.taxRates.status); // 'complete'\nconsole.log(CANONICAL_VERSION.entities.taxRates.fields); // 17",
-          "since": "0.1.0"
-        }
-      ]
-    }
-  ],
-  "usage": {
-    "installation": "bun add @moneyworks/canonical",
-    "examples": [
-      {
-        "title": "Basic Tax Rate Validation",
-        "description": "Validate a tax rate using MoneyWorks canonical rules",
-        "code": "import { TaxRates } from '@moneyworks/canonical';\nimport { YYYYMMDD, AccountCode } from '@moneyworks/utilities';\n\nconst taxRate: TaxRates.MoneyWorksTaxRate = {\n  TaxCode: 'GST10',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 10,\n  Rate2: 10\n};\n\nconst validation = TaxRates.validateTaxRate(taxRate);\nif (!validation.isValid) {\n  console.error('Tax rate validation failed:', validation.warnings);\n}"
-      },
-      {
-        "title": "Tax Calculation with Changeover Date",
-        "description": "Calculate tax using the correct rate based on transaction date",
-        "code": "import { TaxRates } from '@moneyworks/canonical';\nimport { YYYYMMDD } from '@moneyworks/utilities';\n\n// Tax rate changes from 10% to 15% on July 1, 2024\nconst taxRate: TaxRates.MoneyWorksTaxRate = {\n  TaxCode: 'GST',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240701' as YYYYMMDD,\n  Rate1: 10,  // Before July 1\n  Rate2: 15   // On or after July 1\n};\n\n// Transaction on June 15 - uses Rate1 (10%)\nconst juneResult = TaxRates.calculateTaxForRate(\n  taxRate,\n  1000,\n  { transactionDate: '20240615' as YYYYMMDD, isInclusive: false }\n);\nconsole.log(juneResult.taxAmount); // 100\n\n// Transaction on July 15 - uses Rate2 (15%)\nconst julyResult = TaxRates.calculateTaxForRate(\n  taxRate,\n  1000,\n  { transactionDate: '20240715' as YYYYMMDD, isInclusive: false }\n);\nconsole.log(julyResult.taxAmount); // 150"
-      },
-      {
-        "title": "Canadian GST+PST Calculation",
-        "description": "Calculate combined federal and provincial taxes",
-        "code": "import { TaxRates } from '@moneyworks/canonical';\n\n// GST (federal tax)\nconst gst: TaxRates.MoneyWorksTaxRate = {\n  TaxCode: 'GST5',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 5,\n  Rate2: 5\n};\n\n// PST (provincial tax) - compounds on GST\nconst pst: TaxRates.MoneyWorksTaxRate = {\n  TaxCode: 'PST7',\n  PaidAccount: '2120' as AccountCode,\n  RecAccount: '2130' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 7,\n  Rate2: 7,\n  Combine: TaxRates.MoneyWorksTaxCombineMode.ADD_AFTER\n};\n\nconst result = TaxRates.calculateCombinedTax(\n  gst,\n  pst,\n  1000,\n  { transactionDate: '20240615' as YYYYMMDD, isInclusive: false }\n);\n\nconsole.log(result.tier1Tax);   // 50.00 (5% GST)\nconsole.log(result.tier2Tax);   // 73.50 (7% PST on $1050)\nconsole.log(result.totalTax);   // 123.50\nconsole.log(result.grossAmount); // 1123.50"
-      },
-      {
-        "title": "Field Metadata Access",
-        "description": "Access MoneyWorks field definitions and constraints",
-        "code": "import { TaxRates, MoneyWorksDataType } from '@moneyworks/canonical';\n\n// Get metadata for a specific field\nconst taxCodeMeta = TaxRates.getFieldMetadata('TaxCode');\nconsole.log(taxCodeMeta);\n// {\n//   fieldName: 'TaxCode',\n//   dataType: MoneyWorksDataType.TEXT,\n//   maxLength: 5,\n//   canonicalDescription: 'The tax code',\n//   manualSource: 'Appendix B, Page 567',\n//   isRequired: true,\n//   isIndexed: true\n// }\n\n// Get all required fields\nconst requiredFields = TaxRates.getRequiredFields();\nconsole.log(requiredFields);\n// ['TaxCode', 'PaidAccount', 'RecAccount', 'Date', 'Rate1', 'Rate2']\n\n// Check field types\nconst allFields = TaxRates.MONEYWORKS_TAX_RATE_FIELDS;\nObject.entries(allFields).forEach(([field, meta]) => {\n  if (meta.dataType === MoneyWorksDataType.NUMERIC) {\n    console.log(`${field} is a numeric field`);\n  }\n});"
-      }
-    ],
-    "importPatterns": [
-      {
-        "pattern": "import { TaxRates } from '@moneyworks/canonical';",
-        "description": "Import the TaxRates namespace for all tax-related functionality"
-      },
-      {
-        "pattern": "import { MoneyWorksDataType, MoneyWorksValidationResult } from '@moneyworks/canonical';",
-        "description": "Import common types used across all entities"
-      },
-      {
-        "pattern": "import type { MoneyWorksTaxRate } from '@moneyworks/canonical/entities/tax-rates/types';",
-        "description": "Direct import of specific types (not recommended - use namespace imports instead)"
-      }
-    ]
-  },
-  "designPrinciples": [
-    {
-      "principle": "Pure MoneyWorks DSL",
-      "description": "Every type, field name, and enum value comes directly from the MoneyWorks manual. No business domain contamination."
-    },
-    {
-      "principle": "Canonical Terminology",
-      "description": "GST is used for all tax types (including VAT, sales tax). TaxCode not tax_id. PaidAccount not tax_payable."
-    },
-    {
-      "principle": "Type Safety",
-      "description": "Full TypeScript types with branded types from utilities package (YYYYMMDD, AccountCode, etc.)"
-    },
-    {
-      "principle": "Manual Traceability",
-      "description": "Every field includes its source page in the MoneyWorks manual for verification."
-    },
-    {
-      "principle": "Zero Dependencies",
-      "description": "Only depends on @moneyworks/utilities for branded types. No external dependencies."
-    }
-  ],
-  "futurePlans": [
-    {
-      "entity": "Transactions",
-      "status": "Planned",
-      "description": "Complete transaction types including invoices, bills, receipts, and payments"
-    },
-    {
-      "entity": "Accounts",
-      "status": "Planned",  
-      "description": "Chart of accounts with account types, categories, and hierarchies"
-    },
-    {
-      "entity": "Names",
-      "status": "Planned",
-      "description": "Customer and supplier records with contact details and terms"
-    },
-    {
-      "entity": "Products",
-      "status": "Planned",
-      "description": "Inventory items with pricing, stock levels, and categories"
-    }
-  ]
+	"name": "@moneyworks/canonical",
+	"version": "0.1.0",
+	"description": "Pure MoneyWorks canonical types, enums, and business logic - zero contamination from business domains",
+	"overview": "The canonical package is the foundation of MoneyWorks semantic accuracy. It contains ONLY pure MoneyWorks types, terminology, and logic directly from the MoneyWorks manual. This package ensures that MoneyWorks' specific DSL (Domain Specific Language) is preserved throughout the system without contamination from generic business terms.",
+	"exports": [
+		{
+			"name": "Common Types",
+			"description": "Core MoneyWorks data types and validation interfaces used across all entities",
+			"category": "Core",
+			"items": [
+				{
+					"name": "MoneyWorksDataType",
+					"type": "enum",
+					"signature": "enum MoneyWorksDataType { TEXT = 'T', NUMERIC = 'N', DATE = 'D', BOOLEAN = 'B', TIMESTAMP = 'S', ENUMERATED = 'E' }",
+					"description": "MoneyWorks field data types using single-letter codes from the manual",
+					"example": "const fieldType = MoneyWorksDataType.TEXT; // 'T'\nconst isNumeric = fieldType === MoneyWorksDataType.NUMERIC;",
+					"since": "0.1.0"
+				},
+				{
+					"name": "MoneyWorksFieldMetadata",
+					"type": "interface",
+					"signature": "interface MoneyWorksFieldMetadata {\n  fieldName: string;\n  dataType: MoneyWorksDataType;\n  maxLength?: number;\n  canonicalDescription: string;\n  manualSource: string;\n  isRequired?: boolean;\n  isIndexed?: boolean;\n}",
+					"description": "Metadata structure for MoneyWorks fields including type, constraints, and documentation",
+					"example": "const taxCodeMeta: MoneyWorksFieldMetadata = {\n  fieldName: 'TaxCode',\n  dataType: MoneyWorksDataType.TEXT,\n  maxLength: 5,\n  canonicalDescription: 'The tax code',\n  manualSource: 'Appendix B - Tax Rates',\n  isRequired: true,\n  isIndexed: true\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "MoneyWorksValidationResult",
+					"type": "interface",
+					"signature": "interface MoneyWorksValidationResult {\n  isValid: boolean;\n  warnings: string[];\n  context?: Record<string, unknown>;\n}",
+					"description": "Standard validation result structure for all MoneyWorks canonical validation",
+					"example": "const result: MoneyWorksValidationResult = {\n  isValid: false,\n  warnings: ['TaxCode must not exceed 5 characters'],\n  context: { providedLength: 7, maxLength: 5 }\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "MoneyWorksBusinessRules",
+					"type": "interface",
+					"signature": "interface MoneyWorksBusinessRules {\n  validationRules: Record<string, boolean>;\n  relationshipRules?: Record<string, boolean>;\n  calculationRules?: Record<string, boolean>;\n}",
+					"description": "Base interface for entity-specific MoneyWorks business rules",
+					"example": "const taxRules: MoneyWorksBusinessRules = {\n  validationRules: {\n    taxCodeUnique: true,\n    accountsExist: true\n  },\n  relationshipRules: {\n    accountsAreControlAccounts: true\n  }\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "MoneyWorksFieldRelationship",
+					"type": "interface",
+					"signature": "interface MoneyWorksFieldRelationship {\n  sourceField: string;\n  targetEntity: string;\n  targetField: string;\n  relationshipType: 'references' | 'subfile_of' | 'linked_to';\n  isRequired: boolean;\n}",
+					"description": "Defines relationships between MoneyWorks entities using MW terminology",
+					"example": "const relationship: MoneyWorksFieldRelationship = {\n  sourceField: 'PaidAccount',\n  targetEntity: 'Account',\n  targetField: 'Code',\n  relationshipType: 'references',\n  isRequired: true\n};",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "TaxRates Namespace",
+			"description": "Complete tax rate management with MoneyWorks-specific types, validation, and calculations",
+			"category": "Entities",
+			"items": [
+				{
+					"name": "MoneyWorksTaxRate",
+					"type": "interface",
+					"signature": "interface MoneyWorksTaxRate {\n  TaxCode: string;\n  PaidAccount: AccountCode;\n  RecAccount: AccountCode;\n  Date: YYYYMMDD;\n  Rate1: number;\n  Rate2: number;\n  Combine?: MoneyWorksTaxCombineMode;\n  CombineRate1?: number;\n  CombineRate2?: number;\n  GSTPaid?: number;\n  GSTReceived?: number;\n  NetPaid?: number;\n  NetReceived?: number;\n  LastModifiedTime?: string;\n  UserNum?: number;\n  UserText?: string;\n  TaggedText?: string;\n}",
+					"description": "Complete MoneyWorks tax rate entity with all fields from the manual. Uses GST terminology for all tax types.",
+					"example": "const taxRate: MoneyWorksTaxRate = {\n  TaxCode: 'GST10',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 10,\n  Rate2: 10,\n  Combine: MoneyWorksTaxCombineMode.NO_SECOND_TIER\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "MoneyWorksTaxCombineMode",
+					"type": "enum",
+					"signature": "enum MoneyWorksTaxCombineMode {\n  NO_SECOND_TIER = 0,\n  ADD_BEFORE = 1,\n  SUBTRACT_BEFORE = 2,\n  ADD_AFTER = 3,\n  SUBTRACT_AFTER = 4\n}",
+					"description": "How second-tier tax (PST) combines with GST in MoneyWorks tax calculations",
+					"example": "// Canadian HST (combined GST+PST)\nconst hst: MoneyWorksTaxRate = {\n  TaxCode: 'HST13',\n  Rate1: 5,  // GST portion\n  CombineRate1: 8,  // PST portion\n  Combine: MoneyWorksTaxCombineMode.ADD_BEFORE\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "MoneyWorksTaxFinalizationStatus",
+					"type": "enum",
+					"signature": "enum MoneyWorksTaxFinalizationStatus {\n  UNFINALISED = 0,\n  FINALISED = 1,\n  FINALISED_REVERSED = 2\n}",
+					"description": "GST finalization status for Australian/NZ BAS processing",
+					"example": "if (status === MoneyWorksTaxFinalizationStatus.FINALISED) {\n  console.log('Tax period is locked for BAS submission');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "validateTaxCode",
+					"type": "function",
+					"signature": "(taxCode: string) => MoneyWorksValidationResult",
+					"description": "Validates a MoneyWorks TaxCode according to MW rules (max 5 chars, alphanumeric)",
+					"example": "const result = validateTaxCode('GST10');\nif (result.isValid) {\n  console.log('Tax code is valid');\n} else {\n  console.log('Warnings:', result.warnings);\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "validateTaxRate",
+					"type": "function",
+					"signature": "(taxRate: Partial<MoneyWorksTaxRate>) => MoneyWorksValidationResult",
+					"description": "Validates a complete MoneyWorks tax rate entity including required fields and business rules",
+					"example": "const result = validateTaxRate({\n  TaxCode: 'GST10',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 10,\n  Rate2: 10\n});\n\nif (!result.isValid) {\n  console.error('Validation failed:', result.warnings);\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "getCurrentTaxRate",
+					"type": "function",
+					"signature": "(taxRate: MoneyWorksTaxRate, currentDate: YYYYMMDD) => number",
+					"description": "Gets the active tax rate (Rate1 or Rate2) based on changeover date logic",
+					"example": "const rate = getCurrentTaxRate(taxRate, '20240615' as YYYYMMDD);\n// Returns Rate1 if currentDate < taxRate.Date\n// Returns Rate2 if currentDate >= taxRate.Date",
+					"since": "0.1.0"
+				},
+				{
+					"name": "calculateTaxForRate",
+					"type": "function",
+					"signature": "(taxRate: MoneyWorksTaxRate, amount: number, context: TaxCalculationContext) => TaxCalculationResult",
+					"description": "Calculates tax for a single rate with full MoneyWorks business logic including rounding",
+					"example": "const result = calculateTaxForRate(\n  taxRate,\n  1000,\n  { transactionDate: '20240615' as YYYYMMDD, isInclusive: false }\n);\n// result.taxAmount = 100 (for 10% rate)\n// result.netAmount = 1000\n// result.grossAmount = 1100",
+					"since": "0.1.0"
+				},
+				{
+					"name": "calculateCombinedTax",
+					"type": "function",
+					"signature": "(tier1: MoneyWorksTaxRate, tier2: MoneyWorksTaxRate, amount: number, context: TaxCalculationContext) => CombinedTaxResult",
+					"description": "Calculates combined tax for MoneyWorks two-tier tax system (e.g., Canadian GST+PST)",
+					"example": "const result = calculateCombinedTax(\n  gstRate,  // 5% GST\n  pstRate,  // 7% PST\n  1000,\n  { transactionDate: '20240615' as YYYYMMDD, isInclusive: false }\n);\n// result.tier1Tax = 50\n// result.tier2Tax = 70 or 73.50 depending on Combine mode\n// result.totalTax = 120 or 123.50",
+					"since": "0.1.0"
+				},
+				{
+					"name": "getFieldMetadata",
+					"type": "function",
+					"signature": "(fieldName: keyof MoneyWorksTaxRate) => MoneyWorksFieldMetadata | undefined",
+					"description": "Gets complete metadata for a specific tax rate field including type and constraints",
+					"example": "const meta = getFieldMetadata('TaxCode');\n// Returns: {\n//   fieldName: 'TaxCode',\n//   dataType: MoneyWorksDataType.TEXT,\n//   maxLength: 5,\n//   canonicalDescription: 'The tax code',\n//   manualSource: 'Appendix B, Page 567',\n//   isRequired: true,\n//   isIndexed: true\n// }",
+					"since": "0.1.0"
+				},
+				{
+					"name": "MONEYWORKS_TAX_RATE_FIELDS",
+					"type": "constant",
+					"signature": "Record<keyof MoneyWorksTaxRate, MoneyWorksFieldMetadata>",
+					"description": "Complete field definitions for all MoneyWorks tax rate fields",
+					"example": "// Access field metadata\nconst taxCodeMeta = MONEYWORKS_TAX_RATE_FIELDS.TaxCode;\nconsole.log(taxCodeMeta.maxLength); // 5\n\n// Iterate all fields\nObject.entries(MONEYWORKS_TAX_RATE_FIELDS).forEach(([field, meta]) => {\n  console.log(`${field}: ${meta.dataType}`);\n});",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Package Constants",
+			"description": "Version and status information for the canonical package",
+			"category": "Meta",
+			"items": [
+				{
+					"name": "CANONICAL_VERSION",
+					"type": "constant",
+					"signature": "{\n  packageVersion: string;\n  moneyWorksManualVersion: string;\n  lastUpdated: string;\n  entities: {\n    taxRates: { status: 'complete' | 'pending', fields: number };\n    transactions: { status: 'complete' | 'pending', fields: number };\n    accounts: { status: 'complete' | 'pending', fields: number };\n    names: { status: 'complete' | 'pending', fields: number };\n  };\n}",
+					"description": "Version information tracking which MoneyWorks manual version was used and entity completion status",
+					"example": "console.log(CANONICAL_VERSION.moneyWorksManualVersion); // '9.0'\nconsole.log(CANONICAL_VERSION.entities.taxRates.status); // 'complete'\nconsole.log(CANONICAL_VERSION.entities.taxRates.fields); // 17",
+					"since": "0.1.0"
+				}
+			]
+		}
+	],
+	"usage": {
+		"installation": "bun add @moneyworks/canonical",
+		"examples": [
+			{
+				"title": "Basic Tax Rate Validation",
+				"description": "Validate a tax rate using MoneyWorks canonical rules",
+				"code": "import { TaxRates } from '@moneyworks/canonical';\nimport { YYYYMMDD, AccountCode } from '@moneyworks/utilities';\n\nconst taxRate: TaxRates.MoneyWorksTaxRate = {\n  TaxCode: 'GST10',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 10,\n  Rate2: 10\n};\n\nconst validation = TaxRates.validateTaxRate(taxRate);\nif (!validation.isValid) {\n  console.error('Tax rate validation failed:', validation.warnings);\n}"
+			},
+			{
+				"title": "Tax Calculation with Changeover Date",
+				"description": "Calculate tax using the correct rate based on transaction date",
+				"code": "import { TaxRates } from '@moneyworks/canonical';\nimport { YYYYMMDD } from '@moneyworks/utilities';\n\n// Tax rate changes from 10% to 15% on July 1, 2024\nconst taxRate: TaxRates.MoneyWorksTaxRate = {\n  TaxCode: 'GST',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240701' as YYYYMMDD,\n  Rate1: 10,  // Before July 1\n  Rate2: 15   // On or after July 1\n};\n\n// Transaction on June 15 - uses Rate1 (10%)\nconst juneResult = TaxRates.calculateTaxForRate(\n  taxRate,\n  1000,\n  { transactionDate: '20240615' as YYYYMMDD, isInclusive: false }\n);\nconsole.log(juneResult.taxAmount); // 100\n\n// Transaction on July 15 - uses Rate2 (15%)\nconst julyResult = TaxRates.calculateTaxForRate(\n  taxRate,\n  1000,\n  { transactionDate: '20240715' as YYYYMMDD, isInclusive: false }\n);\nconsole.log(julyResult.taxAmount); // 150"
+			},
+			{
+				"title": "Canadian GST+PST Calculation",
+				"description": "Calculate combined federal and provincial taxes",
+				"code": "import { TaxRates } from '@moneyworks/canonical';\n\n// GST (federal tax)\nconst gst: TaxRates.MoneyWorksTaxRate = {\n  TaxCode: 'GST5',\n  PaidAccount: '2100' as AccountCode,\n  RecAccount: '2110' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 5,\n  Rate2: 5\n};\n\n// PST (provincial tax) - compounds on GST\nconst pst: TaxRates.MoneyWorksTaxRate = {\n  TaxCode: 'PST7',\n  PaidAccount: '2120' as AccountCode,\n  RecAccount: '2130' as AccountCode,\n  Date: '20240101' as YYYYMMDD,\n  Rate1: 7,\n  Rate2: 7,\n  Combine: TaxRates.MoneyWorksTaxCombineMode.ADD_AFTER\n};\n\nconst result = TaxRates.calculateCombinedTax(\n  gst,\n  pst,\n  1000,\n  { transactionDate: '20240615' as YYYYMMDD, isInclusive: false }\n);\n\nconsole.log(result.tier1Tax);   // 50.00 (5% GST)\nconsole.log(result.tier2Tax);   // 73.50 (7% PST on $1050)\nconsole.log(result.totalTax);   // 123.50\nconsole.log(result.grossAmount); // 1123.50"
+			},
+			{
+				"title": "Field Metadata Access",
+				"description": "Access MoneyWorks field definitions and constraints",
+				"code": "import { TaxRates, MoneyWorksDataType } from '@moneyworks/canonical';\n\n// Get metadata for a specific field\nconst taxCodeMeta = TaxRates.getFieldMetadata('TaxCode');\nconsole.log(taxCodeMeta);\n// {\n//   fieldName: 'TaxCode',\n//   dataType: MoneyWorksDataType.TEXT,\n//   maxLength: 5,\n//   canonicalDescription: 'The tax code',\n//   manualSource: 'Appendix B, Page 567',\n//   isRequired: true,\n//   isIndexed: true\n// }\n\n// Get all required fields\nconst requiredFields = TaxRates.getRequiredFields();\nconsole.log(requiredFields);\n// ['TaxCode', 'PaidAccount', 'RecAccount', 'Date', 'Rate1', 'Rate2']\n\n// Check field types\nconst allFields = TaxRates.MONEYWORKS_TAX_RATE_FIELDS;\nObject.entries(allFields).forEach(([field, meta]) => {\n  if (meta.dataType === MoneyWorksDataType.NUMERIC) {\n    console.log(`${field} is a numeric field`);\n  }\n});"
+			}
+		],
+		"importPatterns": [
+			{
+				"pattern": "import { TaxRates } from '@moneyworks/canonical';",
+				"description": "Import the TaxRates namespace for all tax-related functionality"
+			},
+			{
+				"pattern": "import { MoneyWorksDataType, MoneyWorksValidationResult } from '@moneyworks/canonical';",
+				"description": "Import common types used across all entities"
+			},
+			{
+				"pattern": "import type { MoneyWorksTaxRate } from '@moneyworks/canonical/entities/tax-rates/types';",
+				"description": "Direct import of specific types (not recommended - use namespace imports instead)"
+			}
+		]
+	},
+	"designPrinciples": [
+		{
+			"principle": "Pure MoneyWorks DSL",
+			"description": "Every type, field name, and enum value comes directly from the MoneyWorks manual. No business domain contamination."
+		},
+		{
+			"principle": "Canonical Terminology",
+			"description": "GST is used for all tax types (including VAT, sales tax). TaxCode not tax_id. PaidAccount not tax_payable."
+		},
+		{
+			"principle": "Type Safety",
+			"description": "Full TypeScript types with branded types from utilities package (YYYYMMDD, AccountCode, etc.)"
+		},
+		{
+			"principle": "Manual Traceability",
+			"description": "Every field includes its source page in the MoneyWorks manual for verification."
+		},
+		{
+			"principle": "Zero Dependencies",
+			"description": "Only depends on @moneyworks/utilities for branded types. No external dependencies."
+		}
+	],
+	"futurePlans": [
+		{
+			"entity": "Transactions",
+			"status": "Planned",
+			"description": "Complete transaction types including invoices, bills, receipts, and payments"
+		},
+		{
+			"entity": "Accounts",
+			"status": "Planned",
+			"description": "Chart of accounts with account types, categories, and hierarchies"
+		},
+		{
+			"entity": "Names",
+			"status": "Planned",
+			"description": "Customer and supplier records with contact details and terms"
+		},
+		{
+			"entity": "Products",
+			"status": "Planned",
+			"description": "Inventory items with pricing, stock levels, and categories"
+		}
+	]
 }

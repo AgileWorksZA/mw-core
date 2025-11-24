@@ -108,15 +108,17 @@ export const exportTool = {
 			const result: MoneyWorksExportResult = {
 				data,
 				recordCount,
-				format: typeof exportFormat === 'string' ? exportFormat : 'custom',
+				format: typeof exportFormat === "string" ? exportFormat : "custom",
 				table,
 			};
 
 			return {
-				content: [{
-					type: "text",
-					text: JSON.stringify(result, null, 2),
-				}],
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(result, null, 2),
+					},
+				],
 			};
 		} catch (error) {
 			throw new Error(

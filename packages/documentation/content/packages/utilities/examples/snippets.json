@@ -1,179 +1,179 @@
 {
-  "snippets": [
-    {
-      "id": "validate-yyyymmdd",
-      "title": "Validate YYYYMMDD date",
-      "description": "Check if a string is valid YYYYMMDD format",
-      "tags": ["date", "validation", "yyyymmdd"],
-      "code": "import { isYYYYMMDD } from '@moneyworks/utilities';\n\nif (isYYYYMMDD(userInput)) {\n  // userInput is now typed as YYYYMMDD\n  processDate(userInput);\n}"
-    },
-    {
-      "id": "create-date-safe",
-      "title": "Create date with safe validation",
-      "description": "Create YYYYMMDD date returning null on invalid input",
-      "tags": ["date", "creation", "validation"],
-      "code": "import { tryCreateYYYYMMDD } from '@moneyworks/utilities';\n\nconst date = tryCreateYYYYMMDD(userInput);\nif (date) {\n  // date is typed as YYYYMMDD\n} else {\n  console.error('Invalid date format');\n}"
-    },
-    {
-      "id": "tagged-template-date",
-      "title": "Create date with tagged template",
-      "description": "Use d`` template for easy date creation with methods",
-      "tags": ["date", "template", "fluent"],
-      "code": "import { d } from '@moneyworks/utilities';\n\nconst today = d`${new Date()}`;\nconst specific = d`20240703`;\nconst tomorrow = today.addDays(1);\n\nif (tomorrow.gt(today)) {\n  console.log('Tomorrow is after today');\n}"
-    },
-    {
-      "id": "parse-any-date",
-      "title": "Parse various date formats",
-      "description": "Convert different date formats to YYYYMMDD",
-      "tags": ["date", "parsing", "conversion"],
-      "code": "import { parseToYYYYMMDD } from '@moneyworks/utilities';\n\nconst date1 = parseToYYYYMMDD('20240703');      // YYYYMMDD\nconst date2 = parseToYYYYMMDD('2024-07-03');    // ISO\nconst date3 = parseToYYYYMMDD('2024/07/03');    // Slash\nconst date4 = parseToYYYYMMDD(new Date());      // Date object"
-    },
-    {
-      "id": "format-date-display",
-      "title": "Format date for display",
-      "description": "Format YYYYMMDD date with custom separator",
-      "tags": ["date", "formatting", "display"],
-      "code": "import { formatYYYYMMDD, createYYYYMMDD } from '@moneyworks/utilities';\n\nconst date = createYYYYMMDD('20240703');\n\nconsole.log(formatYYYYMMDD(date));       // '2024-07-03'\nconsole.log(formatYYYYMMDD(date, '/'));  // '2024/07/03'\nconsole.log(formatYYYYMMDD(date, '.'));  // '2024.07.03'"
-    },
-    {
-      "id": "date-arithmetic",
-      "title": "Add days and months to date",
-      "description": "Perform date arithmetic operations",
-      "tags": ["date", "arithmetic", "calculation"],
-      "code": "import { addDaysToYYYYMMDD, addMonthsToYYYYMMDD, createYYYYMMDD } from '@moneyworks/utilities';\n\nconst date = createYYYYMMDD('20240703');\n\nconst nextWeek = addDaysToYYYYMMDD(date, 7);\nconst nextMonth = addMonthsToYYYYMMDD(date, 1);\nconst lastYear = addMonthsToYYYYMMDD(date, -12);"
-    },
-    {
-      "id": "days-between-dates",
-      "title": "Calculate days between dates",
-      "description": "Get the number of days between two dates",
-      "tags": ["date", "calculation", "difference"],
-      "code": "import { daysBetweenYYYYMMDD, createYYYYMMDD } from '@moneyworks/utilities';\n\nconst start = createYYYYMMDD('20240703');\nconst end = createYYYYMMDD('20240803');\n\nconst days = daysBetweenYYYYMMDD(start, end);\nconsole.log(`${days} days between dates`); // 31 days"
-    },
-    {
-      "id": "compare-dates",
-      "title": "Compare two dates",
-      "description": "Check if date is before, after, or equal",
-      "tags": ["date", "comparison"],
-      "code": "import { isBeforeYYYYMMDD, isAfterYYYYMMDD, compareYYYYMMDD } from '@moneyworks/utilities';\n\nconst date1 = createYYYYMMDD('20240703');\nconst date2 = createYYYYMMDD('20240803');\n\nif (isBeforeYYYYMMDD(date1, date2)) {\n  console.log('date1 is before date2');\n}\n\n// compareYYYYMMDD returns -1, 0, or 1\nconst comparison = compareYYYYMMDD(date1, date2); // -1"
-    },
-    {
-      "id": "month-boundaries",
-      "title": "Get start and end of month",
-      "description": "Find first and last day of month for a date",
-      "tags": ["date", "month", "boundaries"],
-      "code": "import { startOfMonthYYYYMMDD, endOfMonthYYYYMMDD, createYYYYMMDD } from '@moneyworks/utilities';\n\nconst date = createYYYYMMDD('20240715');\n\nconst monthStart = startOfMonthYYYYMMDD(date); // '20240701'\nconst monthEnd = endOfMonthYYYYMMDD(date);     // '20240731'"
-    },
-    {
-      "id": "create-period",
-      "title": "Create and validate period",
-      "description": "Create Period (YYYYMM) with validation",
-      "tags": ["period", "creation", "validation"],
-      "code": "import { createPeriod, isPeriod, periodFromYearMonth } from '@moneyworks/utilities';\n\n// From number\nconst period1 = createPeriod(202407);\n\n// From year and month\nconst period2 = periodFromYearMonth(2024, 7);\n\n// Validate\nif (isPeriod(202407)) {\n  console.log('Valid period');\n}"
-    },
-    {
-      "id": "period-template",
-      "title": "Create period with template",
-      "description": "Use p`` template for period creation",
-      "tags": ["period", "template"],
-      "code": "import { p } from '@moneyworks/utilities';\n\nconst period = p`202407`;\nconst current = p`${new Date()}`;\nconst composed = p`${2024}${7}`;"
-    },
-    {
-      "id": "period-components",
-      "title": "Extract year and month from period",
-      "description": "Get components of a period",
-      "tags": ["period", "extraction"],
-      "code": "import { periodYear, periodMonth, createPeriod } from '@moneyworks/utilities';\n\nconst period = createPeriod(202407);\n\nconst year = periodYear(period);   // 2024\nconst month = periodMonth(period);  // 7"
-    },
-    {
-      "id": "period-dates",
-      "title": "Get date range for period",
-      "description": "Find start and end dates of a period",
-      "tags": ["period", "date", "range"],
-      "code": "import { periodStartDate, periodEndDate, createPeriod } from '@moneyworks/utilities';\n\nconst period = createPeriod(202407);\n\nconst start = periodStartDate(period); // '20240701' (YYYYMMDD)\nconst end = periodEndDate(period);     // '20240731' (YYYYMMDD)"
-    },
-    {
-      "id": "period-arithmetic",
-      "title": "Add months to period",
-      "description": "Period arithmetic operations",
-      "tags": ["period", "arithmetic"],
-      "code": "import { addMonthsToPeriod, createPeriod } from '@moneyworks/utilities';\n\nconst period = createPeriod(202407);\n\nconst nextQuarter = addMonthsToPeriod(period, 3);  // 202410\nconst lastYear = addMonthsToPeriod(period, -12);   // 202307"
-    },
-    {
-      "id": "period-range",
-      "title": "Generate period range",
-      "description": "Create array of periods between start and end",
-      "tags": ["period", "range", "generation"],
-      "code": "import { periodRange, createPeriod } from '@moneyworks/utilities';\n\nconst start = createPeriod(202401);\nconst end = createPeriod(202412);\n\nconst yearPeriods = periodRange(start, end);\n// [202401, 202402, ..., 202412]"
-    },
-    {
-      "id": "parse-json-dates",
-      "title": "Parse JSON with date conversion",
-      "description": "Automatically convert dates when parsing JSON",
-      "tags": ["json", "parsing", "date"],
-      "code": "import { parseMoneyWorksJSON } from '@moneyworks/utilities';\n\nconst data = parseMoneyWorksJSON(`{\n  \"transDate\": \"2024-07-03\",\n  \"period\": 202407,\n  \"amount\": 1500\n}`);\n\n// data.transDate is YYYYMMDD\n// data.period is Period"
-    },
-    {
-      "id": "parse-json-options",
-      "title": "Parse JSON with custom options",
-      "description": "Control JSON parsing behavior",
-      "tags": ["json", "parsing", "options"],
-      "code": "import { parseMoneyWorksJSON } from '@moneyworks/utilities';\n\n// Strict mode - throws on invalid\nconst data = parseMoneyWorksJSON(json, {\n  strict: true,\n  additionalDateFields: ['customDate'],\n  excludeFields: ['rawDate']\n});"
-    },
-    {
-      "id": "stringify-for-display",
-      "title": "Format JSON for display",
-      "description": "Stringify with human-readable formatting",
-      "tags": ["json", "stringify", "display"],
-      "code": "import { stringifyForDisplay } from '@moneyworks/utilities';\n\nconst data = {\n  transDate: createYYYYMMDD('20240703'),\n  period: createPeriod(202407),\n  amount: 1500\n};\n\nconst json = stringifyForDisplay(data);\n// {\n//   \"transDate\": \"2024-07-03\",\n//   \"period\": \"2024/07\",\n//   \"amount\": 1500\n// }"
-    },
-    {
-      "id": "stringify-custom",
-      "title": "Stringify with custom options",
-      "description": "Control JSON stringification format",
-      "tags": ["json", "stringify", "formatting"],
-      "code": "import { stringifyMoneyWorks } from '@moneyworks/utilities';\n\nconst json = stringifyMoneyWorks(data, {\n  formatDates: true,\n  dateSeparator: '.',\n  formatPeriods: true,\n  periodSeparator: '-',\n  indent: 2\n});"
-    },
-    {
-      "id": "branded-types-basic",
-      "title": "Using branded types",
-      "description": "Type-safe primitives with branding",
-      "tags": ["types", "branded", "safety"],
-      "code": "import type { YYYYMMDD, AccountCode, NameCode } from '@moneyworks/utilities';\n\nfunction processInvoice(\n  date: YYYYMMDD,\n  customer: NameCode,\n  account: AccountCode\n) {\n  // Type-safe operations\n}\n\n// Create branded values\nconst date = createYYYYMMDD('20240703');\nconst customer: NameCode = 'CUST001' as NameCode;\nconst account: AccountCode = '4000' as AccountCode;"
-    },
-    {
-      "id": "custom-branded-type",
-      "title": "Create custom branded type",
-      "description": "Define your own branded types",
-      "tags": ["types", "branded", "custom"],
-      "code": "import type { Brand } from '@moneyworks/utilities';\n\n// Define custom types\ntype InvoiceID = Brand<string, 'InvoiceID'>;\ntype OrderNumber = Brand<number, 'OrderNumber'>;\n\n// Use them\nfunction linkInvoiceToOrder(\n  invoice: InvoiceID,\n  order: OrderNumber\n) {\n  // Can't mix up parameters\n}\n\nconst inv: InvoiceID = 'INV-001' as InvoiceID;\nconst ord: OrderNumber = 12345 as OrderNumber;"
-    },
-    {
-      "id": "date-utils-namespace",
-      "title": "Use YYYYMMDDUtils namespace",
-      "description": "Access all date utilities through namespace",
-      "tags": ["date", "namespace", "utilities"],
-      "code": "import { YYYYMMDDUtils } from '@moneyworks/utilities';\n\nconst date = YYYYMMDDUtils.create('20240703');\nconst today = YYYYMMDDUtils.today();\nconst formatted = YYYYMMDDUtils.format(date, '/');\n\nif (YYYYMMDDUtils.isAfter(date, today)) {\n  const days = YYYYMMDDUtils.daysBetween(today, date);\n  console.log(`${days} days until date`);\n}"
-    },
-    {
-      "id": "period-utils-namespace",
-      "title": "Use PeriodUtils namespace",
-      "description": "Access all period utilities through namespace",
-      "tags": ["period", "namespace", "utilities"],
-      "code": "import { PeriodUtils } from '@moneyworks/utilities';\n\nconst period = PeriodUtils.create(202407);\nconst current = PeriodUtils.current();\nconst year = PeriodUtils.year(period);\n\nconst range = PeriodUtils.range(202401, 202412);\nconst formatted = PeriodUtils.format(period, '-');"
-    },
-    {
-      "id": "date-weekend-leap",
-      "title": "Check weekend and leap year",
-      "description": "Additional date checks with fluent API",
-      "tags": ["date", "weekend", "leap year"],
-      "code": "import { d } from '@moneyworks/utilities';\n\nconst date = d`20240703`;\n\nif (date.isWeekend()) {\n  console.log('Date falls on weekend');\n}\n\nif (date.isLeapYear()) {\n  console.log('Date is in a leap year');\n}"
-    },
-    {
-      "id": "safe-stringify",
-      "title": "Safe JSON stringify",
-      "description": "Handle circular references in JSON",
-      "tags": ["json", "stringify", "circular"],
-      "code": "import { safeStringify } from '@moneyworks/utilities';\n\nconst obj: any = { name: 'test' };\nobj.circular = obj; // Circular reference\n\nconst json = safeStringify(obj);\n// {\"name\":\"test\",\"circular\":\"[Circular]\"}"
-    }
-  ]
+	"snippets": [
+		{
+			"id": "validate-yyyymmdd",
+			"title": "Validate YYYYMMDD date",
+			"description": "Check if a string is valid YYYYMMDD format",
+			"tags": ["date", "validation", "yyyymmdd"],
+			"code": "import { isYYYYMMDD } from '@moneyworks/utilities';\n\nif (isYYYYMMDD(userInput)) {\n  // userInput is now typed as YYYYMMDD\n  processDate(userInput);\n}"
+		},
+		{
+			"id": "create-date-safe",
+			"title": "Create date with safe validation",
+			"description": "Create YYYYMMDD date returning null on invalid input",
+			"tags": ["date", "creation", "validation"],
+			"code": "import { tryCreateYYYYMMDD } from '@moneyworks/utilities';\n\nconst date = tryCreateYYYYMMDD(userInput);\nif (date) {\n  // date is typed as YYYYMMDD\n} else {\n  console.error('Invalid date format');\n}"
+		},
+		{
+			"id": "tagged-template-date",
+			"title": "Create date with tagged template",
+			"description": "Use d`` template for easy date creation with methods",
+			"tags": ["date", "template", "fluent"],
+			"code": "import { d } from '@moneyworks/utilities';\n\nconst today = d`${new Date()}`;\nconst specific = d`20240703`;\nconst tomorrow = today.addDays(1);\n\nif (tomorrow.gt(today)) {\n  console.log('Tomorrow is after today');\n}"
+		},
+		{
+			"id": "parse-any-date",
+			"title": "Parse various date formats",
+			"description": "Convert different date formats to YYYYMMDD",
+			"tags": ["date", "parsing", "conversion"],
+			"code": "import { parseToYYYYMMDD } from '@moneyworks/utilities';\n\nconst date1 = parseToYYYYMMDD('20240703');      // YYYYMMDD\nconst date2 = parseToYYYYMMDD('2024-07-03');    // ISO\nconst date3 = parseToYYYYMMDD('2024/07/03');    // Slash\nconst date4 = parseToYYYYMMDD(new Date());      // Date object"
+		},
+		{
+			"id": "format-date-display",
+			"title": "Format date for display",
+			"description": "Format YYYYMMDD date with custom separator",
+			"tags": ["date", "formatting", "display"],
+			"code": "import { formatYYYYMMDD, createYYYYMMDD } from '@moneyworks/utilities';\n\nconst date = createYYYYMMDD('20240703');\n\nconsole.log(formatYYYYMMDD(date));       // '2024-07-03'\nconsole.log(formatYYYYMMDD(date, '/'));  // '2024/07/03'\nconsole.log(formatYYYYMMDD(date, '.'));  // '2024.07.03'"
+		},
+		{
+			"id": "date-arithmetic",
+			"title": "Add days and months to date",
+			"description": "Perform date arithmetic operations",
+			"tags": ["date", "arithmetic", "calculation"],
+			"code": "import { addDaysToYYYYMMDD, addMonthsToYYYYMMDD, createYYYYMMDD } from '@moneyworks/utilities';\n\nconst date = createYYYYMMDD('20240703');\n\nconst nextWeek = addDaysToYYYYMMDD(date, 7);\nconst nextMonth = addMonthsToYYYYMMDD(date, 1);\nconst lastYear = addMonthsToYYYYMMDD(date, -12);"
+		},
+		{
+			"id": "days-between-dates",
+			"title": "Calculate days between dates",
+			"description": "Get the number of days between two dates",
+			"tags": ["date", "calculation", "difference"],
+			"code": "import { daysBetweenYYYYMMDD, createYYYYMMDD } from '@moneyworks/utilities';\n\nconst start = createYYYYMMDD('20240703');\nconst end = createYYYYMMDD('20240803');\n\nconst days = daysBetweenYYYYMMDD(start, end);\nconsole.log(`${days} days between dates`); // 31 days"
+		},
+		{
+			"id": "compare-dates",
+			"title": "Compare two dates",
+			"description": "Check if date is before, after, or equal",
+			"tags": ["date", "comparison"],
+			"code": "import { isBeforeYYYYMMDD, isAfterYYYYMMDD, compareYYYYMMDD } from '@moneyworks/utilities';\n\nconst date1 = createYYYYMMDD('20240703');\nconst date2 = createYYYYMMDD('20240803');\n\nif (isBeforeYYYYMMDD(date1, date2)) {\n  console.log('date1 is before date2');\n}\n\n// compareYYYYMMDD returns -1, 0, or 1\nconst comparison = compareYYYYMMDD(date1, date2); // -1"
+		},
+		{
+			"id": "month-boundaries",
+			"title": "Get start and end of month",
+			"description": "Find first and last day of month for a date",
+			"tags": ["date", "month", "boundaries"],
+			"code": "import { startOfMonthYYYYMMDD, endOfMonthYYYYMMDD, createYYYYMMDD } from '@moneyworks/utilities';\n\nconst date = createYYYYMMDD('20240715');\n\nconst monthStart = startOfMonthYYYYMMDD(date); // '20240701'\nconst monthEnd = endOfMonthYYYYMMDD(date);     // '20240731'"
+		},
+		{
+			"id": "create-period",
+			"title": "Create and validate period",
+			"description": "Create Period (YYYYMM) with validation",
+			"tags": ["period", "creation", "validation"],
+			"code": "import { createPeriod, isPeriod, periodFromYearMonth } from '@moneyworks/utilities';\n\n// From number\nconst period1 = createPeriod(202407);\n\n// From year and month\nconst period2 = periodFromYearMonth(2024, 7);\n\n// Validate\nif (isPeriod(202407)) {\n  console.log('Valid period');\n}"
+		},
+		{
+			"id": "period-template",
+			"title": "Create period with template",
+			"description": "Use p`` template for period creation",
+			"tags": ["period", "template"],
+			"code": "import { p } from '@moneyworks/utilities';\n\nconst period = p`202407`;\nconst current = p`${new Date()}`;\nconst composed = p`${2024}${7}`;"
+		},
+		{
+			"id": "period-components",
+			"title": "Extract year and month from period",
+			"description": "Get components of a period",
+			"tags": ["period", "extraction"],
+			"code": "import { periodYear, periodMonth, createPeriod } from '@moneyworks/utilities';\n\nconst period = createPeriod(202407);\n\nconst year = periodYear(period);   // 2024\nconst month = periodMonth(period);  // 7"
+		},
+		{
+			"id": "period-dates",
+			"title": "Get date range for period",
+			"description": "Find start and end dates of a period",
+			"tags": ["period", "date", "range"],
+			"code": "import { periodStartDate, periodEndDate, createPeriod } from '@moneyworks/utilities';\n\nconst period = createPeriod(202407);\n\nconst start = periodStartDate(period); // '20240701' (YYYYMMDD)\nconst end = periodEndDate(period);     // '20240731' (YYYYMMDD)"
+		},
+		{
+			"id": "period-arithmetic",
+			"title": "Add months to period",
+			"description": "Period arithmetic operations",
+			"tags": ["period", "arithmetic"],
+			"code": "import { addMonthsToPeriod, createPeriod } from '@moneyworks/utilities';\n\nconst period = createPeriod(202407);\n\nconst nextQuarter = addMonthsToPeriod(period, 3);  // 202410\nconst lastYear = addMonthsToPeriod(period, -12);   // 202307"
+		},
+		{
+			"id": "period-range",
+			"title": "Generate period range",
+			"description": "Create array of periods between start and end",
+			"tags": ["period", "range", "generation"],
+			"code": "import { periodRange, createPeriod } from '@moneyworks/utilities';\n\nconst start = createPeriod(202401);\nconst end = createPeriod(202412);\n\nconst yearPeriods = periodRange(start, end);\n// [202401, 202402, ..., 202412]"
+		},
+		{
+			"id": "parse-json-dates",
+			"title": "Parse JSON with date conversion",
+			"description": "Automatically convert dates when parsing JSON",
+			"tags": ["json", "parsing", "date"],
+			"code": "import { parseMoneyWorksJSON } from '@moneyworks/utilities';\n\nconst data = parseMoneyWorksJSON(`{\n  \"transDate\": \"2024-07-03\",\n  \"period\": 202407,\n  \"amount\": 1500\n}`);\n\n// data.transDate is YYYYMMDD\n// data.period is Period"
+		},
+		{
+			"id": "parse-json-options",
+			"title": "Parse JSON with custom options",
+			"description": "Control JSON parsing behavior",
+			"tags": ["json", "parsing", "options"],
+			"code": "import { parseMoneyWorksJSON } from '@moneyworks/utilities';\n\n// Strict mode - throws on invalid\nconst data = parseMoneyWorksJSON(json, {\n  strict: true,\n  additionalDateFields: ['customDate'],\n  excludeFields: ['rawDate']\n});"
+		},
+		{
+			"id": "stringify-for-display",
+			"title": "Format JSON for display",
+			"description": "Stringify with human-readable formatting",
+			"tags": ["json", "stringify", "display"],
+			"code": "import { stringifyForDisplay } from '@moneyworks/utilities';\n\nconst data = {\n  transDate: createYYYYMMDD('20240703'),\n  period: createPeriod(202407),\n  amount: 1500\n};\n\nconst json = stringifyForDisplay(data);\n// {\n//   \"transDate\": \"2024-07-03\",\n//   \"period\": \"2024/07\",\n//   \"amount\": 1500\n// }"
+		},
+		{
+			"id": "stringify-custom",
+			"title": "Stringify with custom options",
+			"description": "Control JSON stringification format",
+			"tags": ["json", "stringify", "formatting"],
+			"code": "import { stringifyMoneyWorks } from '@moneyworks/utilities';\n\nconst json = stringifyMoneyWorks(data, {\n  formatDates: true,\n  dateSeparator: '.',\n  formatPeriods: true,\n  periodSeparator: '-',\n  indent: 2\n});"
+		},
+		{
+			"id": "branded-types-basic",
+			"title": "Using branded types",
+			"description": "Type-safe primitives with branding",
+			"tags": ["types", "branded", "safety"],
+			"code": "import type { YYYYMMDD, AccountCode, NameCode } from '@moneyworks/utilities';\n\nfunction processInvoice(\n  date: YYYYMMDD,\n  customer: NameCode,\n  account: AccountCode\n) {\n  // Type-safe operations\n}\n\n// Create branded values\nconst date = createYYYYMMDD('20240703');\nconst customer: NameCode = 'CUST001' as NameCode;\nconst account: AccountCode = '4000' as AccountCode;"
+		},
+		{
+			"id": "custom-branded-type",
+			"title": "Create custom branded type",
+			"description": "Define your own branded types",
+			"tags": ["types", "branded", "custom"],
+			"code": "import type { Brand } from '@moneyworks/utilities';\n\n// Define custom types\ntype InvoiceID = Brand<string, 'InvoiceID'>;\ntype OrderNumber = Brand<number, 'OrderNumber'>;\n\n// Use them\nfunction linkInvoiceToOrder(\n  invoice: InvoiceID,\n  order: OrderNumber\n) {\n  // Can't mix up parameters\n}\n\nconst inv: InvoiceID = 'INV-001' as InvoiceID;\nconst ord: OrderNumber = 12345 as OrderNumber;"
+		},
+		{
+			"id": "date-utils-namespace",
+			"title": "Use YYYYMMDDUtils namespace",
+			"description": "Access all date utilities through namespace",
+			"tags": ["date", "namespace", "utilities"],
+			"code": "import { YYYYMMDDUtils } from '@moneyworks/utilities';\n\nconst date = YYYYMMDDUtils.create('20240703');\nconst today = YYYYMMDDUtils.today();\nconst formatted = YYYYMMDDUtils.format(date, '/');\n\nif (YYYYMMDDUtils.isAfter(date, today)) {\n  const days = YYYYMMDDUtils.daysBetween(today, date);\n  console.log(`${days} days until date`);\n}"
+		},
+		{
+			"id": "period-utils-namespace",
+			"title": "Use PeriodUtils namespace",
+			"description": "Access all period utilities through namespace",
+			"tags": ["period", "namespace", "utilities"],
+			"code": "import { PeriodUtils } from '@moneyworks/utilities';\n\nconst period = PeriodUtils.create(202407);\nconst current = PeriodUtils.current();\nconst year = PeriodUtils.year(period);\n\nconst range = PeriodUtils.range(202401, 202412);\nconst formatted = PeriodUtils.format(period, '-');"
+		},
+		{
+			"id": "date-weekend-leap",
+			"title": "Check weekend and leap year",
+			"description": "Additional date checks with fluent API",
+			"tags": ["date", "weekend", "leap year"],
+			"code": "import { d } from '@moneyworks/utilities';\n\nconst date = d`20240703`;\n\nif (date.isWeekend()) {\n  console.log('Date falls on weekend');\n}\n\nif (date.isLeapYear()) {\n  console.log('Date is in a leap year');\n}"
+		},
+		{
+			"id": "safe-stringify",
+			"title": "Safe JSON stringify",
+			"description": "Handle circular references in JSON",
+			"tags": ["json", "stringify", "circular"],
+			"code": "import { safeStringify } from '@moneyworks/utilities';\n\nconst obj: any = { name: 'test' };\nobj.circular = obj; // Circular reference\n\nconst json = safeStringify(obj);\n// {\"name\":\"test\",\"circular\":\"[Circular]\"}"
+		}
+	]
 }

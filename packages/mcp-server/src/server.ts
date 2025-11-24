@@ -154,18 +154,25 @@ export class MoneyWorksMCPServer {
 			} catch (error) {
 				// Log the error for debugging
 				console.error(`Error in tool ${request.params.name}:`, error);
-				
+
 				// Return a structured error response
 				return {
 					content: [
 						{
 							type: "text",
-							text: JSON.stringify({
-								error: true,
-								message: error instanceof Error ? error.message : "Unknown error occurred",
-								tool: request.params.name,
-								details: error instanceof Error ? error.stack : undefined,
-							}, null, 2),
+							text: JSON.stringify(
+								{
+									error: true,
+									message:
+										error instanceof Error
+											? error.message
+											: "Unknown error occurred",
+									tool: request.params.name,
+									details: error instanceof Error ? error.stack : undefined,
+								},
+								null,
+								2,
+							),
 						},
 					],
 					isError: true,

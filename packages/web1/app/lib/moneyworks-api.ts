@@ -1,101 +1,101 @@
+import { useMemo } from "react";
 import { useConnection } from "~/contexts/connection-context";
 import { useAuth } from "~/hooks/use-auth";
-import { useMemo } from "react";
 
 export interface MoneyWorksApiOptions {
-  format?: "json" | "xml-terse" | "xml-verbose" | "tsv";
-  limit?: number;
-  offset?: number;
-  fields?: string[];
-  filter?: string;
-  orderBy?: string;
+	format?: "json" | "xml-terse" | "xml-verbose" | "tsv";
+	limit?: number;
+	offset?: number;
+	fields?: string[];
+	filter?: string;
+	orderBy?: string;
 }
 
 export class MoneyWorksApi {
-  private userId: string;
-  private connectionId: string;
+	private userId: string;
+	private connectionId: string;
 
-  constructor(userId: string, connectionId: string) {
-    this.userId = userId;
-    this.connectionId = connectionId;
-  }
+	constructor(userId: string, connectionId: string) {
+		this.userId = userId;
+		this.connectionId = connectionId;
+	}
 
-  async export(table: string, options: MoneyWorksApiOptions = {}) {
-    const formData = new FormData();
-    formData.append("userId", this.userId);
-    formData.append("connectionId", this.connectionId);
-    formData.append("operation", "export");
-    formData.append("table", table);
-    formData.append("options", JSON.stringify(options));
+	async export(table: string, options: MoneyWorksApiOptions = {}) {
+		const formData = new FormData();
+		formData.append("userId", this.userId);
+		formData.append("connectionId", this.connectionId);
+		formData.append("operation", "export");
+		formData.append("table", table);
+		formData.append("options", JSON.stringify(options));
 
-    const response = await fetch("/api/moneyworks", {
-      method: "POST",
-      body: formData,
-    });
+		const response = await fetch("/api/moneyworks", {
+			method: "POST",
+			body: formData,
+		});
 
-    const result = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(result.error || "Failed to fetch data");
-    }
+		const result = await response.json();
 
-    return result.data;
-  }
+		if (!response.ok) {
+			throw new Error(result.error || "Failed to fetch data");
+		}
 
-  async import(table: string, data: any, options: any = {}) {
-    const formData = new FormData();
-    formData.append("userId", this.userId);
-    formData.append("connectionId", this.connectionId);
-    formData.append("operation", "import");
-    formData.append("table", table);
-    formData.append("data", JSON.stringify(data));
-    formData.append("options", JSON.stringify(options));
+		return result.data;
+	}
 
-    const response = await fetch("/api/moneyworks", {
-      method: "POST",
-      body: formData,
-    });
+	async import(table: string, data: any, options: any = {}) {
+		const formData = new FormData();
+		formData.append("userId", this.userId);
+		formData.append("connectionId", this.connectionId);
+		formData.append("operation", "import");
+		formData.append("table", table);
+		formData.append("data", JSON.stringify(data));
+		formData.append("options", JSON.stringify(options));
 
-    const result = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(result.error || "Failed to import data");
-    }
+		const response = await fetch("/api/moneyworks", {
+			method: "POST",
+			body: formData,
+		});
 
-    return result.data;
-  }
+		const result = await response.json();
 
-  async evaluate(expression: string) {
-    const formData = new FormData();
-    formData.append("userId", this.userId);
-    formData.append("connectionId", this.connectionId);
-    formData.append("operation", "evaluate");
-    formData.append("expression", expression);
+		if (!response.ok) {
+			throw new Error(result.error || "Failed to import data");
+		}
 
-    const response = await fetch("/api/moneyworks", {
-      method: "POST",
-      body: formData,
-    });
+		return result.data;
+	}
 
-    const result = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(result.error || "Failed to evaluate expression");
-    }
+	async evaluate(expression: string) {
+		const formData = new FormData();
+		formData.append("userId", this.userId);
+		formData.append("connectionId", this.connectionId);
+		formData.append("operation", "evaluate");
+		formData.append("expression", expression);
 
-    return result.data;
-  }
+		const response = await fetch("/api/moneyworks", {
+			method: "POST",
+			body: formData,
+		});
+
+		const result = await response.json();
+
+		if (!response.ok) {
+			throw new Error(result.error || "Failed to evaluate expression");
+		}
+
+		return result.data;
+	}
 }
 
 export function useMoneyWorksApi() {
-  const { userId } = useAuth();
-  const { currentConnection } = useConnection();
+	const { userId } = useAuth();
+	const { currentConnection } = useConnection();
 
-  return useMemo(() => {
-    if (!userId || !currentConnection) {
-      return null;
-    }
+	return useMemo(() => {
+		if (!userId || !currentConnection) {
+			return null;
+		}
 
-    return new MoneyWorksApi(userId, currentConnection.id);
-  }, [userId, currentConnection?.id]);
+		return new MoneyWorksApi(userId, currentConnection.id);
+	}, [userId, currentConnection?.id]);
 }

@@ -1,46 +1,164 @@
 {
-  "files": [
-    {
-      "path": "packages/api/src/app.ts",
-      "purpose": "Creates and configures the main ElysiaJS REST API application with middleware, routes, and MoneyWorks client management",
-      "layer": "config",
-      "domain": "api",
-      "keyConcepts": ["Elysia", "CORS", "Swagger", "JWT Bearer tokens", "Client caching", "Middleware chain", "MoneyWorks REST client", "Derivative context injection"],
-      "architecturalPatterns": ["Plugin system", "Middleware chain", "Derivative context injection", "Client connection pooling with LRU cleanup", "Route composition"],
-      "exports": {"main": "createApp", "types": ["APIConfig"], "functions": ["createApp"]},
-      "dependencies": {"internal": ["@moneyworks/data", "./registry/table-registry", "./routes/tables", "./routes/eval", "./routes/company", "./routes/i18n", "./routes/health", "./routes/version", "./routes/auth", "./middleware/error-handler", "./middleware/request-id", "./middleware/logging", "./middleware/i18n", "./services/connection-service", "./services/cache"], "external": ["elysia", "@elysiajs/swagger", "@elysiajs/cors"]},
-      "relatedFiles": ["packages/api/src/middleware/error-handler.ts", "packages/api/src/middleware/request-id.ts", "packages/api/src/middleware/logging.ts", "packages/api/src/middleware/i18n.ts", "packages/api/src/routes/auth.ts", "packages/api/src/routes/tables.ts", "packages/api/src/routes/eval.ts", "packages/api/src/routes/company.ts", "packages/api/src/routes/i18n.ts", "packages/api/src/routes/health.ts", "packages/api/src/routes/version.ts", "packages/api/src/services/connection-service.ts", "packages/api/src/services/cache.ts", "packages/api/src/registry/table-registry.ts"],
-      "queries": ["How is the MoneyWorks API server configured?", "Where is Bearer token authentication handled?", "How are MoneyWorks clients cached?", "What middleware is applied globally?", "How are routes registered in this application?"],
-      "complexity": "medium",
-      "importance": "critical"
-    },
-    {
-      "path": "packages/api/src/middleware/auth.ts",
-      "purpose": "Authentication middleware that validates Bearer tokens and attaches MoneyWorks client to request context with client caching",
-      "layer": "service",
-      "domain": "auth",
-      "keyConcepts": ["Bearer token validation", "Client caching", "Context injection", "Connection configuration", "TTL-based cache cleanup"],
-      "architecturalPatterns": ["Middleware pattern", "Client caching with LRU-like eviction", "Dependency injection via context derivation", "Optional authentication"],
-      "exports": {"main": "authMiddleware", "types": [], "functions": ["authMiddleware"]},
-      "dependencies": {"internal": ["connectionService (from ../services/connection-service)", "SmartMoneyWorksClient (from @moneyworks/data)"], "external": ["elysia"]},
-      "relatedFiles": ["packages/api/src/services/connection-service.ts", "packages/api/src/types/context.ts", "packages/api/src/app.ts"],
-      "queries": ["How is API authentication implemented?", "How are MoneyWorks clients managed and cached?", "What connection validation happens on each request?", "How is optional vs required authentication handled?"],
-      "complexity": "medium",
-      "importance": "critical"
-    },
-    {
-      "path": "packages/api/src/controllers/base-table.ts",
-      "purpose": "Generic base controller for MoneyWorks table operations with export and schema discovery",
-      "layer": "service",
-      "domain": "api",
-      "keyConcepts": ["Abstract base controller", "Table export with format support", "Schema discovery and introspection", "Parameter validation", "Error handling for MoneyWorks operations"],
-      "architecturalPatterns": ["Template Method", "Abstract Factory", "Strategy Pattern (format selection)"],
-      "exports": {"main": "BaseTableController", "types": ["TableExportParams", "TableController"], "functions": ["ValidationError", "MoneyWorksError"]},
-      "dependencies": {"internal": ["@moneyworks/data (SmartMoneyWorksClient, ExportOptions, ExportFormat)"], "external": []},
-      "relatedFiles": ["packages/api/src/routes/ (uses this controller)", "packages/data/src/client.ts (SmartMoneyWorksClient)", "packages/canonical/src/entities/ (entity definitions)"],
-      "queries": ["How do I export table data from MoneyWorks?", "What export formats are supported?", "How do I validate export parameters?", "How do I get table schema information?", "How do I handle MoneyWorks-specific errors?"],
-      "complexity": "medium",
-      "importance": "high"
-    }
-  ]
+	"files": [
+		{
+			"path": "packages/api/src/app.ts",
+			"purpose": "Creates and configures the main ElysiaJS REST API application with middleware, routes, and MoneyWorks client management",
+			"layer": "config",
+			"domain": "api",
+			"keyConcepts": [
+				"Elysia",
+				"CORS",
+				"Swagger",
+				"JWT Bearer tokens",
+				"Client caching",
+				"Middleware chain",
+				"MoneyWorks REST client",
+				"Derivative context injection"
+			],
+			"architecturalPatterns": [
+				"Plugin system",
+				"Middleware chain",
+				"Derivative context injection",
+				"Client connection pooling with LRU cleanup",
+				"Route composition"
+			],
+			"exports": {
+				"main": "createApp",
+				"types": ["APIConfig"],
+				"functions": ["createApp"]
+			},
+			"dependencies": {
+				"internal": [
+					"@moneyworks/data",
+					"./registry/table-registry",
+					"./routes/tables",
+					"./routes/eval",
+					"./routes/company",
+					"./routes/i18n",
+					"./routes/health",
+					"./routes/version",
+					"./routes/auth",
+					"./middleware/error-handler",
+					"./middleware/request-id",
+					"./middleware/logging",
+					"./middleware/i18n",
+					"./services/connection-service",
+					"./services/cache"
+				],
+				"external": ["elysia", "@elysiajs/swagger", "@elysiajs/cors"]
+			},
+			"relatedFiles": [
+				"packages/api/src/middleware/error-handler.ts",
+				"packages/api/src/middleware/request-id.ts",
+				"packages/api/src/middleware/logging.ts",
+				"packages/api/src/middleware/i18n.ts",
+				"packages/api/src/routes/auth.ts",
+				"packages/api/src/routes/tables.ts",
+				"packages/api/src/routes/eval.ts",
+				"packages/api/src/routes/company.ts",
+				"packages/api/src/routes/i18n.ts",
+				"packages/api/src/routes/health.ts",
+				"packages/api/src/routes/version.ts",
+				"packages/api/src/services/connection-service.ts",
+				"packages/api/src/services/cache.ts",
+				"packages/api/src/registry/table-registry.ts"
+			],
+			"queries": [
+				"How is the MoneyWorks API server configured?",
+				"Where is Bearer token authentication handled?",
+				"How are MoneyWorks clients cached?",
+				"What middleware is applied globally?",
+				"How are routes registered in this application?"
+			],
+			"complexity": "medium",
+			"importance": "critical"
+		},
+		{
+			"path": "packages/api/src/middleware/auth.ts",
+			"purpose": "Authentication middleware that validates Bearer tokens and attaches MoneyWorks client to request context with client caching",
+			"layer": "service",
+			"domain": "auth",
+			"keyConcepts": [
+				"Bearer token validation",
+				"Client caching",
+				"Context injection",
+				"Connection configuration",
+				"TTL-based cache cleanup"
+			],
+			"architecturalPatterns": [
+				"Middleware pattern",
+				"Client caching with LRU-like eviction",
+				"Dependency injection via context derivation",
+				"Optional authentication"
+			],
+			"exports": {
+				"main": "authMiddleware",
+				"types": [],
+				"functions": ["authMiddleware"]
+			},
+			"dependencies": {
+				"internal": [
+					"connectionService (from ../services/connection-service)",
+					"SmartMoneyWorksClient (from @moneyworks/data)"
+				],
+				"external": ["elysia"]
+			},
+			"relatedFiles": [
+				"packages/api/src/services/connection-service.ts",
+				"packages/api/src/types/context.ts",
+				"packages/api/src/app.ts"
+			],
+			"queries": [
+				"How is API authentication implemented?",
+				"How are MoneyWorks clients managed and cached?",
+				"What connection validation happens on each request?",
+				"How is optional vs required authentication handled?"
+			],
+			"complexity": "medium",
+			"importance": "critical"
+		},
+		{
+			"path": "packages/api/src/controllers/base-table.ts",
+			"purpose": "Generic base controller for MoneyWorks table operations with export and schema discovery",
+			"layer": "service",
+			"domain": "api",
+			"keyConcepts": [
+				"Abstract base controller",
+				"Table export with format support",
+				"Schema discovery and introspection",
+				"Parameter validation",
+				"Error handling for MoneyWorks operations"
+			],
+			"architecturalPatterns": [
+				"Template Method",
+				"Abstract Factory",
+				"Strategy Pattern (format selection)"
+			],
+			"exports": {
+				"main": "BaseTableController",
+				"types": ["TableExportParams", "TableController"],
+				"functions": ["ValidationError", "MoneyWorksError"]
+			},
+			"dependencies": {
+				"internal": [
+					"@moneyworks/data (SmartMoneyWorksClient, ExportOptions, ExportFormat)"
+				],
+				"external": []
+			},
+			"relatedFiles": [
+				"packages/api/src/routes/ (uses this controller)",
+				"packages/data/src/client.ts (SmartMoneyWorksClient)",
+				"packages/canonical/src/entities/ (entity definitions)"
+			],
+			"queries": [
+				"How do I export table data from MoneyWorks?",
+				"What export formats are supported?",
+				"How do I validate export parameters?",
+				"How do I get table schema information?",
+				"How do I handle MoneyWorks-specific errors?"
+			],
+			"complexity": "medium",
+			"importance": "high"
+		}
+	]
 }

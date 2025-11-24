@@ -1,56 +1,49 @@
 {
-  "name": "@moneyworks/mcp-server",
-  "version": "0.1.0",
-  "description": "MoneyWorks MCP Server for AI agents",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "bin": {
-    "moneyworks-mcp": "./dist/index.js"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./server": {
-      "types": "./dist/server.d.ts",
-      "default": "./dist/server.js"
-    },
-    "./tools": {
-      "types": "./dist/tools/index.d.ts",
-      "default": "./dist/tools/index.js"
-    },
-    "./types": {
-      "types": "./dist/types/index.d.ts",
-      "default": "./dist/types/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.4",
-    "@moneyworks/data": "workspace:*",
-    "@moneyworks/canonical": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "tsx": "^4.7.0",
-    "typescript": "^5.0.0"
-  },
-  "keywords": [
-    "moneyworks",
-    "mcp",
-    "ai",
-    "agent"
-  ],
-  "author": "MoneyWorks Team",
-  "license": "MIT"
+	"name": "@moneyworks/mcp-server",
+	"version": "0.1.0",
+	"description": "MoneyWorks MCP Server for AI agents",
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"bin": {
+		"moneyworks-mcp": "./dist/index.js"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./server": {
+			"types": "./dist/server.d.ts",
+			"default": "./dist/server.js"
+		},
+		"./tools": {
+			"types": "./dist/tools/index.d.ts",
+			"default": "./dist/tools/index.js"
+		},
+		"./types": {
+			"types": "./dist/types/index.d.ts",
+			"default": "./dist/types/index.js"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"dev": "tsx watch src/index.ts",
+		"build": "tsc",
+		"start": "node dist/index.js",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.0.4",
+		"@moneyworks/data": "workspace:*",
+		"@moneyworks/canonical": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"tsx": "^4.7.0",
+		"typescript": "^5.0.0"
+	},
+	"keywords": ["moneyworks", "mcp", "ai", "agent"],
+	"author": "MoneyWorks Team",
+	"license": "MIT"
 }

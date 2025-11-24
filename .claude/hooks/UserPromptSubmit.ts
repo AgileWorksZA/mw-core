@@ -10,7 +10,7 @@
  * which handles all the complexity for you.
  */
 
-import { createUserPromptSubmitHook } from 'claude-hooks-sdk';
+import { createUserPromptSubmitHook } from "claude-hooks-sdk";
 
 // That's it! Session context automatically injected
 createUserPromptSubmitHook();

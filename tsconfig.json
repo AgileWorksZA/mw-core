@@ -1,15 +1,15 @@
 {
-  "extends": "./tsconfig.base.json",
-  "files": [],
-  "references": [
-    { "path": "./packages/utilities/tsconfig.json" },
-    { "path": "./packages/canonical/tsconfig.json" },
-    { "path": "./packages/data/tsconfig.json" },
-    { "path": "./packages/api/tsconfig.json" },
-    { "path": "./packages/cli/tsconfig.json" },
-    { "path": "./packages/web1/tsconfig.json" }
-  ],
-  "compilerOptions": {
-    "target": "ES2024"
-  }
+	"extends": "./tsconfig.base.json",
+	"files": [],
+	"references": [
+		{ "path": "./packages/utilities/tsconfig.json" },
+		{ "path": "./packages/canonical/tsconfig.json" },
+		{ "path": "./packages/data/tsconfig.json" },
+		{ "path": "./packages/api/tsconfig.json" },
+		{ "path": "./packages/cli/tsconfig.json" },
+		{ "path": "./packages/web1/tsconfig.json" }
+	],
+	"compilerOptions": {
+		"target": "ES2024"
+	}
 }

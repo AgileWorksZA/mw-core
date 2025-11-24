@@ -1,6 +1,6 @@
 {
   "layer": "schema",
-  "fileCount": 42,
+  "fileCount": 43,
   "files": [
     {
       "path": "packages/db/src/schema/accounts.ts",
@@ -467,6 +467,22 @@
       "architecturalPatterns": [],
       "complexity": "low",
       "importance": "high"
+    },
+    {
+      "path": "packages/canonical/src/entities/accounts/index.ts",
+      "purpose": "MoneyWorks Accounts Canonical Module",
+      "layer": "schema",
+      "domain": "accounts",
+      "keyConcepts": [
+        "MoneyWorks",
+        "canonical-dsl"
+      ],
+      "architecturalPatterns": [
+        "Validation pattern",
+        "Canonical terminology"
+      ],
+      "complexity": "medium",
+      "importance": "critical"
     }
   ]
 }

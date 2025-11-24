@@ -1,19 +1,19 @@
 {
-  "constants": [
-    {
-      "name": "version",
-      "type": "string",
-      "value": "\"0.1.0\"",
-      "description": "Current version of the @moneyworks/utilities package",
-      "usage": "Can be used for version checking or debugging",
-      "examples": [
-        {
-          "title": "Version check",
-          "code": "import { version } from '@moneyworks/utilities';\nconsole.log(`Using utilities v${version}`);"
-        }
-      ],
-      "since": "0.1.0",
-      "category": "Package Info"
-    }
-  ]
+	"constants": [
+		{
+			"name": "version",
+			"type": "string",
+			"value": "\"0.1.0\"",
+			"description": "Current version of the @moneyworks/utilities package",
+			"usage": "Can be used for version checking or debugging",
+			"examples": [
+				{
+					"title": "Version check",
+					"code": "import { version } from '@moneyworks/utilities';\nconsole.log(`Using utilities v${version}`);"
+				}
+			],
+			"since": "0.1.0",
+			"category": "Package Info"
+		}
+	]
 }

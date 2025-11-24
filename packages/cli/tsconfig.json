@@ -1,19 +1,19 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "types": ["bun"],
-    "target": "ES2022",
-    "module": "ES2022",
-    "moduleResolution": "bundler",
-    "paths": {
-      "@moneyworks/canonical/*": ["../canonical/src/*"],
-      "@moneyworks/utilities/*": ["../utilities/src/*"],
-      "@moneyworks/data/*": ["../data/src/*"],
-      "@moneyworks/cli/*": ["./src/*"]
-    },
-    "baseUrl": "."
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"types": ["bun"],
+		"target": "ES2022",
+		"module": "ES2022",
+		"moduleResolution": "bundler",
+		"paths": {
+			"@moneyworks/canonical/*": ["../canonical/src/*"],
+			"@moneyworks/utilities/*": ["../utilities/src/*"],
+			"@moneyworks/data/*": ["../data/src/*"],
+			"@moneyworks/cli/*": ["./src/*"]
+		},
+		"baseUrl": "."
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
 }

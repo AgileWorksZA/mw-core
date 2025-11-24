@@ -7,9 +7,9 @@
  */
 
 import { parseArgs } from "node:util";
+import type { MoneyWorksName } from "@moneyworks/canonical/entities/names";
 import type { GlobalOptions, SmartMoneyWorksClient } from "@moneyworks/data";
 import { NameRepository } from "@moneyworks/data";
-import type { MoneyWorksName } from "@moneyworks/canonical/entities/names";
 import { formatJson, formatList, formatTable } from "../utils/formatters";
 
 /**
@@ -167,9 +167,23 @@ async function searchNames(
 
 	try {
 		const names = await repo.search(searchText, {
-			searchFields: (values.fields as string).split(",") as ("Code" | "Name" | "Phone" | "email" | "Contact")[],
-			customerType: values.customerType as "all" | "customers" | "debtors" | "none",
-			supplierType: values.supplierType as "all" | "suppliers" | "creditors" | "none",
+			searchFields: (values.fields as string).split(",") as (
+				| "Code"
+				| "Name"
+				| "Phone"
+				| "email"
+				| "Contact"
+			)[],
+			customerType: values.customerType as
+				| "all"
+				| "customers"
+				| "debtors"
+				| "none",
+			supplierType: values.supplierType as
+				| "all"
+				| "suppliers"
+				| "creditors"
+				| "none",
 			limit: values.limit ? Number.parseInt(values.limit as string) : undefined,
 		});
 
@@ -414,7 +428,9 @@ async function listOverdue(
 	const repo = new NameRepository(client);
 
 	try {
-		const overdue = await repo.getOverdueDebtors(Number.parseInt(values.days as string));
+		const overdue = await repo.getOverdueDebtors(
+			Number.parseInt(values.days as string),
+		);
 
 		if (values.format === "json") {
 			console.log(formatJson(overdue));

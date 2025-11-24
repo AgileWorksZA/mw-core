@@ -1,173 +1,186 @@
 import { Database } from "bun:sqlite";
 
 export interface MWConnection {
-  id: string;
-  clerk_user_id: string;
-  organization_id?: string; // Added for group support
-  connection_name: string;
-  connection_type: 'datacentre' | 'now'; // NEW: Type of connection
-  mw_username: string; // encrypted
-  mw_password: string; // encrypted
-  mw_folder_name?: string; // encrypted
-  mw_folder_password?: string; // encrypted
-  mw_data_file: string; // encrypted
-  mw_host: string;
-  mw_port: number;
-  mw_now_account_id?: string; // NEW: Reference to parent NOW account
-  mw_now_file_id?: string; // NEW: Unique identifier from NOW
-  mw_now_metadata?: string; // NEW: JSON for NOW-specific data
-  is_default: boolean;
-  last_used_at?: string;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	clerk_user_id: string;
+	organization_id?: string; // Added for group support
+	connection_name: string;
+	connection_type: "datacentre" | "now"; // NEW: Type of connection
+	mw_username: string; // encrypted
+	mw_password: string; // encrypted
+	mw_folder_name?: string; // encrypted
+	mw_folder_password?: string; // encrypted
+	mw_data_file: string; // encrypted
+	mw_host: string;
+	mw_port: number;
+	mw_now_account_id?: string; // NEW: Reference to parent NOW account
+	mw_now_file_id?: string; // NEW: Unique identifier from NOW
+	mw_now_metadata?: string; // NEW: JSON for NOW-specific data
+	is_default: boolean;
+	last_used_at?: string;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface MWNowAccount {
-  id: string;
-  clerk_user_id: string;
-  account_name: string;
-  mw_now_username: string; // encrypted
-  mw_now_password: string; // encrypted
-  mw_now_token?: string; // encrypted, if NOW uses tokens
-  mw_now_refresh_token?: string; // encrypted, if NOW uses OAuth
-  last_synced_at?: string;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	clerk_user_id: string;
+	account_name: string;
+	mw_now_username: string; // encrypted
+	mw_now_password: string; // encrypted
+	mw_now_token?: string; // encrypted, if NOW uses tokens
+	mw_now_refresh_token?: string; // encrypted, if NOW uses OAuth
+	last_synced_at?: string;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface AuditLog {
-  id: string;
-  clerk_user_id: string;
-  connection_id?: string;
-  event_type: 'login' | 'logout' | 'connection_added' | 'connection_updated' | 'connection_deleted' | 'connection_used' | 'api_call' | 'auth_failed';
-  event_details?: string; // JSON string
-  ip_address?: string;
-  user_agent?: string;
-  timestamp: string;
-  success: boolean;
-  error_message?: string;
+	id: string;
+	clerk_user_id: string;
+	connection_id?: string;
+	event_type:
+		| "login"
+		| "logout"
+		| "connection_added"
+		| "connection_updated"
+		| "connection_deleted"
+		| "connection_used"
+		| "api_call"
+		| "auth_failed";
+	event_details?: string; // JSON string
+	ip_address?: string;
+	user_agent?: string;
+	timestamp: string;
+	success: boolean;
+	error_message?: string;
 }
 
 export interface UserPreference {
-  id: string;
-  clerk_user_id: string;
-  default_connection_id?: string;
-  theme?: 'light' | 'dark' | 'system';
-  language?: string;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	clerk_user_id: string;
+	default_connection_id?: string;
+	theme?: "light" | "dark" | "system";
+	language?: string;
+	created_at: string;
+	updated_at: string;
 }
 
 // Chat History Interfaces
 export interface ChatSession {
-  id: string;
-  connection_id: string;
-  clerk_user_id: string;
-  title: string;
-  summary?: string;
-  last_message_at?: string;
-  message_count: number;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	connection_id: string;
+	clerk_user_id: string;
+	title: string;
+	summary?: string;
+	last_message_at?: string;
+	message_count: number;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface ChatMessage {
-  id: string;
-  session_id: string;
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  // Store tool invocations and MW data as JSON
-  tool_invocations?: string;
-  mw_data?: string;
-  tokens_used?: number;
-  created_at: string;
+	id: string;
+	session_id: string;
+	role: "user" | "assistant" | "system";
+	content: string;
+	// Store tool invocations and MW data as JSON
+	tool_invocations?: string;
+	mw_data?: string;
+	tokens_used?: number;
+	created_at: string;
 }
 
 // Company Grouping Interfaces
 export interface Organization {
-  id: string;
-  name: string;
-  plan_type: 'basic' | 'professional' | 'enterprise';
-  settings: Record<string, any>;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	name: string;
+	plan_type: "basic" | "professional" | "enterprise";
+	settings: Record<string, any>;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface CompanyGroup {
-  id: string;
-  organization_id: string;
-  parent_group_id?: string;
-  name: string;
-  type: 'standard' | 'holding' | 'division' | 'client';
-  color_code: string;
-  description?: string;
-  consolidation_settings: Record<string, any>;
-  sync_rules: Record<string, any>;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	organization_id: string;
+	parent_group_id?: string;
+	name: string;
+	type: "standard" | "holding" | "division" | "client";
+	color_code: string;
+	description?: string;
+	consolidation_settings: Record<string, any>;
+	sync_rules: Record<string, any>;
+	is_active: boolean;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface CompanyGroupMember {
-  id: string;
-  group_id: string;
-  connection_id: string;
-  company_code?: string;
-  is_parent_company: boolean;
-  sync_settings: Record<string, any>;
-  mapping_rules: Record<string, any>;
-  joined_at: string;
+	id: string;
+	group_id: string;
+	connection_id: string;
+	company_code?: string;
+	is_parent_company: boolean;
+	sync_settings: Record<string, any>;
+	mapping_rules: Record<string, any>;
+	joined_at: string;
 }
 
 export interface GroupTemplate {
-  id: string;
-  group_id: string;
-  type: 'tax_codes' | 'chart_of_accounts' | 'suppliers' | 'customers';
-  name: string;
-  description?: string;
-  content: Record<string, any>;
-  version: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	group_id: string;
+	type: "tax_codes" | "chart_of_accounts" | "suppliers" | "customers";
+	name: string;
+	description?: string;
+	content: Record<string, any>;
+	version: number;
+	is_active: boolean;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface GroupPermission {
-  id: string;
-  group_id: string;
-  user_id: string;
-  role: 'owner' | 'admin' | 'manager' | 'accountant' | 'bookkeeper' | 'viewer';
-  permissions: Record<string, any>;
-  invited_by?: string;
-  invitation_accepted_at?: string;
-  expires_at?: string;
-  created_at: string;
-  updated_at: string;
+	id: string;
+	group_id: string;
+	user_id: string;
+	role: "owner" | "admin" | "manager" | "accountant" | "bookkeeper" | "viewer";
+	permissions: Record<string, any>;
+	invited_by?: string;
+	invitation_accepted_at?: string;
+	expires_at?: string;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface GroupInvitation {
-  id: string;
-  group_id: string;
-  email: string;
-  role: string;
-  permissions: Record<string, any>;
-  invited_by: string;
-  token: string;
-  expires_at: string;
-  accepted_at?: string;
-  created_at: string;
+	id: string;
+	group_id: string;
+	email: string;
+	role: string;
+	permissions: Record<string, any>;
+	invited_by: string;
+	token: string;
+	expires_at: string;
+	accepted_at?: string;
+	created_at: string;
 }
 
 export interface GroupSyncLog {
-  id: string;
-  group_id: string;
-  operation_type: 'sync_tax_codes' | 'sync_accounts' | 'apply_template' | 'consolidation' | 'bulk_update';
-  initiated_by: string;
-  affected_companies: string[]; // Array of connection IDs
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
-  details?: Record<string, any>;
-  started_at: string;
-  completed_at?: string;
+	id: string;
+	group_id: string;
+	operation_type:
+		| "sync_tax_codes"
+		| "sync_accounts"
+		| "apply_template"
+		| "consolidation"
+		| "bulk_update";
+	initiated_by: string;
+	affected_companies: string[]; // Array of connection IDs
+	status: "pending" | "in_progress" | "completed" | "failed";
+	details?: Record<string, any>;
+	started_at: string;
+	completed_at?: string;
 }
 
 export const SCHEMA_SQL = `

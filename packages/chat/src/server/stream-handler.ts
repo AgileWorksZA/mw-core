@@ -1,11 +1,11 @@
-import { MoneyWorksChatService } from './chat-service';
-import { StreamingChunk, ChatRequest } from '../shared/types';
-import type { CoreMessage } from 'ai';
+import type { CoreMessage } from "ai";
+import type { ChatRequest, StreamingChunk } from "../shared/types";
+import { MoneyWorksChatService } from "./chat-service";
 
 export interface StreamHandlerConfig {
-  openaiApiKey: string;
-  model?: string;
-  maxTokens?: number;
+	openaiApiKey: string;
+	model?: string;
+	maxTokens?: number;
 }
 
 /**
@@ -13,83 +13,86 @@ export interface StreamHandlerConfig {
  * This is designed to be used in an action function
  */
 export function createChatStreamHandler(
-  config: StreamHandlerConfig,
-  mwConnectionConfig: any // MoneyWorks connection from server
+	config: StreamHandlerConfig,
+	mwConnectionConfig: any, // MoneyWorks connection from server
 ) {
-  return async function handleChatStream(
-    request: ChatRequest,
-    context: any // MoneyWorksChatContext from session/db
-  ): Promise<ReadableStream> {
-    const encoder = new TextEncoder();
-    
-    // Convert request messages to CoreMessage format
-    const messages: CoreMessage[] = request.messages.map(msg => ({
-      role: msg.role,
-      content: msg.content
-    }));
+	return async function handleChatStream(
+		request: ChatRequest,
+		context: any, // MoneyWorksChatContext from session/db
+	): Promise<ReadableStream> {
+		const encoder = new TextEncoder();
 
-    // Merge context from request with server context
-    const fullContext = {
-      ...context,
-      ...request.context // Allow client to update some context fields
-    };
+		// Convert request messages to CoreMessage format
+		const messages: CoreMessage[] = request.messages.map((msg) => ({
+			role: msg.role,
+			content: msg.content,
+		}));
 
-    const chatService = new MoneyWorksChatService(
-      fullContext,
-      config,
-      mwConnectionConfig
-    );
+		// Merge context from request with server context
+		const fullContext = {
+			...context,
+			...request.context, // Allow client to update some context fields
+		};
 
-    const stream = new ReadableStream({
-      async start(controller) {
-        try {
-          // Send initial connection message
-          controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify({ type: 'connected' })}\n\n`)
-          );
+		const chatService = new MoneyWorksChatService(
+			fullContext,
+			config,
+			mwConnectionConfig,
+		);
 
-          // Stream chat responses
-          for await (const chunk of chatService.streamChat(messages)) {
-            const sseMessage = `data: ${JSON.stringify(chunk)}\n\n`;
-            controller.enqueue(encoder.encode(sseMessage));
-            
-            // If we received a done signal, close the stream
-            if (chunk.type === 'done') {
-              controller.close();
-              return;
-            }
-          }
+		const stream = new ReadableStream({
+			async start(controller) {
+				try {
+					// Send initial connection message
+					controller.enqueue(
+						encoder.encode(
+							`data: ${JSON.stringify({ type: "connected" })}\n\n`,
+						),
+					);
 
-          // Ensure stream is closed
-          controller.close();
-        } catch (error) {
-          // Send error and close stream
-          const errorChunk: StreamingChunk = {
-            type: 'error',
-            error: error instanceof Error ? error.message : 'Unknown error occurred'
-          };
-          
-          controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify(errorChunk)}\n\n`)
-          );
-          controller.close();
-        }
-      }
-    });
+					// Stream chat responses
+					for await (const chunk of chatService.streamChat(messages)) {
+						const sseMessage = `data: ${JSON.stringify(chunk)}\n\n`;
+						controller.enqueue(encoder.encode(sseMessage));
 
-    return stream;
-  };
+						// If we received a done signal, close the stream
+						if (chunk.type === "done") {
+							controller.close();
+							return;
+						}
+					}
+
+					// Ensure stream is closed
+					controller.close();
+				} catch (error) {
+					// Send error and close stream
+					const errorChunk: StreamingChunk = {
+						type: "error",
+						error:
+							error instanceof Error ? error.message : "Unknown error occurred",
+					};
+
+					controller.enqueue(
+						encoder.encode(`data: ${JSON.stringify(errorChunk)}\n\n`),
+					);
+					controller.close();
+				}
+			},
+		});
+
+		return stream;
+	};
 }
 
 /**
  * Helper to create a Response object for React Router
  */
 export function createSSEResponse(stream: ReadableStream): Response {
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-    },
-  });
+	return new Response(stream, {
+		headers: {
+			"Content-Type": "text/event-stream",
+			"Cache-Control": "no-cache",
+			Connection: "keep-alive",
+		},
+	});
 }

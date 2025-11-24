@@ -84,7 +84,11 @@ export function createMoneyWorksReplacer(
 		}
 
 		// Handle YYYYMMDD formatting
-		if (formatDates && typeof processedValue === "string" && processedValue.length === 8) {
+		if (
+			formatDates &&
+			typeof processedValue === "string" &&
+			processedValue.length === 8
+		) {
 			// Check if it looks like a YYYYMMDD
 			if (/^\d{8}$/.test(processedValue)) {
 				try {

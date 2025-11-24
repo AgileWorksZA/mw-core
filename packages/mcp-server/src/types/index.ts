@@ -4,10 +4,9 @@
  * @moneyworks-dsl PURE
  */
 
-
 export interface MoneyWorksExportParams {
 	table: string;
-	exportFormat?: 'compact' | 'compact-headers' | 'full' | 'schema';
+	exportFormat?: "compact" | "compact-headers" | "full" | "schema";
 	filter?: string;
 	limit?: number;
 	offset?: number;

@@ -1,10 +1,10 @@
-import { MoneyWorksChatContext } from '../shared/types';
-import { p } from '@moneyworks/utilities';
+import { p } from "@moneyworks/utilities";
+import type { MoneyWorksChatContext } from "../shared/types";
 
 export function getSystemPrompt(context: MoneyWorksChatContext): string {
-  const currentPeriod = context.currentPeriod || p`${new Date()}`.toString();
-  
-  return `You are a MoneyWorks accounting assistant for ${context.companyName}.
+	const currentPeriod = context.currentPeriod || p`${new Date()}`.toString();
+
+	return `You are a MoneyWorks accounting assistant for ${context.companyName}.
 
 BEHAVIORAL DIRECTIVE: Be direct and professional. Answer questions without unnecessary friendliness or offers of further help. When you've answered the question, STOP WRITING.
 
@@ -34,12 +34,12 @@ Current Context:
 - Company: ${context.companyName}
 - Period: ${currentPeriod}
 - User: ${context.userId}
-${context.selectedAccount ? `- Selected Account: ${context.selectedAccount}` : ''}
-${context.selectedEntity ? `- Selected Entity: ${context.selectedEntity}` : ''}
+${context.selectedAccount ? `- Selected Account: ${context.selectedAccount}` : ""}
+${context.selectedEntity ? `- Selected Entity: ${context.selectedEntity}` : ""}
 
 Formatting Guidelines:
-- Currency: ${context.currencySymbol || '$'} with ${context.decimalPlaces || 2} decimal places
-- Dates: Display in ${context.dateFormat || 'DD/MM/YYYY'} format
+- Currency: ${context.currencySymbol || "$"} with ${context.decimalPlaces || 2} decimal places
+- Dates: Display in ${context.dateFormat || "DD/MM/YYYY"} format
 - Always show GST amounts separately when relevant
 
 Available Actions:
@@ -88,5 +88,5 @@ ERROR REPORTING REQUIREMENTS:
 - For example: "The searchNames tool failed with error: [specific error message]"
 - Never just say "I encountered an issue" - always be specific about what failed
 - If multiple attempts fail, describe each failure separately
-- Suggest alternative approaches if a tool consistently fails`
+- Suggest alternative approaches if a tool consistently fails`;
 }

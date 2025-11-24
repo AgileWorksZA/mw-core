@@ -1,43 +1,43 @@
 {
-  "version": "1.0.0",
-  "metadata": {
-    "createdAt": "2025-11-24T02:17:09.206Z",
-    "totalFiles": 46,
-    "gitCommit": "9615c28a819573fc5c0ae4ba3822536b7d1ac37f",
-    "indexedDomains": [
-      "canonical",
-      "data-access",
-      "api",
-      "cli",
-      "mcp",
-      "utilities",
-      "documentation"
-    ]
-  },
-  "summary": {
-    "byDomain": {
-      "canonical": 12,
-      "data-access": 14,
-      "api": 5,
-      "cli": 2,
-      "mcp": 2,
-      "utilities": 3,
-      "documentation": 2,
-      "other": 6
-    },
-    "byLayer": {
-      "entity": 9,
-      "client": 3,
-      "parser": 6,
-      "converter": 1,
-      "repository": 3,
-      "route": 1,
-      "middleware": 3,
-      "command": 2,
-      "tool": 2,
-      "util": 8,
-      "skill": 2
-    }
-  },
-  "note": "Full file metadata extracted by Explore agent - see Task result from 2025-11-24 for complete details"
+	"version": "1.0.0",
+	"metadata": {
+		"createdAt": "2025-11-24T02:17:09.206Z",
+		"totalFiles": 46,
+		"gitCommit": "9615c28a819573fc5c0ae4ba3822536b7d1ac37f",
+		"indexedDomains": [
+			"canonical",
+			"data-access",
+			"api",
+			"cli",
+			"mcp",
+			"utilities",
+			"documentation"
+		]
+	},
+	"summary": {
+		"byDomain": {
+			"canonical": 12,
+			"data-access": 14,
+			"api": 5,
+			"cli": 2,
+			"mcp": 2,
+			"utilities": 3,
+			"documentation": 2,
+			"other": 6
+		},
+		"byLayer": {
+			"entity": 9,
+			"client": 3,
+			"parser": 6,
+			"converter": 1,
+			"repository": 3,
+			"route": 1,
+			"middleware": 3,
+			"command": 2,
+			"tool": 2,
+			"util": 8,
+			"skill": 2
+		}
+	},
+	"note": "Full file metadata extracted by Explore agent - see Task result from 2025-11-24 for complete details"
 }

@@ -30,7 +30,7 @@ export async function action({ request }: ActionFunctionArgs) {
 				headers: { "Content-Type": "application/json" },
 			});
 		}
-		
+
 		// Clear all sessions for this user and connection
 		const sessions = await ChatService.getSessionsByConnection(
 			connection.id,

@@ -4,14 +4,14 @@
  * @moneyworks-dsl PURE
  */
 export const moneyworksDocsResource = {
-    definition: {
-        uri: "moneyworks://docs/overview",
-        name: "MoneyWorks DSL Documentation",
-        description: "Core concepts and canonical DSL for MoneyWorks development",
-        mimeType: "text/markdown",
-    },
-    handler() {
-        const content = `# MoneyWorks Canonical DSL Documentation
+	definition: {
+		uri: "moneyworks://docs/overview",
+		name: "MoneyWorks DSL Documentation",
+		description: "Core concepts and canonical DSL for MoneyWorks development",
+		mimeType: "text/markdown",
+	},
+	handler() {
+		const content = `# MoneyWorks Canonical DSL Documentation
 
 ## Overview
 
@@ -106,14 +106,14 @@ The following entities are being vetted for canonical representation:
 - Category1/2: Custom categorization
 
 Each entity will be added to the MCP server as it completes the vetting process.`;
-        return {
-            contents: [
-                {
-                    uri: "moneyworks://docs/overview",
-                    mimeType: "text/markdown",
-                    text: content,
-                },
-            ],
-        };
-    },
+		return {
+			contents: [
+				{
+					uri: "moneyworks://docs/overview",
+					mimeType: "text/markdown",
+					text: content,
+				},
+			],
+		};
+	},
 };

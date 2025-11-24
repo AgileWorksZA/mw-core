@@ -1,640 +1,640 @@
 {
-  "name": "@moneyworks/utilities",
-  "version": "0.1.0",
-  "description": "Type-safe utilities for MoneyWorks date handling, JSON parsing, and branded types",
-  "overview": "This package provides essential utilities for working with MoneyWorks data, including branded types for type safety, date manipulation functions for the YYYYMMDD format with fluent API, period handling for YYYYMM format, and specialized JSON parsing/serialization.",
-  "exports": [
-    {
-      "name": "Tagged Template Literals",
-      "description": "Convenient tagged template literals for creating branded types with fluent APIs",
-      "category": "Templates",
-      "items": [
-        {
-          "name": "d",
-          "type": "function",
-          "signature": "(strings: TemplateStringsArray, ...values: any[]): YYYYMMDDWithMethods",
-          "description": "Tagged template literal for creating YYYYMMDD dates with fluent methods. Parses various date formats and returns a proxy object with chainable date operations.",
-          "example": "const today = d`${new Date()}`;\nconst specific = d`20250115`;\nconst parsed = d`2025-01-15`;\n\n// Fluent operations\nconst due = d`20250115`.addDays(30);\nif (due.gt(new Date())) {\n  console.log(`Due in ${due.subtract(d`${new Date()}`)} days`);\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "p",
-          "type": "function",
-          "signature": "(strings: TemplateStringsArray, ...values: any[]): Period",
-          "description": "Tagged template literal for creating Period values (YYYYMM format). Automatically converts Date objects to periods.",
-          "example": "const period1 = p`202407`;           // From literal\nconst period2 = p`${2024}${7}`;      // From parts\nconst period3 = p`${new Date()}`;    // From Date\n\n// All return Period type",
-          "since": "0.1.0"
-        },
-        {
-          "name": "ac",
-          "type": "function",
-          "signature": "(strings: TemplateStringsArray, ...values: unknown[]): AccountCode",
-          "description": "Tagged template literal for creating AccountCode values",
-          "example": "const cash = ac`1-1100`;             // Cash at Bank\nconst sales = ac`4-1000`;            // Sales Revenue\n\n// Returns AccountCode type",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Branded Types",
-      "description": "Type-safe branded types that prevent accidental misuse of primitive values",
-      "category": "Types",
-      "items": [
-        {
-          "name": "YYYYMMDD",
-          "type": "type",
-          "signature": "type YYYYMMDD = Brand<string, \"YYYYMMDD\">",
-          "description": "Branded type for MoneyWorks date format (YYYYMMDD). Ensures type safety when working with date strings.",
-          "example": "// Explicit typing\nconst date: YYYYMMDD = createYYYYMMDD(\"20240703\");\n\n// Type guards narrow the type\nif (isYYYYMMDD(value)) {\n  // value is now typed as YYYYMMDD\n}\n\n// Functions require correct types\nfunction processDate(date: YYYYMMDD) {\n  // Type-safe date operations\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "YYYYMMDDWithMethods",
-          "type": "type",
-          "signature": "type YYYYMMDDWithMethods = YYYYMMDD & { ...methods }",
-          "description": "Extended YYYYMMDD type with fluent methods for date operations. Created by the `d` tagged template.",
-          "example": "const date = d`20240703`;\n\n// Comparison\nif (date.gt(today) && date.lt(deadline)) {\n  console.log('Date is in valid range');\n}\n\n// Arithmetic\nconst nextWeek = date.addDays(7);\nconst daysUntil = deadline.subtract(date);\n\n// Formatting\nconsole.log(date.format('/')); // \"2024/07/03\"",
-          "since": "0.1.0"
-        },
-        {
-          "name": "Period",
-          "type": "type",
-          "signature": "type Period = Brand<number, \"Period\">",
-          "description": "Branded type for MoneyWorks period numbers in YYYYMM format",
-          "example": "const period: Period = 202407 as Period;\n// Represents July 2024",
-          "since": "0.1.0"
-        },
-        {
-          "name": "AccountCode",
-          "type": "type",
-          "signature": "type AccountCode = Brand<string, \"AccountCode\">",
-          "description": "Branded type for MoneyWorks account codes",
-          "example": "const account: AccountCode = '1-1100' as AccountCode;\n// Cash at Bank account",
-          "since": "0.1.0"
-        },
-        {
-          "name": "NameCode",
-          "type": "type",
-          "signature": "type NameCode = Brand<string, \"NameCode\">",
-          "description": "Branded type for MoneyWorks name (customer/supplier) codes",
-          "example": "const customer: NameCode = 'CUST001' as NameCode;",
-          "since": "0.1.0"
-        },
-        {
-          "name": "ProductCode",
-          "type": "type",
-          "signature": "type ProductCode = Brand<string, \"ProductCode\">",
-          "description": "Branded type for MoneyWorks product codes",
-          "example": "const product: ProductCode = 'WIDG-001' as ProductCode;",
-          "since": "0.1.0"
-        },
-        {
-          "name": "TransactionSeq",
-          "type": "type",
-          "signature": "type TransactionSeq = Brand<number, \"TransactionSeq\">",
-          "description": "Branded type for MoneyWorks transaction sequence numbers",
-          "example": "const seq: TransactionSeq = 12345 as TransactionSeq;",
-          "since": "0.1.0"
-        },
-        {
-          "name": "HHMMSS",
-          "type": "type",
-          "signature": "type HHMMSS = Brand<string, \"HHMMSS\">",
-          "description": "Branded type for time strings in HHMMSS format",
-          "example": "const time: HHMMSS = '143025' as HHMMSS; // 2:30:25 PM",
-          "since": "0.1.0"
-        },
-        {
-          "name": "ISODateTime",
-          "type": "type",
-          "signature": "type ISODateTime = Brand<string, \"ISODateTime\">",
-          "description": "Branded type for ISO 8601 datetime strings",
-          "example": "const datetime: ISODateTime = '2024-07-03T14:30:25Z' as ISODateTime;",
-          "since": "0.1.0"
-        },
-        {
-          "name": "Brand",
-          "type": "type",
-          "signature": "type Brand<T, B> = T & { readonly __brand: B }",
-          "description": "Creates a branded type from a base type",
-          "example": "type CustomerID = Brand<string, 'CustomerID'>;\ntype OrderNumber = Brand<number, 'OrderNumber'>;\n\n// These are now distinct types despite same base type",
-          "since": "0.1.0"
-        },
-        {
-          "name": "Unbrand",
-          "type": "type",
-          "signature": "type Unbrand<T> = T extends Brand<infer U, any> ? U : T",
-          "description": "Extracts the base type from a branded type",
-          "example": "type Base = Unbrand<YYYYMMDD>; // string\ntype Num = Unbrand<Period>;     // number",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "YYYYMMDDWithMethods Methods",
-      "description": "Fluent methods available on dates created with the d`` template literal",
-      "category": "Date Methods",
-      "items": [
-        {
-          "name": "gt",
-          "type": "method",
-          "signature": "(other: Date | string | YYYYMMDD) => boolean",
-          "description": "Check if date is greater than another",
-          "example": "if (d`20240715`.gt(d`20240703`)) {\n  console.log('July 15 is after July 3');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "gte",
-          "type": "method",
-          "signature": "(other: Date | string | YYYYMMDD) => boolean",
-          "description": "Check if date is greater than or equal to another",
-          "example": "if (dueDate.gte(today)) {\n  console.log('Not overdue yet');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "lt",
-          "type": "method",
-          "signature": "(other: Date | string | YYYYMMDD) => boolean",
-          "description": "Check if date is less than another",
-          "example": "if (startDate.lt(endDate)) {\n  console.log('Valid date range');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "lte",
-          "type": "method",
-          "signature": "(other: Date | string | YYYYMMDD) => boolean",
-          "description": "Check if date is less than or equal to another",
-          "example": "if (date.lte(deadline)) {\n  console.log('Within deadline');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "eq",
-          "type": "method",
-          "signature": "(other: Date | string | YYYYMMDD) => boolean",
-          "description": "Check if date equals another",
-          "example": "if (selectedDate.eq(today)) {\n  console.log('Selected today');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "addDays",
-          "type": "method",
-          "signature": "(days: number) => YYYYMMDDWithMethods",
-          "description": "Add days to the date (negative values subtract)",
-          "example": "const nextWeek = d`20240703`.addDays(7);\nconst yesterday = today.addDays(-1);",
-          "since": "0.1.0"
-        },
-        {
-          "name": "addMonths",
-          "type": "method",
-          "signature": "(months: number) => YYYYMMDDWithMethods",
-          "description": "Add months to the date (negative values subtract)",
-          "example": "const nextQuarter = d`20240703`.addMonths(3);\nconst lastYear = today.addMonths(-12);",
-          "since": "0.1.0"
-        },
-        {
-          "name": "subtract",
-          "type": "method",
-          "signature": "(other: Date | string | YYYYMMDD) => number",
-          "description": "Get days between dates",
-          "example": "const daysUntilDue = dueDate.subtract(today);\nconsole.log(`${daysUntilDue} days remaining`);",
-          "since": "0.1.0"
-        },
-        {
-          "name": "format",
-          "type": "method",
-          "signature": "(separator?: string) => string",
-          "description": "Format date with separator (default: '/')",
-          "example": "d`20240703`.format();      // \"2024/07/03\"\nd`20240703`.format('-');   // \"2024-07-03\"\nd`20240703`.format('.');   // \"2024.07.03\"",
-          "since": "0.1.0"
-        },
-        {
-          "name": "toDate",
-          "type": "method",
-          "signature": "() => Date",
-          "description": "Convert to JavaScript Date object",
-          "example": "const jsDate = d`20240703`.toDate();\n// Wed Jul 03 2024 00:00:00 GMT+0000",
-          "since": "0.1.0"
-        },
-        {
-          "name": "toPeriod",
-          "type": "method",
-          "signature": "() => number",
-          "description": "Extract period (YYYYMM) as number",
-          "example": "const period = d`20240703`.toPeriod();\n// Returns: 202407",
-          "since": "0.1.0"
-        },
-        {
-          "name": "isWeekend",
-          "type": "method",
-          "signature": "() => boolean",
-          "description": "Check if date falls on weekend (Saturday or Sunday)",
-          "example": "if (d`20240706`.isWeekend()) {\n  console.log('This is a Saturday');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "isLeapYear",
-          "type": "method",
-          "signature": "() => boolean",
-          "description": "Check if the year is a leap year",
-          "example": "if (d`20240229`.isLeapYear()) {\n  console.log('2024 is a leap year');\n}",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Date Validators",
-      "description": "Type guards and validators for date formats",
-      "category": "Validators",
-      "items": [
-        {
-          "name": "isYYYYMMDD",
-          "type": "function",
-          "signature": "(value: string): value is YYYYMMDD",
-          "description": "Type guard to check if a string is in valid YYYYMMDD format. Validates date ranges including leap years.",
-          "example": "if (isYYYYMMDD(userInput)) {\n  // userInput is now typed as YYYYMMDD\n  const date = yyyymmddToDate(userInput);\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "isPeriod",
-          "type": "function",
-          "signature": "(value: number): value is Period",
-          "description": "Type guard that checks if a number is a valid Period (YYYYMM)",
-          "example": "if (isPeriod(202407)) {\n  // Valid period for July 2024\n  const nextPeriod = addPeriods(202407 as Period, 1);\n}",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Date Factory Functions",
-      "description": "Functions to create and convert date values safely",
-      "category": "Factory",
-      "items": [
-        {
-          "name": "createYYYYMMDD",
-          "type": "function",
-          "signature": "(value: string): YYYYMMDD",
-          "description": "Create a YYYYMMDD from a string with validation. Throws an error if the input is not a valid date.",
-          "example": "const date = createYYYYMMDD('20240703');\n// Throws: createYYYYMMDD('2024-07-03'); // Wrong format\n// Throws: createYYYYMMDD('20240230'); // Invalid date",
-          "since": "0.1.0"
-        },
-        {
-          "name": "tryCreateYYYYMMDD",
-          "type": "function",
-          "signature": "(value: string): YYYYMMDD | null",
-          "description": "Creates a YYYYMMDD from a string, returns null if invalid",
-          "example": "const date = tryCreateYYYYMMDD(userInput);\nif (date) {\n  console.log('Valid date:', date);\n} else {\n  console.error('Invalid date format');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "dateToYYYYMMDD",
-          "type": "function",
-          "signature": "(date: Date): YYYYMMDD",
-          "description": "Converts a JavaScript Date to YYYYMMDD format",
-          "example": "const today = dateToYYYYMMDD(new Date());\n// Returns: '20240703' as YYYYMMDD",
-          "since": "0.1.0"
-        },
-        {
-          "name": "yyyymmddToDate",
-          "type": "function",
-          "signature": "(value: YYYYMMDD): Date",
-          "description": "Converts a YYYYMMDD to a JavaScript Date",
-          "example": "const date = yyyymmddToDate('20240703' as YYYYMMDD);\n// Returns: Date object for July 3, 2024",
-          "since": "0.1.0"
-        },
-        {
-          "name": "parseToYYYYMMDD",
-          "type": "function",
-          "signature": "(value: string | Date | YYYYMMDD): YYYYMMDD",
-          "description": "Parses various date formats to YYYYMMDD. Supports ISO dates, slash format, and more.",
-          "example": "parseToYYYYMMDD('2024-07-03');     // ISO format\nparseToYYYYMMDD('2024/07/03');     // Slash format\nparseToYYYYMMDD('03/07/2024');     // AU/UK format\nparseToYYYYMMDD('07/03/2024');     // US format (ambiguous)\nparseToYYYYMMDD(new Date());       // Date object\nparseToYYYYMMDD('20240703');       // Already YYYYMMDD",
-          "since": "0.1.0"
-        },
-        {
-          "name": "todayYYYYMMDD",
-          "type": "function",
-          "signature": "(): YYYYMMDD",
-          "description": "Get today's date as YYYYMMDD",
-          "example": "const today = todayYYYYMMDD();\n// Returns current date as YYYYMMDD",
-          "since": "0.1.0"
-        },
-        {
-          "name": "createPeriod",
-          "type": "function",
-          "signature": "(yearOrValue: number, month?: number): Period",
-          "description": "Creates a Period from year/month or YYYYMM number",
-          "example": "const period1 = createPeriod(2024, 7);  // July 2024\nconst period2 = createPeriod(202407);   // Same period",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Date Manipulation",
-      "description": "Functions to manipulate and compare dates",
-      "category": "Date Operations",
-      "items": [
-        {
-          "name": "addDaysToYYYYMMDD",
-          "type": "function",
-          "signature": "(date: YYYYMMDD, days: number): YYYYMMDD",
-          "description": "Adds or subtracts days from a YYYYMMDD date",
-          "example": "const tomorrow = addDaysToYYYYMMDD('20240703' as YYYYMMDD, 1);\nconst yesterday = addDaysToYYYYMMDD('20240703' as YYYYMMDD, -1);",
-          "since": "0.1.0"
-        },
-        {
-          "name": "addMonthsToYYYYMMDD",
-          "type": "function",
-          "signature": "(date: YYYYMMDD, months: number): YYYYMMDD",
-          "description": "Adds or subtracts months from a YYYYMMDD date",
-          "example": "const nextMonth = addMonthsToYYYYMMDD('20240703' as YYYYMMDD, 1);\nconst lastYear = addMonthsToYYYYMMDD('20240703' as YYYYMMDD, -12);",
-          "since": "0.1.0"
-        },
-        {
-          "name": "daysBetweenYYYYMMDD",
-          "type": "function",
-          "signature": "(from: YYYYMMDD, to: YYYYMMDD): number",
-          "description": "Calculates the number of days between two dates",
-          "example": "const days = daysBetweenYYYYMMDD(\n  '20240701' as YYYYMMDD,\n  '20240710' as YYYYMMDD\n); // Returns: 9",
-          "since": "0.1.0"
-        },
-        {
-          "name": "compareYYYYMMDD",
-          "type": "function",
-          "signature": "(a: YYYYMMDD, b: YYYYMMDD): -1 | 0 | 1",
-          "description": "Compares two YYYYMMDD dates",
-          "example": "const result = compareYYYYMMDD(date1, date2);\n// Returns: -1 if date1 < date2\n//          0 if date1 === date2\n//          1 if date1 > date2",
-          "since": "0.1.0"
-        },
-        {
-          "name": "isBeforeYYYYMMDD",
-          "type": "function",
-          "signature": "(date: YYYYMMDD, other: YYYYMMDD): boolean",
-          "description": "Check if date is before another date",
-          "example": "if (isBeforeYYYYMMDD(startDate, endDate)) {\n  console.log('Valid date range');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "isAfterYYYYMMDD",
-          "type": "function",
-          "signature": "(date: YYYYMMDD, other: YYYYMMDD): boolean",
-          "description": "Check if date is after another date",
-          "example": "if (isAfterYYYYMMDD(dueDate, today)) {\n  console.log('Not yet due');\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "startOfMonthYYYYMMDD",
-          "type": "function",
-          "signature": "(date: YYYYMMDD): YYYYMMDD",
-          "description": "Get the first day of the month for a date",
-          "example": "const firstDay = startOfMonthYYYYMMDD('20240715' as YYYYMMDD);\n// Returns: '20240701'",
-          "since": "0.1.0"
-        },
-        {
-          "name": "endOfMonthYYYYMMDD",
-          "type": "function",
-          "signature": "(date: YYYYMMDD): YYYYMMDD",
-          "description": "Get the last day of the month for a date",
-          "example": "const lastDay = endOfMonthYYYYMMDD('20240715' as YYYYMMDD);\n// Returns: '20240731'",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Period Operations",
-      "description": "Functions to work with MoneyWorks periods (YYYYMM)",
-      "category": "Period Operations",
-      "items": [
-        {
-          "name": "addPeriods",
-          "type": "function",
-          "signature": "(period: Period, months: number): Period",
-          "description": "Adds or subtracts months from a period",
-          "example": "const nextMonth = addPeriods(202407 as Period, 1);   // 202408\nconst lastYear = addPeriods(202407 as Period, -12);  // 202307",
-          "since": "0.1.0"
-        },
-        {
-          "name": "periodsBetween",
-          "type": "function",
-          "signature": "(from: Period, to: Period): number",
-          "description": "Calculates the number of months between two periods",
-          "example": "const months = periodsBetween(\n  202401 as Period,\n  202407 as Period\n); // Returns: 6",
-          "since": "0.1.0"
-        },
-        {
-          "name": "isPeriodInRange",
-          "type": "function",
-          "signature": "(period: Period, start: Period, end: Period): boolean",
-          "description": "Checks if a period is within a range",
-          "example": "const inFY24 = isPeriodInRange(\n  202402 as Period,\n  202307 as Period,  // July 2023\n  202406 as Period   // June 2024\n); // Returns: true",
-          "since": "0.1.0"
-        },
-        {
-          "name": "periodToDateRange",
-          "type": "function",
-          "signature": "(period: Period): { start: YYYYMMDD; end: YYYYMMDD }",
-          "description": "Converts a period to its date range",
-          "example": "const range = periodToDateRange(202407 as Period);\n// Returns: { start: '20240701', end: '20240731' }",
-          "since": "0.1.0"
-        },
-        {
-          "name": "getCurrentPeriod",
-          "type": "function",
-          "signature": "(): Period",
-          "description": "Get the current period (YYYYMM)",
-          "example": "const currentPeriod = getCurrentPeriod();\n// Returns current month as Period",
-          "since": "0.1.0"
-        },
-        {
-          "name": "comparePeriods",
-          "type": "function",
-          "signature": "(a: Period, b: Period): -1 | 0 | 1",
-          "description": "Compare two periods",
-          "example": "const result = comparePeriods(period1, period2);\n// Returns: -1 if period1 < period2\n//          0 if period1 === period2\n//          1 if period1 > period2",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Formatters",
-      "description": "Functions to format dates and periods for display",
-      "category": "Formatting",
-      "items": [
-        {
-          "name": "formatYYYYMMDD",
-          "type": "function",
-          "signature": "(date: YYYYMMDD, separator?: string): string",
-          "description": "Formats a YYYYMMDD date for display with custom separator",
-          "example": "formatYYYYMMDD('20240703' as YYYYMMDD);       // '2024/07/03'\nformatYYYYMMDD('20240703' as YYYYMMDD, '-');  // '2024-07-03'\nformatYYYYMMDD('20240703' as YYYYMMDD, '.');  // '2024.07.03'",
-          "since": "0.1.0"
-        },
-        {
-          "name": "formatPeriod",
-          "type": "function",
-          "signature": "(period: Period, format?: 'YYYY/MM' | 'YYYY-MM' | 'MM/YYYY' | 'MMM YYYY'): string",
-          "description": "Formats a period for display in various formats",
-          "example": "formatPeriod(202407 as Period);                  // '2024/07'\nformatPeriod(202407 as Period, 'YYYY-MM');      // '2024-07'\nformatPeriod(202407 as Period, 'MM/YYYY');      // '07/2024'\nformatPeriod(202407 as Period, 'MMM YYYY');     // 'Jul 2024'",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "JSON Utilities",
-      "description": "Specialized JSON parsing and serialization for MoneyWorks data",
-      "category": "JSON",
-      "items": [
-        {
-          "name": "parseMoneyWorksJSON",
-          "type": "function",
-          "signature": "(json: string, options?: MoneyWorksParseOptions): unknown",
-          "description": "Parses JSON with MoneyWorks-specific type handling. Automatically converts date strings to YYYYMMDD and handles MoneyWorks-specific formats.",
-          "example": "const data = parseMoneyWorksJSON(jsonString, {\n  dateFields: ['Date', 'DueDate', 'PaymentDate'],\n  periodFields: ['Period', 'StartPeriod', 'EndPeriod'],\n  preserveNull: true\n});\n// Dates are converted to YYYYMMDD type\n// Periods are converted to Period type",
-          "since": "0.1.0"
-        },
-        {
-          "name": "parseMoneyWorksResponse",
-          "type": "function",
-          "signature": "(response: Response): Promise<unknown>",
-          "description": "Parse a fetch Response object with MoneyWorks conventions",
-          "example": "const response = await fetch('/api/invoices');\nconst data = await parseMoneyWorksResponse(response);\n// Handles MoneyWorks date formats automatically",
-          "since": "0.1.0"
-        },
-        {
-          "name": "stringifyMoneyWorks",
-          "type": "function",
-          "signature": "(value: unknown, options?: MoneyWorksStringifyOptions): string",
-          "description": "Serializes data with MoneyWorks formatting rules",
-          "example": "const json = stringifyMoneyWorks(data, {\n  dateFormat: 'YYYYMMDD',\n  omitNull: true,\n  pretty: true\n});\n// Dates are formatted as YYYYMMDD strings\n// Nulls are omitted\n// Output is pretty-printed",
-          "since": "0.1.0"
-        },
-        {
-          "name": "createTypedParser",
-          "type": "function",
-          "signature": "<T>(config: ParserConfig): (json: string) => T",
-          "description": "Creates a type-safe JSON parser with field configuration",
-          "example": "interface Invoice {\n  InvoiceNumber: string;\n  Date: YYYYMMDD;\n  DueDate: YYYYMMDD;\n  Total: number;\n}\n\nconst parseInvoice = createTypedParser<Invoice>({\n  dateFields: ['Date', 'DueDate'],\n  numberFields: ['Total', 'GST']\n});\n\nconst invoice = parseInvoice(jsonString);\n// Type-safe with dates as YYYYMMDD",
-          "since": "0.1.0"
-        },
-        {
-          "name": "safeStringify",
-          "type": "function",
-          "signature": "(value: unknown, fallback?: string): string",
-          "description": "Safely stringifies values, handling circular references and errors",
-          "example": "const json = safeStringify(complexObject, '{}');\n// Never throws, returns fallback on error\n// Handles circular references gracefully",
-          "since": "0.1.0"
-        },
-        {
-          "name": "stringifyForDisplay",
-          "type": "function",
-          "signature": "(value: unknown): string",
-          "description": "Format JSON for display with pretty printing and color support",
-          "example": "console.log(stringifyForDisplay(data));\n// Pretty-printed with 2-space indentation\n// Safe for terminal display",
-          "since": "0.1.0"
-        },
-        {
-          "name": "stringifyForAPI",
-          "type": "function",
-          "signature": "(value: unknown): string",
-          "description": "Format JSON for API transmission with MoneyWorks conventions",
-          "example": "const body = stringifyForAPI({\n  Date: d`20240703`,\n  Amount: 1234.56\n});\n// Compact format, dates as YYYYMMDD",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Utility Namespaces",
-      "description": "Organized namespaces for utility functions",
-      "category": "Namespaces",
-      "items": [
-        {
-          "name": "YYYYMMDDUtils",
-          "type": "namespace",
-          "signature": "namespace YYYYMMDDUtils",
-          "description": "Namespace containing all YYYYMMDD utility functions for convenient access",
-          "example": "import { YYYYMMDDUtils } from '@moneyworks/utilities';\n\n// Use utility functions\nconst isValid = YYYYMMDDUtils.is('20240703');\nconst date = YYYYMMDDUtils.create('20240703');\nconst today = YYYYMMDDUtils.today();\nconst formatted = YYYYMMDDUtils.format(date, '-');",
-          "since": "0.1.0"
-        },
-        {
-          "name": "PeriodUtils",
-          "type": "namespace",
-          "signature": "namespace PeriodUtils",
-          "description": "Namespace containing all Period utility functions",
-          "example": "import { PeriodUtils } from '@moneyworks/utilities';\n\n// Use period utilities\nconst current = PeriodUtils.current();\nconst next = PeriodUtils.add(current, 1);\nconst range = PeriodUtils.toDateRange(current);",
-          "since": "0.1.0"
-        }
-      ]
-    }
-  ],
-  "usage": {
-    "installation": "bun add @moneyworks/utilities",
-    "examples": [
-      {
-        "title": "Working with Fluent Date API",
-        "description": "Use the d`` template literal for intuitive date operations",
-        "code": "import { d } from '@moneyworks/utilities';\n\n// Create dates with fluent API\nconst invoice = {\n  date: d`20240703`,\n  dueDate: d`20240703`.addDays(30),\n  paymentTerms: 30\n};\n\n// Check if overdue\nconst today = d`${new Date()}`;\nif (invoice.dueDate.lt(today)) {\n  const daysOverdue = today.subtract(invoice.dueDate);\n  console.log(`Invoice is ${daysOverdue} days overdue`);\n}\n\n// Date comparisons\nconst dates = [\n  d`20240701`,\n  d`20240715`,\n  d`20240703`\n].sort((a, b) => a.lt(b) ? -1 : a.gt(b) ? 1 : 0);\n\n// Check business days\nlet businessDays = 0;\nlet current = d`20240701`;\nconst end = d`20240731`;\n\nwhile (current.lte(end)) {\n  if (!current.isWeekend()) {\n    businessDays++;\n  }\n  current = current.addDays(1);\n}\nconsole.log(`July 2024 has ${businessDays} business days`);"
-      },
-      {
-        "title": "Type-Safe Date Parsing",
-        "description": "Parse and validate dates from various sources",
-        "code": "import { isYYYYMMDD, parseToYYYYMMDD, tryCreateYYYYMMDD } from '@moneyworks/utilities';\n\n// Parse user input safely\nfunction processDateInput(input: string): YYYYMMDD | null {\n  // Try direct YYYYMMDD format first\n  if (isYYYYMMDD(input)) {\n    return input;\n  }\n  \n  // Try parsing other formats\n  try {\n    return parseToYYYYMMDD(input);\n  } catch {\n    return null;\n  }\n}\n\n// Validate date ranges\nfunction validateDateRange(start: string, end: string): boolean {\n  const startDate = tryCreateYYYYMMDD(start);\n  const endDate = tryCreateYYYYMMDD(end);\n  \n  if (!startDate || !endDate) {\n    return false;\n  }\n  \n  return startDate <= endDate;\n}\n\n// Parse API dates\nconst apiDates = [\n  '2024-07-03',      // ISO format\n  '03/07/2024',      // AU/UK format\n  '20240703',        // YYYYMMDD\n  new Date()         // JS Date\n].map(parseToYYYYMMDD);"
-      },
-      {
-        "title": "Working with Periods",
-        "description": "Handle MoneyWorks periods (YYYYMM) with type safety",
-        "code": "import { p, Period, addPeriods, periodToDateRange, PeriodUtils } from '@moneyworks/utilities';\n\n// Financial year handling\nclass FinancialYear {\n  constructor(\n    private startPeriod: Period,\n    private endPeriod: Period\n  ) {}\n  \n  static fromYear(year: number): FinancialYear {\n    return new FinancialYear(\n      p`${year}07`,     // July start\n      p`${year + 1}06`  // June end\n    );\n  }\n  \n  contains(period: Period): boolean {\n    return period >= this.startPeriod && period <= this.endPeriod;\n  }\n  \n  getPeriods(): Period[] {\n    const periods: Period[] = [];\n    let current = this.startPeriod;\n    \n    while (current <= this.endPeriod) {\n      periods.push(current);\n      current = addPeriods(current, 1);\n    }\n    \n    return periods;\n  }\n}\n\nconst fy24 = FinancialYear.fromYear(2023);\nconst periods = fy24.getPeriods();\n\n// Get date ranges for each period\nconst quarters = [\n  { q: 'Q1', periods: periods.slice(0, 3) },\n  { q: 'Q2', periods: periods.slice(3, 6) },\n  { q: 'Q3', periods: periods.slice(6, 9) },\n  { q: 'Q4', periods: periods.slice(9, 12) }\n].map(q => ({\n  quarter: q.q,\n  start: periodToDateRange(q.periods[0]).start,\n  end: periodToDateRange(q.periods[2]).end\n}));"
-      },
-      {
-        "title": "JSON Parsing with Type Safety",
-        "description": "Parse MoneyWorks API responses with automatic type conversion",
-        "code": "import { parseMoneyWorksJSON, createTypedParser, YYYYMMDD, Period, AccountCode } from '@moneyworks/utilities';\n\n// Define your types\ninterface Invoice {\n  InvoiceNumber: string;\n  Date: YYYYMMDD;\n  DueDate: YYYYMMDD;\n  Period: Period;\n  CustomerAccount: AccountCode;\n  Total: number;\n  GST: number;\n  Items: InvoiceItem[];\n}\n\ninterface InvoiceItem {\n  Description: string;\n  Quantity: number;\n  UnitPrice: number;\n  Account: AccountCode;\n}\n\n// Create a typed parser\nconst parseInvoice = createTypedParser<Invoice>({\n  dateFields: ['Date', 'DueDate'],\n  periodFields: ['Period'],\n  accountFields: ['CustomerAccount', 'Items.*.Account'],\n  numberFields: ['Total', 'GST', 'Items.*.Quantity', 'Items.*.UnitPrice']\n});\n\n// Parse API response\nconst response = await fetch('/api/invoice/INV-001');\nconst json = await response.text();\nconst invoice = parseInvoice(json);\n\n// All dates and periods are now properly typed\nconst daysUntilDue = d`${new Date()}`.subtract(invoice.DueDate);\nconst isCurrentPeriod = invoice.Period === p`${new Date()}`;\n\n// Parse multiple invoices\nconst invoicesJson = await fetch('/api/invoices').then(r => r.text());\nconst invoices = parseMoneyWorksJSON(invoicesJson, {\n  dateFields: ['[].Date', '[].DueDate'],\n  periodFields: ['[].Period'],\n  arrayPaths: ['$']\n}) as Invoice[];"
-      },
-      {
-        "title": "Creating Custom Branded Types",
-        "description": "Extend the type system with your own branded types",
-        "code": "import { Brand, Unbrand } from '@moneyworks/utilities';\n\n// Define custom branded types\ntype InvoiceNumber = Brand<string, 'InvoiceNumber'>;\ntype CustomerID = Brand<string, 'CustomerID'>;\ntype Amount = Brand<number, 'Amount'>;\ntype Percentage = Brand<number, 'Percentage'>;\n\n// Create validators\nfunction isInvoiceNumber(value: string): value is InvoiceNumber {\n  return /^INV-\\d{6}$/.test(value);\n}\n\nfunction isPercentage(value: number): value is Percentage {\n  return value >= 0 && value <= 100;\n}\n\n// Create factory functions\nfunction createInvoiceNumber(value: string): InvoiceNumber {\n  if (!isInvoiceNumber(value)) {\n    throw new Error(`Invalid invoice number format: ${value}`);\n  }\n  return value;\n}\n\nfunction createPercentage(value: number): Percentage {\n  if (!isPercentage(value)) {\n    throw new Error(`Percentage must be between 0 and 100: ${value}`);\n  }\n  return value;\n}\n\n// Tagged template for invoice numbers\nfunction inv(strings: TemplateStringsArray, ...values: any[]): InvoiceNumber {\n  const num = values[0];\n  return createInvoiceNumber(`INV-${String(num).padStart(6, '0')}`);\n}\n\n// Use in your domain\ninterface TaxCalculation {\n  rate: Percentage;\n  amount: Amount;\n  calculate(base: Amount): Amount;\n}\n\nconst gst: TaxCalculation = {\n  rate: createPercentage(10),\n  amount: 0 as Amount,\n  calculate(base: Amount): Amount {\n    const rate = Unbrand(this.rate);\n    const baseAmount = Unbrand(base);\n    return (baseAmount * rate / 100) as Amount;\n  }\n};\n\n// Type safety in action\nconst invoice = {\n  number: inv`123`,  // INV-000123\n  customer: 'CUST001' as CustomerID,\n  subtotal: 1000 as Amount,\n  taxRate: createPercentage(10),\n  // Type error: can't mix types\n  // taxRate: invoice.subtotal  // Error!\n};"
-      }
-    ],
-    "importPatterns": [
-      {
-        "pattern": "import { d, p, ac } from '@moneyworks/utilities';",
-        "description": "Import tagged template literals for creating branded types with fluent APIs"
-      },
-      {
-        "pattern": "import { YYYYMMDD, Period, AccountCode } from '@moneyworks/utilities';",
-        "description": "Import type definitions"
-      },
-      {
-        "pattern": "import { YYYYMMDDUtils, PeriodUtils } from '@moneyworks/utilities';",
-        "description": "Import utility namespaces for organized access to functions"
-      },
-      {
-        "pattern": "import type { YYYYMMDDWithMethods } from '@moneyworks/utilities';",
-        "description": "Import the fluent date type for type annotations"
-      }
-    ]
-  },
-  "designPrinciples": [
-    {
-      "principle": "Type Safety First",
-      "description": "All date and period values are branded types, preventing accidental misuse and ensuring compile-time safety."
-    },
-    {
-      "principle": "Fluent API Design",
-      "description": "The d`` template literal returns dates with chainable methods for intuitive date operations."
-    },
-    {
-      "principle": "MoneyWorks Native",
-      "description": "Follows MoneyWorks conventions: YYYYMMDD for dates, YYYYMM for periods, preserving the native data formats."
-    },
-    {
-      "principle": "Zero Dependencies",
-      "description": "No external dependencies, ensuring small bundle size and maximum compatibility."
-    },
-    {
-      "principle": "Validation by Design",
-      "description": "Invalid values are caught at creation time, not usage time, through factory functions and type guards."
-    },
-    {
-      "principle": "Ergonomic API",
-      "description": "Tagged template literals and intuitive method names make the library pleasant to use."
-    }
-  ]
+	"name": "@moneyworks/utilities",
+	"version": "0.1.0",
+	"description": "Type-safe utilities for MoneyWorks date handling, JSON parsing, and branded types",
+	"overview": "This package provides essential utilities for working with MoneyWorks data, including branded types for type safety, date manipulation functions for the YYYYMMDD format with fluent API, period handling for YYYYMM format, and specialized JSON parsing/serialization.",
+	"exports": [
+		{
+			"name": "Tagged Template Literals",
+			"description": "Convenient tagged template literals for creating branded types with fluent APIs",
+			"category": "Templates",
+			"items": [
+				{
+					"name": "d",
+					"type": "function",
+					"signature": "(strings: TemplateStringsArray, ...values: any[]): YYYYMMDDWithMethods",
+					"description": "Tagged template literal for creating YYYYMMDD dates with fluent methods. Parses various date formats and returns a proxy object with chainable date operations.",
+					"example": "const today = d`${new Date()}`;\nconst specific = d`20250115`;\nconst parsed = d`2025-01-15`;\n\n// Fluent operations\nconst due = d`20250115`.addDays(30);\nif (due.gt(new Date())) {\n  console.log(`Due in ${due.subtract(d`${new Date()}`)} days`);\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "p",
+					"type": "function",
+					"signature": "(strings: TemplateStringsArray, ...values: any[]): Period",
+					"description": "Tagged template literal for creating Period values (YYYYMM format). Automatically converts Date objects to periods.",
+					"example": "const period1 = p`202407`;           // From literal\nconst period2 = p`${2024}${7}`;      // From parts\nconst period3 = p`${new Date()}`;    // From Date\n\n// All return Period type",
+					"since": "0.1.0"
+				},
+				{
+					"name": "ac",
+					"type": "function",
+					"signature": "(strings: TemplateStringsArray, ...values: unknown[]): AccountCode",
+					"description": "Tagged template literal for creating AccountCode values",
+					"example": "const cash = ac`1-1100`;             // Cash at Bank\nconst sales = ac`4-1000`;            // Sales Revenue\n\n// Returns AccountCode type",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Branded Types",
+			"description": "Type-safe branded types that prevent accidental misuse of primitive values",
+			"category": "Types",
+			"items": [
+				{
+					"name": "YYYYMMDD",
+					"type": "type",
+					"signature": "type YYYYMMDD = Brand<string, \"YYYYMMDD\">",
+					"description": "Branded type for MoneyWorks date format (YYYYMMDD). Ensures type safety when working with date strings.",
+					"example": "// Explicit typing\nconst date: YYYYMMDD = createYYYYMMDD(\"20240703\");\n\n// Type guards narrow the type\nif (isYYYYMMDD(value)) {\n  // value is now typed as YYYYMMDD\n}\n\n// Functions require correct types\nfunction processDate(date: YYYYMMDD) {\n  // Type-safe date operations\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "YYYYMMDDWithMethods",
+					"type": "type",
+					"signature": "type YYYYMMDDWithMethods = YYYYMMDD & { ...methods }",
+					"description": "Extended YYYYMMDD type with fluent methods for date operations. Created by the `d` tagged template.",
+					"example": "const date = d`20240703`;\n\n// Comparison\nif (date.gt(today) && date.lt(deadline)) {\n  console.log('Date is in valid range');\n}\n\n// Arithmetic\nconst nextWeek = date.addDays(7);\nconst daysUntil = deadline.subtract(date);\n\n// Formatting\nconsole.log(date.format('/')); // \"2024/07/03\"",
+					"since": "0.1.0"
+				},
+				{
+					"name": "Period",
+					"type": "type",
+					"signature": "type Period = Brand<number, \"Period\">",
+					"description": "Branded type for MoneyWorks period numbers in YYYYMM format",
+					"example": "const period: Period = 202407 as Period;\n// Represents July 2024",
+					"since": "0.1.0"
+				},
+				{
+					"name": "AccountCode",
+					"type": "type",
+					"signature": "type AccountCode = Brand<string, \"AccountCode\">",
+					"description": "Branded type for MoneyWorks account codes",
+					"example": "const account: AccountCode = '1-1100' as AccountCode;\n// Cash at Bank account",
+					"since": "0.1.0"
+				},
+				{
+					"name": "NameCode",
+					"type": "type",
+					"signature": "type NameCode = Brand<string, \"NameCode\">",
+					"description": "Branded type for MoneyWorks name (customer/supplier) codes",
+					"example": "const customer: NameCode = 'CUST001' as NameCode;",
+					"since": "0.1.0"
+				},
+				{
+					"name": "ProductCode",
+					"type": "type",
+					"signature": "type ProductCode = Brand<string, \"ProductCode\">",
+					"description": "Branded type for MoneyWorks product codes",
+					"example": "const product: ProductCode = 'WIDG-001' as ProductCode;",
+					"since": "0.1.0"
+				},
+				{
+					"name": "TransactionSeq",
+					"type": "type",
+					"signature": "type TransactionSeq = Brand<number, \"TransactionSeq\">",
+					"description": "Branded type for MoneyWorks transaction sequence numbers",
+					"example": "const seq: TransactionSeq = 12345 as TransactionSeq;",
+					"since": "0.1.0"
+				},
+				{
+					"name": "HHMMSS",
+					"type": "type",
+					"signature": "type HHMMSS = Brand<string, \"HHMMSS\">",
+					"description": "Branded type for time strings in HHMMSS format",
+					"example": "const time: HHMMSS = '143025' as HHMMSS; // 2:30:25 PM",
+					"since": "0.1.0"
+				},
+				{
+					"name": "ISODateTime",
+					"type": "type",
+					"signature": "type ISODateTime = Brand<string, \"ISODateTime\">",
+					"description": "Branded type for ISO 8601 datetime strings",
+					"example": "const datetime: ISODateTime = '2024-07-03T14:30:25Z' as ISODateTime;",
+					"since": "0.1.0"
+				},
+				{
+					"name": "Brand",
+					"type": "type",
+					"signature": "type Brand<T, B> = T & { readonly __brand: B }",
+					"description": "Creates a branded type from a base type",
+					"example": "type CustomerID = Brand<string, 'CustomerID'>;\ntype OrderNumber = Brand<number, 'OrderNumber'>;\n\n// These are now distinct types despite same base type",
+					"since": "0.1.0"
+				},
+				{
+					"name": "Unbrand",
+					"type": "type",
+					"signature": "type Unbrand<T> = T extends Brand<infer U, any> ? U : T",
+					"description": "Extracts the base type from a branded type",
+					"example": "type Base = Unbrand<YYYYMMDD>; // string\ntype Num = Unbrand<Period>;     // number",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "YYYYMMDDWithMethods Methods",
+			"description": "Fluent methods available on dates created with the d`` template literal",
+			"category": "Date Methods",
+			"items": [
+				{
+					"name": "gt",
+					"type": "method",
+					"signature": "(other: Date | string | YYYYMMDD) => boolean",
+					"description": "Check if date is greater than another",
+					"example": "if (d`20240715`.gt(d`20240703`)) {\n  console.log('July 15 is after July 3');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "gte",
+					"type": "method",
+					"signature": "(other: Date | string | YYYYMMDD) => boolean",
+					"description": "Check if date is greater than or equal to another",
+					"example": "if (dueDate.gte(today)) {\n  console.log('Not overdue yet');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "lt",
+					"type": "method",
+					"signature": "(other: Date | string | YYYYMMDD) => boolean",
+					"description": "Check if date is less than another",
+					"example": "if (startDate.lt(endDate)) {\n  console.log('Valid date range');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "lte",
+					"type": "method",
+					"signature": "(other: Date | string | YYYYMMDD) => boolean",
+					"description": "Check if date is less than or equal to another",
+					"example": "if (date.lte(deadline)) {\n  console.log('Within deadline');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "eq",
+					"type": "method",
+					"signature": "(other: Date | string | YYYYMMDD) => boolean",
+					"description": "Check if date equals another",
+					"example": "if (selectedDate.eq(today)) {\n  console.log('Selected today');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "addDays",
+					"type": "method",
+					"signature": "(days: number) => YYYYMMDDWithMethods",
+					"description": "Add days to the date (negative values subtract)",
+					"example": "const nextWeek = d`20240703`.addDays(7);\nconst yesterday = today.addDays(-1);",
+					"since": "0.1.0"
+				},
+				{
+					"name": "addMonths",
+					"type": "method",
+					"signature": "(months: number) => YYYYMMDDWithMethods",
+					"description": "Add months to the date (negative values subtract)",
+					"example": "const nextQuarter = d`20240703`.addMonths(3);\nconst lastYear = today.addMonths(-12);",
+					"since": "0.1.0"
+				},
+				{
+					"name": "subtract",
+					"type": "method",
+					"signature": "(other: Date | string | YYYYMMDD) => number",
+					"description": "Get days between dates",
+					"example": "const daysUntilDue = dueDate.subtract(today);\nconsole.log(`${daysUntilDue} days remaining`);",
+					"since": "0.1.0"
+				},
+				{
+					"name": "format",
+					"type": "method",
+					"signature": "(separator?: string) => string",
+					"description": "Format date with separator (default: '/')",
+					"example": "d`20240703`.format();      // \"2024/07/03\"\nd`20240703`.format('-');   // \"2024-07-03\"\nd`20240703`.format('.');   // \"2024.07.03\"",
+					"since": "0.1.0"
+				},
+				{
+					"name": "toDate",
+					"type": "method",
+					"signature": "() => Date",
+					"description": "Convert to JavaScript Date object",
+					"example": "const jsDate = d`20240703`.toDate();\n// Wed Jul 03 2024 00:00:00 GMT+0000",
+					"since": "0.1.0"
+				},
+				{
+					"name": "toPeriod",
+					"type": "method",
+					"signature": "() => number",
+					"description": "Extract period (YYYYMM) as number",
+					"example": "const period = d`20240703`.toPeriod();\n// Returns: 202407",
+					"since": "0.1.0"
+				},
+				{
+					"name": "isWeekend",
+					"type": "method",
+					"signature": "() => boolean",
+					"description": "Check if date falls on weekend (Saturday or Sunday)",
+					"example": "if (d`20240706`.isWeekend()) {\n  console.log('This is a Saturday');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "isLeapYear",
+					"type": "method",
+					"signature": "() => boolean",
+					"description": "Check if the year is a leap year",
+					"example": "if (d`20240229`.isLeapYear()) {\n  console.log('2024 is a leap year');\n}",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Date Validators",
+			"description": "Type guards and validators for date formats",
+			"category": "Validators",
+			"items": [
+				{
+					"name": "isYYYYMMDD",
+					"type": "function",
+					"signature": "(value: string): value is YYYYMMDD",
+					"description": "Type guard to check if a string is in valid YYYYMMDD format. Validates date ranges including leap years.",
+					"example": "if (isYYYYMMDD(userInput)) {\n  // userInput is now typed as YYYYMMDD\n  const date = yyyymmddToDate(userInput);\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "isPeriod",
+					"type": "function",
+					"signature": "(value: number): value is Period",
+					"description": "Type guard that checks if a number is a valid Period (YYYYMM)",
+					"example": "if (isPeriod(202407)) {\n  // Valid period for July 2024\n  const nextPeriod = addPeriods(202407 as Period, 1);\n}",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Date Factory Functions",
+			"description": "Functions to create and convert date values safely",
+			"category": "Factory",
+			"items": [
+				{
+					"name": "createYYYYMMDD",
+					"type": "function",
+					"signature": "(value: string): YYYYMMDD",
+					"description": "Create a YYYYMMDD from a string with validation. Throws an error if the input is not a valid date.",
+					"example": "const date = createYYYYMMDD('20240703');\n// Throws: createYYYYMMDD('2024-07-03'); // Wrong format\n// Throws: createYYYYMMDD('20240230'); // Invalid date",
+					"since": "0.1.0"
+				},
+				{
+					"name": "tryCreateYYYYMMDD",
+					"type": "function",
+					"signature": "(value: string): YYYYMMDD | null",
+					"description": "Creates a YYYYMMDD from a string, returns null if invalid",
+					"example": "const date = tryCreateYYYYMMDD(userInput);\nif (date) {\n  console.log('Valid date:', date);\n} else {\n  console.error('Invalid date format');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "dateToYYYYMMDD",
+					"type": "function",
+					"signature": "(date: Date): YYYYMMDD",
+					"description": "Converts a JavaScript Date to YYYYMMDD format",
+					"example": "const today = dateToYYYYMMDD(new Date());\n// Returns: '20240703' as YYYYMMDD",
+					"since": "0.1.0"
+				},
+				{
+					"name": "yyyymmddToDate",
+					"type": "function",
+					"signature": "(value: YYYYMMDD): Date",
+					"description": "Converts a YYYYMMDD to a JavaScript Date",
+					"example": "const date = yyyymmddToDate('20240703' as YYYYMMDD);\n// Returns: Date object for July 3, 2024",
+					"since": "0.1.0"
+				},
+				{
+					"name": "parseToYYYYMMDD",
+					"type": "function",
+					"signature": "(value: string | Date | YYYYMMDD): YYYYMMDD",
+					"description": "Parses various date formats to YYYYMMDD. Supports ISO dates, slash format, and more.",
+					"example": "parseToYYYYMMDD('2024-07-03');     // ISO format\nparseToYYYYMMDD('2024/07/03');     // Slash format\nparseToYYYYMMDD('03/07/2024');     // AU/UK format\nparseToYYYYMMDD('07/03/2024');     // US format (ambiguous)\nparseToYYYYMMDD(new Date());       // Date object\nparseToYYYYMMDD('20240703');       // Already YYYYMMDD",
+					"since": "0.1.0"
+				},
+				{
+					"name": "todayYYYYMMDD",
+					"type": "function",
+					"signature": "(): YYYYMMDD",
+					"description": "Get today's date as YYYYMMDD",
+					"example": "const today = todayYYYYMMDD();\n// Returns current date as YYYYMMDD",
+					"since": "0.1.0"
+				},
+				{
+					"name": "createPeriod",
+					"type": "function",
+					"signature": "(yearOrValue: number, month?: number): Period",
+					"description": "Creates a Period from year/month or YYYYMM number",
+					"example": "const period1 = createPeriod(2024, 7);  // July 2024\nconst period2 = createPeriod(202407);   // Same period",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Date Manipulation",
+			"description": "Functions to manipulate and compare dates",
+			"category": "Date Operations",
+			"items": [
+				{
+					"name": "addDaysToYYYYMMDD",
+					"type": "function",
+					"signature": "(date: YYYYMMDD, days: number): YYYYMMDD",
+					"description": "Adds or subtracts days from a YYYYMMDD date",
+					"example": "const tomorrow = addDaysToYYYYMMDD('20240703' as YYYYMMDD, 1);\nconst yesterday = addDaysToYYYYMMDD('20240703' as YYYYMMDD, -1);",
+					"since": "0.1.0"
+				},
+				{
+					"name": "addMonthsToYYYYMMDD",
+					"type": "function",
+					"signature": "(date: YYYYMMDD, months: number): YYYYMMDD",
+					"description": "Adds or subtracts months from a YYYYMMDD date",
+					"example": "const nextMonth = addMonthsToYYYYMMDD('20240703' as YYYYMMDD, 1);\nconst lastYear = addMonthsToYYYYMMDD('20240703' as YYYYMMDD, -12);",
+					"since": "0.1.0"
+				},
+				{
+					"name": "daysBetweenYYYYMMDD",
+					"type": "function",
+					"signature": "(from: YYYYMMDD, to: YYYYMMDD): number",
+					"description": "Calculates the number of days between two dates",
+					"example": "const days = daysBetweenYYYYMMDD(\n  '20240701' as YYYYMMDD,\n  '20240710' as YYYYMMDD\n); // Returns: 9",
+					"since": "0.1.0"
+				},
+				{
+					"name": "compareYYYYMMDD",
+					"type": "function",
+					"signature": "(a: YYYYMMDD, b: YYYYMMDD): -1 | 0 | 1",
+					"description": "Compares two YYYYMMDD dates",
+					"example": "const result = compareYYYYMMDD(date1, date2);\n// Returns: -1 if date1 < date2\n//          0 if date1 === date2\n//          1 if date1 > date2",
+					"since": "0.1.0"
+				},
+				{
+					"name": "isBeforeYYYYMMDD",
+					"type": "function",
+					"signature": "(date: YYYYMMDD, other: YYYYMMDD): boolean",
+					"description": "Check if date is before another date",
+					"example": "if (isBeforeYYYYMMDD(startDate, endDate)) {\n  console.log('Valid date range');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "isAfterYYYYMMDD",
+					"type": "function",
+					"signature": "(date: YYYYMMDD, other: YYYYMMDD): boolean",
+					"description": "Check if date is after another date",
+					"example": "if (isAfterYYYYMMDD(dueDate, today)) {\n  console.log('Not yet due');\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "startOfMonthYYYYMMDD",
+					"type": "function",
+					"signature": "(date: YYYYMMDD): YYYYMMDD",
+					"description": "Get the first day of the month for a date",
+					"example": "const firstDay = startOfMonthYYYYMMDD('20240715' as YYYYMMDD);\n// Returns: '20240701'",
+					"since": "0.1.0"
+				},
+				{
+					"name": "endOfMonthYYYYMMDD",
+					"type": "function",
+					"signature": "(date: YYYYMMDD): YYYYMMDD",
+					"description": "Get the last day of the month for a date",
+					"example": "const lastDay = endOfMonthYYYYMMDD('20240715' as YYYYMMDD);\n// Returns: '20240731'",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Period Operations",
+			"description": "Functions to work with MoneyWorks periods (YYYYMM)",
+			"category": "Period Operations",
+			"items": [
+				{
+					"name": "addPeriods",
+					"type": "function",
+					"signature": "(period: Period, months: number): Period",
+					"description": "Adds or subtracts months from a period",
+					"example": "const nextMonth = addPeriods(202407 as Period, 1);   // 202408\nconst lastYear = addPeriods(202407 as Period, -12);  // 202307",
+					"since": "0.1.0"
+				},
+				{
+					"name": "periodsBetween",
+					"type": "function",
+					"signature": "(from: Period, to: Period): number",
+					"description": "Calculates the number of months between two periods",
+					"example": "const months = periodsBetween(\n  202401 as Period,\n  202407 as Period\n); // Returns: 6",
+					"since": "0.1.0"
+				},
+				{
+					"name": "isPeriodInRange",
+					"type": "function",
+					"signature": "(period: Period, start: Period, end: Period): boolean",
+					"description": "Checks if a period is within a range",
+					"example": "const inFY24 = isPeriodInRange(\n  202402 as Period,\n  202307 as Period,  // July 2023\n  202406 as Period   // June 2024\n); // Returns: true",
+					"since": "0.1.0"
+				},
+				{
+					"name": "periodToDateRange",
+					"type": "function",
+					"signature": "(period: Period): { start: YYYYMMDD; end: YYYYMMDD }",
+					"description": "Converts a period to its date range",
+					"example": "const range = periodToDateRange(202407 as Period);\n// Returns: { start: '20240701', end: '20240731' }",
+					"since": "0.1.0"
+				},
+				{
+					"name": "getCurrentPeriod",
+					"type": "function",
+					"signature": "(): Period",
+					"description": "Get the current period (YYYYMM)",
+					"example": "const currentPeriod = getCurrentPeriod();\n// Returns current month as Period",
+					"since": "0.1.0"
+				},
+				{
+					"name": "comparePeriods",
+					"type": "function",
+					"signature": "(a: Period, b: Period): -1 | 0 | 1",
+					"description": "Compare two periods",
+					"example": "const result = comparePeriods(period1, period2);\n// Returns: -1 if period1 < period2\n//          0 if period1 === period2\n//          1 if period1 > period2",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Formatters",
+			"description": "Functions to format dates and periods for display",
+			"category": "Formatting",
+			"items": [
+				{
+					"name": "formatYYYYMMDD",
+					"type": "function",
+					"signature": "(date: YYYYMMDD, separator?: string): string",
+					"description": "Formats a YYYYMMDD date for display with custom separator",
+					"example": "formatYYYYMMDD('20240703' as YYYYMMDD);       // '2024/07/03'\nformatYYYYMMDD('20240703' as YYYYMMDD, '-');  // '2024-07-03'\nformatYYYYMMDD('20240703' as YYYYMMDD, '.');  // '2024.07.03'",
+					"since": "0.1.0"
+				},
+				{
+					"name": "formatPeriod",
+					"type": "function",
+					"signature": "(period: Period, format?: 'YYYY/MM' | 'YYYY-MM' | 'MM/YYYY' | 'MMM YYYY'): string",
+					"description": "Formats a period for display in various formats",
+					"example": "formatPeriod(202407 as Period);                  // '2024/07'\nformatPeriod(202407 as Period, 'YYYY-MM');      // '2024-07'\nformatPeriod(202407 as Period, 'MM/YYYY');      // '07/2024'\nformatPeriod(202407 as Period, 'MMM YYYY');     // 'Jul 2024'",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "JSON Utilities",
+			"description": "Specialized JSON parsing and serialization for MoneyWorks data",
+			"category": "JSON",
+			"items": [
+				{
+					"name": "parseMoneyWorksJSON",
+					"type": "function",
+					"signature": "(json: string, options?: MoneyWorksParseOptions): unknown",
+					"description": "Parses JSON with MoneyWorks-specific type handling. Automatically converts date strings to YYYYMMDD and handles MoneyWorks-specific formats.",
+					"example": "const data = parseMoneyWorksJSON(jsonString, {\n  dateFields: ['Date', 'DueDate', 'PaymentDate'],\n  periodFields: ['Period', 'StartPeriod', 'EndPeriod'],\n  preserveNull: true\n});\n// Dates are converted to YYYYMMDD type\n// Periods are converted to Period type",
+					"since": "0.1.0"
+				},
+				{
+					"name": "parseMoneyWorksResponse",
+					"type": "function",
+					"signature": "(response: Response): Promise<unknown>",
+					"description": "Parse a fetch Response object with MoneyWorks conventions",
+					"example": "const response = await fetch('/api/invoices');\nconst data = await parseMoneyWorksResponse(response);\n// Handles MoneyWorks date formats automatically",
+					"since": "0.1.0"
+				},
+				{
+					"name": "stringifyMoneyWorks",
+					"type": "function",
+					"signature": "(value: unknown, options?: MoneyWorksStringifyOptions): string",
+					"description": "Serializes data with MoneyWorks formatting rules",
+					"example": "const json = stringifyMoneyWorks(data, {\n  dateFormat: 'YYYYMMDD',\n  omitNull: true,\n  pretty: true\n});\n// Dates are formatted as YYYYMMDD strings\n// Nulls are omitted\n// Output is pretty-printed",
+					"since": "0.1.0"
+				},
+				{
+					"name": "createTypedParser",
+					"type": "function",
+					"signature": "<T>(config: ParserConfig): (json: string) => T",
+					"description": "Creates a type-safe JSON parser with field configuration",
+					"example": "interface Invoice {\n  InvoiceNumber: string;\n  Date: YYYYMMDD;\n  DueDate: YYYYMMDD;\n  Total: number;\n}\n\nconst parseInvoice = createTypedParser<Invoice>({\n  dateFields: ['Date', 'DueDate'],\n  numberFields: ['Total', 'GST']\n});\n\nconst invoice = parseInvoice(jsonString);\n// Type-safe with dates as YYYYMMDD",
+					"since": "0.1.0"
+				},
+				{
+					"name": "safeStringify",
+					"type": "function",
+					"signature": "(value: unknown, fallback?: string): string",
+					"description": "Safely stringifies values, handling circular references and errors",
+					"example": "const json = safeStringify(complexObject, '{}');\n// Never throws, returns fallback on error\n// Handles circular references gracefully",
+					"since": "0.1.0"
+				},
+				{
+					"name": "stringifyForDisplay",
+					"type": "function",
+					"signature": "(value: unknown): string",
+					"description": "Format JSON for display with pretty printing and color support",
+					"example": "console.log(stringifyForDisplay(data));\n// Pretty-printed with 2-space indentation\n// Safe for terminal display",
+					"since": "0.1.0"
+				},
+				{
+					"name": "stringifyForAPI",
+					"type": "function",
+					"signature": "(value: unknown): string",
+					"description": "Format JSON for API transmission with MoneyWorks conventions",
+					"example": "const body = stringifyForAPI({\n  Date: d`20240703`,\n  Amount: 1234.56\n});\n// Compact format, dates as YYYYMMDD",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Utility Namespaces",
+			"description": "Organized namespaces for utility functions",
+			"category": "Namespaces",
+			"items": [
+				{
+					"name": "YYYYMMDDUtils",
+					"type": "namespace",
+					"signature": "namespace YYYYMMDDUtils",
+					"description": "Namespace containing all YYYYMMDD utility functions for convenient access",
+					"example": "import { YYYYMMDDUtils } from '@moneyworks/utilities';\n\n// Use utility functions\nconst isValid = YYYYMMDDUtils.is('20240703');\nconst date = YYYYMMDDUtils.create('20240703');\nconst today = YYYYMMDDUtils.today();\nconst formatted = YYYYMMDDUtils.format(date, '-');",
+					"since": "0.1.0"
+				},
+				{
+					"name": "PeriodUtils",
+					"type": "namespace",
+					"signature": "namespace PeriodUtils",
+					"description": "Namespace containing all Period utility functions",
+					"example": "import { PeriodUtils } from '@moneyworks/utilities';\n\n// Use period utilities\nconst current = PeriodUtils.current();\nconst next = PeriodUtils.add(current, 1);\nconst range = PeriodUtils.toDateRange(current);",
+					"since": "0.1.0"
+				}
+			]
+		}
+	],
+	"usage": {
+		"installation": "bun add @moneyworks/utilities",
+		"examples": [
+			{
+				"title": "Working with Fluent Date API",
+				"description": "Use the d`` template literal for intuitive date operations",
+				"code": "import { d } from '@moneyworks/utilities';\n\n// Create dates with fluent API\nconst invoice = {\n  date: d`20240703`,\n  dueDate: d`20240703`.addDays(30),\n  paymentTerms: 30\n};\n\n// Check if overdue\nconst today = d`${new Date()}`;\nif (invoice.dueDate.lt(today)) {\n  const daysOverdue = today.subtract(invoice.dueDate);\n  console.log(`Invoice is ${daysOverdue} days overdue`);\n}\n\n// Date comparisons\nconst dates = [\n  d`20240701`,\n  d`20240715`,\n  d`20240703`\n].sort((a, b) => a.lt(b) ? -1 : a.gt(b) ? 1 : 0);\n\n// Check business days\nlet businessDays = 0;\nlet current = d`20240701`;\nconst end = d`20240731`;\n\nwhile (current.lte(end)) {\n  if (!current.isWeekend()) {\n    businessDays++;\n  }\n  current = current.addDays(1);\n}\nconsole.log(`July 2024 has ${businessDays} business days`);"
+			},
+			{
+				"title": "Type-Safe Date Parsing",
+				"description": "Parse and validate dates from various sources",
+				"code": "import { isYYYYMMDD, parseToYYYYMMDD, tryCreateYYYYMMDD } from '@moneyworks/utilities';\n\n// Parse user input safely\nfunction processDateInput(input: string): YYYYMMDD | null {\n  // Try direct YYYYMMDD format first\n  if (isYYYYMMDD(input)) {\n    return input;\n  }\n  \n  // Try parsing other formats\n  try {\n    return parseToYYYYMMDD(input);\n  } catch {\n    return null;\n  }\n}\n\n// Validate date ranges\nfunction validateDateRange(start: string, end: string): boolean {\n  const startDate = tryCreateYYYYMMDD(start);\n  const endDate = tryCreateYYYYMMDD(end);\n  \n  if (!startDate || !endDate) {\n    return false;\n  }\n  \n  return startDate <= endDate;\n}\n\n// Parse API dates\nconst apiDates = [\n  '2024-07-03',      // ISO format\n  '03/07/2024',      // AU/UK format\n  '20240703',        // YYYYMMDD\n  new Date()         // JS Date\n].map(parseToYYYYMMDD);"
+			},
+			{
+				"title": "Working with Periods",
+				"description": "Handle MoneyWorks periods (YYYYMM) with type safety",
+				"code": "import { p, Period, addPeriods, periodToDateRange, PeriodUtils } from '@moneyworks/utilities';\n\n// Financial year handling\nclass FinancialYear {\n  constructor(\n    private startPeriod: Period,\n    private endPeriod: Period\n  ) {}\n  \n  static fromYear(year: number): FinancialYear {\n    return new FinancialYear(\n      p`${year}07`,     // July start\n      p`${year + 1}06`  // June end\n    );\n  }\n  \n  contains(period: Period): boolean {\n    return period >= this.startPeriod && period <= this.endPeriod;\n  }\n  \n  getPeriods(): Period[] {\n    const periods: Period[] = [];\n    let current = this.startPeriod;\n    \n    while (current <= this.endPeriod) {\n      periods.push(current);\n      current = addPeriods(current, 1);\n    }\n    \n    return periods;\n  }\n}\n\nconst fy24 = FinancialYear.fromYear(2023);\nconst periods = fy24.getPeriods();\n\n// Get date ranges for each period\nconst quarters = [\n  { q: 'Q1', periods: periods.slice(0, 3) },\n  { q: 'Q2', periods: periods.slice(3, 6) },\n  { q: 'Q3', periods: periods.slice(6, 9) },\n  { q: 'Q4', periods: periods.slice(9, 12) }\n].map(q => ({\n  quarter: q.q,\n  start: periodToDateRange(q.periods[0]).start,\n  end: periodToDateRange(q.periods[2]).end\n}));"
+			},
+			{
+				"title": "JSON Parsing with Type Safety",
+				"description": "Parse MoneyWorks API responses with automatic type conversion",
+				"code": "import { parseMoneyWorksJSON, createTypedParser, YYYYMMDD, Period, AccountCode } from '@moneyworks/utilities';\n\n// Define your types\ninterface Invoice {\n  InvoiceNumber: string;\n  Date: YYYYMMDD;\n  DueDate: YYYYMMDD;\n  Period: Period;\n  CustomerAccount: AccountCode;\n  Total: number;\n  GST: number;\n  Items: InvoiceItem[];\n}\n\ninterface InvoiceItem {\n  Description: string;\n  Quantity: number;\n  UnitPrice: number;\n  Account: AccountCode;\n}\n\n// Create a typed parser\nconst parseInvoice = createTypedParser<Invoice>({\n  dateFields: ['Date', 'DueDate'],\n  periodFields: ['Period'],\n  accountFields: ['CustomerAccount', 'Items.*.Account'],\n  numberFields: ['Total', 'GST', 'Items.*.Quantity', 'Items.*.UnitPrice']\n});\n\n// Parse API response\nconst response = await fetch('/api/invoice/INV-001');\nconst json = await response.text();\nconst invoice = parseInvoice(json);\n\n// All dates and periods are now properly typed\nconst daysUntilDue = d`${new Date()}`.subtract(invoice.DueDate);\nconst isCurrentPeriod = invoice.Period === p`${new Date()}`;\n\n// Parse multiple invoices\nconst invoicesJson = await fetch('/api/invoices').then(r => r.text());\nconst invoices = parseMoneyWorksJSON(invoicesJson, {\n  dateFields: ['[].Date', '[].DueDate'],\n  periodFields: ['[].Period'],\n  arrayPaths: ['$']\n}) as Invoice[];"
+			},
+			{
+				"title": "Creating Custom Branded Types",
+				"description": "Extend the type system with your own branded types",
+				"code": "import { Brand, Unbrand } from '@moneyworks/utilities';\n\n// Define custom branded types\ntype InvoiceNumber = Brand<string, 'InvoiceNumber'>;\ntype CustomerID = Brand<string, 'CustomerID'>;\ntype Amount = Brand<number, 'Amount'>;\ntype Percentage = Brand<number, 'Percentage'>;\n\n// Create validators\nfunction isInvoiceNumber(value: string): value is InvoiceNumber {\n  return /^INV-\\d{6}$/.test(value);\n}\n\nfunction isPercentage(value: number): value is Percentage {\n  return value >= 0 && value <= 100;\n}\n\n// Create factory functions\nfunction createInvoiceNumber(value: string): InvoiceNumber {\n  if (!isInvoiceNumber(value)) {\n    throw new Error(`Invalid invoice number format: ${value}`);\n  }\n  return value;\n}\n\nfunction createPercentage(value: number): Percentage {\n  if (!isPercentage(value)) {\n    throw new Error(`Percentage must be between 0 and 100: ${value}`);\n  }\n  return value;\n}\n\n// Tagged template for invoice numbers\nfunction inv(strings: TemplateStringsArray, ...values: any[]): InvoiceNumber {\n  const num = values[0];\n  return createInvoiceNumber(`INV-${String(num).padStart(6, '0')}`);\n}\n\n// Use in your domain\ninterface TaxCalculation {\n  rate: Percentage;\n  amount: Amount;\n  calculate(base: Amount): Amount;\n}\n\nconst gst: TaxCalculation = {\n  rate: createPercentage(10),\n  amount: 0 as Amount,\n  calculate(base: Amount): Amount {\n    const rate = Unbrand(this.rate);\n    const baseAmount = Unbrand(base);\n    return (baseAmount * rate / 100) as Amount;\n  }\n};\n\n// Type safety in action\nconst invoice = {\n  number: inv`123`,  // INV-000123\n  customer: 'CUST001' as CustomerID,\n  subtotal: 1000 as Amount,\n  taxRate: createPercentage(10),\n  // Type error: can't mix types\n  // taxRate: invoice.subtotal  // Error!\n};"
+			}
+		],
+		"importPatterns": [
+			{
+				"pattern": "import { d, p, ac } from '@moneyworks/utilities';",
+				"description": "Import tagged template literals for creating branded types with fluent APIs"
+			},
+			{
+				"pattern": "import { YYYYMMDD, Period, AccountCode } from '@moneyworks/utilities';",
+				"description": "Import type definitions"
+			},
+			{
+				"pattern": "import { YYYYMMDDUtils, PeriodUtils } from '@moneyworks/utilities';",
+				"description": "Import utility namespaces for organized access to functions"
+			},
+			{
+				"pattern": "import type { YYYYMMDDWithMethods } from '@moneyworks/utilities';",
+				"description": "Import the fluent date type for type annotations"
+			}
+		]
+	},
+	"designPrinciples": [
+		{
+			"principle": "Type Safety First",
+			"description": "All date and period values are branded types, preventing accidental misuse and ensuring compile-time safety."
+		},
+		{
+			"principle": "Fluent API Design",
+			"description": "The d`` template literal returns dates with chainable methods for intuitive date operations."
+		},
+		{
+			"principle": "MoneyWorks Native",
+			"description": "Follows MoneyWorks conventions: YYYYMMDD for dates, YYYYMM for periods, preserving the native data formats."
+		},
+		{
+			"principle": "Zero Dependencies",
+			"description": "No external dependencies, ensuring small bundle size and maximum compatibility."
+		},
+		{
+			"principle": "Validation by Design",
+			"description": "Invalid values are caught at creation time, not usage time, through factory functions and type guards."
+		},
+		{
+			"principle": "Ergonomic API",
+			"description": "Tagged template literals and intuitive method names make the library pleasant to use."
+		}
+	]
 }

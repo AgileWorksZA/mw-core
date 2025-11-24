@@ -1,23 +1,20 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "composite": true,
-    "declaration": true,
-    "declarationMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "@moneyworks/data": ["../data/src/index.ts"],
-      "@moneyworks/data/*": ["../data/src/*"],
-      "@moneyworks/canonical": ["../canonical/src/index.ts"],
-      "@moneyworks/canonical/*": ["../canonical/src/*"],
-      "@moneyworks/utilities": ["../utilities/src/index.ts"],
-      "@moneyworks/utilities/*": ["../utilities/src/*"]
-    }
-  },
-  "include": ["src/**/*"],
-  "references": [
-    { "path": "../data" },
-    { "path": "../canonical" }
-  ]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
+		"baseUrl": ".",
+		"paths": {
+			"@moneyworks/data": ["../data/src/index.ts"],
+			"@moneyworks/data/*": ["../data/src/*"],
+			"@moneyworks/canonical": ["../canonical/src/index.ts"],
+			"@moneyworks/canonical/*": ["../canonical/src/*"],
+			"@moneyworks/utilities": ["../utilities/src/index.ts"],
+			"@moneyworks/utilities/*": ["../utilities/src/*"]
+		}
+	},
+	"include": ["src/**/*"],
+	"references": [{ "path": "../data" }, { "path": "../canonical" }]
 }

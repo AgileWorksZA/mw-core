@@ -328,4 +328,4 @@ export function getReorderQuantity(product: Product): number | undefined {
 export function formatProductDisplay(product: Product): string {
   return `${product.Code} - ${product.Description} (${product.Type})`;
 }
-```
+""`

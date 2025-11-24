@@ -46,10 +46,12 @@ export const evalTool = {
 			};
 
 			return {
-				content: [{
-					type: "text",
-					text: JSON.stringify(evalResult, null, 2),
-				}],
+				content: [
+					{
+						type: "text",
+						text: JSON.stringify(evalResult, null, 2),
+					},
+				],
 			};
 		} catch (error) {
 			// Provide helpful context for common MWScript errors

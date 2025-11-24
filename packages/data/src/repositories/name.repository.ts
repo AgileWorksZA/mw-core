@@ -121,14 +121,16 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 		params?: MoneyWorksQueryParams,
 	): Promise<MoneyWorksName[]> {
 		// Check if we're in mock mode
-		if (process.env.MONEYWORKS_MOCK_MODE === 'true') {
+		if (process.env.MONEYWORKS_MOCK_MODE === "true") {
 			console.log("[NameRepository] Using mock mode for search:", search);
-			
+
 			// Return mock supplier data if search indicates suppliers
-			if (search?.toLowerCase().includes('supplier') || 
-			    search?.toLowerCase().includes('creditor') ||
-			    params?.search?.toLowerCase().includes('supplier') ||
-			    params?.search?.toLowerCase().includes('creditor')) {
+			if (
+				search?.toLowerCase().includes("supplier") ||
+				search?.toLowerCase().includes("creditor") ||
+				params?.search?.toLowerCase().includes("supplier") ||
+				params?.search?.toLowerCase().includes("creditor")
+			) {
 				const mockSuppliers = [
 					{
 						Code: "SUP001",
@@ -138,17 +140,17 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 						CustomerType: 0,
 						SupplierType: 1,
 						Kind: 1,
-						Hold: false
+						Hold: false,
 					},
 					{
-						Code: "SUP002", 
+						Code: "SUP002",
 						Name: "Global Materials Inc",
 						Phone: "+1 555-0200",
 						Email: "sales@globalmaterials.com",
 						CustomerType: 0,
 						SupplierType: 1,
 						Kind: 1,
-						Hold: false
+						Hold: false,
 					},
 					{
 						Code: "SUP003",
@@ -158,7 +160,7 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 						CustomerType: 0,
 						SupplierType: 1,
 						Kind: 1,
-						Hold: false
+						Hold: false,
 					},
 					{
 						Code: "CRED001",
@@ -168,7 +170,7 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 						CustomerType: 0,
 						SupplierType: 2,
 						Kind: 1,
-						Hold: false
+						Hold: false,
 					},
 					{
 						Code: "CRED002",
@@ -178,20 +180,25 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 						CustomerType: 0,
 						SupplierType: 2,
 						Kind: 1,
-						Hold: false
-					}
+						Hold: false,
+					},
 				];
-				
+
 				return mockSuppliers.map((record) => this.postProcess(record));
 			}
-			
+
 			// Return empty array for other searches in mock mode
 			return [];
 		}
-		
+
 		// Use smartExport which returns objects by default
-		console.log("[NameRepository.find] Calling smartExport with search:", search, "params:", params);
-		
+		console.log(
+			"[NameRepository.find] Calling smartExport with search:",
+			search,
+			"params:",
+			params,
+		);
+
 		try {
 			const result = await this.client.smartExport(this.tableName, {
 				search,
@@ -201,11 +208,18 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 
 			// smartExport returns an array of objects when exportFormat is 'full'
 			if (!Array.isArray(result)) {
-				console.error("[NameRepository.find] Unexpected response format:", result);
+				console.error(
+					"[NameRepository.find] Unexpected response format:",
+					result,
+				);
 				throw new Error("Unexpected response format");
 			}
 
-			console.log("[NameRepository.find] Got", result.length, "records from MoneyWorks");
+			console.log(
+				"[NameRepository.find] Got",
+				result.length,
+				"records from MoneyWorks",
+			);
 			return result.map((record) => this.postProcess(record));
 		} catch (error) {
 			console.error("[NameRepository.find] Error from smartExport:", error);
@@ -461,12 +475,12 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 	): Promise<MoneyWorksName[]> {
 		// MoneyWorks search expressions are very limited - only exact matches work
 		// For text search, we need to fetch data and filter in JavaScript
-		
+
 		let baseFilter = "";
-		
+
 		// Build MoneyWorks filter for type constraints only
 		const typeFilters = [];
-		
+
 		// Add customer type filter
 		if (options.customerType === "customers") {
 			typeFilters.push("(CustomerType=1 OR CustomerType=2)");
@@ -484,7 +498,7 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 		} else if (options.supplierType === "none") {
 			typeFilters.push("SupplierType=0");
 		}
-		
+
 		if (typeFilters.length > 0) {
 			baseFilter = typeFilters.join(" AND ");
 		}
@@ -493,21 +507,21 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 		// Use a reasonable limit to avoid fetching too many records
 		const fetchLimit = Math.max(options.limit || 100, 1000);
 		const allRecords = await this.find(baseFilter || undefined, {
-			limit: fetchLimit
+			limit: fetchLimit,
 		});
 
 		// Now filter by search text in JavaScript
 		const searchFields = options.searchFields || ["Code", "Name"];
 		const searchTextLower = searchText.toLowerCase();
-		
+
 		let filteredRecords = allRecords;
-		
+
 		// Only apply text search if searchText is provided
 		if (searchText.trim()) {
-			filteredRecords = allRecords.filter(record => {
-				return searchFields.some(field => {
+			filteredRecords = allRecords.filter((record) => {
+				return searchFields.some((field) => {
 					const fieldValue = record[field as keyof MoneyWorksName];
-					if (typeof fieldValue === 'string') {
+					if (typeof fieldValue === "string") {
 						return fieldValue.toLowerCase().includes(searchTextLower);
 					}
 					return false;
@@ -518,7 +532,7 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 		// Apply offset and limit
 		const offset = options.offset || 0;
 		const limit = options.limit || filteredRecords.length;
-		
+
 		return filteredRecords.slice(offset, offset + limit);
 	}
 

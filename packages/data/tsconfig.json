@@ -1,28 +1,25 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "declaration": true,
-    "declarationMap": true,
-    "composite": true,
-    "tsBuildInfoFile": "./tsconfig.tsbuildinfo",
-    "noEmit": false,
-    "allowImportingTsExtensions": false,
-    "paths": {
-      "@moneyworks/canonical": ["../canonical/src/index.ts"],
-      "@moneyworks/canonical/*": ["../canonical/src/*"],
-      "@moneyworks/utilities": ["../utilities/src/index.ts"],
-      "@moneyworks/utilities/*": ["../utilities/src/*"],
-      "@moneyworks/data": ["./src/index.ts"],
-      "@moneyworks/data/*": ["./src/*"]
-    },
-    "baseUrl": "."
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"],
-  "references": [
-    { "path": "../canonical" },
-    { "path": "../utilities" }
-  ]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./dist",
+		"declaration": true,
+		"declarationMap": true,
+		"composite": true,
+		"tsBuildInfoFile": "./tsconfig.tsbuildinfo",
+		"noEmit": false,
+		"allowImportingTsExtensions": false,
+		"paths": {
+			"@moneyworks/canonical": ["../canonical/src/index.ts"],
+			"@moneyworks/canonical/*": ["../canonical/src/*"],
+			"@moneyworks/utilities": ["../utilities/src/index.ts"],
+			"@moneyworks/utilities/*": ["../utilities/src/*"],
+			"@moneyworks/data": ["./src/index.ts"],
+			"@moneyworks/data/*": ["./src/*"]
+		},
+		"baseUrl": "."
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"],
+	"references": [{ "path": "../canonical" }, { "path": "../utilities" }]
 }

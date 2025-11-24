@@ -8,7 +8,7 @@
 // Date utilities
 export * from "./date/index";
 
-// JSON utilities  
+// JSON utilities
 export * from "./json/index";
 
 // Type utilities

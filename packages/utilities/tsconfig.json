@@ -1,15 +1,15 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "composite": true,
-    "types": ["bun-types"],
-    "declaration": true,
-    "declarationMap": true,
-    "noEmit": false,
-    "allowImportingTsExtensions": false
-  },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts"]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./dist",
+		"composite": true,
+		"types": ["bun-types"],
+		"declaration": true,
+		"declarationMap": true,
+		"noEmit": false,
+		"allowImportingTsExtensions": false
+	},
+	"include": ["src/**/*"],
+	"exclude": ["src/**/*.test.ts", "src/**/*.spec.ts"]
 }

@@ -6,25 +6,28 @@
 import type { SmartMoneyWorksClient } from "@moneyworks/data";
 import type { MoneyWorksEvalParams } from "../types/index.js";
 export declare const evalTool: {
-    definition: {
-        name: string;
-        description: string;
-        inputSchema: {
-            type: string;
-            properties: {
-                expression: {
-                    type: string;
-                    description: string;
-                };
-            };
-            required: string[];
-        };
-    };
-    handler(client: SmartMoneyWorksClient, params: MoneyWorksEvalParams): Promise<{
-        content: Array<{
-            type: "text";
-            text: string;
-        }>;
-    }>;
+	definition: {
+		name: string;
+		description: string;
+		inputSchema: {
+			type: string;
+			properties: {
+				expression: {
+					type: string;
+					description: string;
+				};
+			};
+			required: string[];
+		};
+	};
+	handler(
+		client: SmartMoneyWorksClient,
+		params: MoneyWorksEvalParams,
+	): Promise<{
+		content: Array<{
+			type: "text";
+			text: string;
+		}>;
+	}>;
 };
 //# sourceMappingURL=eval.tool.d.ts.map

@@ -1,26 +1,26 @@
 {
-  "version": "1.0.0",
-  "createdAt": "2025-11-23T07:39:57.493Z",
-  "lastUpdated": "2025-11-23T08:00:00.000Z",
-  "stats": {
-    "totalEntities": 6,
-    "totalRelations": 5,
-    "totalComponents": 3,
-    "totalPatterns": 6,
-    "totalPainPoints": 2,
-    "totalCausalChains": 0,
-    "totalValueJudgments": 0,
-    "totalPurposes": 0,
-    "averageConfidence": 0.95,
-    "totalSessions": 1
-  },
-  "health": {
-    "ontologyCoverage": 0.75,
-    "epistemicConfidence": 0.96,
-    "qualiaDepth": 0.60,
-    "causationDepth": 0,
-    "axiologyDepth": 0,
-    "teleologyDepth": 0,
-    "lastCompaction": null
-  }
+	"version": "1.0.0",
+	"createdAt": "2025-11-23T07:39:57.493Z",
+	"lastUpdated": "2025-11-23T08:00:00.000Z",
+	"stats": {
+		"totalEntities": 6,
+		"totalRelations": 5,
+		"totalComponents": 3,
+		"totalPatterns": 6,
+		"totalPainPoints": 2,
+		"totalCausalChains": 0,
+		"totalValueJudgments": 0,
+		"totalPurposes": 0,
+		"averageConfidence": 0.95,
+		"totalSessions": 1
+	},
+	"health": {
+		"ontologyCoverage": 0.75,
+		"epistemicConfidence": 0.96,
+		"qualiaDepth": 0.6,
+		"causationDepth": 0,
+		"axiologyDepth": 0,
+		"teleologyDepth": 0,
+		"lastCompaction": null
+	}
 }

@@ -1,368 +1,368 @@
 {
-  "name": "@moneyworks/data",
-  "version": "0.1.0",
-  "description": "Intelligent data access layer for MoneyWorks REST API with automatic field discovery",
-  "overview": "This package provides a sophisticated data access layer featuring automatic field discovery, multiple export formats, and a clean repository pattern. It abstracts the complexities of MoneyWorks' TSV-based REST API while maintaining full type safety and offering flexible data export options.",
-  "exports": [
-    {
-      "name": "Main Entry Points",
-      "description": "Primary functions for creating configured clients and repositories",
-      "category": "Core",
-      "items": [
-        {
-          "name": "createDataLayer",
-          "type": "function",
-          "signature": "(config?: Partial<MoneyWorksConfig>): Promise<DataLayer>",
-          "description": "Creates a configured data layer with smart client and repositories. Uses environment variables for configuration if not provided.",
-          "example": "// Using environment variables\nconst { client, repositories } = await createDataLayer();\n\n// With explicit config\nconst { client, repositories } = await createDataLayer({\n  host: 'localhost',\n  port: 6710,\n  dataFile: 'Accounts',\n  username: 'admin',\n  password: 'password'\n});\n\n// Use repositories\nconst taxRates = await repositories.taxRate.findAll();",
-          "since": "0.1.0"
-        },
-        {
-          "name": "createSmartClient",
-          "type": "function",
-          "signature": "(config?: Partial<MoneyWorksConfig>): SmartMoneyWorksClient",
-          "description": "Creates a smart client instance with automatic field discovery capabilities",
-          "example": "const client = createSmartClient({\n  host: 'localhost',\n  port: 6710\n});\n\nconst data = await client.smartExport('TaxRate', {\n  exportFormat: 'full'\n});",
-          "since": "0.1.0"
-        },
-        {
-          "name": "createRepository",
-          "type": "function",
-          "signature": "<T>(client: SmartMoneyWorksClient, tableName: string): BaseMoneyWorksRepository<T>",
-          "description": "Creates a generic repository instance for any MoneyWorks table",
-          "example": "interface Product {\n  ProductCode: string;\n  Description: string;\n  Price: number;\n}\n\nconst productRepo = createRepository<Product>(client, 'Product');\nconst products = await productRepo.findAll();",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Client Classes",
-      "description": "Low-level and high-level client implementations for MoneyWorks REST API",
-      "category": "Clients",
-      "items": [
-        {
-          "name": "MoneyWorksRESTClient",
-          "type": "class",
-          "signature": "class MoneyWorksRESTClient",
-          "description": "Low-level REST client that handles raw TSV/XML communication with MoneyWorks server. Manages authentication and connection pooling.",
-          "example": "const client = new MoneyWorksRESTClient({\n  host: 'localhost',\n  port: 6710,\n  dataFile: 'Accounts',\n  username: 'admin',\n  password: 'password'\n});\n\n// Export as TSV arrays\nconst tsv = await client.export('TaxRate');\n// [[\"GST10\", \"1400\", \"2400\", ...]]\n\n// Export as XML\nconst xml = await client.export('TaxRate', { format: 'xml' });\n\n// Evaluate MWScript\nconst date = await client.evaluate('Date()');",
-          "since": "0.1.0"
-        },
-        {
-          "name": "SmartMoneyWorksClient",
-          "type": "class",
-          "signature": "class SmartMoneyWorksClient extends MoneyWorksRESTClient",
-          "description": "High-level client with automatic field discovery. Extends REST client to provide typed object responses and multiple export formats.",
-          "example": "const smartClient = new SmartMoneyWorksClient(config);\n\n// Automatic field discovery and object conversion\nconst taxRates = await smartClient.smartExport('TaxRate');\n// [{ TaxCode: \"GST10\", Rate1: 10, ... }]\n\n// Different export formats\nconst compact = await smartClient.smartExport('TaxRate', {\n  exportFormat: 'compact'\n});\n\nconst schema = await smartClient.smartExport('TaxRate', {\n  exportFormat: 'schema'\n});",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Repository Classes",
-      "description": "Repository pattern implementations providing clean data access abstraction",
-      "category": "Repositories",
-      "items": [
-        {
-          "name": "BaseMoneyWorksRepository",
-          "type": "abstract class",
-          "signature": "abstract class BaseMoneyWorksRepository<T> implements IMoneyWorksRepository<T>",
-          "description": "Abstract base class for all entity repositories. Provides standard CRUD operations and can be extended for custom entities.",
-          "example": "class AccountRepository extends BaseMoneyWorksRepository<MoneyWorksAccount> {\n  constructor(client: SmartMoneyWorksClient) {\n    super(client, 'Account');\n  }\n  \n  async findByType(type: string): Promise<MoneyWorksAccount[]> {\n    return this.find({ filter: `Type = '${type}'` });\n  }\n  \n  protected async postProcess(data: any): Promise<MoneyWorksAccount> {\n    return {\n      ...data,\n      AccountCode: data.AccountCode as AccountCode\n    };\n  }\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "TaxRateRepository",
-          "type": "class",
-          "signature": "class TaxRateRepository extends BaseMoneyWorksRepository<MoneyWorksTaxRate>",
-          "description": "Concrete repository implementation for TaxRate entity with specialized methods",
-          "example": "const taxRepo = new TaxRateRepository(client);\n\n// Standard CRUD\nconst all = await taxRepo.findAll();\nconst gst10 = await taxRepo.findByKey('GST10');\n\n// Specialized methods\nconst active = await taxRepo.findActive();\nconst gstRates = await taxRepo.findGSTRates();\nconst forAccount = await taxRepo.findByAccount('1400');",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Field Discovery",
-      "description": "Functions for automatic field structure discovery from MoneyWorks tables",
-      "category": "Discovery",
-      "items": [
-        {
-          "name": "discoverTableStructure",
-          "type": "function",
-          "signature": "(client: MoneyWorksRESTClient, tableName: string): Promise<TableStructure>",
-          "description": "Discovers field names, types, and order by exporting one record as XML. This is the core innovation that enables automatic field mapping.",
-          "example": "const structure = await discoverTableStructure(client, 'Account');\n// {\n//   AccountCode: { index: 0, type: 'string', xmlName: 'accountcode' },\n//   Description: { index: 1, type: 'string', xmlName: 'description' },\n//   Type: { index: 2, type: 'string', xmlName: 'type' },\n//   ...\n// }",
-          "since": "0.1.0"
-        },
-        {
-          "name": "getFieldInfo",
-          "type": "function",
-          "signature": "(client: MoneyWorksRESTClient, tableName: string): Promise<Record<string, FieldInfo>>",
-          "description": "Gets cached field information or discovers it if not cached",
-          "example": "const fields = await getFieldInfo(client, 'TaxRate');\n// Returns cached structure or discovers if needed",
-          "since": "0.1.0"
-        },
-        {
-          "name": "clearFieldCache",
-          "type": "function",
-          "signature": "(tableName: string): Promise<void>",
-          "description": "Clears cached field structure for a specific table. Use when table structure changes.",
-          "example": "// Clear cache after adding custom fields\nawait clearFieldCache('Account');\n\n// Next query will re-discover structure\nconst accounts = await client.smartExport('Account');",
-          "since": "0.1.0"
-        },
-        {
-          "name": "clearAllFieldCaches",
-          "type": "function",
-          "signature": "(): Promise<void>",
-          "description": "Clears all cached field structures. Use when upgrading MoneyWorks or after major schema changes.",
-          "example": "// Clear all caches\nawait clearAllFieldCaches();\n\n// All subsequent queries will re-discover structures",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "TSV Parsing",
-      "description": "Utilities for parsing MoneyWorks TSV format with discovered field structures",
-      "category": "Parsing",
-      "items": [
-        {
-          "name": "parseTSVWithStructure",
-          "type": "function",
-          "signature": "(tsvData: string[][], fieldInfo: Record<string, FieldInfo>): any[]",
-          "description": "Converts TSV arrays to objects using discovered field structure. Handles type conversions for dates and numbers.",
-          "example": "const fieldInfo = await getFieldInfo(client, 'TaxRate');\nconst tsvData = [[\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]];\n\nconst objects = parseTSVWithStructure(tsvData, fieldInfo);\n// [{\n//   TaxCode: \"GST10\",\n//   PaidAccount: \"1400\",\n//   RecAccount: \"2400\",\n//   Date: \"20240101\",\n//   Rate1: 10,\n//   Rate2: 0\n// }]",
-          "since": "0.1.0"
-        },
-        {
-          "name": "validateTSVStructure",
-          "type": "function",
-          "signature": "(row: string[], fieldInfo: Record<string, FieldInfo>): boolean",
-          "description": "Validates that a TSV row matches the expected field structure",
-          "example": "const isValid = validateTSVStructure(\n  [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"],\n  fieldInfo\n);\n// true if row has correct number of fields",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Export Format Converters",
-      "description": "Functions to convert between different export formats",
-      "category": "Converters",
-      "items": [
-        {
-          "name": "convertToCompact",
-          "type": "function",
-          "signature": "(data: any[], fieldInfo: Record<string, FieldInfo>): string[][]",
-          "description": "Converts objects to compact array format for network efficiency",
-          "example": "const objects = [{ TaxCode: \"GST10\", Rate1: 10, ... }];\nconst compact = convertToCompact(objects, fieldInfo);\n// [[\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]]",
-          "since": "0.1.0"
-        },
-        {
-          "name": "convertToCompactHeaders",
-          "type": "function", 
-          "signature": "(data: any[], fieldInfo: Record<string, FieldInfo>): string[][]",
-          "description": "Converts objects to compact format with header row",
-          "example": "const compactHeaders = convertToCompactHeaders(objects, fieldInfo);\n// [\n//   [\"TaxCode\", \"PaidAccount\", \"RecAccount\", \"Date\", \"Rate1\", \"Rate2\"],\n//   [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]\n// ]",
-          "since": "0.1.0"
-        },
-        {
-          "name": "convertToSchema",
-          "type": "function",
-          "signature": "(data: any[], tableName: string, fieldInfo: Record<string, FieldInfo>): SchemaEnrichedExport",
-          "description": "Converts to schema-enriched format with full metadata for LLM understanding",
-          "example": "const schema = convertToSchema(objects, 'TaxRate', fieldInfo);\n// {\n//   schema: {\n//     TaxCode: { type: \"string\", required: true, ... },\n//     ...\n//   },\n//   data: [...],\n//   metadata: { table: \"TaxRate\", ... }\n// }",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Types and Interfaces",
-      "description": "Core type definitions for configuration, queries, and data structures",
-      "category": "Types",
-      "items": [
-        {
-          "name": "MoneyWorksConfig",
-          "type": "interface",
-          "signature": "interface MoneyWorksConfig",
-          "description": "Configuration options for MoneyWorks connection",
-          "example": "const config: MoneyWorksConfig = {\n  host: 'localhost',\n  port: 6710,\n  dataFile: 'Accounts',\n  username: 'admin',\n  password: 'password',\n  timeout: 30000,\n  version: '9'\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "MoneyWorksQueryParams",
-          "type": "interface",
-          "signature": "interface MoneyWorksQueryParams",
-          "description": "Query parameters for filtering, sorting, and pagination",
-          "example": "const params: MoneyWorksQueryParams = {\n  filter: 'Status = \"Active\"',\n  search: 'GST',\n  orderBy: 'TaxCode DESC',\n  limit: 50,\n  offset: 0\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "ExportFormat",
-          "type": "type",
-          "signature": "type ExportFormat = 'compact' | 'compact-headers' | 'full' | 'schema'",
-          "description": "Available export format options",
-          "example": "const format: ExportFormat = 'full';\n\nconst data = await client.smartExport('TaxRate', {\n  exportFormat: format\n});",
-          "since": "0.1.0"
-        },
-        {
-          "name": "FieldInfo",
-          "type": "interface",
-          "signature": "interface FieldInfo { index: number; type: string; xmlName: string; }",
-          "description": "Metadata about a field discovered from XML export",
-          "example": "const fieldInfo: FieldInfo = {\n  index: 0,           // Position in TSV\n  type: 'string',     // Data type\n  xmlName: 'taxcode'  // Original XML element name\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "TableStructure",
-          "type": "type",
-          "signature": "type TableStructure = Record<string, FieldInfo>",
-          "description": "Complete field structure for a MoneyWorks table",
-          "example": "const structure: TableStructure = {\n  TaxCode: { index: 0, type: 'string', xmlName: 'taxcode' },\n  PaidAccount: { index: 1, type: 'string', xmlName: 'paidaccount' },\n  // ... other fields\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "ImportOptions",
-          "type": "interface",
-          "signature": "interface ImportOptions { mode?: 'add' | 'update' | 'set'; }",
-          "description": "Options for importing data into MoneyWorks",
-          "example": "const options: ImportOptions = {\n  mode: 'update'  // Update existing records\n};\n\nconst result = await repository.import(records, options);",
-          "since": "0.1.0"
-        },
-        {
-          "name": "ImportResult",
-          "type": "interface",
-          "signature": "interface ImportResult { imported: number; errors: number; messages: string[]; }",
-          "description": "Result of an import operation",
-          "example": "const result: ImportResult = {\n  imported: 45,\n  errors: 2,\n  messages: [\n    \"Record GST99: Invalid tax code\",\n    \"Record GST98: Account 9999 not found\"\n  ]\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "SchemaEnrichedExport",
-          "type": "interface",
-          "signature": "interface SchemaEnrichedExport { schema: Schema; data: any[]; metadata: Metadata; }",
-          "description": "Export format with complete schema information for LLM consumption",
-          "example": "const enriched: SchemaEnrichedExport = {\n  schema: {\n    TaxCode: {\n      type: 'string',\n      required: true,\n      description: 'Unique tax code identifier',\n      maxLength: 10\n    }\n  },\n  data: [{ TaxCode: 'GST10', ... }],\n  metadata: {\n    table: 'TaxRate',\n    exportedAt: '2025-01-15T10:30:00Z',\n    recordCount: 1,\n    moneyWorksVersion: '9.1.7'\n  }\n};",
-          "since": "0.1.0"
-        },
-        {
-          "name": "DataLayer",
-          "type": "interface",
-          "signature": "interface DataLayer { client: SmartMoneyWorksClient; repositories: Repositories; }",
-          "description": "Return type of createDataLayer containing client and repositories",
-          "example": "const dataLayer: DataLayer = await createDataLayer();\n\n// Access client\nconst data = await dataLayer.client.smartExport('Account');\n\n// Access repositories  \nconst taxRates = await dataLayer.repositories.taxRate.findAll();",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Repository Interface",
-      "description": "Standard interface implemented by all repositories",
-      "category": "Interfaces",
-      "items": [
-        {
-          "name": "IMoneyWorksRepository",
-          "type": "interface",
-          "signature": "interface IMoneyWorksRepository<T>",
-          "description": "Standard repository interface with CRUD operations",
-          "example": "interface IMoneyWorksRepository<T> {\n  find(params?: MoneyWorksQueryParams): Promise<T[]>;\n  findByKey(key: string): Promise<T | null>;\n  findAll(): Promise<T[]>;\n  create(data: Partial<T>): Promise<T>;\n  update(key: string, data: Partial<T>): Promise<T>;\n  delete(key: string): Promise<boolean>;\n  import(data: Partial<T>[], options?: ImportOptions): Promise<ImportResult>;\n}",
-          "since": "0.1.0"
-        }
-      ]
-    }
-  ],
-  "usage": {
-    "examples": [
-      {
-        "title": "Basic Setup and Usage",
-        "description": "Complete example showing data layer setup and common operations",
-        "code": "import { createDataLayer } from '@moneyworks/data';\nimport { d } from '@moneyworks/utilities';\n\n// Initialize data layer\nconst { client, repositories } = await createDataLayer();\n\n// Repository operations\nconst allTaxRates = await repositories.taxRate.findAll();\nconst gst10 = await repositories.taxRate.findByKey('GST10');\n\n// Create new tax rate\nconst newRate = await repositories.taxRate.create({\n  TaxCode: 'GST15',\n  PaidAccount: '1400',\n  RecAccount: '2400',\n  Date: d`20250101`,\n  Rate1: 15,\n  Rate2: 0\n});\n\n// Query with filters\nconst highRates = await repositories.taxRate.find({\n  filter: 'Rate1 > 10',\n  orderBy: 'Rate1 DESC'\n});\n\n// Direct client usage with different formats\nconst compact = await client.smartExport('Account', {\n  exportFormat: 'compact',\n  filter: 'Type = \"Income\"'\n});"
-      },
-      {
-        "title": "Custom Repository Implementation",
-        "description": "Creating a repository for a custom MoneyWorks entity",
-        "code": "import { BaseMoneyWorksRepository, SmartMoneyWorksClient } from '@moneyworks/data';\nimport { MoneyWorksInvoice } from '@moneyworks/canonical';\nimport { YYYYMMDD, Period, d } from '@moneyworks/utilities';\n\nclass InvoiceRepository extends BaseMoneyWorksRepository<MoneyWorksInvoice> {\n  constructor(client: SmartMoneyWorksClient) {\n    super(client, 'Transaction');\n  }\n  \n  // Custom business methods\n  async findOverdue(): Promise<MoneyWorksInvoice[]> {\n    const today = d`${new Date()}`;\n    return this.find({\n      filter: `Type = \"Invoice\" AND DueDate < '${today}' AND AmountDue > 0`,\n      orderBy: 'DueDate'\n    });\n  }\n  \n  async findByCustomer(customerCode: string): Promise<MoneyWorksInvoice[]> {\n    return this.find({\n      filter: `Type = \"Invoice\" AND NameCode = '${customerCode}'`,\n      orderBy: 'TransDate DESC'\n    });\n  }\n  \n  async findByPeriod(period: Period): Promise<MoneyWorksInvoice[]> {\n    return this.find({\n      filter: `Type = \"Invoice\" AND Period = ${period}`\n    });\n  }\n  \n  // Add branded types in post-processing\n  protected async postProcess(data: any): Promise<MoneyWorksInvoice> {\n    return {\n      ...data,\n      TransDate: data.TransDate as YYYYMMDD,\n      DueDate: data.DueDate as YYYYMMDD,\n      Period: data.Period as Period,\n      TransactionSeq: data.TransactionSeq as TransactionSeq\n    };\n  }\n  \n  // Prepare data for import\n  protected prepareForImport(data: Partial<MoneyWorksInvoice>): any {\n    return {\n      ...data,\n      Type: 'Invoice',\n      Status: data.Status || 'Pending'\n    };\n  }\n}\n\n// Usage\nconst invoiceRepo = new InvoiceRepository(client);\nconst overdue = await invoiceRepo.findOverdue();\nconst customerInvoices = await invoiceRepo.findByCustomer('CUST001');"
-      },
-      {
-        "title": "Field Discovery and Caching",
-        "description": "Working with field discovery system",
-        "code": "import { \n  discoverTableStructure, \n  getFieldInfo, \n  clearFieldCache,\n  clearAllFieldCaches \n} from '@moneyworks/data';\n\n// Manually discover structure for a table\nconst structure = await discoverTableStructure(client, 'Product');\nconsole.log('Product fields:', Object.keys(structure));\n\n// Get cached or discover field info\nconst accountFields = await getFieldInfo(client, 'Account');\n\n// Clear cache after schema changes\nawait clearFieldCache('Account');\n\n// Clear all caches (e.g., after MoneyWorks upgrade)\nawait clearAllFieldCaches();\n\n// Next queries will re-discover structures\nconst accounts = await client.smartExport('Account');"
-      },
-      {
-        "title": "Export Format Comparison",
-        "description": "Using different export formats for various scenarios",
-        "code": "const tableName = 'TaxRate';\nconst params = { filter: 'Rate1 > 0' };\n\n// Compact - Minimal network overhead\nconst compact = await client.smartExport(tableName, {\n  ...params,\n  exportFormat: 'compact'\n});\n// [[\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]]\n\n// Compact with headers - Self-documenting\nconst compactHeaders = await client.smartExport(tableName, {\n  ...params,\n  exportFormat: 'compact-headers'\n});\n// [\n//   [\"TaxCode\", \"PaidAccount\", \"RecAccount\", \"Date\", \"Rate1\", \"Rate2\"],\n//   [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]\n// ]\n\n// Full - Best for development\nconst full = await client.smartExport(tableName, {\n  ...params,\n  exportFormat: 'full'\n});\n// [{ TaxCode: \"GST10\", PaidAccount: \"1400\", ... }]\n\n// Schema - Best for LLMs and documentation\nconst schema = await client.smartExport(tableName, {\n  ...params,\n  exportFormat: 'schema'\n});\n// {\n//   schema: { /* field definitions */ },\n//   data: [ /* records */ ],\n//   metadata: { /* export metadata */ }\n// }"
-      },
-      {
-        "title": "Error Handling and Retry",
-        "description": "Robust error handling patterns",
-        "code": "import { MoneyWorksError } from '@moneyworks/data';\n\nasync function robustQuery(repository: any, params: any) {\n  const maxRetries = 3;\n  let lastError;\n  \n  for (let i = 0; i < maxRetries; i++) {\n    try {\n      return await repository.find(params);\n    } catch (error) {\n      lastError = error;\n      \n      if (error.code === 'ECONNREFUSED') {\n        console.error('MoneyWorks server not running');\n        throw error; // Don't retry connection errors\n      }\n      \n      if (error.status === 401) {\n        console.error('Authentication failed');\n        throw error; // Don't retry auth errors\n      }\n      \n      if (error.status === 503) {\n        // Server busy, wait and retry\n        const delay = Math.pow(2, i) * 1000; // Exponential backoff\n        console.log(`Server busy, retrying in ${delay}ms...`);\n        await new Promise(resolve => setTimeout(resolve, delay));\n        continue;\n      }\n      \n      // Unknown error, log and retry\n      console.error(`Attempt ${i + 1} failed:`, error.message);\n    }\n  }\n  \n  throw lastError;\n}\n\n// Usage with error handling\ntry {\n  const data = await robustQuery(repositories.taxRate, {\n    filter: 'Rate1 > 10'\n  });\n  console.log(`Found ${data.length} tax rates`);\n} catch (error) {\n  if (error.code === 'ETIMEDOUT') {\n    console.error('Query timed out - check network connection');\n  } else {\n    console.error('Query failed:', error.message);\n  }\n}"
-      }
-    ],
-    "importPatterns": [
-      {
-        "pattern": "import { createDataLayer } from '@moneyworks/data';",
-        "description": "Import main entry point for creating configured data layer"
-      },
-      {
-        "pattern": "import { MoneyWorksRESTClient, SmartMoneyWorksClient } from '@moneyworks/data';",
-        "description": "Import client classes for direct instantiation"
-      },
-      {
-        "pattern": "import { BaseMoneyWorksRepository, TaxRateRepository } from '@moneyworks/data';",
-        "description": "Import repository classes for extension or direct use"
-      },
-      {
-        "pattern": "import type { MoneyWorksConfig, ExportFormat, ImportResult } from '@moneyworks/data';",
-        "description": "Import type definitions"
-      }
-    ]
-  },
-  "designPrinciples": [
-    {
-      "principle": "Automatic Field Discovery",
-      "description": "The system automatically discovers field structures from MoneyWorks XML exports, eliminating the need for manual field mapping and ensuring compatibility across different MoneyWorks versions."
-    },
-    {
-      "principle": "Multiple Export Formats",
-      "description": "Supports four distinct export formats (compact, compact-headers, full, schema) to optimize for different use cases - from network efficiency to developer experience to LLM consumption."
-    },
-    {
-      "principle": "Repository Pattern",
-      "description": "Clean abstraction layer that encapsulates data access logic, making it easy to add business methods and maintain consistent data handling across the application."
-    },
-    {
-      "principle": "Type Safety with Branded Types",
-      "description": "Leverages TypeScript and branded types from @moneyworks/canonical to ensure compile-time safety and prevent common data type errors."
-    },
-    {
-      "principle": "Performance Through Caching",
-      "description": "Field structures are discovered once and cached, providing optimal performance while maintaining flexibility to clear caches when schemas change."
-    }
-  ],
-  "futurePlans": [
-    {
-      "feature": "Additional Repositories",
-      "description": "Implement repositories for all MoneyWorks entities (Account, Transaction, Name, Product, etc.)",
-      "status": "Planned"
-    },
-    {
-      "feature": "GraphQL Layer",
-      "description": "Add GraphQL schema generation from discovered structures",
-      "status": "Considered"
-    },
-    {
-      "feature": "Real-time Subscriptions",
-      "description": "WebSocket support for real-time data updates",
-      "status": "Researching"
-    },
-    {
-      "feature": "Advanced Query Builder",
-      "description": "Fluent API for building complex MoneyWorks queries",
-      "status": "Planned"
-    },
-    {
-      "feature": "Batch Processing",
-      "description": "Optimized handling for large-scale import/export operations",
-      "status": "In Progress"
-    }
-  ]
+	"name": "@moneyworks/data",
+	"version": "0.1.0",
+	"description": "Intelligent data access layer for MoneyWorks REST API with automatic field discovery",
+	"overview": "This package provides a sophisticated data access layer featuring automatic field discovery, multiple export formats, and a clean repository pattern. It abstracts the complexities of MoneyWorks' TSV-based REST API while maintaining full type safety and offering flexible data export options.",
+	"exports": [
+		{
+			"name": "Main Entry Points",
+			"description": "Primary functions for creating configured clients and repositories",
+			"category": "Core",
+			"items": [
+				{
+					"name": "createDataLayer",
+					"type": "function",
+					"signature": "(config?: Partial<MoneyWorksConfig>): Promise<DataLayer>",
+					"description": "Creates a configured data layer with smart client and repositories. Uses environment variables for configuration if not provided.",
+					"example": "// Using environment variables\nconst { client, repositories } = await createDataLayer();\n\n// With explicit config\nconst { client, repositories } = await createDataLayer({\n  host: 'localhost',\n  port: 6710,\n  dataFile: 'Accounts',\n  username: 'admin',\n  password: 'password'\n});\n\n// Use repositories\nconst taxRates = await repositories.taxRate.findAll();",
+					"since": "0.1.0"
+				},
+				{
+					"name": "createSmartClient",
+					"type": "function",
+					"signature": "(config?: Partial<MoneyWorksConfig>): SmartMoneyWorksClient",
+					"description": "Creates a smart client instance with automatic field discovery capabilities",
+					"example": "const client = createSmartClient({\n  host: 'localhost',\n  port: 6710\n});\n\nconst data = await client.smartExport('TaxRate', {\n  exportFormat: 'full'\n});",
+					"since": "0.1.0"
+				},
+				{
+					"name": "createRepository",
+					"type": "function",
+					"signature": "<T>(client: SmartMoneyWorksClient, tableName: string): BaseMoneyWorksRepository<T>",
+					"description": "Creates a generic repository instance for any MoneyWorks table",
+					"example": "interface Product {\n  ProductCode: string;\n  Description: string;\n  Price: number;\n}\n\nconst productRepo = createRepository<Product>(client, 'Product');\nconst products = await productRepo.findAll();",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Client Classes",
+			"description": "Low-level and high-level client implementations for MoneyWorks REST API",
+			"category": "Clients",
+			"items": [
+				{
+					"name": "MoneyWorksRESTClient",
+					"type": "class",
+					"signature": "class MoneyWorksRESTClient",
+					"description": "Low-level REST client that handles raw TSV/XML communication with MoneyWorks server. Manages authentication and connection pooling.",
+					"example": "const client = new MoneyWorksRESTClient({\n  host: 'localhost',\n  port: 6710,\n  dataFile: 'Accounts',\n  username: 'admin',\n  password: 'password'\n});\n\n// Export as TSV arrays\nconst tsv = await client.export('TaxRate');\n// [[\"GST10\", \"1400\", \"2400\", ...]]\n\n// Export as XML\nconst xml = await client.export('TaxRate', { format: 'xml' });\n\n// Evaluate MWScript\nconst date = await client.evaluate('Date()');",
+					"since": "0.1.0"
+				},
+				{
+					"name": "SmartMoneyWorksClient",
+					"type": "class",
+					"signature": "class SmartMoneyWorksClient extends MoneyWorksRESTClient",
+					"description": "High-level client with automatic field discovery. Extends REST client to provide typed object responses and multiple export formats.",
+					"example": "const smartClient = new SmartMoneyWorksClient(config);\n\n// Automatic field discovery and object conversion\nconst taxRates = await smartClient.smartExport('TaxRate');\n// [{ TaxCode: \"GST10\", Rate1: 10, ... }]\n\n// Different export formats\nconst compact = await smartClient.smartExport('TaxRate', {\n  exportFormat: 'compact'\n});\n\nconst schema = await smartClient.smartExport('TaxRate', {\n  exportFormat: 'schema'\n});",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Repository Classes",
+			"description": "Repository pattern implementations providing clean data access abstraction",
+			"category": "Repositories",
+			"items": [
+				{
+					"name": "BaseMoneyWorksRepository",
+					"type": "abstract class",
+					"signature": "abstract class BaseMoneyWorksRepository<T> implements IMoneyWorksRepository<T>",
+					"description": "Abstract base class for all entity repositories. Provides standard CRUD operations and can be extended for custom entities.",
+					"example": "class AccountRepository extends BaseMoneyWorksRepository<MoneyWorksAccount> {\n  constructor(client: SmartMoneyWorksClient) {\n    super(client, 'Account');\n  }\n  \n  async findByType(type: string): Promise<MoneyWorksAccount[]> {\n    return this.find({ filter: `Type = '${type}'` });\n  }\n  \n  protected async postProcess(data: any): Promise<MoneyWorksAccount> {\n    return {\n      ...data,\n      AccountCode: data.AccountCode as AccountCode\n    };\n  }\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "TaxRateRepository",
+					"type": "class",
+					"signature": "class TaxRateRepository extends BaseMoneyWorksRepository<MoneyWorksTaxRate>",
+					"description": "Concrete repository implementation for TaxRate entity with specialized methods",
+					"example": "const taxRepo = new TaxRateRepository(client);\n\n// Standard CRUD\nconst all = await taxRepo.findAll();\nconst gst10 = await taxRepo.findByKey('GST10');\n\n// Specialized methods\nconst active = await taxRepo.findActive();\nconst gstRates = await taxRepo.findGSTRates();\nconst forAccount = await taxRepo.findByAccount('1400');",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Field Discovery",
+			"description": "Functions for automatic field structure discovery from MoneyWorks tables",
+			"category": "Discovery",
+			"items": [
+				{
+					"name": "discoverTableStructure",
+					"type": "function",
+					"signature": "(client: MoneyWorksRESTClient, tableName: string): Promise<TableStructure>",
+					"description": "Discovers field names, types, and order by exporting one record as XML. This is the core innovation that enables automatic field mapping.",
+					"example": "const structure = await discoverTableStructure(client, 'Account');\n// {\n//   AccountCode: { index: 0, type: 'string', xmlName: 'accountcode' },\n//   Description: { index: 1, type: 'string', xmlName: 'description' },\n//   Type: { index: 2, type: 'string', xmlName: 'type' },\n//   ...\n// }",
+					"since": "0.1.0"
+				},
+				{
+					"name": "getFieldInfo",
+					"type": "function",
+					"signature": "(client: MoneyWorksRESTClient, tableName: string): Promise<Record<string, FieldInfo>>",
+					"description": "Gets cached field information or discovers it if not cached",
+					"example": "const fields = await getFieldInfo(client, 'TaxRate');\n// Returns cached structure or discovers if needed",
+					"since": "0.1.0"
+				},
+				{
+					"name": "clearFieldCache",
+					"type": "function",
+					"signature": "(tableName: string): Promise<void>",
+					"description": "Clears cached field structure for a specific table. Use when table structure changes.",
+					"example": "// Clear cache after adding custom fields\nawait clearFieldCache('Account');\n\n// Next query will re-discover structure\nconst accounts = await client.smartExport('Account');",
+					"since": "0.1.0"
+				},
+				{
+					"name": "clearAllFieldCaches",
+					"type": "function",
+					"signature": "(): Promise<void>",
+					"description": "Clears all cached field structures. Use when upgrading MoneyWorks or after major schema changes.",
+					"example": "// Clear all caches\nawait clearAllFieldCaches();\n\n// All subsequent queries will re-discover structures",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "TSV Parsing",
+			"description": "Utilities for parsing MoneyWorks TSV format with discovered field structures",
+			"category": "Parsing",
+			"items": [
+				{
+					"name": "parseTSVWithStructure",
+					"type": "function",
+					"signature": "(tsvData: string[][], fieldInfo: Record<string, FieldInfo>): any[]",
+					"description": "Converts TSV arrays to objects using discovered field structure. Handles type conversions for dates and numbers.",
+					"example": "const fieldInfo = await getFieldInfo(client, 'TaxRate');\nconst tsvData = [[\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]];\n\nconst objects = parseTSVWithStructure(tsvData, fieldInfo);\n// [{\n//   TaxCode: \"GST10\",\n//   PaidAccount: \"1400\",\n//   RecAccount: \"2400\",\n//   Date: \"20240101\",\n//   Rate1: 10,\n//   Rate2: 0\n// }]",
+					"since": "0.1.0"
+				},
+				{
+					"name": "validateTSVStructure",
+					"type": "function",
+					"signature": "(row: string[], fieldInfo: Record<string, FieldInfo>): boolean",
+					"description": "Validates that a TSV row matches the expected field structure",
+					"example": "const isValid = validateTSVStructure(\n  [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"],\n  fieldInfo\n);\n// true if row has correct number of fields",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Export Format Converters",
+			"description": "Functions to convert between different export formats",
+			"category": "Converters",
+			"items": [
+				{
+					"name": "convertToCompact",
+					"type": "function",
+					"signature": "(data: any[], fieldInfo: Record<string, FieldInfo>): string[][]",
+					"description": "Converts objects to compact array format for network efficiency",
+					"example": "const objects = [{ TaxCode: \"GST10\", Rate1: 10, ... }];\nconst compact = convertToCompact(objects, fieldInfo);\n// [[\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]]",
+					"since": "0.1.0"
+				},
+				{
+					"name": "convertToCompactHeaders",
+					"type": "function",
+					"signature": "(data: any[], fieldInfo: Record<string, FieldInfo>): string[][]",
+					"description": "Converts objects to compact format with header row",
+					"example": "const compactHeaders = convertToCompactHeaders(objects, fieldInfo);\n// [\n//   [\"TaxCode\", \"PaidAccount\", \"RecAccount\", \"Date\", \"Rate1\", \"Rate2\"],\n//   [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]\n// ]",
+					"since": "0.1.0"
+				},
+				{
+					"name": "convertToSchema",
+					"type": "function",
+					"signature": "(data: any[], tableName: string, fieldInfo: Record<string, FieldInfo>): SchemaEnrichedExport",
+					"description": "Converts to schema-enriched format with full metadata for LLM understanding",
+					"example": "const schema = convertToSchema(objects, 'TaxRate', fieldInfo);\n// {\n//   schema: {\n//     TaxCode: { type: \"string\", required: true, ... },\n//     ...\n//   },\n//   data: [...],\n//   metadata: { table: \"TaxRate\", ... }\n// }",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Types and Interfaces",
+			"description": "Core type definitions for configuration, queries, and data structures",
+			"category": "Types",
+			"items": [
+				{
+					"name": "MoneyWorksConfig",
+					"type": "interface",
+					"signature": "interface MoneyWorksConfig",
+					"description": "Configuration options for MoneyWorks connection",
+					"example": "const config: MoneyWorksConfig = {\n  host: 'localhost',\n  port: 6710,\n  dataFile: 'Accounts',\n  username: 'admin',\n  password: 'password',\n  timeout: 30000,\n  version: '9'\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "MoneyWorksQueryParams",
+					"type": "interface",
+					"signature": "interface MoneyWorksQueryParams",
+					"description": "Query parameters for filtering, sorting, and pagination",
+					"example": "const params: MoneyWorksQueryParams = {\n  filter: 'Status = \"Active\"',\n  search: 'GST',\n  orderBy: 'TaxCode DESC',\n  limit: 50,\n  offset: 0\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "ExportFormat",
+					"type": "type",
+					"signature": "type ExportFormat = 'compact' | 'compact-headers' | 'full' | 'schema'",
+					"description": "Available export format options",
+					"example": "const format: ExportFormat = 'full';\n\nconst data = await client.smartExport('TaxRate', {\n  exportFormat: format\n});",
+					"since": "0.1.0"
+				},
+				{
+					"name": "FieldInfo",
+					"type": "interface",
+					"signature": "interface FieldInfo { index: number; type: string; xmlName: string; }",
+					"description": "Metadata about a field discovered from XML export",
+					"example": "const fieldInfo: FieldInfo = {\n  index: 0,           // Position in TSV\n  type: 'string',     // Data type\n  xmlName: 'taxcode'  // Original XML element name\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "TableStructure",
+					"type": "type",
+					"signature": "type TableStructure = Record<string, FieldInfo>",
+					"description": "Complete field structure for a MoneyWorks table",
+					"example": "const structure: TableStructure = {\n  TaxCode: { index: 0, type: 'string', xmlName: 'taxcode' },\n  PaidAccount: { index: 1, type: 'string', xmlName: 'paidaccount' },\n  // ... other fields\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "ImportOptions",
+					"type": "interface",
+					"signature": "interface ImportOptions { mode?: 'add' | 'update' | 'set'; }",
+					"description": "Options for importing data into MoneyWorks",
+					"example": "const options: ImportOptions = {\n  mode: 'update'  // Update existing records\n};\n\nconst result = await repository.import(records, options);",
+					"since": "0.1.0"
+				},
+				{
+					"name": "ImportResult",
+					"type": "interface",
+					"signature": "interface ImportResult { imported: number; errors: number; messages: string[]; }",
+					"description": "Result of an import operation",
+					"example": "const result: ImportResult = {\n  imported: 45,\n  errors: 2,\n  messages: [\n    \"Record GST99: Invalid tax code\",\n    \"Record GST98: Account 9999 not found\"\n  ]\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "SchemaEnrichedExport",
+					"type": "interface",
+					"signature": "interface SchemaEnrichedExport { schema: Schema; data: any[]; metadata: Metadata; }",
+					"description": "Export format with complete schema information for LLM consumption",
+					"example": "const enriched: SchemaEnrichedExport = {\n  schema: {\n    TaxCode: {\n      type: 'string',\n      required: true,\n      description: 'Unique tax code identifier',\n      maxLength: 10\n    }\n  },\n  data: [{ TaxCode: 'GST10', ... }],\n  metadata: {\n    table: 'TaxRate',\n    exportedAt: '2025-01-15T10:30:00Z',\n    recordCount: 1,\n    moneyWorksVersion: '9.1.7'\n  }\n};",
+					"since": "0.1.0"
+				},
+				{
+					"name": "DataLayer",
+					"type": "interface",
+					"signature": "interface DataLayer { client: SmartMoneyWorksClient; repositories: Repositories; }",
+					"description": "Return type of createDataLayer containing client and repositories",
+					"example": "const dataLayer: DataLayer = await createDataLayer();\n\n// Access client\nconst data = await dataLayer.client.smartExport('Account');\n\n// Access repositories  \nconst taxRates = await dataLayer.repositories.taxRate.findAll();",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Repository Interface",
+			"description": "Standard interface implemented by all repositories",
+			"category": "Interfaces",
+			"items": [
+				{
+					"name": "IMoneyWorksRepository",
+					"type": "interface",
+					"signature": "interface IMoneyWorksRepository<T>",
+					"description": "Standard repository interface with CRUD operations",
+					"example": "interface IMoneyWorksRepository<T> {\n  find(params?: MoneyWorksQueryParams): Promise<T[]>;\n  findByKey(key: string): Promise<T | null>;\n  findAll(): Promise<T[]>;\n  create(data: Partial<T>): Promise<T>;\n  update(key: string, data: Partial<T>): Promise<T>;\n  delete(key: string): Promise<boolean>;\n  import(data: Partial<T>[], options?: ImportOptions): Promise<ImportResult>;\n}",
+					"since": "0.1.0"
+				}
+			]
+		}
+	],
+	"usage": {
+		"examples": [
+			{
+				"title": "Basic Setup and Usage",
+				"description": "Complete example showing data layer setup and common operations",
+				"code": "import { createDataLayer } from '@moneyworks/data';\nimport { d } from '@moneyworks/utilities';\n\n// Initialize data layer\nconst { client, repositories } = await createDataLayer();\n\n// Repository operations\nconst allTaxRates = await repositories.taxRate.findAll();\nconst gst10 = await repositories.taxRate.findByKey('GST10');\n\n// Create new tax rate\nconst newRate = await repositories.taxRate.create({\n  TaxCode: 'GST15',\n  PaidAccount: '1400',\n  RecAccount: '2400',\n  Date: d`20250101`,\n  Rate1: 15,\n  Rate2: 0\n});\n\n// Query with filters\nconst highRates = await repositories.taxRate.find({\n  filter: 'Rate1 > 10',\n  orderBy: 'Rate1 DESC'\n});\n\n// Direct client usage with different formats\nconst compact = await client.smartExport('Account', {\n  exportFormat: 'compact',\n  filter: 'Type = \"Income\"'\n});"
+			},
+			{
+				"title": "Custom Repository Implementation",
+				"description": "Creating a repository for a custom MoneyWorks entity",
+				"code": "import { BaseMoneyWorksRepository, SmartMoneyWorksClient } from '@moneyworks/data';\nimport { MoneyWorksInvoice } from '@moneyworks/canonical';\nimport { YYYYMMDD, Period, d } from '@moneyworks/utilities';\n\nclass InvoiceRepository extends BaseMoneyWorksRepository<MoneyWorksInvoice> {\n  constructor(client: SmartMoneyWorksClient) {\n    super(client, 'Transaction');\n  }\n  \n  // Custom business methods\n  async findOverdue(): Promise<MoneyWorksInvoice[]> {\n    const today = d`${new Date()}`;\n    return this.find({\n      filter: `Type = \"Invoice\" AND DueDate < '${today}' AND AmountDue > 0`,\n      orderBy: 'DueDate'\n    });\n  }\n  \n  async findByCustomer(customerCode: string): Promise<MoneyWorksInvoice[]> {\n    return this.find({\n      filter: `Type = \"Invoice\" AND NameCode = '${customerCode}'`,\n      orderBy: 'TransDate DESC'\n    });\n  }\n  \n  async findByPeriod(period: Period): Promise<MoneyWorksInvoice[]> {\n    return this.find({\n      filter: `Type = \"Invoice\" AND Period = ${period}`\n    });\n  }\n  \n  // Add branded types in post-processing\n  protected async postProcess(data: any): Promise<MoneyWorksInvoice> {\n    return {\n      ...data,\n      TransDate: data.TransDate as YYYYMMDD,\n      DueDate: data.DueDate as YYYYMMDD,\n      Period: data.Period as Period,\n      TransactionSeq: data.TransactionSeq as TransactionSeq\n    };\n  }\n  \n  // Prepare data for import\n  protected prepareForImport(data: Partial<MoneyWorksInvoice>): any {\n    return {\n      ...data,\n      Type: 'Invoice',\n      Status: data.Status || 'Pending'\n    };\n  }\n}\n\n// Usage\nconst invoiceRepo = new InvoiceRepository(client);\nconst overdue = await invoiceRepo.findOverdue();\nconst customerInvoices = await invoiceRepo.findByCustomer('CUST001');"
+			},
+			{
+				"title": "Field Discovery and Caching",
+				"description": "Working with field discovery system",
+				"code": "import { \n  discoverTableStructure, \n  getFieldInfo, \n  clearFieldCache,\n  clearAllFieldCaches \n} from '@moneyworks/data';\n\n// Manually discover structure for a table\nconst structure = await discoverTableStructure(client, 'Product');\nconsole.log('Product fields:', Object.keys(structure));\n\n// Get cached or discover field info\nconst accountFields = await getFieldInfo(client, 'Account');\n\n// Clear cache after schema changes\nawait clearFieldCache('Account');\n\n// Clear all caches (e.g., after MoneyWorks upgrade)\nawait clearAllFieldCaches();\n\n// Next queries will re-discover structures\nconst accounts = await client.smartExport('Account');"
+			},
+			{
+				"title": "Export Format Comparison",
+				"description": "Using different export formats for various scenarios",
+				"code": "const tableName = 'TaxRate';\nconst params = { filter: 'Rate1 > 0' };\n\n// Compact - Minimal network overhead\nconst compact = await client.smartExport(tableName, {\n  ...params,\n  exportFormat: 'compact'\n});\n// [[\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]]\n\n// Compact with headers - Self-documenting\nconst compactHeaders = await client.smartExport(tableName, {\n  ...params,\n  exportFormat: 'compact-headers'\n});\n// [\n//   [\"TaxCode\", \"PaidAccount\", \"RecAccount\", \"Date\", \"Rate1\", \"Rate2\"],\n//   [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"]\n// ]\n\n// Full - Best for development\nconst full = await client.smartExport(tableName, {\n  ...params,\n  exportFormat: 'full'\n});\n// [{ TaxCode: \"GST10\", PaidAccount: \"1400\", ... }]\n\n// Schema - Best for LLMs and documentation\nconst schema = await client.smartExport(tableName, {\n  ...params,\n  exportFormat: 'schema'\n});\n// {\n//   schema: { /* field definitions */ },\n//   data: [ /* records */ ],\n//   metadata: { /* export metadata */ }\n// }"
+			},
+			{
+				"title": "Error Handling and Retry",
+				"description": "Robust error handling patterns",
+				"code": "import { MoneyWorksError } from '@moneyworks/data';\n\nasync function robustQuery(repository: any, params: any) {\n  const maxRetries = 3;\n  let lastError;\n  \n  for (let i = 0; i < maxRetries; i++) {\n    try {\n      return await repository.find(params);\n    } catch (error) {\n      lastError = error;\n      \n      if (error.code === 'ECONNREFUSED') {\n        console.error('MoneyWorks server not running');\n        throw error; // Don't retry connection errors\n      }\n      \n      if (error.status === 401) {\n        console.error('Authentication failed');\n        throw error; // Don't retry auth errors\n      }\n      \n      if (error.status === 503) {\n        // Server busy, wait and retry\n        const delay = Math.pow(2, i) * 1000; // Exponential backoff\n        console.log(`Server busy, retrying in ${delay}ms...`);\n        await new Promise(resolve => setTimeout(resolve, delay));\n        continue;\n      }\n      \n      // Unknown error, log and retry\n      console.error(`Attempt ${i + 1} failed:`, error.message);\n    }\n  }\n  \n  throw lastError;\n}\n\n// Usage with error handling\ntry {\n  const data = await robustQuery(repositories.taxRate, {\n    filter: 'Rate1 > 10'\n  });\n  console.log(`Found ${data.length} tax rates`);\n} catch (error) {\n  if (error.code === 'ETIMEDOUT') {\n    console.error('Query timed out - check network connection');\n  } else {\n    console.error('Query failed:', error.message);\n  }\n}"
+			}
+		],
+		"importPatterns": [
+			{
+				"pattern": "import { createDataLayer } from '@moneyworks/data';",
+				"description": "Import main entry point for creating configured data layer"
+			},
+			{
+				"pattern": "import { MoneyWorksRESTClient, SmartMoneyWorksClient } from '@moneyworks/data';",
+				"description": "Import client classes for direct instantiation"
+			},
+			{
+				"pattern": "import { BaseMoneyWorksRepository, TaxRateRepository } from '@moneyworks/data';",
+				"description": "Import repository classes for extension or direct use"
+			},
+			{
+				"pattern": "import type { MoneyWorksConfig, ExportFormat, ImportResult } from '@moneyworks/data';",
+				"description": "Import type definitions"
+			}
+		]
+	},
+	"designPrinciples": [
+		{
+			"principle": "Automatic Field Discovery",
+			"description": "The system automatically discovers field structures from MoneyWorks XML exports, eliminating the need for manual field mapping and ensuring compatibility across different MoneyWorks versions."
+		},
+		{
+			"principle": "Multiple Export Formats",
+			"description": "Supports four distinct export formats (compact, compact-headers, full, schema) to optimize for different use cases - from network efficiency to developer experience to LLM consumption."
+		},
+		{
+			"principle": "Repository Pattern",
+			"description": "Clean abstraction layer that encapsulates data access logic, making it easy to add business methods and maintain consistent data handling across the application."
+		},
+		{
+			"principle": "Type Safety with Branded Types",
+			"description": "Leverages TypeScript and branded types from @moneyworks/canonical to ensure compile-time safety and prevent common data type errors."
+		},
+		{
+			"principle": "Performance Through Caching",
+			"description": "Field structures are discovered once and cached, providing optimal performance while maintaining flexibility to clear caches when schemas change."
+		}
+	],
+	"futurePlans": [
+		{
+			"feature": "Additional Repositories",
+			"description": "Implement repositories for all MoneyWorks entities (Account, Transaction, Name, Product, etc.)",
+			"status": "Planned"
+		},
+		{
+			"feature": "GraphQL Layer",
+			"description": "Add GraphQL schema generation from discovered structures",
+			"status": "Considered"
+		},
+		{
+			"feature": "Real-time Subscriptions",
+			"description": "WebSocket support for real-time data updates",
+			"status": "Researching"
+		},
+		{
+			"feature": "Advanced Query Builder",
+			"description": "Fluent API for building complex MoneyWorks queries",
+			"status": "Planned"
+		},
+		{
+			"feature": "Batch Processing",
+			"description": "Optimized handling for large-scale import/export operations",
+			"status": "In Progress"
+		}
+	]
 }

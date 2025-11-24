@@ -1,331 +1,331 @@
 {
-  "name": "@moneyworks/cli",
-  "version": "0.1.0",
-  "description": "Command-line interface for testing and interacting with MoneyWorks Core",
-  "overview": "This package provides a comprehensive CLI for developers working with MoneyWorks. It offers commands for data export/import, connection testing, and MWScript evaluation, with support for multiple output formats and flexible configuration options.",
-  "exports": [
-    {
-      "name": "Commands",
-      "description": "Available CLI commands for interacting with MoneyWorks",
-      "category": "Commands",
-      "items": [
-        {
-          "name": "test-connection",
-          "type": "command",
-          "signature": "mw test-connection [options]",
-          "description": "Tests connection to MoneyWorks server and displays server information including version, document count, and sample data availability.",
-          "example": "mw test-connection\n# Testing connection to localhost:6710...\n# ✓ Connected to MoneyWorks 9.1.7\n# ✓ Found 3 documents\n# ✓ Found 5 tax rates in Acme Widgets\n\n# With custom config\nmw test-connection --config prod-config.json\n\n# With debug output\nmw test-connection --debug",
-          "since": "0.1.0"
-        },
-        {
-          "name": "export",
-          "type": "command",
-          "signature": "mw export <table> [options]",
-          "description": "Exports data from specified MoneyWorks table with support for filtering, pagination, and multiple output formats.",
-          "example": "# Basic export\nmw export TaxRate\n\n# Export with filter and save to file\nmw export TaxRate --filter \"Rate1 > 10\" --output high-rates.json\n\n# Export in compact format with limit\nmw export Account --exportFormat compact --limit 100\n\n# Export with ordering and pagination\nmw export Transaction \\\n  --filter \"TransDate >= '20250101'\" \\\n  --orderBy \"TransDate DESC\" \\\n  --limit 50 \\\n  --offset 100\n\n# Export with schema information\nmw export Product --exportFormat schema --output product-schema.json",
-          "since": "0.1.0"
-        },
-        {
-          "name": "import",
-          "type": "command",
-          "signature": "mw import <table> --file <path> [options]",
-          "description": "Imports data into MoneyWorks table from JSON file with support for different import modes and field calculation.",
-          "example": "# Basic import\nmw import TaxRate --file new-rates.json\n\n# Update existing records\nmw import TaxRate --file updates.json --mode update\n\n# Create or update based on key\nmw import Account --file accounts.json --mode createOrUpdate\n\n# Import with calculated fields\nmw import TaxRate --file rates.json \\\n  --work-it-out \\\n  --calculate \"Date=Date(), ModifiedBy='CLI Import'\"",
-          "since": "0.1.0"
-        },
-        {
-          "name": "eval",
-          "type": "command",
-          "signature": "mw eval <expression> [options]",
-          "description": "Evaluates MWScript expressions on the MoneyWorks server. Useful for calculations, queries, and testing MoneyWorks scripting.",
-          "example": "# Simple calculations\nmw eval \"1 + 1\"\n# Result: 2\n\n# Count records\nmw eval \"Count(TaxRate)\"\n# Result: 5\n\n# Date calculations\nmw eval \"Date() + 30\"\n# Result: 20250214\n\n# Complex queries\nmw eval \"Sum(Transaction.Total, Period=202501 and Status='Posted')\"\n# Result: 45678.90\n\n# String operations\nmw eval \"Uppercase('hello world')\"\n# Result: HELLO WORLD",
-          "since": "0.1.0"
-        },
-        {
-          "name": "version",
-          "type": "command",
-          "signature": "mw version [options]",
-          "description": "Displays the MoneyWorks server version.",
-          "example": "mw version\n# MoneyWorks version: 9.1.7\n\n# With timing\nmw version --timing\n# MoneyWorks version: 9.1.7\n# Timing: 45ms",
-          "since": "0.1.0"
-        },
-        {
-          "name": "list",
-          "type": "command",
-          "signature": "mw list [options]",
-          "description": "Lists all available documents on the MoneyWorks server that the current user can access.",
-          "example": "mw list\n# Available documents:\n# 1. Acme Widgets\n# 2. Demo Company\n# 3. Test Database\n\n# With debug info\nmw list --debug\n# [DEBUG] Connecting to localhost:6710\n# [DEBUG] Fetching document list\n# Available documents:\n# ...",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Command Options",
-      "description": "Options available for CLI commands",
-      "category": "Options",
-      "items": [
-        {
-          "name": "Export Options",
-          "type": "options",
-          "signature": "export command options",
-          "description": "Options available for the export command to control filtering, formatting, and output.",
-          "example": "# Filter options\n--filter <expression>    # MoneyWorks filter expression\n--search <text>         # Search text fields\n\n# Sorting and pagination\n--orderBy <field>       # Sort by field (e.g., \"TaxCode DESC\")\n--limit <number>        # Limit records returned\n--offset <number>       # Skip first n records\n\n# Format options\n--exportFormat <format> # Output format: compact, compact-headers, full, schema\n--format <format>       # MW format: json, xml-terse, xml-verbose, tsv\n\n# Output\n--output <file>         # Save to file instead of stdout",
-          "since": "0.1.0"
-        },
-        {
-          "name": "Import Options",
-          "type": "options",
-          "signature": "import command options",
-          "description": "Options for controlling import behavior and data processing.",
-          "example": "# Required\n--file <path>           # JSON file to import\n\n# Import behavior\n--mode <mode>           # Import mode: create, update, createOrUpdate\n--work-it-out           # Enable automatic field resolution\n--calculate <fields>    # Calculate field values (comma-separated)\n\n# Examples:\n--mode update\n--calculate \"Date=Date(), User='Import'\"",
-          "since": "0.1.0"
-        },
-        {
-          "name": "Global Options",
-          "type": "options",
-          "signature": "options available for all commands",
-          "description": "Global options that can be used with any command for configuration and debugging.",
-          "example": "# Configuration\n--config <file>     # Path to config file (default: mw-config.json)\n\n# Output control\n--debug            # Enable debug mode with verbose logging\n--timing           # Show timing information\n\n# Help\n--help             # Display help for command\n--version          # Show CLI version",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Configuration",
-      "description": "Configuration file format and environment variables",
-      "category": "Config",
-      "items": [
-        {
-          "name": "Config File",
-          "type": "config",
-          "signature": "mw-config.json",
-          "description": "JSON configuration file for MoneyWorks connection settings. The CLI looks for this file in the current directory by default.",
-          "example": "{\n  \"host\": \"localhost\",\n  \"port\": 6710,\n  \"username\": \"Admin\",\n  \"password\": \"secure-password\",\n  \"dataFile\": \"Acme Widgets\",\n  \"timeout\": 30000,\n  \"version\": \"9\"\n}\n\n// Multiple configs for different environments\n// mw-config.dev.json\n{\n  \"host\": \"dev-server.local\",\n  \"port\": 6710,\n  \"username\": \"Developer\",\n  \"password\": \"dev-password\",\n  \"dataFile\": \"Test Data\"\n}\n\n// Usage: mw export TaxRate --config mw-config.dev.json",
-          "since": "0.1.0"
-        },
-        {
-          "name": "Environment Variables",
-          "type": "config",
-          "signature": "MW_* environment variables",
-          "description": "Environment variables used when no config file is specified. Useful for CI/CD pipelines and containerized deployments.",
-          "example": "# Connection settings\nexport MW_HOST=server.example.com\nexport MW_PORT=6710\nexport MW_USERNAME=Admin\nexport MW_PASSWORD=secure-password\nexport MW_DATAFILE=\"Production Data\"\nexport MW_TIMEOUT=30000\nexport MW_VERSION=9\n\n# Usage\nmw export Account  # Uses environment variables\n\n# Override specific values\nMW_DATAFILE=\"Test Data\" mw test-connection",
-          "since": "0.1.0"
-        },
-        {
-          "name": "loadConfig",
-          "type": "function",
-          "signature": "(configPath?: string): Promise<MoneyWorksConfig>",
-          "description": "Loads configuration from file or environment variables. Used internally by the CLI but exposed for programmatic use.",
-          "example": "import { loadConfig } from '@moneyworks/cli/config';\n\n// Load default config\nconst config = await loadConfig();\n\n// Load specific config file\nconst prodConfig = await loadConfig('prod-config.json');\n\n// Config priority:\n// 1. Specified config file\n// 2. mw-config.json in current directory\n// 3. Environment variables\n// 4. Default values",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Export Formats",
-      "description": "Available export format options with examples",
-      "category": "Formats",
-      "items": [
-        {
-          "name": "compact",
-          "type": "format",
-          "signature": "--exportFormat compact",
-          "description": "Exports data as raw arrays without field names. Most efficient for data transfer and storage.",
-          "example": "mw export TaxRate --exportFormat compact\n\n// Output:\n[\n  [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"],\n  [\"GST15\", \"1400\", \"2400\", \"20240101\", \"15\", \"0\"]\n]\n\n// Best for:\n// - Minimal file size\n// - Network transfer\n// - When field structure is known",
-          "since": "0.1.0"
-        },
-        {
-          "name": "compact-headers",
-          "type": "format",
-          "signature": "--exportFormat compact-headers",
-          "description": "Exports data as arrays with field names in the first row. Self-documenting while maintaining efficiency.",
-          "example": "mw export TaxRate --exportFormat compact-headers\n\n// Output:\n[\n  [\"TaxCode\", \"PaidAccount\", \"RecAccount\", \"Date\", \"Rate1\", \"Rate2\"],\n  [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"],\n  [\"GST15\", \"1400\", \"2400\", \"20240101\", \"15\", \"0\"]\n]\n\n// Best for:\n// - CSV conversion\n// - Spreadsheet import\n// - Human-readable compact format",
-          "since": "0.1.0"
-        },
-        {
-          "name": "full",
-          "type": "format",
-          "signature": "--exportFormat full",
-          "description": "Default format. Exports data as complete JSON objects with field names. Best for development and data manipulation.",
-          "example": "mw export TaxRate --exportFormat full\n\n// Output:\n[\n  {\n    \"TaxCode\": \"GST10\",\n    \"PaidAccount\": \"1400\",\n    \"RecAccount\": \"2400\",\n    \"Date\": \"20240101\",\n    \"Rate1\": 10,\n    \"Rate2\": 0\n  },\n  {\n    \"TaxCode\": \"GST15\",\n    \"PaidAccount\": \"1400\",\n    \"RecAccount\": \"2400\",\n    \"Date\": \"20240101\",\n    \"Rate1\": 15,\n    \"Rate2\": 0\n  }\n]\n\n// Best for:\n// - Development and debugging\n// - Data transformation\n// - Direct JSON consumption",
-          "since": "0.1.0"
-        },
-        {
-          "name": "schema",
-          "type": "format",
-          "signature": "--exportFormat schema",
-          "description": "Exports data with complete schema information including field types, constraints, and metadata. Ideal for documentation and LLM consumption.",
-          "example": "mw export TaxRate --exportFormat schema\n\n// Output:\n{\n  \"schema\": {\n    \"TaxCode\": {\n      \"type\": \"string\",\n      \"required\": true,\n      \"maxLength\": 10,\n      \"description\": \"Unique tax code identifier\"\n    },\n    \"PaidAccount\": {\n      \"type\": \"string\",\n      \"required\": true,\n      \"description\": \"Account for tax paid\"\n    },\n    \"Rate1\": {\n      \"type\": \"number\",\n      \"required\": true,\n      \"min\": 0,\n      \"max\": 100,\n      \"description\": \"Primary tax rate percentage\"\n    }\n    // ... other fields\n  },\n  \"data\": [\n    // ... records\n  ],\n  \"metadata\": {\n    \"table\": \"TaxRate\",\n    \"exportedAt\": \"2025-01-15T10:30:00Z\",\n    \"recordCount\": 2,\n    \"moneyWorksVersion\": \"9.1.7\"\n  }\n}\n\n// Best for:\n// - API documentation\n// - LLM understanding\n// - Schema validation\n// - Type generation",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Types",
-      "description": "TypeScript types used by the CLI",
-      "category": "Types",
-      "items": [
-        {
-          "name": "CommandHandler",
-          "type": "type",
-          "signature": "type CommandHandler = (client: SmartMoneyWorksClient, args: string[], options: GlobalOptions) => Promise<void>",
-          "description": "Function signature for CLI command handlers. All commands must implement this interface.",
-          "example": "import type { CommandHandler } from '@moneyworks/cli';\n\nconst myCommand: CommandHandler = async (client, args, options) => {\n  if (options.debug) {\n    console.log('[DEBUG] Starting my command');\n  }\n  \n  // Command implementation\n  const data = await client.smartExport('TaxRate');\n  console.log(`Found ${data.length} records`);\n};\n\nexport default myCommand;",
-          "since": "0.1.0"
-        },
-        {
-          "name": "GlobalOptions",
-          "type": "interface",
-          "signature": "interface GlobalOptions { config?: string; debug?: boolean; timing?: boolean; }",
-          "description": "Global options available to all commands.",
-          "example": "interface GlobalOptions {\n  config?: string;   // Path to config file\n  debug?: boolean;   // Enable debug output\n  timing?: boolean;  // Show timing information\n}\n\n// Accessing in command handler\nif (options.debug) {\n  console.log('[DEBUG] Debug mode enabled');\n}\n\nif (options.timing) {\n  const start = Date.now();\n  // ... operation ...\n  console.log(`Timing: ${Date.now() - start}ms`);\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "ExportOptions",
-          "type": "interface",
-          "signature": "interface ExportOptions extends GlobalOptions",
-          "description": "Options specific to the export command.",
-          "example": "interface ExportOptions extends GlobalOptions {\n  filter?: string;         // MoneyWorks filter expression\n  search?: string;         // Text search\n  orderBy?: string;        // Sort order\n  limit?: number;          // Record limit\n  offset?: number;         // Skip records\n  exportFormat?: ExportFormat;  // Output format\n  format?: string;         // MoneyWorks format\n  output?: string;         // Output file path\n}",
-          "since": "0.1.0"
-        },
-        {
-          "name": "ImportOptions",
-          "type": "interface",
-          "signature": "interface ImportOptions extends GlobalOptions",
-          "description": "Options specific to the import command.",
-          "example": "interface ImportOptions extends GlobalOptions {\n  file: string;           // Input file path (required)\n  mode?: ImportMode;      // create, update, createOrUpdate\n  workItOut?: boolean;    // Auto field resolution\n  calculate?: string;     // Calculated fields\n}\n\ntype ImportMode = 'create' | 'update' | 'createOrUpdate';",
-          "since": "0.1.0"
-        }
-      ]
-    },
-    {
-      "name": "Utilities",
-      "description": "Utility functions and helpers",
-      "category": "Utils",
-      "items": [
-        {
-          "name": "formatOutput",
-          "type": "function",
-          "signature": "(data: any, format: ExportFormat): string",
-          "description": "Formats data according to specified export format. Used internally by export command.",
-          "example": "import { formatOutput } from '@moneyworks/cli/utils';\n\nconst data = [{ TaxCode: 'GST10', Rate1: 10 }];\n\n// Format as compact\nconst compact = formatOutput(data, 'compact');\n// [[\"GST10\", 10]]\n\n// Format with schema\nconst schema = formatOutput(data, 'schema');\n// { schema: {...}, data: [...], metadata: {...} }",
-          "since": "0.1.0"
-        },
-        {
-          "name": "parseFilter",
-          "type": "function",
-          "signature": "(filter?: string): string | undefined",
-          "description": "Validates and normalizes MoneyWorks filter expressions.",
-          "example": "import { parseFilter } from '@moneyworks/cli/utils';\n\n// Valid filters\nparseFilter(\"Rate1 > 10\");  // \"Rate1 > 10\"\nparseFilter(\"Status='Active'\");  // \"Status='Active'\"\n\n// Handles edge cases\nparseFilter(\"\");  // undefined\nparseFilter(\" \");  // undefined",
-          "since": "0.1.0"
-        },
-        {
-          "name": "timing",
-          "type": "function",
-          "signature": "(label: string, fn: () => Promise<T>): Promise<T>",
-          "description": "Utility for timing operations. Automatically outputs timing when --timing flag is set.",
-          "example": "import { timing } from '@moneyworks/cli/utils';\n\n// Time an operation\nconst data = await timing('Export', async () => {\n  return await client.smartExport('TaxRate');\n});\n// Output: Timing: Export: 123ms\n\n// Nested timing\nconst result = await timing('Total', async () => {\n  await timing('Connect', () => client.connect());\n  return await timing('Query', () => client.query());\n});\n// Output:\n// Timing: Connect: 45ms\n// Timing: Query: 78ms\n// Timing: Total: 123ms",
-          "since": "0.1.0"
-        }
-      ]
-    }
-  ],
-  "usage": {
-    "examples": [
-      {
-        "title": "Basic Workflow",
-        "description": "Common workflow for exporting, modifying, and importing data",
-        "code": "# 1. Test connection\nmw test-connection\n\n# 2. Export current data as backup\nmw export TaxRate --output backup-taxrates.json\n\n# 3. Export specific records to modify\nmw export TaxRate --filter \"Rate1 = 10\" --output gst10-rates.json\n\n# 4. Modify the JSON file (external process)\n# ... edit gst10-rates.json ...\n\n# 5. Import modified data\nmw import TaxRate --file gst10-rates.json --mode update\n\n# 6. Verify changes\nmw export TaxRate --filter \"Rate1 = 10.5\""
-      },
-      {
-        "title": "Automation Script",
-        "description": "Bash script for automated daily exports",
-        "code": "#!/bin/bash\n# daily-export.sh - Export all critical data\n\nDATE=$(date +%Y%m%d)\nOUTPUT_DIR=\"backups/$DATE\"\n\n# Create output directory\nmkdir -p \"$OUTPUT_DIR\"\n\n# Export all tables with timing\nTABLES=(\"TaxRate\" \"Account\" \"Transaction\" \"Name\" \"Product\")\n\nfor table in \"${TABLES[@]}\"; do\n  echo \"Exporting $table...\"\n  mw export \"$table\" \\\n    --output \"$OUTPUT_DIR/${table}.json\" \\\n    --exportFormat full \\\n    --timing\ndone\n\n# Create compressed archive\ntar -czf \"backups/backup-$DATE.tar.gz\" \"$OUTPUT_DIR\"\nrm -rf \"$OUTPUT_DIR\"\n\necho \"Backup complete: backups/backup-$DATE.tar.gz\""
-      },
-      {
-        "title": "Data Validation Pipeline",
-        "description": "Using CLI with jq for data validation and transformation",
-        "code": "# Export and validate tax rates\nmw export TaxRate --exportFormat full | jq '\n  # Validate all rates are between 0 and 100\n  map(select(.Rate1 < 0 or .Rate1 > 100)) |\n  if length > 0 then\n    error(\"Invalid tax rates found: \\(.)\")\n  else\n    \"All tax rates valid\" | {status: ., count: length}\n  end\n'\n\n# Transform and filter accounts\nmw export Account | jq '\n  # Get income accounts with balance\n  map(select(.Type == \"Income\" and .Balance > 0)) |\n  map({code: .AccountCode, name: .Description, balance: .Balance}) |\n  sort_by(.balance) | reverse\n' > income-accounts.json\n\n# Count transactions by period\nmw export Transaction --filter 'Type=\"Invoice\"' | jq '\n  group_by(.Period) |\n  map({period: .[0].Period, count: length, total: (map(.Total) | add)}) |\n  sort_by(.period)\n'"
-      },
-      {
-        "title": "Error Handling and Recovery",
-        "description": "Robust import with error handling and rollback",
-        "code": "#!/bin/bash\n# safe-import.sh - Import with automatic rollback on failure\n\nTABLE=\"TaxRate\"\nIMPORT_FILE=\"new-rates.json\"\nBACKUP_FILE=\"backup-$(date +%s).json\"\n\n# Function to check if import was successful\ncheck_import() {\n  local count=$(mw eval \"Count($TABLE)\" 2>/dev/null)\n  if [[ -z \"$count\" || \"$count\" -eq 0 ]]; then\n    return 1\n  fi\n  return 0\n}\n\n# Create backup\necho \"Creating backup...\"\nif ! mw export \"$TABLE\" --output \"$BACKUP_FILE\"; then\n  echo \"Failed to create backup. Aborting.\"\n  exit 1\nfi\n\n# Perform import\necho \"Importing from $IMPORT_FILE...\"\nif ! mw import \"$TABLE\" --file \"$IMPORT_FILE\" --mode createOrUpdate; then\n  echo \"Import failed. Attempting rollback...\"\n  \n  # Rollback\n  if mw import \"$TABLE\" --file \"$BACKUP_FILE\" --mode createOrUpdate; then\n    echo \"Rollback successful.\"\n  else\n    echo \"CRITICAL: Rollback failed! Manual intervention required.\"\n    echo \"Backup file: $BACKUP_FILE\"\n    exit 2\n  fi\n  exit 1\nfi\n\n# Verify import\nif ! check_import; then\n  echo \"Import verification failed. Check data integrity.\"\n  exit 1\nfi\n\necho \"Import successful.\"\n# Clean up backup after successful import\n# rm \"$BACKUP_FILE\""
-      },
-      {
-        "title": "Performance Testing",
-        "description": "Benchmark different export formats and options",
-        "code": "#!/bin/bash\n# benchmark.sh - Compare export performance\n\necho \"MoneyWorks CLI Export Benchmark\"\necho \"================================\"\necho \"\"\n\n# Test different formats\nFORMATS=(\"compact\" \"compact-headers\" \"full\" \"schema\")\nTABLE=\"Transaction\"\nLIMIT=1000\n\nfor format in \"${FORMATS[@]}\"; do\n  echo \"Testing format: $format\"\n  \n  # Run 3 times and calculate average\n  total_time=0\n  for i in {1..3}; do\n    # Capture timing output\n    output=$(mw export \"$TABLE\" \\\n      --limit $LIMIT \\\n      --exportFormat \"$format\" \\\n      --timing 2>&1 >/dev/null)\n    \n    # Extract timing\n    time=$(echo \"$output\" | grep -oE 'Total: ([0-9]+)ms' | grep -oE '[0-9]+')\n    total_time=$((total_time + time))\n    \n    echo \"  Run $i: ${time}ms\"\n  done\n  \n  avg=$((total_time / 3))\n  echo \"  Average: ${avg}ms\"\n  echo \"\"\ndone\n\n# Test pagination performance\necho \"Testing pagination (offset impact)\"\nfor offset in 0 1000 5000 10000; do\n  output=$(mw export \"$TABLE\" \\\n    --limit 100 \\\n    --offset $offset \\\n    --timing 2>&1 >/dev/null)\n  \n  time=$(echo \"$output\" | grep -oE 'Total: ([0-9]+)ms' | grep -oE '[0-9]+')\n  echo \"  Offset $offset: ${time}ms\"\ndone"
-      }
-    ],
-    "importPatterns": [
-      {
-        "pattern": "bunx @moneyworks/cli <command>",
-        "description": "Run CLI without installation using bunx"
-      },
-      {
-        "pattern": "import { loadConfig } from '@moneyworks/cli/config';",
-        "description": "Import configuration utilities for programmatic use"
-      },
-      {
-        "pattern": "import type { CommandHandler, GlobalOptions } from '@moneyworks/cli';",
-        "description": "Import types for custom command development"
-      }
-    ]
-  },
-  "designPrinciples": [
-    {
-      "principle": "Developer Experience First",
-      "description": "The CLI prioritizes ease of use with sensible defaults, clear error messages, and helpful debug output. Configuration via files or environment variables provides flexibility without complexity."
-    },
-    {
-      "principle": "Multiple Export Formats",
-      "description": "Supporting four distinct export formats ensures the CLI can serve different use cases - from efficient data transfer (compact) to rich documentation (schema)."
-    },
-    {
-      "principle": "MoneyWorks Native",
-      "description": "The CLI respects MoneyWorks conventions, using exact field names and supporting native filter expressions and MWScript evaluation."
-    },
-    {
-      "principle": "Composable and Scriptable",
-      "description": "Designed to work well with Unix pipes and scripting, enabling complex workflows through composition of simple commands."
-    },
-    {
-      "principle": "Performance Visibility",
-      "description": "Built-in timing and debug modes provide transparency into performance, helping developers optimize their integrations."
-    }
-  ],
-  "futurePlans": [
-    {
-      "feature": "Interactive Mode",
-      "description": "Add REPL-style interactive mode for exploratory data analysis",
-      "status": "Planned"
-    },
-    {
-      "feature": "Progress Indicators",
-      "description": "Show progress bars for large export/import operations",
-      "status": "Planned"
-    },
-    {
-      "feature": "Streaming Support",
-      "description": "Stream large datasets to reduce memory usage",
-      "status": "Researching"
-    },
-    {
-      "feature": "Additional Tables",
-      "description": "Support for all MoneyWorks tables (Account, Transaction, Name, etc.)",
-      "status": "In Progress"
-    },
-    {
-      "feature": "Dry Run Mode",
-      "description": "Preview import changes without applying them",
-      "status": "Planned"
-    },
-    {
-      "feature": "Watch Mode",
-      "description": "Monitor and sync changes between local files and MoneyWorks",
-      "status": "Considered"
-    }
-  ]
+	"name": "@moneyworks/cli",
+	"version": "0.1.0",
+	"description": "Command-line interface for testing and interacting with MoneyWorks Core",
+	"overview": "This package provides a comprehensive CLI for developers working with MoneyWorks. It offers commands for data export/import, connection testing, and MWScript evaluation, with support for multiple output formats and flexible configuration options.",
+	"exports": [
+		{
+			"name": "Commands",
+			"description": "Available CLI commands for interacting with MoneyWorks",
+			"category": "Commands",
+			"items": [
+				{
+					"name": "test-connection",
+					"type": "command",
+					"signature": "mw test-connection [options]",
+					"description": "Tests connection to MoneyWorks server and displays server information including version, document count, and sample data availability.",
+					"example": "mw test-connection\n# Testing connection to localhost:6710...\n# ✓ Connected to MoneyWorks 9.1.7\n# ✓ Found 3 documents\n# ✓ Found 5 tax rates in Acme Widgets\n\n# With custom config\nmw test-connection --config prod-config.json\n\n# With debug output\nmw test-connection --debug",
+					"since": "0.1.0"
+				},
+				{
+					"name": "export",
+					"type": "command",
+					"signature": "mw export <table> [options]",
+					"description": "Exports data from specified MoneyWorks table with support for filtering, pagination, and multiple output formats.",
+					"example": "# Basic export\nmw export TaxRate\n\n# Export with filter and save to file\nmw export TaxRate --filter \"Rate1 > 10\" --output high-rates.json\n\n# Export in compact format with limit\nmw export Account --exportFormat compact --limit 100\n\n# Export with ordering and pagination\nmw export Transaction \\\n  --filter \"TransDate >= '20250101'\" \\\n  --orderBy \"TransDate DESC\" \\\n  --limit 50 \\\n  --offset 100\n\n# Export with schema information\nmw export Product --exportFormat schema --output product-schema.json",
+					"since": "0.1.0"
+				},
+				{
+					"name": "import",
+					"type": "command",
+					"signature": "mw import <table> --file <path> [options]",
+					"description": "Imports data into MoneyWorks table from JSON file with support for different import modes and field calculation.",
+					"example": "# Basic import\nmw import TaxRate --file new-rates.json\n\n# Update existing records\nmw import TaxRate --file updates.json --mode update\n\n# Create or update based on key\nmw import Account --file accounts.json --mode createOrUpdate\n\n# Import with calculated fields\nmw import TaxRate --file rates.json \\\n  --work-it-out \\\n  --calculate \"Date=Date(), ModifiedBy='CLI Import'\"",
+					"since": "0.1.0"
+				},
+				{
+					"name": "eval",
+					"type": "command",
+					"signature": "mw eval <expression> [options]",
+					"description": "Evaluates MWScript expressions on the MoneyWorks server. Useful for calculations, queries, and testing MoneyWorks scripting.",
+					"example": "# Simple calculations\nmw eval \"1 + 1\"\n# Result: 2\n\n# Count records\nmw eval \"Count(TaxRate)\"\n# Result: 5\n\n# Date calculations\nmw eval \"Date() + 30\"\n# Result: 20250214\n\n# Complex queries\nmw eval \"Sum(Transaction.Total, Period=202501 and Status='Posted')\"\n# Result: 45678.90\n\n# String operations\nmw eval \"Uppercase('hello world')\"\n# Result: HELLO WORLD",
+					"since": "0.1.0"
+				},
+				{
+					"name": "version",
+					"type": "command",
+					"signature": "mw version [options]",
+					"description": "Displays the MoneyWorks server version.",
+					"example": "mw version\n# MoneyWorks version: 9.1.7\n\n# With timing\nmw version --timing\n# MoneyWorks version: 9.1.7\n# Timing: 45ms",
+					"since": "0.1.0"
+				},
+				{
+					"name": "list",
+					"type": "command",
+					"signature": "mw list [options]",
+					"description": "Lists all available documents on the MoneyWorks server that the current user can access.",
+					"example": "mw list\n# Available documents:\n# 1. Acme Widgets\n# 2. Demo Company\n# 3. Test Database\n\n# With debug info\nmw list --debug\n# [DEBUG] Connecting to localhost:6710\n# [DEBUG] Fetching document list\n# Available documents:\n# ...",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Command Options",
+			"description": "Options available for CLI commands",
+			"category": "Options",
+			"items": [
+				{
+					"name": "Export Options",
+					"type": "options",
+					"signature": "export command options",
+					"description": "Options available for the export command to control filtering, formatting, and output.",
+					"example": "# Filter options\n--filter <expression>    # MoneyWorks filter expression\n--search <text>         # Search text fields\n\n# Sorting and pagination\n--orderBy <field>       # Sort by field (e.g., \"TaxCode DESC\")\n--limit <number>        # Limit records returned\n--offset <number>       # Skip first n records\n\n# Format options\n--exportFormat <format> # Output format: compact, compact-headers, full, schema\n--format <format>       # MW format: json, xml-terse, xml-verbose, tsv\n\n# Output\n--output <file>         # Save to file instead of stdout",
+					"since": "0.1.0"
+				},
+				{
+					"name": "Import Options",
+					"type": "options",
+					"signature": "import command options",
+					"description": "Options for controlling import behavior and data processing.",
+					"example": "# Required\n--file <path>           # JSON file to import\n\n# Import behavior\n--mode <mode>           # Import mode: create, update, createOrUpdate\n--work-it-out           # Enable automatic field resolution\n--calculate <fields>    # Calculate field values (comma-separated)\n\n# Examples:\n--mode update\n--calculate \"Date=Date(), User='Import'\"",
+					"since": "0.1.0"
+				},
+				{
+					"name": "Global Options",
+					"type": "options",
+					"signature": "options available for all commands",
+					"description": "Global options that can be used with any command for configuration and debugging.",
+					"example": "# Configuration\n--config <file>     # Path to config file (default: mw-config.json)\n\n# Output control\n--debug            # Enable debug mode with verbose logging\n--timing           # Show timing information\n\n# Help\n--help             # Display help for command\n--version          # Show CLI version",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Configuration",
+			"description": "Configuration file format and environment variables",
+			"category": "Config",
+			"items": [
+				{
+					"name": "Config File",
+					"type": "config",
+					"signature": "mw-config.json",
+					"description": "JSON configuration file for MoneyWorks connection settings. The CLI looks for this file in the current directory by default.",
+					"example": "{\n  \"host\": \"localhost\",\n  \"port\": 6710,\n  \"username\": \"Admin\",\n  \"password\": \"secure-password\",\n  \"dataFile\": \"Acme Widgets\",\n  \"timeout\": 30000,\n  \"version\": \"9\"\n}\n\n// Multiple configs for different environments\n// mw-config.dev.json\n{\n  \"host\": \"dev-server.local\",\n  \"port\": 6710,\n  \"username\": \"Developer\",\n  \"password\": \"dev-password\",\n  \"dataFile\": \"Test Data\"\n}\n\n// Usage: mw export TaxRate --config mw-config.dev.json",
+					"since": "0.1.0"
+				},
+				{
+					"name": "Environment Variables",
+					"type": "config",
+					"signature": "MW_* environment variables",
+					"description": "Environment variables used when no config file is specified. Useful for CI/CD pipelines and containerized deployments.",
+					"example": "# Connection settings\nexport MW_HOST=server.example.com\nexport MW_PORT=6710\nexport MW_USERNAME=Admin\nexport MW_PASSWORD=secure-password\nexport MW_DATAFILE=\"Production Data\"\nexport MW_TIMEOUT=30000\nexport MW_VERSION=9\n\n# Usage\nmw export Account  # Uses environment variables\n\n# Override specific values\nMW_DATAFILE=\"Test Data\" mw test-connection",
+					"since": "0.1.0"
+				},
+				{
+					"name": "loadConfig",
+					"type": "function",
+					"signature": "(configPath?: string): Promise<MoneyWorksConfig>",
+					"description": "Loads configuration from file or environment variables. Used internally by the CLI but exposed for programmatic use.",
+					"example": "import { loadConfig } from '@moneyworks/cli/config';\n\n// Load default config\nconst config = await loadConfig();\n\n// Load specific config file\nconst prodConfig = await loadConfig('prod-config.json');\n\n// Config priority:\n// 1. Specified config file\n// 2. mw-config.json in current directory\n// 3. Environment variables\n// 4. Default values",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Export Formats",
+			"description": "Available export format options with examples",
+			"category": "Formats",
+			"items": [
+				{
+					"name": "compact",
+					"type": "format",
+					"signature": "--exportFormat compact",
+					"description": "Exports data as raw arrays without field names. Most efficient for data transfer and storage.",
+					"example": "mw export TaxRate --exportFormat compact\n\n// Output:\n[\n  [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"],\n  [\"GST15\", \"1400\", \"2400\", \"20240101\", \"15\", \"0\"]\n]\n\n// Best for:\n// - Minimal file size\n// - Network transfer\n// - When field structure is known",
+					"since": "0.1.0"
+				},
+				{
+					"name": "compact-headers",
+					"type": "format",
+					"signature": "--exportFormat compact-headers",
+					"description": "Exports data as arrays with field names in the first row. Self-documenting while maintaining efficiency.",
+					"example": "mw export TaxRate --exportFormat compact-headers\n\n// Output:\n[\n  [\"TaxCode\", \"PaidAccount\", \"RecAccount\", \"Date\", \"Rate1\", \"Rate2\"],\n  [\"GST10\", \"1400\", \"2400\", \"20240101\", \"10\", \"0\"],\n  [\"GST15\", \"1400\", \"2400\", \"20240101\", \"15\", \"0\"]\n]\n\n// Best for:\n// - CSV conversion\n// - Spreadsheet import\n// - Human-readable compact format",
+					"since": "0.1.0"
+				},
+				{
+					"name": "full",
+					"type": "format",
+					"signature": "--exportFormat full",
+					"description": "Default format. Exports data as complete JSON objects with field names. Best for development and data manipulation.",
+					"example": "mw export TaxRate --exportFormat full\n\n// Output:\n[\n  {\n    \"TaxCode\": \"GST10\",\n    \"PaidAccount\": \"1400\",\n    \"RecAccount\": \"2400\",\n    \"Date\": \"20240101\",\n    \"Rate1\": 10,\n    \"Rate2\": 0\n  },\n  {\n    \"TaxCode\": \"GST15\",\n    \"PaidAccount\": \"1400\",\n    \"RecAccount\": \"2400\",\n    \"Date\": \"20240101\",\n    \"Rate1\": 15,\n    \"Rate2\": 0\n  }\n]\n\n// Best for:\n// - Development and debugging\n// - Data transformation\n// - Direct JSON consumption",
+					"since": "0.1.0"
+				},
+				{
+					"name": "schema",
+					"type": "format",
+					"signature": "--exportFormat schema",
+					"description": "Exports data with complete schema information including field types, constraints, and metadata. Ideal for documentation and LLM consumption.",
+					"example": "mw export TaxRate --exportFormat schema\n\n// Output:\n{\n  \"schema\": {\n    \"TaxCode\": {\n      \"type\": \"string\",\n      \"required\": true,\n      \"maxLength\": 10,\n      \"description\": \"Unique tax code identifier\"\n    },\n    \"PaidAccount\": {\n      \"type\": \"string\",\n      \"required\": true,\n      \"description\": \"Account for tax paid\"\n    },\n    \"Rate1\": {\n      \"type\": \"number\",\n      \"required\": true,\n      \"min\": 0,\n      \"max\": 100,\n      \"description\": \"Primary tax rate percentage\"\n    }\n    // ... other fields\n  },\n  \"data\": [\n    // ... records\n  ],\n  \"metadata\": {\n    \"table\": \"TaxRate\",\n    \"exportedAt\": \"2025-01-15T10:30:00Z\",\n    \"recordCount\": 2,\n    \"moneyWorksVersion\": \"9.1.7\"\n  }\n}\n\n// Best for:\n// - API documentation\n// - LLM understanding\n// - Schema validation\n// - Type generation",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Types",
+			"description": "TypeScript types used by the CLI",
+			"category": "Types",
+			"items": [
+				{
+					"name": "CommandHandler",
+					"type": "type",
+					"signature": "type CommandHandler = (client: SmartMoneyWorksClient, args: string[], options: GlobalOptions) => Promise<void>",
+					"description": "Function signature for CLI command handlers. All commands must implement this interface.",
+					"example": "import type { CommandHandler } from '@moneyworks/cli';\n\nconst myCommand: CommandHandler = async (client, args, options) => {\n  if (options.debug) {\n    console.log('[DEBUG] Starting my command');\n  }\n  \n  // Command implementation\n  const data = await client.smartExport('TaxRate');\n  console.log(`Found ${data.length} records`);\n};\n\nexport default myCommand;",
+					"since": "0.1.0"
+				},
+				{
+					"name": "GlobalOptions",
+					"type": "interface",
+					"signature": "interface GlobalOptions { config?: string; debug?: boolean; timing?: boolean; }",
+					"description": "Global options available to all commands.",
+					"example": "interface GlobalOptions {\n  config?: string;   // Path to config file\n  debug?: boolean;   // Enable debug output\n  timing?: boolean;  // Show timing information\n}\n\n// Accessing in command handler\nif (options.debug) {\n  console.log('[DEBUG] Debug mode enabled');\n}\n\nif (options.timing) {\n  const start = Date.now();\n  // ... operation ...\n  console.log(`Timing: ${Date.now() - start}ms`);\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "ExportOptions",
+					"type": "interface",
+					"signature": "interface ExportOptions extends GlobalOptions",
+					"description": "Options specific to the export command.",
+					"example": "interface ExportOptions extends GlobalOptions {\n  filter?: string;         // MoneyWorks filter expression\n  search?: string;         // Text search\n  orderBy?: string;        // Sort order\n  limit?: number;          // Record limit\n  offset?: number;         // Skip records\n  exportFormat?: ExportFormat;  // Output format\n  format?: string;         // MoneyWorks format\n  output?: string;         // Output file path\n}",
+					"since": "0.1.0"
+				},
+				{
+					"name": "ImportOptions",
+					"type": "interface",
+					"signature": "interface ImportOptions extends GlobalOptions",
+					"description": "Options specific to the import command.",
+					"example": "interface ImportOptions extends GlobalOptions {\n  file: string;           // Input file path (required)\n  mode?: ImportMode;      // create, update, createOrUpdate\n  workItOut?: boolean;    // Auto field resolution\n  calculate?: string;     // Calculated fields\n}\n\ntype ImportMode = 'create' | 'update' | 'createOrUpdate';",
+					"since": "0.1.0"
+				}
+			]
+		},
+		{
+			"name": "Utilities",
+			"description": "Utility functions and helpers",
+			"category": "Utils",
+			"items": [
+				{
+					"name": "formatOutput",
+					"type": "function",
+					"signature": "(data: any, format: ExportFormat): string",
+					"description": "Formats data according to specified export format. Used internally by export command.",
+					"example": "import { formatOutput } from '@moneyworks/cli/utils';\n\nconst data = [{ TaxCode: 'GST10', Rate1: 10 }];\n\n// Format as compact\nconst compact = formatOutput(data, 'compact');\n// [[\"GST10\", 10]]\n\n// Format with schema\nconst schema = formatOutput(data, 'schema');\n// { schema: {...}, data: [...], metadata: {...} }",
+					"since": "0.1.0"
+				},
+				{
+					"name": "parseFilter",
+					"type": "function",
+					"signature": "(filter?: string): string | undefined",
+					"description": "Validates and normalizes MoneyWorks filter expressions.",
+					"example": "import { parseFilter } from '@moneyworks/cli/utils';\n\n// Valid filters\nparseFilter(\"Rate1 > 10\");  // \"Rate1 > 10\"\nparseFilter(\"Status='Active'\");  // \"Status='Active'\"\n\n// Handles edge cases\nparseFilter(\"\");  // undefined\nparseFilter(\" \");  // undefined",
+					"since": "0.1.0"
+				},
+				{
+					"name": "timing",
+					"type": "function",
+					"signature": "(label: string, fn: () => Promise<T>): Promise<T>",
+					"description": "Utility for timing operations. Automatically outputs timing when --timing flag is set.",
+					"example": "import { timing } from '@moneyworks/cli/utils';\n\n// Time an operation\nconst data = await timing('Export', async () => {\n  return await client.smartExport('TaxRate');\n});\n// Output: Timing: Export: 123ms\n\n// Nested timing\nconst result = await timing('Total', async () => {\n  await timing('Connect', () => client.connect());\n  return await timing('Query', () => client.query());\n});\n// Output:\n// Timing: Connect: 45ms\n// Timing: Query: 78ms\n// Timing: Total: 123ms",
+					"since": "0.1.0"
+				}
+			]
+		}
+	],
+	"usage": {
+		"examples": [
+			{
+				"title": "Basic Workflow",
+				"description": "Common workflow for exporting, modifying, and importing data",
+				"code": "# 1. Test connection\nmw test-connection\n\n# 2. Export current data as backup\nmw export TaxRate --output backup-taxrates.json\n\n# 3. Export specific records to modify\nmw export TaxRate --filter \"Rate1 = 10\" --output gst10-rates.json\n\n# 4. Modify the JSON file (external process)\n# ... edit gst10-rates.json ...\n\n# 5. Import modified data\nmw import TaxRate --file gst10-rates.json --mode update\n\n# 6. Verify changes\nmw export TaxRate --filter \"Rate1 = 10.5\""
+			},
+			{
+				"title": "Automation Script",
+				"description": "Bash script for automated daily exports",
+				"code": "#!/bin/bash\n# daily-export.sh - Export all critical data\n\nDATE=$(date +%Y%m%d)\nOUTPUT_DIR=\"backups/$DATE\"\n\n# Create output directory\nmkdir -p \"$OUTPUT_DIR\"\n\n# Export all tables with timing\nTABLES=(\"TaxRate\" \"Account\" \"Transaction\" \"Name\" \"Product\")\n\nfor table in \"${TABLES[@]}\"; do\n  echo \"Exporting $table...\"\n  mw export \"$table\" \\\n    --output \"$OUTPUT_DIR/${table}.json\" \\\n    --exportFormat full \\\n    --timing\ndone\n\n# Create compressed archive\ntar -czf \"backups/backup-$DATE.tar.gz\" \"$OUTPUT_DIR\"\nrm -rf \"$OUTPUT_DIR\"\n\necho \"Backup complete: backups/backup-$DATE.tar.gz\""
+			},
+			{
+				"title": "Data Validation Pipeline",
+				"description": "Using CLI with jq for data validation and transformation",
+				"code": "# Export and validate tax rates\nmw export TaxRate --exportFormat full | jq '\n  # Validate all rates are between 0 and 100\n  map(select(.Rate1 < 0 or .Rate1 > 100)) |\n  if length > 0 then\n    error(\"Invalid tax rates found: \\(.)\")\n  else\n    \"All tax rates valid\" | {status: ., count: length}\n  end\n'\n\n# Transform and filter accounts\nmw export Account | jq '\n  # Get income accounts with balance\n  map(select(.Type == \"Income\" and .Balance > 0)) |\n  map({code: .AccountCode, name: .Description, balance: .Balance}) |\n  sort_by(.balance) | reverse\n' > income-accounts.json\n\n# Count transactions by period\nmw export Transaction --filter 'Type=\"Invoice\"' | jq '\n  group_by(.Period) |\n  map({period: .[0].Period, count: length, total: (map(.Total) | add)}) |\n  sort_by(.period)\n'"
+			},
+			{
+				"title": "Error Handling and Recovery",
+				"description": "Robust import with error handling and rollback",
+				"code": "#!/bin/bash\n# safe-import.sh - Import with automatic rollback on failure\n\nTABLE=\"TaxRate\"\nIMPORT_FILE=\"new-rates.json\"\nBACKUP_FILE=\"backup-$(date +%s).json\"\n\n# Function to check if import was successful\ncheck_import() {\n  local count=$(mw eval \"Count($TABLE)\" 2>/dev/null)\n  if [[ -z \"$count\" || \"$count\" -eq 0 ]]; then\n    return 1\n  fi\n  return 0\n}\n\n# Create backup\necho \"Creating backup...\"\nif ! mw export \"$TABLE\" --output \"$BACKUP_FILE\"; then\n  echo \"Failed to create backup. Aborting.\"\n  exit 1\nfi\n\n# Perform import\necho \"Importing from $IMPORT_FILE...\"\nif ! mw import \"$TABLE\" --file \"$IMPORT_FILE\" --mode createOrUpdate; then\n  echo \"Import failed. Attempting rollback...\"\n  \n  # Rollback\n  if mw import \"$TABLE\" --file \"$BACKUP_FILE\" --mode createOrUpdate; then\n    echo \"Rollback successful.\"\n  else\n    echo \"CRITICAL: Rollback failed! Manual intervention required.\"\n    echo \"Backup file: $BACKUP_FILE\"\n    exit 2\n  fi\n  exit 1\nfi\n\n# Verify import\nif ! check_import; then\n  echo \"Import verification failed. Check data integrity.\"\n  exit 1\nfi\n\necho \"Import successful.\"\n# Clean up backup after successful import\n# rm \"$BACKUP_FILE\""
+			},
+			{
+				"title": "Performance Testing",
+				"description": "Benchmark different export formats and options",
+				"code": "#!/bin/bash\n# benchmark.sh - Compare export performance\n\necho \"MoneyWorks CLI Export Benchmark\"\necho \"================================\"\necho \"\"\n\n# Test different formats\nFORMATS=(\"compact\" \"compact-headers\" \"full\" \"schema\")\nTABLE=\"Transaction\"\nLIMIT=1000\n\nfor format in \"${FORMATS[@]}\"; do\n  echo \"Testing format: $format\"\n  \n  # Run 3 times and calculate average\n  total_time=0\n  for i in {1..3}; do\n    # Capture timing output\n    output=$(mw export \"$TABLE\" \\\n      --limit $LIMIT \\\n      --exportFormat \"$format\" \\\n      --timing 2>&1 >/dev/null)\n    \n    # Extract timing\n    time=$(echo \"$output\" | grep -oE 'Total: ([0-9]+)ms' | grep -oE '[0-9]+')\n    total_time=$((total_time + time))\n    \n    echo \"  Run $i: ${time}ms\"\n  done\n  \n  avg=$((total_time / 3))\n  echo \"  Average: ${avg}ms\"\n  echo \"\"\ndone\n\n# Test pagination performance\necho \"Testing pagination (offset impact)\"\nfor offset in 0 1000 5000 10000; do\n  output=$(mw export \"$TABLE\" \\\n    --limit 100 \\\n    --offset $offset \\\n    --timing 2>&1 >/dev/null)\n  \n  time=$(echo \"$output\" | grep -oE 'Total: ([0-9]+)ms' | grep -oE '[0-9]+')\n  echo \"  Offset $offset: ${time}ms\"\ndone"
+			}
+		],
+		"importPatterns": [
+			{
+				"pattern": "bunx @moneyworks/cli <command>",
+				"description": "Run CLI without installation using bunx"
+			},
+			{
+				"pattern": "import { loadConfig } from '@moneyworks/cli/config';",
+				"description": "Import configuration utilities for programmatic use"
+			},
+			{
+				"pattern": "import type { CommandHandler, GlobalOptions } from '@moneyworks/cli';",
+				"description": "Import types for custom command development"
+			}
+		]
+	},
+	"designPrinciples": [
+		{
+			"principle": "Developer Experience First",
+			"description": "The CLI prioritizes ease of use with sensible defaults, clear error messages, and helpful debug output. Configuration via files or environment variables provides flexibility without complexity."
+		},
+		{
+			"principle": "Multiple Export Formats",
+			"description": "Supporting four distinct export formats ensures the CLI can serve different use cases - from efficient data transfer (compact) to rich documentation (schema)."
+		},
+		{
+			"principle": "MoneyWorks Native",
+			"description": "The CLI respects MoneyWorks conventions, using exact field names and supporting native filter expressions and MWScript evaluation."
+		},
+		{
+			"principle": "Composable and Scriptable",
+			"description": "Designed to work well with Unix pipes and scripting, enabling complex workflows through composition of simple commands."
+		},
+		{
+			"principle": "Performance Visibility",
+			"description": "Built-in timing and debug modes provide transparency into performance, helping developers optimize their integrations."
+		}
+	],
+	"futurePlans": [
+		{
+			"feature": "Interactive Mode",
+			"description": "Add REPL-style interactive mode for exploratory data analysis",
+			"status": "Planned"
+		},
+		{
+			"feature": "Progress Indicators",
+			"description": "Show progress bars for large export/import operations",
+			"status": "Planned"
+		},
+		{
+			"feature": "Streaming Support",
+			"description": "Stream large datasets to reduce memory usage",
+			"status": "Researching"
+		},
+		{
+			"feature": "Additional Tables",
+			"description": "Support for all MoneyWorks tables (Account, Transaction, Name, etc.)",
+			"status": "In Progress"
+		},
+		{
+			"feature": "Dry Run Mode",
+			"description": "Preview import changes without applying them",
+			"status": "Planned"
+		},
+		{
+			"feature": "Watch Mode",
+			"description": "Monitor and sync changes between local files and MoneyWorks",
+			"status": "Considered"
+		}
+	]
 }

@@ -1,893 +1,893 @@
 {
-  "name": "@moneyworks/web1",
-  "version": "0.1.0",
-  "description": "Modern web application for MoneyWorks with React Router v7, React Query, and Radix UI",
-  "exports": [
-    {
-      "name": "Components",
-      "items": [
-        {
-          "name": "AddCompanyDialog",
-          "type": "component",
-          "description": "Modal dialog for adding new MoneyWorks connections",
-          "signature": "function AddCompanyDialog(props: AddCompanyDialogProps): JSX.Element",
-          "props": [
-            {
-              "name": "open",
-              "type": "boolean",
-              "description": "Control dialog visibility"
-            },
-            {
-              "name": "onOpenChange",
-              "type": "(open: boolean) => void",
-              "description": "Callback when dialog state changes"
-            },
-            {
-              "name": "onSuccess",
-              "type": "(connection: Connection) => void",
-              "optional": true,
-              "description": "Callback after successful connection creation"
-            }
-          ],
-          "usage": [
-            "```typescript",
-            "import { AddCompanyDialog } from '~/components/add-company-dialog';",
-            "",
-            "function MyComponent() {",
-            "  const [open, setOpen] = useState(false);",
-            "  ",
-            "  return (",
-            "    <AddCompanyDialog",
-            "      open={open}",
-            "      onOpenChange={setOpen}",
-            "      onSuccess={(connection) => {",
-            "        toast.success(`Connected to ${connection.name}`);",
-            "      }}",
-            "    />",
-            "  );",
-            "}",
-            "```"
-          ]
-        },
-        {
-          "name": "AuthGuard",
-          "type": "component",
-          "description": "Protect routes requiring authentication",
-          "signature": "function AuthGuard({ children, fallback }: AuthGuardProps): JSX.Element",
-          "props": [
-            {
-              "name": "children",
-              "type": "React.ReactNode",
-              "description": "Content to show when authenticated"
-            },
-            {
-              "name": "fallback",
-              "type": "React.ReactNode",
-              "optional": true,
-              "description": "Content to show when not authenticated"
-            },
-            {
-              "name": "redirectTo",
-              "type": "string",
-              "optional": true,
-              "description": "URL to redirect to when not authenticated"
-            }
-          ],
-          "usage": [
-            "```typescript",
-            "import { AuthGuard } from '~/components/auth-guard';",
-            "",
-            "<AuthGuard redirectTo=\"/sign-in\">",
-            "  <ProtectedContent />",
-            "</AuthGuard>",
-            "```"
-          ]
-        },
-        {
-          "name": "ConnectionSwitcher",
-          "type": "component",
-          "description": "Dropdown component for switching between MoneyWorks connections",
-          "signature": "function ConnectionSwitcher(props: ConnectionSwitcherProps): JSX.Element",
-          "props": [
-            {
-              "name": "currentConnection",
-              "type": "Connection | null",
-              "description": "Currently active connection"
-            },
-            {
-              "name": "connections",
-              "type": "Connection[]",
-              "optional": true,
-              "description": "List of available connections"
-            },
-            {
-              "name": "onSwitch",
-              "type": "(connectionId: string) => void",
-              "description": "Callback when connection is switched"
-            }
-          ],
-          "features": [
-            "Search/filter connections",
-            "Group connections by folder",
-            "Show connection status",
-            "Quick add new connection"
-          ]
-        },
-        {
-          "name": "GroupTree",
-          "type": "component",
-          "description": "Hierarchical tree view for organizing connections into groups",
-          "signature": "function GroupTree(props: GroupTreeProps): JSX.Element",
-          "props": [
-            {
-              "name": "groups",
-              "type": "Group[]",
-              "description": "List of groups with nested structure"
-            },
-            {
-              "name": "connections",
-              "type": "Connection[]",
-              "description": "List of connections to display"
-            },
-            {
-              "name": "onSelectConnection",
-              "type": "(connection: Connection) => void",
-              "description": "Callback when connection is selected"
-            },
-            {
-              "name": "onCreateGroup",
-              "type": "(parentId?: string) => void",
-              "description": "Callback to create new group"
-            },
-            {
-              "name": "onMoveConnection",
-              "type": "(connectionId: string, groupId: string) => void",
-              "optional": true,
-              "description": "Callback for drag-and-drop"
-            }
-          ]
-        },
-        {
-          "name": "Navigation",
-          "type": "component",
-          "description": "Main application navigation component",
-          "signature": "function Navigation(): JSX.Element",
-          "features": [
-            "Responsive design",
-            "Active route highlighting",
-            "User menu with sign out",
-            "Connection switcher integration",
-            "Collapsible on mobile"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "UI Components",
-      "items": [
-        {
-          "name": "Button",
-          "type": "component",
-          "description": "Versatile button component with multiple variants and sizes",
-          "signature": "const Button = React.forwardRef<HTMLButtonElement, ButtonProps>",
-          "props": [
-            {
-              "name": "variant",
-              "type": "'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'",
-              "optional": true,
-              "description": "Visual style variant"
-            },
-            {
-              "name": "size",
-              "type": "'default' | 'sm' | 'lg' | 'icon'",
-              "optional": true,
-              "description": "Button size"
-            },
-            {
-              "name": "asChild",
-              "type": "boolean",
-              "optional": true,
-              "description": "Render as child element"
-            }
-          ],
-          "usage": [
-            "```typescript",
-            "import { Button } from '~/components/ui/button';",
-            "",
-            "<Button variant=\"destructive\" size=\"sm\">",
-            "  Delete",
-            "</Button>",
-            "",
-            "// As link",
-            "<Button asChild>",
-            "  <Link to=\"/dashboard\">Dashboard</Link>",
-            "</Button>",
-            "```"
-          ]
-        },
-        {
-          "name": "Dialog",
-          "type": "component",
-          "description": "Modal dialog component built on Radix UI",
-          "signature": "function Dialog(props: DialogProps): JSX.Element",
-          "subcomponents": [
-            "DialogTrigger",
-            "DialogContent",
-            "DialogHeader",
-            "DialogTitle",
-            "DialogDescription",
-            "DialogFooter"
-          ],
-          "usage": [
-            "```typescript",
-            "import {",
-            "  Dialog,",
-            "  DialogContent,",
-            "  DialogHeader,",
-            "  DialogTitle,",
-            "} from '~/components/ui/dialog';",
-            "",
-            "<Dialog>",
-            "  <DialogTrigger asChild>",
-            "    <Button>Open</Button>",
-            "  </DialogTrigger>",
-            "  <DialogContent>",
-            "    <DialogHeader>",
-            "      <DialogTitle>Title</DialogTitle>",
-            "    </DialogHeader>",
-            "    {/* Content */}",
-            "  </DialogContent>",
-            "</Dialog>",
-            "```"
-          ]
-        },
-        {
-          "name": "Table",
-          "type": "component",
-          "description": "Data table component with sorting and selection",
-          "signature": "function Table(props: TableProps): JSX.Element",
-          "subcomponents": [
-            "TableHeader",
-            "TableBody",
-            "TableFooter",
-            "TableRow",
-            "TableHead",
-            "TableCell",
-            "TableCaption"
-          ]
-        },
-        {
-          "name": "Select",
-          "type": "component",
-          "description": "Select dropdown component built on Radix UI",
-          "signature": "function Select(props: SelectProps): JSX.Element",
-          "subcomponents": [
-            "SelectTrigger",
-            "SelectContent",
-            "SelectItem",
-            "SelectValue",
-            "SelectGroup",
-            "SelectLabel"
-          ]
-        },
-        {
-          "name": "Input",
-          "type": "component",
-          "description": "Styled input component with consistent theming",
-          "signature": "const Input = React.forwardRef<HTMLInputElement, InputProps>",
-          "props": [
-            {
-              "name": "type",
-              "type": "string",
-              "optional": true,
-              "description": "HTML input type"
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "optional": true,
-              "description": "Additional CSS classes"
-            }
-          ]
-        },
-        {
-          "name": "Card",
-          "type": "component",
-          "description": "Container component for grouping related content",
-          "signature": "function Card(props: CardProps): JSX.Element",
-          "subcomponents": [
-            "CardHeader",
-            "CardTitle",
-            "CardDescription",
-            "CardContent",
-            "CardFooter"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Hooks",
-      "items": [
-        {
-          "name": "useAuth",
-          "type": "hook",
-          "description": "Access authentication state and user information",
-          "signature": "function useAuth(): AuthState",
-          "returns": {
-            "type": "AuthState",
-            "properties": [
-              {
-                "name": "isLoaded",
-                "type": "boolean",
-                "description": "Whether auth state has loaded"
-              },
-              {
-                "name": "isSignedIn",
-                "type": "boolean",
-                "description": "Whether user is authenticated"
-              },
-              {
-                "name": "user",
-                "type": "User | null",
-                "description": "Current user object"
-              },
-              {
-                "name": "signOut",
-                "type": "() => Promise<void>",
-                "description": "Sign out function"
-              }
-            ]
-          },
-          "usage": [
-            "```typescript",
-            "import { useAuth } from '~/hooks/use-auth';",
-            "",
-            "function UserProfile() {",
-            "  const { isSignedIn, user, signOut } = useAuth();",
-            "  ",
-            "  if (!isSignedIn) {",
-            "    return <Navigate to=\"/sign-in\" />;",
-            "  }",
-            "  ",
-            "  return (",
-            "    <div>",
-            "      <p>Welcome, {user.firstName}!</p>",
-            "      <Button onClick={signOut}>Sign Out</Button>",
-            "    </div>",
-            "  );",
-            "}",
-            "```"
-          ]
-        },
-        {
-          "name": "useMoneyWorks",
-          "type": "hook",
-          "description": "Access MoneyWorks client for current connection",
-          "signature": "function useMoneyWorks(): MoneyWorksHookResult",
-          "returns": {
-            "type": "MoneyWorksHookResult",
-            "properties": [
-              {
-                "name": "client",
-                "type": "MoneyWorksRESTClient | null",
-                "description": "Configured MoneyWorks client"
-              },
-              {
-                "name": "currentConnection",
-                "type": "Connection | null",
-                "description": "Active connection details"
-              }
-            ]
-          },
-          "usage": [
-            "```typescript",
-            "import { useMoneyWorks } from '~/hooks/use-moneyworks';",
-            "",
-            "function TaxRatesList() {",
-            "  const { client, currentConnection } = useMoneyWorks();",
-            "  ",
-            "  const { data, isLoading } = useQuery({",
-            "    queryKey: ['taxRates', currentConnection?.id],",
-            "    queryFn: () => client!.export('TaxRate'),",
-            "    enabled: !!client",
-            "  });",
-            "  ",
-            "  if (!currentConnection) {",
-            "    return <NoConnectionMessage />;",
-            "  }",
-            "  ",
-            "  return <TaxRatesTable data={data} />;",
-            "}",
-            "```"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Contexts",
-      "items": [
-        {
-          "name": "ConnectionProvider",
-          "type": "component",
-          "description": "Context provider for managing MoneyWorks connections",
-          "signature": "function ConnectionProvider({ children }: ConnectionProviderProps): JSX.Element",
-          "context": {
-            "name": "ConnectionContext",
-            "value": {
-              "connections": "Connection[]",
-              "currentConnection": "Connection | null",
-              "currentConnectionId": "string | null",
-              "switchConnection": "(id: string) => void",
-              "createConnection": "(data: CreateConnectionData) => Promise<Connection>",
-              "updateConnection": "(id: string, data: UpdateConnectionData) => Promise<Connection>",
-              "deleteConnection": "(id: string) => Promise<void>",
-              "refreshConnections": "() => Promise<void>"
-            }
-          },
-          "usage": [
-            "```typescript",
-            "// In root.tsx",
-            "<ConnectionProvider>",
-            "  <App />",
-            "</ConnectionProvider>",
-            "",
-            "// In components",
-            "import { useConnection } from '~/contexts/connection-context';",
-            "",
-            "function MyComponent() {",
-            "  const { currentConnection, switchConnection } = useConnection();",
-            "  // Use connection data",
-            "}",
-            "```"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Services",
-      "items": [
-        {
-          "name": "Audit Service",
-          "type": "module",
-          "description": "Service for logging audit trails",
-          "exports": [
-            {
-              "name": "logAudit",
-              "type": "function",
-              "signature": "async function logAudit(params: AuditLogParams): Promise<void>",
-              "parameters": [
-                {
-                  "name": "userId",
-                  "type": "string",
-                  "description": "User performing the action"
-                },
-                {
-                  "name": "action",
-                  "type": "AuditAction",
-                  "description": "Action being performed"
-                },
-                {
-                  "name": "connectionId",
-                  "type": "string",
-                  "optional": true,
-                  "description": "Related connection ID"
-                },
-                {
-                  "name": "details",
-                  "type": "Record<string, any>",
-                  "optional": true,
-                  "description": "Additional action details"
-                },
-                {
-                  "name": "ipAddress",
-                  "type": "string",
-                  "optional": true,
-                  "description": "Client IP address"
-                }
-              ]
-            },
-            {
-              "name": "getAuditLogs",
-              "type": "function",
-              "signature": "async function getAuditLogs(params: GetAuditLogsParams): Promise<AuditLog[]>"
-            }
-          ]
-        },
-        {
-          "name": "Connections Service",
-          "type": "module",
-          "description": "Service for managing MoneyWorks connections",
-          "exports": [
-            {
-              "name": "listConnections",
-              "type": "function",
-              "signature": "async function listConnections(userId: string): Promise<Connection[]>"
-            },
-            {
-              "name": "getConnection",
-              "type": "function",
-              "signature": "async function getConnection(id: string, userId: string): Promise<Connection | null>"
-            },
-            {
-              "name": "createConnection",
-              "type": "function",
-              "signature": "async function createConnection(data: CreateConnectionData): Promise<Connection>"
-            },
-            {
-              "name": "updateConnection",
-              "type": "function",
-              "signature": "async function updateConnection(id: string, userId: string, data: UpdateConnectionData): Promise<Connection>"
-            },
-            {
-              "name": "deleteConnection",
-              "type": "function",
-              "signature": "async function deleteConnection(id: string, userId: string): Promise<void>"
-            },
-            {
-              "name": "testConnection",
-              "type": "function",
-              "signature": "async function testConnection(data: ConnectionData): Promise<TestResult>"
-            }
-          ]
-        },
-        {
-          "name": "Crypto Service",
-          "type": "module",
-          "description": "Service for encrypting/decrypting sensitive data",
-          "exports": [
-            {
-              "name": "encrypt",
-              "type": "function",
-              "signature": "async function encrypt(plaintext: string): Promise<string>",
-              "description": "Encrypt plaintext using AES-256-GCM"
-            },
-            {
-              "name": "decrypt",
-              "type": "function",
-              "signature": "async function decrypt(ciphertext: string): Promise<string>",
-              "description": "Decrypt ciphertext back to plaintext"
-            },
-            {
-              "name": "generateKey",
-              "type": "function",
-              "signature": "function generateKey(): string",
-              "description": "Generate a new encryption key"
-            }
-          ]
-        },
-        {
-          "name": "Groups Service",
-          "type": "module",
-          "description": "Service for managing connection groups",
-          "exports": [
-            {
-              "name": "listGroups",
-              "type": "function",
-              "signature": "async function listGroups(userId: string): Promise<Group[]>"
-            },
-            {
-              "name": "createGroup",
-              "type": "function",
-              "signature": "async function createGroup(data: CreateGroupData): Promise<Group>"
-            },
-            {
-              "name": "updateGroup",
-              "type": "function",
-              "signature": "async function updateGroup(id: string, userId: string, data: UpdateGroupData): Promise<Group>"
-            },
-            {
-              "name": "deleteGroup",
-              "type": "function",
-              "signature": "async function deleteGroup(id: string, userId: string): Promise<void>"
-            },
-            {
-              "name": "addConnectionToGroup",
-              "type": "function",
-              "signature": "async function addConnectionToGroup(groupId: string, connectionId: string, userId: string): Promise<void>"
-            },
-            {
-              "name": "removeConnectionFromGroup",
-              "type": "function",
-              "signature": "async function removeConnectionFromGroup(groupId: string, connectionId: string, userId: string): Promise<void>"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Database",
-      "items": [
-        {
-          "name": "Database Client",
-          "type": "constant",
-          "description": "Drizzle ORM client for SQLite",
-          "signature": "export const db: DrizzleD1Database",
-          "usage": [
-            "```typescript",
-            "import { db } from '~/db/client';",
-            "import { connections } from '~/db/schema';",
-            "",
-            "// Query connections",
-            "const userConnections = await db",
-            "  .select()",
-            "  .from(connections)",
-            "  .where(eq(connections.user_id, userId));",
-            "```"
-          ]
-        },
-        {
-          "name": "Schema",
-          "type": "module",
-          "description": "Database schema definitions",
-          "tables": [
-            {
-              "name": "connections",
-              "description": "MoneyWorks connection configurations"
-            },
-            {
-              "name": "groups",
-              "description": "Groups for organizing connections"
-            },
-            {
-              "name": "group_members",
-              "description": "Many-to-many relationship between groups and connections"
-            },
-            {
-              "name": "audit_logs",
-              "description": "Audit trail of user actions"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Routes",
-      "items": [
-        {
-          "name": "Dashboard Route",
-          "type": "route",
-          "path": "/dashboard",
-          "description": "Main dashboard showing connection overview",
-          "exports": [
-            {
-              "name": "loader",
-              "description": "Load user connections and stats"
-            },
-            {
-              "name": "default",
-              "description": "Dashboard component"
-            }
-          ]
-        },
-        {
-          "name": "Tax Rates Route",
-          "type": "route",
-          "path": "/tax-rates",
-          "description": "Display and manage tax rates",
-          "exports": [
-            {
-              "name": "loader",
-              "description": "Load tax rates from MoneyWorks"
-            },
-            {
-              "name": "default",
-              "description": "Tax rates table component"
-            }
-          ]
-        },
-        {
-          "name": "Connections Route",
-          "type": "route",
-          "path": "/connections",
-          "description": "Manage MoneyWorks connections",
-          "exports": [
-            {
-              "name": "loader",
-              "description": "Load user connections"
-            },
-            {
-              "name": "action",
-              "description": "Handle connection CRUD operations"
-            },
-            {
-              "name": "default",
-              "description": "Connections list component"
-            }
-          ]
-        },
-        {
-          "name": "API Routes",
-          "type": "route",
-          "path": "/api/*",
-          "description": "Internal API endpoints",
-          "endpoints": [
-            "/api/connections - Connection CRUD",
-            "/api/groups - Group management",
-            "/api/moneyworks - Proxy to MoneyWorks",
-            "/api/debug/connections - Debug info"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Utilities",
-      "items": [
-        {
-          "name": "cn",
-          "type": "function",
-          "description": "Merge class names with Tailwind CSS",
-          "signature": "function cn(...inputs: ClassValue[]): string",
-          "usage": [
-            "```typescript",
-            "import { cn } from '~/lib/utils';",
-            "",
-            "// Merge classes",
-            "className={cn(",
-            "  'px-4 py-2 rounded',",
-            "  isActive && 'bg-primary',",
-            "  className",
-            ")}",
-            "```"
-          ]
-        },
-        {
-          "name": "i18n",
-          "type": "module",
-          "description": "Internationalization configuration",
-          "exports": [
-            {
-              "name": "default",
-              "type": "i18n instance",
-              "description": "Configured i18next instance"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Types",
-      "items": [
-        {
-          "name": "Connection",
-          "type": "interface",
-          "description": "MoneyWorks connection configuration",
-          "properties": [
-            {
-              "name": "id",
-              "type": "string",
-              "description": "Unique identifier"
-            },
-            {
-              "name": "user_id",
-              "type": "string",
-              "description": "Owner user ID"
-            },
-            {
-              "name": "name",
-              "type": "string",
-              "description": "Display name"
-            },
-            {
-              "name": "mw_host",
-              "type": "string",
-              "description": "MoneyWorks server host"
-            },
-            {
-              "name": "mw_port",
-              "type": "number",
-              "description": "MoneyWorks server port"
-            },
-            {
-              "name": "mw_data_file",
-              "type": "string",
-              "description": "Data file path"
-            },
-            {
-              "name": "mw_username",
-              "type": "string",
-              "description": "MoneyWorks username"
-            },
-            {
-              "name": "mw_password",
-              "type": "string",
-              "description": "Encrypted password"
-            },
-            {
-              "name": "mw_folder_name",
-              "type": "string",
-              "optional": true,
-              "description": "Folder name for folder auth"
-            },
-            {
-              "name": "mw_folder_password",
-              "type": "string",
-              "optional": true,
-              "description": "Encrypted folder password"
-            },
-            {
-              "name": "is_active",
-              "type": "boolean",
-              "description": "Whether connection is active"
-            },
-            {
-              "name": "created_at",
-              "type": "Date",
-              "description": "Creation timestamp"
-            },
-            {
-              "name": "updated_at",
-              "type": "Date",
-              "description": "Last update timestamp"
-            }
-          ]
-        },
-        {
-          "name": "Group",
-          "type": "interface",
-          "description": "Connection group for organization",
-          "properties": [
-            {
-              "name": "id",
-              "type": "string"
-            },
-            {
-              "name": "user_id",
-              "type": "string"
-            },
-            {
-              "name": "name",
-              "type": "string"
-            },
-            {
-              "name": "parent_id",
-              "type": "string",
-              "optional": true
-            },
-            {
-              "name": "created_at",
-              "type": "Date"
-            }
-          ]
-        },
-        {
-          "name": "AuditLog",
-          "type": "interface",
-          "description": "Audit log entry",
-          "properties": [
-            {
-              "name": "id",
-              "type": "string"
-            },
-            {
-              "name": "user_id",
-              "type": "string"
-            },
-            {
-              "name": "connection_id",
-              "type": "string",
-              "optional": true
-            },
-            {
-              "name": "action",
-              "type": "AuditAction"
-            },
-            {
-              "name": "details",
-              "type": "Record<string, any>",
-              "optional": true
-            },
-            {
-              "name": "ip_address",
-              "type": "string",
-              "optional": true
-            },
-            {
-              "name": "created_at",
-              "type": "Date"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+	"name": "@moneyworks/web1",
+	"version": "0.1.0",
+	"description": "Modern web application for MoneyWorks with React Router v7, React Query, and Radix UI",
+	"exports": [
+		{
+			"name": "Components",
+			"items": [
+				{
+					"name": "AddCompanyDialog",
+					"type": "component",
+					"description": "Modal dialog for adding new MoneyWorks connections",
+					"signature": "function AddCompanyDialog(props: AddCompanyDialogProps): JSX.Element",
+					"props": [
+						{
+							"name": "open",
+							"type": "boolean",
+							"description": "Control dialog visibility"
+						},
+						{
+							"name": "onOpenChange",
+							"type": "(open: boolean) => void",
+							"description": "Callback when dialog state changes"
+						},
+						{
+							"name": "onSuccess",
+							"type": "(connection: Connection) => void",
+							"optional": true,
+							"description": "Callback after successful connection creation"
+						}
+					],
+					"usage": [
+						"```typescript",
+						"import { AddCompanyDialog } from '~/components/add-company-dialog';",
+						"",
+						"function MyComponent() {",
+						"  const [open, setOpen] = useState(false);",
+						"  ",
+						"  return (",
+						"    <AddCompanyDialog",
+						"      open={open}",
+						"      onOpenChange={setOpen}",
+						"      onSuccess={(connection) => {",
+						"        toast.success(`Connected to ${connection.name}`);",
+						"      }}",
+						"    />",
+						"  );",
+						"}",
+						"```"
+					]
+				},
+				{
+					"name": "AuthGuard",
+					"type": "component",
+					"description": "Protect routes requiring authentication",
+					"signature": "function AuthGuard({ children, fallback }: AuthGuardProps): JSX.Element",
+					"props": [
+						{
+							"name": "children",
+							"type": "React.ReactNode",
+							"description": "Content to show when authenticated"
+						},
+						{
+							"name": "fallback",
+							"type": "React.ReactNode",
+							"optional": true,
+							"description": "Content to show when not authenticated"
+						},
+						{
+							"name": "redirectTo",
+							"type": "string",
+							"optional": true,
+							"description": "URL to redirect to when not authenticated"
+						}
+					],
+					"usage": [
+						"```typescript",
+						"import { AuthGuard } from '~/components/auth-guard';",
+						"",
+						"<AuthGuard redirectTo=\"/sign-in\">",
+						"  <ProtectedContent />",
+						"</AuthGuard>",
+						"```"
+					]
+				},
+				{
+					"name": "ConnectionSwitcher",
+					"type": "component",
+					"description": "Dropdown component for switching between MoneyWorks connections",
+					"signature": "function ConnectionSwitcher(props: ConnectionSwitcherProps): JSX.Element",
+					"props": [
+						{
+							"name": "currentConnection",
+							"type": "Connection | null",
+							"description": "Currently active connection"
+						},
+						{
+							"name": "connections",
+							"type": "Connection[]",
+							"optional": true,
+							"description": "List of available connections"
+						},
+						{
+							"name": "onSwitch",
+							"type": "(connectionId: string) => void",
+							"description": "Callback when connection is switched"
+						}
+					],
+					"features": [
+						"Search/filter connections",
+						"Group connections by folder",
+						"Show connection status",
+						"Quick add new connection"
+					]
+				},
+				{
+					"name": "GroupTree",
+					"type": "component",
+					"description": "Hierarchical tree view for organizing connections into groups",
+					"signature": "function GroupTree(props: GroupTreeProps): JSX.Element",
+					"props": [
+						{
+							"name": "groups",
+							"type": "Group[]",
+							"description": "List of groups with nested structure"
+						},
+						{
+							"name": "connections",
+							"type": "Connection[]",
+							"description": "List of connections to display"
+						},
+						{
+							"name": "onSelectConnection",
+							"type": "(connection: Connection) => void",
+							"description": "Callback when connection is selected"
+						},
+						{
+							"name": "onCreateGroup",
+							"type": "(parentId?: string) => void",
+							"description": "Callback to create new group"
+						},
+						{
+							"name": "onMoveConnection",
+							"type": "(connectionId: string, groupId: string) => void",
+							"optional": true,
+							"description": "Callback for drag-and-drop"
+						}
+					]
+				},
+				{
+					"name": "Navigation",
+					"type": "component",
+					"description": "Main application navigation component",
+					"signature": "function Navigation(): JSX.Element",
+					"features": [
+						"Responsive design",
+						"Active route highlighting",
+						"User menu with sign out",
+						"Connection switcher integration",
+						"Collapsible on mobile"
+					]
+				}
+			]
+		},
+		{
+			"name": "UI Components",
+			"items": [
+				{
+					"name": "Button",
+					"type": "component",
+					"description": "Versatile button component with multiple variants and sizes",
+					"signature": "const Button = React.forwardRef<HTMLButtonElement, ButtonProps>",
+					"props": [
+						{
+							"name": "variant",
+							"type": "'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'",
+							"optional": true,
+							"description": "Visual style variant"
+						},
+						{
+							"name": "size",
+							"type": "'default' | 'sm' | 'lg' | 'icon'",
+							"optional": true,
+							"description": "Button size"
+						},
+						{
+							"name": "asChild",
+							"type": "boolean",
+							"optional": true,
+							"description": "Render as child element"
+						}
+					],
+					"usage": [
+						"```typescript",
+						"import { Button } from '~/components/ui/button';",
+						"",
+						"<Button variant=\"destructive\" size=\"sm\">",
+						"  Delete",
+						"</Button>",
+						"",
+						"// As link",
+						"<Button asChild>",
+						"  <Link to=\"/dashboard\">Dashboard</Link>",
+						"</Button>",
+						"```"
+					]
+				},
+				{
+					"name": "Dialog",
+					"type": "component",
+					"description": "Modal dialog component built on Radix UI",
+					"signature": "function Dialog(props: DialogProps): JSX.Element",
+					"subcomponents": [
+						"DialogTrigger",
+						"DialogContent",
+						"DialogHeader",
+						"DialogTitle",
+						"DialogDescription",
+						"DialogFooter"
+					],
+					"usage": [
+						"```typescript",
+						"import {",
+						"  Dialog,",
+						"  DialogContent,",
+						"  DialogHeader,",
+						"  DialogTitle,",
+						"} from '~/components/ui/dialog';",
+						"",
+						"<Dialog>",
+						"  <DialogTrigger asChild>",
+						"    <Button>Open</Button>",
+						"  </DialogTrigger>",
+						"  <DialogContent>",
+						"    <DialogHeader>",
+						"      <DialogTitle>Title</DialogTitle>",
+						"    </DialogHeader>",
+						"    {/* Content */}",
+						"  </DialogContent>",
+						"</Dialog>",
+						"```"
+					]
+				},
+				{
+					"name": "Table",
+					"type": "component",
+					"description": "Data table component with sorting and selection",
+					"signature": "function Table(props: TableProps): JSX.Element",
+					"subcomponents": [
+						"TableHeader",
+						"TableBody",
+						"TableFooter",
+						"TableRow",
+						"TableHead",
+						"TableCell",
+						"TableCaption"
+					]
+				},
+				{
+					"name": "Select",
+					"type": "component",
+					"description": "Select dropdown component built on Radix UI",
+					"signature": "function Select(props: SelectProps): JSX.Element",
+					"subcomponents": [
+						"SelectTrigger",
+						"SelectContent",
+						"SelectItem",
+						"SelectValue",
+						"SelectGroup",
+						"SelectLabel"
+					]
+				},
+				{
+					"name": "Input",
+					"type": "component",
+					"description": "Styled input component with consistent theming",
+					"signature": "const Input = React.forwardRef<HTMLInputElement, InputProps>",
+					"props": [
+						{
+							"name": "type",
+							"type": "string",
+							"optional": true,
+							"description": "HTML input type"
+						},
+						{
+							"name": "className",
+							"type": "string",
+							"optional": true,
+							"description": "Additional CSS classes"
+						}
+					]
+				},
+				{
+					"name": "Card",
+					"type": "component",
+					"description": "Container component for grouping related content",
+					"signature": "function Card(props: CardProps): JSX.Element",
+					"subcomponents": [
+						"CardHeader",
+						"CardTitle",
+						"CardDescription",
+						"CardContent",
+						"CardFooter"
+					]
+				}
+			]
+		},
+		{
+			"name": "Hooks",
+			"items": [
+				{
+					"name": "useAuth",
+					"type": "hook",
+					"description": "Access authentication state and user information",
+					"signature": "function useAuth(): AuthState",
+					"returns": {
+						"type": "AuthState",
+						"properties": [
+							{
+								"name": "isLoaded",
+								"type": "boolean",
+								"description": "Whether auth state has loaded"
+							},
+							{
+								"name": "isSignedIn",
+								"type": "boolean",
+								"description": "Whether user is authenticated"
+							},
+							{
+								"name": "user",
+								"type": "User | null",
+								"description": "Current user object"
+							},
+							{
+								"name": "signOut",
+								"type": "() => Promise<void>",
+								"description": "Sign out function"
+							}
+						]
+					},
+					"usage": [
+						"```typescript",
+						"import { useAuth } from '~/hooks/use-auth';",
+						"",
+						"function UserProfile() {",
+						"  const { isSignedIn, user, signOut } = useAuth();",
+						"  ",
+						"  if (!isSignedIn) {",
+						"    return <Navigate to=\"/sign-in\" />;",
+						"  }",
+						"  ",
+						"  return (",
+						"    <div>",
+						"      <p>Welcome, {user.firstName}!</p>",
+						"      <Button onClick={signOut}>Sign Out</Button>",
+						"    </div>",
+						"  );",
+						"}",
+						"```"
+					]
+				},
+				{
+					"name": "useMoneyWorks",
+					"type": "hook",
+					"description": "Access MoneyWorks client for current connection",
+					"signature": "function useMoneyWorks(): MoneyWorksHookResult",
+					"returns": {
+						"type": "MoneyWorksHookResult",
+						"properties": [
+							{
+								"name": "client",
+								"type": "MoneyWorksRESTClient | null",
+								"description": "Configured MoneyWorks client"
+							},
+							{
+								"name": "currentConnection",
+								"type": "Connection | null",
+								"description": "Active connection details"
+							}
+						]
+					},
+					"usage": [
+						"```typescript",
+						"import { useMoneyWorks } from '~/hooks/use-moneyworks';",
+						"",
+						"function TaxRatesList() {",
+						"  const { client, currentConnection } = useMoneyWorks();",
+						"  ",
+						"  const { data, isLoading } = useQuery({",
+						"    queryKey: ['taxRates', currentConnection?.id],",
+						"    queryFn: () => client!.export('TaxRate'),",
+						"    enabled: !!client",
+						"  });",
+						"  ",
+						"  if (!currentConnection) {",
+						"    return <NoConnectionMessage />;",
+						"  }",
+						"  ",
+						"  return <TaxRatesTable data={data} />;",
+						"}",
+						"```"
+					]
+				}
+			]
+		},
+		{
+			"name": "Contexts",
+			"items": [
+				{
+					"name": "ConnectionProvider",
+					"type": "component",
+					"description": "Context provider for managing MoneyWorks connections",
+					"signature": "function ConnectionProvider({ children }: ConnectionProviderProps): JSX.Element",
+					"context": {
+						"name": "ConnectionContext",
+						"value": {
+							"connections": "Connection[]",
+							"currentConnection": "Connection | null",
+							"currentConnectionId": "string | null",
+							"switchConnection": "(id: string) => void",
+							"createConnection": "(data: CreateConnectionData) => Promise<Connection>",
+							"updateConnection": "(id: string, data: UpdateConnectionData) => Promise<Connection>",
+							"deleteConnection": "(id: string) => Promise<void>",
+							"refreshConnections": "() => Promise<void>"
+						}
+					},
+					"usage": [
+						"```typescript",
+						"// In root.tsx",
+						"<ConnectionProvider>",
+						"  <App />",
+						"</ConnectionProvider>",
+						"",
+						"// In components",
+						"import { useConnection } from '~/contexts/connection-context';",
+						"",
+						"function MyComponent() {",
+						"  const { currentConnection, switchConnection } = useConnection();",
+						"  // Use connection data",
+						"}",
+						"```"
+					]
+				}
+			]
+		},
+		{
+			"name": "Services",
+			"items": [
+				{
+					"name": "Audit Service",
+					"type": "module",
+					"description": "Service for logging audit trails",
+					"exports": [
+						{
+							"name": "logAudit",
+							"type": "function",
+							"signature": "async function logAudit(params: AuditLogParams): Promise<void>",
+							"parameters": [
+								{
+									"name": "userId",
+									"type": "string",
+									"description": "User performing the action"
+								},
+								{
+									"name": "action",
+									"type": "AuditAction",
+									"description": "Action being performed"
+								},
+								{
+									"name": "connectionId",
+									"type": "string",
+									"optional": true,
+									"description": "Related connection ID"
+								},
+								{
+									"name": "details",
+									"type": "Record<string, any>",
+									"optional": true,
+									"description": "Additional action details"
+								},
+								{
+									"name": "ipAddress",
+									"type": "string",
+									"optional": true,
+									"description": "Client IP address"
+								}
+							]
+						},
+						{
+							"name": "getAuditLogs",
+							"type": "function",
+							"signature": "async function getAuditLogs(params: GetAuditLogsParams): Promise<AuditLog[]>"
+						}
+					]
+				},
+				{
+					"name": "Connections Service",
+					"type": "module",
+					"description": "Service for managing MoneyWorks connections",
+					"exports": [
+						{
+							"name": "listConnections",
+							"type": "function",
+							"signature": "async function listConnections(userId: string): Promise<Connection[]>"
+						},
+						{
+							"name": "getConnection",
+							"type": "function",
+							"signature": "async function getConnection(id: string, userId: string): Promise<Connection | null>"
+						},
+						{
+							"name": "createConnection",
+							"type": "function",
+							"signature": "async function createConnection(data: CreateConnectionData): Promise<Connection>"
+						},
+						{
+							"name": "updateConnection",
+							"type": "function",
+							"signature": "async function updateConnection(id: string, userId: string, data: UpdateConnectionData): Promise<Connection>"
+						},
+						{
+							"name": "deleteConnection",
+							"type": "function",
+							"signature": "async function deleteConnection(id: string, userId: string): Promise<void>"
+						},
+						{
+							"name": "testConnection",
+							"type": "function",
+							"signature": "async function testConnection(data: ConnectionData): Promise<TestResult>"
+						}
+					]
+				},
+				{
+					"name": "Crypto Service",
+					"type": "module",
+					"description": "Service for encrypting/decrypting sensitive data",
+					"exports": [
+						{
+							"name": "encrypt",
+							"type": "function",
+							"signature": "async function encrypt(plaintext: string): Promise<string>",
+							"description": "Encrypt plaintext using AES-256-GCM"
+						},
+						{
+							"name": "decrypt",
+							"type": "function",
+							"signature": "async function decrypt(ciphertext: string): Promise<string>",
+							"description": "Decrypt ciphertext back to plaintext"
+						},
+						{
+							"name": "generateKey",
+							"type": "function",
+							"signature": "function generateKey(): string",
+							"description": "Generate a new encryption key"
+						}
+					]
+				},
+				{
+					"name": "Groups Service",
+					"type": "module",
+					"description": "Service for managing connection groups",
+					"exports": [
+						{
+							"name": "listGroups",
+							"type": "function",
+							"signature": "async function listGroups(userId: string): Promise<Group[]>"
+						},
+						{
+							"name": "createGroup",
+							"type": "function",
+							"signature": "async function createGroup(data: CreateGroupData): Promise<Group>"
+						},
+						{
+							"name": "updateGroup",
+							"type": "function",
+							"signature": "async function updateGroup(id: string, userId: string, data: UpdateGroupData): Promise<Group>"
+						},
+						{
+							"name": "deleteGroup",
+							"type": "function",
+							"signature": "async function deleteGroup(id: string, userId: string): Promise<void>"
+						},
+						{
+							"name": "addConnectionToGroup",
+							"type": "function",
+							"signature": "async function addConnectionToGroup(groupId: string, connectionId: string, userId: string): Promise<void>"
+						},
+						{
+							"name": "removeConnectionFromGroup",
+							"type": "function",
+							"signature": "async function removeConnectionFromGroup(groupId: string, connectionId: string, userId: string): Promise<void>"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Database",
+			"items": [
+				{
+					"name": "Database Client",
+					"type": "constant",
+					"description": "Drizzle ORM client for SQLite",
+					"signature": "export const db: DrizzleD1Database",
+					"usage": [
+						"```typescript",
+						"import { db } from '~/db/client';",
+						"import { connections } from '~/db/schema';",
+						"",
+						"// Query connections",
+						"const userConnections = await db",
+						"  .select()",
+						"  .from(connections)",
+						"  .where(eq(connections.user_id, userId));",
+						"```"
+					]
+				},
+				{
+					"name": "Schema",
+					"type": "module",
+					"description": "Database schema definitions",
+					"tables": [
+						{
+							"name": "connections",
+							"description": "MoneyWorks connection configurations"
+						},
+						{
+							"name": "groups",
+							"description": "Groups for organizing connections"
+						},
+						{
+							"name": "group_members",
+							"description": "Many-to-many relationship between groups and connections"
+						},
+						{
+							"name": "audit_logs",
+							"description": "Audit trail of user actions"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Routes",
+			"items": [
+				{
+					"name": "Dashboard Route",
+					"type": "route",
+					"path": "/dashboard",
+					"description": "Main dashboard showing connection overview",
+					"exports": [
+						{
+							"name": "loader",
+							"description": "Load user connections and stats"
+						},
+						{
+							"name": "default",
+							"description": "Dashboard component"
+						}
+					]
+				},
+				{
+					"name": "Tax Rates Route",
+					"type": "route",
+					"path": "/tax-rates",
+					"description": "Display and manage tax rates",
+					"exports": [
+						{
+							"name": "loader",
+							"description": "Load tax rates from MoneyWorks"
+						},
+						{
+							"name": "default",
+							"description": "Tax rates table component"
+						}
+					]
+				},
+				{
+					"name": "Connections Route",
+					"type": "route",
+					"path": "/connections",
+					"description": "Manage MoneyWorks connections",
+					"exports": [
+						{
+							"name": "loader",
+							"description": "Load user connections"
+						},
+						{
+							"name": "action",
+							"description": "Handle connection CRUD operations"
+						},
+						{
+							"name": "default",
+							"description": "Connections list component"
+						}
+					]
+				},
+				{
+					"name": "API Routes",
+					"type": "route",
+					"path": "/api/*",
+					"description": "Internal API endpoints",
+					"endpoints": [
+						"/api/connections - Connection CRUD",
+						"/api/groups - Group management",
+						"/api/moneyworks - Proxy to MoneyWorks",
+						"/api/debug/connections - Debug info"
+					]
+				}
+			]
+		},
+		{
+			"name": "Utilities",
+			"items": [
+				{
+					"name": "cn",
+					"type": "function",
+					"description": "Merge class names with Tailwind CSS",
+					"signature": "function cn(...inputs: ClassValue[]): string",
+					"usage": [
+						"```typescript",
+						"import { cn } from '~/lib/utils';",
+						"",
+						"// Merge classes",
+						"className={cn(",
+						"  'px-4 py-2 rounded',",
+						"  isActive && 'bg-primary',",
+						"  className",
+						")}",
+						"```"
+					]
+				},
+				{
+					"name": "i18n",
+					"type": "module",
+					"description": "Internationalization configuration",
+					"exports": [
+						{
+							"name": "default",
+							"type": "i18n instance",
+							"description": "Configured i18next instance"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Types",
+			"items": [
+				{
+					"name": "Connection",
+					"type": "interface",
+					"description": "MoneyWorks connection configuration",
+					"properties": [
+						{
+							"name": "id",
+							"type": "string",
+							"description": "Unique identifier"
+						},
+						{
+							"name": "user_id",
+							"type": "string",
+							"description": "Owner user ID"
+						},
+						{
+							"name": "name",
+							"type": "string",
+							"description": "Display name"
+						},
+						{
+							"name": "mw_host",
+							"type": "string",
+							"description": "MoneyWorks server host"
+						},
+						{
+							"name": "mw_port",
+							"type": "number",
+							"description": "MoneyWorks server port"
+						},
+						{
+							"name": "mw_data_file",
+							"type": "string",
+							"description": "Data file path"
+						},
+						{
+							"name": "mw_username",
+							"type": "string",
+							"description": "MoneyWorks username"
+						},
+						{
+							"name": "mw_password",
+							"type": "string",
+							"description": "Encrypted password"
+						},
+						{
+							"name": "mw_folder_name",
+							"type": "string",
+							"optional": true,
+							"description": "Folder name for folder auth"
+						},
+						{
+							"name": "mw_folder_password",
+							"type": "string",
+							"optional": true,
+							"description": "Encrypted folder password"
+						},
+						{
+							"name": "is_active",
+							"type": "boolean",
+							"description": "Whether connection is active"
+						},
+						{
+							"name": "created_at",
+							"type": "Date",
+							"description": "Creation timestamp"
+						},
+						{
+							"name": "updated_at",
+							"type": "Date",
+							"description": "Last update timestamp"
+						}
+					]
+				},
+				{
+					"name": "Group",
+					"type": "interface",
+					"description": "Connection group for organization",
+					"properties": [
+						{
+							"name": "id",
+							"type": "string"
+						},
+						{
+							"name": "user_id",
+							"type": "string"
+						},
+						{
+							"name": "name",
+							"type": "string"
+						},
+						{
+							"name": "parent_id",
+							"type": "string",
+							"optional": true
+						},
+						{
+							"name": "created_at",
+							"type": "Date"
+						}
+					]
+				},
+				{
+					"name": "AuditLog",
+					"type": "interface",
+					"description": "Audit log entry",
+					"properties": [
+						{
+							"name": "id",
+							"type": "string"
+						},
+						{
+							"name": "user_id",
+							"type": "string"
+						},
+						{
+							"name": "connection_id",
+							"type": "string",
+							"optional": true
+						},
+						{
+							"name": "action",
+							"type": "AuditAction"
+						},
+						{
+							"name": "details",
+							"type": "Record<string, any>",
+							"optional": true
+						},
+						{
+							"name": "ip_address",
+							"type": "string",
+							"optional": true
+						},
+						{
+							"name": "created_at",
+							"type": "Date"
+						}
+					]
+				}
+			]
+		}
+	]
 }

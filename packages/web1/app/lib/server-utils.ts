@@ -3,9 +3,9 @@
  */
 
 import { createMoneyWorksClient } from "@moneyworks/data";
+import { clerk } from "~/.server/clerk";
 import type { MWConnection } from "~/db/schema";
 import { connectionService } from "~/services/connections";
-import { clerk } from "~/.server/clerk";
 
 /**
  * Get user ID from request using Clerk server-side auth
@@ -16,16 +16,16 @@ export async function getUserIdFromRequest(
 	// Try query parameter first (for API calls)
 	const url = new URL(request.url);
 	const userId = url.searchParams.get("userId");
-	
+
 	if (userId) {
 		return userId;
 	}
-	
+
 	// For routes that need auth, we need proper Clerk integration
 	// The issue is that Clerk's cookie needs to be decoded server-side
 	// Let me check if we have the session cookie
 	const cookieHeader = request.headers.get("cookie");
-	
+
 	// TEMPORARY: For now, extract userId from the cookie if present
 	// The __session cookie from Clerk contains the userId
 	// This is a workaround until we get proper SSR auth working
@@ -34,7 +34,7 @@ export async function getUserIdFromRequest(
 		// This matches what we see in the test output
 		return "user_2zLoF3qzDl79hyJoTvEC5bOBc5O";
 	}
-	
+
 	return null;
 }
 
@@ -79,7 +79,7 @@ export { createMoneyWorksClient };
  */
 export async function requireAuthAndConnection(request: Request) {
 	const userId = await getUserIdFromRequest(request);
-	
+
 	if (!userId) {
 		throw new Response("Unauthorized", { status: 401 });
 	}

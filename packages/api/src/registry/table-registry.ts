@@ -7,13 +7,13 @@
 
 import type { SmartMoneyWorksClient } from "@moneyworks/data";
 import type { TableController } from "../controllers/base-table";
+import { AccountController } from "../controllers/account";
 import { NameController } from "../controllers/name";
 import { TaxRateController } from "../controllers/tax-rate";
 
 export class TableRegistry {
 	private tables = new Map<string, TableController>();
 	private upcoming = [
-		"Account",
 		"Transaction",
 		"Product",
 		"Job",
@@ -32,9 +32,9 @@ export class TableRegistry {
 		// Register vetted tables
 		this.register(new TaxRateController(this.client));
 		this.register(new NameController(this.client));
+		this.register(new AccountController(this.client));
 
 		// Future tables will be registered here as they're vetted
-		// this.register(new AccountController(this.client));
 		// this.register(new TransactionController(this.client));
 	}
 

@@ -212,9 +212,9 @@ export function createMoneyWorksReviver(options: MoneyWorksParseOptions = {}) {
 		if (convertTimes && typeof value === "string" && TIME_FIELDS.has(key)) {
 			if (/^\d{6}$/.test(value)) {
 				// Validate time components
-				const hours = parseInt(value.substring(0, 2), 10);
-				const minutes = parseInt(value.substring(2, 4), 10);
-				const seconds = parseInt(value.substring(4, 6), 10);
+				const hours = Number.parseInt(value.substring(0, 2), 10);
+				const minutes = Number.parseInt(value.substring(2, 4), 10);
+				const seconds = Number.parseInt(value.substring(4, 6), 10);
 
 				if (
 					hours >= 0 &&

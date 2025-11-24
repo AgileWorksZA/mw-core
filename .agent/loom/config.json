@@ -1,6 +1,6 @@
 {
-	"version": "1.0.0",
-	"initialized": "2025-11-24T01:02:21.846Z",
+	"version": "2.0.0",
+	"initialized": "2025-11-24T11:00:00.000Z",
 	"project": {
 		"name": "@moneyworks/monorepo",
 		"path": "/Users/hgeldenhuys/WebstormProjects/mw-core"
@@ -46,6 +46,7 @@
 		"requirements-planner",
 		"spec-writer"
 	],
-	"storyCounter": 1,
-	"taskCounter": 13
+	"features": [],
+	"storyCounter": 0,
+	"taskCounter": 0
 }

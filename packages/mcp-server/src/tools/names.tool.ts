@@ -583,7 +583,10 @@ export const updateNameHoldStatusTool = {
 		params: { code: string; onHold: boolean },
 	) {
 		const repo = new NameRepository(client);
-		const updatedName = await repo.putOnHold(params.code as NameCode, params.onHold);
+		const updatedName = await repo.putOnHold(
+			params.code as NameCode,
+			params.onHold,
+		);
 
 		return {
 			content: [

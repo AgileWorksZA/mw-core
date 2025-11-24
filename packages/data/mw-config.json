@@ -1,9 +1,9 @@
 {
-  "host": "localhost",
-  "port": 6710,
-  "dataFile": "acme.moneyworks",
-  "username": "Herman Geldenhuys",
-  "password": "",
-  "folderPassword": "",
-  "folderName": ""
+	"host": "localhost",
+	"port": 6710,
+	"dataFile": "acme.moneyworks",
+	"username": "Herman Geldenhuys",
+	"password": "",
+	"folderPassword": "",
+	"folderName": ""
 }

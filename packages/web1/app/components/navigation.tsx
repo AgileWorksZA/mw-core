@@ -1,5 +1,6 @@
 import { UserButton } from "@clerk/clerk-react";
 import {
+	BookOpen,
 	Building2,
 	Calculator,
 	ChevronDown,
@@ -49,7 +50,6 @@ export function Navigation() {
 		document.documentElement.classList.toggle("dark", newTheme === "dark");
 	};
 
-
 	const navItems = [
 		{ to: "/chat", label: "Assistant", icon: MessageSquare },
 		{ to: "/groups", label: "Groups", icon: FolderTree },
@@ -59,6 +59,7 @@ export function Navigation() {
 	];
 
 	const accountingMenuItems = [
+		{ to: "/accounts", label: "Chart of Accounts", icon: BookOpen },
 		{ to: "/names", label: "Names", icon: Users },
 		{ to: "/tax-rates", label: t("nav.taxRates"), icon: Receipt },
 		// Add more accounting menu items here as they're implemented

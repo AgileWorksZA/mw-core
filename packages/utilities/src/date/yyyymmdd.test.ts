@@ -4,6 +4,7 @@
 
 import { describe, expect, test } from "bun:test";
 import {
+	YYYYMMDDUtils,
 	addDaysToYYYYMMDD,
 	addMonthsToYYYYMMDD,
 	compareYYYYMMDD,
@@ -19,7 +20,6 @@ import {
 	parseToYYYYMMDD,
 	startOfMonthYYYYMMDD,
 	tryCreateYYYYMMDD,
-	YYYYMMDDUtils,
 	yyyymmddToDate,
 } from "@moneyworks/utilities/date/yyyymmdd";
 
@@ -96,7 +96,9 @@ describe("YYYYMMDD utilities", () => {
 
 		test("parses ISO date format", () => {
 			expect(parseToYYYYMMDD("2025-01-15").toString()).toBe("20250115");
-			expect(parseToYYYYMMDD("2025-01-15T10:30:00").toString()).toBe("20250115");
+			expect(parseToYYYYMMDD("2025-01-15T10:30:00").toString()).toBe(
+				"20250115",
+			);
 		});
 
 		test("parses slash format", () => {
@@ -186,14 +188,24 @@ describe("YYYYMMDD utilities", () => {
 
 	describe("month operations", () => {
 		test("gets start of month", () => {
-			expect(startOfMonthYYYYMMDD(createYYYYMMDD("20250115")).toString()).toBe("20250101");
-			expect(startOfMonthYYYYMMDD(createYYYYMMDD("20250131")).toString()).toBe("20250101");
+			expect(startOfMonthYYYYMMDD(createYYYYMMDD("20250115")).toString()).toBe(
+				"20250101",
+			);
+			expect(startOfMonthYYYYMMDD(createYYYYMMDD("20250131")).toString()).toBe(
+				"20250101",
+			);
 		});
 
 		test("gets end of month", () => {
-			expect(endOfMonthYYYYMMDD(createYYYYMMDD("20250115")).toString()).toBe("20250131");
-			expect(endOfMonthYYYYMMDD(createYYYYMMDD("20250201")).toString()).toBe("20250228");
-			expect(endOfMonthYYYYMMDD(createYYYYMMDD("20200215")).toString()).toBe("20200229"); // Leap year
+			expect(endOfMonthYYYYMMDD(createYYYYMMDD("20250115")).toString()).toBe(
+				"20250131",
+			);
+			expect(endOfMonthYYYYMMDD(createYYYYMMDD("20250201")).toString()).toBe(
+				"20250228",
+			);
+			expect(endOfMonthYYYYMMDD(createYYYYMMDD("20200215")).toString()).toBe(
+				"20200229",
+			); // Leap year
 		});
 	});
 
@@ -284,24 +296,24 @@ describe("YYYYMMDD utilities", () => {
 			const date = d`20250115`;
 			const earlier = d`20250110`;
 			const later = d`20250120`;
-			
+
 			// gt (greater than)
 			expect(date.gt(earlier)).toBe(true);
 			expect(date.gt(later)).toBe(false);
 			expect(date.gt(new Date(2025, 0, 10))).toBe(true);
-			
+
 			// lt (less than)
 			expect(date.lt(later)).toBe(true);
 			expect(date.lt(earlier)).toBe(false);
-			
+
 			// gte (greater than or equal)
 			expect(date.gte(date)).toBe(true);
 			expect(date.gte(earlier)).toBe(true);
-			
+
 			// lte (less than or equal)
 			expect(date.lte(date)).toBe(true);
 			expect(date.lte(later)).toBe(true);
-			
+
 			// eq (equal)
 			expect(date.eq(d`20250115`)).toBe(true);
 			expect(date.eq(new Date(2025, 0, 15))).toBe(true);
@@ -309,15 +321,15 @@ describe("YYYYMMDD utilities", () => {
 
 		test("arithmetic methods work", () => {
 			const date = d`20250115`;
-			
+
 			// addDays
 			expect(date.addDays(5).toString()).toBe("20250120");
 			expect(date.addDays(-5).toString()).toBe("20250110");
-			
+
 			// addMonths
 			expect(date.addMonths(1).toString()).toBe("20250215");
 			expect(date.addMonths(-1).toString()).toBe("20241215");
-			
+
 			// subtract (days between)
 			expect(date.subtract(d`20250110`)).toBe(5);
 			expect(date.subtract(d`20250120`)).toBe(-5);
@@ -332,13 +344,13 @@ describe("YYYYMMDD utilities", () => {
 
 		test("conversion methods work", () => {
 			const date = d`20250115`;
-			
+
 			// toDate
 			const jsDate = date.toDate();
 			expect(jsDate.getFullYear()).toBe(2025);
 			expect(jsDate.getMonth()).toBe(0);
 			expect(jsDate.getDate()).toBe(15);
-			
+
 			// toPeriod
 			expect(date.toPeriod()).toBe(202501);
 		});
@@ -346,19 +358,19 @@ describe("YYYYMMDD utilities", () => {
 		test("validation methods work", () => {
 			// isWeekend
 			const wednesday = d`20250115`; // Jan 15, 2025 is a Wednesday
-			const saturday = d`20250118`;  // Jan 18, 2025 is a Saturday
-			const sunday = d`20250119`;    // Jan 19, 2025 is a Sunday
-			
+			const saturday = d`20250118`; // Jan 18, 2025 is a Saturday
+			const sunday = d`20250119`; // Jan 19, 2025 is a Sunday
+
 			expect(wednesday.isWeekend()).toBe(false);
 			expect(saturday.isWeekend()).toBe(true);
 			expect(sunday.isWeekend()).toBe(true);
-			
+
 			// isLeapYear
-			const leapYear = d`20240215`;    // 2024 is a leap year
+			const leapYear = d`20240215`; // 2024 is a leap year
 			const nonLeapYear = d`20250215`; // 2025 is not a leap year
-			const century = d`19000215`;     // 1900 is not a leap year
+			const century = d`19000215`; // 1900 is not a leap year
 			const quadCentury = d`20000215`; // 2000 is a leap year
-			
+
 			expect(leapYear.isLeapYear()).toBe(true);
 			expect(nonLeapYear.isLeapYear()).toBe(false);
 			expect(century.isLeapYear()).toBe(false);
@@ -367,7 +379,7 @@ describe("YYYYMMDD utilities", () => {
 
 		test("string methods still work", () => {
 			const date = d`20250115`;
-			
+
 			// String methods
 			expect(date.substring(0, 4)).toBe("2025");
 			expect(date.length).toBe(8);
@@ -377,36 +389,30 @@ describe("YYYYMMDD utilities", () => {
 
 		test("method chaining works", () => {
 			const date = d`20250115`;
-			
-			const result = date
-				.addMonths(1)
-				.addDays(5)
-				.format("/");
-			
+
+			const result = date.addMonths(1).addDays(5).format("/");
+
 			expect(result).toBe("2025/02/20");
-			
+
 			// Can chain comparisons
-			const isValid = date
-				.addMonths(1)
-				.gt(date) && date
-				.addMonths(1)
-				.lt(d`20250301`);
-			
+			const isValid =
+				date.addMonths(1).gt(date) && date.addMonths(1).lt(d`20250301`);
+
 			expect(isValid).toBe(true);
 		});
 
 		test("works with different input types", () => {
 			const date = d`20250115`;
-			
+
 			// Compare with Date
 			expect(date.gt(new Date(2025, 0, 10))).toBe(true);
 			expect(date.lt(new Date(2025, 0, 20))).toBe(true);
-			
+
 			// Compare with string (various formats)
 			expect(date.eq("20250115")).toBe(true);
 			expect(date.eq("2025-01-15")).toBe(true);
 			expect(date.eq("2025/01/15")).toBe(true);
-			
+
 			// Subtract with different types
 			expect(date.subtract(new Date(2025, 0, 10))).toBe(5);
 			expect(date.subtract("2025-01-10")).toBe(5);

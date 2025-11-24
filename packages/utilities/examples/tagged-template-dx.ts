@@ -1,17 +1,24 @@
 /**
  * Tagged Template Literals for MoneyWorks Types
- * 
+ *
  * This example demonstrates the improved developer experience
  * using tagged template literals for branded types
  */
 
-import { d, p, YYYYMMDDUtils, PeriodUtils, createYYYYMMDD, createPeriod } from '@moneyworks/utilities';
-import type { YYYYMMDDType, PeriodType } from '@moneyworks/utilities';
+import {
+	PeriodUtils,
+	YYYYMMDDUtils,
+	createPeriod,
+	createYYYYMMDD,
+	d,
+	p,
+} from "@moneyworks/utilities";
+import type { PeriodType, YYYYMMDDType } from "@moneyworks/utilities";
 
 const oldWay = {
-  transDate: createYYYYMMDD('20250115'),
-  period: createPeriod(202501),
-  dueDate: createYYYYMMDD('20250215')
+	transDate: createYYYYMMDD("20250115"),
+	period: createPeriod(202501),
+	dueDate: createYYYYMMDD("20250215"),
 };
 
 // ===== AFTER: Tagged template literals =====
@@ -33,21 +40,21 @@ const currentPeriod = p`${new Date()}`;
 const year = 2025;
 const month = 1;
 const day = 15;
-const composed = d`${year}${String(month).padStart(2, '0')}${String(day).padStart(2, '0')}`;
-const composedPeriod = p`${year}${String(month).padStart(2, '0')}`;
+const composed = d`${year}${String(month).padStart(2, "0")}${String(day).padStart(2, "0")}`;
+const composedPeriod = p`${year}${String(month).padStart(2, "0")}`;
 
 // Using tagged template literals
 const invoice = {
-  id: 1001,
-  transDate: d`20250115`,
-  dueDate: d`20250215`,
-  period: p`202501`,
-  amount: 1500.00
+	id: 1001,
+	transDate: d`20250115`,
+	dueDate: d`20250215`,
+	period: p`202501`,
+	amount: 1500.0,
 };
 
 // Type-safe function parameters
 function processInvoice(date: YYYYMMDDType, period: PeriodType) {
-  console.log(`Processing invoice for ${date} in period ${period}`);
+	console.log(`Processing invoice for ${date} in period ${period}`);
 }
 
 // Clean function calls
@@ -55,40 +62,44 @@ processInvoice(d`20250115`, p`202501`);
 
 // Works perfectly with comparisons
 if (d`20250115` < d`20250120`) {
-  console.log('First date is earlier');
+	console.log("First date is earlier");
 }
 
 // Array operations
 const holidays = [
-  d`20250101`, // New Year
-  d`20250704`, // Independence Day  
-  d`20251225`, // Christmas
+	d`20250101`, // New Year
+	d`20250704`, // Independence Day
+	d`20251225`, // Christmas
 ];
 
 const fiscalPeriods = [
-  p`202501`, p`202502`, p`202503`, // Q1
-  p`202504`, p`202505`, p`202506`, // Q2
+	p`202501`,
+	p`202502`,
+	p`202503`, // Q1
+	p`202504`,
+	p`202505`,
+	p`202506`, // Q2
 ];
 
 // Conditional logic
 const effectiveDate = d`${
-  new Date().getMonth() === 0 
-    ? new Date(new Date().getFullYear(), 0, 1)
-    : new Date()
+	new Date().getMonth() === 0
+		? new Date(new Date().getFullYear(), 0, 1)
+		: new Date()
 }`;
 
 // Error handling
 try {
-  const invalid = d`20251301`; // Invalid month
+	const invalid = d`20251301`; // Invalid month
 } catch (error) {
-  console.error('Invalid date format');
+	console.error("Invalid date format");
 }
 
 // JSON serialization works perfectly
 const data = {
-  startDate: d`20250101`,
-  endDate: d`20251231`,
-  period: p`202501`
+	startDate: d`20250101`,
+	endDate: d`20251231`,
+	period: p`202501`,
 };
 
 console.log(JSON.stringify(data));
@@ -96,11 +107,11 @@ console.log(JSON.stringify(data));
 
 // Integration with MoneyWorks API
 const transaction = {
-  TransDate: d`20250115`,
-  Period: p`202501`,
-  DueDate: d`20250215`,
-  Amount: 1500.00,
-  Description: "Invoice #1234"
+	TransDate: d`20250115`,
+	Period: p`202501`,
+	DueDate: d`20250215`,
+	Amount: 1500.0,
+	Description: "Invoice #1234",
 };
 
 // Real-world example: Date calculations
@@ -114,8 +125,8 @@ const nextQuarter = PeriodUtils.addMonths(currentMonth, 3);
 
 // Complex business logic
 function getDiscountDeadline(invoiceDate: YYYYMMDDType): YYYYMMDDType {
-  // 2% discount if paid within 10 days
-  return YYYYMMDDUtils.addDays(invoiceDate, 10);
+	// 2% discount if paid within 10 days
+	return YYYYMMDDUtils.addDays(invoiceDate, 10);
 }
 
 const discountBy = getDiscountDeadline(d`20250115`);

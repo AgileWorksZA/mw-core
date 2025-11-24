@@ -23,6 +23,10 @@
 			"types": "./src/entities/accounts/index.ts",
 			"import": "./src/entities/accounts/index.ts"
 		},
+		"./entities/accounts": {
+			"types": "./src/entities/accounts/index.ts",
+			"import": "./src/entities/accounts/index.ts"
+		},
 		"./names": {
 			"types": "./src/entities/names/index.ts",
 			"import": "./src/entities/names/index.ts"

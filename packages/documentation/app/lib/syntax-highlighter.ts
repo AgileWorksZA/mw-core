@@ -1,75 +1,77 @@
-import { createHighlighter, type Highlighter } from 'shiki';
+import { type Highlighter, createHighlighter } from "shiki";
 
 // Cache the highlighter instance
 let highlighterPromise: Promise<Highlighter> | null = null;
 
 // Common languages for MoneyWorks documentation
 const LANGUAGES = [
-  'typescript',
-  'javascript', 
-  'bash',
-  'json',
-  'tsx',
-  'jsx',
-  'sql',
-  'yaml',
-  'markdown',
-  'mdx'
+	"typescript",
+	"javascript",
+	"bash",
+	"json",
+	"tsx",
+	"jsx",
+	"sql",
+	"yaml",
+	"markdown",
+	"mdx",
 ];
 
 // Theme configuration
 const THEMES = {
-  light: 'github-light',
-  dark: 'vitesse-dark'
+	light: "github-light",
+	dark: "vitesse-dark",
 };
 
 /**
  * Get or create the singleton highlighter instance
  */
 export async function getHighlighter(): Promise<Highlighter> {
-  if (!highlighterPromise) {
-    highlighterPromise = createHighlighter({
-      themes: Object.values(THEMES),
-      langs: LANGUAGES,
-    });
-  }
-  
-  return highlighterPromise;
+	if (!highlighterPromise) {
+		highlighterPromise = createHighlighter({
+			themes: Object.values(THEMES),
+			langs: LANGUAGES,
+		});
+	}
+
+	return highlighterPromise;
 }
 
 /**
  * Highlight code with the specified language and theme
  */
 export async function highlightCode(
-  code: string,
-  language: string = 'text',
-  theme: 'light' | 'dark' = 'dark',
-  includeCopyButton: boolean = true
+	code: string,
+	language = "text",
+	theme: "light" | "dark" = "dark",
+	includeCopyButton = true,
 ): Promise<string> {
-  const highlighter = await getHighlighter();
-  
-  // Ensure the language is loaded
-  const loadedLanguages = highlighter.getLoadedLanguages();
-  if (!loadedLanguages.includes(language) && language !== 'text') {
-    try {
-      await highlighter.loadLanguage(language as any);
-    } catch (error) {
-      console.warn(`Failed to load language '${language}', falling back to 'text'`);
-      language = 'text';
-    }
-  }
-  
-  const html = highlighter.codeToHtml(code, {
-    lang: language,
-    theme: THEMES[theme],
-  });
-  
-  // Wrap in a container with copy button
-  if (includeCopyButton) {
-    // Convert code to base64 to avoid escaping issues
-    const base64Code = Buffer.from(code).toString('base64');
-    
-    return `
+	const highlighter = await getHighlighter();
+
+	// Ensure the language is loaded
+	const loadedLanguages = highlighter.getLoadedLanguages();
+	if (!loadedLanguages.includes(language) && language !== "text") {
+		try {
+			await highlighter.loadLanguage(language as any);
+		} catch (error) {
+			console.warn(
+				`Failed to load language '${language}', falling back to 'text'`,
+			);
+			language = "text";
+		}
+	}
+
+	const html = highlighter.codeToHtml(code, {
+		lang: language,
+		theme: THEMES[theme],
+	});
+
+	// Wrap in a container with copy button
+	if (includeCopyButton) {
+		// Convert code to base64 to avoid escaping issues
+		const base64Code = Buffer.from(code).toString("base64");
+
+		return `
       <div class="relative group">
         ${html}
         <button
@@ -99,9 +101,9 @@ export async function highlightCode(
         </button>
       </div>
     `;
-  }
-  
-  return html;
+	}
+
+	return html;
 }
 
 /**
@@ -109,45 +111,45 @@ export async function highlightCode(
  * e.g., "typescript" or "typescript title=example.ts"
  */
 export function parseLanguage(infoString: string): string {
-  if (!infoString) return 'text';
-  
-  // Extract just the language part (before any spaces)
-  const language = infoString.split(' ')[0].toLowerCase();
-  
-  // Map common aliases
-  const aliases: Record<string, string> = {
-    'ts': 'typescript',
-    'js': 'javascript',
-    'sh': 'bash',
-    'shell': 'bash',
-    'yml': 'yaml',
-    'md': 'markdown',
-  };
-  
-  return aliases[language] || language;
+	if (!infoString) return "text";
+
+	// Extract just the language part (before any spaces)
+	const language = infoString.split(" ")[0].toLowerCase();
+
+	// Map common aliases
+	const aliases: Record<string, string> = {
+		ts: "typescript",
+		js: "javascript",
+		sh: "bash",
+		shell: "bash",
+		yml: "yaml",
+		md: "markdown",
+	};
+
+	return aliases[language] || language;
 }
 
 /**
  * Parse code block metadata from fence info string
  */
 export function parseCodeBlockMeta(infoString: string): {
-  language: string;
-  title?: string;
-  showLineNumbers?: boolean;
+	language: string;
+	title?: string;
+	showLineNumbers?: boolean;
 } {
-  const parts = infoString.split(' ');
-  const language = parseLanguage(parts[0]);
-  
-  const meta: any = { language };
-  
-  // Parse additional metadata
-  parts.slice(1).forEach(part => {
-    if (part.startsWith('title=')) {
-      meta.title = part.slice(6);
-    } else if (part === 'showLineNumbers') {
-      meta.showLineNumbers = true;
-    }
-  });
-  
-  return meta;
+	const parts = infoString.split(" ");
+	const language = parseLanguage(parts[0]);
+
+	const meta: any = { language };
+
+	// Parse additional metadata
+	parts.slice(1).forEach((part) => {
+		if (part.startsWith("title=")) {
+			meta.title = part.slice(6);
+		} else if (part === "showLineNumbers") {
+			meta.showLineNumbers = true;
+		}
+	});
+
+	return meta;
 }

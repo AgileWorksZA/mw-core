@@ -2,38 +2,38 @@
 
 /**
  * MoneyWorks API Server Entry Point
- * 
+ *
  * @moneyworks-dsl PURE
  */
 
-import { createApp } from './app';
+import { createApp } from "./app";
 
 async function startServer() {
-  const port = parseInt(process.env.PORT || '3000');
-  const host = process.env.HOST || '0.0.0.0';
-  
-  console.log('🚀 Starting MoneyWorks API Server with Token Authentication...');
-  
-  try {
-    // Create and start API
-    const app = createApp({
-      port,
-      host,
-      enableSwagger: process.env.DISABLE_SWAGGER !== 'true',
-      enableCors: process.env.DISABLE_CORS !== 'true'
-    });
-    
-    app.listen({
-      port,
-      hostname: host
-    });
-    
-    console.log(`
+	const port = Number.parseInt(process.env.PORT || "3000");
+	const host = process.env.HOST || "0.0.0.0";
+
+	console.log("🚀 Starting MoneyWorks API Server with Token Authentication...");
+
+	try {
+		// Create and start API
+		const app = createApp({
+			port,
+			host,
+			enableSwagger: process.env.DISABLE_SWAGGER !== "true",
+			enableCors: process.env.DISABLE_CORS !== "true",
+		});
+
+		app.listen({
+			port,
+			hostname: host,
+		});
+
+		console.log(`
 ✨ MoneyWorks API Server is running!
 
-🌍 Server: http://${host === '0.0.0.0' ? 'localhost' : host}:${port}
-📚 API Base: http://${host === '0.0.0.0' ? 'localhost' : host}:${port}/api/v1
-📖 Swagger: http://${host === '0.0.0.0' ? 'localhost' : host}:${port}/api/v1/swagger
+🌍 Server: http://${host === "0.0.0.0" ? "localhost" : host}:${port}
+📚 API Base: http://${host === "0.0.0.0" ? "localhost" : host}:${port}/api/v1
+📖 Swagger: http://${host === "0.0.0.0" ? "localhost" : host}:${port}/api/v1/swagger
 
 Available endpoints:
 - POST /api/v1/auth/token          - Exchange MW credentials for token
@@ -55,22 +55,21 @@ Protected endpoints (require Authorization: Bearer <token>):
 - GET  /api/v1/health              - Health check
 - GET  /api/v1/version             - Version info
     `);
-    
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
-  }
+	} catch (error) {
+		console.error("❌ Failed to start server:", error);
+		process.exit(1);
+	}
 }
 
 // Handle graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n👋 Shutting down MoneyWorks API Server...');
-  process.exit(0);
+process.on("SIGINT", () => {
+	console.log("\n👋 Shutting down MoneyWorks API Server...");
+	process.exit(0);
 });
 
-process.on('SIGTERM', () => {
-  console.log('\n👋 Shutting down MoneyWorks API Server...');
-  process.exit(0);
+process.on("SIGTERM", () => {
+	console.log("\n👋 Shutting down MoneyWorks API Server...");
+	process.exit(0);
 });
 
 // Start the server

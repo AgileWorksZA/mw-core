@@ -4,41 +4,41 @@
  * @moneyworks-dsl PURE
  */
 export interface MoneyWorksExportParams {
-    table: string;
-    exportFormat?: 'compact' | 'compact-headers' | 'full' | 'schema';
-    filter?: string;
-    limit?: number;
-    offset?: number;
-    orderBy?: string;
+	table: string;
+	exportFormat?: "compact" | "compact-headers" | "full" | "schema";
+	filter?: string;
+	limit?: number;
+	offset?: number;
+	orderBy?: string;
 }
 export interface MoneyWorksEvalParams {
-    expression: string;
+	expression: string;
 }
 export interface MoneyWorksSchemaParams {
-    table: string;
+	table: string;
 }
 export interface MoneyWorksExportResult {
-    data: unknown[] | unknown[][] | Record<string, unknown>;
-    recordCount?: number;
-    format: string;
-    table: string;
+	data: unknown[] | unknown[][] | Record<string, unknown>;
+	recordCount?: number;
+	format: string;
+	table: string;
 }
 export interface MoneyWorksEvalResult {
-    expression: string;
-    result: string;
+	expression: string;
+	result: string;
 }
 export interface MoneyWorksSchemaResult {
-    table: string;
-    fields: Array<{
-        name: string;
-        position: number;
-        dataType: string;
-        canonicalType?: string;
-    }>;
+	table: string;
+	fields: Array<{
+		name: string;
+		position: number;
+		dataType: string;
+		canonicalType?: string;
+	}>;
 }
 export interface MoneyWorksTablesResult {
-    available: string[];
-    vetted: string[];
-    upcoming: string[];
+	available: string[];
+	vetted: string[];
+	upcoming: string[];
 }
 //# sourceMappingURL=index.d.ts.map

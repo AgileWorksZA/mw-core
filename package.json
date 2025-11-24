@@ -1,45 +1,43 @@
 {
-  "name": "@moneyworks/monorepo",
-  "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@types/node": "^24.0.10",
-    "bun-types": "latest",
-    "xml2js": "^0.6.2"
-  },
-  "private": true,
-  "scripts": {
-    "build:cli": "echo 'Running directly from TypeScript - no build needed'",
-    "build:mcp": "echo 'Running directly from TypeScript - no build needed'",
-    "build:deps": "echo 'Running directly from TypeScript - no build needed'",
-    "build:all": "echo 'Only web1 needs building for production' && bun --cwd packages/web1 build",
-    "build:api": "echo 'Running directly from TypeScript - no build needed'",
-    "clean": "rm -rf node_modules packages/*/node_modules",
-    "test": "bun test",
-    "cli": "bun --cwd packages/api cli",
-    "mw": "bun --cwd packages/cli dev",
-    "mcp": "bun --cwd packages/mcp-server dev",
-    "mcp:build": "bun --cwd packages/mcp-server build",
-    "mcp:start": "bun --cwd packages/mcp-server start",
-    "api": "bun --cwd packages/api dev",
-    "api:start": "bun --cwd packages/api start",
-    "api:build": "bun run build:deps && bun --cwd packages/api build",
-    "web": "bun --bun --cwd packages/web1 dev",
-    "web:build": "bun run build:deps && bun --cwd packages/web1 build",
-    "start:web": "bun --cwd packages/web1 start",
-    "start:api": "bun --cwd packages/api start"
-  },
-  "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
-  "dependencies": {
-    "@elevenlabs/elevenlabs-js": "^2.5.0",
-    "add": "^2.0.6",
-    "bun": "^1.2.19",
-    "claude-hooks-sdk": "^0.8.2",
-    "elevenlabs": "^1.59.0",
-    "eventsource": "^4.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  }
+	"name": "@moneyworks/monorepo",
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/node": "^24.0.10",
+		"bun-types": "latest",
+		"xml2js": "^0.6.2"
+	},
+	"private": true,
+	"scripts": {
+		"build:cli": "echo 'Running directly from TypeScript - no build needed'",
+		"build:mcp": "echo 'Running directly from TypeScript - no build needed'",
+		"build:deps": "echo 'Running directly from TypeScript - no build needed'",
+		"build:all": "echo 'Only web1 needs building for production' && bun --cwd packages/web1 build",
+		"build:api": "echo 'Running directly from TypeScript - no build needed'",
+		"clean": "rm -rf node_modules packages/*/node_modules",
+		"test": "bun test",
+		"cli": "bun --cwd packages/api cli",
+		"mw": "bun --cwd packages/cli dev",
+		"mcp": "bun --cwd packages/mcp-server dev",
+		"mcp:build": "bun --cwd packages/mcp-server build",
+		"mcp:start": "bun --cwd packages/mcp-server start",
+		"api": "bun --cwd packages/api dev",
+		"api:start": "bun --cwd packages/api start",
+		"api:build": "bun run build:deps && bun --cwd packages/api build",
+		"web": "bun --bun --cwd packages/web1 dev",
+		"web:build": "bun run build:deps && bun --cwd packages/web1 build",
+		"start:web": "bun --cwd packages/web1 start",
+		"start:api": "bun --cwd packages/api start"
+	},
+	"type": "module",
+	"workspaces": ["packages/*"],
+	"dependencies": {
+		"@elevenlabs/elevenlabs-js": "^2.5.0",
+		"add": "^2.0.6",
+		"bun": "^1.2.19",
+		"claude-hooks-sdk": "^0.8.2",
+		"elevenlabs": "^1.59.0",
+		"eventsource": "^4.0.0",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1"
+	}
 }

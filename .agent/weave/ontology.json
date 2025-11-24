@@ -1,167 +1,171 @@
 {
-  "$schema": "./SCHEMA.md#ontology",
-  "title": "Ontology",
-  "description": "What exists - entities, relations, constraints",
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-23T08:00:00.000Z",
-  "entities": {
-    "api-application": {
-      "id": "api-application",
-      "name": "API Application",
-      "type": "module",
-      "description": "ElysiaJS REST API application for MoneyWorks with Swagger, CORS, and middleware chain",
-      "location": "packages/api/src/app.ts",
-      "confidence": 0.95,
-      "tags": ["api", "elysia", "rest", "moneyworks"],
-      "attributes": {
-        "framework": "ElysiaJS",
-        "port": "3002",
-        "basePath": "/api/v1",
-        "features": ["swagger", "cors", "auth", "caching"]
-      }
-    },
-    "auth-middleware": {
-      "id": "auth-middleware",
-      "name": "Authentication Middleware",
-      "type": "middleware",
-      "description": "Bearer token validation middleware that attaches MoneyWorks client to request context with caching",
-      "location": "packages/api/src/middleware/auth.ts",
-      "confidence": 0.95,
-      "tags": ["auth", "middleware", "bearer-token", "caching"],
-      "attributes": {
-        "cacheTTL": "10 minutes",
-        "cleanupInterval": "5 minutes",
-        "tokenType": "Bearer"
-      }
-    },
-    "smart-moneyworks-client": {
-      "id": "smart-moneyworks-client",
-      "name": "SmartMoneyWorksClient",
-      "type": "class",
-      "description": "MoneyWorks REST client with automatic field discovery and multiple export format support",
-      "location": "packages/data/src/client/moneyworks-smart-client.ts",
-      "confidence": 0.95,
-      "tags": ["client", "moneyworks", "field-discovery", "export"],
-      "attributes": {
-        "extends": "MoneyWorksRESTClient",
-        "exportFormats": ["compact", "compact-headers", "full", "schema"],
-        "caching": "field structure discovery cache"
-      }
-    },
-    "field-discovery": {
-      "id": "field-discovery",
-      "name": "Field Discovery System",
-      "type": "module",
-      "description": "Discovers MoneyWorks table field structure from XML exports since TSV has no headers",
-      "location": "packages/data/src/parsers/field-discovery.ts",
-      "confidence": 0.95,
-      "tags": ["parsing", "xml", "field-discovery", "moneyworks"],
-      "attributes": {
-        "method": "XML export parsing",
-        "caching": "in-memory Map",
-        "fallback": "predefined TSV mappings"
-      }
-    },
-    "tax-rate-entity": {
-      "id": "tax-rate-entity",
-      "name": "MoneyWorksTaxRate",
-      "type": "interface",
-      "description": "Canonical MoneyWorks TaxRate entity with GST terminology preserved",
-      "location": "packages/canonical/src/entities/tax-rates/types.ts",
-      "confidence": 1.0,
-      "tags": ["canonical", "entity", "tax", "moneyworks-dsl"],
-      "attributes": {
-        "preservesTerminology": true,
-        "brandedTypes": ["YYYYMMDD", "AccountCode"],
-        "keyFields": ["TaxCode", "PaidAccount", "RecAccount", "Rate1", "Rate2"]
-      }
-    },
-    "client-cache": {
-      "id": "client-cache",
-      "name": "Client Cache",
-      "type": "system",
-      "description": "LRU-like cache for MoneyWorks clients with TTL-based cleanup",
-      "location": "packages/api/src/middleware/auth.ts",
-      "confidence": 0.9,
-      "tags": ["caching", "performance", "ttl"],
-      "attributes": {
-        "implementation": "Map<string, {client, lastUsed}>",
-        "maxAge": "10 minutes",
-        "cleanupInterval": "5 minutes"
-      }
-    }
-  },
-  "relations": {
-    "api-uses-middleware": {
-      "id": "api-uses-middleware",
-      "from": "api-application",
-      "to": "auth-middleware",
-      "type": "uses",
-      "description": "API application uses auth middleware for request authentication",
-      "confidence": 0.95
-    },
-    "middleware-uses-client": {
-      "id": "middleware-uses-client",
-      "from": "auth-middleware",
-      "to": "smart-moneyworks-client",
-      "type": "creates",
-      "description": "Auth middleware creates and caches SmartMoneyWorksClient instances",
-      "confidence": 0.95
-    },
-    "client-uses-discovery": {
-      "id": "client-uses-discovery",
-      "from": "smart-moneyworks-client",
-      "to": "field-discovery",
-      "type": "depends-on",
-      "description": "Smart client uses field discovery to determine table structures",
-      "confidence": 0.95
-    },
-    "middleware-uses-cache": {
-      "id": "middleware-uses-cache",
-      "from": "auth-middleware",
-      "to": "client-cache",
-      "type": "uses",
-      "description": "Auth middleware uses client cache to avoid recreating clients",
-      "confidence": 0.95
-    },
-    "client-processes-entity": {
-      "id": "client-processes-entity",
-      "from": "smart-moneyworks-client",
-      "to": "tax-rate-entity",
-      "type": "processes",
-      "description": "Smart client exports and parses MoneyWorks TaxRate entities",
-      "confidence": 0.9
-    }
-  },
-  "constraints": {
-    "canonical-dsl-purity": {
-      "id": "canonical-dsl-purity",
-      "type": "naming",
-      "description": "NEVER translate MoneyWorks terminology - preserve exact field names (GST, TaxCode, RecAccount)",
-      "severity": "critical",
-      "scope": ["packages/canonical/**/*"],
-      "examples": ["Use 'GST' not 'VAT'", "Use 'TaxCode' not 'taxId'", "Use 'RecAccount' not 'receivableAccount'"]
-    },
-    "auth-bearer-token": {
-      "id": "auth-bearer-token",
-      "type": "authentication",
-      "description": "All protected endpoints require Bearer token in Authorization header",
-      "severity": "high",
-      "scope": ["packages/api/src/routes/**/*"]
-    },
-    "field-discovery-required": {
-      "id": "field-discovery-required",
-      "type": "data-access",
-      "description": "TSV exports have no headers, must use XML to discover field structure",
-      "severity": "high",
-      "scope": ["packages/data/src/parsers/**/*"]
-    }
-  },
-  "metadata": {
-    "totalEntities": 6,
-    "totalRelations": 5,
-    "totalConstraints": 3,
-    "averageConfidence": 0.94,
-    "lastCompaction": null
-  }
+	"$schema": "./SCHEMA.md#ontology",
+	"title": "Ontology",
+	"description": "What exists - entities, relations, constraints",
+	"version": "1.0.0",
+	"lastUpdated": "2025-11-23T08:00:00.000Z",
+	"entities": {
+		"api-application": {
+			"id": "api-application",
+			"name": "API Application",
+			"type": "module",
+			"description": "ElysiaJS REST API application for MoneyWorks with Swagger, CORS, and middleware chain",
+			"location": "packages/api/src/app.ts",
+			"confidence": 0.95,
+			"tags": ["api", "elysia", "rest", "moneyworks"],
+			"attributes": {
+				"framework": "ElysiaJS",
+				"port": "3002",
+				"basePath": "/api/v1",
+				"features": ["swagger", "cors", "auth", "caching"]
+			}
+		},
+		"auth-middleware": {
+			"id": "auth-middleware",
+			"name": "Authentication Middleware",
+			"type": "middleware",
+			"description": "Bearer token validation middleware that attaches MoneyWorks client to request context with caching",
+			"location": "packages/api/src/middleware/auth.ts",
+			"confidence": 0.95,
+			"tags": ["auth", "middleware", "bearer-token", "caching"],
+			"attributes": {
+				"cacheTTL": "10 minutes",
+				"cleanupInterval": "5 minutes",
+				"tokenType": "Bearer"
+			}
+		},
+		"smart-moneyworks-client": {
+			"id": "smart-moneyworks-client",
+			"name": "SmartMoneyWorksClient",
+			"type": "class",
+			"description": "MoneyWorks REST client with automatic field discovery and multiple export format support",
+			"location": "packages/data/src/client/moneyworks-smart-client.ts",
+			"confidence": 0.95,
+			"tags": ["client", "moneyworks", "field-discovery", "export"],
+			"attributes": {
+				"extends": "MoneyWorksRESTClient",
+				"exportFormats": ["compact", "compact-headers", "full", "schema"],
+				"caching": "field structure discovery cache"
+			}
+		},
+		"field-discovery": {
+			"id": "field-discovery",
+			"name": "Field Discovery System",
+			"type": "module",
+			"description": "Discovers MoneyWorks table field structure from XML exports since TSV has no headers",
+			"location": "packages/data/src/parsers/field-discovery.ts",
+			"confidence": 0.95,
+			"tags": ["parsing", "xml", "field-discovery", "moneyworks"],
+			"attributes": {
+				"method": "XML export parsing",
+				"caching": "in-memory Map",
+				"fallback": "predefined TSV mappings"
+			}
+		},
+		"tax-rate-entity": {
+			"id": "tax-rate-entity",
+			"name": "MoneyWorksTaxRate",
+			"type": "interface",
+			"description": "Canonical MoneyWorks TaxRate entity with GST terminology preserved",
+			"location": "packages/canonical/src/entities/tax-rates/types.ts",
+			"confidence": 1.0,
+			"tags": ["canonical", "entity", "tax", "moneyworks-dsl"],
+			"attributes": {
+				"preservesTerminology": true,
+				"brandedTypes": ["YYYYMMDD", "AccountCode"],
+				"keyFields": ["TaxCode", "PaidAccount", "RecAccount", "Rate1", "Rate2"]
+			}
+		},
+		"client-cache": {
+			"id": "client-cache",
+			"name": "Client Cache",
+			"type": "system",
+			"description": "LRU-like cache for MoneyWorks clients with TTL-based cleanup",
+			"location": "packages/api/src/middleware/auth.ts",
+			"confidence": 0.9,
+			"tags": ["caching", "performance", "ttl"],
+			"attributes": {
+				"implementation": "Map<string, {client, lastUsed}>",
+				"maxAge": "10 minutes",
+				"cleanupInterval": "5 minutes"
+			}
+		}
+	},
+	"relations": {
+		"api-uses-middleware": {
+			"id": "api-uses-middleware",
+			"from": "api-application",
+			"to": "auth-middleware",
+			"type": "uses",
+			"description": "API application uses auth middleware for request authentication",
+			"confidence": 0.95
+		},
+		"middleware-uses-client": {
+			"id": "middleware-uses-client",
+			"from": "auth-middleware",
+			"to": "smart-moneyworks-client",
+			"type": "creates",
+			"description": "Auth middleware creates and caches SmartMoneyWorksClient instances",
+			"confidence": 0.95
+		},
+		"client-uses-discovery": {
+			"id": "client-uses-discovery",
+			"from": "smart-moneyworks-client",
+			"to": "field-discovery",
+			"type": "depends-on",
+			"description": "Smart client uses field discovery to determine table structures",
+			"confidence": 0.95
+		},
+		"middleware-uses-cache": {
+			"id": "middleware-uses-cache",
+			"from": "auth-middleware",
+			"to": "client-cache",
+			"type": "uses",
+			"description": "Auth middleware uses client cache to avoid recreating clients",
+			"confidence": 0.95
+		},
+		"client-processes-entity": {
+			"id": "client-processes-entity",
+			"from": "smart-moneyworks-client",
+			"to": "tax-rate-entity",
+			"type": "processes",
+			"description": "Smart client exports and parses MoneyWorks TaxRate entities",
+			"confidence": 0.9
+		}
+	},
+	"constraints": {
+		"canonical-dsl-purity": {
+			"id": "canonical-dsl-purity",
+			"type": "naming",
+			"description": "NEVER translate MoneyWorks terminology - preserve exact field names (GST, TaxCode, RecAccount)",
+			"severity": "critical",
+			"scope": ["packages/canonical/**/*"],
+			"examples": [
+				"Use 'GST' not 'VAT'",
+				"Use 'TaxCode' not 'taxId'",
+				"Use 'RecAccount' not 'receivableAccount'"
+			]
+		},
+		"auth-bearer-token": {
+			"id": "auth-bearer-token",
+			"type": "authentication",
+			"description": "All protected endpoints require Bearer token in Authorization header",
+			"severity": "high",
+			"scope": ["packages/api/src/routes/**/*"]
+		},
+		"field-discovery-required": {
+			"id": "field-discovery-required",
+			"type": "data-access",
+			"description": "TSV exports have no headers, must use XML to discover field structure",
+			"severity": "high",
+			"scope": ["packages/data/src/parsers/**/*"]
+		}
+	},
+	"metadata": {
+		"totalEntities": 6,
+		"totalRelations": 5,
+		"totalConstraints": 3,
+		"averageConfidence": 0.94,
+		"lastCompaction": null
+	}
 }

@@ -1,46 +1,46 @@
 {
-  "id": "LT-001",
-  "title": "Create simple hello endpoint",
-  "description": "Add a GET /api/hello endpoint that returns a greeting",
-  "why": "Verify Loom workflows work correctly in mw-core",
-  "status": "planned",
-  "priority": "high",
-  "estimatedComplexity": "simple",
-  "sessions": [],
-  "hookEvents": [],
-  "tasks": [],
-  "acceptanceCriteria": [
-    {
-      "id": "LT-001-AC-001",
-      "storyId": "LT-001",
-      "description": "Endpoint returns 200 status",
-      "testable": true,
-      "tested": false,
-      "evidence": null,
-      "status": "pending"
-    },
-    {
-      "id": "LT-001-AC-002",
-      "storyId": "LT-001",
-      "description": "Response includes greeting message",
-      "testable": true,
-      "tested": false,
-      "evidence": null,
-      "status": "pending"
-    },
-    {
-      "id": "LT-001-AC-003",
-      "storyId": "LT-001",
-      "description": "Route is registered",
-      "testable": true,
-      "tested": false,
-      "evidence": null,
-      "status": "pending"
-    }
-  ],
-  "decisions": [],
-  "learnings": [],
-  "weaveRefs": [],
-  "createdAt": "2025-11-24T01:02:36.070Z",
-  "completedAt": null
+	"id": "LT-001",
+	"title": "Create simple hello endpoint",
+	"description": "Add a GET /api/hello endpoint that returns a greeting",
+	"why": "Verify Loom workflows work correctly in mw-core",
+	"status": "planned",
+	"priority": "high",
+	"estimatedComplexity": "simple",
+	"sessions": [],
+	"hookEvents": [],
+	"tasks": [],
+	"acceptanceCriteria": [
+		{
+			"id": "LT-001-AC-001",
+			"storyId": "LT-001",
+			"description": "Endpoint returns 200 status",
+			"testable": true,
+			"tested": false,
+			"evidence": null,
+			"status": "pending"
+		},
+		{
+			"id": "LT-001-AC-002",
+			"storyId": "LT-001",
+			"description": "Response includes greeting message",
+			"testable": true,
+			"tested": false,
+			"evidence": null,
+			"status": "pending"
+		},
+		{
+			"id": "LT-001-AC-003",
+			"storyId": "LT-001",
+			"description": "Route is registered",
+			"testable": true,
+			"tested": false,
+			"evidence": null,
+			"status": "pending"
+		}
+	],
+	"decisions": [],
+	"learnings": [],
+	"weaveRefs": [],
+	"createdAt": "2025-11-24T01:02:36.070Z",
+	"completedAt": null
 }

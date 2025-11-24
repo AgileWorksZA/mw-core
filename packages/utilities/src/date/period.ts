@@ -81,8 +81,8 @@ export function dateToPeriod(date: Date): Period {
  * Convert YYYYMMDD to period
  */
 export function yyyymmddToPeriod(date: YYYYMMDD): Period {
-	const year = parseInt(date.substring(0, 4), 10);
-	const month = parseInt(date.substring(4, 6), 10);
+	const year = Number.parseInt(date.substring(0, 4), 10);
+	const month = Number.parseInt(date.substring(4, 6), 10);
 	return periodFromYearMonth(year, month);
 }
 
@@ -131,7 +131,7 @@ export function monthsBetweenPeriods(from: Period, to: Period): number {
 /**
  * Format period for display
  */
-export function formatPeriod(period: Period, separator: string = "/"): string {
+export function formatPeriod(period: Period, separator = "/"): string {
 	const year = periodYear(period);
 	const month = String(periodMonth(period)).padStart(2, "0");
 	return `${year}${separator}${month}`;
@@ -154,16 +154,13 @@ export function periodRange(from: Period, to: Period): Period[] {
 
 /**
  * Tagged template literal for creating Period values
- * 
+ *
  * @example
  * const period = p`202501`;
  * const current = p`${new Date()}`;
  * const composed = p`${2025}${1}`;
  */
-export function p(
-	strings: TemplateStringsArray,
-	...values: any[]
-): Period {
+export function p(strings: TemplateStringsArray, ...values: any[]): Period {
 	// Combine template parts
 	let result = strings[0];
 	for (let i = 0; i < values.length; i++) {
@@ -175,13 +172,13 @@ export function p(
 			result += String(value) + strings[i + 1];
 		}
 	}
-	
+
 	// Parse as number and validate
-	const num = parseInt(result, 10);
-	if (isNaN(num)) {
+	const num = Number.parseInt(result, 10);
+	if (Number.isNaN(num)) {
 		throw new Error(`Invalid period format: ${result}`);
 	}
-	
+
 	return createPeriod(num);
 }
 
