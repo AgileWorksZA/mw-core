@@ -1,70 +1,69 @@
 {
-  "name": "@moneyworks/canonical",
-  "version": "0.1.0",
-  "description": "Pure MoneyWorks canonical types, enums, and business logic - zero contamination",
-  "type": "module",
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
-    },
-    "./tax-rates": {
-      "types": "./src/entities/tax-rates/index.ts",
-      "import": "./src/entities/tax-rates/index.ts"
-    },
-    "./transactions": {
-      "types": "./src/entities/transactions/index.ts",
-      "import": "./src/entities/transactions/index.ts"
-    },
-    "./accounts": {
-      "types": "./src/entities/accounts/index.ts",
-      "import": "./src/entities/accounts/index.ts"
-    },
-    "./names": {
-      "types": "./src/entities/names/index.ts",
-      "import": "./src/entities/names/index.ts"
-    }
-  },
-  "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "build:dev": "tsc",
-    "dev": "tsc --watch",
-    "clean": "rm -rf dist",
-    "typecheck": "tsc --noEmit",
-    "validate-dsl": "bun run src/validation/validate-dsl.ts"
-  },
-  "dependencies": {
-    "@moneyworks/utilities": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "bun-types": "latest",
-    "typescript": "^5.6.3"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "files": [
-    "dist",
-    "src",
-    "README.md",
-    "README-AI.md"
-  ],
-  "keywords": [
-    "moneyworks",
-    "canonical",
-    "dsl",
-    "domain-specific-language",
-    "accounting"
-  ],
-  "author": "MoneyWorks Core Team",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/moneyworks/mw-core.git",
-    "directory": "packages/canonical"
-  }
+	"name": "@moneyworks/canonical",
+	"version": "0.1.0",
+	"description": "Pure MoneyWorks canonical types, enums, and business logic - zero contamination",
+	"type": "module",
+	"main": "./src/index.ts",
+	"module": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts"
+		},
+		"./tax-rates": {
+			"types": "./src/entities/tax-rates/index.ts",
+			"import": "./src/entities/tax-rates/index.ts"
+		},
+		"./transactions": {
+			"types": "./src/entities/transactions/index.ts",
+			"import": "./src/entities/transactions/index.ts"
+		},
+		"./accounts": {
+			"types": "./src/entities/accounts/index.ts",
+			"import": "./src/entities/accounts/index.ts"
+		},
+		"./names": {
+			"types": "./src/entities/names/index.ts",
+			"import": "./src/entities/names/index.ts"
+		},
+		"./products": {
+			"types": "./src/entities/products/index.ts",
+			"import": "./src/entities/products/index.ts"
+		}
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.build.json",
+		"build:dev": "tsc",
+		"dev": "tsc --watch",
+		"clean": "rm -rf dist",
+		"typecheck": "tsc --noEmit",
+		"validate-dsl": "bun run src/validation/validate-dsl.ts"
+	},
+	"dependencies": {
+		"@moneyworks/utilities": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"bun-types": "latest",
+		"typescript": "^5.6.3"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"files": ["dist", "src", "README.md", "README-AI.md"],
+	"keywords": [
+		"moneyworks",
+		"canonical",
+		"dsl",
+		"domain-specific-language",
+		"accounting"
+	],
+	"author": "MoneyWorks Core Team",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/moneyworks/mw-core.git",
+		"directory": "packages/canonical"
+	}
 }
