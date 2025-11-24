@@ -31,7 +31,9 @@ try {
     session_id: hookData.session_id,
     tool_name: hookData.tool_name,
     agent_name: hookData.agent_name,
-    cwd: hookData.cwd
+    cwd: hookData.cwd,
+    // Include full payload for complete debugging
+    payload: hookData
   };
 
   // Append to log file (JSONL format)
