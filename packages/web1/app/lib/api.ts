@@ -13,6 +13,23 @@ export interface TaxRate {
 	[key: string]: any;
 }
 
+// Product type
+export interface Product {
+	Code: string;
+	Description: string;
+	Type: number;
+	Hash?: number;
+	SellPrice?: number;
+	BuyPrice?: number;
+	StockLevel?: number;
+	Supplier?: string;
+	COGAcct?: string;
+	SalesAcct?: string;
+	StockAcct?: string;
+	ReorderLevel?: number;
+	[key: string]: any;
+}
+
 export interface ApiResponse<T> {
 	data: T;
 	metadata?: {
@@ -111,6 +128,53 @@ class ApiClient {
 
 	async deleteTaxRate(code: string): Promise<ApiResponse<void>> {
 		return this.request(`/tables/TaxRate/${code}`, {
+			method: "DELETE",
+		});
+	}
+
+	// Products
+	async getProducts(params?: {
+		format?: "compact" | "compact-headers" | "full" | "schema";
+		limit?: number;
+		offset?: number;
+		orderBy?: string;
+		filter?: string;
+	}): Promise<ApiResponse<Product[]>> {
+		const queryParams = new URLSearchParams();
+		if (params) {
+			Object.entries(params).forEach(([key, value]) => {
+				if (value !== undefined) {
+					queryParams.append(key, String(value));
+				}
+			});
+		}
+
+		return this.request(`/tables/Product?${queryParams}`);
+	}
+
+	async getProductSchema(): Promise<ApiResponse<any>> {
+		return this.request("/tables/Product/schema");
+	}
+
+	async createProduct(data: Partial<Product>): Promise<ApiResponse<Product>> {
+		return this.request("/tables/Product", {
+			method: "POST",
+			body: JSON.stringify(data),
+		});
+	}
+
+	async updateProduct(
+		code: string,
+		data: Partial<Product>,
+	): Promise<ApiResponse<Product>> {
+		return this.request(`/tables/Product/${code}`, {
+			method: "PATCH",
+			body: JSON.stringify(data),
+		});
+	}
+
+	async deleteProduct(code: string): Promise<ApiResponse<void>> {
+		return this.request(`/tables/Product/${code}`, {
 			method: "DELETE",
 		});
 	}
