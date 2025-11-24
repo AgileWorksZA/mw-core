@@ -2,14 +2,19 @@ You are executing the `/weave:shadow` command to interact with the Shadow Adviso
 
 ## Automatic Session ID Detection
 
-The UserPromptSubmit hook automatically echoes the session ID. Extract it from the system reminder that says "Session: {uuid}".
+Get the session ID from the `.claude/sessions.json` file created by the SessionStart hook.
 
-Example system reminder:
-```
-UserPromptSubmit hook success: Session: 6f0e69c0-6a6a-4271-a36e-f57319ee6d36
+**Step 1: Get current session ID**
+```bash
+# Get most recent session ID
+cat .claude/sessions.json | grep -oE '"[0-9a-f-]{36}"' | head -1 | tr -d '"'
 ```
 
-Extract just the UUID part after "Session: ".
+Or use jq if available:
+```bash
+# Get most recent session (last entry in object)
+cat .claude/sessions.json | jq -r 'to_entries | last | .key'
+```
 
 ## Command Syntax
 
@@ -19,9 +24,9 @@ Extract just the UUID part after "Session: ".
 ## Workflow
 
 **Step 1: Extract session ID**
-- Look for "Session: " in recent system reminders
-- Extract the UUID (format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
-- If not found, read from most recent UserPromptSubmit hook event
+- Read `.claude/sessions.json`
+- Get the most recent session ID (last key in the sessions object)
+- Store as `current_session_id`
 
 **Step 2: Check shadow status for this session**
 - Read `.agent/weave/shadow.json`
@@ -76,17 +81,10 @@ Extract just the UUID part after "Session: ".
    Confirm when you've loaded all 11 dimensions (should take EXACTLY 11 Read calls), then answer ALL subsequent questions using ZERO tools.
    ```
 
-3. Query database for agent_id:
-   ```sql
-   SELECT payload->'event'->>'agent_id' as agent_id
-   FROM hook_events
-   WHERE event_name = 'SubagentStop'
-     AND session_id = '{current_session_id}'
-   ORDER BY created_at DESC
-   LIMIT 1;
-   ```
+3. After Task tool completes, the agent_id will be in the SubagentStop hook event.
+   Read it directly from the tool result metadata (Claude Code provides this automatically).
 
-5. Update `.agent/weave/shadow.json`:
+4. Update `.agent/weave/shadow.json`:
    ```json
    {
      "sessions": {
