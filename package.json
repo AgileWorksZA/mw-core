@@ -36,7 +36,7 @@
     "@elevenlabs/elevenlabs-js": "^2.5.0",
     "add": "^2.0.6",
     "bun": "^1.2.19",
-    "claude-hooks-sdk": "^0.7.1",
+    "claude-hooks-sdk": "^0.8.0",
     "elevenlabs": "^1.59.0",
     "eventsource": "^4.0.0",
     "react": "^18.3.1",

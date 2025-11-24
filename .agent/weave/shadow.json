@@ -9,6 +9,15 @@
       "status": "initialized",
       "dimensions_loaded": 11,
       "notes": "Initial shadow advisor with all 11 Weave dimensions loaded"
+    },
+    "27f7e922-1c99-4b8f-8831-18dd303b717c": {
+      "agent_id": "shadow-advisor-square-giraffe",
+      "created_at": "2025-11-24T02:08:00.000Z",
+      "last_synced": "2025-11-24T02:08:00.000Z",
+      "weave_version": "2.0.0",
+      "status": "initialized",
+      "dimensions_loaded": 11,
+      "notes": "Shadow advisor for square-giraffe session with all 11 Weave dimensions loaded"
     }
   },
   "notes": "Shadow advisor agents keyed by session_id. Each session creates a persistent Haiku subagent with Weave dimensions cached."
