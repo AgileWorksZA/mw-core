@@ -786,6 +786,89 @@ export const NAME_TSV_FIELD_MAPPING = [
 ];
 
 /**
+ * Product table TSV field mapping
+ * Based on actual MoneyWorks export observation
+ * TSV columns: sequencenumber, lastmodifiedtime, _timestamp, code, supplierscode, supplier, description, ...
+ */
+export const PRODUCT_TSV_FIELD_MAPPING = [
+	{ position: 0, xmlName: "sequencenumber", pascalName: "Sequencenumber", dataType: "number" as const },
+	{ position: 1, xmlName: "lastmodifiedtime", pascalName: "LastModifiedTime", dataType: "number" as const },
+	{ position: 2, xmlName: "_timestamp", pascalName: "_Timestamp", dataType: "string" as const }, // Formatted timestamp
+	{ position: 3, xmlName: "code", pascalName: "Code", dataType: "string" as const },
+	{ position: 4, xmlName: "supplierscode", pascalName: "Supplierscode", dataType: "string" as const },
+	{ position: 5, xmlName: "supplier", pascalName: "Supplier", dataType: "string" as const },
+	{ position: 6, xmlName: "description", pascalName: "Description", dataType: "string" as const },
+	{ position: 7, xmlName: "comment", pascalName: "Comment", dataType: "string" as const },
+	{ position: 8, xmlName: "category1", pascalName: "Category1", dataType: "string" as const },
+	{ position: 9, xmlName: "category2", pascalName: "Category2", dataType: "string" as const },
+	{ position: 10, xmlName: "category3", pascalName: "Category3", dataType: "string" as const },
+	{ position: 11, xmlName: "category4", pascalName: "Category4", dataType: "string" as const },
+	{ position: 12, xmlName: "salesacct", pascalName: "Salesacct", dataType: "string" as const },
+	{ position: 13, xmlName: "cogacct", pascalName: "Cogacct", dataType: "string" as const },
+	{ position: 14, xmlName: "stockacct", pascalName: "Stockacct", dataType: "string" as const },
+	{ position: 15, xmlName: "usernum", pascalName: "Usernum", dataType: "number" as const },
+	{ position: 16, xmlName: "sellunit", pascalName: "Sellunit", dataType: "string" as const },
+	{ position: 17, xmlName: "sellprice", pascalName: "Sellprice", dataType: "number" as const },
+	{ position: 18, xmlName: "plussage", pascalName: "Plussage", dataType: "number" as const },
+	{ position: 19, xmlName: "buyweight", pascalName: "Buyweight", dataType: "number" as const },
+	{ position: 20, xmlName: "buyunit", pascalName: "Buyunit", dataType: "string" as const },
+	{ position: 21, xmlName: "costprice", pascalName: "Costprice", dataType: "number" as const },
+	{ position: 22, xmlName: "conversionfactor", pascalName: "Conversionfactor", dataType: "number" as const },
+	{ position: 23, xmlName: "marginwarning", pascalName: "Marginwarning", dataType: "number" as const },
+	{ position: 24, xmlName: "selldiscount", pascalName: "Selldiscount", dataType: "number" as const },
+	{ position: 25, xmlName: "selldiscountmode", pascalName: "Selldiscountmode", dataType: "number" as const },
+	{ position: 26, xmlName: "usertext", pascalName: "Usertext", dataType: "string" as const },
+	{ position: 27, xmlName: "stockonhand", pascalName: "Stockonhand", dataType: "number" as const },
+	{ position: 28, xmlName: "stockvalue", pascalName: "Stockvalue", dataType: "number" as const },
+	{ position: 29, xmlName: "minbuildqty", pascalName: "Minbuildqty", dataType: "number" as const },
+	{ position: 30, xmlName: "normalbuildqty", pascalName: "Normalbuildqty", dataType: "number" as const },
+	{ position: 31, xmlName: "reorderlevel", pascalName: "Reorderlevel", dataType: "number" as const },
+	{ position: 32, xmlName: "jobpricingmode", pascalName: "Jobpricingmode", dataType: "number" as const },
+	{ position: 33, xmlName: "flags", pascalName: "Flags", dataType: "number" as const },
+	{ position: 34, xmlName: "colour", pascalName: "Colour", dataType: "number" as const },
+	{ position: 35, xmlName: "usemultipleprices", pascalName: "Usemultipleprices", dataType: "number" as const },
+	{ position: 36, xmlName: "sellpriceb", pascalName: "Sellpriceb", dataType: "number" as const },
+	{ position: 37, xmlName: "sellpricec", pascalName: "Sellpricec", dataType: "number" as const },
+	{ position: 38, xmlName: "sellpriced", pascalName: "Sellpriced", dataType: "number" as const },
+	{ position: 39, xmlName: "sellpricee", pascalName: "Sellpricee", dataType: "number" as const },
+	{ position: 40, xmlName: "sellpricef", pascalName: "Sellpricef", dataType: "number" as const },
+	{ position: 41, xmlName: "qtybreak1", pascalName: "Qtybreak1", dataType: "number" as const },
+	{ position: 42, xmlName: "qtybreak2", pascalName: "Qtybreak2", dataType: "number" as const },
+	{ position: 43, xmlName: "qtybreak3", pascalName: "Qtybreak3", dataType: "number" as const },
+	{ position: 44, xmlName: "qtybreak4", pascalName: "Qtybreak4", dataType: "number" as const },
+	{ position: 45, xmlName: "qtybrksellpricea1", pascalName: "Qtybrksellpricea1", dataType: "number" as const },
+	{ position: 46, xmlName: "qtybrksellpricea2", pascalName: "Qtybrksellpricea2", dataType: "number" as const },
+	{ position: 47, xmlName: "qtybrksellpricea3", pascalName: "Qtybrksellpricea3", dataType: "number" as const },
+	{ position: 48, xmlName: "qtybrksellpricea4", pascalName: "Qtybrksellpricea4", dataType: "number" as const },
+	{ position: 49, xmlName: "qtybrksellpriceb1", pascalName: "Qtybrksellpriceb1", dataType: "number" as const },
+	{ position: 50, xmlName: "qtybrksellpriceb2", pascalName: "Qtybrksellpriceb2", dataType: "number" as const },
+	{ position: 51, xmlName: "qtybrksellpriceb3", pascalName: "Qtybrksellpriceb3", dataType: "number" as const },
+	{ position: 52, xmlName: "qtybrksellpriceb4", pascalName: "Qtybrksellpriceb4", dataType: "number" as const },
+	{ position: 53, xmlName: "type", pascalName: "Type", dataType: "string" as const }, // 'P', 'S', 'A'
+	{ position: 54, xmlName: "count", pascalName: "Count", dataType: "number" as const },
+	{ position: 55, xmlName: "stocktakestartqty", pascalName: "Stocktakestartqty", dataType: "number" as const },
+	{ position: 56, xmlName: "stocktakevalue", pascalName: "Stocktakevalue", dataType: "number" as const },
+	{ position: 57, xmlName: "stocktakenewqty", pascalName: "Stocktakenewqty", dataType: "number" as const },
+	{ position: 58, xmlName: "barcode", pascalName: "Barcode", dataType: "string" as const },
+	{ position: 59, xmlName: "buypricecurrency", pascalName: "Buypricecurrency", dataType: "string" as const },
+	{ position: 60, xmlName: "buyprice", pascalName: "Buyprice", dataType: "number" as const },
+	{ position: 61, xmlName: "custom1", pascalName: "Custom1", dataType: "string" as const },
+	{ position: 62, xmlName: "custom2", pascalName: "Custom2", dataType: "string" as const },
+	{ position: 63, xmlName: "custom3", pascalName: "Custom3", dataType: "string" as const },
+	{ position: 64, xmlName: "custom4", pascalName: "Custom4", dataType: "string" as const },
+	{ position: 65, xmlName: "buytaxcodeoverride", pascalName: "Buytaxcodeoverride", dataType: "string" as const },
+	{ position: 66, xmlName: "selltaxcodeoverride", pascalName: "Selltaxcodeoverride", dataType: "string" as const },
+	{ position: 67, xmlName: "leadtimedays", pascalName: "Leadtimedays", dataType: "number" as const },
+	{ position: 68, xmlName: "hash", pascalName: "Hash", dataType: "number" as const },
+	{ position: 69, xmlName: "sellweight", pascalName: "Sellweight", dataType: "number" as const },
+	{ position: 70, xmlName: "custom5", pascalName: "Custom5", dataType: "string" as const },
+	{ position: 71, xmlName: "custom6", pascalName: "Custom6", dataType: "string" as const },
+	{ position: 72, xmlName: "custom7", pascalName: "Custom7", dataType: "string" as const },
+	{ position: 73, xmlName: "custom8", pascalName: "Custom8", dataType: "string" as const },
+	{ position: 74, xmlName: "taggedtext", pascalName: "Taggedtext", dataType: "string" as const },
+];
+
+/**
  * Get TSV field mapping for a table
  */
 export function getTSVFieldMapping(tableName: string) {
@@ -794,6 +877,8 @@ export function getTSVFieldMapping(tableName: string) {
 			return TAXRATE_TSV_FIELD_MAPPING;
 		case "NAME":
 			return NAME_TSV_FIELD_MAPPING;
+		case "PRODUCT":
+			return PRODUCT_TSV_FIELD_MAPPING;
 		default:
 			// For other tables, we'll need to discover dynamically
 			return null;
