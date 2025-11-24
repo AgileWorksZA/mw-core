@@ -33,7 +33,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	try {
 		// Since we don't have a single product endpoint, fetch all and find the one
 		const response = await api.getProducts({ format: "full" });
-		const product = response.data.find((p: Product) => p.Code === code);
+		const product = response.data.find((p: Product) => p.code === code);
 
 		if (!product) {
 			throw new Error("Product not found");
@@ -71,21 +71,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
 	}
 
 	const data: Partial<Product> = {
-		Code: formData.get("Code") as string,
-		Description: formData.get("Description") as string,
-		Type: Number.parseInt(formData.get("Type") as string),
-		SellPrice: formData.get("SellPrice")
-			? Number.parseFloat(formData.get("SellPrice") as string)
+		code: formData.get("code") as string,
+		description: formData.get("description") as string,
+		type: formData.get("type") as string, // 'P', 'S', or 'A'
+		sellprice: formData.get("sellprice")
+			? Number.parseFloat(formData.get("sellprice") as string)
 			: undefined,
-		BuyPrice: formData.get("BuyPrice")
-			? Number.parseFloat(formData.get("BuyPrice") as string)
+		buyprice: formData.get("buyprice")
+			? Number.parseFloat(formData.get("buyprice") as string)
 			: undefined,
-		Supplier: (formData.get("Supplier") as string) || undefined,
-		COGAcct: (formData.get("COGAcct") as string) || undefined,
-		SalesAcct: (formData.get("SalesAcct") as string) || undefined,
-		StockAcct: (formData.get("StockAcct") as string) || undefined,
-		ReorderLevel: formData.get("ReorderLevel")
-			? Number.parseFloat(formData.get("ReorderLevel") as string)
+		supplier: (formData.get("supplier") as string) || undefined,
+		cogacct: (formData.get("cogacct") as string) || undefined,
+		salesacct: (formData.get("salesacct") as string) || undefined,
+		stockacct: (formData.get("stockacct") as string) || undefined,
+		reorderlevel: formData.get("reorderlevel")
+			? Number.parseFloat(formData.get("reorderlevel") as string)
 			: undefined,
 	};
 
@@ -109,23 +109,23 @@ export default function ProductDetail() {
 	const params = useParams();
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-	// Get product type display name
-	const getProductTypeDisplay = (type?: number) => {
+	// Get product type display name - MoneyWorks uses character codes
+	const getProductTypeDisplay = (type?: string) => {
 		switch (type) {
-			case 0:
+			case "P":
 				return "Stock";
-			case 1:
+			case "S":
 				return "Service";
-			case 2:
+			case "A":
 				return "Assembly";
 			default:
-				return "-";
+				return type || "-";
 		}
 	};
 
-	// Check if product is inventoried (Hash >= 8)
-	const isInventoried = (hash?: number) => {
-		return hash !== undefined && hash >= 8;
+	// Check if product is inventoried (flags >= 8)
+	const isInventoried = (flags?: number) => {
+		return flags !== undefined && flags >= 8;
 	};
 
 	if (error && !isNew) {
@@ -170,7 +170,7 @@ export default function ProductDetail() {
 							<p className="text-muted-foreground">
 								Editing product: {params.code}
 							</p>
-							{isInventoried(product?.Hash) && (
+							{isInventoried(product?.flags) && (
 								<span
 									className="text-xs text-muted-foreground"
 									title="Inventoried"
@@ -187,11 +187,11 @@ export default function ProductDetail() {
 						<h2 className="text-lg font-semibold mb-4">Basic Information</h2>
 						<div className="grid gap-6">
 							<div className="grid gap-2">
-								<Label htmlFor="Code">Product Code</Label>
+								<Label htmlFor="code">Product Code</Label>
 								<Input
-									id="Code"
-									name="Code"
-									defaultValue={product?.Code || ""}
+									id="code"
+									name="code"
+									defaultValue={product?.code || ""}
 									required
 									disabled={!isNew}
 									placeholder="e.g., PROD-001"
@@ -202,26 +202,26 @@ export default function ProductDetail() {
 							</div>
 
 							<div className="grid gap-2">
-								<Label htmlFor="Description">Description</Label>
+								<Label htmlFor="description">Description</Label>
 								<Input
-									id="Description"
-									name="Description"
-									defaultValue={product?.Description || ""}
+									id="description"
+									name="description"
+									defaultValue={product?.description || ""}
 									required
 									placeholder="e.g., Widget Premium 2000"
 								/>
 							</div>
 
 							<div className="grid gap-2">
-								<Label htmlFor="Type">Product Type</Label>
-								<Select name="Type" defaultValue={product?.Type?.toString() || "0"}>
+								<Label htmlFor="type">Product Type</Label>
+								<Select name="type" defaultValue={product?.type || "P"}>
 									<SelectTrigger>
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="0">Stock (Physical Inventory)</SelectItem>
-										<SelectItem value="1">Service (Non-Physical)</SelectItem>
-										<SelectItem value="2">Assembly (Build-to-Order)</SelectItem>
+										<SelectItem value="P">Stock (Physical Inventory)</SelectItem>
+										<SelectItem value="S">Service (Non-Physical)</SelectItem>
+										<SelectItem value="A">Assembly (Build-to-Order)</SelectItem>
 									</SelectContent>
 								</Select>
 							</div>
@@ -232,25 +232,25 @@ export default function ProductDetail() {
 						<h2 className="text-lg font-semibold mb-4">Pricing</h2>
 						<div className="grid gap-6 sm:grid-cols-2">
 							<div className="grid gap-2">
-								<Label htmlFor="SellPrice">Sell Price</Label>
+								<Label htmlFor="sellprice">Sell Price</Label>
 								<Input
-									id="SellPrice"
-									name="SellPrice"
+									id="sellprice"
+									name="sellprice"
 									type="number"
 									step="0.01"
-									defaultValue={product?.SellPrice?.toString() || ""}
+									defaultValue={product?.sellprice?.toString() || ""}
 									placeholder="0.00"
 								/>
 							</div>
 
 							<div className="grid gap-2">
-								<Label htmlFor="BuyPrice">Buy Price (Cost)</Label>
+								<Label htmlFor="buyprice">Buy Price (Cost)</Label>
 								<Input
-									id="BuyPrice"
-									name="BuyPrice"
+									id="buyprice"
+									name="buyprice"
 									type="number"
 									step="0.01"
-									defaultValue={product?.BuyPrice?.toString() || ""}
+									defaultValue={product?.buyprice?.toString() || ""}
 									placeholder="0.00"
 								/>
 							</div>
@@ -263,11 +263,11 @@ export default function ProductDetail() {
 						</h2>
 						<div className="grid gap-6">
 							<div className="grid gap-2">
-								<Label htmlFor="Supplier">Supplier Code</Label>
+								<Label htmlFor="supplier">Supplier Code</Label>
 								<Input
-									id="Supplier"
-									name="Supplier"
-									defaultValue={product?.Supplier || ""}
+									id="supplier"
+									name="supplier"
+									defaultValue={product?.supplier || ""}
 									placeholder="e.g., SUP-001"
 								/>
 								<p className="text-sm text-muted-foreground">
@@ -276,13 +276,13 @@ export default function ProductDetail() {
 							</div>
 
 							<div className="grid gap-2">
-								<Label htmlFor="ReorderLevel">Reorder Level</Label>
+								<Label htmlFor="reorderlevel">Reorder Level</Label>
 								<Input
-									id="ReorderLevel"
-									name="ReorderLevel"
+									id="reorderlevel"
+									name="reorderlevel"
 									type="number"
 									step="0.01"
-									defaultValue={product?.ReorderLevel?.toString() || ""}
+									defaultValue={product?.reorderlevel?.toString() || ""}
 									placeholder="0.00"
 								/>
 								<p className="text-sm text-muted-foreground">
@@ -290,14 +290,14 @@ export default function ProductDetail() {
 								</p>
 							</div>
 
-							{!isNew && isInventoried(product?.Hash) && (
+							{!isNew && isInventoried(product?.flags) && (
 								<div className="rounded-lg bg-muted p-4">
 									<div className="flex items-center gap-2 mb-2">
 										<span className="text-lg">📦</span>
 										<p className="font-medium">Current Stock Level</p>
 									</div>
 									<p className="text-2xl font-bold">
-										{product?.StockLevel?.toFixed(2) || "0.00"}
+										{product?.stockonhand?.toFixed(2) || "0.00"}
 									</p>
 									<p className="text-sm text-muted-foreground mt-1">
 										This product is tracked in inventory
@@ -311,11 +311,11 @@ export default function ProductDetail() {
 						<h2 className="text-lg font-semibold mb-4">Account Codes</h2>
 						<div className="grid gap-6 sm:grid-cols-3">
 							<div className="grid gap-2">
-								<Label htmlFor="COGAcct">COGS Account</Label>
+								<Label htmlFor="cogacct">COGS Account</Label>
 								<Input
-									id="COGAcct"
-									name="COGAcct"
-									defaultValue={product?.COGAcct || ""}
+									id="cogacct"
+									name="cogacct"
+									defaultValue={product?.cogacct || ""}
 									placeholder="e.g., 5000"
 								/>
 								<p className="text-xs text-muted-foreground">
@@ -324,22 +324,22 @@ export default function ProductDetail() {
 							</div>
 
 							<div className="grid gap-2">
-								<Label htmlFor="SalesAcct">Sales Account</Label>
+								<Label htmlFor="salesacct">Sales Account</Label>
 								<Input
-									id="SalesAcct"
-									name="SalesAcct"
-									defaultValue={product?.SalesAcct || ""}
+									id="salesacct"
+									name="salesacct"
+									defaultValue={product?.salesacct || ""}
 									placeholder="e.g., 4000"
 								/>
 								<p className="text-xs text-muted-foreground">Revenue account</p>
 							</div>
 
 							<div className="grid gap-2">
-								<Label htmlFor="StockAcct">Stock Account</Label>
+								<Label htmlFor="stockacct">Stock Account</Label>
 								<Input
-									id="StockAcct"
-									name="StockAcct"
-									defaultValue={product?.StockAcct || ""}
+									id="stockacct"
+									name="stockacct"
+									defaultValue={product?.stockacct || ""}
 									placeholder="e.g., 1400"
 								/>
 								<p className="text-xs text-muted-foreground">

@@ -26,13 +26,19 @@ import {
 } from "~/lib/server-utils";
 
 interface Product {
-	Code: string;
-	Description: string;
-	Type: number;
-	SellPrice?: number;
-	StockLevel?: number;
-	Supplier?: string;
-	Hash?: number;
+	// MoneyWorks returns lowercase field names
+	code: string;
+	description: string;
+	type: string; // 'P' = Product, 'S' = Service, etc.
+	sellprice?: number;
+	stockonhand?: number; // Stock level
+	supplier?: string;
+	flags?: number; // Replaces Hash for inventory status
+	buyprice?: number;
+	costprice?: number;
+	category1?: string;
+	category2?: string;
+	category3?: string;
 	[key: string]: any;
 }
 
@@ -85,9 +91,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			queryOptions.filter = `Code CONTAINS[cd] "${search}" OR Description CONTAINS[cd] "${search}"`;
 		}
 
-		// Add type filter if provided
+		// Add type filter if provided (MoneyWorks uses character codes: 'P', 'S', 'A')
 		if (type) {
-			const typeFilter = `Type = ${type}`;
+			const typeFilter = `Type = "${type}"`;
 			queryOptions.filter = queryOptions.filter
 				? `(${queryOptions.filter}) AND ${typeFilter}`
 				: typeFilter;
@@ -100,6 +106,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			...queryOptions,
 			exportFormat: "full",
 		});
+
+		// Debug: Log the first product to see field structure
+		if (products.length > 0) {
+			console.log("[Products Loader] First product keys:", Object.keys(products[0]));
+			console.log("[Products Loader] First product sample:", JSON.stringify(products[0], null, 2).slice(0, 500));
+		}
 
 		// For now, we'll estimate total count (in production, you'd want a separate count query)
 		const total =
@@ -172,23 +184,23 @@ function ProductsContent() {
 		setSearchParams(newParams);
 	};
 
-	// Get product type display name
-	const getProductTypeDisplay = (type?: number) => {
+	// Get product type display name - MoneyWorks uses character codes
+	const getProductTypeDisplay = (type?: string) => {
 		switch (type) {
-			case 0:
+			case "P":
 				return "Stock";
-			case 1:
+			case "S":
 				return "Service";
-			case 2:
+			case "A":
 				return "Assembly";
 			default:
-				return "-";
+				return type || "-";
 		}
 	};
 
-	// Check if product is inventoried (Hash >= 8)
-	const isInventoried = (hash?: number) => {
-		return hash !== undefined && hash >= 8;
+	// Check if product is inventoried (flags >= 8)
+	const isInventoried = (flags?: number) => {
+		return flags !== undefined && flags >= 8;
 	};
 
 	// Format currency
@@ -249,9 +261,9 @@ function ProductsContent() {
 						onChange={(e) => updateParam("type", e.target.value || null)}
 					>
 						<option value="">All Types</option>
-						<option value="0">Stock</option>
-						<option value="1">Service</option>
-						<option value="2">Assembly</option>
+						<option value="P">Stock</option>
+						<option value="S">Service</option>
+						<option value="A">Assembly</option>
 					</select>
 				</div>
 
@@ -261,7 +273,7 @@ function ProductsContent() {
 							<AlertDescription>
 								Showing results for: "{filters.search}"
 								{filters.type &&
-									` (${getProductTypeDisplay(Number.parseInt(filters.type))} only)`}
+									` (${getProductTypeDisplay(filters.type)} only)`}
 							</AlertDescription>
 						</Alert>
 					</div>
@@ -351,11 +363,11 @@ function ProductsContent() {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{products.map((product) => (
-										<TableRow key={product.Code}>
+									{products.map((product, index) => (
+										<TableRow key={product.code || `product-${index}`}>
 											<TableCell className="font-medium">
-												{product.Code}
-												{isInventoried(product.Hash) && (
+												{product.code}
+												{isInventoried(product.flags) && (
 													<span
 														className="ml-2 text-xs text-muted-foreground"
 														title="Inventoried"
@@ -364,22 +376,22 @@ function ProductsContent() {
 													</span>
 												)}
 											</TableCell>
-											<TableCell>{product.Description || "-"}</TableCell>
+											<TableCell>{product.description || "-"}</TableCell>
 											<TableCell>
-												{getProductTypeDisplay(product.Type)}
+												{getProductTypeDisplay(product.type)}
 											</TableCell>
 											<TableCell className="text-right">
-												{formatCurrency(product.SellPrice)}
+												{formatCurrency(product.sellprice)}
 											</TableCell>
 											<TableCell className="text-right">
-												{isInventoried(product.Hash)
-													? product.StockLevel?.toFixed(2) || "0.00"
+												{isInventoried(product.flags)
+													? product.stockonhand?.toFixed(2) || "0.00"
 													: "N/A"}
 											</TableCell>
-											<TableCell>{product.Supplier || "-"}</TableCell>
+											<TableCell>{product.supplier || "-"}</TableCell>
 											<TableCell className="text-right">
 												<Button variant="ghost" size="sm" asChild>
-													<Link to={`/products/${product.Code}`}>View</Link>
+													<Link to={`/products/${product.code}`}>View</Link>
 												</Button>
 											</TableCell>
 										</TableRow>

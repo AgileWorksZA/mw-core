@@ -13,20 +13,23 @@ export interface TaxRate {
 	[key: string]: any;
 }
 
-// Product type
+// Product type - MoneyWorks returns lowercase field names
 export interface Product {
-	Code: string;
-	Description: string;
-	Type: number;
-	Hash?: number;
-	SellPrice?: number;
-	BuyPrice?: number;
-	StockLevel?: number;
-	Supplier?: string;
-	COGAcct?: string;
-	SalesAcct?: string;
-	StockAcct?: string;
-	ReorderLevel?: number;
+	code: string;
+	description: string;
+	type: string; // 'P' = Stock, 'S' = Service, 'A' = Assembly
+	flags?: number; // inventory status (>= 8 = inventoried)
+	sellprice?: number;
+	buyprice?: number;
+	stockonhand?: number;
+	supplier?: string;
+	cogacct?: string;
+	salesacct?: string;
+	stockacct?: string;
+	reorderlevel?: number;
+	category1?: string;
+	category2?: string;
+	category3?: string;
 	[key: string]: any;
 }
 
