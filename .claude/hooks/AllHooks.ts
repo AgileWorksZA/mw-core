@@ -25,15 +25,10 @@ try {
   const date = new Date().toISOString().split('T')[0];
   const logFile = join(logsDir, `hooks-${date}.jsonl`);
 
+  // Just log the ENTIRE event payload - no filtering
   const logEntry = {
     timestamp: new Date().toISOString(),
-    hook_event: hookData.hook_event_name || hookData.hook_event || 'unknown',
-    session_id: hookData.session_id,
-    tool_name: hookData.tool_name,
-    agent_name: hookData.agent_name,
-    cwd: hookData.cwd,
-    // Include full payload for complete debugging
-    payload: hookData
+    ...hookData  // Spread the entire payload - conversation, transcript, context, EVERYTHING
   };
 
   // Append to log file (JSONL format)
@@ -43,8 +38,9 @@ try {
   const SIGNIFICANT_HOOKS = ['PostToolUse', 'SessionStart', 'SessionEnd', 'Stop'];
   const TRACKED_TOOLS = ['Write', 'Edit', 'Bash', 'SlashCommand', 'Task'];
 
-  const isSignificant = SIGNIFICANT_HOOKS.includes(logEntry.hook_event) ||
-    (logEntry.tool_name && TRACKED_TOOLS.includes(logEntry.tool_name));
+  const hookEvent = hookData.hook_event_name || hookData.hook_event || 'unknown';
+  const isSignificant = SIGNIFICANT_HOOKS.includes(hookEvent) ||
+    (hookData.tool_name && TRACKED_TOOLS.includes(hookData.tool_name));
 
   if (isSignificant) {
     const configPath = join(process.cwd(), '.agent/config.json');
@@ -60,10 +56,10 @@ try {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sessionId: logEntry.session_id,
+        sessionId: hookData.session_id,
         project: 'mw-core',
-        hookEvent: logEntry.hook_event,
-        toolName: logEntry.tool_name,
+        hookEvent: hookEvent,
+        toolName: hookData.tool_name,
         metadata: hookData,
         timestamp: logEntry.timestamp
       })
