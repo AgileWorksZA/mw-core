@@ -1,0 +1,6 @@
+{
+	"code": "CONT",
+	"name": "Contacts",
+	"description": "Contact entity features - extends Names table with unlimited additional contacts per Name",
+	"storyCounter": 1
+}

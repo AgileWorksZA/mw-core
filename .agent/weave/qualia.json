@@ -26,6 +26,16 @@
 			"frequency": "after major changes or branch switches",
 			"resolution": "Run 'rm -rf packages/*/dist' before recheck"
 		},
+		"field-length-discrepancies-pain": {
+			"id": "field-length-discrepancies-pain",
+			"title": "Field length discrepancies between related tables",
+			"description": "MoneyWorks tables have inconsistent field lengths for same-purpose fields (e.g., Contact.eMail=63 chars vs Names.email=80 chars)",
+			"severity": "medium",
+			"impact": "Data migration/sync between tables can cause silent truncation",
+			"observedIn": ["CONT-001 implementation"],
+			"frequency": "per-entity with related fields",
+			"resolution": "Document field limits in canonical types, validate/truncate during migration"
+		},
 		"tsv-no-headers": {
 			"id": "tsv-no-headers",
 			"title": "TSV exports have no headers",
@@ -223,6 +233,21 @@
 				"AC-011: 37 tests passing, 183 assertions"
 			],
 			"evidence": ["US-002: Created comprehensive validation report with evidence for all 27 ACs"]
+		},
+		"comprehensive-bit-utilities": {
+			"id": "comprehensive-bit-utilities",
+			"title": "Provide Comprehensive Bit Manipulation Utilities for Flag Fields",
+			"description": "When implementing bit flag fields (roles, status, permissions), provide full utility set: encode, decode, hasRole, addRole, removeRole, toHex, fromHex",
+			"category": "api-design",
+			"importance": "high",
+			"rationale": "Developers shouldn't need to understand bitwise operations to work with role fields",
+			"examples": [
+				"encodeRoles(['STATEMENT', 'INVOICES']) -> 5",
+				"decodeRoles(5) -> ['STATEMENT', 'INVOICES']",
+				"hasRole(role, MoneyWorksContactRoles.STATEMENT)",
+				"addRole(existingRole, MoneyWorksContactRoles.ORDERS)"
+			],
+			"evidence": ["CONT-001: Created 8 utility functions for Contact roles"]
 		}
 	},
 	"contextualKnowledge": {},
@@ -234,11 +259,11 @@
 	"cognitiveLoad": {},
 	"metadata": {
 		"totalExperiences": 0,
-		"totalPainPoints": 3,
+		"totalPainPoints": 4,
 		"totalSolutions": 3,
 		"totalWorkflows": 2,
-		"totalBestPractices": 6,
+		"totalBestPractices": 7,
 		"totalPatterns": 0,
-		"lastUpdated": "2025-11-24T07:40:00.000Z"
+		"lastUpdated": "2025-11-24T21:10:00.000Z"
 	}
 }

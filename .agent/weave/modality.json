@@ -59,6 +59,24 @@
 			"tradeoff": "Manual step required, but clear and auditable",
 			"confidence": 0.8,
 			"context": "After US-001 missed registration, considered automatic approach but rejected"
+		},
+		"composite-key-for-contacts": {
+			"id": "composite-key-for-contacts",
+			"option": "Use ParentSeq + Order as composite primary key for Contacts",
+			"rejectedBecause": "SequenceNumber is MoneyWorks canonical primary key, already unique",
+			"currentApproach": "Use SequenceNumber as primary key",
+			"tradeoff": "Requires separate lookup for contacts by parent, but matches MW design",
+			"confidence": 0.95,
+			"context": "CONT-001 D-001: Decided to follow MW table design rather than create synthetic key"
+		},
+		"16-bit-only-roles": {
+			"id": "16-bit-only-roles",
+			"option": "Only support standard 16-bit contact roles",
+			"rejectedBecause": "Would break GetContactForRole compatibility with Contact1/Contact2 legacy fields",
+			"currentApproach": "Include MoneyWorksLegacyContactRoles with 0x10000 and 0x20000 bits",
+			"tradeoff": "Adds complexity to role enum, but enables full MW compatibility",
+			"confidence": 0.9,
+			"context": "CONT-001 D-002: Extended beyond 16-bit for backward compatibility"
 		}
 	},
 	"possibleFutures": {
@@ -92,9 +110,10 @@
 	},
 	"metadata": {
 		"totalAlternatives": 2,
-		"totalRejectedOptions": 1,
+		"totalRejectedOptions": 3,
 		"totalPossibleFutures": 2,
 		"averageConfidence": 0.91,
-		"lastCompaction": null
+		"lastCompaction": null,
+		"lastUpdated": "2025-11-24T21:10:00.000Z"
 	}
 }

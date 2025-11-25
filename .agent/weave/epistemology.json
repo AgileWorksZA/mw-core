@@ -188,6 +188,41 @@
 			},
 			"rationale": "Taxonomy helps ensure consistent naming and comprehensive coverage across entities",
 			"evidence": ["ACCT-001: 8 methods organized across categories"]
+		},
+		"bitwise-role-search-pattern": {
+			"id": "bitwise-role-search-pattern",
+			"name": "MoneyWorks Bitwise Role Search Syntax",
+			"description": "MoneyWorks search supports bitwise operations using (Field&#xx)!=0 syntax for efficient role-based filtering",
+			"type": "query-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/data/src/repositories/contact.repository.ts", "CONT-001 implementation"],
+			"syntax": "(Role&#xx)!=0 where xx is hex role bit",
+			"examples": [
+				"(Role&#1)!=0 - contacts receiving statements",
+				"(Role&#4)!=0 - contacts receiving invoices",
+				"(Role&#10000)!=0 - Contact1 assumed role"
+			],
+			"rationale": "Enables server-side filtering without fetching all records, crucial for performance with large contact lists",
+			"evidence": ["CONT-001 L-002: Discovered bitwise search during Contact role implementation"]
+		},
+		"sequence-number-vs-code-primary-key-pattern": {
+			"id": "sequence-number-vs-code-primary-key-pattern",
+			"name": "SequenceNumber vs Code Primary Key Strategy",
+			"description": "MoneyWorks tables use different primary key strategies: user-defined Code (Products) vs auto-generated SequenceNumber (Names, Contacts)",
+			"type": "data-model-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/data/src/repositories/contact.repository.ts", "packages/data/src/repositories/name.repository.ts"],
+			"strategies": {
+				"codeBasedTables": ["Product - user-defined alphanumeric code"],
+				"sequenceNumberTables": ["Name - auto-generated integer", "Contact - auto-generated integer"]
+			},
+			"implications": [
+				"Repository primaryKey must match table strategy",
+				"findByCode() only works for code-based tables",
+				"SequenceNumber tables require findBySequenceNumber() or filter queries"
+			],
+			"rationale": "Table key strategy affects repository design and query patterns",
+			"evidence": ["CONT-001 D-001: Contact uses SequenceNumber not Code"]
 		}
 	},
 	"validations": {
@@ -228,12 +263,12 @@
 	"knowledgeGaps": [],
 	"metadata": {
 		"totalConcepts": 0,
-		"totalPatterns": 10,
+		"totalPatterns": 12,
 		"totalValidations": 1,
 		"averageConfidence": 0.97,
-		"highConfidenceConcepts": 10,
+		"highConfidenceConcepts": 12,
 		"lowConfidenceConcepts": 0,
 		"knowledgeGaps": 0,
-		"lastValidation": "2025-11-24T07:40:00.000Z"
+		"lastValidation": "2025-11-24T21:10:00.000Z"
 	}
 }

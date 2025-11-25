@@ -117,13 +117,29 @@
 			"why": "Prevents US-001 mistake where Product was left in 'upcoming' status",
 			"confidence": 1.0,
 			"evidence": ["US-002: Account in 'available' after following checklist", "US-001: Product in 'upcoming' without registration"]
+		},
+		"automation-readiness-threshold": {
+			"id": "automation-readiness-threshold",
+			"what": "After 3-4 similar entity implementations, create scaffolding skill with deterministic scripts",
+			"when": "Pattern is confirmed across multiple entities (Product, Account, Name, Contact)",
+			"how": "Create .claude/skills/moneyworks-entity-scaffolding/ with SKILL.md + scripts/scaffold-entity.ts",
+			"why": "CONT-001 is 4th entity - pattern is clearly repeatable, 9-file structure is 100% deterministic",
+			"benefits": [
+				"30-45 minutes saved per entity",
+				"100% structural consistency",
+				"No forgotten exports or registrations",
+				"Reduced LLM non-determinism"
+			],
+			"confidence": 0.95,
+			"evidence": ["CONT-001: 4th entity confirmed pattern - ready for automation"]
 		}
 	},
 	"metadata": {
 		"totalWowPatterns": 3,
 		"totalDelegationStrategies": 1,
-		"totalBestPractices": 3,
+		"totalBestPractices": 6,
 		"averageConfidence": 0.94,
-		"lastCompaction": null
+		"lastCompaction": null,
+		"lastUpdated": "2025-11-24T21:10:00.000Z"
 	}
 }

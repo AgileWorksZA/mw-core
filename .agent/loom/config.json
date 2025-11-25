@@ -82,8 +82,14 @@
 			"name": "Accounts",
 			"description": "Account/Chart of Accounts entity features - financial account management",
 			"storyCount": 1
+		},
+		{
+			"code": "CONT",
+			"name": "Contacts",
+			"description": "Contact entity features - extends Names table with unlimited additional contacts per Name",
+			"storyCount": 1
 		}
 	],
-	"storyCounter": 2,
+	"storyCounter": 3,
 	"taskCounter": 21
 }

@@ -24,8 +24,12 @@ export { ProductRepository } from "./product.repository";
 // Account Repository
 export { AccountRepository } from "./account.repository";
 
+// Contact Repository
+export { ContactRepository } from "./contact.repository";
+
 // Canonical type re-exports for convenience
 export type { MoneyWorksName } from "@moneyworks/canonical/names";
 export type { MoneyWorksTaxRate } from "@moneyworks/canonical/tax-rates";
 export type { MoneyWorksProduct } from "@moneyworks/canonical/products";
 export type { MoneyWorksAccount } from "@moneyworks/canonical/entities/accounts";
+export type { MoneyWorksContact } from "@moneyworks/canonical/entities/contacts";
