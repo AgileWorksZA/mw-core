@@ -1,0 +1,98 @@
+{
+	"version": "2.0.0",
+	"description": "Rules, obligations, permissions, and prohibitions for Loom workflows",
+	"obligations": {
+		"must_read_env": {
+			"rule": "MUST read .env file at session startup for DATABASE_URL and configuration",
+			"rationale": "Prevents connection errors from using wrong database",
+			"enforcement": "Automatic check in session initialization"
+		},
+		"must_test_before_commit": {
+			"rule": "MUST test implementation before committing",
+			"rationale": "Catch bugs early, maintain code quality",
+			"enforcement": "Pre-commit hook validation"
+		},
+		"must_ask_when_ambiguous": {
+			"rule": "MUST ask clarifying questions when requirements are ambiguous",
+			"rationale": "Prevents wasted effort on wrong implementation",
+			"enforcement": "Agent judgment, encouraged in workflow"
+		},
+		"must_apply_boy_scout_rule": {
+			"rule": "MUST apply Boy Scout Rule when touching existing code",
+			"rationale": "Leave code cleaner than you found it - fix errors and improve code quality even when not directly related to current task",
+			"enforcement": "Code review, retrospective analysis",
+			"examples": [
+				"Fix nearby typos while implementing feature",
+				"Extract duplicated code into shared function",
+				"Add missing type annotations to adjacent code",
+				"Improve variable names for clarity",
+				"Fix unrelated errors discovered during work session",
+				"Update outdated comments",
+				"Remove dead code",
+				"Add proper error handling to fragile code"
+			]
+		}
+	},
+	"permissions": {
+		"may_refactor_adjacent_code": {
+			"rule": "MAY refactor code adjacent to changes if applying Boy Scout Rule",
+			"condition": "Only if it improves clarity without changing behavior",
+			"rationale": "Incremental code quality improvement"
+		},
+		"may_fix_unrelated_errors": {
+			"rule": "MAY fix errors discovered during work that are not related to current task",
+			"condition": "Fix should be low-risk and improve overall codebase health",
+			"rationale": "Opportunistic improvement leads to higher quality codebase over time"
+		},
+		"may_defer_work": {
+			"rule": "MAY defer ACs/tasks to future stories with user approval",
+			"condition": "Must document reason and target story",
+			"rationale": "Enables scope flexibility"
+		}
+	},
+	"prohibitions": {
+		"must_not_use_psql_without_env": {
+			"rule": "MUST NOT use `psql \"${DATABASE_URL}\"` without reading .env first",
+			"rationale": "Causes 'database does not exist' error",
+			"alternative": "Read .env, extract DATABASE_URL, then use it"
+		},
+		"must_not_commit_untested_code": {
+			"rule": "MUST NOT commit code without testing",
+			"rationale": "Untested code breaks CI, wastes team time",
+			"alternative": "Run tests locally, verify passing, then commit"
+		},
+		"must_not_use_any_type": {
+			"rule": "MUST NOT use TypeScript `any` type",
+			"rationale": "Project-specific: type safety is mandatory",
+			"alternative": "Use `unknown` and narrow with type guards, or define proper types"
+		},
+		"must_not_ignore_discovered_issues": {
+			"rule": "MUST NOT ignore obvious errors or issues discovered while working",
+			"rationale": "Boy Scout Rule - leaving known issues unfixed degrades codebase",
+			"alternative": "Fix the issue if low-risk, or document it for future work if complex"
+		}
+	},
+	"definition_of_ready": {
+		"story_dor": [
+			"WHY extracted (business motivation clear)",
+			"3-7 testable acceptance criteria defined",
+			"Weave consulted for relevant knowledge",
+			"User approved requirements",
+			"Story status = planned"
+		]
+	},
+	"definition_of_done": {
+		"story_dod": [
+			"All non-deferred tasks completed",
+			"All non-deferred ACs tested and passing",
+			"Code committed to repository",
+			"Documentation updated (README, ARCHITECTURE, etc.)",
+			"Tests written and passing",
+			"TypeScript compilation passes (no errors)",
+			"Retrospective generated",
+			"Learnings extracted to Weave",
+			"Story status = complete",
+			"completedAt timestamp set"
+		]
+	}
+}

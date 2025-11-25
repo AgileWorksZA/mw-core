@@ -21,7 +21,11 @@ export { TaxRateRepository } from "./tax-rate.repository";
 // Product Repository
 export { ProductRepository } from "./product.repository";
 
+// Account Repository
+export { AccountRepository } from "./account.repository";
+
 // Canonical type re-exports for convenience
 export type { MoneyWorksName } from "@moneyworks/canonical/names";
 export type { MoneyWorksTaxRate } from "@moneyworks/canonical/tax-rates";
 export type { MoneyWorksProduct } from "@moneyworks/canonical/products";
+export type { MoneyWorksAccount } from "@moneyworks/canonical/entities/accounts";

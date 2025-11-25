@@ -18,10 +18,10 @@ export * from "./common/business-rules";
 export * as TaxRates from "./entities/tax-rates";
 export * as Names from "./entities/names";
 export * as Products from "./entities/products";
+export * as Accounts from "./entities/accounts";
 
 // Future entities will be added here:
 // export * as Transactions from './entities/transactions';
-// export * as Accounts from './entities/accounts';
 // export * as Contacts from './entities/contacts';
 // etc.
 
@@ -56,8 +56,8 @@ export const CANONICAL_VERSION = {
 		taxRates: { status: "complete", fields: 17 },
 		names: { status: "complete", fields: 94 },
 		products: { status: "complete", fields: 70 },
+		accounts: { status: "complete", fields: 35 },
 		transactions: { status: "pending", fields: 0 },
-		accounts: { status: "pending", fields: 0 },
 		contacts: { status: "pending", fields: 0 },
 	},
 } as const;

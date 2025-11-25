@@ -7,6 +7,7 @@
  */
 
 import { createSmartClient } from "./client/moneyworks-smart-client";
+import { AccountRepository } from "./repositories/account.repository";
 import { CompanyInformationRepository } from "./repositories/company-information.repository";
 import { NameRepository } from "./repositories/name.repository";
 import { ProductRepository } from "./repositories/product.repository";
@@ -95,6 +96,7 @@ export {
 } from "./repositories/company-information.repository";
 export { NameRepository } from "./repositories/name.repository";
 export { ProductRepository } from "./repositories/product.repository";
+export { AccountRepository } from "./repositories/account.repository";
 
 /**
  * Create a MoneyWorks client with repositories from a connection object
@@ -136,6 +138,7 @@ export function createMoneyWorksClient(connection: {
 			companyInformation: new CompanyInformationRepository(client),
 			name: new NameRepository(client),
 			product: new ProductRepository(client),
+			account: new AccountRepository(client),
 		},
 	};
 }
@@ -166,6 +169,7 @@ export async function createDataLayer(configPath?: string) {
 			companyInformation: new CompanyInformationRepository(client),
 			name: new NameRepository(client),
 			product: new ProductRepository(client),
+			account: new AccountRepository(client),
 			// Future repositories will be added here
 			// transaction: new TransactionRepository(client),
 			// contact: new ContactRepository(client),

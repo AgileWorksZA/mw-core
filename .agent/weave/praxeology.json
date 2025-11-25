@@ -3,7 +3,7 @@
 	"title": "Praxeology (Π)",
 	"description": "How we work - WoW patterns, delegation strategies, best practices",
 	"version": "1.0.0",
-	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"lastUpdated": "2025-11-24T14:00:00.000Z",
 	"wowPatterns": {
 		"full-stack-story-pattern": {
 			"id": "full-stack-story-pattern",
@@ -67,6 +67,25 @@
 		}
 	},
 	"bestPractices": {
+		"context-compaction-recovery": {
+			"id": "context-compaction-recovery",
+			"what": "Resume work cleanly after context compaction using state files and todo lists",
+			"when": "Session continues from compacted context",
+			"how": "Read state files, check todo status, identify current task, continue from where left off",
+			"why": "Context compaction loses in-flight work details, state files preserve progress",
+			"confidence": 0.9,
+			"evidence": ["ACCT-001: Resumed T-007 typecheck after compaction, completed successfully"]
+		},
+		"entity-implementation-skill-opportunity": {
+			"id": "entity-implementation-skill-opportunity",
+			"what": "After 2-3 entity implementations, create scaffolding skill to automate boilerplate",
+			"when": "Pattern is proven across multiple entities (Product, Account, Name)",
+			"how": "Create skill at .claude/skills/moneyworks-entity-scaffolding/ with SKILL.md + scripts",
+			"why": "Deterministic scripts eliminate LLM inconsistency in file structure, naming, imports",
+			"benefits": ["30+ minutes saved per entity", "100% structural consistency"],
+			"confidence": 0.85,
+			"evidence": ["ACCT-001 retrospective: Identified automation opportunity"]
+		},
 		"evidence-based-validation": {
 			"id": "evidence-based-validation",
 			"what": "Collect concrete evidence (file paths, line numbers, test output, API responses) for each acceptance criterion",

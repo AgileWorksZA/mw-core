@@ -3,9 +3,29 @@
 	"title": "Qualia",
 	"description": "What it's like - experiential knowledge, pain points, solutions",
 	"version": "1.0.0",
-	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"lastUpdated": "2025-11-24T14:00:00.000Z",
 	"experiences": {},
 	"painPoints": {
+		"triple-export-registration-pain": {
+			"id": "triple-export-registration-pain",
+			"title": "Triple export registration easy to forget",
+			"description": "Adding new repository requires updating 3 separate locations in index.ts, easy to miss one",
+			"severity": "medium",
+			"impact": "Causes 'Module has no exported member' errors at typecheck",
+			"observedIn": ["ACCT-001 typecheck fix"],
+			"frequency": "per-entity",
+			"resolution": "Follow 9-step entity checklist, always update all 3 locations"
+		},
+		"stale-dist-folders-pain": {
+			"id": "stale-dist-folders-pain",
+			"title": "Stale dist folders cause false typecheck errors",
+			"description": "TypeScript composite projects cache build artifacts that can become stale",
+			"severity": "medium",
+			"impact": "Typecheck fails even with correct code, frustrating debugging",
+			"observedIn": ["ACCT-001 context compaction recovery"],
+			"frequency": "after major changes or branch switches",
+			"resolution": "Run 'rm -rf packages/*/dist' before recheck"
+		},
 		"tsv-no-headers": {
 			"id": "tsv-no-headers",
 			"title": "TSV exports have no headers",
@@ -112,6 +132,31 @@
 		}
 	},
 	"bestPractices": {
+		"reference-implementation-pattern": {
+			"id": "reference-implementation-pattern",
+			"title": "Use existing entity as reference implementation",
+			"description": "When implementing new entity, copy structure from existing entity (e.g., Product for Account)",
+			"category": "productivity",
+			"importance": "high",
+			"rationale": "Ensures consistency, reduces cognitive load, establishes baseline structure",
+			"examples": [
+				"ACCT-001 used Product entity as reference for Account implementation",
+				"Copy enums.ts structure, types.ts interface format, repository method categories"
+			]
+		},
+		"domain-specific-query-methods": {
+			"id": "domain-specific-query-methods",
+			"title": "Add domain-specific query methods beyond requirements",
+			"description": "Include natural complements to required methods that address common use cases",
+			"category": "api-design",
+			"importance": "medium",
+			"rationale": "Anticipates developer needs, provides complete API without scope creep",
+			"examples": [
+				"findProfitLossAccounts() as complement to findBalanceSheetAccounts()",
+				"findBankAccounts() for accounts with banking info",
+				"findByControlAccount() for account hierarchy queries"
+			]
+		},
 		"preserve-canonical-dsl": {
 			"id": "preserve-canonical-dsl",
 			"title": "Always Preserve MoneyWorks Terminology",

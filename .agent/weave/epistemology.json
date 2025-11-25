@@ -3,7 +3,7 @@
 	"title": "Epistemology",
 	"description": "How we know - knowledge confidence and provenance",
 	"version": "1.0.0",
-	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"lastUpdated": "2025-11-24T14:00:00.000Z",
 	"knowledge": {},
 	"patterns": {
 		"canonical-dsl-pattern": {
@@ -135,6 +135,59 @@
 			],
 			"rationale": "Domain-specific methods improve code readability and reduce cognitive load compared to generic filters",
 			"evidence": ["US-002: AccountRepository has 11 specialized query methods"]
+		},
+		"9-step-entity-implementation-pattern": {
+			"id": "9-step-entity-implementation-pattern",
+			"name": "9-Step Entity Implementation Checklist",
+			"description": "Complete entity implementation requires 9 files across 3 packages: canonical (3), data (3), api (2), plus registry update",
+			"type": "architectural-pattern",
+			"confidence": 1.0,
+			"observedIn": ["ACCT-001 implementation"],
+			"steps": [
+				"1. packages/canonical/src/entities/{entity}/enums.ts",
+				"2. packages/canonical/src/entities/{entity}/types.ts",
+				"3. packages/canonical/src/entities/{entity}/index.ts + update main index",
+				"4. packages/data/src/repositories/{entity}.repository.ts",
+				"5. packages/data/src/repositories/index.ts export",
+				"6. packages/data/src/index.ts export + factory functions",
+				"7. packages/api/src/controllers/{entity}.ts",
+				"8. packages/api/src/registry/table-registry.ts registration"
+			],
+			"rationale": "Ensures complete backend entity implementation with no missed exports or registrations",
+			"evidence": ["ACCT-001: All 9 steps followed, Account available in API"]
+		},
+		"triple-export-registration-pattern": {
+			"id": "triple-export-registration-pattern",
+			"name": "Triple Export Registration for Repositories",
+			"description": "New repositories require export in 3 locations: repositories/index.ts, main index.ts, AND both factory functions",
+			"type": "code-organization-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/data/src/index.ts", "ACCT-001 typecheck fix"],
+			"locations": [
+				"packages/data/src/repositories/index.ts",
+				"packages/data/src/index.ts (export statement)",
+				"packages/data/src/index.ts (createMoneyWorksClient repositories)",
+				"packages/data/src/index.ts (createDataLayer repositories)"
+			],
+			"antipattern": "Forgetting any of the 3 locations causes 'Module has no exported member' errors",
+			"evidence": ["ACCT-001: Initial typecheck failed until all 3 locations updated"]
+		},
+		"repository-query-categories-pattern": {
+			"id": "repository-query-categories-pattern",
+			"name": "Repository Query Method Categories",
+			"description": "Organize repository queries into 5 categories for consistent API design",
+			"type": "api-design-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/data/src/repositories/account.repository.ts"],
+			"categories": {
+				"primaryKeyLookup": "findByCode(), findByKey()",
+				"typeFiltering": "findByType(), findByCategory()",
+				"statusFiltering": "findActiveAccounts()",
+				"domainSpecific": "findBalanceSheetAccounts(), findProfitLossAccounts(), findBankAccounts()",
+				"relationshipBased": "findByControlAccount()"
+			},
+			"rationale": "Taxonomy helps ensure consistent naming and comprehensive coverage across entities",
+			"evidence": ["ACCT-001: 8 methods organized across categories"]
 		}
 	},
 	"validations": {

@@ -34,6 +34,23 @@
 		"workflowStyle": "autonomous",
 		"documentationLevel": "standard"
 	},
+	"designPrinciples": {
+		"core": [
+			"Boy Scout Rule: Leave code cleaner than you found it - fix errors, improve code quality even when not directly related to current task",
+			"YAGNI: Avoid over-engineering, build what's needed now",
+			"DRY: Don't repeat yourself, extract patterns"
+		],
+		"codeQuality": [
+			"Prefer readability over cleverness",
+			"Prefer explicit over implicit",
+			"Prefer composition over inheritance"
+		],
+		"projectSpecific": [
+			"Always use branded types for domain IDs (AccountCode, ProductCode)",
+			"Never use `any` type in TypeScript",
+			"Preserve canonical MoneyWorks terminology"
+		]
+	},
 	"definitionOfDone": [
 		"All tasks completed",
 		"All acceptance criteria tested and passing",
@@ -59,8 +76,14 @@
 			"name": "Products",
 			"description": "Product entity features - inventory, pricing, and catalog management",
 			"storyCount": 1
+		},
+		{
+			"code": "ACCT",
+			"name": "Accounts",
+			"description": "Account/Chart of Accounts entity features - financial account management",
+			"storyCount": 1
 		}
 	],
-	"storyCounter": 1,
-	"taskCounter": 14
+	"storyCounter": 2,
+	"taskCounter": 21
 }

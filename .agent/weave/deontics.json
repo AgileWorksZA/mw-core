@@ -3,8 +3,29 @@
 	"title": "Deontics (Δ)",
 	"description": "What must/can/cannot be done - obligations, permissions, prohibitions",
 	"version": "1.0.0",
-	"lastUpdated": "2025-11-24T07:40:00.000Z",
+	"lastUpdated": "2025-11-24T14:00:00.000Z",
 	"obligations": {
+		"triple-export-obligation": {
+			"id": "triple-export-obligation",
+			"what": "Update all 3 export locations when adding new repository",
+			"why": "Missing any location causes Module has no exported member errors",
+			"when": "After creating new repository class",
+			"how": "Update: (1) repositories/index.ts, (2) main index.ts export, (3) both factory functions",
+			"severity": "HIGH",
+			"confidence": 1.0,
+			"evidence": ["ACCT-001: Forgot main index.ts initially, typecheck failed"],
+			"enforcedBy": "9-step entity implementation checklist"
+		},
+		"factory-function-update-obligation": {
+			"id": "factory-function-update-obligation",
+			"what": "Add new repository to BOTH createMoneyWorksClient AND createDataLayer",
+			"why": "Both factory functions create repository instances, missing one breaks downstream consumers",
+			"when": "After adding repository export to index.ts",
+			"how": "Add 'entityName: new EntityRepository(client)' to both functions' repositories object",
+			"severity": "HIGH",
+			"confidence": 1.0,
+			"evidence": ["ACCT-001: Updated both functions with account: new AccountRepository(client)"]
+		},
 		"table-registry-registration-obligation": {
 			"id": "table-registry-registration-obligation",
 			"what": "Register all API controllers in TableRegistry",
