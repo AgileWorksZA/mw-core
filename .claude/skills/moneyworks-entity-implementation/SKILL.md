@@ -1,11 +1,15 @@
 ---
 name: Implementing MoneyWorks Entities
-description: Full-stack implementation workflow for new MoneyWorks entities (Transaction, Job, Account, etc.). Creates types in canonical, repository in data, controller in api, registers in TableRegistry, and optionally adds web routes. Use when adding new entity support to the SDK, implementing CRUD for MW tables, or scaffolding entity layers.
+description: API-only implementation workflow for new MoneyWorks entities (Transaction, Job, Contact, etc.). Creates types in canonical, repository in data, controller in api, and registers in TableRegistry. Use when adding new entity support to the SDK, implementing CRUD for MW tables, or scaffolding entity layers.
 ---
 
 # Implementing MoneyWorks Entities
 
-Transform a MoneyWorks table into a fully-supported SDK entity with types, repository, controller, API registration, and optional web UI. This workflow was battle-tested on Product entity implementation (PROD-001).
+Transform a MoneyWorks table into a fully-supported SDK entity with types, repository, controller, and API registration. This workflow was battle-tested across PROD-001, ACCT-001, and CONT-001 implementations.
+
+## Loom Integration
+
+**For Loom executor agents:** When executing entity-related stories, invoke this skill FIRST to scaffold boilerplate, then customize the generated files with entity-specific logic.
 
 ## Quick Start (Automated)
 
@@ -51,7 +55,7 @@ bun tsc --project packages/data/tsconfig.json --noEmit
 
 ## Core Principle
 
-**Follow the 7-layer stack in order.** Each layer depends on the previous. Missing the TableRegistry registration (Layer 5) is the most common mistake - it makes your entity "unavailable" despite all code being correct.
+**Follow the 5-layer stack in order.** Each layer depends on the previous. Missing the TableRegistry registration (Layer 5) is the most common mistake - it makes your entity "unavailable" despite all code being correct.
 
 ## Prerequisites
 
@@ -225,23 +229,6 @@ private upcoming = [
 
 **Why this matters**: Without registration, `/api/v1/tables` won't list your entity and all API calls will return 404. This is the #1 missed step (documented in Weave as Q:painpoint-table-registry).
 
-### Layer 6: Web Routes (Optional)
-
-**List Route**: `packages/web1/app/routes/{entity}.tsx`
-**Detail Route**: `packages/web1/app/routes/{entity}.$code.tsx`
-
-Follow patterns from `products.tsx` and `products.$code.tsx`.
-
-### Layer 7: Route Registration & Navigation (Optional)
-
-**File**: `packages/web1/app/routes.ts`
-```typescript
-route("{entity}", "routes/{entity}.tsx"),
-route("{entity}/:code", "routes/{entity}.$code.tsx"),
-```
-
-**Navigation**: Add link in `packages/web1/app/components/navigation.tsx`
-
 ## Verification Checklist
 
 ```bash
@@ -265,7 +252,9 @@ curl "http://localhost:3400/api/v1/tables/{Entity}/schema" \
   -H "Authorization: Bearer $TOKEN"
 ```
 
-## Critical Learnings from PROD-001
+## Critical Learnings
+
+### From PROD-001
 
 | ID | Issue | Solution |
 |----|-------|----------|
@@ -273,6 +262,26 @@ curl "http://localhost:3400/api/v1/tables/{Entity}/schema" \
 | L-002 | Type fields use character codes | Parse as strings ('P', 'S', 'A'), not numbers |
 | L-003 | Elysia error handler doesn't propagate | Add try/catch in route handlers for MW query errors |
 | L-004 | MoneyWorks query syntax | Use function-based: `left(Code,2)="BA"` not SQL-like CONTAINS |
+
+### From CONT-001
+
+| ID | Issue | Solution |
+|----|-------|----------|
+| L-005 | Primary key varies by table | Products use `Code`, Names/Contacts use `SequenceNumber` - check table schema |
+| L-006 | Bitwise role fields extend beyond 16 bits | Include legacy bits (0x10000, 0x20000) for Contact1/Contact2 |
+| L-007 | MoneyWorks bitwise search syntax | Use `(Role&#xx)!=0` for efficient role-based filtering |
+| L-008 | Field length discrepancies | Contact.eMail (63 chars) differs from Names.email (80 chars) |
+
+### Primary Key Strategy
+
+Different MoneyWorks tables use different primary key strategies:
+
+| Strategy | Tables | Lookup Method |
+|----------|--------|---------------|
+| **Code-based** (user-defined) | Product | `findByCode()` |
+| **SequenceNumber** (auto-generated) | Name, Contact | `findBySequenceNumber()` or filter queries |
+
+Always check the target table's key strategy before implementing repository.
 
 ## TSV Field Mapping Discovery
 
@@ -301,37 +310,35 @@ export const {ENTITY}_TSV_FIELD_MAPPING: string[] = [
 3. **Type field as number** - MoneyWorks uses single characters ('P', 'S'), not enum numbers
 4. **Missing package exports** - Repository created but not exported from index.ts
 5. **Not running typecheck** - Type errors discovered in production
+6. **Wrong primary key type** - Using `Code` for SequenceNumber-based tables or vice versa
+7. **Incomplete bit utilities** - For bitfield entities, provide encode/decode/has/add/remove helpers
 
 ## Files Affected (Complete List)
 
-**Canonical** (types):
+**Canonical** (types) - 3 files:
 - `packages/canonical/src/entities/{entity}/types.ts`
 - `packages/canonical/src/entities/{entity}/enums.ts`
 - `packages/canonical/src/entities/{entity}/index.ts`
+- `packages/canonical/src/index.ts` (update main barrel export)
 
-**Data** (repository):
+**Data** (repository) - 3 files:
 - `packages/data/src/repositories/{entity}.repository.ts`
 - `packages/data/src/repositories/index.ts`
 - `packages/data/src/index.ts`
-- `packages/data/src/parsers/moneyworks-field-mappings.ts` (TSV mapping)
 
-**API** (controller + registry):
+**API** (controller + registry) - 2 files:
 - `packages/api/src/controllers/{entity}.ts`
 - `packages/api/src/registry/table-registry.ts` (CRITICAL)
 
-**Web** (optional):
-- `packages/web1/app/routes/{entity}.tsx`
-- `packages/web1/app/routes/{entity}.$code.tsx`
-- `packages/web1/app/routes.ts`
-- `packages/web1/app/components/navigation.tsx`
+**Total: 9 files** (consistent across PROD-001, ACCT-001, CONT-001)
 
 ## Reference Implementations
 
 Use these as templates:
-- **Account** (ACCT-001): Complete full-stack implementation with specialized query methods
-- **Product** (PROD-001): Full implementation with all layers
-- **TaxRate**: Simpler entity, good for reference
-- **Name**: Contact/customer entity with complex fields
+- **Contact** (CONT-001): Complete implementation with role bit-mapping, specialized queries, SequenceNumber key
+- **Account** (ACCT-001): Full implementation with specialized query methods, Code-based key
+- **Product** (PROD-001): Full implementation with all layers, Code-based key
+- **TaxRate**: Simpler entity, good starting reference
 
 ## Success Metrics
 
@@ -340,12 +347,71 @@ Implementation is complete when:
 - [ ] Entity appears in `/api/v1/tables` "available" array
 - [ ] Data export returns properly structured records
 - [ ] Schema endpoint returns field definitions
-- [ ] Web routes render list and detail views (if applicable)
 - [ ] Loom story updated with completed status
+
+## Bitfield Entities
+
+For entities with bitfield flags (like Contact roles), always provide comprehensive utilities:
+
+```typescript
+// enums.ts
+export enum MoneyWorks{Entity}Flags {
+  FLAG_ONE = 0x0001,
+  FLAG_TWO = 0x0002,
+}
+
+// Utility functions
+export function encode{Entity}Flags(flags: MoneyWorks{Entity}Flags[]): number {
+  return flags.reduce((acc, flag) => acc | flag, 0);
+}
+
+export function decode{Entity}Flags(value: number): MoneyWorks{Entity}Flags[] {
+  return Object.values(MoneyWorks{Entity}Flags)
+    .filter(flag => typeof flag === 'number' && (value & flag) !== 0) as MoneyWorks{Entity}Flags[];
+}
+
+export function hasFlag(value: number, flag: MoneyWorks{Entity}Flags): boolean {
+  return (value & flag) !== 0;
+}
+
+export function addFlag(value: number, flag: MoneyWorks{Entity}Flags): number {
+  return value | flag;
+}
+
+export function removeFlag(value: number, flag: MoneyWorks{Entity}Flags): number {
+  return value & ~flag;
+}
+```
+
+## MoneyWorks Bitwise Search Syntax
+
+For efficient role/flag filtering, use MoneyWorks bitwise search:
+
+```typescript
+// Find contacts with specific role bit set
+async findByRole(roleBit: number): Promise<MoneyWorksContact[]> {
+  const hexBit = roleBit.toString(16);
+  return this.find({
+    search: `(Role&#${hexBit})!=0`,
+  });
+}
+```
+
+This filters server-side, avoiding fetching all records.
 
 ## When to Use This Skill
 
-- Implementing new MoneyWorks entities: Transaction, Job, Account, StockMovement
+- Implementing new MoneyWorks entities: Transaction, Job, StockMovement, etc.
 - Adding CRUD support for additional MW tables
 - Scaffolding entity support for Loom stories
 - Extending SDK with new data entities
+
+## Loom Executor Integration
+
+When a Loom story involves entity implementation:
+
+1. **Check if this skill applies** - Story involves creating/updating MW entity support
+2. **Run scaffold scripts first** - Generate boilerplate before manual customization
+3. **Customize generated files** - Add entity-specific fields, queries, validations
+4. **Follow 9-file checklist** - Ensure all files created and registered
+5. **Run verification checklist** - TypeScript + API tests before marking complete

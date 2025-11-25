@@ -333,166 +333,85 @@ private upcoming = [
 ];
 ```
 
-## Template: Web List Route
+## Template: Bitfield Utilities (for flag/role entities)
 
-**File**: `packages/web1/app/routes/{entity}.tsx`
+**File**: `packages/canonical/src/entities/{entity}/enums.ts`
 
 ```typescript
-import { useLoaderData, useSearchParams, Link } from "react-router";
-import { data } from "react-router";
-import type { Route } from "./+types/{entity}";
-import { createMWClient } from "~/lib/mw-client.server";
-
-export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const page = Number(url.searchParams.get("page")) || 1;
-  const limit = 50;
-  const offset = (page - 1) * limit;
-  const search = url.searchParams.get("search") || "";
-
-  const client = await createMWClient();
-
-  const searchFilter = search
-    ? `Description contains "${search}"`
-    : undefined;
-
-  const items = await client.smartExport("{Entity}", {
-    exportFormat: "full",
-    search: searchFilter,
-    limit,
-    offset,
-  });
-
-  return data({ items, page, search });
+/**
+ * {Entity} Flags/Roles (bitmask)
+ * @moneyworks-field Flags
+ */
+export enum MoneyWorks{Entity}Flags {
+  FLAG_ONE = 0x0001,
+  FLAG_TWO = 0x0002,
+  FLAG_THREE = 0x0004,
+  // Add all flag values...
 }
 
-export default function {Entity}List() {
-  const { items, page, search } = useLoaderData<typeof loader>();
-  const [searchParams, setSearchParams] = useSearchParams();
+/**
+ * Encode multiple flags into a single bitmask value
+ */
+export function encode{Entity}Flags(flags: MoneyWorks{Entity}Flags[]): number {
+  return flags.reduce((acc, flag) => acc | flag, 0);
+}
 
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">{DisplayName}</h1>
+/**
+ * Decode a bitmask value into individual flags
+ */
+export function decode{Entity}Flags(value: number): MoneyWorks{Entity}Flags[] {
+  return Object.values(MoneyWorks{Entity}Flags)
+    .filter(flag => typeof flag === 'number' && (value & flag) !== 0) as MoneyWorks{Entity}Flags[];
+}
 
-      {/* Search */}
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search..."
-          defaultValue={search}
-          onChange={(e) => {
-            setSearchParams({ search: e.target.value, page: "1" });
-          }}
-          className="border p-2 rounded"
-        />
-      </div>
+/**
+ * Check if a specific flag is set
+ */
+export function has{Entity}Flag(value: number, flag: MoneyWorks{Entity}Flags): boolean {
+  return (value & flag) !== 0;
+}
 
-      {/* List */}
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            <th className="border p-2">{PrimaryKey}</th>
-            <th className="border p-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item: any) => (
-            <tr key={item.{PrimaryKey}}>
-              <td className="border p-2">
-                <Link to={`/{entity}/${item.{PrimaryKey}}`}>
-                  {item.{PrimaryKey}}
-                </Link>
-              </td>
-              <td className="border p-2">{item.Description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+/**
+ * Add a flag to an existing bitmask
+ */
+export function add{Entity}Flag(value: number, flag: MoneyWorks{Entity}Flags): number {
+  return value | flag;
+}
 
-      {/* Pagination */}
-      <div className="mt-4 flex gap-2">
-        {page > 1 && (
-          <Link to={`?page=${page - 1}&search=${search}`}>Previous</Link>
-        )}
-        <span>Page {page}</span>
-        {items.length === 50 && (
-          <Link to={`?page=${page + 1}&search=${search}`}>Next</Link>
-        )}
-      </div>
-    </div>
-  );
+/**
+ * Remove a flag from an existing bitmask
+ */
+export function remove{Entity}Flag(value: number, flag: MoneyWorks{Entity}Flags): number {
+  return value & ~flag;
 }
 ```
 
-## Template: Web Detail Route
+## Template: Specialized Query with Bitwise Search
 
-**File**: `packages/web1/app/routes/{entity}.$code.tsx`
+**File**: `packages/data/src/repositories/{entity}.repository.ts`
 
 ```typescript
-import { useLoaderData, Link } from "react-router";
-import { data, redirect } from "react-router";
-import type { Route } from "./+types/{entity}.$code";
-import { createMWClient } from "~/lib/mw-client.server";
-
-export async function loader({ params }: Route.LoaderArgs) {
-  const { code } = params;
-  if (!code) throw new Error("Code is required");
-
-  const client = await createMWClient();
-
-  const items = await client.smartExport("{Entity}", {
-    exportFormat: "full",
-    search: `{PrimaryKey}="${code}"`,
-    limit: 1,
+/**
+ * Find records by flag/role bit (uses MW bitwise search)
+ * @param flagBit The flag bit value to search for
+ */
+async findByFlag(flagBit: number): Promise<MoneyWorks{Entity}[]> {
+  const hexBit = flagBit.toString(16);
+  return this.find({
+    search: `(Flags&#${hexBit})!=0`,
   });
-
-  if (!items || items.length === 0) {
-    throw new Response("Not Found", { status: 404 });
-  }
-
-  return data({ item: items[0] });
 }
 
-export default function {Entity}Detail() {
-  const { item } = useLoaderData<typeof loader>();
-
-  return (
-    <div className="container mx-auto p-4">
-      <Link to="/{entity}" className="text-blue-500 mb-4 inline-block">
-        &larr; Back to {DisplayName}
-      </Link>
-
-      <h1 className="text-2xl font-bold mb-4">
-        {item.{PrimaryKey}}: {item.Description}
-      </h1>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <h2 className="font-bold">Details</h2>
-          <dl className="mt-2">
-            <dt className="font-medium">{PrimaryKey}</dt>
-            <dd>{item.{PrimaryKey}}</dd>
-
-            <dt className="font-medium mt-2">Description</dt>
-            <dd>{item.Description}</dd>
-
-            {/* Add more fields */}
-          </dl>
-        </div>
-      </div>
-    </div>
-  );
+/**
+ * Find records by multiple flags (AND logic)
+ */
+async findByFlags(flags: MoneyWorks{Entity}Flags[]): Promise<MoneyWorks{Entity}[]> {
+  const combined = encode{Entity}Flags(flags);
+  const hexBit = combined.toString(16);
+  return this.find({
+    search: `(Flags&#${hexBit})=${hexBit}`,
+  });
 }
-```
-
-## Template: Routes Registration
-
-**File**: `packages/web1/app/routes.ts`
-
-```typescript
-// Add these lines in the route array:
-route("{entity}", "routes/{entity}.tsx"),
-route("{entity}/:code", "routes/{entity}.$code.tsx"),
 ```
 
 ## Template: TSV Field Mapping
