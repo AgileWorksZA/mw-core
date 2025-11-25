@@ -73,3 +73,120 @@ Contacts are not "first class" in the same way Names are. You typically search f
 
 ### 3. The Email Length Trap
 Be careful migrating data from `Names.email` (80 chars) to `Contacts.eMail` (63 chars). You may truncate long addresses if you blindly move them to the subfile.
+
+---
+
+## Role Bit Flags
+
+The `Role` field is a bitmask. Common role bits:
+
+| Bit | Value | Purpose |
+|-----|-------|---------|
+| 0 | `0x0001` | Receives Statements |
+| 1 | `0x0002` | Receives Remittances |
+| 2 | `0x0004` | Receives Invoices |
+| 3 | `0x0008` | Receives Purchase Orders |
+| 4 | `0x0010` | Receives Quotes |
+| 16 | `0x10000` | Contact1 (legacy - embedded contact) |
+| 17 | `0x20000` | Contact2 (legacy - embedded contact) |
+
+---
+
+## SDK Usage Examples
+
+### Repository Access
+
+```typescript
+import { createMoneyWorksClient } from '@moneyworks/data';
+import { MoneyWorksContactRoles, hasContactRole } from '@moneyworks/canonical';
+
+const client = createMoneyWorksClient({ /* config */ });
+const contactRepo = client.repositories.contact;
+const nameRepo = client.repositories.name;
+```
+
+### Find Contacts for a Customer
+
+```typescript
+// Get customer
+const customer = await nameRepo.findByCode('ACME');
+
+// Get all contacts for that customer
+const contacts = await contactRepo.findByParentSeq(customer.SequenceNumber);
+```
+
+### Find Contacts by Role
+
+```typescript
+// Find all contacts who receive statements
+const statementRecipients = await contactRepo.findByRole(
+  MoneyWorksContactRoles.STATEMENT
+);
+
+// Find contacts who receive invoices
+const invoiceRecipients = await contactRepo.findByRole(
+  MoneyWorksContactRoles.INVOICE
+);
+
+// Using raw bitwise search
+const poRecipients = await contactRepo.find({
+  search: `(Role&#8) != 0`  // Bit 3 = Purchase Orders
+});
+```
+
+### Find Contacts by Email
+
+```typescript
+const contact = await contactRepo.findByEmail('john@acme.com');
+```
+
+### Check Contact Roles
+
+```typescript
+import {
+  hasContactRole,
+  decodeContactRoles,
+  MoneyWorksContactRoles,
+} from '@moneyworks/canonical';
+
+const contact = await contactRepo.findBySequenceNumber(12345);
+
+// Check single role
+if (hasContactRole(contact.Role, MoneyWorksContactRoles.STATEMENT)) {
+  console.log('This contact receives statements');
+}
+
+// Get all roles
+const roles = decodeContactRoles(contact.Role);
+console.log('Contact roles:', roles);
+```
+
+### Complete Customer with Contacts Example
+
+```typescript
+async function getCustomerWithContacts(code: string) {
+  const customer = await nameRepo.findByCode(code);
+  if (!customer) return null;
+
+  const contacts = await contactRepo.findByParentSeq(customer.SequenceNumber);
+
+  return {
+    customer,
+    contacts,
+    primaryContact: contacts.find(c =>
+      hasContactRole(c.Role, MoneyWorksContactRoles.CONTACT1)
+    ),
+    invoiceContacts: contacts.filter(c =>
+      hasContactRole(c.Role, MoneyWorksContactRoles.INVOICE)
+    ),
+  };
+}
+```
+
+---
+
+## Related Documentation
+
+- [**Names Entity**](names.md) - Parent entity for Contacts
+- [**Entity Relationships**](../concepts/relationships.md) - How Contact links to Name
+- [**Query Syntax**](../reference/query-syntax.md) - Bitwise search syntax

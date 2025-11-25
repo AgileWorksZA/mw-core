@@ -132,3 +132,135 @@ MoneyWorks generally calculates tax bottom-up:
 ### 3. Key lookups
 *   **Find all unpaid invoices for a customer**:
     `Type="DII" and Status="P" and NameCode="XYZ" and BalanceDue <> 0`
+
+---
+
+## SDK Usage Examples
+
+### Repository Access
+
+```typescript
+import { createMoneyWorksClient } from '@moneyworks/data';
+
+const client = createMoneyWorksClient({ /* config */ });
+const transactionRepo = client.repositories.transaction;
+const detailRepo = client.repositories.detail;
+```
+
+### Find Transactions by Type
+
+```typescript
+// All sales invoices
+const salesInvoices = await transactionRepo.findByType('DII');
+
+// All payments
+const payments = await transactionRepo.findByType('CP');
+
+// Multiple types
+const invoices = await transactionRepo.find({
+  search: `Type = "DII" or Type = "CII"`
+});
+```
+
+### Filter by Status
+
+```typescript
+// Only posted (committed) transactions
+const posted = await transactionRepo.findPosted();
+
+// Only unposted (draft) transactions
+const drafts = await transactionRepo.findUnposted();
+
+// Both
+const all = await transactionRepo.findByStatus('P'); // or 'U'
+```
+
+### Date Range Queries
+
+```typescript
+// Transactions in date range
+const transactions = await transactionRepo.findByDateRange('20240101', '20240131');
+
+// This year's transactions
+const thisYear = await transactionRepo.find({
+  search: `year(TransDate) = 2024`
+});
+```
+
+### Customer-Specific Queries
+
+```typescript
+// All transactions for a customer
+const customerTrans = await transactionRepo.findByNameCode('ACME');
+
+// Unpaid invoices for customer
+const unpaid = await transactionRepo.find({
+  search: `Type = "DII" and Status = "P" and NameCode = "ACME" and BalanceDue <> 0`
+});
+```
+
+### Working with Detail Lines
+
+```typescript
+// Get lines for a transaction
+const transaction = await transactionRepo.findBySequenceNumber(12345);
+const lines = await detailRepo.findByParentSeq(transaction.SequenceNumber);
+
+// Get lines hitting specific account
+const salesLines = await detailRepo.findByAccount('4000');
+
+// Get lines for specific product
+const widgetLines = await detailRepo.findByProduct('WIDGET-001');
+```
+
+### Complete Invoice Example
+
+```typescript
+// Fetch invoice with all related data
+async function getInvoiceWithDetails(seqNum: number) {
+  const invoice = await transactionRepo.findBySequenceNumber(seqNum);
+  if (!invoice) return null;
+
+  const lines = await detailRepo.findByParentSeq(seqNum);
+  const customer = await nameRepo.findByCode(invoice.NameCode);
+
+  return {
+    invoice,
+    lines,
+    customer,
+    total: invoice.Gross,
+    balance: invoice.BalanceDue,
+    isPaid: invoice.BalanceDue === 0,
+  };
+}
+```
+
+### Transaction Type Helpers
+
+```typescript
+import {
+  MoneyWorksTransactionType,
+  isDebtorTransaction,
+  isCreditorTransaction,
+  isCashTransaction,
+  getTransactionDirection,
+} from '@moneyworks/canonical';
+
+// Check transaction category
+if (isDebtorTransaction(trans.Type)) {
+  console.log('This is a customer-related transaction');
+}
+
+// Get direction
+const direction = getTransactionDirection(trans.Type);
+// 'income' | 'expense' | 'neutral'
+```
+
+---
+
+## Related Documentation
+
+- [**Entity Relationships**](../concepts/relationships.md) - How Transaction links to other entities
+- [**Query Syntax**](../reference/query-syntax.md) - MoneyWorks search expression reference
+- [**Transaction Types**](../reference/transaction-types.md) - Complete list of type codes
+- [**Detail Entity**](#2-transaction-detail-line-fields) - Line item schema
