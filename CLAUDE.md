@@ -1,5 +1,45 @@
 # MoneyWorks Core - Claude Code Assistant
 
+## EPISTEMIC PROTOCOL - READ FIRST
+
+**For the MoneyWorks Canonical Ontology project, we use persistent epistemic memory:**
+
+```yaml
+State Management:
+  state_file: moneyworks-ontology/state.yaml      # Persistent epistemic state
+  backlog_file: moneyworks-ontology/backlog.yaml  # Task tracking
+  handoff_file: moneyworks-ontology/handoff.yaml  # Session initialization (TASK-000)
+  context_file: moneyworks-ontology/context.md    # Invariants, mission, vision
+```
+
+### Session Initialization Protocol
+
+**Every new session MUST:**
+1. Read `moneyworks-ontology/handoff.yaml` for zero-entropy context
+2. Read `moneyworks-ontology/state.yaml` for current epistemic state
+3. Review `moneyworks-ontology/backlog.yaml` for active tasks
+4. Continue from last known state (no epistemic drift)
+
+**Every session end MUST:**
+1. Update `state.yaml` with session outcomes
+2. Update `backlog.yaml` task statuses
+3. Document any new epistemic insights
+
+### Prime Directive
+
+Establish a 100% truthful, high-fidelity, mereologically coherent MoneyWorks ontology with:
+- **Eitology**: Essence of MoneyWorks concepts
+- **Axiology**: Value dimensions of accounting
+- **Teleology**: Purpose of each entity
+- **Epistemic grounding**: All claims traced to source
+- **Empirical validation**: Verified against live system
+
+### Source Material
+- **Manual**: `/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror` (1201 HTML files)
+- **Canonical TS**: `/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/generated`
+
+---
+
 This project leverages advanced Claude Code commands and intelligent search capabilities for MoneyWorks API development and documentation access.
 
 ## 🔍 **Intelligent Search Tools**

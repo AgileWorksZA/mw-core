@@ -24,6 +24,15 @@
  */
 export const MONEYWORKS_RECONCILIATION_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique bank reconciliation identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "Account",
     dataType: "T" as const,
     maxLength: 8,

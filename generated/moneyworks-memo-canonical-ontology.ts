@@ -26,6 +26,15 @@
  */
 export const MONEYWORKS_MEMO_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique memo identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "LastModifiedTime",
     dataType: "S" as const,
     canonicalDescription: "The date and time that this record was last changed.",

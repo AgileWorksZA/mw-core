@@ -1,0 +1,176 @@
+# MoneyWorks Entity Topology
+# Tier 0: High-level entity map ALWAYS loaded
+# Token budget: ~800 tokens
+
+# Overview of all 20 MoneyWorks entities and their roles
+
+entities:
+  # === PRIMARY BUSINESS ENTITIES ===
+
+  Transactions:
+    role: "Financial events"
+    category: primary
+    fields: 65+
+    description: "All financial transactions: invoices, payments, journals, orders"
+    contains: [Detail]
+    key_relationships: [Names, Accounts, Products, Jobs, TaxRates]
+
+  Names:
+    role: "Business contacts"
+    category: primary
+    fields: 96
+    description: "Customers, suppliers, contacts - anyone you do business with"
+    contains: [Contacts, Memo]
+    classification: [CustomerType, SupplierType]
+
+  Accounts:
+    role: "Chart of accounts"
+    category: primary
+    fields: 26
+    description: "General ledger accounts for financial tracking"
+    hierarchy: ParentCode
+    classification: [Type, System, Category, Group]
+
+  Products:
+    role: "Inventory and services"
+    category: primary
+    fields: 69
+    description: "Things you buy, sell, or track"
+    contains: [Inventory, BuildRecords]
+
+  Jobs:
+    role: "Project costing"
+    category: primary
+    fields: 34
+    description: "Projects, contracts, cost centers"
+    hierarchy: ParentCode
+    client_link: DebtorCode
+
+  Assets:
+    role: "Fixed assets"
+    category: primary
+    fields: 32
+    description: "Fixed asset register with depreciation"
+    contains: [AssetLog]
+
+  # === SUPPORTING ENTITIES ===
+
+  Detail:
+    role: "Transaction lines"
+    category: subfile
+    parent: Transactions
+    fields: 37
+    description: "Individual line items within transactions"
+
+  Contacts:
+    role: "Additional contacts"
+    category: subfile
+    parent: Names
+    fields: 14
+    description: "Additional contact persons beyond Name's built-in 2"
+
+  Memo:
+    role: "Notes"
+    category: subfile
+    parent: Names
+    fields: 5
+    description: "Notes and reminders attached to Names"
+
+  Inventory:
+    role: "Stock locations"
+    category: subfile
+    parent: Products
+    fields: 8
+    description: "Location-based stock tracking"
+
+  AssetLog:
+    role: "Asset history"
+    category: subfile
+    parent: Assets
+    fields: 13
+    description: "Asset action audit trail"
+
+  BuildRecords:
+    role: "Assembly recipes"
+    category: subfile
+    parent: Products
+    fields: 5
+    description: "Bill of materials for assemblies"
+
+  # === CLASSIFICATION ENTITIES ===
+
+  Departments:
+    role: "Organization units"
+    category: classification
+    fields: 9
+    description: "Cost centers, divisions, branches"
+
+  TaxRates:
+    role: "Tax codes"
+    category: classification
+    fields: 17
+    description: "Tax calculation rules and rates"
+
+  GeneralClassifications:
+    role: "Flexible categories"
+    category: classification
+    description: "Account categories, department groups"
+    prefixes: { C: AccountCategory, G: DepartmentGroup, D: DepartmentClassification }
+
+  # === SYSTEM ENTITIES ===
+
+  Payments:
+    role: "Invoice allocations"
+    category: junction
+    fields: 6
+    description: "Links invoices to payment transactions"
+
+  Reconciliation:
+    role: "Bank reconciliation"
+    category: system
+    fields: 8
+    description: "Bank statement reconciliation sessions"
+
+  Allocations:
+    role: "Auto-allocation rules"
+    category: system
+    fields: 12
+    description: "Rules for automatic transaction splitting"
+
+  Login:
+    role: "User authentication"
+    category: system
+    fields: 13
+    description: "User accounts and permissions"
+
+  User:
+    role: "Script storage"
+    category: system
+    fields: 3
+    description: "Key-value storage for scripts"
+
+  User2:
+    role: "Enhanced storage"
+    category: system
+    fields: 21
+    description: "Typed persistent storage with DevKey"
+
+entity_count:
+  total: 20
+  primary: 6
+  subfile: 6
+  classification: 3
+  system: 5
+
+# Quick reference for navigation
+quick_lookup:
+  "customer data": Names
+  "supplier data": Names
+  "invoice": Transactions
+  "payment": Transactions
+  "GL account": Accounts
+  "stock item": Products
+  "project": Jobs
+  "equipment": Assets
+  "tax code": TaxRates
+  "cost center": Departments

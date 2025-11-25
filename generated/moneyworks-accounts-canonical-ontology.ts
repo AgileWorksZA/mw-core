@@ -161,7 +161,7 @@ export enum MoneyWorksAccountFlags {
  */
 export const MONEYWORKS_ACCOUNT_FIELDS = [
   {
-    fieldName: "AccountantsCode",
+    fieldName: "AccountantCode",
     dataType: "T" as const,
     maxLength: 9,
     canonicalDescription: "Code in accountant's chart that corresponds to this account.",
@@ -392,6 +392,75 @@ export const MONEYWORKS_ACCOUNT_FIELDS = [
     manualSource: "moneyworks_appendix_accounts.html",
     relationshipTarget: "scripting system",
     relationshipRule: "Scriptable text data storage"
+  },
+  {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique record identifier for FK references",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
+    fieldName: "Flags",
+    dataType: "N" as const,
+    canonicalDescription: "Account flags bitfield",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "BalanceLimit",
+    dataType: "N" as const,
+    canonicalDescription: "Overdraft or balance limit for bank accounts",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "ManualChequeNumDigits",
+    dataType: "N" as const,
+    canonicalDescription: "Number of digits in manual cheque numbers",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "PrintedChequeNumDigits",
+    dataType: "N" as const,
+    canonicalDescription: "Number of digits in printed cheque numbers",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "FeedID",
+    dataType: "T" as const,
+    maxLength: 100,
+    canonicalDescription: "Bank feed integration identifier",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "Cashflow",
+    dataType: "T" as const,
+    maxLength: 10,
+    canonicalDescription: "Cashflow statement category code",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "Cashforecast",
+    dataType: "T" as const,
+    maxLength: 10,
+    canonicalDescription: "Cash forecast category code",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "ImportFormat",
+    dataType: "T" as const,
+    maxLength: 50,
+    canonicalDescription: "Bank statement import format specification",
+    manualSource: "Empirical API validation",
+    isRequired: false
   }
 ] as const;
 

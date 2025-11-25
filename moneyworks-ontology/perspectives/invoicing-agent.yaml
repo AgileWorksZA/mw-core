@@ -1,0 +1,163 @@
+# Invoicing Agent Perspective
+# Pre-composed ontology view for invoice creation/management
+# Target context budget: ~8K tokens
+
+agent:
+  name: invoicing-agent
+  purpose: "Create, modify, and manage customer and supplier invoices"
+  capabilities:
+    - Create debtor invoices (DII, DIC)
+    - Create creditor invoices (CII, CIC)
+    - Process payments and allocations
+    - Generate quotes and orders
+    - Handle credit notes and adjustments
+
+context_loading:
+  # === ALWAYS LOADED (~2K tokens) ===
+  always:
+    - tier-0-core/paradigm.yaml
+    - tier-0-core/terminology.yaml
+    - tier-0-core/topology.yaml#Transactions,Names,Products
+
+  # === TASK-SPECIFIC LOADING ===
+
+  creating_debtor_invoice:
+    load:
+      - tier-2-semantics/enumerations/transaction-types.yaml#DII,DIC
+      - tier-2-semantics/rules/core-rules.yaml#debtor_type_match
+    focus_entities: [Transaction, Detail, Name, Account, Product, TaxRate]
+    focus_fields:
+      Transaction:
+        required: [TypeCode, NameCode, TransDate, OurRef]
+        common: [DueDate, Description, GrossAmount]
+      Detail:
+        required: [AcctCode, Debit, Credit]
+        common: [StockCode, Quantity, UnitPrice, TaxCode, Description]
+    validation_checklist:
+      - "NameCode must reference a Debtor (CustomerType > 0)"
+      - "All Detail.AcctCode must exist and be postable"
+      - "Transaction must balance"
+
+  creating_creditor_invoice:
+    load:
+      - tier-2-semantics/enumerations/transaction-types.yaml#CII,CIC
+      - tier-2-semantics/rules/core-rules.yaml#creditor_type_match
+    focus_fields:
+      Transaction:
+        required: [TypeCode, NameCode, TransDate, TheirRef]
+        common: [DueDate, Description, GrossAmount]
+    validation_checklist:
+      - "NameCode must reference a Creditor (SupplierType > 0)"
+      - "TheirRef should contain supplier's invoice number"
+
+  processing_payment:
+    load:
+      - tier-2-semantics/enumerations/transaction-types.yaml#CRD,CPC
+      - tier-1-relationships/foreign-keys.yaml#Payments
+    focus_entities: [Transaction, Detail, Payments, Name]
+    key_concept: |
+      Payments are allocated via the Payments junction table.
+      Each Payments record links one invoice to one payment transaction.
+      One payment can cover multiple invoices (multiple Payments records).
+
+  creating_quote:
+    load:
+      - tier-2-semantics/enumerations/transaction-types.yaml#QU
+    note: "Quotes have no GL impact - can be converted to orders/invoices"
+
+  handling_orders:
+    load:
+      - tier-2-semantics/enumerations/transaction-types.yaml#SOI,SOC,POI,POC
+    lifecycle:
+      sales: "Quote → SOI (order) → DII (invoice) or SOC (direct sale)"
+      purchase: "POI (order) → CII (invoice) or POC (direct purchase)"
+
+# === QUICK REFERENCE (always available) ===
+
+quick_reference:
+  transaction_type_selection:
+    "Customer invoice, payment later": DII
+    "Customer invoice, paid immediately": DIC
+    "Supplier invoice, payment later": CII
+    "Supplier invoice, paid immediately": CIC
+    "Receive customer payment": CRD
+    "Make supplier payment": CPC
+    "Quote to customer": QU
+    "Sales order": SOI
+    "Purchase order": POI
+
+  required_for_invoice:
+    debtor:
+      - "TypeCode: DII or DIC"
+      - "NameCode: valid customer/debtor"
+      - "TransDate: invoice date"
+      - "At least one Detail line with AcctCode"
+    creditor:
+      - "TypeCode: CII or CIC"
+      - "NameCode: valid supplier/creditor"
+      - "TransDate: invoice date"
+      - "TheirRef: supplier's invoice number"
+      - "At least one Detail line with AcctCode"
+
+  common_errors:
+    "Transaction does not balance":
+      cause: "Debits != Credits in Detail lines"
+      fix: "Review line amounts, add balancing line if needed"
+
+    "Invalid account code":
+      cause: "AcctCode doesn't exist in Accounts"
+      fix: "Verify account code or create account first"
+
+    "Cannot post to non-posting account":
+      cause: "Account has NON_POSTING_ACCOUNT flag"
+      fix: "Use a child account or different account"
+
+    "Name type mismatch":
+      cause: "Using debtor type with creditor name or vice versa"
+      fix: "Check Name.CustomerType/SupplierType matches transaction"
+
+# === LAZY LOAD TRIGGERS ===
+
+lazy_load:
+  "tax calculation needed":
+    load: tier-2-semantics/enumerations/tax-rates.yaml
+    trigger_phrases: ["tax", "GST", "VAT", "inclusive", "exclusive"]
+
+  "multi-currency":
+    load: tier-3-entities/currency-deep.yaml
+    trigger_phrases: ["foreign currency", "exchange rate", "FX"]
+
+  "job costing":
+    load: tier-3-entities/jobs-deep.yaml
+    trigger_phrases: ["job", "project", "cost center"]
+
+  "inventory impact":
+    load: tier-3-entities/products-deep.yaml#inventory
+    trigger_phrases: ["stock", "inventory", "quantity"]
+
+  "understanding flags":
+    load: tier-2-semantics/flags/all-flags.yaml
+    trigger_phrases: ["flag", "printed", "imported", "system line"]
+
+# === EXAMPLE WORKFLOWS ===
+
+example_workflows:
+  simple_customer_invoice:
+    steps:
+      - "Create Transaction with TypeCode=DII"
+      - "Set NameCode to customer code"
+      - "Set TransDate, DueDate, OurRef"
+      - "Add Detail line(s) with AcctCode, amounts"
+      - "If products: set StockCode, Quantity, UnitPrice"
+      - "Set TaxCode for tax calculation"
+      - "Verify transaction balances"
+      - "Post transaction"
+
+  receive_payment:
+    steps:
+      - "Create Transaction with TypeCode=CRD"
+      - "Set NameCode to paying customer"
+      - "Set Contra to bank account"
+      - "Set amount in Detail line"
+      - "Create Payments record(s) to allocate to invoices"
+      - "Post transaction"

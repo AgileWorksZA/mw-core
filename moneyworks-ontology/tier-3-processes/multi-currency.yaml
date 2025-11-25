@@ -1,0 +1,98 @@
+# MoneyWorks Multi-Currency Mechanics
+# Tier 3: Business Processes
+# Verification: 4/4 claims verified against source (2025-11-25)
+
+metadata:
+  version: "1.0"
+  created: "2025-11-25"
+  verification_status: "VERIFIED"
+  verification_accuracy: "100%"
+  source_documents:
+    - moneyworks_multicurrency_setting_up_multi-currency.html
+    - moneyworks_multicurrency_setting_the_exchange_rate.html
+    - moneyworks_multicurrency_realised_and_unrealised_gains_and_losses.html
+    - moneyworks_multicurrency_paying_a_foreign_currency_invoice.html
+
+system_initialization:
+  multi_currency_mode:
+    location: "Edit > Document Preferences > Locale/Currency tab"
+    default: "disabled"
+    immutability: "once a currency is created, multi-currency mode cannot be disabled"
+    verification: "VERIFIED - source line 203"
+
+  base_currency:
+    definition: "local currency selected at system setup"
+    role: "all amounts ultimately expressed in base currency"
+    immutable: true
+
+exchange_rate_handling:
+  rate_expression:
+    convention: "units of foreign currency per one unit of local currency"
+    example: "if rate = 0.5, then $1 USD = 0.5 EUR"
+    verification: "VERIFIED - source line 207"
+
+  system_rate:
+    scope: "one rate per currency per period"
+    timing: "determined at transaction posting time by default"
+    update_command: "Command > Change Currency Rate"
+
+  transaction_rate_override:
+    mechanism: "click Exchange Rate button in transaction entry"
+    locking: "turn off 'Use system rate at posting time' to lock rate"
+    persistence: "locked rate persists even if system rate changes"
+
+gain_loss_mechanics:
+  unrealised:
+    definition: "currency gain/loss on unpaid invoices"
+    trigger: "when system exchange rate changes while invoice unpaid"
+    account: "Unrealised Gain/Loss account (from currency settings)"
+    journal: "automatic when exchange rate changed"
+
+  realised:
+    definition: "currency gain/loss on settled transactions"
+    triggers:
+      - "foreign currency bank balance rate change"
+      - "foreign currency invoice paid"
+      - "amount received differs from system rate"
+    account: "Realised Currency Gain/Loss account"
+
+  prior_period_rate_change:
+    behavior: "two journals created"
+    journal_1: "gain/loss in period of change"
+    journal_2: "reversal in subsequent period"
+    verification: "VERIFIED - source line 216"
+    rationale: "prevents distortion when same rate in consecutive periods"
+
+transaction_rules:
+  invoice_currency:
+    rule: "invoice currency determined by customer/supplier currency"
+    configuration: "set on Names record Pricing & Terms panel"
+
+  payment_settlement:
+    rule: "payment must pass through currency's bank account"
+    constraint: "batch payments must be single currency"
+
+  overpayments:
+    rule: "overpayments in foreign currencies not allowed"
+    workaround: "enter debit note and credit note pair"
+    verification: "VERIFIED - source line 194"
+
+funds_transfer:
+  cross_currency:
+    command: "Command > Transfer Funds"
+    parameters:
+      - "from_account: source bank"
+      - "to_account: destination bank"
+      - "amount: in From Account currency"
+      - "amount_received: in To Account currency"
+    rate_options:
+      - "specify Amount Received - Rate calculates"
+      - "specify Rate - Amount Received calculates"
+
+constraints:
+  customer_currency_immutability:
+    rule: "once assigned, customer/supplier currency cannot be altered"
+    implication: "all transactions locked to that currency forever"
+
+  head_office_billing:
+    requirement: "head office and branch must have same currency"

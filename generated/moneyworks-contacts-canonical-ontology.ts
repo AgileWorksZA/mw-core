@@ -66,6 +66,15 @@ export interface MoneyWorksCanonicalContactField {
  */
 export const MONEYWORKS_CONTACTS_FIELDS: MoneyWorksCanonicalContactField[] = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N",
+    canonicalDescription: "Primary key - unique contact identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "AfterHours",
     dataType: "T",
     maxLength: 19,

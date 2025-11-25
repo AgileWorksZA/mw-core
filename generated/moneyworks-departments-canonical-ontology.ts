@@ -37,6 +37,15 @@ export type MoneyWorksDepartmentDataType =
  */
 export const MONEYWORKS_DEPARTMENT_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique department identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "Classification",
     dataType: "T" as const,
     maxLength: 5,
@@ -47,7 +56,7 @@ export const MONEYWORKS_DEPARTMENT_FIELDS = [
     // TODO: Add relationship validation after General entity extraction
     entityReference: {
       referencesEntity: "General",
-      referencesType: "DepartmentClassification", 
+      referencesType: "DepartmentClassification",
       referenceConstraint: "Must match General.Code where Code startsWith('D')",
       relationshipType: "optional_lookup"
     }
@@ -87,6 +96,13 @@ export const MONEYWORKS_DEPARTMENT_FIELDS = [
     manualSource: "moneyworks_appendix_departments.html",
     isRequired: true,
     isIndexed: false
+  },
+  {
+    fieldName: "Flags",
+    dataType: "N" as const,
+    canonicalDescription: "Department flags bitfield",
+    manualSource: "Empirical API validation",
+    isRequired: false
   },
   {
     fieldName: "LastModifiedTime",
@@ -167,9 +183,12 @@ export const MONEYWORKS_DEPARTMENT_SYSTEM_FIELDS = MONEYWORKS_DEPARTMENT_FIELDS
  * Represents organizational classification units for business tracking and reporting
  */
 export interface MoneyWorksDepartmentEntity {
+  /** Primary key - unique department identifier */
+  SequenceNumber: number;
+
   /** Department classification code (max 5 chars) */
   Classification?: string;
-  
+
   /** Department code - primary identifier (max 5 chars) */
   Code: string;
   
@@ -181,7 +200,10 @@ export interface MoneyWorksDepartmentEntity {
   
   /** Department name/description (max 35 chars) */
   Description: string;
-  
+
+  /** Department flags bitfield */
+  Flags?: number;
+
   /** System timestamp of last modification */
   LastModifiedTime?: Date;
   

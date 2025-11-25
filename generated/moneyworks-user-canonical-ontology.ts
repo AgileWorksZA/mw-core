@@ -30,6 +30,16 @@
  */
 export const MONEYWORKS_USER_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    maxLength: undefined,
+    canonicalDescription: "Primary key - unique user data record identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystemField: true,
+    isIndexed: true
+  },
+  {
     fieldName: "LastModifiedTime",
     dataType: "S" as const,
     maxLength: undefined,

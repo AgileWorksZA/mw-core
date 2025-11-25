@@ -1,0 +1,184 @@
+# MoneyWorks Relationship Cardinality
+# Tier 1: Relationship multiplicities
+# Token budget: ~600 tokens
+
+cardinality_notation:
+  "1:1": "One-to-one (rare)"
+  "1:N": "One-to-many (parent-child)"
+  "N:1": "Many-to-one (foreign key)"
+  "M:N": "Many-to-many (junction table)"
+
+relationships:
+  # === ONE-TO-MANY (Parent owns children) ===
+
+  one_to_many:
+    - parent: Transactions
+      child: Detail
+      cardinality: "1:N (required)"
+      minimum: 1
+      note: "Every transaction has at least one detail line"
+
+    - parent: Names
+      child: Contacts
+      cardinality: "1:N (optional)"
+      minimum: 0
+      note: "Names can exist without additional contacts"
+
+    - parent: Names
+      child: Memo
+      cardinality: "1:N (optional)"
+      minimum: 0
+      note: "Notes are optional"
+
+    - parent: Products
+      child: Inventory
+      cardinality: "1:N (optional)"
+      minimum: 0
+      note: "Only for inventory-tracked products"
+
+    - parent: Products
+      child: BuildRecords
+      cardinality: "1:N (optional)"
+      minimum: 0
+      note: "Only for assembled products"
+
+    - parent: Assets
+      child: AssetLog
+      cardinality: "1:N (optional)"
+      minimum: 0
+      note: "System-managed history"
+
+  # === MANY-TO-ONE (Foreign key references) ===
+
+  many_to_one:
+    # Transaction references
+    - source: Transactions
+      target: Names
+      field: NameCode
+      optional: true
+
+    - source: Transactions
+      target: Accounts
+      field: Contra
+      optional: true
+
+    - source: Detail
+      target: Accounts
+      field: Account  # Canonical name (alias: AcctCode)
+      optional: false  # Required
+
+    - source: Detail
+      target: Products
+      field: StockCode
+      optional: true
+
+    - source: Detail
+      target: Jobs
+      field: JobCode
+      optional: true
+
+    - source: Detail
+      target: TaxRates
+      field: TaxCode
+      optional: true
+
+    - source: Detail
+      target: Departments
+      field: Dept
+      optional: true
+
+    # Name references
+    - source: Names
+      target: Accounts
+      field: RecAccount
+      optional: true
+
+    - source: Names
+      target: Accounts
+      field: PayAccount
+      optional: true
+
+    - source: Names
+      target: TaxRates
+      field: TaxCode  # Canonical name (alias: DefaultTax)
+      optional: true
+
+    # Product references
+    - source: Products
+      target: Accounts
+      fields: [AssetAccount, COGSAccount, IncomeAccount]
+      optional: true
+
+    - source: Products
+      target: TaxRates
+      field: TaxCode
+      optional: true
+
+    # Job references
+    - source: Jobs
+      target: Names
+      field: Client  # Canonical name (alias: DebtorCode)
+      optional: true
+
+    # Asset references
+    - source: Assets
+      target: Accounts
+      fields: [AssetAccount, DepreciationAccount]
+      optional: false  # Required
+
+  # === MANY-TO-MANY (Junction tables) ===
+
+  many_to_many:
+    - name: "Invoice-Payment Allocation"
+      junction: Payments
+      side_a:
+        entity: Transactions
+        role: invoice
+        field: InvoiceID
+      side_b:
+        entity: Transactions
+        role: payment
+        field: PaymentID
+      note: "One invoice can receive multiple payments; one payment can cover multiple invoices"
+
+  # === SELF-REFERENTIAL ===
+
+  self_referential:
+    - entity: Accounts
+      field: ParentCode
+      cardinality: "N:1"
+      note: "Account hierarchy"
+
+    - entity: Jobs
+      field: Project  # Canonical name (alias: ParentCode)
+      cardinality: "N:1"
+      note: "Project hierarchy"
+
+    - entity: Transactions
+      field: OriginalSeq
+      cardinality: "N:1"
+      note: "Cancellation chains"
+
+    - entity: Transactions
+      field: OrderSeq
+      cardinality: "N:1"
+      note: "Order fulfillment chains"
+
+    - entity: Names
+      field: Salesperson  # Canonical name (alias: SalespersonCode)
+      cardinality: "N:1"
+      note: "Salesperson assignment"
+
+required_relationships:
+  # These MUST exist for entity to be valid
+  Detail.Account: "Every detail line must have an account"
+  Detail.ParentSeq: "Every detail line must belong to a transaction"
+  Assets.AssetAccount: "Every asset must have an asset account"
+  Assets.DepreciationAccount: "Every asset must have a depreciation account"
+
+optional_relationships:
+  # These are commonly used but not required
+  common:
+    - "Transactions.NameCode (most transactions have a customer/supplier)"
+    - "Detail.StockCode (product transactions)"
+    - "Detail.JobCode (job costing)"

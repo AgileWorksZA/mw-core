@@ -1,0 +1,65 @@
+# MoneyWorks Canonical Terminology
+# Tier 0: Language mapping ALWAYS loaded
+# Token budget: ~500 tokens
+
+# CRITICAL: Use MoneyWorks canonical terms, never domain-specific terms
+
+canonical_terms:
+  # Entity names
+  Names: "Business contacts - customers, suppliers, or both"
+  Transactions: "Financial events including invoices, payments, journals"
+  Detail: "Transaction line items (subfile of Transactions)"
+  Accounts: "General ledger accounts (chart of accounts)"
+  Products: "Inventory items and services"
+  Jobs: "Projects for cost tracking"
+  Departments: "Organizational units for classification"
+  TaxRates: "Tax codes and calculation rules"
+  Assets: "Fixed asset register"
+  Contacts: "Additional contact persons for Names (subfile)"
+  Memo: "Notes and reminders for Names (subfile)"
+  Inventory: "Stock locations for Products (subfile)"
+  Payments: "Invoice-to-payment allocation records"
+
+  # Key field terminology
+  Code: "Primary identifier (text, usually short)"
+  Seq: "Internal sequence number (system-assigned integer)"
+  ParentSeq: "Reference to parent record's Seq"
+
+terminology_mappings:
+  # Common misunderstandings - canonical term on right
+  customer: "Name with CustomerType > 0"
+  client: "Name with CustomerType > 0"
+  supplier: "Name with SupplierType > 0"
+  vendor: "Name with SupplierType > 0"
+  invoice: "Transaction with TypeCode in [DI, CI, DIC, CIC, DII, CII]"
+  payment: "Transaction with TypeCode in [CR, CP, CRD, CPC]"
+  journal: "Transaction with TypeCode in [JN, JNS]"
+  order: "Transaction with TypeCode in [SO, PO, SOC, POC, SOI, POI]"
+  quote: "Transaction with TypeCode = QU"
+  item: "Product or Detail line (context dependent)"
+  stock: "Product with inventory tracking enabled"
+
+field_type_codes:
+  T: "Text (string)"
+  N: "Number (integer or decimal)"
+  D: "Date"
+  S: "Timestamp (date + time)"
+  B: "Boolean"
+  M: "Memo (long text)"
+
+common_patterns:
+  # Code fields are user-defined identifiers
+  "{Entity}Code": "User-assigned identifier (e.g., NameCode, StockCode)"
+  # Seq fields are system-assigned
+  "{Entity}Seq": "System-assigned sequence number"
+  # Parent fields indicate hierarchy
+  "Parent{X}": "Reference to parent record"
+  # Type/Kind fields indicate classification
+  "Type/Kind": "Enumerated classification value"
+
+warning_terms:
+  # Terms that should trigger careful handling
+  Kind: "Usually an enumeration - check entity for values"
+  Type: "Usually an enumeration - check entity for values"
+  Flags: "Bit-mapped field - see flag decomposition"
+  Status: "State indicator - check valid values"

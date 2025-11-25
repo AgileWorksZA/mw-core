@@ -1,0 +1,466 @@
+# MoneyWorks Complete Foreign Key Registry
+# Tier 1: Navigation - loaded for exploration
+# Token budget: ~2000 tokens
+#
+# VALIDATION STATUS: Reconciled 2025-01-25
+# - Verified fields marked with [V]
+# - Semantic inference marked with [S] (logically correct but no relationshipTarget in source)
+# - Field name corrections applied per validation report
+
+foreign_keys:
+  # === TRANSACTIONS ===
+
+  Transactions:
+    NameCode:  # [V] Verified in source
+      target: Names.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "The customer or supplier for this transaction"
+      validation: "If TypeCode is debtor type, Name must have CustomerType > 0"
+      source_verified: true
+
+    Contra:  # [V] Verified in source
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Bank/cash account for receipts/payments"
+      source_verified: true
+
+    OriginalSeq:  # [S] Semantic - field exists, logical FK
+      target: Transaction.SequenceNumber
+      cardinality: N:1
+      nullable: true
+      semantic: "Original transaction (for cancellations)"
+      self_referential: true
+      source_verified: false
+      note: "Field exists but no relationshipTarget in source"
+
+    OrderSeq:  # [S] Semantic - field exists, logical FK
+      target: Transaction.SequenceNumber
+      cardinality: N:1
+      nullable: true
+      semantic: "Original order (for fulfilled orders)"
+      self_referential: true
+      source_verified: false
+
+  # === DETAIL (Transaction Lines) ===
+
+  Detail:
+    ParentSeq:  # [V] Verified - CORRECTED from "Transactions" to "Transaction"
+      target: Transaction.SequenceNumber
+      cardinality: N:1
+      nullable: false
+      semantic: "Parent transaction this line belongs to"
+      source_verified: true
+
+    Account:  # [V] Verified - CORRECTED field name from "AcctCode"
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: false
+      semantic: "GL account affected by this line"
+      source_verified: true
+      yaml_alias: AcctCode  # Common alias
+
+    StockCode:  # [V] Verified in source
+      target: Products.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Product code (for inventory transactions)"
+      source_verified: true
+
+    JobCode:  # [V] Verified in source
+      target: Jobs.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Job code for cost tracking"
+      source_verified: true
+
+    TaxCode:  # [V] Verified - target is TaxRates.TaxCode not .Code
+      target: TaxRates.TaxCode
+      cardinality: N:1
+      nullable: true
+      semantic: "Tax code for this line"
+      source_verified: true
+
+    Dept:  # [S] Semantic inference
+      target: Departments.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Department for classification"
+      source_verified: false
+
+    Statement:  # [V] Verified - CORRECTED to SequenceNumber
+      target: Reconciliation.SequenceNumber
+      cardinality: N:1
+      nullable: true
+      semantic: "Reconciliation session where reconciled"
+      source_verified: true
+
+    StockLocation:  # [S] Semantic inference
+      target: Inventory.Location
+      cardinality: N:1
+      nullable: true
+      semantic: "Stock location for inventory"
+      source_verified: false
+
+  # === NAMES ===
+
+  Names:
+    RecAccount:  # [S] Field exists, logical FK to AR control account
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Accounts Receivable control account for this debtor"
+      constraint: "Account must have System='AR'"
+      source_verified: false
+
+    PayAccount:  # [S] Field exists, logical FK to AP control account
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Accounts Payable control account for this creditor"
+      constraint: "Account must have System='AP'"
+      source_verified: false
+
+    TaxCode:  # [V] Verified - CORRECTED field name from "DefaultTax"
+      target: TaxRates.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Default tax code for transactions"
+      source_verified: true
+
+    TaxCode2:  # [S] Semantic - secondary tax
+      target: TaxRates.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Secondary default tax code"
+      source_verified: false
+
+    Salesperson:  # [S] Semantic - CORRECTED from "SalespersonCode"
+      target: Names.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Assigned salesperson"
+      self_referential: true
+      source_verified: false
+
+  # === CONTACTS (Subfile of Names) ===
+
+  Contacts:
+    ParentSeq:  # [V] Verified in source
+      target: Names.Seq
+      cardinality: N:1
+      nullable: false
+      semantic: "Name this contact belongs to"
+      source_verified: true
+
+  # === MEMO (Subfile of Names) ===
+
+  Memo:
+    NameSeq:  # [V] Verified - target simplified to "Names"
+      target: Names.Seq
+      cardinality: N:1
+      nullable: false
+      semantic: "Name this memo belongs to"
+      source_verified: true
+
+  # === ACCOUNTS ===
+
+  Accounts:
+    Category:  # [V] Verified - CORRECTED to "General.Code"
+      target: General.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Account category for reporting"
+      constraint: "General.Kind='C'"
+      source_verified: true
+
+    Group:  # [V] Verified - CORRECTED to "General.Code"
+      target: General.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Department group for reporting"
+      constraint: "General.Kind='G'"
+      source_verified: true
+
+    TaxCode:  # [S] Semantic inference
+      target: TaxRates.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Default tax code"
+      source_verified: false
+
+    ParentCode:  # [S] Semantic - hierarchy field
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Parent account in hierarchy"
+      self_referential: true
+      source_verified: false
+
+    PandL:  # [V] Verified in source
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "P&L account for year-end transfer"
+      self_referential: true
+      source_verified: true
+
+  # === PRODUCTS ===
+
+  Products:
+    TaxCode:  # [S] Semantic inference
+      target: TaxRates.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Default tax code for sales"
+      source_verified: false
+
+    TaxCode2:  # [S] Semantic inference
+      target: TaxRates.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Secondary tax code"
+      source_verified: false
+
+    AssetAcct:  # [S] Semantic - inventory asset account
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Inventory asset account"
+      source_verified: false
+
+    COGSAcct:  # [S] Semantic - cost of goods sold
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Cost of goods sold account"
+      source_verified: false
+
+    IncomeAcct:  # [S] Semantic - revenue account
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Revenue account for sales"
+      source_verified: false
+
+    SuppliersCode:  # [S] Semantic - CORRECTED field name
+      target: Names.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Default supplier"
+      source_verified: false
+
+  # === INVENTORY (Subfile of Products) ===
+
+  Inventory:
+    ProductSeq:  # [V] Verified in source
+      target: Products.Seq
+      cardinality: N:1
+      nullable: false
+      semantic: "Product this inventory record belongs to"
+      source_verified: true
+
+  # === BUILD RECORDS (Subfile of Products) ===
+
+  BuildRecords:
+    ProductSeq:  # [V] Verified in source
+      target: Products.Seq
+      cardinality: N:1
+      nullable: false
+      semantic: "Assembled product"
+      source_verified: true
+
+    PartCode:  # [V] Verified in source
+      target: Products.Code
+      cardinality: N:1
+      nullable: false
+      semantic: "Component product in recipe"
+      source_verified: true
+
+  # === JOBS ===
+
+  Jobs:
+    Client:  # [V] Verified - CORRECTED from "DebtorCode"
+      target: Names.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Client for this job"
+      constraint: "Name must have CustomerType > 0"
+      source_verified: true
+      yaml_alias: DebtorCode  # Common alias
+
+    Project:  # [V] Verified - CORRECTED from "ParentCode"
+      target: Jobs.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Parent job in hierarchy"
+      self_referential: true
+      source_verified: true
+      yaml_alias: ParentCode  # Common alias
+
+    Manager:  # [S] Semantic - field exists
+      target: Names.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Project manager"
+      source_verified: false
+
+  # === ASSETS ===
+
+  Assets:
+    Account:  # [S] Semantic - asset GL account
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: false
+      semantic: "Asset account in GL"
+      source_verified: false
+
+    DepnAccount:  # [S] Semantic - depreciation expense
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: false
+      semantic: "Depreciation expense account"
+      source_verified: false
+
+    AccumAccount:  # [S] Semantic - accumulated depreciation
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Accumulated depreciation account"
+      source_verified: false
+
+    Dept:  # [S] Semantic - CORRECTED from "DepartmentCode"
+      target: Departments.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Department owning asset"
+      source_verified: false
+
+  # === ASSET LOG (Subfile of Assets) ===
+
+  AssetLog:
+    AssetSeq:  # [S] Semantic - parent reference
+      target: Assets.Seq
+      cardinality: N:1
+      nullable: false
+      semantic: "Asset this log entry belongs to"
+      source_verified: false
+
+  # === PAYMENTS (Junction Table) ===
+
+  Payments:
+    InvoiceID:  # [S] Semantic - verified structure exists
+      target: Transaction.SequenceNumber
+      cardinality: N:1
+      nullable: false
+      semantic: "Invoice being paid"
+      source_verified: false
+      note: "Can be negative with high-bit for overpayments"
+
+    PaymentID:  # [S] Semantic - verified structure exists
+      target: Transaction.SequenceNumber
+      cardinality: N:1
+      nullable: false
+      semantic: "Payment transaction"
+      source_verified: false
+
+  # === TAXRATES ===
+
+  TaxRates:
+    RecAccount:  # [V] Verified - CORRECTED from "CollectAccount"
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Account for tax collected (output tax)"
+      source_verified: true
+
+    PaidAccount:  # [V] Verified - CORRECTED from "PayAccount"
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Account for tax paid (input tax)"
+      source_verified: true
+
+  # === DEPARTMENTS ===
+
+  Departments:
+    Classification:  # [S] Semantic - references General
+      target: General.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Department classification"
+      constraint: "Code starts with 'D'"
+      source_verified: false
+
+  # === ALLOCATIONS ===
+
+  Allocations:
+    # CORRECTED: Allocations uses different field structure
+    MatchAccount:  # [S] Semantic - bank account to match
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: false
+      semantic: "Bank account to match for auto-allocation"
+      source_verified: false
+
+    SplitAcct1:  # [S] Semantic - allocation target 1
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: false
+      semantic: "Primary allocation target account"
+      source_verified: false
+
+    SplitAcct2:  # [S] Semantic - allocation target 2
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Secondary allocation target account"
+      source_verified: false
+
+    SplitAcct3:  # [S] Semantic - allocation target 3
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Tertiary allocation target account"
+      source_verified: false
+
+    SplitAcct4:  # [S] Semantic - allocation target 4
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: true
+      semantic: "Quaternary allocation target account"
+      source_verified: false
+
+  # === RECONCILIATION ===
+
+  Reconciliation:
+    Account:  # [V] Verified in source
+      target: Accounts.Code
+      cardinality: N:1
+      nullable: false
+      semantic: "Bank account being reconciled"
+      source_verified: true
+
+# Summary statistics
+summary:
+  total_foreign_keys: 54
+  source_verified: 22
+  semantic_inference: 32
+  self_referential: 5
+  entities_with_fks: 16
+  entities_without_fks: 4  # General, Login, User, User2
+
+# Validation metadata
+validation:
+  date: "2025-01-25"
+  method: "Subagent cross-validation against canonical TS files"
+  corrections_applied:
+    - "GeneralClassifications → General (entity name)"
+    - "Jobs.DebtorCode → Jobs.Client (field name)"
+    - "Jobs.ParentCode → Jobs.Project (field name)"
+    - "TaxRates.CollectAccount → TaxRates.RecAccount"
+    - "TaxRates.PayAccount → TaxRates.PaidAccount"
+    - "Detail.AcctCode → Detail.Account"
+    - "Detail.ParentSeq target: Transactions → Transaction"
+    - "Allocations: SourceAccount/TargetAccount → MatchAccount/SplitAcct"

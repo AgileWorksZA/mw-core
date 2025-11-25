@@ -1,0 +1,209 @@
+# MoneyWorks Account Types - Complete Semantic Reference
+# Tier 2: Contextual - load when working with accounts
+# Token budget: ~800 tokens
+
+# Two classification systems: Type (accounting behavior) and System (special function)
+
+account_types:
+  # Primary accounting type classification
+
+  IN:
+    code: "IN"
+    name: "Income"
+    category: revenue
+    normal_balance: credit
+    p_and_l: true
+    semantic: "General income not from sales (interest, fees, other income)"
+    typical_accounts:
+      - "Interest Income"
+      - "Service Fees"
+      - "Other Income"
+    behavior:
+      debit: "Decreases (reduces income)"
+      credit: "Increases (records income)"
+
+  SA:
+    code: "SA"
+    name: "Sales"
+    category: revenue
+    normal_balance: credit
+    p_and_l: true
+    semantic: "Revenue from primary business operations (sales of goods/services)"
+    typical_accounts:
+      - "Sales Revenue"
+      - "Service Revenue"
+      - "Product Sales"
+    behavior:
+      debit: "Decreases (returns, discounts)"
+      credit: "Increases (records sales)"
+
+  EX:
+    code: "EX"
+    name: "Expense"
+    category: expense
+    normal_balance: debit
+    p_and_l: true
+    semantic: "Operating expenses not directly tied to production"
+    typical_accounts:
+      - "Rent Expense"
+      - "Utilities"
+      - "Office Supplies"
+      - "Salaries"
+    behavior:
+      debit: "Increases (records expense)"
+      credit: "Decreases (reimbursements)"
+
+  CS:
+    code: "CS"
+    name: "Cost of Sales"
+    category: expense
+    normal_balance: debit
+    p_and_l: true
+    semantic: "Direct costs of goods sold (COGS, direct labor, materials)"
+    typical_accounts:
+      - "Cost of Goods Sold"
+      - "Direct Materials"
+      - "Direct Labor"
+    behavior:
+      debit: "Increases (records cost)"
+      credit: "Decreases (adjustments)"
+
+  CA:
+    code: "CA"
+    name: "Current Asset"
+    category: asset
+    normal_balance: debit
+    balance_sheet: true
+    semantic: "Assets expected to convert to cash within one year"
+    typical_accounts:
+      - "Cash/Bank"
+      - "Accounts Receivable"
+      - "Inventory"
+      - "Prepaid Expenses"
+
+  FA:
+    code: "FA"
+    name: "Fixed Asset"
+    category: asset
+    normal_balance: debit
+    balance_sheet: true
+    semantic: "Long-term tangible assets (property, plant, equipment)"
+    typical_accounts:
+      - "Buildings"
+      - "Equipment"
+      - "Vehicles"
+      - "Accumulated Depreciation (contra)"
+
+  TA:
+    code: "TA"
+    name: "Term Asset"
+    category: asset
+    normal_balance: debit
+    balance_sheet: true
+    semantic: "Long-term assets not classified as fixed (investments, loans)"
+    typical_accounts:
+      - "Long-term Investments"
+      - "Loans Receivable"
+
+  CL:
+    code: "CL"
+    name: "Current Liability"
+    category: liability
+    normal_balance: credit
+    balance_sheet: true
+    semantic: "Obligations due within one year"
+    typical_accounts:
+      - "Accounts Payable"
+      - "Accrued Expenses"
+      - "Tax Payable"
+      - "Short-term Loans"
+
+  TL:
+    code: "TL"
+    name: "Term Liability"
+    category: liability
+    normal_balance: credit
+    balance_sheet: true
+    semantic: "Long-term obligations (mortgages, long-term debt)"
+    typical_accounts:
+      - "Mortgage Payable"
+      - "Bank Loans"
+      - "Bonds Payable"
+
+  SF:
+    code: "SF"
+    name: "Shareholders Funds"
+    category: equity
+    normal_balance: credit
+    balance_sheet: true
+    semantic: "Owner's equity (capital, retained earnings)"
+    typical_accounts:
+      - "Share Capital"
+      - "Retained Earnings"
+      - "Owner's Drawings"
+
+system_account_types:
+  # Special system designations (in addition to Type)
+
+  BK:
+    code: "BK"
+    name: "Bank Account"
+    semantic: "Account represents a real-world bank account"
+    enables:
+      - bank_reconciliation
+      - payment_processing
+      - cheque_printing
+      - statement_import
+    compatible_types: [CA]  # Usually Current Asset
+
+  AR:
+    code: "AR"
+    name: "Accounts Receivable"
+    semantic: "Control account for debtor balances"
+    constraints:
+      - "No direct manual posting"
+      - "Auto-posted by debtor transactions"
+    linked_to: "Names.RecAccount"
+    compatible_types: [CA]
+
+  AP:
+    code: "AP"
+    name: "Accounts Payable"
+    semantic: "Control account for creditor balances"
+    constraints:
+      - "No direct manual posting"
+      - "Auto-posted by creditor transactions"
+    linked_to: "Names.PayAccount"
+    compatible_types: [CL]
+
+  GR:
+    code: "GR"
+    name: "GST Received"
+    semantic: "Tax collected on sales (output tax)"
+    linked_to: "TaxRates.CollectAccount"
+    compatible_types: [CL]
+
+  GP:
+    code: "GP"
+    name: "GST Paid"
+    semantic: "Tax paid on purchases (input tax)"
+    linked_to: "TaxRates.PayAccount"
+    compatible_types: [CA]
+
+  PL:
+    code: "PL"
+    name: "Profit & Loss"
+    semantic: "Account for retained/current earnings"
+    special: "Year-end profit/loss transfers here"
+    compatible_types: [SF]
+
+  "  ":
+    code: "  "
+    name: "Ordinary"
+    semantic: "No special system function"
+
+ebitda_classification:
+  I: { name: "Interest", for_ebitda: true }
+  T: { name: "Tax", for_ebitda: true }
+  D: { name: "Depreciation/Amortization", for_ebitda: true }
+  "": { name: "Other", for_ebitda: false }

@@ -1,0 +1,82 @@
+# MoneyWorks Accounting Paradigm
+# Tier 0: Core concepts ALWAYS loaded for every agent
+# Token budget: ~600 tokens
+
+accounting_fundamentals:
+  double_entry:
+    principle: "Every transaction has equal debits and credits"
+    equation: "Assets = Liabilities + Equity"
+    implication: "Transaction.Details must always balance"
+
+  debit_credit_rules:
+    assets:
+      normal_balance: debit
+      increase: debit
+      decrease: credit
+    liabilities:
+      normal_balance: credit
+      increase: credit
+      decrease: debit
+    equity:
+      normal_balance: credit
+      increase: credit
+      decrease: debit
+    revenue:
+      normal_balance: credit
+      increase: credit
+      decrease: debit
+    expenses:
+      normal_balance: debit
+      increase: debit
+      decrease: credit
+
+  account_types_behavior:
+    # Maps MoneyWorks account types to accounting behavior
+    IN: { category: revenue, normal: credit, description: "Income" }
+    SA: { category: revenue, normal: credit, description: "Sales" }
+    EX: { category: expense, normal: debit, description: "Expense" }
+    CS: { category: expense, normal: debit, description: "Cost of Sales" }
+    CA: { category: asset, normal: debit, description: "Current Asset" }
+    CL: { category: liability, normal: credit, description: "Current Liability" }
+    FA: { category: asset, normal: debit, description: "Fixed Asset" }
+    TA: { category: asset, normal: debit, description: "Term Asset" }
+    TL: { category: liability, normal: credit, description: "Term Liability" }
+    SF: { category: equity, normal: credit, description: "Shareholders Funds" }
+
+moneyworks_paradigm:
+  entity_terminology:
+    # MoneyWorks calls database tables "files"
+    file: "A MoneyWorks entity/table"
+    record: "A single row in a file"
+    field: "A column/attribute in a file"
+
+  naming_conventions:
+    debtor: "A party who owes money TO the business (customer with credit)"
+    creditor: "A party to whom the business OWES money (supplier)"
+    name: "Generic term for any business contact (can be debtor, creditor, or both)"
+
+  transaction_flow:
+    sales_cycle:
+      - "Quote (QU) → Sales Order (SO) → Debtor Invoice (DI) → Receipt (CR)"
+    purchase_cycle:
+      - "Purchase Order (PO) → Creditor Invoice (CI) → Payment (CP)"
+
+  control_accounts:
+    accounts_receivable: "Aggregate of all debtor balances"
+    accounts_payable: "Aggregate of all creditor balances"
+    rule: "Never post directly to control accounts - use invoices/payments"
+
+business_model:
+  # MoneyWorks assumes these business patterns
+  assumptions:
+    - "Business has customers (debtors) and/or suppliers (creditors)"
+    - "Transactions affect the general ledger via accounts"
+    - "Products/services are sold with optional inventory tracking"
+    - "Jobs/projects provide cost tracking granularity"
+    - "Departments provide organizational classification"
+
+  universal_applicability:
+    retail: "POS sales, inventory, simple AR"
+    services: "Time billing, job costing, complex AR/AP"
+    manufacturing: "BOM, inventory, work in progress"
+    nonprofit: "Fund accounting via departments"

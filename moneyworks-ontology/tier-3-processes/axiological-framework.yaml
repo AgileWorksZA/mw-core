@@ -1,0 +1,124 @@
+# MoneyWorks Axiological Framework
+# Tier 3: Business Processes - Value Dimensions
+# Verification: 2/4 claims verified, 1 partial, 1 unverified (2025-11-25)
+
+metadata:
+  version: "1.0"
+  created: "2025-11-25"
+  verification_status: "PARTIAL"
+  verification_accuracy: "50%"
+  verification_notes:
+    - "Claim 1 (transactional balance): PARTIAL - behavior documented, UI manifestation not explicit"
+    - "Claim 2 (period correctness): VERIFIED"
+    - "Claim 3 (posting immutability): VERIFIED"
+    - "Claim 4 (security level): UNVERIFIED - mechanics documented, access control behavior not"
+
+transactional_integrity:
+  # Core double-entry bookkeeping values
+
+  balance_requirement:
+    definition: "Debits must equal credits in every transaction"
+    manifestation: "Transaction cannot be accepted until amounts balance"
+    verification: "PARTIAL - balance requirement documented, button-dimming UI not explicit"
+    source: "moneyworks_transactions_transaction_fields.html"
+    evidence: "The total of the gross column in the details lines must match this before the transaction can be accepted"
+
+  period_correctness:
+    definition: "Transactions must be dated within appropriate period state"
+    manifestation:
+      locked_periods: "transactions cannot be posted into them until unlocked"
+      closed_periods: "cannot enter transactions, cannot be reopened"
+    verification: "VERIFIED"
+    source: "moneyworks_periods_the_period_management_dialog_box.html"
+    evidence: "Closed periods appear in red. You cannot enter transactions into these, nor can they be reopened."
+
+  valid_account_references:
+    definition: "All detail lines must reference valid accounts"
+    manifestation: "Account code validation against Account master"
+    constraint: "Accounts must belong to standard types (SA,CS,IN,EX,CA,CL,FA,TA,TL,SF)"
+    source: "moneyworks_accounts_chart_of_accounts.html"
+
+data_quality:
+  # Completeness, type safety, referential coherence
+
+  required_field_enforcement:
+    definition: "Mandatory fields must be populated"
+    manifestation: "Record cannot be accepted if required fields empty"
+    mechanism: "Validation lists strictly enforce field population"
+    source: "moneyworks_windows_assigning_a_validation_to_an_entry_field.html"
+
+  type_constraints:
+    definition: "Field values must conform to declared types"
+    manifestation:
+      - "Numeric fields reject alphabetic input"
+      - "Date fields enforce date format"
+      - "Code fields validate against master files"
+
+  referential_integrity:
+    definition: "Foreign keys must point to existing records"
+    manifestation: "System prevents entering codes that don't exist"
+    mechanism: "Choices window appears if code ambiguous"
+
+compliance:
+  # Regulatory and audit requirements
+
+  posting_immutability:
+    definition: "Posted transactions cannot be modified"
+    manifestation: "Detail lines become read-only after posting"
+    correction_method: "Use Cancel command, enter new transaction"
+    verification: "VERIFIED"
+    source: "moneyworks_transactions_posting_transactions.html"
+    evidence: "Once posted, the accounting information in the transaction cannot be modified"
+
+  audit_trail:
+    definition: "All transactions traceable to source"
+    manifestation:
+      - "Transaction entry timestamp recorded"
+      - "User identification (login initials) captured"
+      - "Transaction status field (U=unposted, P=posted)"
+    source: "moneyworks_transactions_information_on_a_transaction_record.html"
+
+  security_levels:
+    definition: "Access to sensitive accounts controlled by security level"
+    manifestation: "Security level change requires single-user mode"
+    verification: "UNVERIFIED - access control behavior not documented in cited source"
+    note: "Source documents mechanics of changing levels, not the access control effect"
+    source: "moneyworks_accounts_changing_the_security_level.html"
+
+  period_closure:
+    definition: "Closed periods are permanent and immutable"
+    precondition: "Cannot close period with unposted transactions"
+    effect: "Once closed, cannot be reopened"
+    source: "moneyworks_periods_the_period_management_dialog_box.html"
+
+business_process:
+  # Operational consistency values
+
+  reconciliation_completeness:
+    definition: "Bank reconciliation must fully match before acceptance"
+    manifestation: "Difference calculation must be zero"
+    common_issue: "Incorrect opening balance most common cause of persistent discrepancy"
+    source: "moneyworks_cash_problems_with_bank_reconciliations.html"
+
+  payment_allocation:
+    definition: "Receipts/payments must be allocated to correct invoices"
+    manifestation:
+      - "Auto-Allocation rules match descriptions to invoices"
+      - "Manual allocation allows invoice selection"
+    consequence: "Unallocated payments create balance discrepancies"
+    source: "moneyworks_debtors_printing_an_allocation_summary.html"
+
+  depreciation_consistency:
+    definition: "Asset depreciation must be applied consistently"
+    constraint: "Annual depreciation mandatory before year-end closing"
+    rule: "Cannot depreciate subsequent years without prior year complete"
+    source: "moneyworks_assets_importing_asset_categories.html"
+
+tax_compliance:
+  definition: "GST/VAT calculations must be correct and reconcilable"
+  manifestation:
+    - "Tax codes assigned to accounts determine treatment"
+    - "System generates tax control account lines"
+    - "Tax override capability for special transactions"
+  consequence: "Incorrect tax returns, regulatory penalties"
+  source: "moneyworks_transactions_adjusting_gst_vat_tax_rounding.html"

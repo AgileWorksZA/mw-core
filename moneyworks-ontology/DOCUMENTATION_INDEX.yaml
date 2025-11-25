@@ -1,0 +1,159 @@
+# MoneyWorks HTML Documentation Index
+# Auto-generated catalog of 1197 HTML files
+# Location: /Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror/manual/manual/
+
+summary:
+  total_files: 1197
+  appendix_files: 25
+  major_categories: 44
+
+appendices:
+  - Field definitions and data structures for MoneyWorks entities
+  - 25 files covering core data models
+
+  a_note_on_colours_and_colour_searching:
+    file: "moneyworks_appendix_a_note_on_colours_and_colour_searching.html"
+  account_categories__department_classifications_and_groups:
+    file: "moneyworks_appendix_account_categories__department_classifications_and_groups.html"
+  accounts:
+    file: "moneyworks_appendix_accounts.html"
+  allocation_file:
+    file: "moneyworks_appendix_allocation_file.html"
+  appendix_afield_descriptions:
+    file: "moneyworks_appendix_appendix_afield_descriptions.html"
+  asset_categories:
+    file: "moneyworks_appendix_asset_categories.html"
+  assets:
+    file: "moneyworks_appendix_assets.html"
+  build_file:
+    file: "moneyworks_appendix_build_file.html"
+  contacts:
+    file: "moneyworks_appendix_contacts.html"
+  departments:
+    file: "moneyworks_appendix_departments.html"
+  inventory:
+    file: "moneyworks_appendix_inventory.html"
+  job_sheet_items:
+    file: "moneyworks_appendix_job_sheet_items.html"
+  jobs:
+    file: "moneyworks_appendix_jobs.html"
+  login_file:
+    file: "moneyworks_appendix_login_file.html"
+  memo_file:
+    file: "moneyworks_appendix_memo_file.html"
+  names:
+    file: "moneyworks_appendix_names.html"
+  offledgers_and_currency:
+    file: "moneyworks_appendix_offledgers_and_currency.html"
+  payments_file:
+    file: "moneyworks_appendix_payments_file.html"
+  products:
+    file: "moneyworks_appendix_products.html"
+  reconciliation_file:
+    file: "moneyworks_appendix_reconciliation_file.html"
+  simplified_schema:
+    file: "moneyworks_appendix_simplified_schema.html"
+  tax_rate:
+    file: "moneyworks_appendix_tax_rate.html"
+  transactions:
+    file: "moneyworks_appendix_transactions.html"
+  user2_file:
+    file: "moneyworks_appendix_user2_file.html"
+  user_file:
+    file: "moneyworks_appendix_user_file.html"
+
+# Key entity documentation
+core_entities:
+  transactions:
+    appendix: "moneyworks_appendix_transactions.html"
+    file_count: 53
+    description: "Transaction records, entry, posting, and management"
+
+  accounts:
+    appendix: "moneyworks_appendix_accounts.html"
+    file_count: 24
+    description: "Chart of accounts, account setup, types, and structure"
+
+  names:
+    appendix: "moneyworks_appendix_names.html"
+    file_count: 13
+    description: "Contact records, debtors, creditors, and roles"
+
+  products:
+    appendix: "moneyworks_appendix_products.html"
+    file_count: 6
+    description: "Products, items, and inventory definitions"
+
+  jobs:
+    appendix: "moneyworks_appendix_jobs.html"
+    file_count: 26
+    description: "Job sheets, time tracking, and project costing"
+
+  assets:
+    appendix: "moneyworks_appendix_assets.html"
+    file_count: 16
+    description: "Fixed asset register, depreciation, and disposal"
+
+  inventory:
+    appendix: "moneyworks_appendix_inventory.html"
+    file_count: 3
+    description: "Stock control, locations, and stock takes"
+
+  payments:
+    appendix: "moneyworks_appendix_payments_file.html"
+    file_count: 9
+    description: "Payment processing, reconciliation, and electronic transfers"
+
+  tax:
+    appendix: "moneyworks_appendix_tax_rate.html"
+    file_count: 48
+    description: "GST/VAT configuration, reporting, and compliance"
+
+
+# All documentation categories by file count
+all_categories:
+  calculations: 318 files
+  transactions: 53 files
+  gst: 48 files
+  reportwriter: 47 files
+  reports: 45 files
+  scripts: 45 files
+  forms: 34 files
+  export: 30 files
+  stock: 27 files
+  datacentre: 26 files
+  jobs: 26 files
+  analysis: 25 files
+  appendix: 25 files
+  accounts: 24 files
+  cash: 23 files
+  orders: 23 files
+  file: 22 files
+  starting: 22 files
+  debtors: 21 files
+  lists: 20 files
+  printing: 19 files
+  reporttutorial: 19 files
+  multicurrency: 18 files
+  preferences: 18 files
+  einvoicing: 17 files
+  assets: 16 files
+  networking: 16 files
+  privileges: 15 files
+  departments: 13 files
+  names: 13 files
+  budgets: 12 files
+  services: 12 files
+  creditors: 11 files
+  items: 11 files
+  serials: 11 files
+  windows: 10 files
+  jobtutorial: 9 files
+  navigator: 9 files
+  introduction: 8 files
+  adjustments: 7 files
+  enquiries: 6 files
+  wiki: 6 files
+  mwnow: 5 files
+  periods: 5 files
+  index: 2 files

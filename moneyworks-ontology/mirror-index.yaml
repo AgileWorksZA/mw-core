@@ -1,0 +1,578 @@
+# MoneyWorks Manual Index
+# Canonical index of mirror/ documentation for subagent mining
+# Created: 2025-01-25
+
+metadata:
+  source: "/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror"
+  total_html_files: 1201
+  index_version: "1.0"
+  created_date: "2025-01-25"
+
+# ============================================================================
+# APPENDIX FILES - PRIMARY SOURCE FOR ENTITY FIELD DEFINITIONS
+# ============================================================================
+
+appendix_files:
+  # These are the authoritative field definition sources
+  base_path: "/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror/manual/manual"
+
+  entities:
+    Transactions:
+      file: "moneyworks_appendix_transactions.html"
+      priority: P1
+      status: pending
+      notes: "65+ fields, TypeCode enums, Detail subfile"
+
+    Accounts:
+      file: "moneyworks_appendix_accounts.html"
+      priority: P1
+      status: pending
+      notes: "26+ fields, Type and System enums, hierarchy"
+
+    Names:
+      file: "moneyworks_appendix_names.html"
+      priority: P1
+      status: pending
+      notes: "96 fields, CustomerType/SupplierType, contacts"
+
+    Products:
+      file: "moneyworks_appendix_products.html"
+      priority: P1
+      status: pending
+      notes: "69 fields, inventory tracking, pricing"
+
+    Jobs:
+      file: "moneyworks_appendix_jobs.html"
+      priority: P1
+      status: pending
+      notes: "34 fields, hierarchy, client reference"
+
+    Assets:
+      file: "moneyworks_appendix_assets.html"
+      priority: P2
+      status: pending
+      notes: "32 fields, depreciation, lifecycle"
+
+    TaxRates:
+      file: "moneyworks_appendix_tax_rate.html"
+      priority: P2
+      status: pending
+      notes: "17 fields, rate calculation"
+
+    Departments:
+      file: "moneyworks_appendix_departments.html"
+      priority: P2
+      status: pending
+      notes: "9 fields, cost centers"
+
+    Contacts:
+      file: "moneyworks_appendix_contacts.html"
+      priority: P2
+      status: pending
+      notes: "14 fields, Names subfile"
+
+    Inventory:
+      file: "moneyworks_appendix_inventory.html"
+      priority: P2
+      status: pending
+      notes: "8 fields, Products subfile"
+
+    Payments:
+      file: "moneyworks_appendix_payments_file.html"
+      priority: P2
+      status: pending
+      notes: "6 fields, junction table"
+
+    Reconciliation:
+      file: "moneyworks_appendix_reconciliation_file.html"
+      priority: P3
+      status: pending
+      notes: "8 fields, bank rec sessions"
+
+    Allocations:
+      file: "moneyworks_appendix_allocation_file.html"
+      priority: P2
+      status: pending
+      notes: "12 fields, auto-allocation rules"
+
+    BuildRecords:
+      file: "moneyworks_appendix_build_file.html"
+      priority: P3
+      status: pending
+      notes: "5 fields, BOM/assembly"
+
+    Memo:
+      file: "moneyworks_appendix_memo_file.html"
+      priority: P3
+      status: pending
+      notes: "5 fields, Names subfile"
+
+    Login:
+      file: "moneyworks_appendix_login_file.html"
+      priority: P3
+      status: pending
+      notes: "13 fields, authentication"
+
+    User:
+      file: "moneyworks_appendix_user_file.html"
+      priority: P3
+      status: pending
+      notes: "3 fields, script storage"
+
+    User2:
+      file: "moneyworks_appendix_user2_file.html"
+      priority: P3
+      status: pending
+      notes: "21 fields, typed storage"
+
+    General:
+      file: "moneyworks_appendix_account_categories__department_classifications_and_groups.html"
+      priority: P3
+      status: pending
+      notes: "Classifications entity"
+
+    AssetCategories:
+      file: "moneyworks_appendix_asset_categories.html"
+      priority: P3
+      status: pending
+      notes: "Asset classification"
+
+    JobSheetItems:
+      file: "moneyworks_appendix_job_sheet_items.html"
+      priority: P3
+      status: pending
+      notes: "Job detail items"
+
+  special_appendices:
+    FieldDescriptions:
+      file: "moneyworks_appendix_appendix_afield_descriptions.html"
+      notes: "Overview of all field types"
+
+    SimplifiedSchema:
+      file: "moneyworks_appendix_simplified_schema.html"
+      notes: "Entity relationship overview"
+
+    OffledgersAndCurrency:
+      file: "moneyworks_appendix_offledgers_and_currency.html"
+      notes: "Multi-currency handling"
+
+    ColoursAndSearching:
+      file: "moneyworks_appendix_a_note_on_colours_and_colour_searching.html"
+      notes: "Color codes and search patterns"
+
+# ============================================================================
+# TOPIC CATEGORIES - ORGANIZED BY FUNCTIONAL AREA
+# ============================================================================
+
+topic_categories:
+  # Core accounting
+  accounts:
+    description: "Chart of accounts, account management"
+    file_count: 25
+    file_pattern: "moneyworks_accounts_*.html"
+    key_files:
+      - "moneyworks_accounts_chart_of_accounts.html"
+      - "moneyworks_accounts_account_types.html"
+      - "moneyworks_accounts_account_categories.html"
+      - "moneyworks_accounts_multilevel_account_structures.html"
+
+  transactions:
+    description: "Transaction entry, types, management"
+    file_count: 40
+    file_pattern: "moneyworks_transactions_*.html"
+    key_files:
+      - "moneyworks_transactions_transaction_types.html"
+      - "moneyworks_transactions_entering_transactions.html"
+
+  # Receivables
+  debtors:
+    description: "Customer/debtor management, AR"
+    file_count: 30
+    file_pattern: "moneyworks_debtors_*.html"
+    key_files:
+      - "moneyworks_debtors_debtor_invoices.html"
+      - "moneyworks_debtors_receipts.html"
+      - "moneyworks_debtors_aging.html"
+
+  # Payables
+  creditors:
+    description: "Supplier/creditor management, AP"
+    file_count: 25
+    file_pattern: "moneyworks_creditors_*.html"
+    key_files:
+      - "moneyworks_creditors_creditor_invoices.html"
+      - "moneyworks_creditors_payments.html"
+
+  # Inventory
+  stock:
+    description: "Inventory management, stock control"
+    file_count: 35
+    file_pattern: "moneyworks_stock_*.html"
+    key_files:
+      - "moneyworks_stock_stock_control.html"
+      - "moneyworks_stock_stock_take.html"
+
+  items:
+    description: "Product items, pricing"
+    file_count: 40
+    file_pattern: "moneyworks_items_*.html"
+    key_files:
+      - "moneyworks_items_creating_products.html"
+      - "moneyworks_items_pricing.html"
+
+  # Projects
+  jobs:
+    description: "Job costing, project management"
+    file_count: 25
+    file_pattern: "moneyworks_jobs_*.html"
+    key_files:
+      - "moneyworks_jobs_job_costing.html"
+      - "moneyworks_jobs_job_billing.html"
+
+  jobtutorial:
+    description: "Job costing tutorial"
+    file_count: 15
+    file_pattern: "moneyworks_jobtutorial_*.html"
+
+  # Fixed Assets
+  assets:
+    description: "Fixed asset management"
+    file_count: 15
+    file_pattern: "moneyworks_assets_*.html"
+    key_files:
+      - "moneyworks_assets_depreciation.html"
+      - "moneyworks_assets_asset_register.html"
+
+  # Banking
+  cash:
+    description: "Cash management, banking"
+    file_count: 20
+    file_pattern: "moneyworks_cash_*.html"
+    key_files:
+      - "moneyworks_cash_bank_reconciliation.html"
+      - "moneyworks_cash_cash_receipts.html"
+
+  # Tax
+  gst:
+    description: "GST/VAT/tax handling"
+    file_count: 20
+    file_pattern: "moneyworks_gst_*.html"
+    key_files:
+      - "moneyworks_gst_tax_rates.html"
+      - "moneyworks_gst_tax_returns.html"
+
+  # Orders
+  orders:
+    description: "Sales and purchase orders"
+    file_count: 25
+    file_pattern: "moneyworks_orders_*.html"
+    key_files:
+      - "moneyworks_orders_sales_orders.html"
+      - "moneyworks_orders_purchase_orders.html"
+
+  # Contacts
+  names:
+    description: "Contact/name management"
+    file_count: 20
+    file_pattern: "moneyworks_names_*.html"
+    key_files:
+      - "moneyworks_names_creating_names.html"
+      - "moneyworks_names_name_types.html"
+
+  # Departments
+  departments:
+    description: "Departmental accounting"
+    file_count: 10
+    file_pattern: "moneyworks_departments_*.html"
+
+  # Reporting
+  reports:
+    description: "Standard reports"
+    file_count: 30
+    file_pattern: "moneyworks_reports_*.html"
+
+  analysis:
+    description: "Analysis reports"
+    file_count: 25
+    file_pattern: "moneyworks_analysis_*.html"
+
+  reportwriter:
+    description: "Custom report writer"
+    file_count: 30
+    file_pattern: "moneyworks_reportwriter_*.html"
+
+  reporttutorial:
+    description: "Report writing tutorial"
+    file_count: 15
+    file_pattern: "moneyworks_reporttutorial_*.html"
+
+  # System
+  preferences:
+    description: "System preferences"
+    file_count: 25
+    file_pattern: "moneyworks_preferences_*.html"
+
+  privileges:
+    description: "User privileges and security"
+    file_count: 15
+    file_pattern: "moneyworks_privileges_*.html"
+
+  scripts:
+    description: "Scripting and automation"
+    file_count: 40
+    file_pattern: "moneyworks_scripts_*.html"
+
+  calculations:
+    description: "Calculation functions"
+    file_count: 50
+    file_pattern: "moneyworks_calculations_*.html"
+    notes: "Important for understanding computed fields"
+
+  # Multi-currency
+  multicurrency:
+    description: "Multi-currency handling"
+    file_count: 20
+    file_pattern: "moneyworks_multicurrency_*.html"
+
+  # Period handling
+  periods:
+    description: "Accounting periods"
+    file_count: 15
+    file_pattern: "moneyworks_periods_*.html"
+
+  # Adjustments
+  adjustments:
+    description: "Adjustments and corrections"
+    file_count: 10
+    file_pattern: "moneyworks_adjustments_*.html"
+    key_files:
+      - "moneyworks_adjustments_general_ledger_journals.html"
+      - "moneyworks_adjustments_cancel_transaction.html"
+      - "moneyworks_adjustments_write_off_command.html"
+
+  # Import/Export
+  export:
+    description: "Data export"
+    file_count: 20
+    file_pattern: "moneyworks_export_*.html"
+
+  # Server/Networking
+  datacentre:
+    description: "MoneyWorks Datacentre setup"
+    file_count: 30
+    file_pattern: "moneyworks_datacentre_*.html"
+
+  networking:
+    description: "Network configuration"
+    file_count: 15
+    file_pattern: "moneyworks_networking_*.html"
+
+  # Other
+  introduction:
+    description: "Getting started"
+    file_count: 20
+    file_pattern: "moneyworks_introduction_*.html"
+
+  budgets:
+    description: "Budget management"
+    file_count: 15
+    file_pattern: "moneyworks_budgets_*.html"
+
+  serials:
+    description: "Serial number tracking"
+    file_count: 10
+    file_pattern: "moneyworks_serials_*.html"
+
+  services:
+    description: "Service items"
+    file_count: 10
+    file_pattern: "moneyworks_services_*.html"
+
+  einvoicing:
+    description: "Electronic invoicing"
+    file_count: 10
+    file_pattern: "moneyworks_einvoicing_*.html"
+
+# ============================================================================
+# ENTITY-TO-DOCUMENT MAPPING
+# ============================================================================
+
+entity_document_mapping:
+  # Maps each entity to relevant documentation beyond appendix
+
+  Transactions:
+    appendix: "moneyworks_appendix_transactions.html"
+    related_topics:
+      - transactions
+      - debtors
+      - creditors
+      - cash
+      - adjustments
+    key_documents:
+      - "moneyworks_transactions_transaction_types.html"
+      - "moneyworks_debtors_debtor_invoices.html"
+      - "moneyworks_creditors_creditor_invoices.html"
+      - "moneyworks_cash_cash_receipts.html"
+      - "moneyworks_adjustments_general_ledger_journals.html"
+
+  Accounts:
+    appendix: "moneyworks_appendix_accounts.html"
+    related_topics:
+      - accounts
+    key_documents:
+      - "moneyworks_accounts_chart_of_accounts.html"
+      - "moneyworks_accounts_account_types.html"
+      - "moneyworks_accounts_multilevel_account_structures.html"
+
+  Names:
+    appendix: "moneyworks_appendix_names.html"
+    related_topics:
+      - names
+      - debtors
+      - creditors
+    key_documents:
+      - "moneyworks_names_creating_names.html"
+      - "moneyworks_debtors_managing_debtors.html"
+      - "moneyworks_creditors_managing_creditors.html"
+
+  Products:
+    appendix: "moneyworks_appendix_products.html"
+    related_topics:
+      - items
+      - stock
+      - serials
+    key_documents:
+      - "moneyworks_items_creating_products.html"
+      - "moneyworks_items_pricing.html"
+      - "moneyworks_stock_stock_control.html"
+
+  Jobs:
+    appendix: "moneyworks_appendix_jobs.html"
+    related_topics:
+      - jobs
+      - jobtutorial
+    key_documents:
+      - "moneyworks_jobs_job_costing.html"
+      - "moneyworks_jobs_job_billing.html"
+
+  TaxRates:
+    appendix: "moneyworks_appendix_tax_rate.html"
+    related_topics:
+      - gst
+    key_documents:
+      - "moneyworks_gst_tax_rates.html"
+      - "moneyworks_gst_tax_returns.html"
+
+  Assets:
+    appendix: "moneyworks_appendix_assets.html"
+    related_topics:
+      - assets
+    key_documents:
+      - "moneyworks_assets_depreciation.html"
+      - "moneyworks_assets_asset_register.html"
+
+  Reconciliation:
+    appendix: "moneyworks_appendix_reconciliation_file.html"
+    related_topics:
+      - cash
+    key_documents:
+      - "moneyworks_cash_bank_reconciliation.html"
+
+  Allocations:
+    appendix: "moneyworks_appendix_allocation_file.html"
+    related_topics:
+      - cash
+    key_documents:
+      - "moneyworks_cash_auto_allocation.html"
+
+# ============================================================================
+# MINING PRIORITIES
+# ============================================================================
+
+mining_priorities:
+  P1_critical:
+    description: "Core entities requiring immediate verification"
+    entities:
+      - Transactions
+      - Accounts
+      - Names
+      - Products
+      - Jobs
+    rationale: "Highest FK density, most qualia gaps"
+
+  P2_high:
+    description: "Important supporting entities"
+    entities:
+      - Assets
+      - TaxRates
+      - Departments
+      - Contacts
+      - Inventory
+      - Payments
+      - Allocations
+    rationale: "FK verification needed, moderate qualia gaps"
+
+  P3_standard:
+    description: "System and supporting entities"
+    entities:
+      - Reconciliation
+      - BuildRecords
+      - Memo
+      - Login
+      - User
+      - User2
+      - General
+    rationale: "Lower impact, simpler structures"
+
+# ============================================================================
+# SUBAGENT MINING ASSIGNMENTS
+# ============================================================================
+
+mining_assignments:
+  batch_1:
+    agents: 5
+    focus: "P1 entities - appendix field extraction"
+    assignments:
+      agent_1: { entity: Transactions, file: "moneyworks_appendix_transactions.html" }
+      agent_2: { entity: Accounts, file: "moneyworks_appendix_accounts.html" }
+      agent_3: { entity: Names, file: "moneyworks_appendix_names.html" }
+      agent_4: { entity: Products, file: "moneyworks_appendix_products.html" }
+      agent_5: { entity: Jobs, file: "moneyworks_appendix_jobs.html" }
+
+  batch_2:
+    agents: 5
+    focus: "P2 entities - appendix field extraction"
+    assignments:
+      agent_1: { entity: Assets, file: "moneyworks_appendix_assets.html" }
+      agent_2: { entity: TaxRates, file: "moneyworks_appendix_tax_rate.html" }
+      agent_3: { entity: Departments, file: "moneyworks_appendix_departments.html" }
+      agent_4: { entity: Contacts, file: "moneyworks_appendix_contacts.html" }
+      agent_5: { entity: Inventory, file: "moneyworks_appendix_inventory.html" }
+
+  batch_3:
+    agents: 5
+    focus: "P2/P3 entities - appendix field extraction"
+    assignments:
+      agent_1: { entity: Payments, file: "moneyworks_appendix_payments_file.html" }
+      agent_2: { entity: Allocations, file: "moneyworks_appendix_allocation_file.html" }
+      agent_3: { entity: Reconciliation, file: "moneyworks_appendix_reconciliation_file.html" }
+      agent_4: { entity: BuildRecords, file: "moneyworks_appendix_build_file.html" }
+      agent_5: { entity: Memo, file: "moneyworks_appendix_memo_file.html" }
+
+  batch_4:
+    agents: 3
+    focus: "System entities - appendix field extraction"
+    assignments:
+      agent_1: { entity: Login, file: "moneyworks_appendix_login_file.html" }
+      agent_2: { entity: User, file: "moneyworks_appendix_user_file.html" }
+      agent_3: { entity: User2, file: "moneyworks_appendix_user2_file.html" }
+
+  batch_5_process:
+    agents: 5
+    focus: "Business process documentation for qualia enrichment"
+    assignments:
+      agent_1: { topic: "payment_allocation", sources: ["cash", "debtors", "creditors"] }
+      agent_2: { topic: "tax_calculation", sources: ["gst"] }
+      agent_3: { topic: "depreciation", sources: ["assets"] }
+      agent_4: { topic: "bank_reconciliation", sources: ["cash"] }
+      agent_5: { topic: "period_close", sources: ["periods", "reports"] }

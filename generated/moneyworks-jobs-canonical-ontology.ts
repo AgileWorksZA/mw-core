@@ -72,6 +72,15 @@ export enum MoneyWorksJobColour {
  */
 export const MONEYWORKS_JOB_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique job identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "Code",
     dataType: "T" as const,
     maxLength: 9,
@@ -179,6 +188,57 @@ export const MONEYWORKS_JOB_FIELDS = [
     dataType: "N" as const,
     canonicalDescription: "The percent markup applied to items used on the job.",
     manualSource: "moneyworks_appendix_jobs.html"
+  },
+  {
+    fieldName: "Variations",
+    dataType: "N" as const,
+    canonicalDescription: "Total variations amount for the job",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "RetentionsHeld",
+    dataType: "N" as const,
+    canonicalDescription: "Amount of retentions currently held",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "RetentionsOwing",
+    dataType: "N" as const,
+    canonicalDescription: "Amount of retentions owing",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "ProductPricing",
+    dataType: "T" as const,
+    maxLength: 1,
+    canonicalDescription: "Product pricing level for this job (A-F)",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "RetainPercent",
+    dataType: "N" as const,
+    canonicalDescription: "Retention percentage for the job",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "WIPAccount",
+    dataType: "T" as const,
+    maxLength: 13,
+    canonicalDescription: "Work In Progress account code for the job",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "Flags",
+    dataType: "N" as const,
+    canonicalDescription: "Job flags bitfield",
+    manualSource: "Empirical API validation",
+    isRequired: false
   },
   {
     fieldName: "PercentComplete",

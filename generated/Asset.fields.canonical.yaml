@@ -1,0 +1,825 @@
+Entity: Asset
+InternalName: Asset
+SourceDocument: moneyworks_appendix_assets.html
+ExtractionDate: "2025-11-25"
+Completeness: HIGH
+
+# Primary Asset Fields
+Fields:
+  # Identity & Classification
+  Code:
+    DataType: Text
+    Size: 19
+    Cardinality: "1"
+    Description: A unique code for the asset
+    Semantics:
+      Domain: Asset Identifier
+      IsKey: true
+      Constraint: "UNIQUE NOT NULL"
+    Example: "ASSET-001, IT-COMPUTER-2023"
+
+  Description:
+    DataType: Text
+    Size: 63
+    Cardinality: "1"
+    Description: The description of the asset
+    Semantics:
+      Domain: Asset Metadata
+      Constraint: "NOT NULL"
+    Example: "Dell OptiPlex 7090 Desktop Computer"
+
+  Category:
+    DataType: Text
+    Size: 7
+    Cardinality: "1"
+    Description: The Asset Category of the asset
+    Semantics:
+      Domain: Asset Classification
+      ForeignKeyTo: AssetCategory
+      Constraint: "MUST reference valid AssetCategory record"
+    Example: "FURN, VEHICLE, IT-EQU"
+
+  SerialNum:
+    DataType: Text
+    Size: 31
+    Cardinality: "0..1"
+    Description: A serial number for the asset
+    Semantics:
+      Domain: Asset Identification
+      IsOptional: true
+      Constraint: "UNIQUE per manufacturer batches"
+    Example: "SN-4567890123"
+
+  Location:
+    DataType: Text
+    Size: 15
+    Cardinality: "0..1"
+    Description: Where the asset is kept
+    Semantics:
+      Domain: Asset Physical Location
+      IsOptional: true
+    Example: "Office-Floor-2, Warehouse-A"
+
+  Dept:
+    DataType: Text
+    Size: 5
+    Cardinality: "0..1"
+    Description: The asset department
+    Semantics:
+      Domain: Organizational Assignment
+      ForeignKeyTo: Department
+      Constraint: "MUST be a MoneyWorks Department if specified"
+      Requirement: Mandatory validation against Department table
+    Example: "SALES, OPS-A, IT"
+
+  # Quantity & Valuation
+  Qty:
+    DataType: Numeric
+    Size: null
+    Cardinality: "1"
+    Description: The quantity of the asset (normally 1, but might be a set of similar assets such as desks)
+    Semantics:
+      Domain: Asset Quantity
+      Constraint: "Typically 1 for single items, >1 for asset groups"
+      BusinessRule: "Depreciation calculations scale by Qty"
+    Calculation: "BookValue = (Cost - AccumDepreciation) * Qty"
+    Example: "1, 5, 12"
+
+  Cost:
+    DataType: Numeric
+    Size: null
+    Cardinality: "1"
+    Description: The cost (per unit) of the asset
+    Semantics:
+      Domain: Asset Valuation
+      Unit: "Currency (per unit)"
+      Constraint: "Cost per unit, not total; multiply by Qty for gross asset value"
+      IsImmutable: true
+      Requirement: "Set at acquisition and typically not changed"
+    Example: "1500.00, 50000.00"
+
+  BookValue:
+    DataType: Numeric
+    Size: null
+    Cardinality: "1"
+    Description: The current book value
+    Semantics:
+      Domain: Asset Valuation
+      Unit: Currency
+      IsCalculated: true
+      Formula: "(Cost - AccumDepreciation) * Qty - RevalSurplusImpairAmt"
+      Requirement: "Updated after each depreciation run or revaluation"
+    Example: "1200.50, 42500.75"
+
+  ExpectedResidualValue:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: Expected residual value
+    Semantics:
+      Domain: Asset Valuation
+      Unit: Currency
+      IsOptional: true
+      Requirement: "Used in some depreciation methods; if provided overrides pure straight-line"
+    Example: "100.00, 500.00"
+
+  # Depreciation Core Fields
+  Type:
+    DataType: Text
+    Size: 3
+    Cardinality: "1"
+    Description: Depreciation type, SL (straight line) or DV (diminishing value)
+    Semantics:
+      Domain: Asset Depreciation Method
+      Enumeration:
+        - Value: "SL"
+          Label: "Straight Line"
+          Description: Linear depreciation over expected life
+        - Value: "DV"
+          Label: "Diminishing Value"
+          Description: Accelerated depreciation; declining balance method
+      Constraint: "ENUM('SL', 'DV')"
+      Requirement: "Must be set; determines depreciation calculation method"
+      ImpactsDepreciation: true
+    Example: "SL, DV"
+
+  Rate:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: Depreciation rate
+    Semantics:
+      Domain: Asset Depreciation Rate
+      Unit: "Percentage (0-100) or decimal (0.0-1.0) depending on implementation"
+      IsOptional: true
+      Relationship: "Alternative to ExpectedLife; if provided overrides life-based calculation"
+      Requirement: "Either ExpectedLife or Rate must be specified"
+      ImpactsDepreciation: true
+    Example: "20.0 (20% per annum DV), 0.10 (10% DV)"
+
+  ExpectedLife:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: The expected life in years of the asset
+    Semantics:
+      Domain: Asset Depreciation Life
+      Unit: Years
+      IsOptional: true
+      Relationship: "Alternative to Rate; if ExpectedLife provided, annual SL rate = 1/ExpectedLife"
+      Requirement: "Either ExpectedLife or Rate must be specified for depreciation"
+      BusinessRule: "If SL type: Annual Depreciation = (Cost * Qty) / ExpectedLife (adjusted for PrivateUsePercent)"
+      ImpactsDepreciation: true
+    Example: "5, 10, 20"
+
+  # Accumulated Depreciation & Adjustments
+  AccumDepreciation:
+    DataType: Numeric
+    Size: null
+    Cardinality: "1"
+    Description: The accumulated depreciation recorded against the asset
+    Semantics:
+      Domain: Asset Depreciation
+      Unit: Currency
+      IsCalculated: true
+      Constraint: "Always >= 0; cumulative depreciation charges"
+      Requirement: "Updated by depreciation runs; updated by revaluations; updated by disposals"
+      RelatedFields:
+        - AccumDepnAdj: "Adjustments to this value due to revaluations"
+        - Rate: "May also be referenced in depreciation calculation"
+    Formula: "SUM of all depreciation journal entries + AccumDepnAdj"
+    Example: "300.50, 5000.00"
+
+  AccumDepnAdj:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: Total adjustments to accumulated depreciation due to revaluations
+    Semantics:
+      Domain: Asset Depreciation Adjustment
+      Unit: Currency
+      IsOptional: true
+      Requirement: "Set during asset revaluation process; not set during normal depreciation"
+      UsageContext: "When asset is revalued (market revaluation), accumulated depreciation may be adjusted"
+      RelatedFields:
+        - RevalSurplusImpairAmt: "Revaluation surplus/impairment amount"
+        - LastRevaluedDate: "When revaluation occurred"
+    Example: "0, 100.00, -50.00"
+
+  # Accounting Account References
+  # NOTE: The documentation does NOT explicitly list depreciation account fields
+  # (AccumulatedDepnAcct, DepreciationAcct) but they are implied in the asset lifecycle
+  DepreciationAccountsImplied:
+    Note: "The Asset record structure does not explicitly contain account references in the documentation"
+    BusinessLogic: |
+      Depreciation entries are created via transaction posting to GL accounts.
+      The Asset Category likely defines:
+      - GL Account for accumulated depreciation posting
+      - GL Account for depreciation expense posting
+    RelatedEntity: AssetCategory
+    See: moneyworks_appendix_asset_categories.html
+
+  # Lifecycle - Acquisition & Disposal
+  AcquisitionDate:
+    DataType: Date
+    Size: null
+    Cardinality: "1"
+    Description: Date on which the asset was acquired
+    Semantics:
+      Domain: Asset Lifecycle
+      Constraint: "NOT NULL; marks asset start date"
+      Requirement: "Set when asset record created; typically tied to AcquisitionSeq transaction"
+    Example: "2023-01-15"
+
+  AcquisitionSeq:
+    DataType: Numeric
+    Size: null
+    Cardinality: "1"
+    Description: The sequence number of the purchase transaction for the asset
+    Semantics:
+      Domain: Asset Transaction Link
+      ForeignKeyTo: Transaction
+      IsKey: false
+      Constraint: "References the transaction that created this asset"
+      Relationship: "Links to GL transaction via sequence number"
+    Example: "12345, 56789"
+
+  DisposalDate:
+    DataType: Date
+    Size: null
+    Cardinality: "0..1"
+    Description: Date last disposed
+    Semantics:
+      Domain: Asset Lifecycle
+      IsOptional: true
+      Requirement: "Set only when asset is disposed; indicates end of asset life"
+      RelatedFields:
+        - Status: "Should be 'DSP' (disposed) when DisposalDate is set"
+        - GainLossOnDisposal: "Gain/loss calculated at this date"
+    Example: "2025-06-30"
+
+  DisposalSeq:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: The sequence number of the last disposal transaction for the asset
+    Semantics:
+      Domain: Asset Transaction Link
+      ForeignKeyTo: Transaction
+      IsOptional: true
+      Constraint: "References the transaction that disposed this asset"
+      Relationship: "Links to GL transaction via sequence number"
+    Example: "67890"
+
+  GainLossOnDisposal:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: The gain or loss on asset disposal
+    Semantics:
+      Domain: Asset Valuation
+      Unit: Currency
+      IsOptional: true
+      IsCalculated: true
+      Formula: "Disposal Proceeds - (Cost * Qty - AccumDepreciation)"
+      BusinessRule: "Positive = gain (income); Negative = loss (expense)"
+      UsageContext: "Calculated at disposal; posted to GL via disposal transaction"
+    Example: "500.00 (gain), -200.00 (loss)"
+
+  # Private Use & Tax Adjustments
+  PrivateUsePercent:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: The percent of the asset used privately
+    Semantics:
+      Domain: Asset Allocation
+      Unit: Percentage (0-100)
+      IsOptional: true
+      Constraint: "Value must be 0-100"
+      BusinessRule: "Reduces deductible depreciation for tax purposes: Deductible Depreciation = Calculated Depreciation * (1 - PrivateUsePercent/100)"
+      ImpactsDepreciation: true
+      TaxRelevance: "Used in jurisdictions that disallow depreciation on private-use portions"
+    Example: "25 (25% private use), 0 (100% business), 50"
+
+  # Depreciation Dates & Tracking
+  LastDepreciatedDate:
+    DataType: Date
+    Size: null
+    Cardinality: "0..1"
+    Description: Date on which the asset was last depreciated
+    Semantics:
+      Domain: Asset Depreciation Tracking
+      IsOptional: true
+      Requirement: "Updated after each depreciation run"
+      BusinessRule: "Used to prevent double depreciation; tracks most recent depreciation period"
+    Example: "2025-09-30"
+
+  LastRevaluedDate:
+    DataType: Date
+    Size: null
+    Cardinality: "0..1"
+    Description: Date of last revaluation (blank if none)
+    Semantics:
+      Domain: Asset Valuation
+      IsOptional: true
+      Requirement: "Set only if revaluation has occurred"
+      RelatedFields:
+        - RevalSurplusImpairAmt: "Amount of revaluation"
+        - AccumDepnAdj: "Adjustments to depreciation from revaluation"
+    Example: "2024-12-31"
+
+  RevalSurplusImpairAmt:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: Total revalued amount (positive if surplus)
+    Semantics:
+      Domain: Asset Valuation
+      Unit: Currency
+      IsOptional: true
+      IsCalculated: true
+      Formula: "Current Fair Value - Previous Book Value"
+      Constraint: "Positive = revaluation surplus (asset appreciation); Negative = impairment"
+      BusinessRule: "Affects BookValue calculation; posted to revaluation reserve/OCI in GL"
+      UsageContext: "Set during asset revaluation process (e.g., market revaluation, appraisal)"
+    Example: "5000.00 (surplus), -1000.00 (impairment)"
+
+  # Status & Lifecycle State
+  Status:
+    DataType: Text
+    Size: 3
+    Cardinality: "1"
+    Description: The asset status
+    Semantics:
+      Domain: Asset Lifecycle State
+      Enumeration:
+        - Value: "NEW"
+          Label: "New"
+          Description: Asset just created; may not yet be in use or depreciation scheduled
+          DepreciationStatus: "Pre-active; depreciation may not have commenced"
+        - Value: "ACT"
+          Label: "Active"
+          Description: Asset in active use and being depreciated
+          DepreciationStatus: "Subject to regular depreciation"
+        - Value: "NDP"
+          Label: "Non-Depreciable"
+          Description: Asset not subject to depreciation (e.g., land, collectibles, intangibles)
+          DepreciationStatus: "Exempt from depreciation; no depreciation calculated"
+        - Value: "OTH"
+          Label: "Other"
+          Description: Asset in other state (unspecified)
+          DepreciationStatus: "Depends on business logic"
+        - Value: "DSP"
+          Label: "Disposed"
+          Description: Asset disposed/sold/scrapped; end-of-life
+          DepreciationStatus: "No further depreciation; gains/losses calculated"
+      Constraint: "ENUM('NEW', 'ACT', 'NDP', 'OTH', 'DSP')"
+      ImpactsDepreciation: true
+      Requirement: "Crucial for depreciation eligibility; filters assets in depreciation run"
+    Example: "NEW, ACT, NDP, OTH, DSP"
+
+  # Metadata & Extensibility
+  LastModifiedBy:
+    DataType: Text
+    Size: 3
+    Cardinality: "0..1"
+    Description: User who last modified the asset record
+    Semantics:
+      Domain: Audit Trail
+      IsOptional: true
+      Requirement: "System-set; records last editor"
+    Example: "USR, JDH, ABC"
+
+  Colour:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: Colour of record
+    Semantics:
+      Domain: UI/Presentation
+      IsOptional: true
+      Constraint: "Likely an RGB colour code or color palette index"
+    Example: "0, 16711680 (red)"
+
+  Comment:
+    DataType: Text
+    Size: 255
+    Cardinality: "0..1"
+    Description: Comments on asset
+    Semantics:
+      Domain: Asset Metadata
+      IsOptional: true
+    Example: "Refurbished unit, requires annual maintenance check"
+
+  UserNum:
+    DataType: Numeric
+    Size: null
+    Cardinality: "0..1"
+    Description: Scriptable number
+    Semantics:
+      Domain: User-Defined Extension
+      IsOptional: true
+      Requirement: "Available for custom scripting/automation"
+    Example: "Custom values per business logic"
+
+  UserText:
+    DataType: Text
+    Size: 255
+    Cardinality: "0..1"
+    Description: Scriptable text
+    Semantics:
+      Domain: User-Defined Extension
+      IsOptional: true
+      Requirement: "Available for custom scripting/automation"
+    Example: "Custom values per business logic"
+
+  TaggedText:
+    DataType: Text
+    Size: 255
+    Cardinality: "0..1"
+    Description: Scriptable tag storage
+    Semantics:
+      Domain: User-Defined Extension
+      IsOptional: true
+      Requirement: "Available for tags/labels via scripting"
+    Example: "tag1:value1, tag2:value2"
+
+  Custom1:
+    DataType: Text
+    Size: 255
+    Cardinality: "0..1"
+    Description: For your own use
+    Semantics:
+      Domain: User-Defined Extension
+      IsOptional: true
+
+  Custom2:
+    DataType: Text
+    Size: 255
+    Cardinality: "0..1"
+    Description: For your own use
+    Semantics:
+      Domain: User-Defined Extension
+      IsOptional: true
+
+  Custom3:
+    DataType: Text
+    Size: 255
+    Cardinality: "0..1"
+    Description: For your own use
+    Semantics:
+      Domain: User-Defined Extension
+      IsOptional: true
+
+  Custom4:
+    DataType: Text
+    Size: 255
+    Cardinality: "0..1"
+    Description: For your own use
+    Semantics:
+      Domain: User-Defined Extension
+      IsOptional: true
+
+# Sub-Entity: AssetLog
+AssetLog:
+  InternalName: AssetLog
+  Description: |
+    Associated with each asset is the assetlog subfile, which is a log of each action
+    (depreciation, revaluations etc) in the life of the asset.
+  Semantics:
+    Relationship: One-to-Many (Asset has many AssetLog entries)
+    Cardinality: "Asset (1) -> AssetLog (*)"
+    Purpose: "Audit trail of all asset lifecycle events; immutable transaction log"
+    UsageContext: "Historical record; used for reconciliation, reporting, tax compliance"
+
+  Fields:
+    ParentSeq:
+      DataType: Numeric
+      Size: null
+      Cardinality: "1"
+      Description: Sequence number of asset
+      Semantics:
+        ForeignKeyTo: Asset
+        Constraint: "Foreign key to Asset.Seq (implied primary key)"
+
+    Action:
+      DataType: Text
+      Size: 3
+      Cardinality: "1"
+      Description: Type of action
+      Semantics:
+        Domain: Asset Lifecycle Event
+        Enumeration:
+          - Value: "AA"
+            Label: "Acquisition"
+            Description: Asset acquisition; initial creation and GL posting
+            DepreciationImpact: "Initializes depreciation schedule"
+          - Value: "AD"
+            Label: "Disposal (Full)"
+            Description: Full disposal of asset; 100% sale or write-off
+            DepreciationImpact: "Terminates depreciation; calculates gain/loss"
+          - Value: "AP"
+            Label: "Part Disposal"
+            Description: Partial disposal; sale of portion of asset (e.g., 5 of 10 desks)
+            DepreciationImpact: "Adjusts Qty; proportional gain/loss; may adjust AccumDepreciation"
+          - Value: "DS"
+            Label: "Straight Line Depreciation"
+            Description: Depreciation charge using straight-line method
+            DepreciationImpact: "Increases AccumDepreciation; posts to GL"
+          - Value: "DD"
+            Label: "Diminishing Value Depreciation"
+            Description: Depreciation charge using diminishing value (declining balance) method
+            DepreciationImpact: "Increases AccumDepreciation; posts to GL"
+          - Value: "ME"
+            Label: "Memo"
+            Description: Memo entry; non-GL action
+            DepreciationImpact: "No depreciation impact"
+          - Value: "RV"
+            Label: "Revaluation"
+            Description: Asset revaluation; market value or appraisal update
+            DepreciationImpact: "Adjusts book value; may adjust AccumDepnAdj; posts revaluation adjustment"
+        Constraint: "ENUM('AA', 'AD', 'AP', 'DS', 'DD', 'ME', 'RV')"
+
+    Date:
+      DataType: Date
+      Size: null
+      Cardinality: "1"
+      Description: Date of action
+      Semantics:
+        Domain: Transaction Date
+        Requirement: "When the action occurred"
+
+    Qty:
+      DataType: Numeric
+      Size: null
+      Cardinality: "1"
+      Description: Quantity
+      Semantics:
+        Domain: Asset Quantity
+        Requirement: "Quantity affected by this action (especially for AP - part disposal)"
+
+    Depreciation:
+      DataType: Numeric
+      Size: null
+      Cardinality: "0..1"
+      Description: Depreciation due to action
+      Semantics:
+        Domain: Asset Depreciation
+        Unit: Currency
+        IsOptional: true
+        Constraint: "Non-zero only for DS (straight-line) and DD (diminishing-value) actions"
+        BusinessRule: |
+          For DS: Depreciation = (Cost * Qty - AccumDepreciation) / (remaining years)
+          For DD: Depreciation = AccumDepreciation * Rate / 12 (monthly) or per period
+          Adjusted by PrivateUsePercent
+
+    Adjustment1:
+      DataType: Numeric
+      Size: null
+      Cardinality: "0..1"
+      Description: Adjustments
+      Semantics:
+        Domain: Asset Valuation Adjustment
+        IsOptional: true
+        Constraint: "Used for revaluations and disposals"
+
+    Adjustment2:
+      DataType: Numeric
+      Size: null
+      Cardinality: "0..1"
+      Description: Adjustments
+      Semantics:
+        Domain: Asset Valuation Adjustment
+        IsOptional: true
+        Constraint: "Secondary adjustment (e.g., tax adjustment)"
+
+    Rate:
+      DataType: Numeric
+      Size: null
+      Cardinality: "0..1"
+      Description: Depreciation rate used
+      Semantics:
+        Domain: Asset Depreciation Rate
+        Unit: Percentage or Decimal
+        IsOptional: true
+        Requirement: "Recorded for audit trail; may differ from current asset Rate if rate changed"
+
+    PrivateUsePercent:
+      DataType: Numeric
+      Size: null
+      Cardinality: "0..1"
+      Description: Private use percent
+      Semantics:
+        Domain: Asset Allocation
+        Unit: Percentage (0-100)
+        IsOptional: true
+        Requirement: "Recorded for audit trail; may differ from current asset PrivateUsePercent"
+
+    AccumDepreciation:
+      DataType: Numeric
+      Size: null
+      Cardinality: "1"
+      Description: Accumulated depreciation after action
+      Semantics:
+        Domain: Asset Depreciation
+        Unit: Currency
+        IsCalculated: true
+        Requirement: "Running total; allows audit trail of depreciation history"
+        Formula: "Previous AccumDepreciation + Depreciation (or adjusted by disposal/revaluation)"
+
+    AccumReval:
+      DataType: Numeric
+      Size: null
+      Cardinality: "0..1"
+      Description: Accumulated revaluation after action
+      Semantics:
+        Domain: Asset Valuation
+        Unit: Currency
+        IsOptional: true
+        IsCalculated: true
+        Requirement: "Recorded only for RV (revaluation) actions; running total of revaluations"
+
+    ClosingValue:
+      DataType: Numeric
+      Size: null
+      Cardinality: "1"
+      Description: Book value after action
+      Semantics:
+        Domain: Asset Valuation
+        Unit: Currency
+        IsCalculated: true
+        Formula: "(Cost * Qty - AccumDepreciation) +/- RevalSurplusImpairAmt"
+        Requirement: "Running book value; allows reconciliation"
+
+    TransactionSeq:
+      DataType: Numeric
+      Size: null
+      Cardinality: "0..1"
+      Description: Sequence number of transaction associated with action
+      Semantics:
+        ForeignKeyTo: Transaction
+        IsOptional: true
+        Constraint: "Non-null for AA, AD, AP, DS, DD, RV (GL posting); null for ME (memo)"
+        Relationship: "Links to GL transaction via sequence number"
+
+    Memo:
+      DataType: Text
+      Size: 255
+      Cardinality: "0..1"
+      Description: User memo
+      Semantics:
+        Domain: Metadata
+        IsOptional: true
+        UsageContext: "Primarily for ME (memo) actions; can be used for any action"
+
+# Business Rules & Constraints
+BusinessRules:
+  DepreciationCalculation:
+    StraightLine:
+      Formula: |
+        Annual Depreciation = [(Cost * Qty - ExpectedResidualValue) / ExpectedLife] 
+                             * (1 - PrivateUsePercent / 100)
+        Monthly Depreciation = Annual Depreciation / 12
+      Adjustment: "Scaled by PrivateUsePercent if asset has private use component"
+      Constraint: "Type must be 'SL'; ExpectedLife must be > 0"
+
+    DiminishingValue:
+      Formula: |
+        Book Value at period start = Cost * Qty - AccumDepreciation
+        Depreciation = Book Value * Rate * (1 - PrivateUsePercent / 100)
+      Adjustment: "Applied to declining balance; accelerates early depreciation"
+      Constraint: "Type must be 'DV'; Rate must be > 0 and <= 100"
+
+  DepreciationEligibility:
+    ActiveAssets: "Status = 'ACT' => eligible for depreciation"
+    NewAssets: "Status = 'NEW' => may or may not be depreciated (business rule)"
+    NonDepreciable: "Status = 'NDP' => NOT eligible; no depreciation calculated"
+    DisposedAssets: "Status = 'DSP' => no further depreciation after DisposalDate"
+
+  DepreciationTiming:
+    StartDate: "Depreciation begins on AcquisitionDate (or later if Status != 'ACT')"
+    EndDate: "Depreciation stops on DisposalDate or when Status = 'DSP'"
+    Prevention: "LastDepreciatedDate prevents double-depreciation in same period"
+
+  RevaluationRules:
+    Impact: |
+      When revaluation occurs:
+      - RevalSurplusImpairAmt is set (positive = surplus, negative = impairment)
+      - AccumDepnAdj is adjusted (captures depreciation change from revaluation)
+      - LastRevaluedDate is updated
+      - BookValue is recalculated
+    PostingBehavior: "Revaluation surplus/impairment posted to GL (likely OCI or revaluation reserve)"
+
+  DisposalRules:
+    PartialDisposal: |
+      When Qty is disposed (AP action):
+      - Original Qty is reduced
+      - Proportional AccumDepreciation adjustment
+      - GainLossOnDisposal = Proceeds - (Cost - (AccumDepreciation / Original Qty) * DisposedQty)
+    FullDisposal: |
+      When entire asset disposed (AD action):
+      - Status = 'DSP'
+      - DisposalDate set
+      - DisposalSeq linked to GL transaction
+      - GainLossOnDisposal calculated and posted
+
+  PrivateUseAdjustment:
+    Rule: "Deductible depreciation = Calculated Depreciation * (100 - PrivateUsePercent) / 100"
+    Timing: "Applied in depreciation calculation; affects AssetLog.Depreciation"
+    Audit: "PrivateUsePercent recorded in AssetLog for historical accuracy"
+
+# Enumerations Summary
+Enumerations:
+  Status:
+    NEW: "Asset just created"
+    ACT: "Active, being depreciated"
+    NDP: "Non-depreciable (exempt from depreciation)"
+    OTH: "Other state"
+    DSP: "Disposed"
+
+  Type:
+    SL: "Straight Line depreciation"
+    DV: "Diminishing Value (declining balance) depreciation"
+
+  AssetLog.Action:
+    AA: "Acquisition"
+    AD: "Disposal (full)"
+    AP: "Part Disposal"
+    DS: "Depreciation - Straight Line"
+    DD: "Depreciation - Diminishing Value"
+    ME: "Memo"
+    RV: "Revaluation"
+
+# Foreign Key References
+ForeignKeys:
+  Category: AssetCategory
+  Dept: Department
+  AcquisitionSeq: Transaction
+  DisposalSeq: Transaction
+  AssetLog.ParentSeq: Asset
+  AssetLog.TransactionSeq: Transaction
+
+# Data Quality Metrics
+Qualia:
+  Current: 0.2
+  Target: 0.95
+  GapsIdentified:
+    - "No explicit account code fields (AccumulatedDepnAcct, DepreciationExpenseAcct) in Asset record"
+    - "Account assignment likely via AssetCategory (not documented in this extract)"
+    - "Depreciation interval (monthly, quarterly, yearly) not specified; inferred from business logic"
+    - "Private use adjustment basis (tax vs. accounting) not specified"
+    - "Revaluation method (market, appraisal, index) not specified"
+
+  EnhancementsRequired:
+    - Cross-reference AssetCategory entity for account mappings
+    - Clarify depreciation interval and frequency
+    - Document tax vs. accounting treatment of private use
+    - Clarify PrivateUsePercent applicability (business rules)
+    - Understand revaluation trigger conditions
+    - Confirm whether AccumDepnAdj applies to book value or tax basis
+
+# Derived Insights
+DerivedSemantics:
+  AssetLifecycle:
+    Stages:
+      1_Acquisition:
+        Trigger: "AcquisitionSeq transaction posted; Status set to 'NEW' or 'ACT'"
+        Fields: "Code, Description, Category, Cost, Qty, AcquisitionDate, AcquisitionSeq"
+        Event: "AA (Acquisition) logged in AssetLog"
+
+      2_Active:
+        Trigger: "Status = 'ACT' and AcquisitionDate <= Current Date"
+        Fields: "Type, Rate, ExpectedLife, PrivateUsePercent, LastDepreciatedDate"
+        Event: "DS or DD (Depreciation) logged monthly/quarterly/yearly"
+        Output: "Depreciation journal entries posted to GL (expense account)"
+
+      3_Revaluation:
+        Trigger: "Manual revaluation process"
+        Fields: "LastRevaluedDate, RevalSurplusImpairAmt, AccumDepnAdj"
+        Event: "RV (Revaluation) logged in AssetLog"
+        Output: "Revaluation surplus/impairment posted to GL"
+
+      4_Disposal:
+        Trigger: "Disposal transaction posted; Status set to 'DSP'"
+        Fields: "DisposalDate, DisposalSeq, GainLossOnDisposal"
+        Event: "AD (full) or AP (partial) logged in AssetLog"
+        Output: "Gain/loss journal entries posted to GL; proceeds recorded"
+
+  DepreciationAdjustments:
+    - "PrivateUsePercent reduces deductible depreciation (tax-relevant)"
+    - "AccumDepnAdj captures revaluation-induced depreciation adjustments"
+    - "AssetLog.Adjustment1/2 capture one-time adjustments"
+
+  BookValueCalculation:
+    Full: |
+      BookValue = (Cost * Qty - AccumDepreciation - AccumDepnAdj) + RevalSurplusImpairAmt
+      OR
+      BookValue = (Cost - AccumDepreciation) * Qty +/- RevalSurplusImpairAmt
+    Simplified: "Historical cost net of accumulated depreciation and adjustments"
+
+  TaxCompliance:
+    PrivateUseAllocation: "Business use portion only is deductible"
+    DisposalGainLoss: "Gain/loss = Proceeds - (Cost - Accumulated Depreciation)"
+    Revaluation: "May have tax basis implications depending on jurisdiction"
+

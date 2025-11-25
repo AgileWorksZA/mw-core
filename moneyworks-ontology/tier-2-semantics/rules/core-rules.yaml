@@ -1,0 +1,213 @@
+# MoneyWorks Core Business Rules
+# Tier 2: Contextual - load when validating or creating records
+# Token budget: ~1200 tokens
+
+# Rules that govern MoneyWorks behavior
+
+transaction_rules:
+  # === FUNDAMENTAL RULES ===
+
+  double_entry:
+    id: "TXN-001"
+    scope: Transaction
+    rule: "sum(Detail.Debit) == sum(Detail.Credit)"
+    enforcement: system
+    error: "Transaction does not balance"
+    critical: true
+
+  minimum_lines:
+    id: "TXN-002"
+    scope: Transaction
+    rule: "count(Detail) >= 1"
+    enforcement: system
+    error: "Transaction must have at least one line"
+
+  # === NAME MATCHING RULES ===
+
+  debtor_type_match:
+    id: "TXN-010"
+    scope: Transaction
+    rule: |
+      if TypeCode in [DII, DIC, CRD, CPD]:
+        Name.CustomerType > 0
+    enforcement: system
+    error: "Debtor transaction requires customer/debtor type name"
+
+  creditor_type_match:
+    id: "TXN-011"
+    scope: Transaction
+    rule: |
+      if TypeCode in [CII, CIC, CPC, CRC]:
+        Name.SupplierType > 0
+    enforcement: system
+    error: "Creditor transaction requires supplier/creditor type name"
+
+  journal_no_name:
+    id: "TXN-012"
+    scope: Transaction
+    rule: |
+      if TypeCode == JN:
+        NameCode is null
+    enforcement: warning
+    note: "Journals should not have NameCode - use specific types for AR/AP"
+
+  # === ACCOUNT RULES ===
+
+  valid_account:
+    id: "TXN-020"
+    scope: Detail
+    rule: "AcctCode exists in Accounts"
+    enforcement: system
+    error: "Invalid account code"
+
+  postable_account:
+    id: "TXN-021"
+    scope: Detail
+    rule: "(Account.Flags & 0x8000) == 0"
+    enforcement: system
+    error: "Cannot post to non-posting (header) account"
+
+  control_account_restriction:
+    id: "TXN-022"
+    scope: Detail
+    rule: |
+      if Account.System in [AR, AP]:
+        only_via_invoice_or_payment
+    enforcement: warning
+    note: "Control accounts should only be affected by invoice/payment transactions"
+
+  job_code_required:
+    id: "TXN-023"
+    scope: Detail
+    rule: |
+      if (Account.Flags & 0x0004) != 0:
+        JobCode is not null
+    enforcement: system
+    error: "Account requires job code"
+
+  # === PERIOD RULES ===
+
+  valid_period:
+    id: "TXN-030"
+    scope: Transaction
+    rule: "TransDate within open accounting period"
+    enforcement: system
+    bypass: "Administrator can override"
+
+  future_date:
+    id: "TXN-031"
+    scope: Transaction
+    rule: "TransDate <= today (unless order/quote)"
+    enforcement: warning
+    exceptions: [SOI, POI, QU]
+
+account_rules:
+  unique_code:
+    id: "ACC-001"
+    scope: Account
+    rule: "Code is unique"
+    enforcement: system
+
+  system_account_type_match:
+    id: "ACC-010"
+    scope: Account
+    rule: |
+      if System == AR: Type must be CA
+      if System == AP: Type must be CL
+      if System == BK: Type must be CA
+    enforcement: system
+    error: "System account type mismatch"
+
+  single_retained_earnings:
+    id: "ACC-011"
+    scope: Account
+    rule: "Only one account with Flags bit for RetainedEarnings"
+    enforcement: system
+
+  hierarchy_depth:
+    id: "ACC-020"
+    scope: Account
+    rule: "No circular references in ParentCode"
+    enforcement: system
+
+name_rules:
+  unique_code:
+    id: "NAM-001"
+    scope: Name
+    rule: "Code is unique"
+    enforcement: system
+
+  control_account_match:
+    id: "NAM-010"
+    scope: Name
+    rule: |
+      if CustomerType > 0: RecAccount.System == AR
+      if SupplierType > 0: PayAccount.System == AP
+    enforcement: system
+
+  credit_limit_debtor:
+    id: "NAM-020"
+    scope: Name
+    rule: "CreditLimit only meaningful if CustomerType == 2 (Debtor)"
+    enforcement: none
+    note: "Informational only"
+
+product_rules:
+  unique_code:
+    id: "PRD-001"
+    scope: Product
+    rule: "Code is unique"
+    enforcement: system
+
+  inventory_accounts:
+    id: "PRD-010"
+    scope: Product
+    rule: |
+      if inventory_tracked:
+        AssetAccount is required
+        COGSAccount is required
+    enforcement: warning
+
+job_rules:
+  unique_code:
+    id: "JOB-001"
+    scope: Job
+    rule: "Code is unique"
+    enforcement: system
+
+  client_debtor:
+    id: "JOB-010"
+    scope: Job
+    rule: |
+      if DebtorCode is not null:
+        Name.CustomerType > 0
+    enforcement: system
+    error: "Job client must be a customer"
+
+  hierarchy_no_loops:
+    id: "JOB-020"
+    scope: Job
+    rule: "No circular references in ParentCode"
+    enforcement: system
+
+validation_sequence:
+  creating_transaction:
+    - "Validate TypeCode is valid"
+    - "Validate NameCode exists (if provided)"
+    - "Validate Name type matches transaction type"
+    - "For each Detail line:"
+    - "  - Validate AcctCode exists"
+    - "  - Validate Account is postable"
+    - "  - Validate JobCode exists (if provided)"
+    - "  - Validate JobCode required (if account requires)"
+    - "  - Validate StockCode exists (if provided)"
+    - "  - Validate TaxCode exists (if provided)"
+    - "Validate transaction balances"
+    - "Validate TransDate in open period"
+
+  creating_name:
+    - "Validate Code is unique"
+    - "Validate RecAccount exists (if CustomerType > 0)"
+    - "Validate PayAccount exists (if SupplierType > 0)"
+    - "Validate RecAccount has System=AR"
+    - "Validate PayAccount has System=AP"

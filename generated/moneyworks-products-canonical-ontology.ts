@@ -184,6 +184,15 @@ export enum MoneyWorksProductFlags {
  */
 export const MONEYWORKS_PRODUCT_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique product identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "Code",
     dataType: "T" as const,
     maxLength: 31,
@@ -200,6 +209,20 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
     manualSource: "moneyworks_appendix_products.html",
     isRequired: true,
     isIndexed: true
+  },
+  {
+    fieldName: "Count",
+    dataType: "N" as const,
+    canonicalDescription: "Product count field for tracking purposes",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "OnOrder",
+    dataType: "N" as const,
+    canonicalDescription: "Quantity currently on order from suppliers",
+    manualSource: "Empirical API validation",
+    isRequired: false
   },
   {
     fieldName: "Description",

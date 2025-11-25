@@ -50,6 +50,15 @@ export enum MoneyWorksAllocationSplitMode {
  */
 export const MONEYWORKS_ALLOCATION_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique allocation rule identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystemField: true,
+    isIndexed: true
+  },
+  {
     fieldName: "LastModifiedTime",
     dataType: "S" as const,
     canonicalDescription: "The date and time that this record was last changed.",

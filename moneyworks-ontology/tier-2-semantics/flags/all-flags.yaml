@@ -1,0 +1,267 @@
+# MoneyWorks Flag Decomposition - All Entities
+# Tier 2: Contextual - load when working with flags
+# Token budget: ~1500 tokens
+
+# Flags are bit-mapped integer fields where each bit has meaning
+
+flag_reading_guide:
+  explanation: |
+    Flags are integers where each bit position indicates a boolean state.
+    To check if a flag is set: (flags & bit_value) != 0
+    To set a flag: flags | bit_value
+    To clear a flag: flags & ~bit_value
+  example:
+    value: 0x0021  # Binary: 100001
+    bits_set: [0, 5]  # Bit 0 and bit 5 are set
+
+transaction_flags:
+  field: Transaction.Flags
+  datatype: integer
+  bits:
+    0x00000001:
+      name: WAS_CANCELLED
+      semantic: "This transaction was cancelled by another transaction"
+      related_field: OriginalSeq
+
+    0x00000002:
+      name: IS_CANCELLATION
+      semantic: "This transaction is a cancellation of another"
+
+    0x00000004:
+      name: WAS_WRITTEN_OFF
+      semantic: "This transaction was written off (bad debt)"
+
+    0x00000008:
+      name: CREDITOR_REIMBURSE
+      semantic: "Creditor reimbursement transaction"
+
+    0x00000010:
+      name: DEBTOR_REIMBURSE
+      semantic: "Debtor reimbursement transaction"
+
+    0x00000020:
+      name: PRINTED
+      semantic: "Transaction has been printed"
+
+    0x00000040:
+      name: IS_WRITEOFF_DUMMY
+      semantic: "System dummy transaction for write-off"
+
+    0x00000080:
+      name: IS_CONTRA_DUMMY
+      semantic: "System dummy transaction for contra"
+
+    0x00000800:
+      name: NOT_ON_STATEMENT
+      semantic: "Exclude from customer/supplier statements"
+
+    0x00001000:
+      name: IS_BANKING_JOURNAL
+      semantic: "Transaction is a banking journal"
+
+    0x00002000:
+      name: IS_JOB_INVOICE
+      semantic: "Invoice was generated from job billing"
+
+    0x00004000:
+      name: CHANGED_AFTER_POSTING
+      semantic: "Transaction was modified after posting"
+
+    0x00008000:
+      name: PROMPT_DISCOUNT_TAKEN
+      semantic: "Prompt payment discount was applied"
+
+    0x00010000:
+      name: FUNDS_XFER
+      semantic: "Transaction is a funds transfer"
+
+    0x00020000:
+      name: IS_DISCOUNT_CREDIT_NOTE
+      semantic: "Credit note for discount"
+
+    0x00040000:
+      name: IS_WRITEOFF_CREDIT_NOTE
+      semantic: "Credit note for write-off"
+
+    0x00080000:
+      name: IS_NEW_STYLE_SALES_TAX
+      semantic: "Uses new-style sales tax calculation"
+
+    0x00100000:
+      name: HAS_SCAN
+      semantic: "Transaction has attached scanned document"
+
+    0x00200000:
+      name: HAS_OUTSTANDING_STOCK_RECEIPTS
+      semantic: "Order has stock receipts pending"
+
+    0x00400000:
+      name: PPD_TERMS_LOCKED
+      semantic: "Prompt payment discount terms locked"
+
+    0x00800000:
+      name: IS_DEPOSIT_ON_ORDER
+      semantic: "Transaction is a deposit on order"
+
+    0x01000000:
+      name: IMPORTED_TRANSACTION
+      semantic: "Transaction was imported (not manually entered)"
+
+    0x08000000:
+      name: IS_RECURRED_TRANSACTION
+      semantic: "Transaction was created from recurring template"
+
+detail_flags:
+  field: Detail.Flags
+  datatype: integer
+  bits:
+    0x0001:
+      name: DEPT_IS_SALESPERSON
+      semantic: "Department field contains salesperson code"
+
+    0x0002:
+      name: FREIGHT_ITEM
+      semantic: "This line is a freight charge"
+
+    0x0004:
+      name: PRODUCT_PRICE_TAX_INCLUSIVE
+      semantic: "Product price includes tax"
+
+    0x0008:
+      name: TAX_LINE
+      semantic: "This is a tax calculation line"
+
+    0x0010:
+      name: TAX_LINE_OVERRIDE
+      semantic: "Tax line added by manual override"
+
+    0x0020:
+      name: IS_TIME_ITEM
+      semantic: "Line is a time billing item"
+
+    0x0040:
+      name: PROMPT_PAYMENT_DISCOUNTABLE
+      semantic: "Line eligible for prompt payment discount"
+
+    0x0100:
+      name: FOREIGN_CURRENCY
+      semantic: "Line is in foreign currency"
+
+    0x0200:
+      name: BALANCING_LINE_FOREIGN
+      semantic: "Balancing line for foreign currency"
+
+    0x0400:
+      name: BALANCING_LINE_CONTRA
+      semantic: "Balancing line for contra posting"
+
+    0x0800:
+      name: STOCK_IGNORED
+      semantic: "Stock tracking ignored (for jobs)"
+
+    0x1000:
+      name: BANKING_JOURNAL_HOLDING
+      semantic: "Banking journal holding line"
+
+    0x2000:
+      name: BANKING_JOURNAL_BANK
+      semantic: "Banking journal bank line"
+
+    0x4000:
+      name: STOCK_JOURNAL_LINE
+      semantic: "Stock journal line"
+
+    0x8000:
+      name: SYSTEM_LINE
+      semantic: "System-generated line"
+
+detail_more_flags:
+  field: Detail.MoreFlags
+  datatype: integer
+  bits:
+    0x0001:
+      name: REQUIRES_SERIAL_NUMBER
+      semantic: "Product requires serial number entry"
+
+    0x0002:
+      name: REQUIRES_BATCH_NUMBER
+      semantic: "Product requires batch number entry"
+
+    0x0004:
+      name: BATCH_EXPIRES
+      semantic: "Batch has expiry date tracking"
+
+account_flags:
+  field: Account.Flags
+  datatype: integer
+  bits:
+    0x0001:
+      name: DO_NOT_RECONCILE
+      semantic: "Bank account excluded from reconciliation"
+
+    0x0002:
+      name: UNBANKED_ACCOUNT
+      semantic: "Bank account without physical bank (petty cash)"
+
+    0x0004:
+      name: JOB_CODE_REQUIRED
+      semantic: "Job code required when posting to this account"
+
+    0x0010:
+      name: SYNCHRONISE_CHEQUE_NUMBERS
+      semantic: "Sync cheque numbers with bank"
+
+    0x0020:
+      name: NON_DISCOUNTABLE
+      semantic: "Account excluded from discount calculations"
+
+    0x8000:
+      name: NON_POSTING_ACCOUNT
+      semantic: "Header account only - cannot receive postings"
+      important: "Check before posting!"
+
+name_flags:
+  field: Name.Flags
+  datatype: integer
+  bits:
+    0x0001:
+      name: REQUIRES_ORDER_NUMBER
+      semantic: "Customer requires PO number on orders"
+
+contact_role_flags:
+  field: Contacts.Role
+  datatype: integer
+  note: "Bit-mapped roles - multiple roles per contact"
+  bits:
+    0x01:
+      name: ROLE_1
+      semantic: "User-defined role 1"
+    0x02:
+      name: ROLE_2
+      semantic: "User-defined role 2"
+    0x04:
+      name: ROLE_3
+      semantic: "User-defined role 3"
+    0x08:
+      name: ROLE_4
+      semantic: "User-defined role 4"
+    0x10:
+      name: ROLE_5
+      semantic: "User-defined role 5"
+    0x20:
+      name: ROLE_6
+      semantic: "User-defined role 6"
+    0x40:
+      name: ROLE_7
+      semantic: "User-defined role 7"
+    0x80:
+      name: ROLE_8
+      semantic: "User-defined role 8"
+
+common_flag_checks:
+  "Is transaction printed?": "(Transaction.Flags & 0x00000020) != 0"
+  "Is imported?": "(Transaction.Flags & 0x01000000) != 0"
+  "Is account non-posting?": "(Account.Flags & 0x8000) != 0"
+  "Is job code required?": "(Account.Flags & 0x0004) != 0"
+  "Is tax line?": "(Detail.Flags & 0x0008) != 0"
+  "Is system line?": "(Detail.Flags & 0x8000) != 0"

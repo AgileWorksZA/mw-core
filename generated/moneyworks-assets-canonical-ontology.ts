@@ -57,6 +57,15 @@ export enum MoneyWorksDepreciationType {
  */
 export const MONEYWORKS_ASSET_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique asset identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "Code",
     dataType: "T" as const,
     maxLength: 19,

@@ -644,7 +644,7 @@ export const MONEYWORKS_TRANSACTION_FIELDS = [
     relationshipRule: "Marks transaction as recurring template"
   },
   {
-    fieldName: "SalesPerson",
+    fieldName: "Salesperson",
     dataType: "T" as const,
     maxLength: 5,
     canonicalDescription: "The salesperson for the transaction. If the transaction involves any products with the \"Append Salesperson\" attribute set, the value of this field will be appended to that products sales and/or cost of goods account code.",
@@ -870,6 +870,47 @@ export const MONEYWORKS_TRANSACTION_FIELDS = [
     manualSource: "moneyworks_appendix_transactions.html",
     relationshipTarget: "scripting system",
     relationshipRule: "Scriptable text data storage"
+  },
+  {
+    fieldName: "TaxProcessed",
+    dataType: "N" as const,
+    canonicalDescription: "GST/VAT processing status flag",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false
+  },
+  {
+    fieldName: "Currency",
+    dataType: "A" as const,
+    maxLength: 3,
+    canonicalDescription: "Transaction currency code (multi-currency support)",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "CurrencyTransferSeq",
+    dataType: "N" as const,
+    canonicalDescription: "Foreign exchange transfer transaction reference",
+    manualSource: "Empirical API validation",
+    isRequired: false,
+    foreignKey: {
+      targetEntity: "Transaction",
+      targetField: "SequenceNumber",
+      relationship: "many-to-one"
+    }
+  },
+  {
+    fieldName: "PromptPaymentTerms",
+    dataType: "N" as const,
+    canonicalDescription: "Early payment discount terms (days)",
+    manualSource: "Empirical API validation",
+    isRequired: false
+  },
+  {
+    fieldName: "PromptPaymentDisc",
+    dataType: "N" as const,
+    canonicalDescription: "Early payment discount percentage",
+    manualSource: "Empirical API validation",
+    isRequired: false
   }
 ] as const;
 

@@ -1,0 +1,292 @@
+# MoneyWorks Transaction Types - Complete Semantic Reference
+# Tier 2: Contextual - load when working with transactions
+# Token budget: ~2000 tokens
+
+# CRITICAL: Understanding transaction types is essential for correct accounting
+
+transaction_types:
+  # === DEBTOR (Customer) TRANSACTIONS ===
+
+  DII:
+    code: "DII"
+    name: "Debtor Invoice Incomplete"
+    full_name: "Debtor Invoice - Incomplete"
+    semantic: |
+      Invoice issued TO a customer. Creates accounts receivable.
+      "Incomplete" means payment is expected (not yet paid).
+    accounting_effect:
+      creates: receivable
+      debtor_balance: increase
+      contra_account: automatic AR control
+    journal_entry:
+      debit: "Accounts Receivable (control account)"
+      credit: "Revenue account(s)"
+    required_fields:
+      - NameCode       # Must be a Debtor (CustomerType > 0)
+      - TransDate      # Invoice date
+      - DueDate        # Payment due date
+    typical_use: "Standard customer invoice"
+
+  DIC:
+    code: "DIC"
+    name: "Debtor Invoice Complete"
+    full_name: "Debtor Invoice - Complete"
+    semantic: |
+      Invoice issued TO a customer that is ALREADY PAID.
+      Used for cash sales or prepaid invoices.
+    accounting_effect:
+      creates: receivable_and_receipt
+      debtor_balance: zero_net  # Invoice + payment cancel
+    required_fields:
+      - NameCode
+      - Contra         # Bank/cash account for payment
+    typical_use: "Cash sale, immediate payment"
+
+  CR:
+    code: "CR"
+    name: "Cash Receipt"
+    full_name: "Cash Receipt"
+    semantic: |
+      General cash receipt NOT tied to an invoice.
+      For miscellaneous income, refunds received, etc.
+    accounting_effect:
+      bank_balance: increase
+      no_debtor_effect: true
+    required_fields:
+      - Contra         # Bank/cash account
+    optional_fields:
+      - NameCode       # Can have a name but not required
+    typical_use: "Miscellaneous receipt, bank interest"
+
+  CRD:
+    code: "CRD"
+    name: "Cash Receipt Debtor"
+    full_name: "Cash Receipt for Debtor Invoice"
+    semantic: |
+      Payment received FROM a customer for invoice(s).
+      Reduces accounts receivable.
+    accounting_effect:
+      bank_balance: increase
+      debtor_balance: decrease
+    required_fields:
+      - NameCode       # Debtor making payment
+      - Contra         # Bank/cash account
+    allocation: "Usually allocated to specific invoices via Payments"
+    typical_use: "Customer payment on account"
+
+  CRC:
+    code: "CRC"
+    name: "Cash Receipt Creditor Refund"
+    full_name: "Cash Receipt - Creditor Refund"
+    semantic: |
+      Refund received FROM a supplier.
+      Reduces accounts payable.
+    accounting_effect:
+      bank_balance: increase
+      creditor_balance: decrease
+    typical_use: "Supplier refund, credit note payment"
+
+  # === CREDITOR (Supplier) TRANSACTIONS ===
+
+  CII:
+    code: "CII"
+    name: "Creditor Invoice Incomplete"
+    full_name: "Creditor Invoice - Incomplete"
+    semantic: |
+      Invoice received FROM a supplier. Creates accounts payable.
+      "Incomplete" means payment is due (not yet paid).
+    accounting_effect:
+      creates: payable
+      creditor_balance: increase
+      contra_account: automatic AP control
+    journal_entry:
+      debit: "Expense or Asset account(s)"
+      credit: "Accounts Payable (control account)"
+    required_fields:
+      - NameCode       # Must be a Creditor (SupplierType > 0)
+      - TheirRef       # Supplier's invoice number
+    typical_use: "Standard supplier invoice"
+
+  CIC:
+    code: "CIC"
+    name: "Creditor Invoice Complete"
+    full_name: "Creditor Invoice - Complete"
+    semantic: |
+      Invoice received FROM a supplier that is ALREADY PAID.
+      Used for immediate payment or COD purchases.
+    accounting_effect:
+      creates: payable_and_payment
+      creditor_balance: zero_net
+    typical_use: "COD purchase, credit card purchase"
+
+  CP:
+    code: "CP"
+    name: "Cash Payment"
+    full_name: "Cash Payment"
+    semantic: |
+      General cash payment NOT tied to an invoice.
+      For miscellaneous expenses, petty cash, etc.
+    accounting_effect:
+      bank_balance: decrease
+      no_creditor_effect: true
+    required_fields:
+      - Contra         # Bank/cash account
+    typical_use: "Miscellaneous payment, bank fees"
+
+  CPC:
+    code: "CPC"
+    name: "Cash Payment Creditor"
+    full_name: "Cash Payment for Creditor Invoice"
+    semantic: |
+      Payment made TO a supplier for invoice(s).
+      Reduces accounts payable.
+    accounting_effect:
+      bank_balance: decrease
+      creditor_balance: decrease
+    required_fields:
+      - NameCode       # Creditor being paid
+      - Contra         # Bank/cash account
+    allocation: "Usually allocated to specific invoices via Payments"
+    typical_use: "Supplier payment on account"
+
+  CPD:
+    code: "CPD"
+    name: "Cash Payment Debtor Refund"
+    full_name: "Cash Payment - Debtor Refund"
+    semantic: |
+      Refund issued TO a customer.
+      Reduces accounts receivable.
+    accounting_effect:
+      bank_balance: decrease
+      debtor_balance: decrease
+    typical_use: "Customer refund, credit note payment"
+
+  # === JOURNAL TRANSACTIONS ===
+
+  JN:
+    code: "JN"
+    name: "General Journal"
+    full_name: "General Journal Entry"
+    semantic: |
+      Manual journal entry for adjustments, accruals, corrections.
+      No automatic contra - user controls all entries.
+    accounting_effect:
+      manual: true
+      no_automatic_postings: true
+    constraints:
+      - "Cannot have NameCode (use specific transaction types for AR/AP)"
+      - "Must balance within transaction"
+    typical_use: "Month-end accruals, corrections, reclassifications"
+
+  JNS:
+    code: "JNS"
+    name: "Stock Journal"
+    full_name: "Stock Journal Entry"
+    semantic: |
+      Journal entry affecting inventory without financial impact.
+      For stock adjustments, transfers, write-offs.
+    accounting_effect:
+      inventory: affected
+      financial: none_or_manual
+    typical_use: "Inventory adjustments, stock takes"
+
+  # === ORDER TRANSACTIONS ===
+
+  SOI:
+    code: "SOI"
+    name: "Sales Order Incomplete"
+    full_name: "Sales Order - Incomplete"
+    semantic: |
+      Order received FROM a customer. Does NOT affect GL.
+      Reserves stock (if enabled). Converts to invoice when shipped.
+    accounting_effect:
+      gl_impact: none
+      stock_reserved: optional
+    typical_use: "Customer order awaiting fulfillment"
+
+  SOC:
+    code: "SOC"
+    name: "Sales Order Complete"
+    full_name: "Sales Order - Complete (Sold)"
+    semantic: |
+      Completed sales order. Affects GL and inventory.
+      Usually created by converting SOI.
+    accounting_effect:
+      gl_impact: yes
+      inventory: decreased
+    typical_use: "Fulfilled sales order"
+
+  POI:
+    code: "POI"
+    name: "Purchase Order Incomplete"
+    full_name: "Purchase Order - Incomplete"
+    semantic: |
+      Order placed TO a supplier. Does NOT affect GL.
+      Commits to purchase but no financial impact yet.
+    accounting_effect:
+      gl_impact: none
+    typical_use: "Supplier order awaiting delivery"
+
+  POC:
+    code: "POC"
+    name: "Purchase Order Complete"
+    full_name: "Purchase Order - Complete (Bought)"
+    semantic: |
+      Completed purchase order. Affects GL and inventory.
+      Usually created by converting POI.
+    accounting_effect:
+      gl_impact: yes
+      inventory: increased
+    typical_use: "Received purchase order"
+
+  # === QUOTE ===
+
+  QU:
+    code: "QU"
+    name: "Quote"
+    full_name: "Quote/Estimate"
+    semantic: |
+      Quotation for customer. NO GL or inventory impact.
+      Can be converted to sales order or invoice.
+    accounting_effect:
+      gl_impact: none
+      inventory: none
+    typical_use: "Customer quotation, estimate, proposal"
+
+type_classifications:
+  debtor_types: [DII, DIC, CRD]
+  creditor_types: [CII, CIC, CPC]
+  cash_types: [CR, CP, CRC, CPD]
+  journal_types: [JN, JNS]
+  order_types: [SOI, SOC, POI, POC, QU]
+
+  affects_gl: [DII, DIC, CII, CIC, CR, CRD, CRC, CP, CPC, CPD, JN, JNS, SOC, POC]
+  no_gl_impact: [SOI, POI, QU]
+
+  affects_debtor: [DII, DIC, CRD, CPD]
+  affects_creditor: [CII, CIC, CPC, CRC]
+
+decision_tree:
+  # Use this to determine correct transaction type
+  "Selling to customer?":
+    "Quote only": QU
+    "Order, not shipped": SOI
+    "Order, shipped": SOC
+    "Invoice, payment later": DII
+    "Invoice, paid now": DIC
+  "Receiving payment?":
+    "For invoice": CRD
+    "General/misc": CR
+    "Refund from supplier": CRC
+  "Buying from supplier?":
+    "Order, not received": POI
+    "Order, received": POC
+    "Invoice, payment later": CII
+    "Invoice, paid now": CIC
+  "Making payment?":
+    "For invoice": CPC
+    "General/misc": CP
+    "Refund to customer": CPD
+  "Adjustment/manual entry?":
+    "Financial": JN
+    "Stock only": JNS

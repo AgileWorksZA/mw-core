@@ -51,6 +51,15 @@ export enum MoneyWorksAssetLogAction {
  */
 export const MONEYWORKS_ASSETLOG_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique asset log entry identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "ParentSeq",
     dataType: "N" as const,
     canonicalDescription: "Sequencenumber of asset",

@@ -75,6 +75,15 @@ export enum MoneyWorksStockTakeState {
  */
 export const MONEYWORKS_INVENTORY_FIELDS = [
   {
+    fieldName: "SequenceNumber",
+    dataType: "N" as const,
+    canonicalDescription: "Primary key - unique inventory record identifier",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: true,
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "Expiry",
     dataType: "D" as const,
     canonicalDescription: "The expiry date for expiring batches",

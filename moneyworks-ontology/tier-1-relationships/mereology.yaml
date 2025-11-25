@@ -1,0 +1,192 @@
+# MoneyWorks Mereological Map
+# Tier 1: Parts-whole relationships
+# Token budget: ~1000 tokens
+
+# Mereology: The study of parts and wholes
+# Critical for AI agents to understand entity composition
+
+composites:
+  # === TRANSACTION STRUCTURE ===
+
+  Transaction:
+    whole_type: financial_event
+    description: "A complete financial transaction"
+    parts:
+      - entity: Detail
+        relationship: transaction_lines
+        cardinality: 1..N
+        link_field: Detail.ParentSeq → Transaction.SequenceNumber
+        constraint: "Must have at least one detail line"
+        balancing_rule: "sum(Detail.Debit) == sum(Detail.Credit)"
+
+    decomposition:
+      header: "Transaction entity (dates, reference, totals)"
+      lines: "Detail entities (accounts, amounts, allocations)"
+      separation: "Header stored once, lines stored per allocation"
+
+  # === NAME STRUCTURE ===
+
+  Name:
+    whole_type: business_entity
+    description: "A complete business contact with all related data"
+    parts:
+      - entity: Contact
+        relationship: additional_contacts
+        cardinality: 0..N
+        link_field: Contact.ParentSeq → Name.Seq
+        note: "Names has built-in Contact1/Contact2 fields (embedded)"
+
+      - entity: Memo
+        relationship: notes_and_reminders
+        cardinality: 0..N
+        link_field: Memo.NameSeq → Name.Seq
+
+    embedded_parts:
+      # These are fields within Names, not separate entities
+      - name: Contact1
+        fields: [Contact, email, Mobile, DDI, Afterhours, Position, Salutation, Role, Memo]
+      - name: Contact2
+        fields: [Contact2, email2, Mobile2, DDI2, Afterhours2, Position2, Salutation2, Role2, Memo2]
+
+    architectural_insight: |
+      Names uses a dual-layer contact architecture:
+      - Layer 1: Embedded Contact1/Contact2 for quick access (most businesses)
+      - Layer 2: Contacts subfile for unlimited contacts (enterprises)
+
+  # === PRODUCT STRUCTURE ===
+
+  Product:
+    whole_type: inventory_item
+    description: "A product with its inventory and assembly information"
+    parts:
+      - entity: Inventory
+        relationship: stock_locations
+        cardinality: 0..N
+        link_field: Inventory.ProductSeq → Product.Seq
+        constraint: "Only for inventory-tracked products"
+
+      - entity: BuildRecords
+        relationship: assembly_recipe
+        cardinality: 0..N
+        link_field: BuildRecords.ProductSeq → Product.Seq
+        constraint: "Only for assembled/kit products"
+
+    decomposition:
+      definition: "Product entity (description, pricing, accounts)"
+      locations: "Inventory entities (location, quantity, serial/batch)"
+      recipe: "BuildRecords entities (component parts, quantities)"
+
+  # === ASSET STRUCTURE ===
+
+  Asset:
+    whole_type: fixed_asset
+    description: "A fixed asset with its complete history"
+    parts:
+      - entity: AssetLog
+        relationship: audit_trail
+        cardinality: 0..N
+        link_field: AssetLog.AssetSeq → Asset.Seq
+        constraint: "System-managed history"
+
+    lifecycle_events:
+      - Purchase
+      - Depreciation
+      - Revaluation
+      - Disposal
+
+hierarchies:
+  # === SELF-REFERENTIAL HIERARCHIES ===
+
+  Accounts:
+    type: tree
+    parent_field: ParentCode
+    child_field: Code
+    semantic: "Chart of accounts hierarchy"
+    depth: unlimited
+    examples:
+      - "1000 Assets → 1100 Current Assets → 1110 Cash"
+      - "4000 Revenue → 4100 Sales → 4110 Product Sales"
+
+  Jobs:
+    type: tree
+    parent_field: ParentCode
+    child_field: Code
+    semantic: "Project/sub-project hierarchy"
+    depth: unlimited
+    client_at_top: "Top-level jobs link to Names via DebtorCode"
+    examples:
+      - "PRJ001 Main Project → PRJ001.1 Phase 1 → PRJ001.1.1 Task A"
+
+  Transactions:
+    type: linked_pairs
+    link_field: OriginalSeq
+    semantic: "Transaction chains (cancellations, orders to invoices)"
+    patterns:
+      - "Quote → Order → Invoice → Receipt"
+      - "Invoice → Cancellation"
+
+junction_tables:
+  # === MANY-TO-MANY RELATIONSHIPS ===
+
+  Payments:
+    role: invoice_payment_allocations
+    description: "Links invoices to payment transactions"
+    relationship: "Transactions (invoice) ←→ Transactions (payment)"
+    keys:
+      - InvoiceID: "Transaction.SequenceNumber of invoice"
+      - PaymentID: "Transaction.SequenceNumber of payment"
+    cardinality: "Many invoices can be paid by many payments"
+    special_encoding: |
+      For overpayments: InvoiceID is negative with high-bit set
+      Allows tracking unallocated payment amounts
+
+atomic_entities:
+  # === ENTITIES WITHOUT PARTS ===
+
+  - entity: TaxRates
+    note: "Standalone tax configuration"
+
+  - entity: Departments
+    note: "Standalone organizational unit"
+
+  - entity: GeneralClassifications
+    note: "Standalone category definitions"
+
+  - entity: Login
+    note: "Standalone user authentication"
+
+  - entity: User
+    note: "Standalone key-value storage"
+
+  - entity: User2
+    note: "Standalone typed storage"
+
+  - entity: Allocations
+    note: "Standalone allocation rules"
+
+  - entity: Reconciliation
+    note: "Standalone session metadata"
+
+understanding_guide:
+  for_agents: |
+    When working with MoneyWorks entities:
+
+    1. TRANSACTIONS are COMPOSED OF Details
+       - Never create a Transaction without Detail lines
+       - Detail lines must balance (debits = credits)
+
+    2. NAMES CAN HAVE Contacts and Memos
+       - Simple case: Use built-in Contact1/Contact2 fields
+       - Complex case: Add records to Contacts subfile
+
+    3. PRODUCTS CAN HAVE Inventory and BuildRecords
+       - Only if inventory tracking is enabled
+       - BuildRecords only for assembled products
+
+    4. ASSETS ACCUMULATE AssetLog entries
+       - System manages the log automatically
+       - Each action creates a log entry
+
+    5. ACCOUNTS and JOBS can be HIERARCHICAL
+       - Check ParentCode to understand structure
+       - Navigate tree for reporting roll-ups

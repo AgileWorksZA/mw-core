@@ -1,0 +1,136 @@
+# MoneyWorks Entity Dependency Graph
+# Tier 1: Navigation - loaded for exploration
+# Token budget: ~1200 tokens
+
+# Entity creation order and dependencies
+# Determines: What must exist before X can be created?
+
+creation_order:
+  # Level 0: No dependencies (can be created first)
+  independent:
+    - GeneralClassifications  # Categories and groups
+    - Login                   # User accounts
+    - User                    # Script storage
+    - User2                   # Enhanced storage
+
+  # Level 1: Depends only on Level 0
+  foundation:
+    - TaxRates                # Depends on: nothing (but uses Accounts when created)
+    - Departments             # Depends on: GeneralClassifications (optional)
+    - Accounts                # Depends on: TaxRates (optional), GeneralClassifications
+
+  # Level 2: Depends on Level 1
+  core:
+    - Names                   # Depends on: Accounts (RecAccount, PayAccount), TaxRates
+    - Products                # Depends on: TaxRates, Accounts (AssetAccount, etc.)
+    - Jobs                    # Depends on: Names (DebtorCode), Accounts
+    - Assets                  # Depends on: Accounts, Departments
+
+  # Level 3: Depends on Level 2
+  operational:
+    - Transactions            # Depends on: Names, Accounts, Products, Jobs, TaxRates
+    - Reconciliation          # Depends on: Accounts (bank accounts)
+    - Allocations             # Depends on: Accounts
+
+  # Level 4: Depends on Level 3
+  derived:
+    - Payments                # Depends on: Transactions (links invoices to payments)
+
+  # Subfiles: Created with parent
+  subfiles:
+    Detail: { parent: Transactions }
+    Contacts: { parent: Names }
+    Memo: { parent: Names }
+    Inventory: { parent: Products }
+    BuildRecords: { parent: Products }
+    AssetLog: { parent: Assets }
+
+dependencies:
+  Transactions:
+    hard:  # Must exist, will fail without
+      - Accounts              # Every detail line needs an account
+    soft:  # Usually needed, can be empty
+      - Names                 # NameCode (customer/supplier)
+      - Products              # Detail.StockCode
+      - Jobs                  # Detail.JobCode
+      - TaxRates              # Detail.TaxCode
+      - Departments           # Detail.Dept
+
+  Names:
+    hard: []
+    soft:
+      - Accounts              # RecAccount, PayAccount
+      - TaxRates              # DefaultTax
+      - Departments           # Category fields
+
+  Products:
+    hard: []
+    soft:
+      - TaxRates              # TaxCode
+      - Accounts              # AssetAccount, COGSAccount, IncomeAccount
+      - Departments           # Category fields
+
+  Jobs:
+    hard: []
+    soft:
+      - Names                 # DebtorCode (client)
+      - Accounts              # Control accounts
+      - Products              # For job materials
+
+  Assets:
+    hard:
+      - Accounts              # AssetAccount, DepreciationAccount
+    soft:
+      - Departments           # DepartmentCode
+
+  Payments:
+    hard:
+      - Transactions          # Both invoice and payment must exist
+
+cascade_effects:
+  # What happens when X is deleted/modified?
+
+  Names:
+    referenced_by:
+      - Transactions.NameCode
+      - Jobs.DebtorCode
+      - Contacts.ParentSeq
+      - Memo.NameSeq
+    deletion: "Block if referenced by transactions"
+
+  Accounts:
+    referenced_by:
+      - Transactions.Detail.AcctCode
+      - Names.RecAccount
+      - Names.PayAccount
+      - Assets.AssetAccount
+      - TaxRates.CollectAccount
+    deletion: "Block if has balance or transactions"
+
+  Products:
+    referenced_by:
+      - Transactions.Detail.StockCode
+      - Inventory.ProductSeq
+      - BuildRecords.ProductSeq
+    deletion: "Block if has inventory or transactions"
+
+  TaxRates:
+    referenced_by:
+      - Transactions.Detail.TaxCode
+      - Names.DefaultTax
+      - Products.TaxCode
+    deletion: "Block if in use"
+
+  Jobs:
+    referenced_by:
+      - Transactions.Detail.JobCode
+    deletion: "Block if has transactions"
+
+validation_order:
+  # Order to validate when creating a Transaction
+  - "1. Verify NameCode exists in Names (if provided)"
+  - "2. Verify all Detail.AcctCode exist in Accounts"
+  - "3. Verify Detail.StockCode exist in Products (if provided)"
+  - "4. Verify Detail.JobCode exist in Jobs (if provided)"
+  - "5. Verify Detail.TaxCode exist in TaxRates"
+  - "6. Verify sum(debits) == sum(credits)"
