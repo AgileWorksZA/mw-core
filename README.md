@@ -121,6 +121,10 @@ This enables clean imports between packages:
 import { MoneyWorksRestClient } from "@moneyworks/data/client";
 ```
 
+## Removed Packages
+
+- **web1** - React Router v7 web UI (removed in `a3d1e64`). Recover: `git checkout 6118813 -- packages/web1`
+
 ## License
 
 [MIT](LICENSE)
