@@ -22,6 +22,7 @@ Certain accounts are hard-wired into MoneyWorks' business logic. You generally c
 Accounts can be segmented by department using a suffix (e.g., `4000-A`, `4000-B`).
 *   The "base" account is `4000`.
 *   The system treats `4000-A` as a distinct GL code but allows reporting rolled up by `4000` or by Department `A`.
+*   **See Also**: [**Ledger Entity**](ledger.md) - The `Ledger` table stores the actual departmental balances. The `Account` table just defines the 4000 "parent".
 
 ---
 
