@@ -11,7 +11,6 @@
 		"build:cli": "echo 'Running directly from TypeScript - no build needed'",
 		"build:mcp": "echo 'Running directly from TypeScript - no build needed'",
 		"build:deps": "echo 'Running directly from TypeScript - no build needed'",
-		"build:all": "echo 'Only web1 needs building for production' && bun --cwd packages/web1 build",
 		"build:api": "echo 'Running directly from TypeScript - no build needed'",
 		"clean": "rm -rf node_modules packages/*/node_modules",
 		"test": "bun test",
@@ -22,11 +21,7 @@
 		"mcp:start": "bun --cwd packages/mcp-server start",
 		"api": "bun --cwd packages/api dev",
 		"api:start": "bun --cwd packages/api start",
-		"api:build": "bun run build:deps && bun --cwd packages/api build",
-		"web": "bun --bun --cwd packages/web1 dev",
-		"web:build": "bun run build:deps && bun --cwd packages/web1 build",
-		"start:web": "bun --cwd packages/web1 start",
-		"start:api": "bun --cwd packages/api start"
+		"api:build": "bun run build:deps && bun --cwd packages/api build"
 	},
 	"type": "module",
 	"workspaces": ["packages/*"],
