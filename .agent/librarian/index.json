@@ -1,43 +1,532 @@
 {
-	"version": "1.0.0",
-	"metadata": {
-		"createdAt": "2025-11-24T02:17:09.206Z",
-		"totalFiles": 46,
-		"gitCommit": "9615c28a819573fc5c0ae4ba3822536b7d1ac37f",
-		"indexedDomains": [
-			"canonical",
-			"data-access",
-			"api",
-			"cli",
-			"mcp",
-			"utilities",
-			"documentation"
-		]
-	},
-	"summary": {
-		"byDomain": {
-			"canonical": 12,
-			"data-access": 14,
-			"api": 5,
-			"cli": 2,
-			"mcp": 2,
-			"utilities": 3,
-			"documentation": 2,
-			"other": 6
-		},
-		"byLayer": {
-			"entity": 9,
-			"client": 3,
-			"parser": 6,
-			"converter": 1,
-			"repository": 3,
-			"route": 1,
-			"middleware": 3,
-			"command": 2,
-			"tool": 2,
-			"util": 8,
-			"skill": 2
-		}
-	},
-	"note": "Full file metadata extracted by Explore agent - see Task result from 2025-11-24 for complete details"
+  "version": "2.0.0",
+  "metadata": {
+    "createdAt": "2025-11-24T14:30:00.000Z",
+    "totalFiles": 29,
+    "gitCommit": "6118813",
+    "indexedDomains": ["api", "canonical", "data", "cli", "mcp-server", "chat", "utilities"]
+  },
+  "files": [
+    {
+      "path": "packages/api/src/index.ts",
+      "purpose": "ElysiaJS REST API server entry point with token authentication for MoneyWorks data access",
+      "layer": "routes",
+      "domain": "api",
+      "keyConcepts": ["ElysiaJS", "Token-based authentication", "REST API", "Server initialization", "Graceful shutdown"],
+      "architecturalPatterns": ["Server bootstrapping", "Factory pattern", "Signal handling", "Client connection pooling"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/api/src/routes/tables.ts",
+      "purpose": "RESTful endpoints for MoneyWorks table data export, schema discovery, and internationalization",
+      "layer": "routes",
+      "domain": "api",
+      "keyConcepts": ["Table registry", "Data export", "Multiple export formats", "Schema discovery", "Pagination"],
+      "architecturalPatterns": ["Factory pattern", "Dependency injection", "Content negotiation", "Controller pattern"],
+      "complexity": "high",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/api/src/routes/auth.ts",
+      "purpose": "Handles MoneyWorks authentication endpoints for token exchange, refresh, and logout",
+      "layer": "routes",
+      "domain": "api",
+      "keyConcepts": ["Token Exchange", "Credential Validation", "Access/Refresh Token Pattern", "Bearer Token Authorization"],
+      "architecturalPatterns": ["Route Factory Pattern", "Error Handling", "Bearer Token Authentication"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/api/src/routes/eval.ts",
+      "purpose": "MWScript evaluation routes for expression and template evaluation against MoneyWorks tables",
+      "layer": "routes",
+      "domain": "api",
+      "keyConcepts": ["MWScript evaluation", "Expression evaluation", "Template evaluation", "Result caching"],
+      "architecturalPatterns": ["Route factory pattern", "Result caching with TTL", "Data type detection"],
+      "complexity": "medium",
+      "importance": "high"
+    },
+    {
+      "path": "packages/api/src/registry/table-registry.ts",
+      "purpose": "Central registry managing MoneyWorks table controllers with vetting status tracking",
+      "layer": "config",
+      "domain": "api",
+      "keyConcepts": ["Table registration", "Controller management", "Vetting status", "Table lifecycle"],
+      "architecturalPatterns": ["Registry pattern", "Service locator", "Factory with lazy initialization"],
+      "complexity": "low",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/api/src/controllers/base-table.ts",
+      "purpose": "Abstract base controller providing generic CRUD and export functionality for MoneyWorks table entities",
+      "layer": "controller",
+      "domain": "api",
+      "keyConcepts": ["Table abstraction", "Export format handling", "Parameter validation", "Schema discovery"],
+      "architecturalPatterns": ["Template Method Pattern", "Strategy Pattern", "Error translation"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/api/src/services/connection-service.ts",
+      "purpose": "Manages MoneyWorks API connections with encrypted storage, token generation, and authentication",
+      "layer": "service",
+      "domain": "api",
+      "keyConcepts": ["Connection Management", "Token-Based Authentication", "AES-256-GCM Encryption", "SQLite Persistence"],
+      "architecturalPatterns": ["Service Layer Pattern", "Singleton Pattern", "Caching Strategy", "Token Hashing"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/canonical/src/index.ts",
+      "purpose": "Central entry point for pure MoneyWorks canonical types, enums, and business logic",
+      "layer": "schema",
+      "domain": "canonical",
+      "keyConcepts": ["Canonical DSL", "MoneyWorks type definitions", "Entity namespacing", "Branded types"],
+      "architecturalPatterns": ["Barrel export pattern", "Entity namespace isolation", "Re-export aggregation"],
+      "complexity": "low",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/canonical/src/entities/tax-rates/types.ts",
+      "purpose": "Pure MoneyWorks canonical type definitions for tax rate entities with strict DSL terminology",
+      "layer": "schema",
+      "domain": "canonical",
+      "keyConcepts": ["TaxCode", "MoneyWorks GST terminology", "PaidAccount", "RecAccount", "Tax rate changeover"],
+      "architecturalPatterns": ["Canonical DSL preservation", "Branded type usage", "AI-instruction metadata"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/canonical/src/entities/names/types.ts",
+      "purpose": "Canonical MoneyWorks Names entity type definitions for customers, suppliers, debtors, and creditors",
+      "layer": "schema",
+      "domain": "canonical",
+      "keyConcepts": ["MoneyWorksName entity", "Customer vs Debtor", "Supplier vs Creditor", "Contact information"],
+      "architecturalPatterns": ["Canonical DSL", "Branded types", "Partial type pattern", "Filter interface"],
+      "complexity": "high",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/canonical/src/entities/accounts/types.ts",
+      "purpose": "MoneyWorks Account entity types with comprehensive field mappings and DSL purity enforcement",
+      "layer": "schema",
+      "domain": "canonical",
+      "keyConcepts": ["MoneyWorks Account Entity", "Chart of Accounts", "Account Type Classification", "Balance Tracking"],
+      "architecturalPatterns": ["Branded Types", "Canonical DSL", "Input/Output Type Separation", "Filter Interface"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/data/src/index.ts",
+      "purpose": "Public API entry point for the MoneyWorks data access layer",
+      "layer": "service",
+      "domain": "data",
+      "keyConcepts": ["MoneyWorks REST API client", "Repository pattern", "Data parsers", "Export format conversion"],
+      "architecturalPatterns": ["Repository pattern", "Factory pattern", "Smart client abstraction"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/data/src/client/moneyworks-smart-client.ts",
+      "purpose": "Smart MoneyWorks REST client with automatic field discovery and multiple export format support",
+      "layer": "service",
+      "domain": "data",
+      "keyConcepts": ["Field discovery", "Export formats", "TSV parsing", "Schema enrichment", "Table structure caching"],
+      "architecturalPatterns": ["Inheritance", "Caching", "Factory pattern", "Adapter pattern", "Lazy loading"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/data/src/repositories/base.repository.ts",
+      "purpose": "Base repository pattern and interface for MoneyWorks entity CRUD operations",
+      "layer": "service",
+      "domain": "data",
+      "keyConcepts": ["Repository Pattern", "MoneyWorks DSL", "CRUD Operations", "Generic Types", "Field Discovery"],
+      "architecturalPatterns": ["Abstract Repository Pattern", "Generic Repository", "Template Method", "Factory Pattern"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/data/src/repositories/tax-rate.repository.ts",
+      "purpose": "Repository for MoneyWorks TaxRate entity data access operations",
+      "layer": "service",
+      "domain": "data",
+      "keyConcepts": ["TaxRate entity", "MoneyWorks DSL", "TaxCode", "GST rates", "Multi-tier tax rates"],
+      "architecturalPatterns": ["Repository pattern", "Generic inheritance", "Post-processing", "Query filtering"],
+      "complexity": "medium",
+      "importance": "high"
+    },
+    {
+      "path": "packages/data/src/parsers/field-discovery.ts",
+      "purpose": "Dynamically discovers MoneyWorks table field structures from XML exports",
+      "layer": "service",
+      "domain": "data",
+      "keyConcepts": ["Field discovery", "Table structure", "XML parsing", "TSV field mapping", "Data type inference"],
+      "architecturalPatterns": ["Cache-first lookup", "Fallback to dynamic discovery", "Parser composition"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/data/src/parsers/smart-tsv-parser.ts",
+      "purpose": "Parse headerless TSV data from MoneyWorks using discovered field structure metadata",
+      "layer": "service",
+      "domain": "data",
+      "keyConcepts": ["TSV parsing", "Field structure mapping", "Data type inference", "Headerless data handling"],
+      "architecturalPatterns": ["Dependency injection", "Type-based value parsing", "Validation pattern"],
+      "complexity": "medium",
+      "importance": "high"
+    },
+    {
+      "path": "packages/data/src/converters/export-format-converter.ts",
+      "purpose": "Transforms MoneyWorks data between different export formats",
+      "layer": "service",
+      "domain": "data",
+      "keyConcepts": ["Export format conversion", "Data normalization", "Schema enrichment", "Array-to-object conversion"],
+      "architecturalPatterns": ["Format conversion pipeline", "Normalization to intermediate format", "Two-stage conversion"],
+      "complexity": "medium",
+      "importance": "high"
+    },
+    {
+      "path": "packages/cli/src/index.ts",
+      "purpose": "Entry point for the MoneyWorks CLI application",
+      "layer": "cli",
+      "domain": "cli",
+      "keyConcepts": ["Command-line argument parsing", "CLI routing", "Configuration loading", "SmartClient instantiation"],
+      "architecturalPatterns": ["Command handler pattern", "Configuration-driven initialization", "Error boundary"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/mcp-server/src/index.ts",
+      "purpose": "CLI entry point that initializes and starts the MoneyWorks MCP server",
+      "layer": "config",
+      "domain": "mcp-server",
+      "keyConcepts": ["Model Context Protocol", "CLI executable", "Process lifecycle", "Signal handling"],
+      "architecturalPatterns": ["CLI entry point pattern", "Graceful shutdown pattern", "Server factory pattern"],
+      "complexity": "low",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/mcp-server/src/server.ts",
+      "purpose": "MCP Server implementation for MoneyWorks, managing tools and resources for AI agent integration",
+      "layer": "service",
+      "domain": "mcp-server",
+      "keyConcepts": ["Model Context Protocol", "Server initialization", "Tool routing", "Resource handling"],
+      "architecturalPatterns": ["Singleton pattern", "Request handler pattern", "Tool registry pattern", "Lazy loading"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/mcp-server/src/tools/export.tool.ts",
+      "purpose": "MCP tool definition for exporting MoneyWorks entity data with multiple format support",
+      "layer": "service",
+      "domain": "mcp-server",
+      "keyConcepts": ["Data export", "MoneyWorks entities", "Export formats", "Data filtering", "Pagination"],
+      "architecturalPatterns": ["MCP tool handler pattern", "Input schema validation", "Entity whitelisting"],
+      "complexity": "medium",
+      "importance": "high"
+    },
+    {
+      "path": "packages/chat/src/index.ts",
+      "purpose": "Central aggregation point for chat package re-exports",
+      "layer": "component",
+      "domain": "chat",
+      "keyConcepts": ["Module re-export pattern", "Chat interface abstraction", "Client-server separation"],
+      "architecturalPatterns": ["Barrel export", "Client-server decoupling", "Package namespace aggregation"],
+      "complexity": "low",
+      "importance": "high"
+    },
+    {
+      "path": "packages/chat/src/server/chat-service.ts",
+      "purpose": "Core service for handling streaming chat interactions with MoneyWorks data using OpenAI",
+      "layer": "service",
+      "domain": "chat",
+      "keyConcepts": ["Streaming chat", "Language model integration", "Tool-based function calling", "Data enrichment"],
+      "architecturalPatterns": ["Service pattern", "Streaming iterator pattern", "Dependency injection", "Tool-calling"],
+      "complexity": "high",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/chat/src/server/prompts.ts",
+      "purpose": "Generates system prompts for MoneyWorks accounting chat assistant",
+      "layer": "config",
+      "domain": "chat",
+      "keyConcepts": ["System prompt generation", "MoneyWorks terminology enforcement", "Transaction types", "Status codes"],
+      "architecturalPatterns": ["Context-dependent prompt generation", "Semantic enforcement", "Behavioral directives"],
+      "complexity": "medium",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/chat/src/server/tools.ts",
+      "purpose": "Factory function creating AI tool definitions for MoneyWorks data queries",
+      "layer": "service",
+      "domain": "chat",
+      "keyConcepts": ["Tool definitions", "AI agent integration", "MoneyWorks entity queries", "Financial reports"],
+      "architecturalPatterns": ["Factory pattern", "Tool/agent pattern", "Repository pattern usage", "Schema-driven API"],
+      "complexity": "medium",
+      "importance": "high"
+    },
+    {
+      "path": "packages/utilities/src/index.ts",
+      "purpose": "Central barrel export for shared MoneyWorks utilities",
+      "layer": "util",
+      "domain": "utilities",
+      "keyConcepts": ["Branded types", "Type-safe date handling", "JSON serialization", "MoneyWorks DSL primitives"],
+      "architecturalPatterns": ["Barrel exports", "Branded type pattern", "Tagged template literals"],
+      "complexity": "low",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/utilities/src/date/yyyymmdd.ts",
+      "purpose": "Type-safe YYYYMMDD date handling for MoneyWorks with validation and chainable methods",
+      "layer": "util",
+      "domain": "utilities",
+      "keyConcepts": ["YYYYMMDD branded type", "Date format validation", "Type guards", "Proxy-based method chaining"],
+      "architecturalPatterns": ["Branded types", "Type guard pattern", "Proxy pattern", "Tagged template literals"],
+      "complexity": "high",
+      "importance": "critical"
+    },
+    {
+      "path": "packages/utilities/src/types/branded.ts",
+      "purpose": "Defines branded types for type-safe primitives in the MoneyWorks ecosystem",
+      "layer": "schema",
+      "domain": "utilities",
+      "keyConcepts": ["Branded types", "Type safety for primitives", "MoneyWorks date formats", "Account codes"],
+      "architecturalPatterns": ["Brand<T, B> generic", "Unbrand<T> utility", "Nominal typing"],
+      "complexity": "low",
+      "importance": "critical"
+    }
+  ],
+  "indexes": {
+    "byDomain": {
+      "api": [
+        "packages/api/src/index.ts",
+        "packages/api/src/routes/tables.ts",
+        "packages/api/src/routes/auth.ts",
+        "packages/api/src/routes/eval.ts",
+        "packages/api/src/registry/table-registry.ts",
+        "packages/api/src/controllers/base-table.ts",
+        "packages/api/src/services/connection-service.ts"
+      ],
+      "canonical": [
+        "packages/canonical/src/index.ts",
+        "packages/canonical/src/entities/tax-rates/types.ts",
+        "packages/canonical/src/entities/names/types.ts",
+        "packages/canonical/src/entities/accounts/types.ts"
+      ],
+      "data": [
+        "packages/data/src/index.ts",
+        "packages/data/src/client/moneyworks-smart-client.ts",
+        "packages/data/src/repositories/base.repository.ts",
+        "packages/data/src/repositories/tax-rate.repository.ts",
+        "packages/data/src/parsers/field-discovery.ts",
+        "packages/data/src/parsers/smart-tsv-parser.ts",
+        "packages/data/src/converters/export-format-converter.ts"
+      ],
+      "cli": [
+        "packages/cli/src/index.ts"
+      ],
+      "mcp-server": [
+        "packages/mcp-server/src/index.ts",
+        "packages/mcp-server/src/server.ts",
+        "packages/mcp-server/src/tools/export.tool.ts"
+      ],
+      "chat": [
+        "packages/chat/src/index.ts",
+        "packages/chat/src/server/chat-service.ts",
+        "packages/chat/src/server/prompts.ts",
+        "packages/chat/src/server/tools.ts"
+      ],
+      "utilities": [
+        "packages/utilities/src/index.ts",
+        "packages/utilities/src/date/yyyymmdd.ts",
+        "packages/utilities/src/types/branded.ts"
+      ]
+    },
+    "byLayer": {
+      "routes": [
+        "packages/api/src/index.ts",
+        "packages/api/src/routes/tables.ts",
+        "packages/api/src/routes/auth.ts",
+        "packages/api/src/routes/eval.ts"
+      ],
+      "controller": [
+        "packages/api/src/controllers/base-table.ts"
+      ],
+      "service": [
+        "packages/api/src/services/connection-service.ts",
+        "packages/data/src/index.ts",
+        "packages/data/src/client/moneyworks-smart-client.ts",
+        "packages/data/src/repositories/base.repository.ts",
+        "packages/data/src/repositories/tax-rate.repository.ts",
+        "packages/data/src/parsers/field-discovery.ts",
+        "packages/data/src/parsers/smart-tsv-parser.ts",
+        "packages/data/src/converters/export-format-converter.ts",
+        "packages/mcp-server/src/server.ts",
+        "packages/mcp-server/src/tools/export.tool.ts",
+        "packages/chat/src/server/chat-service.ts",
+        "packages/chat/src/server/tools.ts"
+      ],
+      "schema": [
+        "packages/canonical/src/index.ts",
+        "packages/canonical/src/entities/tax-rates/types.ts",
+        "packages/canonical/src/entities/names/types.ts",
+        "packages/canonical/src/entities/accounts/types.ts",
+        "packages/utilities/src/types/branded.ts"
+      ],
+      "config": [
+        "packages/api/src/registry/table-registry.ts",
+        "packages/mcp-server/src/index.ts",
+        "packages/chat/src/server/prompts.ts"
+      ],
+      "cli": [
+        "packages/cli/src/index.ts"
+      ],
+      "component": [
+        "packages/chat/src/index.ts"
+      ],
+      "util": [
+        "packages/utilities/src/index.ts",
+        "packages/utilities/src/date/yyyymmdd.ts"
+      ]
+    },
+    "byPattern": {
+      "Repository": [
+        "packages/data/src/repositories/base.repository.ts",
+        "packages/data/src/repositories/tax-rate.repository.ts"
+      ],
+      "Factory": [
+        "packages/api/src/index.ts",
+        "packages/api/src/routes/tables.ts",
+        "packages/api/src/routes/auth.ts",
+        "packages/data/src/index.ts",
+        "packages/data/src/client/moneyworks-smart-client.ts",
+        "packages/chat/src/server/tools.ts"
+      ],
+      "Singleton": [
+        "packages/api/src/services/connection-service.ts",
+        "packages/mcp-server/src/server.ts"
+      ],
+      "BrandedTypes": [
+        "packages/canonical/src/entities/tax-rates/types.ts",
+        "packages/canonical/src/entities/names/types.ts",
+        "packages/canonical/src/entities/accounts/types.ts",
+        "packages/utilities/src/types/branded.ts",
+        "packages/utilities/src/date/yyyymmdd.ts"
+      ],
+      "BarrelExport": [
+        "packages/canonical/src/index.ts",
+        "packages/data/src/index.ts",
+        "packages/chat/src/index.ts",
+        "packages/utilities/src/index.ts"
+      ],
+      "Caching": [
+        "packages/data/src/client/moneyworks-smart-client.ts",
+        "packages/data/src/parsers/field-discovery.ts",
+        "packages/api/src/services/connection-service.ts"
+      ],
+      "StreamingIterator": [
+        "packages/chat/src/server/chat-service.ts"
+      ],
+      "MCP": [
+        "packages/mcp-server/src/index.ts",
+        "packages/mcp-server/src/server.ts",
+        "packages/mcp-server/src/tools/export.tool.ts"
+      ]
+    },
+    "byConcept": {
+      "authentication": [
+        "packages/api/src/routes/auth.ts",
+        "packages/api/src/services/connection-service.ts"
+      ],
+      "data-export": [
+        "packages/api/src/routes/tables.ts",
+        "packages/data/src/client/moneyworks-smart-client.ts",
+        "packages/data/src/converters/export-format-converter.ts",
+        "packages/mcp-server/src/tools/export.tool.ts"
+      ],
+      "field-discovery": [
+        "packages/data/src/parsers/field-discovery.ts",
+        "packages/data/src/client/moneyworks-smart-client.ts"
+      ],
+      "tsv-parsing": [
+        "packages/data/src/parsers/smart-tsv-parser.ts",
+        "packages/data/src/parsers/field-discovery.ts"
+      ],
+      "moneyworks-dsl": [
+        "packages/canonical/src/index.ts",
+        "packages/canonical/src/entities/tax-rates/types.ts",
+        "packages/canonical/src/entities/names/types.ts",
+        "packages/canonical/src/entities/accounts/types.ts"
+      ],
+      "ai-integration": [
+        "packages/chat/src/server/chat-service.ts",
+        "packages/chat/src/server/tools.ts",
+        "packages/mcp-server/src/server.ts"
+      ],
+      "date-handling": [
+        "packages/utilities/src/date/yyyymmdd.ts",
+        "packages/utilities/src/types/branded.ts"
+      ]
+    }
+  },
+  "conceptMap": {
+    "data-access-layer": {
+      "description": "MoneyWorks data access via REST API with smart field discovery and multiple export formats",
+      "primaryFiles": [
+        "packages/data/src/index.ts",
+        "packages/data/src/client/moneyworks-smart-client.ts",
+        "packages/data/src/repositories/base.repository.ts"
+      ],
+      "relatedConcepts": ["field-discovery", "tsv-parsing", "export-formats", "repository-pattern"]
+    },
+    "canonical-types": {
+      "description": "Pure MoneyWorks type definitions preserving exact DSL terminology",
+      "primaryFiles": [
+        "packages/canonical/src/index.ts",
+        "packages/canonical/src/entities/tax-rates/types.ts",
+        "packages/canonical/src/entities/names/types.ts",
+        "packages/canonical/src/entities/accounts/types.ts"
+      ],
+      "relatedConcepts": ["branded-types", "dsl-preservation", "type-safety"]
+    },
+    "api-layer": {
+      "description": "REST API endpoints for MoneyWorks data access with authentication",
+      "primaryFiles": [
+        "packages/api/src/index.ts",
+        "packages/api/src/routes/tables.ts",
+        "packages/api/src/routes/auth.ts"
+      ],
+      "relatedConcepts": ["authentication", "data-export", "elysia-framework"]
+    },
+    "ai-integration": {
+      "description": "AI agent integration via MCP server and chat service",
+      "primaryFiles": [
+        "packages/mcp-server/src/server.ts",
+        "packages/chat/src/server/chat-service.ts",
+        "packages/chat/src/server/tools.ts"
+      ],
+      "relatedConcepts": ["model-context-protocol", "openai-integration", "tool-calling"]
+    },
+    "type-safety-utilities": {
+      "description": "Branded types and type-safe utilities for MoneyWorks primitives",
+      "primaryFiles": [
+        "packages/utilities/src/types/branded.ts",
+        "packages/utilities/src/date/yyyymmdd.ts"
+      ],
+      "relatedConcepts": ["branded-types", "date-handling", "nominal-typing"]
+    }
+  },
+  "queries": {
+    "how-to-start-api-server": ["packages/api/src/index.ts"],
+    "how-to-export-moneyworks-data": ["packages/data/src/client/moneyworks-smart-client.ts", "packages/api/src/routes/tables.ts"],
+    "how-to-create-repository": ["packages/data/src/repositories/base.repository.ts"],
+    "how-to-handle-moneyworks-dates": ["packages/utilities/src/date/yyyymmdd.ts"],
+    "how-to-authenticate-with-api": ["packages/api/src/routes/auth.ts", "packages/api/src/services/connection-service.ts"],
+    "how-to-add-mcp-tool": ["packages/mcp-server/src/server.ts", "packages/mcp-server/src/tools/export.tool.ts"],
+    "what-is-field-discovery": ["packages/data/src/parsers/field-discovery.ts"],
+    "what-moneyworks-entities-exist": ["packages/canonical/src/index.ts"],
+    "how-to-use-branded-types": ["packages/utilities/src/types/branded.ts"]
+  }
 }

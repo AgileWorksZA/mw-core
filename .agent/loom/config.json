@@ -88,8 +88,14 @@
 			"name": "Contacts",
 			"description": "Contact entity features - extends Names table with unlimited additional contacts per Name",
 			"storyCount": 1
+		},
+		{
+			"code": "TXNS",
+			"name": "Transactions",
+			"description": "Transaction and Detail entity features - core financial transactions with header/detail architecture",
+			"storyCount": 1
 		}
 	],
-	"storyCounter": 3,
+	"storyCounter": 4,
 	"taskCounter": 21
 }
