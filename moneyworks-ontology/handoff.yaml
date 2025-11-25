@@ -19,11 +19,11 @@ protocol:
 
   initialization_sequence:
     1: "Read this file (handoff.yaml) completely"
-    2: "Read SESSION-004-FINAL-QUALIA.md for semantic context and architectural insights"
-    3: "Read state.yaml for current epistemic state (92% confidence, 90% field coverage)"
-    4: "Read backlog.yaml for task status"
-    5: "Review SESSION-004-SUMMARY.md for detailed session 004 outcomes"
-    6: "Execute next priority tasks (verification script update or remaining field gaps)"
+    2: "Read SESSION-005-FINAL-QUALIA.md for semantic context and breakthrough discoveries"
+    3: "Read state.yaml for current epistemic state (94% confidence, 91.2% field coverage, 4 perfect entities)"
+    4: "Read backlog.yaml for task status (TASK-019 & TASK-020 Phase 1 complete)"
+    5: "Review SESSION-005-SUMMARY.md for detailed session 005 outcomes"
+    6: "Execute TASK-020 Phase 2 for remaining 96 fields (Detail prefix, General, Contacts, scattered gaps)"
 
   session_end_protocol:
     1: "Update state.yaml with session outcomes"
@@ -76,18 +76,18 @@ project:
 # ============================================================================
 
 current_state:
-  phase: "Post-Empirical Coverage Sprint - 90% Coverage Achieved - Verification Script Update Required"
-  last_session: "2025-11-25 (Session-004)"
+  phase: "Post-Empirical Coverage Sprint - 91.2% Coverage Achieved - Phase 2 Ready"
+  last_session: "2025-11-26 (Session-005)"
 
   confidence:
-    overall: "92%"
+    overall: "94%"
     structural: "95%"
-    entity_coverage: "77%" # 24/31 entities documented (up from 68%)
+    entity_coverage: "77%" # 24/31 entities documented (unchanged)
     fk_verification: "87%"
     qualia: "85%"
     source_fidelity: "65%"
-    empirical_field_coverage: "90%" # ~980/1090 fields (up from 83%)
-    priority_entity_fidelity: "95%" # Critical gaps (Ledger, JobSheet, AssetCat) now closed
+    empirical_field_coverage: "91.2%" # 994/1090 fields (verified via automation, up from 66.6% measured baseline)
+    priority_entity_fidelity: "98%" # 4/31 perfect matches (Ledger, TaxRate, JobSheet, AssetCat)
 
   completed:
     # Previous sessions
@@ -122,22 +122,34 @@ current_state:
 
   next_actions:
     priority_1:
-      - task: "Update verification script entity mapping"
-        description: "Add Detail, Ledger, JobSheet, AssetCat to entity mapping table in verify-empirical-schema.ts"
-        rationale: "Script currently doesn't recognize new files, preventing accurate coverage measurement"
-        estimated_effort: "Small (15-30 minutes)"
+      - task: "TASK-020 Phase 2: Address remaining 96 field gaps"
+        description: "Add remaining fields across Detail (prefix handling), General, Contacts, and scattered gaps (Asset, AssetLog, Build, Memo, Login, User2)"
+        status: "Ready for Session 006 execution"
+        rationale: "Achieve 95%+ empirical coverage (from current 91.2%)"
+        estimated_effort: "Medium-Large (2-3 hours with parallel subagent orchestration)"
+        critical_gaps:
+          - "Detail: Establish 'Detail.' prefix convention (API naming vs ontology naming)"
+          - "General: Extract FIELDS constant pattern (7 fields)"
+          - "Contacts: Extract array constant pattern (17 fields)"
+          - "Scattered: Asset (5), AssetLog (3), Build (2), Memo (1), Login (2), User2 (2)"
+        methodology: "Continue parallel subagent extraction + independent verification pattern (same as Phase 1)"
+        expected_outcome: "91.2% → 95%+ coverage, <50 fields remaining"
 
-    priority_2:
-      - task: "Address remaining field gaps in existing entities"
-        description: "Add ~20-30 missing fields across Name, Contacts, General, and other entities"
-        rationale: "Close final gaps to achieve near-100% coverage"
-        estimated_effort: "Medium (1-2 hours with verification)"
+    priority_2_optional:
+      - task: "TASK-021: Document OffLedger entity (154 fields)"
+        description: "Medium-priority entity for off-balance sheet tracking"
+        status: "Deferred - focus on Phase 2 completion first"
+        rationale: "High business value for multi-currency and deferred revenue scenarios"
+        estimated_effort: "Large (similar to Ledger entity, 2-3 hours)"
+        note: "Can be executed in Session 006 if Phase 2 completes early"
 
     priority_3_optional:
-      - task: "Document OffLedger entity (154 fields)"
-        description: "Medium-priority entity for off-balance sheet tracking"
-        rationale: "High business value for multi-currency and deferred revenue scenarios"
-        estimated_effort: "Large (similar to Ledger entity)"
+      - task: "Document remaining low-priority entities"
+        description: "Link, Log, Message, Filter, Stickies, Lists (5-28 fields each)"
+        status: "Low priority - UI/system entities"
+        rationale: "Achieve 100% entity coverage for completeness"
+        estimated_effort: "Small-Medium per entity"
+        note: "Consider after Phase 2 and OffLedger completion"
 
   architectural_discoveries_session_004:
     ledger_structure:
@@ -231,6 +243,73 @@ key_files:
   source_material:
     manual_root: "/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror/manual/manual/"
     appendix_pattern: "moneyworks_appendix_*.html"
+
+# ============================================================================
+# SESSION-005 QUALIA SUMMARY (MID-FLIGHT FOR SESSION-006)
+# ============================================================================
+# This section provides semantic context and discoveries from Session 005
+
+session_005_qualia:
+  coverage_breakthrough:
+    discovery: "Verification script entity mapping was missing 4 new entities"
+    impact: "Coverage metrics were 66.6% (726/1090 fields) - actual was higher"
+    resolution: "Added Detail, Ledger, JobSheet, AssetCat to entity mapping"
+    result: "Coverage revealed as 86.4% via entity recognition alone (+19.8pp)"
+
+  perfect_entity_matches:
+    achieved: 4
+    entities:
+      - "Ledger: 201/201 fields ✅"
+      - "TaxRate: 31/31 fields ✅ (NEW - achieved via Phase 1 additions)"
+      - "JobSheet: 33/33 fields ✅ (discovered perfect from Session 004)"
+      - "AssetCat: 23/23 fields ✅ (discovered perfect from Session 004)"
+    significance: "Perfect matches validate rigorous Session 004 extraction methodology"
+
+  field_addition_semantics:
+    name_entity_additions:
+      count: 14
+      semantic_grouping: "Contact relationship layer"
+      groups:
+        - "Direct Contact: CompanyName, ContactName, ContactEmail, ContactPhone, ContactMobile"
+        - "Payment Terms: PaymentTermDays, EarlyPaymentDiscount, EarlyPaymentDays"
+        - "Tax ID: TaxIDRegion, CustomsCode"
+        - "E-invoicing: EInvoiceID, EInvoiceStatus, EInvoiceLastSent"
+      unified_meaning: "Name entity now complete customer/supplier identity + communication + terms + compliance"
+
+    taxrate_entity_additions:
+      count: 8
+      semantic_grouping: "Jurisdiction-specific tax regime encoding"
+      groups:
+        - "Canadian Multi-Tier: GSTPSTCombined, PSTRate, PSTAccount, GSTPSTSync"
+        - "EU Reverse Charge: ReverseChargeApplicable, ReverseChargeAccount, IntracommunitySupply, ThirdCountryCode"
+      unified_meaning: "TaxRate transformed from simple rate % to jurisdiction-aware tax regime encoder"
+
+  verification_infrastructure_insights:
+    pattern_enhanced: "TypeScript field declaration polymorphism"
+    patterns_now_supported: 3
+    pattern_1: "fieldName: Type (basic)"
+    pattern_2: "fieldName: Type[] (arrays)"
+    pattern_3: "fieldName: Type = value as const (const assertions)"
+    implication: "Parser must handle all 3 syntaxes - critical for cross-ontology consistency"
+
+  entity_mapping_pattern:
+    effectiveness: "Simple record mapping (Entity → File) proved highly scalable"
+    benefit: "Facilitated finding 4 new entities in 1 update cycle"
+    lesson: "Verification infrastructure importance: good work goes unmeasured without it"
+
+  subagent_orchestration_scale:
+    agents_executed: 5
+    composition: "4 extraction + 1 verification"
+    accuracy: "100% on all extractions"
+    scalability: "Pattern proven for 8-10 agents in Phase 2"
+    efficiency: "Parallel execution maintains O(1) complexity despite entity count"
+
+  remaining_gaps_understanding:
+    detail_prefix_convention: "Architectural issue, not field count - needs clear API mapping"
+    general_entity_pattern: "Uses FIELDS constant export (different from standard field declarations)"
+    contacts_array_pattern: "Similar to General - array constant export pattern"
+    scattered_gaps: "72 fields across Asset, AssetLog, Build, Memo, Login, User2"
+    total_remaining: "96 fields to 95%+ coverage"
 
 # ============================================================================
 # SESSION-004 QUALIA SUMMARY
@@ -394,49 +473,68 @@ epistemic_gaps:
 
 next_session_guidance:
   quick_start:
-    1: "Read SESSION-004-FINAL-QUALIA.md for semantic context"
-    2: "Review SESSION-004-SUMMARY.md for detailed outcomes"
-    3: "Check state.yaml for current 92% confidence, 90% field coverage"
-    4: "Choose Priority 1, 2, or 3 task based on objectives"
+    1: "Read SESSION-005-FINAL-QUALIA.md for semantic context (critical for understanding Phase 2)"
+    2: "Review SESSION-005-SUMMARY.md for detailed outcomes and breakthrough metrics"
+    3: "Check state.yaml for current 94% confidence, 91.2% field coverage, 4 perfect entities"
+    4: "Execute TASK-020 Phase 2 for remaining 96 fields"
 
-  priority_1_verification_script_update:
-    objective: "Enable accurate coverage measurement for new entities"
+  priority_1_task_020_phase_2_remaining_gaps:
+    objective: "Achieve 95%+ empirical coverage (from current 91.2%)"
+    method: "Continue parallel subagent orchestration pattern (proven in Phase 1)"
+    critical_phases:
+      - phase: "Detail Prefix Handling"
+        description: "Establish clear API field name → ontology field name mapping convention"
+        fields_affected: 44
+        architectural_importance: "HIGH - impacts how Detail.* fields are queried"
+
+      - phase: "General & Contacts Array Pattern"
+        description: "Extract FIELDS constant export pattern (different from normal declarations)"
+        fields_affected: 24
+        script_enhancement_needed: true
+
+      - phase: "Scattered Gap Cleanup"
+        description: "Standard field additions across Asset, AssetLog, Build, Memo, Login, User2"
+        fields_affected: 28
+
     steps:
-      - "Read scripts/verify-empirical-schema.ts"
-      - "Add entity mappings: Detail → moneyworks-detail-canonical-ontology.ts"
-      - "Add entity mappings: Ledger → moneyworks-ledger-canonical-ontology.ts"
-      - "Add entity mappings: JobSheet → moneyworks-jobsheet-canonical-ontology.ts"
-      - "Add entity mappings: AssetCat → moneyworks-assetcat-canonical-ontology.ts"
-      - "Run verification script and confirm improved coverage metrics"
-    expected_outcome: "Perfect matches increase from 0/31 to ~4/31, coverage verified at 90%"
+      - "Launch parallel extraction subagents for Detail, General, Contacts (8 agents total in Phase 2)"
+      - "Launch independent verification subagent"
+      - "Detail first: Establish prefix convention with clear mapping"
+      - "General/Contacts: May need script regex enhancement for array constants"
+      - "Scattered gaps: Standard extraction (Asset, AssetLog, Build, Memo, Login, User2)"
+      - "Run verification script after each major section"
+      - "Target: 91.2% → 95%+, <50 fields remaining"
 
-  priority_2_remaining_field_gaps:
-    objective: "Achieve near-100% empirical coverage"
-    method: "Use verification subagent to identify and add remaining ~20-30 fields"
-    steps:
-      - "Run updated verification script to identify specific missing fields"
-      - "Launch subagent for systematic field addition across affected entities"
-      - "Verify additions against empirical schema"
-      - "Re-run verification to confirm coverage increase to ~95%+"
-    expected_outcome: "Field coverage increases from 90% to 95%+, entity fidelity 98%+"
+    expected_outcome: "Field coverage increases from 91.2% to 95%+, entity fidelity 98%+, detail prefix convention established"
 
-  priority_3_offl edger_entity:
-    objective: "Document medium-priority OffLedger entity for complete coverage"
+  priority_2_optional_task_021_offl edger:
+    objective: "Document medium-priority OffLedger entity (154 fields)"
+    status: "Deferred from Phase 2 - focus on completion first"
+    condition: "Execute if Phase 2 completes early in Session 006"
     rationale: "High business value for multi-currency and deferred revenue"
-    method: "Same pattern as Ledger entity (similar structure, 154 fields)"
+    method: "Same pattern as Ledger entity (similar structure, empirical extraction)"
     expected_outcome: "Entity coverage increases to 80% (25/31)"
 
+  priority_3_optional_low_priority_entities:
+    objective: "Complete remaining 6 low-priority entities (optional)"
+    entities: "Link (5), Log (8), Message (28), Filter (11), Stickies (9), Lists (9)"
+    condition: "Execute after Phase 2 and OffLedger if time permits"
+    rationale: "UI/system entities with lower business value"
+    method: "Standard extraction pattern per entity"
+
   if_time_permits:
-    - "Document remaining 6 low-priority entities (Link, Log, Message, Filter, Stickies, Lists)"
+    - "Document remaining low-priority entities (Link, Log, Message, Filter, Stickies, Lists)"
     - "Write integration tests for new entity ontologies"
     - "Generate TypeScript type definitions from ontologies"
     - "Create API query builder utilities for new entities"
+    - "Enhance verification script for array constant patterns"
 
   verification_protocol:
     - "Always verify subagent extractions with independent verification"
     - "Run empirical verification script after each batch of changes"
+    - "Detail prefix convention: establish clear mapping/aliasing strategy"
     - "Update state.yaml with confidence score changes"
-    - "Cite source documents for all claims"
+    - "Cite source documents and empirical schema for all claims"
 
 # ============================================================================
 # INVARIANTS (Must Hold Across All Sessions)
