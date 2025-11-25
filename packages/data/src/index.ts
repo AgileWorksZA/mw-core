@@ -10,9 +10,11 @@ import { createSmartClient } from "./client/moneyworks-smart-client";
 import { AccountRepository } from "./repositories/account.repository";
 import { CompanyInformationRepository } from "./repositories/company-information.repository";
 import { ContactRepository } from "./repositories/contact.repository";
+import { DetailRepository } from "./repositories/detail.repository";
 import { NameRepository } from "./repositories/name.repository";
 import { ProductRepository } from "./repositories/product.repository";
 import { TaxRateRepository } from "./repositories/tax-rate.repository";
+import { TransactionRepository } from "./repositories/transaction.repository";
 
 // Export clients
 export { MoneyWorksRESTClient } from "./client/moneyworks-rest-client";
@@ -99,6 +101,8 @@ export { NameRepository } from "./repositories/name.repository";
 export { ProductRepository } from "./repositories/product.repository";
 export { AccountRepository } from "./repositories/account.repository";
 export { ContactRepository } from "./repositories/contact.repository";
+export { TransactionRepository } from "./repositories/transaction.repository";
+export { DetailRepository } from "./repositories/detail.repository";
 
 /**
  * Create a MoneyWorks client with repositories from a connection object
@@ -142,6 +146,8 @@ export function createMoneyWorksClient(connection: {
 			product: new ProductRepository(client),
 			account: new AccountRepository(client),
 			contact: new ContactRepository(client),
+			transaction: new TransactionRepository(client),
+			detail: new DetailRepository(client),
 		},
 	};
 }
@@ -174,8 +180,8 @@ export async function createDataLayer(configPath?: string) {
 			product: new ProductRepository(client),
 			account: new AccountRepository(client),
 			contact: new ContactRepository(client),
-			// Future repositories will be added here
-			// transaction: new TransactionRepository(client),
+			transaction: new TransactionRepository(client),
+			detail: new DetailRepository(client),
 		},
 	};
 }

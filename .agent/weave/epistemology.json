@@ -223,6 +223,26 @@
 			],
 			"rationale": "Table key strategy affects repository design and query patterns",
 			"evidence": ["CONT-001 D-001: Contact uses SequenceNumber not Code"]
+		},
+		"dual-entity-parent-child-pattern": {
+			"id": "dual-entity-parent-child-pattern",
+			"name": "Dual-Entity Parent-Child FK Pattern",
+			"description": "Some MoneyWorks entities require two coordinated types with parent-child FK relationship (e.g., Transaction header + Detail line items)",
+			"type": "data-model-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/canonical/src/entities/transactions/", "packages/canonical/src/entities/details/", "TXNS-001"],
+			"structure": {
+				"parent": "Transaction - header with who/when/totals",
+				"child": "Detail - line items with account/product entries",
+				"foreignKey": "Detail.ParentSeq -> Transaction.SequenceNumber"
+			},
+			"implementation": [
+				"Separate repositories for each entity",
+				"DetailRepository.findByParentSeq() for child lookup",
+				"TransactionRepository.findWithDetails() for joined queries"
+			],
+			"rationale": "Accounting transactions inherently have header/line structure - represents one logical unit but two MW tables",
+			"evidence": ["TXNS-001: First dual-entity implementation with Transaction + Detail"]
 		}
 	},
 	"validations": {
@@ -263,12 +283,12 @@
 	"knowledgeGaps": [],
 	"metadata": {
 		"totalConcepts": 0,
-		"totalPatterns": 12,
+		"totalPatterns": 13,
 		"totalValidations": 1,
 		"averageConfidence": 0.97,
-		"highConfidenceConcepts": 12,
+		"highConfidenceConcepts": 13,
 		"lowConfidenceConcepts": 0,
 		"knowledgeGaps": 0,
-		"lastValidation": "2025-11-24T21:10:00.000Z"
+		"lastValidation": "2025-11-25T05:30:00.000Z"
 	}
 }

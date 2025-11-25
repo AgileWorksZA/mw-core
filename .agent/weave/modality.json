@@ -60,6 +60,15 @@
 			"confidence": 0.8,
 			"context": "After US-001 missed registration, considered automatic approach but rejected"
 		},
+		"detail-prefixed-field-names": {
+			"id": "detail-prefixed-field-names",
+			"option": "Use MoneyWorks API field names directly with 'Detail.' prefix in interface",
+			"rejectedBecause": "Creates inconsistent DX - Detail.Account vs Account in other entities",
+			"currentApproach": "Strip 'Detail.' prefix in postProcess(), restore in prepare()",
+			"tradeoff": "Extra processing step, but cleaner interface for developers",
+			"confidence": 0.95,
+			"context": "TXNS-001 D-001: Decided to strip prefix for cleaner DX"
+		},
 		"composite-key-for-contacts": {
 			"id": "composite-key-for-contacts",
 			"option": "Use ParentSeq + Order as composite primary key for Contacts",
@@ -110,10 +119,10 @@
 	},
 	"metadata": {
 		"totalAlternatives": 2,
-		"totalRejectedOptions": 3,
+		"totalRejectedOptions": 4,
 		"totalPossibleFutures": 2,
 		"averageConfidence": 0.91,
 		"lastCompaction": null,
-		"lastUpdated": "2025-11-24T21:10:00.000Z"
+		"lastUpdated": "2025-11-25T05:30:00.000Z"
 	}
 }

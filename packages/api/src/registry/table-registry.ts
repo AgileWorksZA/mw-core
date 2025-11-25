@@ -9,14 +9,15 @@ import type { SmartMoneyWorksClient } from "@moneyworks/data";
 import type { TableController } from "../controllers/base-table";
 import { AccountController } from "../controllers/account";
 import { ContactController } from "../controllers/contact";
+import { DetailController } from "../controllers/detail";
 import { NameController } from "../controllers/name";
 import { ProductController } from "../controllers/product";
 import { TaxRateController } from "../controllers/tax-rate";
+import { TransactionController } from "../controllers/transaction";
 
 export class TableRegistry {
 	private tables = new Map<string, TableController>();
 	private upcoming = [
-		"Transaction",
 		"Job",
 		"Category1",
 		"Category2",
@@ -36,9 +37,8 @@ export class TableRegistry {
 		this.register(new ProductController(this.client));
 		this.register(new AccountController(this.client));
 		this.register(new ContactController(this.client));
-
-		// Future tables will be registered here as they're vetted
-		// this.register(new TransactionController(this.client));
+		this.register(new TransactionController(this.client));
+		this.register(new DetailController(this.client));
 	}
 
 	/**

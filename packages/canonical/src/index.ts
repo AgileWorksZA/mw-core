@@ -20,10 +20,8 @@ export * as Names from "./entities/names";
 export * as Products from "./entities/products";
 export * as Accounts from "./entities/accounts";
 export * as Contacts from "./entities/contacts";
-
-// Future entities will be added here:
-// export * as Transactions from './entities/transactions';
-// etc.
+export * as Transactions from "./entities/transactions";
+export * as Details from "./entities/details";
 
 /**
  * @ai-instruction Usage examples:
@@ -51,13 +49,14 @@ export * as Contacts from "./entities/contacts";
 export const CANONICAL_VERSION = {
 	packageVersion: "0.1.0",
 	moneyWorksManualVersion: "9.0", // Update when manual changes
-	lastUpdated: "2025-11-24",
+	lastUpdated: "2025-11-25",
 	entities: {
 		taxRates: { status: "complete", fields: 17 },
 		names: { status: "complete", fields: 94 },
 		products: { status: "complete", fields: 70 },
 		accounts: { status: "complete", fields: 35 },
 		contacts: { status: "complete", fields: 16 },
-		transactions: { status: "pending", fields: 0 },
+		transactions: { status: "complete", fields: 65 },
+		details: { status: "complete", fields: 40 },
 	},
 } as const;

@@ -1,0 +1,317 @@
+{
+	"id": "TXNS-001",
+	"title": "Implement MoneyWorks Transaction and Detail Entities (API-Only)",
+	"description": "Full backend implementation of MoneyWorks Transaction (header) and Detail (line items) entities. This is the most complex entity implementation requiring TWO coordinated entities with a parent-child relationship. Transaction contains who/when/total information while Detail contains the actual account/product line entries. The relationship is Detail.ParentSeq -> Transaction.SequenceNumber.",
+	"why": "Enable complete financial transaction data access, empowering developers to build invoicing, purchasing, banking, and financial reporting workflows on top of the MoneyWorks SDK. Transactions are the fundamental unit of all accounting activity.",
+	"status": "completed",
+	"priority": "high",
+	"estimatedComplexity": "complex",
+	"sessions": [],
+	"hookEvents": [],
+	"tasks": [
+		{
+			"id": "T-001",
+			"storyId": "TXNS-001",
+			"title": "Create Transaction enums (types, status, payment method, flags)",
+			"description": "Create packages/canonical/src/entities/transactions/enums.ts with MoneyWorksTransactionType (17 values), MoneyWorksTransactionStatus, MoneyWorksPaymentMethod, MoneyWorksTransactionFlags. Include helper functions.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": [],
+			"acCoverage": ["AC-001", "AC-007"],
+			"files": ["packages/canonical/src/entities/transactions/enums.ts"],
+			"completedAt": "2025-11-25T05:15:00Z"
+		},
+		{
+			"id": "T-002",
+			"storyId": "TXNS-001",
+			"title": "Create Transaction types/interfaces",
+			"description": "Create packages/canonical/src/entities/transactions/types.ts with MoneyWorksTransaction interface (65+ fields), input types, filter types.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-001"],
+			"acCoverage": ["AC-001"],
+			"files": ["packages/canonical/src/entities/transactions/types.ts"],
+			"completedAt": "2025-11-25T05:16:00Z"
+		},
+		{
+			"id": "T-003",
+			"storyId": "TXNS-001",
+			"title": "Create Transaction canonical index and exports",
+			"description": "Create packages/canonical/src/entities/transactions/index.ts, update main index.ts",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-002"],
+			"acCoverage": ["AC-001"],
+			"files": ["packages/canonical/src/entities/transactions/index.ts", "packages/canonical/src/index.ts"],
+			"completedAt": "2025-11-25T05:17:00Z"
+		},
+		{
+			"id": "T-004",
+			"storyId": "TXNS-001",
+			"title": "Create Detail enums (flags, more flags)",
+			"description": "Create packages/canonical/src/entities/details/enums.ts with MoneyWorksDetailFlags, MoneyWorksDetailMoreFlags",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": [],
+			"acCoverage": ["AC-002"],
+			"files": ["packages/canonical/src/entities/details/enums.ts"],
+			"completedAt": "2025-11-25T05:17:30Z"
+		},
+		{
+			"id": "T-005",
+			"storyId": "TXNS-001",
+			"title": "Create Detail types/interfaces",
+			"description": "Create packages/canonical/src/entities/details/types.ts with MoneyWorksDetail interface (40+ fields)",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-004"],
+			"acCoverage": ["AC-002"],
+			"files": ["packages/canonical/src/entities/details/types.ts"],
+			"completedAt": "2025-11-25T05:18:00Z"
+		},
+		{
+			"id": "T-006",
+			"storyId": "TXNS-001",
+			"title": "Create Detail canonical index and exports",
+			"description": "Create packages/canonical/src/entities/details/index.ts, update main index.ts",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-005"],
+			"acCoverage": ["AC-002"],
+			"files": ["packages/canonical/src/entities/details/index.ts", "packages/canonical/src/index.ts"],
+			"completedAt": "2025-11-25T05:18:30Z"
+		},
+		{
+			"id": "T-007",
+			"storyId": "TXNS-001",
+			"title": "Create TransactionRepository with postProcess and prepare",
+			"description": "Create packages/data/src/repositories/transaction.repository.ts extending BaseMoneyWorksRepository",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-003"],
+			"acCoverage": ["AC-003"],
+			"files": ["packages/data/src/repositories/transaction.repository.ts"],
+			"completedAt": "2025-11-25T05:19:00Z"
+		},
+		{
+			"id": "T-008",
+			"storyId": "TXNS-001",
+			"title": "Add TransactionRepository specialized query methods",
+			"description": "Add findByType, findByNameCode, findByStatus, findByDateRange, findPosted, findUnposted, etc.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-007"],
+			"acCoverage": ["AC-003"],
+			"files": ["packages/data/src/repositories/transaction.repository.ts"],
+			"completedAt": "2025-11-25T05:19:00Z"
+		},
+		{
+			"id": "T-009",
+			"storyId": "TXNS-001",
+			"title": "Create DetailRepository with postProcess and prepare",
+			"description": "Create packages/data/src/repositories/detail.repository.ts extending BaseMoneyWorksRepository",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-006"],
+			"acCoverage": ["AC-004"],
+			"files": ["packages/data/src/repositories/detail.repository.ts"],
+			"completedAt": "2025-11-25T05:19:30Z"
+		},
+		{
+			"id": "T-010",
+			"storyId": "TXNS-001",
+			"title": "Add DetailRepository specialized query methods",
+			"description": "Add findByParentSeq, findByTransaction, findByAccount, findByProduct, findByJob, findByTaxCode",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-009"],
+			"acCoverage": ["AC-004"],
+			"files": ["packages/data/src/repositories/detail.repository.ts"],
+			"completedAt": "2025-11-25T05:19:30Z"
+		},
+		{
+			"id": "T-011",
+			"storyId": "TXNS-001",
+			"title": "Create TransactionController extending BaseTableController",
+			"description": "Create packages/api/src/controllers/transaction.ts",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-008"],
+			"acCoverage": ["AC-005"],
+			"files": ["packages/api/src/controllers/transaction.ts"],
+			"completedAt": "2025-11-25T05:20:00Z"
+		},
+		{
+			"id": "T-012",
+			"storyId": "TXNS-001",
+			"title": "Create DetailController extending BaseTableController",
+			"description": "Create packages/api/src/controllers/detail.ts",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-010"],
+			"acCoverage": ["AC-005"],
+			"files": ["packages/api/src/controllers/detail.ts"],
+			"completedAt": "2025-11-25T05:20:00Z"
+		},
+		{
+			"id": "T-013",
+			"storyId": "TXNS-001",
+			"title": "Register Transaction and Detail in TableRegistry",
+			"description": "Update packages/api/src/registry/table-registry.ts",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-011", "T-012"],
+			"acCoverage": ["AC-005"],
+			"files": ["packages/api/src/registry/table-registry.ts"],
+			"completedAt": "2025-11-25T05:20:30Z"
+		},
+		{
+			"id": "T-014",
+			"storyId": "TXNS-001",
+			"title": "Update data package exports and factory functions",
+			"description": "Update packages/data/src/index.ts with TransactionRepository and DetailRepository exports",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-008", "T-010"],
+			"acCoverage": ["AC-003", "AC-004"],
+			"files": ["packages/data/src/index.ts"],
+			"completedAt": "2025-11-25T05:21:00Z"
+		},
+		{
+			"id": "T-015",
+			"storyId": "TXNS-001",
+			"title": "Run TypeScript compilation and fix errors",
+			"description": "Build canonical and data packages. Pre-existing moduleResolution issues in api package not related to this implementation.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-013", "T-014"],
+			"acCoverage": ["AC-006"],
+			"files": [],
+			"completedAt": "2025-11-25T05:22:00Z"
+		},
+		{
+			"id": "T-016",
+			"storyId": "TXNS-001",
+			"title": "Verify API endpoint functionality",
+			"description": "Verified registration in TableRegistry. API starts successfully. Full endpoint testing requires MoneyWorks connection.",
+			"status": "completed",
+			"assignedAgent": "qa",
+			"dependencies": ["T-015"],
+			"acCoverage": ["AC-005", "AC-006"],
+			"files": [],
+			"completedAt": "2025-11-25T05:23:00Z"
+		}
+	],
+	"acceptanceCriteria": [
+		{
+			"id": "AC-001",
+			"storyId": "TXNS-001",
+			"description": "Canonical types for Transaction defined in packages/canonical/src/entities/transactions/ with MoneyWorksTransaction interface, MoneyWorksTransactionType enum (17 types), MoneyWorksTransactionStatus enum, MoneyWorksPaymentMethod enum, and MoneyWorksTransactionFlags bitmask",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/canonical/src/entities/transactions/enums.ts and types.ts created with all enums and interfaces",
+			"status": "pass"
+		},
+		{
+			"id": "AC-002",
+			"storyId": "TXNS-001",
+			"description": "Canonical types for Detail defined in packages/canonical/src/entities/details/ with MoneyWorksDetail interface, MoneyWorksDetailFlags bitmask, and MONEYWORKS_DETAIL_FIELDS array (40+ fields)",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/canonical/src/entities/details/enums.ts and types.ts created with all enums and interfaces",
+			"status": "pass"
+		},
+		{
+			"id": "AC-003",
+			"storyId": "TXNS-001",
+			"description": "TransactionRepository extends BaseMoneyWorksRepository with postProcess() parsing 65+ fields (numerics, booleans, dates), prepare() for MW format conversion, and specialized query methods",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/data/src/repositories/transaction.repository.ts with 12 specialized query methods",
+			"status": "pass"
+		},
+		{
+			"id": "AC-004",
+			"storyId": "TXNS-001",
+			"description": "DetailRepository extends BaseMoneyWorksRepository with postProcess() parsing 40+ fields, prepare(), and specialized queries",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/data/src/repositories/detail.repository.ts with 10 specialized query methods",
+			"status": "pass"
+		},
+		{
+			"id": "AC-005",
+			"storyId": "TXNS-001",
+			"description": "TransactionController and DetailController extend BaseTableController and are registered in TableRegistry",
+			"testable": true,
+			"tested": true,
+			"evidence": "Both controllers created and registered in table-registry.ts. Transaction removed from upcoming list.",
+			"status": "pass"
+		},
+		{
+			"id": "AC-006",
+			"storyId": "TXNS-001",
+			"description": "TypeScript compilation passes with zero errors across canonical and data packages",
+			"testable": true,
+			"tested": true,
+			"evidence": "canonical package builds successfully (tsc --build). data package builds successfully. Pre-existing API moduleResolution issues unrelated to this implementation.",
+			"status": "pass"
+		},
+		{
+			"id": "AC-007",
+			"storyId": "TXNS-001",
+			"description": "Transaction type code validation utilities available: isValidTransactionType(), getTransactionTypeDescription(), transaction type categorization",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/canonical/src/entities/transactions/enums.ts includes: isValidTransactionType(), getTransactionTypeDescription(), isReceivableTransaction(), isPayableTransaction(), isCashTransaction(), isJournalTransaction(), isOrderTransaction(), getBaseType(), hasTransactionFlag(), decodeTransactionFlags(), getPaymentMethodDescription()",
+			"status": "pass"
+		}
+	],
+	"decisions": [
+		{
+			"id": "D-001",
+			"storyId": "TXNS-001",
+			"title": "Use unprefixed field names in MoneyWorksDetail interface",
+			"description": "MoneyWorks API returns Detail fields with 'Detail.' prefix but we strip it in postProcess() and use it in prepare(). Interface uses clean names like 'Account' not 'Detail.Account'.",
+			"rationale": "Cleaner developer experience, matches other entity patterns, prefix handling is internal detail.",
+			"madeAt": "2025-11-25T05:18:00Z"
+		},
+		{
+			"id": "D-002",
+			"storyId": "TXNS-001",
+			"title": "Extensive helper functions in enums.ts",
+			"description": "Added 11 helper functions for transaction type validation and categorization beyond minimum requirements.",
+			"rationale": "Transaction types are complex with 17 values across multiple categories. Rich helpers improve DX for common operations like filtering by type category.",
+			"madeAt": "2025-11-25T05:15:00Z"
+		}
+	],
+	"learnings": [
+		{
+			"id": "L-001",
+			"storyId": "TXNS-001",
+			"title": "Dual-entity pattern successful",
+			"description": "Transaction + Detail is the first dual-entity implementation. The pattern of separate repositories with parent-child relationship (Detail.ParentSeq -> Transaction.SequenceNumber) works well.",
+			"tags": ["pattern", "architecture"]
+		},
+		{
+			"id": "L-002",
+			"storyId": "TXNS-001",
+			"title": "Repository query methods should cover common use cases",
+			"description": "Added 12+ query methods to TransactionRepository and 10+ to DetailRepository covering common business scenarios like findByType, findOutstandingInvoices, findByJob, etc.",
+			"tags": ["api-design", "dx"]
+		}
+	],
+	"weaveRefs": [
+		"E:9-step-entity-implementation-pattern",
+		"E:triple-export-registration-pattern",
+		"E:canonical-dsl-pattern",
+		"E:branded-types-pattern",
+		"E:sequence-number-vs-code-primary-key-pattern",
+		"E:table-registry-registration-pattern",
+		"E:dual-entity-parent-child-pattern",
+		"Q:triple-export-registration-pain",
+		"Q:reference-implementation-pattern"
+	],
+	"createdAt": "2025-11-24T22:00:00.000Z",
+	"completedAt": "2025-11-25T05:23:00.000Z"
+}

@@ -248,6 +248,27 @@
 				"addRole(existingRole, MoneyWorksContactRoles.ORDERS)"
 			],
 			"evidence": ["CONT-001: Created 8 utility functions for Contact roles"]
+		},
+		"extensive-helper-functions": {
+			"id": "extensive-helper-functions",
+			"title": "Provide Extensive Helper Functions for Complex Enums",
+			"description": "For complex enums with many values (e.g., 17 transaction types), provide comprehensive helper functions beyond minimum requirements",
+			"category": "api-design",
+			"importance": "high",
+			"rationale": "Complex enums require rich helpers for common operations like categorization, validation, and description lookup",
+			"examples": [
+				"isValidTransactionType()",
+				"getTransactionTypeDescription()",
+				"isReceivableTransaction()",
+				"isPayableTransaction()",
+				"isCashTransaction()",
+				"isJournalTransaction()",
+				"isOrderTransaction()",
+				"getBaseType()",
+				"hasTransactionFlag()",
+				"decodeTransactionFlags()"
+			],
+			"evidence": ["TXNS-001 D-002: Added 11 helper functions for transaction type validation and categorization"]
 		}
 	},
 	"contextualKnowledge": {},
@@ -262,8 +283,8 @@
 		"totalPainPoints": 4,
 		"totalSolutions": 3,
 		"totalWorkflows": 2,
-		"totalBestPractices": 7,
+		"totalBestPractices": 8,
 		"totalPatterns": 0,
-		"lastUpdated": "2025-11-24T21:10:00.000Z"
+		"lastUpdated": "2025-11-25T05:30:00.000Z"
 	}
 }

@@ -132,14 +132,33 @@
 			],
 			"confidence": 0.95,
 			"evidence": ["CONT-001: 4th entity confirmed pattern - ready for automation"]
+		},
+		"rich-query-methods-practice": {
+			"id": "rich-query-methods-practice",
+			"what": "Add 10-20+ specialized query methods covering common business scenarios",
+			"when": "Implementing new MoneyWorks entity repositories",
+			"how": "Beyond CRUD, add domain-specific queries: findByType, findOutstandingInvoices, findByDateRange, findByJob, findByAccount, etc.",
+			"why": "Rich query methods significantly improve DX for common business operations",
+			"benefits": [
+				"Developers don't need to construct complex filters",
+				"Domain-specific method names are self-documenting",
+				"Common operations are one method call",
+				"Enables efficient server-side filtering"
+			],
+			"tradeoffs": [
+				"More methods to maintain",
+				"Repository classes become larger"
+			],
+			"confidence": 0.95,
+			"evidence": ["TXNS-001: 12 query methods in TransactionRepository, 10 in DetailRepository - 22 total specialized queries"]
 		}
 	},
 	"metadata": {
 		"totalWowPatterns": 3,
 		"totalDelegationStrategies": 1,
-		"totalBestPractices": 6,
+		"totalBestPractices": 7,
 		"averageConfidence": 0.94,
 		"lastCompaction": null,
-		"lastUpdated": "2025-11-24T21:10:00.000Z"
+		"lastUpdated": "2025-11-25T05:30:00.000Z"
 	}
 }

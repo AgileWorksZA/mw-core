@@ -1,0 +1,6 @@
+{
+	"code": "TXNS",
+	"name": "Transactions",
+	"description": "Transaction and Detail entity features - the core financial transaction system with header/detail architecture",
+	"storyCounter": 1
+}
