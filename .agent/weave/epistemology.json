@@ -243,6 +243,55 @@
 			],
 			"rationale": "Accounting transactions inherently have header/line structure - represents one logical unit but two MW tables",
 			"evidence": ["TXNS-001: First dual-entity implementation with Transaction + Detail"]
+		},
+		"tsv-header-row-import-pattern": {
+			"id": "tsv-header-row-import-pattern",
+			"name": "TSV Header Row for Import",
+			"description": "MoneyWorks TSV import requires field names as first row. Unlike export (no headers), import needs headers for column mapping.",
+			"type": "data-exchange-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/data/src/client/moneyworks-smart-client.ts", "IMPT-001"],
+			"implementation": "recordsToOrderedTSV() generates header row from discovered schema fields before data rows",
+			"rationale": "MoneyWorks uses header row to match incoming columns to table fields during import",
+			"evidence": ["IMPT-001 L-001: TSV import requires header row with field names"]
+		},
+		"schema-driven-import-pattern": {
+			"id": "schema-driven-import-pattern",
+			"name": "Schema-Driven Import Field Ordering",
+			"description": "Use discovered table schema to determine field order when generating TSV for import. Field order in TSV must match schema.",
+			"type": "data-exchange-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/data/src/client/moneyworks-smart-client.ts", "IMPT-001"],
+			"implementation": [
+				"1. ensureFieldStructure() discovers table schema",
+				"2. Extract fields from schema in correct order",
+				"3. Generate TSV with columns matching field order",
+				"4. Values align with header positions"
+			],
+			"rationale": "JSON doesn't preserve order, but TSV column positions must match MoneyWorks field structure for correct import",
+			"evidence": ["IMPT-001 L-002: Field order matters - schema discovery ensures correct ordering"]
+		},
+		"layered-validation-pattern": {
+			"id": "layered-validation-pattern",
+			"name": "Layered Pre-Import Validation",
+			"description": "Validate records client-side before sending to MoneyWorks to catch errors earlier with better messages",
+			"type": "api-design-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/data/src/validators/import-validator.ts", "IMPT-001"],
+			"layers": [
+				"1. Required field validation",
+				"2. Type validation (string, number, boolean, date)",
+				"3. String length validation (maxLength)",
+				"4. Date format validation (YYYYMMDD)",
+				"5. Custom validators per entity"
+			],
+			"benefits": [
+				"Earlier error detection (before network call)",
+				"Better error messages with field-level detail",
+				"Reduced round trips to MoneyWorks server"
+			],
+			"rationale": "MoneyWorks error responses can be cryptic - client-side validation provides clearer feedback",
+			"evidence": ["IMPT-001 L-003: Validation before send saves round trips and improves error messages"]
 		}
 	},
 	"validations": {
@@ -283,12 +332,12 @@
 	"knowledgeGaps": [],
 	"metadata": {
 		"totalConcepts": 0,
-		"totalPatterns": 13,
+		"totalPatterns": 16,
 		"totalValidations": 1,
 		"averageConfidence": 0.97,
-		"highConfidenceConcepts": 13,
+		"highConfidenceConcepts": 16,
 		"lowConfidenceConcepts": 0,
 		"knowledgeGaps": 0,
-		"lastValidation": "2025-11-25T05:30:00.000Z"
+		"lastValidation": "2025-11-25T12:00:00.000Z"
 	}
 }

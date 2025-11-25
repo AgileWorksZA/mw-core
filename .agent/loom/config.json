@@ -94,8 +94,14 @@
 			"name": "Transactions",
 			"description": "Transaction and Detail entity features - core financial transactions with header/detail architecture",
 			"storyCount": 1
+		},
+		{
+			"code": "IMPT",
+			"name": "Import",
+			"description": "Import functionality - write operations to create/update records in MoneyWorks from SDK",
+			"storyCount": 1
 		}
 	],
-	"storyCounter": 4,
+	"storyCounter": 5,
 	"taskCounter": 21
 }

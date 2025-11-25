@@ -139,6 +139,46 @@
 			"automation": "fully automated via Task tool + specialized agents",
 			"parallelization": "Independent tasks run in parallel (e.g., fields + validators, list route + detail route)",
 			"evidence": ["US-002: 25 tasks completed autonomously in ~1.5 hours"]
+		},
+		"import-workflow": {
+			"id": "import-workflow",
+			"name": "MoneyWorks Data Import",
+			"description": "Complete workflow for importing/writing data to MoneyWorks via SDK",
+			"steps": [
+				"Authenticate with Bearer token",
+				"Create/retrieve cached SmartMoneyWorksClient",
+				"Discover field structure via ensureFieldStructure()",
+				"Optionally validate records via validateRecordsForImport()",
+				"Convert objects to TSV with recordsToOrderedTSV() (header row + data rows)",
+				"Send TSV to MoneyWorks via base import() method",
+				"Parse ImportResult with success, created, updated, errors",
+				"Return typed result with errorDetails if any"
+			],
+			"complexity": "medium",
+			"frequency": "per-create/update-request",
+			"automation": "fully automated via smartImport()",
+			"evidence": ["IMPT-001: Complete import foundation implementation"]
+		},
+		"repository-crud-workflow": {
+			"id": "repository-crud-workflow",
+			"name": "Repository CRUD Operations",
+			"description": "Workflow for create/update/upsert via BaseMoneyWorksRepository",
+			"steps": [
+				"Call repository.create(), update(), or upsert() with record object",
+				"Repository calls prepare() for data transformation",
+				"Optional validation via import-validator",
+				"smartImport() converts to TSV and sends to MoneyWorks",
+				"On success, re-fetch record to get server-generated values",
+				"Return created/updated record"
+			],
+			"complexity": "low",
+			"frequency": "per-write-operation",
+			"modes": {
+				"create": "insert mode - fails if record exists",
+				"update": "update mode - fails if record doesn't exist",
+				"upsert": "replace mode - creates or updates"
+			},
+			"evidence": ["IMPT-001: BaseMoneyWorksRepository now supports full CRUD"]
 		}
 	},
 	"bestPractices": {
@@ -282,9 +322,9 @@
 		"totalExperiences": 0,
 		"totalPainPoints": 4,
 		"totalSolutions": 3,
-		"totalWorkflows": 2,
+		"totalWorkflows": 4,
 		"totalBestPractices": 8,
 		"totalPatterns": 0,
-		"lastUpdated": "2025-11-25T05:30:00.000Z"
+		"lastUpdated": "2025-11-25T12:00:00.000Z"
 	}
 }

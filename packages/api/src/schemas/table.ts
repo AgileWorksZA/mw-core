@@ -186,3 +186,105 @@ export const TableExportResponseSchema = t.Union(
 		description: "Table data in requested format",
 	},
 );
+
+/**
+ * Import mode enum
+ */
+export const ImportModeEnum = t.Union(
+	[t.Literal("insert"), t.Literal("update"), t.Literal("replace")],
+	{
+		description:
+			"Import mode: insert (create only), update (update only), replace (upsert)",
+		default: "replace",
+	},
+);
+
+/**
+ * Import request body schema
+ */
+export const TableImportBodySchema = t.Object(
+	{
+		records: t.Array(t.Record(t.String(), t.Any()), {
+			description: "Array of records to import",
+			minItems: 1,
+			maxItems: 1000,
+		}),
+		mode: t.Optional(ImportModeEnum),
+		workItOut: t.Optional(
+			t.Boolean({
+				description: "Let MoneyWorks work out field mappings",
+				default: false,
+			}),
+		),
+		calculated: t.Optional(
+			t.Boolean({
+				description: "Recalculate calculated fields after import",
+				default: false,
+			}),
+		),
+		validate: t.Optional(
+			t.Boolean({
+				description: "Validate records before sending to MoneyWorks",
+				default: true,
+			}),
+		),
+	},
+	{
+		description: "Import request body",
+		examples: [
+			{
+				records: [
+					{ TaxCode: "GST15", Rate: 15, Description: "GST 15%" },
+					{ TaxCode: "GST10", Rate: 10, Description: "GST 10%" },
+				],
+				mode: "replace",
+				validate: true,
+			},
+		],
+	},
+);
+
+/**
+ * Import error detail schema
+ */
+export const ImportErrorDetailSchema = t.Object({
+	recordIndex: t.Number({ description: "Zero-based index of failed record" }),
+	field: t.Optional(t.String({ description: "Field that caused the error" })),
+	message: t.String({ description: "Error message" }),
+	code: t.Optional(t.String({ description: "Error code" })),
+	value: t.Optional(t.Any({ description: "Value that caused the error" })),
+});
+
+/**
+ * Import result schema
+ */
+export const ImportResultSchema = t.Object(
+	{
+		success: t.Boolean({ description: "Whether import was successful" }),
+		processed: t.Number({ description: "Total records processed" }),
+		created: t.Number({ description: "Records created" }),
+		updated: t.Number({ description: "Records updated" }),
+		skipped: t.Number({ description: "Records skipped" }),
+		errors: t.Number({ description: "Number of errors" }),
+		errorDetails: t.Array(ImportErrorDetailSchema, {
+			description: "Detailed error information",
+		}),
+		rawResponse: t.Optional(
+			t.String({ description: "Raw MoneyWorks response" }),
+		),
+	},
+	{
+		description: "Import operation result",
+		examples: [
+			{
+				success: true,
+				processed: 2,
+				created: 2,
+				updated: 0,
+				skipped: 0,
+				errors: 0,
+				errorDetails: [],
+			},
+		],
+	},
+);

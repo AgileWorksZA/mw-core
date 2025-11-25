@@ -1,0 +1,242 @@
+{
+	"id": "IMPT-001",
+	"title": "MoneyWorks Import Foundation - Create/Update Records via SDK",
+	"description": "Implement write operations to create and update records in MoneyWorks through the SDK. This includes adding import methods to SmartMoneyWorksClient, creating write-capable repository base class, implementing validation before write, and exposing import endpoints via ElysiaJS REST API with proper error handling.",
+	"why": "Enable bidirectional data sync by allowing applications to write back to MoneyWorks, completing the data integration story and enabling real business automation workflows.",
+	"status": "completed",
+	"priority": "high",
+	"estimatedComplexity": "complex",
+	"sessions": [],
+	"hookEvents": [],
+	"tasks": [
+		{
+			"id": "T-001",
+			"storyId": "IMPT-001",
+			"title": "Enhance ImportOptions and ImportResult types in canonical layer",
+			"description": "Update packages/data/src/client/types.ts with enhanced ImportOptions (mode: insert|update|replace, workItOut, calculated, returnImported) and expand ImportResult with errorDetails array containing record index, field, and message. Add MoneyWorks-specific import mode semantics documentation.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": [],
+			"acCoverage": ["AC-002", "AC-006"],
+			"files": ["packages/data/src/client/types.ts"],
+			"reference": "packages/data/src/client/types.ts (existing ImportOptions)",
+			"sessionId": null,
+			"transactionId": null,
+			"createdAt": "2025-11-25T11:00:00Z",
+			"completedAt": "2025-11-25T12:00:00Z"
+		},
+		{
+			"id": "T-002",
+			"storyId": "IMPT-001",
+			"title": "Implement smartImport() in SmartMoneyWorksClient",
+			"description": "Add smartImport(table, records, options) method to packages/data/src/client/moneyworks-smart-client.ts. Method must: (1) discover table structure via ensureFieldStructure(), (2) convert objects to TSV with correct field ordering using discovered schema, (3) call base import() method, (4) return typed ImportResult. Include proper error handling for schema discovery failures.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-001"],
+			"acCoverage": ["AC-001", "AC-002"],
+			"files": ["packages/data/src/client/moneyworks-smart-client.ts"],
+			"reference": "packages/data/src/client/moneyworks-rest-client.ts (existing import() method L272-357)",
+			"sessionId": null,
+			"transactionId": null,
+			"createdAt": "2025-11-25T11:00:00Z",
+			"completedAt": "2025-11-25T12:00:00Z"
+		},
+		{
+			"id": "T-003",
+			"storyId": "IMPT-001",
+			"title": "Create validation utilities for pre-write validation",
+			"description": "Create packages/data/src/validators/import-validator.ts with: (1) validateRecordForImport(record, schema) function, (2) field type validators (string length, number range, date format), (3) required field checking, (4) ValidationError class with field-level error details. Use canonical field definitions where available.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-001"],
+			"acCoverage": ["AC-004"],
+			"files": ["packages/data/src/validators/import-validator.ts", "packages/data/src/validators/index.ts"],
+			"reference": "packages/canonical/src/entities/accounts/validators.ts (existing validator pattern)",
+			"sessionId": null,
+			"transactionId": null,
+			"createdAt": "2025-11-25T11:00:00Z",
+			"completedAt": "2025-11-25T12:00:00Z"
+		},
+		{
+			"id": "T-004",
+			"storyId": "IMPT-001",
+			"title": "Implement create/update/upsert in BaseMoneyWorksRepository",
+			"description": "Update packages/data/src/repositories/base.repository.ts to implement create(), update(), and add upsert() methods. Methods must: (1) use smartImport with appropriate mode (insert/update/createOrUpdate), (2) call prepare() for data transformation, (3) optionally validate via import-validator, (4) return created/updated record by re-fetching. Replace TODO placeholders with real implementation.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-002", "T-003"],
+			"acCoverage": ["AC-003", "AC-004"],
+			"files": ["packages/data/src/repositories/base.repository.ts"],
+			"reference": "packages/data/src/repositories/base.repository.ts (existing find methods L117-163)",
+			"sessionId": null,
+			"transactionId": null,
+			"createdAt": "2025-11-25T11:00:00Z",
+			"completedAt": "2025-11-25T12:00:00Z"
+		},
+		{
+			"id": "T-005",
+			"storyId": "IMPT-001",
+			"title": "Add import() method to BaseTableController",
+			"description": "Update packages/api/src/controllers/base-table.ts to add import(params) method that: (1) accepts ImportParams with records array and ImportOptions, (2) validates authentication, (3) calls repository create/upsert, (4) returns ImportResult. Add validateImport() for input validation.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-004"],
+			"acCoverage": ["AC-005", "AC-006"],
+			"files": ["packages/api/src/controllers/base-table.ts"],
+			"reference": "packages/api/src/controllers/base-table.ts (existing export() method L41-59)",
+			"sessionId": null,
+			"transactionId": null,
+			"createdAt": "2025-11-25T11:00:00Z",
+			"completedAt": "2025-11-25T12:00:00Z"
+		},
+		{
+			"id": "T-006",
+			"storyId": "IMPT-001",
+			"title": "Create POST /api/v1/{table}/import route",
+			"description": "Add import route to packages/api/src/routes/ (either in existing table routes or new import.ts). Route must: (1) use POST method, (2) accept JSON body with records array and options, (3) authenticate request, (4) call controller.import(), (5) return ImportResult with proper HTTP status codes (200 success, 400 validation error, 500 MW error).",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-005"],
+			"acCoverage": ["AC-005"],
+			"files": ["packages/api/src/routes/tables.ts", "packages/api/src/schemas/table.ts"],
+			"reference": "packages/api/src/registry/table-registry.ts (existing route patterns)",
+			"sessionId": null,
+			"transactionId": null,
+			"createdAt": "2025-11-25T11:00:00Z",
+			"completedAt": "2025-11-25T12:00:00Z"
+		},
+		{
+			"id": "T-007",
+			"storyId": "IMPT-001",
+			"title": "Update package exports for new modules",
+			"description": "Update packages/data/src/index.ts to export: (1) new validator module, (2) enhanced types. Follow triple-export-registration pattern. Ensure SmartMoneyWorksClient changes are reflected in type definitions.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-002", "T-003", "T-004"],
+			"acCoverage": ["AC-007"],
+			"files": ["packages/data/src/index.ts", "packages/data/src/validators/index.ts"],
+			"reference": "E:triple-export-registration-pattern in Weave",
+			"sessionId": null,
+			"transactionId": null,
+			"createdAt": "2025-11-25T11:00:00Z",
+			"completedAt": "2025-11-25T12:00:00Z"
+		},
+		{
+			"id": "T-008",
+			"storyId": "IMPT-001",
+			"title": "Run typecheck and fix any compilation errors",
+			"description": "Execute 'bun run typecheck' from repository root. Fix any TypeScript errors across all packages. Ensure all imports resolve correctly and type definitions are complete. Document any quirks discovered.",
+			"status": "completed",
+			"assignedAgent": "backend-dev",
+			"dependencies": ["T-006", "T-007"],
+			"acCoverage": ["AC-007"],
+			"files": [],
+			"reference": "ACCT-001 typecheck verification step",
+			"sessionId": null,
+			"transactionId": null,
+			"createdAt": "2025-11-25T11:00:00Z",
+			"completedAt": "2025-11-25T12:00:00Z"
+		}
+	],
+	"acceptanceCriteria": [
+		{
+			"id": "AC-001",
+			"storyId": "IMPT-001",
+			"description": "SmartMoneyWorksClient has smartImport() method that converts objects to TSV with correct field ordering based on discovered schema",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/data/src/client/moneyworks-smart-client.ts - smartImport() method at line 253-293, recordsToOrderedTSV() at line 303-359, valueToTSV() at line 365-384",
+			"status": "pass"
+		},
+		{
+			"id": "AC-002",
+			"storyId": "IMPT-001",
+			"description": "ImportOptions supports mode parameter (insert, update, replace) with proper MoneyWorks semantics",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/data/src/client/types.ts - ImportMode type at line 18 with 'insert' | 'update' | 'replace', ImportOptions interface at line 31-84 with documented mode semantics",
+			"status": "pass"
+		},
+		{
+			"id": "AC-003",
+			"storyId": "IMPT-001",
+			"description": "BaseWriteRepository class provides create(), update(), and upsert() methods with proper error handling",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/data/src/repositories/base.repository.ts - create() at line 183-221, update() at line 236-276, upsert() at line 295-336, bulkCreate() at line 353-370, bulkUpsert() at line 387-404",
+			"status": "pass"
+		},
+		{
+			"id": "AC-004",
+			"storyId": "IMPT-001",
+			"description": "Pre-write validation using canonical field validators prevents invalid data from being sent to MoneyWorks",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/data/src/validators/import-validator.ts - validateRecordForImport() at line 269-322, validateRecordsForImport() at line 340-368, validators for string length, number range, date format, required fields",
+			"status": "pass"
+		},
+		{
+			"id": "AC-005",
+			"storyId": "IMPT-001",
+			"description": "API exposes POST /api/v1/{table}/import endpoint with proper authentication and error responses",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/api/src/routes/tables.ts - POST /:table/import route at line 232-334, TableImportBodySchema and ImportResultSchema in packages/api/src/schemas/table.ts",
+			"status": "pass"
+		},
+		{
+			"id": "AC-006",
+			"storyId": "IMPT-001",
+			"description": "ImportResult type provides detailed feedback: processed, created, updated, errors count with errorDetails array",
+			"testable": true,
+			"tested": true,
+			"evidence": "packages/data/src/client/types.ts - ImportResult interface at line 110-143 with success, processed, created, updated, skipped, errors, errorDetails[], ImportErrorDetail at line 92-103",
+			"status": "pass"
+		},
+		{
+			"id": "AC-007",
+			"storyId": "IMPT-001",
+			"description": "TypeScript compilation passes with zero errors after implementation",
+			"testable": true,
+			"tested": true,
+			"evidence": "bunx tsc --noEmit passes with no errors in packages/data, packages/api, packages/canonical, packages/cli",
+			"status": "pass"
+		}
+	],
+	"decisions": [
+		{
+			"id": "D-001",
+			"title": "Use 'replace' as default import mode instead of 'insert'",
+			"description": "Changed default import mode from 'insert' to 'replace' (upsert) for better developer experience - most import operations want to update if exists, create if not",
+			"rationale": "Upsert is the most common use case and reduces errors from duplicate key violations",
+			"madeAt": "2025-11-25T12:00:00Z"
+		},
+		{
+			"id": "D-002",
+			"title": "Rename import modes to match MoneyWorks REST API",
+			"description": "Changed from 'create/update/createOrUpdate' to 'insert/update/replace' to match MoneyWorks REST API terminology exactly",
+			"rationale": "Canonical DSL purity - use exact MoneyWorks terms",
+			"madeAt": "2025-11-25T12:00:00Z"
+		}
+	],
+	"learnings": [
+		{
+			"id": "L-001",
+			"title": "TSV import requires header row with field names",
+			"description": "When importing to MoneyWorks, include field names as the first row of TSV data. MoneyWorks uses this to map columns to fields.",
+			"category": "technical"
+		}
+	],
+	"weaveRefs": [
+		"E:multi-format-export-pattern",
+		"E:canonical-dsl-pattern",
+		"E:branded-types-pattern",
+		"E:field-discovery-pattern",
+		"E:9-step-entity-implementation-pattern",
+		"Q:triple-export-registration-pain",
+		"Pi:full-stack-story-pattern",
+		"Pi:evidence-based-validation"
+	],
+	"createdAt": "2025-11-25T10:00:00.000Z",
+	"completedAt": "2025-11-25T12:00:00.000Z"
+}

@@ -270,7 +270,7 @@ export class NameRepository extends BaseMoneyWorksRepository<MoneyWorksName> {
 
 		const prepared = this.prepare(nameData);
 		const result = await this.client.import(this.tableName, [prepared], {
-			mode: "create",
+			mode: "insert",
 		});
 
 		if (result.errors > 0 || !result.created) {

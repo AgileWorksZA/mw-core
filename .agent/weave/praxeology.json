@@ -151,14 +151,51 @@
 			],
 			"confidence": 0.95,
 			"evidence": ["TXNS-001: 12 query methods in TransactionRepository, 10 in DetailRepository - 22 total specialized queries"]
+		},
+		"validate-before-import": {
+			"id": "validate-before-import",
+			"what": "Always validate records client-side before sending to MoneyWorks import",
+			"when": "Implementing create/update/upsert operations",
+			"how": "Use validateRecordsForImport() from import-validator.ts before smartImport()",
+			"why": "MoneyWorks error responses can be cryptic - client validation provides better messages",
+			"benefits": [
+				"Earlier error detection (before network call)",
+				"Better error messages with field-level detail",
+				"Reduced round trips to server",
+				"Validates date format (YYYYMMDD), string length, required fields"
+			],
+			"tradeoffs": [
+				"Extra processing overhead",
+				"Must keep validators in sync with schema"
+			],
+			"confidence": 0.95,
+			"evidence": ["IMPT-001 L-003: Validation before send saves round trips"]
+		},
+		"use-replace-mode-default": {
+			"id": "use-replace-mode-default",
+			"what": "Default to 'replace' (upsert) mode for import operations instead of 'insert'",
+			"when": "Implementing SmartMoneyWorksClient import methods",
+			"how": "Set mode: 'replace' as default in ImportOptions",
+			"why": "Most common use case is update-if-exists, create-if-not - reduces duplicate key errors",
+			"benefits": [
+				"Better developer experience - most imports just work",
+				"No need to check existence before import",
+				"Reduces duplicate key violation errors"
+			],
+			"tradeoffs": [
+				"May accidentally overwrite data if key collision not expected",
+				"Less strict than insert-only mode"
+			],
+			"confidence": 0.9,
+			"evidence": ["IMPT-001 D-001: Changed default from insert to replace for better DX"]
 		}
 	},
 	"metadata": {
 		"totalWowPatterns": 3,
 		"totalDelegationStrategies": 1,
-		"totalBestPractices": 7,
+		"totalBestPractices": 9,
 		"averageConfidence": 0.94,
 		"lastCompaction": null,
-		"lastUpdated": "2025-11-25T05:30:00.000Z"
+		"lastUpdated": "2025-11-25T12:00:00.000Z"
 	}
 }

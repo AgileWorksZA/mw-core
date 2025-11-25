@@ -15,8 +15,10 @@ import {
 	SuccessResponse,
 } from "../schemas/common";
 import {
+	ImportResultSchema,
 	TableExportQuerySchema,
 	TableExportResponseSchema,
+	TableImportBodySchema,
 	TableListSchema,
 	TableSchemaSchema,
 } from "../schemas/table";
@@ -220,6 +222,111 @@ export function createTableRoutes(cache?: CacheService) {
 							SuccessResponse(TableExportResponseSchema),
 							t.String({ description: "TSV data for compact formats" }),
 						]),
+						400: ErrorSchema,
+						404: ErrorSchema,
+						500: ErrorSchema,
+					},
+				},
+			)
+
+			// Import records into a table
+			.post(
+				"/:table/import",
+				async (context) => {
+					const {
+						params: { table },
+						body,
+						set,
+						headers,
+						mwClient,
+					} = context as any;
+					if (!mwClient) throw new Error("No authenticated client");
+					const registry = createTableRegistry(mwClient);
+					const requestId = headers["x-request-id"] || "unknown";
+					const controller = registry.getTable(table);
+
+					if (!controller) {
+						set.status = 404;
+						throw new Error(`NOT_FOUND: Table '${table}' is not available`);
+					}
+
+					try {
+						const result = await controller.import({
+							records: body.records,
+							mode: body.mode,
+							workItOut: body.workItOut,
+							calculated: body.calculated,
+							validate: body.validate,
+						});
+
+						// Set status based on result
+						if (!result.success) {
+							set.status = result.errors > 0 ? 400 : 200;
+						}
+
+						return {
+							data: result,
+							metadata: {
+								table,
+								timestamp: new Date().toISOString(),
+								requestId,
+							},
+						};
+					} catch (error: any) {
+						// Handle validation errors
+						if (
+							error?.name === "ValidationError" ||
+							error?.code?.startsWith("INVALID") ||
+							error?.code?.startsWith("EMPTY")
+						) {
+							set.status = 400;
+							return {
+								error: {
+									code: error.code || "VALIDATION_ERROR",
+									message: error.message,
+									requestId,
+								},
+							};
+						}
+						// Re-throw other errors for global handler
+						throw error;
+					}
+				},
+				{
+					params: t.Object({
+						table: t.String({ description: "Table name" }),
+					}),
+					body: TableImportBodySchema,
+					detail: {
+						summary: "Import records into table",
+						description: `Import records into a MoneyWorks table.
+
+**Import Modes:**
+- **insert**: Create new records only. Fails if record already exists.
+- **update**: Update existing records only. Fails if record doesn't exist.
+- **replace**: (Default) Upsert - update if exists, create if not.
+
+**Validation:**
+Records are validated against the table schema before import by default.
+Set \`validate: false\` to skip client-side validation.
+
+**Limits:**
+Maximum 1000 records per request.
+
+**Example:**
+\`\`\`json
+{
+  "records": [
+    { "TaxCode": "GST15", "Rate": 15, "Description": "GST 15%" }
+  ],
+  "mode": "replace"
+}
+\`\`\`
+`,
+						tags: ["Tables"],
+					},
+					response: {
+						200: SuccessResponse(ImportResultSchema),
 						400: ErrorSchema,
 						404: ErrorSchema,
 						500: ErrorSchema,

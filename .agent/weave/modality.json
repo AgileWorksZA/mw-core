@@ -51,6 +51,15 @@
 		}
 	},
 	"rejectedOptions": {
+		"generic-crud-mode-terminology": {
+			"id": "generic-crud-mode-terminology",
+			"option": "Use generic CRUD terminology (create/update/createOrUpdate) for import modes",
+			"rejectedBecause": "Violates canonical DSL purity - MoneyWorks uses insert/update/replace",
+			"currentApproach": "Use exact MoneyWorks REST API mode names: insert, update, replace",
+			"tradeoff": "Less familiar to developers expecting CRUD terms, but maintains DSL consistency",
+			"confidence": 0.95,
+			"context": "IMPT-001 D-002: Chose MoneyWorks terminology over generic CRUD"
+		},
 		"automatic-controller-registration": {
 			"id": "automatic-controller-registration",
 			"option": "Automatically register all controllers via file scanning",
@@ -119,10 +128,10 @@
 	},
 	"metadata": {
 		"totalAlternatives": 2,
-		"totalRejectedOptions": 4,
+		"totalRejectedOptions": 5,
 		"totalPossibleFutures": 2,
 		"averageConfidence": 0.91,
 		"lastCompaction": null,
-		"lastUpdated": "2025-11-25T05:30:00.000Z"
+		"lastUpdated": "2025-11-25T12:00:00.000Z"
 	}
 }

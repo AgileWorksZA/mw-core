@@ -319,9 +319,11 @@ export class MoneyWorksRESTClient {
 
 			// This is a simplified parser - actual format depends on MoneyWorks version
 			const result: ImportResult = {
+				success: true,
 				processed: records.length,
 				created: 0,
 				updated: 0,
+				skipped: 0,
 				errors: 0,
 				errorDetails: [],
 			};

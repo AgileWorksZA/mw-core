@@ -68,6 +68,17 @@
 			"severity": "MEDIUM",
 			"confidence": 0.9,
 			"enforcedBy": "/loom:complete Step 3"
+		},
+		"pre-import-validation-obligation": {
+			"id": "pre-import-validation-obligation",
+			"what": "Validate records client-side before sending to MoneyWorks import",
+			"why": "MoneyWorks error responses can be cryptic - client validation catches errors earlier with better messages",
+			"when": "Before any create/update/upsert operation via smartImport()",
+			"how": "Use validateRecordsForImport() from import-validator.ts, check result.valid before proceeding",
+			"severity": "MEDIUM",
+			"confidence": 0.9,
+			"evidence": ["IMPT-001: Created validation layer in packages/data/src/validators/import-validator.ts"],
+			"enforcedBy": "ImportOptions.validate defaults to true"
 		}
 	},
 	"permissions": {
@@ -123,10 +134,11 @@
 		}
 	},
 	"metadata": {
-		"totalObligations": 4,
+		"totalObligations": 5,
 		"totalPermissions": 2,
 		"totalProhibitions": 3,
 		"averageConfidence": 0.94,
-		"lastCompaction": null
+		"lastCompaction": null,
+		"lastUpdated": "2025-11-25T12:00:00.000Z"
 	}
 }

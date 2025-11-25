@@ -1,0 +1,6 @@
+{
+	"code": "IMPT",
+	"name": "Import",
+	"description": "Import functionality - write operations to create/update records in MoneyWorks from SDK",
+	"storyCounter": 1
+}

@@ -5,8 +5,14 @@
  * @moneyworks-dsl PURE
  */
 
-import type { ExportOptions, SmartMoneyWorksClient } from "@moneyworks/data";
-import type { ExportFormat } from "@moneyworks/data";
+import type {
+	ExportFormat,
+	ExportOptions,
+	ImportMode,
+	ImportOptions,
+	ImportResult,
+	SmartMoneyWorksClient,
+} from "@moneyworks/data";
 
 export interface TableExportParams {
 	format?: ExportFormat;
@@ -16,13 +22,28 @@ export interface TableExportParams {
 	orderBy?: string;
 }
 
+export interface TableImportParams {
+	/** Records to import */
+	records: Record<string, unknown>[];
+	/** Import mode: insert, update, or replace (upsert) */
+	mode?: ImportMode;
+	/** Let MoneyWorks work out field mappings */
+	workItOut?: boolean;
+	/** Include calculated fields */
+	calculated?: boolean;
+	/** Validate records before import */
+	validate?: boolean;
+}
+
 export interface TableController {
 	tableName: string;
 	displayName: string;
 	description: string;
 	export(params: TableExportParams): Promise<any>;
+	import(params: TableImportParams): Promise<ImportResult>;
 	getSchema(): Promise<any>;
 	validateExport(params: TableExportParams): void;
+	validateImport(params: TableImportParams): void;
 }
 
 /**
@@ -136,6 +157,104 @@ export abstract class BaseTableController implements TableController {
 
 		// Subclasses can add table-specific validation
 		this.validateTableSpecific(params);
+	}
+
+	/**
+	 * Import records into the table
+	 *
+	 * @param params - Import parameters including records, mode, and options
+	 * @returns ImportResult with success/error details
+	 *
+	 * @example
+	 * const result = await controller.import({
+	 *   records: [{ TaxCode: 'GST15', Rate: 15 }],
+	 *   mode: 'insert'
+	 * });
+	 */
+	async import(params: TableImportParams): Promise<ImportResult> {
+		// Validate parameters
+		this.validateImport(params);
+
+		const options: ImportOptions = {
+			mode: params.mode || "replace",
+			workItOut: params.workItOut,
+			calculated: params.calculated,
+			validate: params.validate,
+		};
+
+		try {
+			const result = await this.client.smartImport(
+				this.tableName,
+				params.records,
+				options,
+			);
+			return result;
+		} catch (error) {
+			this.handleMoneyWorksError(error);
+		}
+	}
+
+	/**
+	 * Validate import parameters
+	 */
+	validateImport(params: TableImportParams): void {
+		// Validate records array
+		if (!params.records || !Array.isArray(params.records)) {
+			throw new ValidationError(
+				"INVALID_RECORDS",
+				"Records must be a non-empty array",
+			);
+		}
+
+		if (params.records.length === 0) {
+			throw new ValidationError(
+				"EMPTY_RECORDS",
+				"At least one record is required for import",
+			);
+		}
+
+		// Validate max records per request
+		const maxRecords = 1000;
+		if (params.records.length > maxRecords) {
+			throw new ValidationError(
+				"TOO_MANY_RECORDS",
+				`Cannot import more than ${maxRecords} records at once`,
+			);
+		}
+
+		// Validate mode if provided
+		const validModes: ImportMode[] = ["insert", "update", "replace"];
+		if (params.mode && !validModes.includes(params.mode)) {
+			throw new ValidationError(
+				"INVALID_MODE",
+				`Mode must be one of: ${validModes.join(", ")}`,
+			);
+		}
+
+		// Validate each record is an object
+		for (let i = 0; i < params.records.length; i++) {
+			const record = params.records[i];
+			if (
+				!record ||
+				typeof record !== "object" ||
+				Array.isArray(record)
+			) {
+				throw new ValidationError(
+					"INVALID_RECORD",
+					`Record at index ${i} must be an object`,
+				);
+			}
+		}
+
+		// Subclasses can add table-specific validation
+		this.validateTableSpecificImport(params);
+	}
+
+	/**
+	 * Table-specific import validation (override in subclasses)
+	 */
+	protected validateTableSpecificImport(params: TableImportParams): void {
+		// Default: no additional validation
 	}
 
 	/**

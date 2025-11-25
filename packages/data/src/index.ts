@@ -30,6 +30,8 @@ export type {
 	ImportOptions,
 	ImportResult,
 	ImportMode,
+	ImportErrorDetail,
+	LegacyImportMode,
 	GlobalOptions,
 	ExportFormat,
 	VersionInfo,
@@ -87,6 +89,24 @@ export {
 	convertExportFormat,
 } from "./converters";
 export type { SchemaEnrichedExport } from "./client/types";
+
+// Export validators
+export {
+	type FieldValidationError,
+	type RecordValidationResult,
+	type ValidationResult,
+	type FieldValidator,
+	ValidationError,
+	validateStringLength,
+	validateNumberRange,
+	validateDateFormat,
+	validateBoolean,
+	validateRequired,
+	validateFieldType,
+	validateRecordForImport,
+	validateRecordsForImport,
+	createFieldValidator,
+} from "./validators";
 
 // Re-export types from client and repositories for convenience
 export { SmartMoneyWorksClient } from "./client/moneyworks-smart-client";
