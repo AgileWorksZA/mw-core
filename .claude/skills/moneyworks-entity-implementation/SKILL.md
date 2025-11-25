@@ -7,6 +7,48 @@ description: Full-stack implementation workflow for new MoneyWorks entities (Tra
 
 Transform a MoneyWorks table into a fully-supported SDK entity with types, repository, controller, API registration, and optional web UI. This workflow was battle-tested on Product entity implementation (PROD-001).
 
+## Quick Start (Automated)
+
+Use the automation scripts to generate all boilerplate files in seconds:
+
+```bash
+# Step 1: Generate all boilerplate files
+bun .claude/skills/moneyworks-entity-implementation/scripts/scaffold-entity.ts \
+  --entity="Transaction" \
+  --table="Transaction" \
+  --primaryKey="SequenceNumber" \
+  --displayName="Transactions" \
+  --description="Financial transaction records"
+
+# Step 2: Update all export locations (4 files updated automatically)
+bun .claude/skills/moneyworks-entity-implementation/scripts/update-exports.ts \
+  --entity="Transaction"
+
+# Step 3: Run typecheck
+bun tsc --project packages/canonical/tsconfig.json --noEmit
+bun tsc --project packages/data/tsconfig.json --noEmit
+
+# Step 4: Customize generated files with actual MoneyWorks fields
+# - Edit enums.ts with actual type values
+# - Edit types.ts with all fields from MoneyWorks schema
+# - Add numeric field list to repository postProcess()
+```
+
+**What the scripts create:**
+- `packages/canonical/src/entities/{entity}/enums.ts` - Enum definitions
+- `packages/canonical/src/entities/{entity}/types.ts` - TypeScript interfaces
+- `packages/canonical/src/entities/{entity}/index.ts` - Barrel exports
+- `packages/data/src/repositories/{entity}.repository.ts` - Data repository
+- `packages/api/src/controllers/{entity}.ts` - API controller
+
+**What update-exports.ts handles:**
+1. `packages/canonical/src/index.ts` - Entity export
+2. `packages/data/src/repositories/index.ts` - Repository export
+3. `packages/data/src/index.ts` - Export + both factory functions
+4. `packages/api/src/registry/table-registry.ts` - Controller registration
+
+---
+
 ## Core Principle
 
 **Follow the 7-layer stack in order.** Each layer depends on the previous. Missing the TableRegistry registration (Layer 5) is the most common mistake - it makes your entity "unavailable" despite all code being correct.
@@ -286,6 +328,7 @@ export const {ENTITY}_TSV_FIELD_MAPPING: string[] = [
 ## Reference Implementations
 
 Use these as templates:
+- **Account** (ACCT-001): Complete full-stack implementation with specialized query methods
 - **Product** (PROD-001): Full implementation with all layers
 - **TaxRate**: Simpler entity, good for reference
 - **Name**: Contact/customer entity with complex fields
