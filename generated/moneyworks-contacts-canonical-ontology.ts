@@ -25,7 +25,7 @@
  * 
  * 4. Field Capacity Advantages (Contacts vs Names):
  *    ✅ Contact name: 39 chars vs Names(25/29) - CONTACTS ADVANTAGE
- *    ❌ Email: 63 chars vs Names(80/80) - NAMES ADVANTAGE  
+ *    ❌ Email: 63 chars vs Names(80/80) - NAMES ADVANTAGE
  *    ✅ Mobile: 19 chars vs Names(14/13) - CONTACTS ADVANTAGE
  *    ✅ Position: 39 chars vs Names(29/29) - CONTACTS ADVANTAGE
  *    ✅ AfterHours: 19 chars vs Names(11/11) - CONTACTS ADVANTAGE
@@ -99,11 +99,11 @@ export const MONEYWORKS_CONTACTS_FIELDS: MoneyWorksCanonicalContactField[] = [
   },
   
   {
-    fieldName: "eMail",
+    fieldName: "Email",
     dataType: "T",
     maxLength: 63,
     canonicalDescription: "Contact's email address",
-    manualSource: "moneyworks_appendix_contacts.html - eMail field"
+    manualSource: "moneyworks_appendix_contacts.html - Email field"
   },
   
   {
@@ -386,7 +386,7 @@ export const MONEYWORKS_CONTACTS_CANONICAL_SUMMARY = {
     },
     
     namesAdvantage: {
-      eMail: "63 chars vs Names.email(80)/email2(80) - Names provides more email capacity"
+      Email: "63 chars vs Names.email(80)/email2(80) - Names provides more email capacity"
     },
     
     equivalent: {

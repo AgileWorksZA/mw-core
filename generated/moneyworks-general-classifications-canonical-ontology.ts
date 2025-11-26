@@ -40,12 +40,40 @@ export enum GeneralClassificationType {
  * Represents the unified structure of all classification types
  */
 export interface MoneyWorksGeneralClassification {
-  /** 
+  /**
+   * Unique system-assigned sequence number (Primary Key)
+   *
+   * CONSTRAINTS:
+   * - Required field
+   * - System-managed (read-only)
+   * - Unique identifier for each classification record
+   * - Auto-incremented by MoneyWorks
+   *
+   * TYPE: Integer
+   * EXAMPLE: 49
+   */
+  SequenceNumber: number;
+
+  /**
+   * System-maintained timestamp of last modification
+   *
+   * CONSTRAINTS:
+   * - Optional field
+   * - System-managed (read-only)
+   * - Tracks changes to the classification record itself
+   * - Format: YYYYMMDDHHmmss (14-digit timestamp)
+   *
+   * TYPE: String (timestamp)
+   * EXAMPLE: "20250305112751"
+   */
+  LastModifiedTime?: string;
+
+  /**
    * The classification code with prefix (C/D/S)
    * - C = Account Category (e.g., 'CCOMMS' for communication accounts)
    * - D = Department Classification (e.g., 'DFOH' for front-of-house departments)
    * - S = Department Group (e.g., 'SOPS' for operations departments)
-   * 
+   *
    * CONSTRAINTS:
    * - Required field, indexed
    * - Maximum 5 characters including prefix
@@ -53,28 +81,51 @@ export interface MoneyWorksGeneralClassification {
    * - Spaces converted to underscores
    * - '@' character not permitted
    * - First character must be C, D, or S
+   *
+   * TYPE: String
+   * EXAMPLE: "" (can be empty)
    */
   Code: string;
 
-  /** 
+  /**
    * The human-readable classification name
-   * 
+   *
    * CONSTRAINTS:
    * - Required field
    * - Maximum 25 characters
    * - Descriptive name for the classification
+   *
+   * TYPE: String
+   * EXAMPLE: "2026/27"
    */
   Description: string;
 
-  /** 
-   * System-maintained timestamp of last modification
-   * 
+  /**
+   * Date field for classification-related date tracking
+   *
    * CONSTRAINTS:
    * - Optional field
-   * - System-managed (read-only)
-   * - Tracks changes to the classification record itself
+   * - Format: YYYYMMDD (8-digit date)
+   * - Used for temporal classification associations
+   * - Default: 19040101 (MoneyWorks epoch date indicating no date set)
+   *
+   * TYPE: String (date)
+   * EXAMPLE: "19040101"
    */
-  LastModifiedTime?: string;
+  Date?: string;
+
+  /**
+   * Long numeric field for extended classification data
+   *
+   * CONSTRAINTS:
+   * - Optional field
+   * - Can store numeric values for classification metadata
+   * - Purpose varies by classification type and business context
+   *
+   * TYPE: Number
+   * EXAMPLE: 9
+   */
+  Long?: number;
 }
 
 /**
@@ -107,22 +158,43 @@ export interface MoneyWorksDepartmentGroup extends MoneyWorksGeneralClassificati
 export const GeneralClassificationValidation = {
   /** Core field validation rules */
   fields: {
+    SequenceNumber: {
+      required: true,
+      readonly: true,
+      type: 'number',
+      description: 'Unique system-assigned sequence number (Primary Key)'
+    },
+    LastModifiedTime: {
+      required: false,
+      readonly: true,
+      type: 'string',
+      pattern: /^\d{14}$/,
+      description: 'System-managed timestamp of last modification (YYYYMMDDHHmmss)'
+    },
     Code: {
       required: true,
       indexed: true,
+      type: 'string',
       maxLength: 5,
       pattern: /^[CDS][A-Z0-9_]{0,4}$/,
       description: 'Classification code with prefix (C/D/S), max 5 chars, alphanumeric with underscores'
     },
     Description: {
       required: true,
+      type: 'string',
       maxLength: 25,
       description: 'Human-readable classification name, max 25 characters'
     },
-    LastModifiedTime: {
+    Date: {
       required: false,
-      readonly: true,
-      description: 'System-managed timestamp of last modification'
+      type: 'string',
+      pattern: /^\d{8}$/,
+      description: 'Date field for classification tracking (YYYYMMDD format)'
+    },
+    Long: {
+      required: false,
+      type: 'number',
+      description: 'Long numeric field for extended classification data'
     }
   },
 
@@ -180,6 +252,63 @@ export const GeneralClassificationValidation = {
     }
   }
 } as const;
+
+/**
+ * Canonical field definitions for General Classifications entity
+ * Defines the complete field structure with types, constraints, and metadata
+ */
+export const MONEYWORKS_GENERAL_FIELDS = [
+  {
+    fieldName: "SequenceNumber",
+    dataType: "N",
+    canonicalDescription: "Unique system-assigned sequence number (Primary Key). System-managed, read-only, auto-incremented identifier.",
+    isRequired: true,
+    isIndexed: false,
+    isReadOnly: true
+  },
+  {
+    fieldName: "LastModifiedTime",
+    dataType: "T",
+    canonicalDescription: "System-maintained timestamp of last modification. Format: YYYYMMDDHHmmss (14-digit timestamp). System-managed, read-only.",
+    isRequired: false,
+    isIndexed: false,
+    isReadOnly: true
+  },
+  {
+    fieldName: "Code",
+    dataType: "A",
+    canonicalDescription: "Classification code with prefix (C=Account Category, D=Department Classification, S=Department Group). Max 5 chars, alphanumeric with underscores, auto-capitalized.",
+    isRequired: true,
+    isIndexed: true,
+    isReadOnly: false,
+    maxLength: 5
+  },
+  {
+    fieldName: "Description",
+    dataType: "A",
+    canonicalDescription: "Human-readable classification name. Maximum 25 characters.",
+    isRequired: true,
+    isIndexed: false,
+    isReadOnly: false,
+    maxLength: 25
+  },
+  {
+    fieldName: "Date",
+    dataType: "D",
+    canonicalDescription: "Date field for classification-related date tracking. Format: YYYYMMDD (8-digit date). Default: 19040101 (MoneyWorks epoch indicating no date set).",
+    isRequired: false,
+    isIndexed: false,
+    isReadOnly: false
+  },
+  {
+    fieldName: "Long",
+    dataType: "N",
+    canonicalDescription: "Long numeric field for extended classification data. Purpose varies by classification type and business context.",
+    isRequired: false,
+    isIndexed: false,
+    isReadOnly: false
+  }
+] as const;
 
 /**
  * Type guard functions for classification type determination

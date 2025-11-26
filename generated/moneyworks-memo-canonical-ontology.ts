@@ -53,6 +53,13 @@ export const MONEYWORKS_MEMO_FIELDS = [
     relationshipRule: "Must reference valid Names.Seq (primary key of Names entity)"
   },
   {
+    fieldName: "Order",
+    dataType: "N" as const,
+    canonicalDescription: "Sort order of memo within the parent Name record",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false
+  },
+  {
     fieldName: "Date",
     dataType: "D" as const,
     canonicalDescription: "Date of memo",
@@ -64,6 +71,13 @@ export const MONEYWORKS_MEMO_FIELDS = [
     dataType: "D" as const,
     canonicalDescription: "Date of reminder",
     manualSource: "moneyworks_appendix_memo_file.html",
+    isRequired: false
+  },
+  {
+    fieldName: "Flags",
+    dataType: "N" as const,
+    canonicalDescription: "Bitfield flags for memo configuration and display control",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
     isRequired: false
   },
   {

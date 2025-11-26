@@ -1,13 +1,18 @@
 /**
  * MoneyWorks AssetLog Entity - Canonical Ontology
- * 
+ *
  * PURE MoneyWorks canonical definitions extracted from official manual
  * Source: moneyworks_appendix_assets.html - AssetLog subfile
  * Authority: MoneyWorks Manual - AssetLog Field Descriptions
- * 
+ *
  * CRITICAL DISCOVERY: AssetLog is a comprehensive audit trail subfile that tracks
  * every action in an asset's lifecycle - acquisitions, depreciation, revaluations,
  * disposals, and administrative actions. Provides complete financial history.
+ *
+ * Field Coverage: 20 fields (21 in empirical schema minus Slot)
+ * - LastModifiedTime: System timestamp field
+ * - LogDate: Renamed from "Date" for clarity
+ * - Disposal fields: 4 fields for tracking business/private use disposal accounting
  */
 
 // ============================================================================
@@ -60,6 +65,15 @@ export const MONEYWORKS_ASSETLOG_FIELDS = [
     isIndexed: true
   },
   {
+    fieldName: "LastModifiedTime",
+    dataType: "T" as const,
+    maxLength: 14,
+    canonicalDescription: "Last modified timestamp (YYYYMMDDHHMMSS format) - tracks when this log entry was last updated",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isSystem: true,
+    isIndexed: true
+  },
+  {
     fieldName: "ParentSeq",
     dataType: "N" as const,
     canonicalDescription: "Sequencenumber of asset",
@@ -77,9 +91,9 @@ export const MONEYWORKS_ASSETLOG_FIELDS = [
     isRequired: true
   },
   {
-    fieldName: "Date",
+    fieldName: "LogDate",
     dataType: "D" as const,
-    canonicalDescription: "Date of action",
+    canonicalDescription: "Date of action - when the asset lifecycle event occurred",
     manualSource: "moneyworks_appendix_assets.html",
     isRequired: true
   },
@@ -151,6 +165,34 @@ export const MONEYWORKS_ASSETLOG_FIELDS = [
     maxLength: 255,
     canonicalDescription: "User memo",
     manualSource: "moneyworks_appendix_assets.html"
+  },
+  {
+    fieldName: "DisposedAccDepn",
+    dataType: "N" as const,
+    canonicalDescription: "Accumulated depreciation at disposal - total depreciation on disposed asset portion (business use)",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    applicableActions: ["AD", "AP"]
+  },
+  {
+    fieldName: "GainLossOnDisposal",
+    dataType: "N" as const,
+    canonicalDescription: "Gain or loss on disposal - calculated difference between disposal proceeds and book value (business use)",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    applicableActions: ["AD", "AP"]
+  },
+  {
+    fieldName: "GainLossOnDisposalPrivate",
+    dataType: "N" as const,
+    canonicalDescription: "Gain or loss on disposal (private use portion) - calculated for private use percentage of asset",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    applicableActions: ["AD", "AP"]
+  },
+  {
+    fieldName: "DisposalAccDepnPrivate",
+    dataType: "N" as const,
+    canonicalDescription: "Accumulated depreciation at disposal (private use portion) - depreciation on private use percentage",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    applicableActions: ["AD", "AP"]
   }
 ] as const;
 
@@ -177,10 +219,17 @@ export const MONEYWORKS_ASSETLOG_CANONICAL_TERMS = {
   
   // Financial tracking (MoneyWorks canonical)
   ACTION_DATE: "Action Date",                    // When action occurred
+  LOG_DATE: "Log Date",                          // Date of lifecycle event
   DEPRECIATION_AMOUNT: "Depreciation Amount",    // Amount depreciated
   ACCUMULATED_DEPRECIATION: "Accumulated Depreciation", // Total depreciation
   ACCUMULATED_REVALUATION: "Accumulated Revaluation",   // Total revaluations
   CLOSING_VALUE: "Closing Value",                // Book value after action
+
+  // Disposal tracking (MoneyWorks canonical)
+  DISPOSED_ACCUM_DEPN: "Disposed Accumulated Depreciation", // Depreciation at disposal (business)
+  GAIN_LOSS_ON_DISPOSAL: "Gain/Loss on Disposal",          // Disposal gain/loss (business)
+  GAIN_LOSS_DISPOSAL_PRIVATE: "Gain/Loss on Disposal (Private)", // Disposal gain/loss (private use)
+  DISPOSAL_ACCUM_DEPN_PRIVATE: "Disposal Accumulated Depreciation (Private)", // Depreciation at disposal (private)
   
   // Relationships (MoneyWorks canonical)
   PARENT_ASSET: "Parent Asset",                  // Asset this log belongs to

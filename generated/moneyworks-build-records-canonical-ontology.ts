@@ -51,6 +51,13 @@ export const MONEYWORKS_BUILD_RECORDS_FIELDS = [
     relationshipRule: "Foreign key relationship - Build records belong to specific Product entries"
   },
   {
+    fieldName: "Order",
+    dataType: "N" as const,
+    canonicalDescription: "Sort order of component within the product recipe",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false
+  },
+  {
     fieldName: "PartCode",
     dataType: "T" as const,
     maxLength: 19,
@@ -66,6 +73,13 @@ export const MONEYWORKS_BUILD_RECORDS_FIELDS = [
     canonicalDescription: "Quantity of component required",
     manualSource: "moneyworks_appendix_build_file.html",
     isRequired: true
+  },
+  {
+    fieldName: "Flags",
+    dataType: "N" as const,
+    canonicalDescription: "Bitfield flags for build record configuration and behavior control",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false
   },
   {
     fieldName: "Memo",

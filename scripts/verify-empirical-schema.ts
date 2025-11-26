@@ -58,6 +58,20 @@ interface VerificationResult {
 }
 
 // ============================================================================
+// SYSTEM FIELD EXCLUSIONS
+// ============================================================================
+
+/**
+ * Internal MoneyWorks system fields that should be excluded from ontology verification.
+ *
+ * These fields are present in the empirical API data but are not part of the canonical
+ * business ontology as they represent internal system state rather than business logic.
+ *
+ * - Slot: Internal record slot number used by MoneyWorks for data storage
+ */
+const EXCLUDED_SYSTEM_FIELDS = ['Slot'] as const;
+
+// ============================================================================
 // ENTITY NAME MAPPING
 // ============================================================================
 
@@ -111,7 +125,13 @@ function extractFieldsFromOntology(filePath: string): string[] {
   return Array.from(fieldMatches, match => match[1]);
 }
 
-function normalizeFieldName(field: string): string {
+function normalizeFieldName(field: string, entityName?: string): string {
+  // Special handling for Detail entity: empirical API returns fields with "Detail." prefix
+  // but ontology defines them without prefix (e.g., "Detail.SequenceNumber" vs "SequenceNumber")
+  if (entityName === 'Detail' && field.startsWith('Detail.')) {
+    return field.substring(7); // Strip "Detail." prefix (7 characters)
+  }
+
   // MoneyWorks API returns PascalCase, but exports use lowercase
   // Normalize to PascalCase for comparison
   return field;
@@ -149,17 +169,27 @@ function verifyEntity(
   const ontologyFields = extractFieldsFromOntology(ontologyFilePath);
   result.ontologyFieldCount = ontologyFields.length;
 
+  // Filter out internal system fields from empirical data
+  // These fields are present in API responses but represent internal state, not business logic
+  const filteredEmpiricalFields = empiricalTable.fields.filter(field => {
+    const normalized = normalizeFieldName(field, empiricalTable.name);
+    return !EXCLUDED_SYSTEM_FIELDS.includes(normalized as any);
+  });
+
+  // Update empirical field count to reflect filtered fields
+  result.empiricalFieldCount = filteredEmpiricalFields.length;
+
   // Normalize field names for comparison
-  const empiricalFieldsSet = new Set(empiricalTable.fields.map(normalizeFieldName));
-  const ontologyFieldsSet = new Set(ontologyFields.map(normalizeFieldName));
+  const empiricalFieldsSet = new Set(filteredEmpiricalFields.map(f => normalizeFieldName(f, empiricalTable.name)));
+  const ontologyFieldsSet = new Set(ontologyFields.map(f => normalizeFieldName(f, empiricalTable.name)));
 
   // Find discrepancies
-  result.missingInOntology = empiricalTable.fields.filter(
-    field => !ontologyFieldsSet.has(normalizeFieldName(field))
+  result.missingInOntology = filteredEmpiricalFields.filter(
+    field => !ontologyFieldsSet.has(normalizeFieldName(field, empiricalTable.name))
   );
 
   result.missingInEmpirical = ontologyFields.filter(
-    field => !empiricalFieldsSet.has(normalizeFieldName(field))
+    field => !empiricalFieldsSet.has(normalizeFieldName(field, empiricalTable.name))
   );
 
   // Check if counts match

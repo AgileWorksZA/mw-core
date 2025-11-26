@@ -66,6 +66,14 @@ export const MONEYWORKS_ASSET_FIELDS = [
     isIndexed: true
   },
   {
+    fieldName: "LastModifiedTime",
+    dataType: "S" as const,
+    canonicalDescription: "The date and time that this record was last changed.",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    relationshipTarget: "System audit fields",
+    relationshipRule: "System-maintained timestamp for all record modifications"
+  },
+  {
     fieldName: "Code",
     dataType: "T" as const,
     maxLength: 19,
@@ -301,6 +309,33 @@ export const MONEYWORKS_ASSET_FIELDS = [
     maxLength: 255,
     canonicalDescription: "For your own use",
     manualSource: "moneyworks_appendix_assets.html"
+  },
+  {
+    fieldName: "DisposedAccDepn",
+    dataType: "N" as const,
+    canonicalDescription: "Accumulated depreciation at time of disposal for business use portion",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false,
+    relationshipTarget: "AssetLog disposal records",
+    relationshipRule: "Tracks business portion accumulated depreciation when asset is disposed"
+  },
+  {
+    fieldName: "DisposalAccDepnPrivate",
+    dataType: "N" as const,
+    canonicalDescription: "Accumulated depreciation at time of disposal for private use portion",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false,
+    relationshipTarget: "AssetLog disposal records",
+    relationshipRule: "Tracks private portion accumulated depreciation when asset with PrivateUsePercent is disposed"
+  },
+  {
+    fieldName: "InitialDepn",
+    dataType: "N" as const,
+    canonicalDescription: "Initial depreciation amount applied at asset acquisition or first depreciation run",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false,
+    relationshipTarget: "AssetLog acquisition records",
+    relationshipRule: "Tracks initial depreciation adjustment for partial year acquisitions"
   }
 ] as const;
 

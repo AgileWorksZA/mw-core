@@ -339,6 +339,15 @@ export const MONEYWORKS_LOGIN_FIELDS = [
     manualSource: "moneyworks_appendix_login_file.html",
     isRequired: false,
     businessRule: "Custom text data for scripting extensions"
+  },
+  {
+    fieldName: "SettingsDonor",
+    dataType: "T" as const,
+    maxLength: 31,
+    canonicalDescription: "User settings template source",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false,
+    businessRule: "References another user whose settings should be inherited/copied"
   }
 ] as const;
 
@@ -574,6 +583,7 @@ export interface MoneyWorksLogin {
   Privileges?: string;            // Max 65 characters, privilege map
   Role?: string;                  // Max 3 characters, user role
   SecurityLevel?: number;         // Numeric security level
+  SettingsDonor?: string;         // Max 31 characters, settings template source
   TaggedText?: string;            // Max 255 characters, scriptable storage
   UserNum?: number;               // Scriptable numeric field
   UserText?: string;              // Max 255 characters, scriptable text

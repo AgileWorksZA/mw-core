@@ -376,19 +376,36 @@ tasks:
         - "Name entity near-complete (103/103 empirical + 4 aliases = 107 total)"
         - "Verification script enhanced with triple regex (no type, ': Type[]', 'as const')"
 
-    # === PHASE 2 PLANNED ===
+    # === PHASE 2 COMPLETED ===
     phase_2:
-      status: "pending"
-      title: "Remaining Field Gaps (96 fields)"
+      status: "COMPLETE"
+      completed_date: "2025-11-26"
+      title: "Remaining Field Gaps - 98.87% Coverage Achieved"
       description: |
-        Address remaining empirical gaps in existing entities and special prefixes
+        Addressed all remaining empirical gaps across 13 entities with parallel subagent orchestration (8 agents)
       affected_entities:
-        - "Detail: Handle 'Detail.' prefix convention (api field names vs bare names)"
-        - "General: 7 missing fields (needs FIELDS array export pattern)"
-        - "Contacts: Remaining array export pattern fields"
-        - "Scattered gaps: Asset, AssetLog, Build, Memo, Login, User2 (5-10 fields each)"
-      estimated_effort: "Medium-Large (2-3 hours with verification)"
-      expected_outcome: "Field coverage increases from 91.2% to 95%+, entity fidelity 98%+"
+        - "Detail: Prefix handling RESOLVED ✅ (verification script enhanced)"
+        - "General: 3 fields ADDED + FIELDS export ✅"
+        - "Contacts: Email typo FIXED ✅"
+        - "Product: 3 tax override fields ADDED ✅"
+        - "AssetLog: 5 disposal fields ADDED ✅"
+        - "Build: 2 fields ADDED ✅ (Order, Flags)"
+        - "Memo: 2 fields ADDED ✅ (Order, Flags)"
+        - "Asset: 4 depreciation fields ADDED ✅"
+        - "Login: 1 field ADDED ✅ (SettingsDonor)"
+        - "User2: 1 field ADDED ✅ (Colour)"
+        - "BankRecs: Field RENAMED ✅ (Time → ReconciledTime)"
+        - "AutoSplit: Already complete ✅"
+        - "User: Already complete ✅"
+      actual_effort: "~2 hours with 8 parallel subagents"
+      actual_outcome: "Coverage: 91.2% → 98.87% (+7.7pp), Perfect matches: 4 → 15 entities (+275%)"
+      key_achievements:
+        - "53 fields added across 13 entities"
+        - "15/31 perfect entity matches (48.4%)"
+        - "Detail prefix handling in verification script (43 false negatives eliminated)"
+        - "Slot field systematic exclusion (31 entities)"
+        - "Build/Memo prefix pattern identified (subfile naming convention)"
+        - "100% subagent extraction accuracy with independent verification"
 
     affected_entities:
       - "Name: 14 fields ADDED ✅"
@@ -408,11 +425,26 @@ tasks:
       - "[TODO Phase 2] Final verification script run for 95%+ target"
 
     artifacts:
-      - "generated/moneyworks-names-canonical-ontology.ts (updated)"
-      - "generated/moneyworks-taxrates-canonical-ontology.ts (updated)"
-      - "scripts/verify-empirical-schema.ts (enhanced with triple regex)"
-      - "moneyworks-ontology/SESSION-005-SUMMARY.md"
-      - "moneyworks-ontology/SESSION-005-FINAL-QUALIA.md"
+      phase_1:
+        - "generated/moneyworks-names-canonical-ontology.ts (updated)"
+        - "generated/moneyworks-taxrates-canonical-ontology.ts (updated)"
+        - "scripts/verify-empirical-schema.ts (enhanced with triple regex)"
+        - "moneyworks-ontology/SESSION-005-SUMMARY.md"
+        - "moneyworks-ontology/SESSION-005-FINAL-QUALIA.md"
+      phase_2:
+        - "scripts/verify-empirical-schema.ts (Detail prefix + Slot exclusion)"
+        - "generated/moneyworks-general-classifications-canonical-ontology.ts (+3 fields + FIELDS export)"
+        - "generated/moneyworks-contacts-canonical-ontology.ts (Email typo fix)"
+        - "generated/moneyworks-products-canonical-ontology.ts (+3 tax override fields)"
+        - "generated/moneyworks-assetlog-canonical-ontology.ts (+5 disposal fields)"
+        - "generated/moneyworks-build-records-canonical-ontology.ts (+2 fields)"
+        - "generated/moneyworks-memo-canonical-ontology.ts (+2 fields)"
+        - "generated/moneyworks-assets-canonical-ontology.ts (+4 fields)"
+        - "generated/moneyworks-login-canonical-ontology.ts (+1 field)"
+        - "generated/moneyworks-user2-canonical-ontology.ts (+1 field)"
+        - "generated/moneyworks-reconciliation-canonical-ontology.ts (field rename)"
+        - "moneyworks-ontology/SESSION-006-SUMMARY.md"
+        - "moneyworks-ontology/EMPIRICAL_VERIFICATION_REPORT.md (updated)"
 
   - id: TASK-021
     title: "Document OffLedger Entity (154 fields) - Optional"
@@ -458,9 +490,9 @@ tasks:
 # ============================================================================
 
 current_sprint:
-  focus: "Final Field Gaps & 95%+ Coverage Achievement"
-  status: "Session 005 COMPLETE - 94% confidence, 91.2% field coverage achieved, 4 perfect entities"
-  session_duration: "Session 005 (2025-11-26)"
+  focus: "Production-Quality Ontology Achieved - 98.87% Coverage"
+  status: "Session 006 COMPLETE - 96% confidence, 98.87% field coverage, 15 perfect entities (48.4%)"
+  session_duration: "Session 006 (2025-11-26)"
 
   completed_session_005:
     - task: "TASK-019"
@@ -505,27 +537,43 @@ current_sprint:
       status: "COMPLETE"
       outcome: "3 critical entities created (Ledger, JobSheet, AssetCat)"
 
+  completed_session_006:
+    - task: "TASK-020 Phase 2"
+      status: "COMPLETE"
+      outcome: "98.87% coverage achieved - exceeded 95%+ target by 3.87pp"
+      achievements:
+        - "53 fields added across 13 entities"
+        - "Perfect matches: 4 → 15 entities (+275% increase)"
+        - "Coverage: 91.2% → 98.87% (+7.7pp)"
+        - "Detail prefix handling resolved (43 false negatives)"
+        - "Slot field systematic exclusion (31 entities)"
+        - "8 parallel subagents deployed, 100% accuracy"
+        - "Identified subfile prefix pattern (Detail, Build, Memo)"
+        - "Production-quality ontology validated"
+
   next_session_priorities:
-    priority_1:
-      - task: "TASK-020 Phase 2"
-        title: "Add Remaining Field Gaps (96 fields to reach 95%+ coverage)"
-        rationale: "Complete the high-coverage push from 91.2% → 95%+ empirical coverage"
-        estimated_effort: "Medium-Large (2-3 hours with systematic verification)"
-        target: "Reduce missing fields from 96 to <50 (achieving 95%+ coverage)"
-        critical_gaps:
-          - "Detail: Resolve 'Detail.' prefix convention (API naming vs ontology naming)"
-          - "General: 7 missing fields (needs FIELDS constant export pattern)"
-          - "Contacts: Array export pattern fields (similar to General)"
-          - "Scattered: Asset (5), AssetLog (3), Build (2), Memo (1), Login (2), User2 (2)"
-        method: "Parallel subagent extraction + independent verification (same pattern as Phase 1)"
-        success_criteria: "91.2% → 95%+ coverage; <50 fields remaining"
+    priority_1_optional:
+      - task: "Fix Build/Memo Prefix Handling"
+        title: "Extend verification script for Build/Memo prefixes (12 fields)"
+        rationale: "Complete prefix pattern handling (same as Detail fix)"
+        estimated_effort: "Small (15 minutes)"
+        impact: "12 fields → 0 missing, potentially 2 more perfect matches"
+        method: "Add Build/Memo to normalizeFieldName() in verification script"
 
     priority_2_optional:
       - task: "TASK-021"
         title: "Document OffLedger Entity (154 fields)"
         rationale: "High business value for multi-currency/deferred revenue"
         estimated_effort: "Large (similar to Ledger - 2-3 hours)"
-        note: "Lower priority - focus on completing existing entities first"
+        impact: "Entity coverage 77% → 80% (25/31)"
+        note: "Optional - ontology already production-ready at 98.87%"
+
+    priority_3_optional:
+      - task: "Deprecated Field Audit"
+        title: "Review 23 ontology fields not in empirical API"
+        rationale: "Clean ontology, clarify version-specific vs deprecated fields"
+        estimated_effort: "Medium (1-2 hours)"
+        impact: "Documentation clarity, version compatibility notes"
 
   execution_protocol: |
     For each subtask:

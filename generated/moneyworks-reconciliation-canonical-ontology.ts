@@ -90,10 +90,10 @@ export const MONEYWORKS_RECONCILIATION_FIELDS = [
     businessRule: "Sequential statement number used for audit trail and reference"
   },
   {
-    fieldName: "Time",
+    fieldName: "ReconciledTime",
     dataType: "S" as const,
     canonicalDescription: "Date and time of reconciliation",
-    manualSource: "moneyworks_appendix_reconciliation_file.html",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
     businessRule: "Records when reconciliation session was performed"
   }
 ] as const;

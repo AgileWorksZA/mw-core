@@ -307,7 +307,15 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
     canonicalDescription: "The product code that your usual supplier uses to refer to the product.",
     manualSource: "moneyworks_appendix_products.html"
   },
-  
+  {
+    fieldName: "BuyTaxCodeOverride",
+    dataType: "T" as const,
+    maxLength: 3,
+    canonicalDescription: "Optional tax code override for purchases of this product. When set, this tax code will be used instead of the default supplier tax code when purchasing this product. Allows product-specific tax treatment for procurement.",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false
+  },
+
   // SELLING FIELDS
   {
     fieldName: "SellPrice",
@@ -376,7 +384,15 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
     canonicalDescription: "True if using multiple sell prices",
     manualSource: "moneyworks_appendix_products.html"
   },
-  
+  {
+    fieldName: "SellTaxCodeOverride",
+    dataType: "T" as const,
+    maxLength: 3,
+    canonicalDescription: "Optional tax code override for sales of this product. When set, this tax code will be used instead of the default customer tax code when selling this product. Enables product-specific tax treatment for sales (e.g., VAT-exempt goods, reduced rates).",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false
+  },
+
   // QUANTITY BREAK PRICING
   {
     fieldName: "QtyBreak1",
@@ -467,7 +483,7 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
   {
     fieldName: "AverageValue",
     dataType: "N" as const,
-    canonicalDescription: "Average per-unit stock value; you cannot alter this",
+    canonicalDescription: "Average per-unit stock value; you cannot alter this. NOTE: This field appears in the manual but is NOT present in empirical MoneyWorks Now v9.2.3 schema (2025-11-25). May be deprecated or version-specific. Verify with documentation before use.",
     manualSource: "moneyworks_export_import_field_descriptions_for_products.html",
     isRequired: false
   },
@@ -508,6 +524,13 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
     dataType: "N" as const,
     canonicalDescription: "The total stock on hand when a stock take is commenced. Use the StockTakeStartQtyForLocation(location) function for the commencing stock at a given location",
     manualSource: "moneyworks_appendix_products.html"
+  },
+  {
+    fieldName: "StockTakeValue",
+    dataType: "N" as const,
+    canonicalDescription: "The monetary value of stock at the time of stock take commencement, calculated based on cost price. Used for reconciliation and variance analysis during physical inventory counts.",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false
   },
   
   // ACCOUNT RELATIONSHIPS

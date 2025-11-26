@@ -221,6 +221,15 @@ export const MONEYWORKS_USER2_FIELDS = [
     manualSource: "moneyworks_appendix_user2_file.html",
     isRequired: false,
     versionNote: "Added in newer version"
+  },
+  {
+    fieldName: "Colour",
+    dataType: "N" as const,
+    maxLength: undefined,
+    canonicalDescription: "Colour coding for user data categorization",
+    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
+    isRequired: false,
+    businessRule: "Numeric colour code for visual categorization and filtering"
   }
 ] as const;
 
@@ -407,6 +416,7 @@ export interface MoneyWorksUser2 {
   Text3?: string;                 // Max 255 characters (newer version)
   Text4?: string;                 // Max 255 characters (newer version)
   TaggedText?: string;            // Max 255 characters for tagged text (newer version)
+  Colour?: number;                // Colour code for categorization
 }
 
 /**
