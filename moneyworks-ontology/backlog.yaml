@@ -1,12 +1,12 @@
 # MoneyWorks Ontology - Project Backlog
 # Canonical task tracking for epistemic continuity
-# Updated: 2025-11-25
+# Updated: 2025-11-26
 
 metadata:
   project: moneyworks-canonical-ontology
-  version: "0.3.0"
+  version: "0.4.0"
   created: "2025-01-25"
-  updated: "2025-11-25"
+  updated: "2025-11-26"
   methodology: "Mereologically coherent ontology extraction with empirical validation"
 
 # ============================================================================
@@ -799,4 +799,124 @@ statuses:
       - "Perfect match rate: 77.4% → 80.6%"
       - "Empirical verification: 25/31 entities with perfect matches"
       - "PascalCase casing convention established as canonical"
+
+
+  - id: TASK-024
+    title: "Phase 0 Critical Remediation - Coherence Analysis Blockers"
+    phase: quality
+    status: pending
+    priority: P0
+    depends_on: []
+    created: "2025-11-26"
+    description: |
+      CRITICAL: Address 3 P0 blockers identified in coherence analysis before production.
+      Multi-agent analysis found critical issues blocking production deployment.
+    
+    blockers_identified:
+      blocker_1:
+        issue: "Session status conflict"
+        detail: "state.yaml says COMPLETE, handoff.yaml says MID-FLIGHT"
+        impact: "Production deployment decision blocked"
+        action: "Decide and update both files consistently"
+        time: "30 minutes"
+      
+      blocker_2:
+        issue: "Field count header inaccuracy"
+        detail: "11 files have wrong field counts in headers"
+        examples:
+          - "user2.ts: claims 2, actual 33 (+1550% error)"
+          - "contacts.ts: missing count claim"
+          - "message.ts: claims 9, actual 29 (+222%)"
+          - "taxrates.ts: claims 9, actual 30 (+233%)"
+          - "transactions.ts: claims 65, actual 111 (+71%)"
+        impact: "Code generators will fail, types incorrect"
+        action: "Audit all 31 files and fix headers"
+        time: "2 hours"
+      
+      blocker_3:
+        issue: "TASK-023 status ambiguity"
+        detail: "backlog.yaml=completed, handoff.yaml=pending"
+        impact: "Unclear if export verification actually occurred"
+        action: "Verify and document actual status"
+        time: "30 minutes"
+    
+    acceptance_criteria:
+      - "Session status consistent across state.yaml and handoff.yaml"
+      - "All 31 entity ontology files have accurate field count headers"
+      - "TASK-023 status clarified with evidence"
+      - "Production readiness decision can be made"
+
+  - id: TASK-025
+    title: "Phase 1 High-Priority Remediation - Quality Issues"
+    phase: quality
+    status: pending
+    priority: P1
+    depends_on: [TASK-024]
+    created: "2025-11-26"
+    description: |
+      Address high-priority quality issues before production deployment.
+      These issues affect ontology accuracy and consistency.
+    
+    issues_to_fix:
+      issue_1:
+        problem: "Duplicate field definitions (20 violations)"
+        files:
+          - "allocations: Fields in both FIELDS and BUSINESS_RULES arrays"
+          - "memo: LastModifiedTime appears 5 times"
+          - "departments: LastModifiedTime appears 3 times"
+          - "contacts: Order, ParentSeq, Role duplicated"
+        action: "Remove duplicates, consolidate definitions"
+        time: "3 hours"
+      
+      issue_2:
+        problem: "Non-standard dataTypes (6 files)"
+        types: ["M", "DT", "B", "$ ", "3"]
+        action: "Document non-standard types or convert to standard set (T, N, D, A, S)"
+        time: "2 hours"
+      
+      issue_3:
+        problem: "Entity count outdated in ARCHITECTURE.md"
+        detail: "Claims 20 entities, actual 31"
+        action: "Update ARCHITECTURE.md and topology.yaml"
+        time: "1 hour"
+      
+      issue_4:
+        problem: "Epistemic state metric inconsistencies"
+        detail: "Multiple perfect match values in state.yaml (16, 24, 80.6%)"
+        action: "Clean up, maintain single source of truth per metric"
+        time: "1 hour"
+    
+    acceptance_criteria:
+      - "No duplicate field definitions in any ontology file"
+      - "All dataTypes documented and standardized"
+      - "ARCHITECTURE.md reflects 31 entities"
+      - "Epistemic state metrics consistent"
+    
+    time_estimate: "9 hours"
+
+  - id: TASK-026
+    title: "Automated Coherence Validation CI Pipeline"
+    phase: automation
+    status: pending
+    priority: P2
+    depends_on: [TASK-025]
+    created: "2025-11-26"
+    description: |
+      Create automated CI pipeline to prevent coherence issues.
+      Validate field counts, detect duplicates, check metric consistency.
+    
+    components:
+      - "Field count validator (actual vs claimed)"
+      - "Duplicate field detector"
+      - "DataType consistency checker"
+      - "Metric coherence validator (cross-file)"
+      - "Pre-commit hooks for field count updates"
+    
+    acceptance_criteria:
+      - "CI fails if field counts are inaccurate"
+      - "CI detects duplicate field definitions"
+      - "CI validates metric consistency across state/backlog/handoff"
+      - "Pre-commit hook prevents committing wrong field counts"
+    
+    time_estimate: "2 days"
 
