@@ -44,13 +44,6 @@ export enum MoneyWorksAssetCatType {
 
 export const MONEYWORKS_ASSETCAT_FIELDS = [
   {
-    fieldName: "Slot",
-    dataType: "N" as const,
-    canonicalDescription: "Database slot - internal record identifier",
-    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
-    isSystem: true
-  },
-  {
     fieldName: "SequenceNumber",
     dataType: "N" as const,
     canonicalDescription: "Primary key - unique identifier for asset category",

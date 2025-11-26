@@ -5,8 +5,8 @@
  * Source: moneyworks_appendix_names.html
  * Authority: MoneyWorks Manual - Names Field Descriptions
  *
- * COVERAGE: 110/110 fields (100%) - Complete canonical extraction
- * Enhanced: 2025-11-26 by Claude Code (added 14 empirically-verified fields to achieve 110 total)
+ * COVERAGE: 102 fields - Canonical field names corrected (Amendment 001, Slot removed)
+ * Enhanced: 2025-11-26 by Claude Code (Amendment 001: Corrected 4 field names, removed 4 duplicates, removed Slot field)
  * Previous: 2025-07-12 by ont1 (added 57 fields from 39 to achieve 96)
  *
  * CRITICAL DISCOVERIES:
@@ -119,16 +119,6 @@ export enum MoneyWorksNameFlags {
  */
 export const MONEYWORKS_NAME_FIELDS = [
   {
-    fieldName: "Slot",
-    dataType: "N" as const,
-    canonicalDescription: "Internal database slot/position field (system-managed, excluded from API exports)",
-    manualSource: "Empirical schema validation (MoneyWorks Now v9.2.3)",
-    isRequired: true,
-    isSystem: true,
-    isIndexed: true,
-    apiExcluded: true
-  },
-  {
     fieldName: "SequenceNumber",
     dataType: "N" as const,
     canonicalDescription: "Primary key - unique name identifier",
@@ -236,14 +226,6 @@ export const MONEYWORKS_NAME_FIELDS = [
   // SALES AND BUSINESS ASSIGNMENT FIELDS
   // ============================================================================
 
-  {
-    fieldName: "Salesperson",
-    dataType: "T" as const,
-    maxLength: 5,
-    canonicalDescription: "Salesperson code/name assigned to this customer (alternative field name for SalesPerson)",
-    manualSource: "Empirical schema validation (MoneyWorks Now v9.2.3)",
-    relationshipNote: "Duplicate of SalesPerson field - MoneyWorks provides both field names for API compatibility"
-  },
 
   // ============================================================================
   // CONTACT PERSON NAMES (DUAL-LAYER ARCHITECTURE: NAMES BUILT-IN CONTACTS)
@@ -685,7 +667,7 @@ export const MONEYWORKS_NAME_FIELDS = [
   // ============================================================================
   
   {
-    fieldName: "SalesPerson",
+    fieldName: "Salesperson",
     dataType: "T" as const,
     maxLength: 5,
     canonicalDescription: "Code for salesperson for client--automatically copied to the transaction.salesperson field.",
@@ -793,19 +775,11 @@ export const MONEYWORKS_NAME_FIELDS = [
   // ============================================================================
 
   {
-    fieldName: "EInvoiceID",
+    fieldName: "EInvoicingID",
     dataType: "T" as const,
     maxLength: 31,
     canonicalDescription: "The ID to use for the customer when eInvoicing using a Peppol Access Point (e.g. ABN in Australia, NZBN in New Zealand)",
     manualSource: "moneyworks_appendix_names.html"
-  },
-  {
-    fieldName: "EInvoicingID",
-    dataType: "T" as const,
-    maxLength: 31,
-    canonicalDescription: "Electronic invoicing identifier (canonical field name)",
-    manualSource: "Empirical schema validation (MoneyWorks Now v9.2.3)",
-    aliasFields: ["EInvoiceID"]
   },
 
   // ============================================================================
@@ -874,17 +848,10 @@ export const MONEYWORKS_NAME_FIELDS = [
   // ============================================================================
 
   {
-    fieldName: "CustPropmtPaymentDiscount",
+    fieldName: "CustPromptPaymentDiscount",
     dataType: "N" as const,
     canonicalDescription: "Prompt payment discount percentage",
     manualSource: "moneyworks_appendix_names.html"
-  },
-  {
-    fieldName: "CustPromptPaymentDiscount",
-    dataType: "N" as const,
-    canonicalDescription: "Customer prompt payment discount percentage (canonical field name)",
-    manualSource: "Empirical schema validation (MoneyWorks Now v9.2.3)",
-    aliasFields: ["CustPropmtPaymentDiscount"]
   },
   {
     fieldName: "CustPromptPaymentTerms",
@@ -903,12 +870,6 @@ export const MONEYWORKS_NAME_FIELDS = [
     dataType: "N" as const,
     canonicalDescription: "Supplier prompt payment terms days. 0 for no prompt payment; > 0 for within N days; < 0 for by Nth date of following month",
     manualSource: "Empirical schema validation (MoneyWorks Now v9.2.3)"
-  },
-  {
-    fieldName: "SupplierPromptPaymentTerms",
-    dataType: "N" as const,
-    canonicalDescription: "0 for no prompt payment; > 0 for within N days; < 0 for by Nth date of following month",
-    manualSource: "moneyworks_appendix_names.html"
   },
 
   // ============================================================================

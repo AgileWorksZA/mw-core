@@ -42,14 +42,6 @@
 export const MONEYWORKS_JOBSHEET_FIELDS = [
   // SYSTEM FIELDS (MoneyWorks internal)
   {
-    fieldName: "Slot",
-    dataType: "N" as const,
-    canonicalDescription: "Database slot - internal system field for record storage",
-    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
-    isSystem: true,
-    semanticNotes: "Internal MoneyWorks field, not for business logic use"
-  },
-  {
     fieldName: "SequenceNumber",
     dataType: "N" as const,
     canonicalDescription: "Primary key - unique identifier for job sheet entry",

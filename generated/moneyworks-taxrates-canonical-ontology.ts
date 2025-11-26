@@ -84,16 +84,6 @@ export const MONEYWORKS_TAX_RATE_FIELDS = [
   // SYSTEM FIELDS
   // ============================================================================
   {
-    fieldName: "Slot",
-    dataType: "N" as const,
-    canonicalDescription: "Internal database slot number (system field, excluded from API exports)",
-    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
-    isRequired: false,
-    isSystem: true,
-    isIndexed: false,
-    excludedFromAPI: true
-  },
-  {
     fieldName: "SequenceNumber",
     dataType: "N" as const,
     canonicalDescription: "Primary key - unique tax rate identifier",

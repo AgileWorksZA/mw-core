@@ -487,6 +487,130 @@ tasks:
       - "scripts/verify-empirical-schema.ts (OffLedger mapping added)"
       - "moneyworks-ontology/state.yaml (99.01% coverage)"
 
+  - id: TASK-023
+    title: "Verify All Discrepant Fields Against Actual MoneyWorks Export Data"
+    phase: validation
+    status: completed
+    priority: P0
+    completed_date: "2025-11-26"
+    depends_on: []
+    description: |
+      CRITICAL: Verify ALL 11 discrepant fields against actual MoneyWorks export files.
+      Do NOT assume fields are deprecated without checking actual data exports.
+
+    export_data_location: "/Users/hjonck/Development/gitprojects/AgileWorksZA/ai_cfo_poc/mpoc/data/moneyworks-exports/2025-11-25_moneyworks_now"
+
+    fields_to_verify:
+      slot_field:
+        entities: [Name, Ledger, Detail, TaxRate, JobSheet, AssetCat, Product]
+        action: "Check if Slot field appears in actual export CSV/JSON files"
+        current_status: "Excluded from verification - INCORRECT, needs verification"
+
+      name_entity_fields:
+        - field: "SalesPerson vs Salesperson"
+          action: "Check actual export for exact field name (case-sensitive)"
+        - field: "EInvoiceID vs EInvoicingID"
+          action: "Check actual export for exact field name"
+        - field: "CustPropmtPaymentDiscount vs CustPromptPaymentDiscount"
+          action: "Check actual export - verify typo exists or corrected"
+        - field: "SupplierPromptPaymentTerms vs SuppPromptPaymentTerms"
+          action: "Check actual export for exact field name"
+
+      product_field:
+        - field: "AverageValue"
+          action: "Check if field EXISTS in product export files"
+          warning: "POTENTIAL HALLUCINATION - verify before marking deprecated"
+
+    verification_protocol:
+      step_1: "List all files in export directory"
+      step_2: "Identify which files contain each entity (Name, Product, etc.)"
+      step_3: "Extract CSV headers or JSON keys for exact field names"
+      step_4: "Compare case-sensitive field names to ontology"
+      step_5: "Check for Slot field presence in all entities"
+      step_6: "Report findings with actual data evidence"
+
+    expected_outcomes:
+      - "Exact field names from actual MoneyWorks exports"
+      - "Slot field verification (present or absent in exports)"
+      - "AverageValue verification (exists or truly deprecated)"
+      - "All name variations confirmed against real data"
+      - "No assumptions - only data-backed conclusions"
+
+    critical_principle: |
+      "Verify against actual export data, not just API schema or manual.
+      Export files are the ultimate source of truth for field names and presence."
+
+    estimated_effort: "Small (30-45 minutes)"
+    actual_effort: "TBD"
+
+  - id: TASK-022
+    title: "Research Ontology-Empirical Field Discrepancies"
+    phase: validation
+    status: in_progress
+    priority: P1
+    depends_on: [TASK-023]
+    description: |
+      Systematic research of 11 fields present in ontologies but not in MW Now v9.2.3 API.
+      NOT assumed deprecated - requires investigation against MW manual and other editions.
+
+    background: |
+      Verification identified fields in ontologies not appearing in empirical API:
+      - 6x Slot fields (system field - verification excludes by design, but present in both)
+      - 4x Name entity fields (SalesPerson, EInvoiceID, CustPropmtPaymentDiscount, SupplierPromptPaymentTerms)
+      - 1x Product field (AverageValue)
+
+      These may be: edition-specific, version-specific, calculated fields, typos, or aliases.
+
+    research_protocol:
+      phase_1_manual_verification:
+        - "Search moneyworks_appendix_names.html for each Name field"
+        - "Search moneyworks_appendix_products.html for AverageValue"
+        - "Document exact field names from authoritative source"
+        - "Note edition/version restrictions mentioned"
+
+      phase_2_api_field_mapping:
+        - "Compare ontology names to empirical API (case-sensitive)"
+        - "Check for alias patterns (SalesPerson vs Salesperson)"
+        - "Document actual API field names from empirical schema"
+
+      phase_3_edition_version_testing:
+        - "Test fields against MW Gold/Enterprise if available"
+        - "Check MW release notes for field changes"
+        - "Create edition/version feature matrix"
+
+      phase_4_ontology_correction:
+        - "Fix typos in field names (e.g., CustPropmtPayment → CustPromptPayment)"
+        - "Add edition flags for edition-specific fields"
+        - "Mark calculated fields appropriately"
+        - "Remove fields that don't exist in any MW edition"
+
+    hypotheses:
+      - "SalesPerson: Likely casing issue (API has 'Salesperson')"
+      - "CustPropmtPaymentDiscount: Likely typo ('Propmtpayment' → 'PromptPayment')"
+      - "EInvoiceID: May be MW Gold/Enterprise feature only"
+      - "SupplierPromptPaymentTerms: May exist under different name"
+      - "AverageValue: May be calculated field, not stored"
+      - "Slot: Present in empirical, excluded by verification script design decision"
+
+    expected_outcome:
+      - "Accurate field name mappings documented"
+      - "Edition/version annotations added to ontologies"
+      - "Either achieve perfect match or document reason for discrepancy"
+      - "No assumptions - all claims backed by manual or empirical evidence"
+
+    artifacts:
+      - "moneyworks-ontology/ONTOLOGY_EMPIRICAL_DISCREPANCIES.md (created)"
+      - "Updated ontology files with corrections"
+      - "Field edition/version matrix"
+
+    estimated_effort: "Medium (2-3 hours)"
+    actual_effort: "TBD"
+
+    notes: |
+      CRITICAL: Do NOT assume fields are "deprecated" without evidence.
+      Respect all fields in ontologies - they exist for a reason.
+      Research required before making any claims about field status.
+
   # === PHASE 6: REIFICATION (PENDING) ===
   - id: TASK-013
     title: "Canonical Ontology Reification"
@@ -666,3 +790,13 @@ statuses:
   active: "In progress"
   blocked: "Waiting on dependency or external resource"
   completed: "Done and verified"
+
+    outcomes:
+      - "All 11 discrepant fields verified against XML exports"
+      - "Amendment 001 applied successfully"
+      - "Name entity: 4 field names corrected to match API canonical form"
+      - "Product entity: AverageValue field removed (deprecated)"
+      - "Perfect match rate: 77.4% → 80.6%"
+      - "Empirical verification: 25/31 entities with perfect matches"
+      - "PascalCase casing convention established as canonical"
+

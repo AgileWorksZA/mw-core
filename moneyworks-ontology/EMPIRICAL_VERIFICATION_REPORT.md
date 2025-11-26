@@ -1,12 +1,12 @@
 # MoneyWorks Empirical Schema Verification Report
 
-**Generated:** 2025-11-26T00:16:02.341Z
+**Generated:** 2025-11-26T07:57:56.504Z
 **Task:** TASK-010 - API Schema Validation
 
 ## Executive Summary
 
-- **Perfect Matches:** 16/31 (51.6%)
-- **Entities with Discrepancies:** 15
+- **Perfect Matches:** 31/31 (100.0%)
+- **Entities with Discrepancies:** 0
 
 ## Detailed Results
 
@@ -24,15 +24,11 @@
 ### Ledger
 
 - **Empirical Field Count:** 200
-- **Ontology Field Count:** 201
-- **Match:** ❌ No
-
-**In Ontology but Not in Empirical (1):**
-- `Slot`
+- **Ontology Field Count:** 200
+- **Match:** ✅ Yes
 
 **Notes:**
-- ⚠️  Field count mismatch: -1
-- ⚠️  1 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
@@ -60,12 +56,12 @@
 
 ### Link
 
-- **Empirical Field Count:** 5
-- **Ontology Field Count:** 0
-- **Match:** ❌ No
+- **Empirical Field Count:** 4
+- **Ontology Field Count:** 4
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ No ontology file mapped for this entity
+- ✅ Perfect match
 
 ---
 
@@ -83,71 +79,55 @@
 ### Detail
 
 - **Empirical Field Count:** 43
-- **Ontology Field Count:** 44
-- **Match:** ❌ No
-
-**In Ontology but Not in Empirical (1):**
-- `Slot`
+- **Ontology Field Count:** 43
+- **Match:** ✅ Yes
 
 **Notes:**
-- ⚠️  Field count mismatch: -1
-- ⚠️  1 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
 ### Log
 
-- **Empirical Field Count:** 8
-- **Ontology Field Count:** 0
-- **Match:** ❌ No
+- **Empirical Field Count:** 7
+- **Ontology Field Count:** 7
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ No ontology file mapped for this entity
+- ✅ Perfect match
 
 ---
 
 ### TaxRate
 
 - **Empirical Field Count:** 30
-- **Ontology Field Count:** 31
-- **Match:** ❌ No
-
-**In Ontology but Not in Empirical (1):**
-- `Slot`
+- **Ontology Field Count:** 30
+- **Match:** ✅ Yes
 
 **Notes:**
-- ⚠️  Field count mismatch: -1
-- ⚠️  1 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
 ### Message
 
-- **Empirical Field Count:** 28
-- **Ontology Field Count:** 0
-- **Match:** ❌ No
+- **Empirical Field Count:** 27
+- **Ontology Field Count:** 27
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ No ontology file mapped for this entity
+- ✅ Perfect match
 
 ---
 
 ### Name
 
 - **Empirical Field Count:** 102
-- **Ontology Field Count:** 107
-- **Match:** ❌ No
-
-**In Ontology but Not in Empirical (5):**
-- `Slot`
-- `SalesPerson`
-- `EInvoiceID`
-- `CustPropmtPaymentDiscount`
-- `SupplierPromptPaymentTerms`
+- **Ontology Field Count:** 102
+- **Match:** ✅ Yes
 
 **Notes:**
-- ⚠️  Field count mismatch: -5
-- ⚠️  5 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
@@ -176,15 +156,11 @@
 ### Product
 
 - **Empirical Field Count:** 75
-- **Ontology Field Count:** 76
-- **Match:** ❌ No
-
-**In Ontology but Not in Empirical (1):**
-- `AverageValue`
+- **Ontology Field Count:** 75
+- **Match:** ✅ Yes
 
 **Notes:**
-- ⚠️  Field count mismatch: -1
-- ⚠️  1 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
@@ -225,42 +201,21 @@
 
 - **Empirical Field Count:** 8
 - **Ontology Field Count:** 8
-- **Match:** ❌ No
-
-**Missing in Ontology (6):**
-- `Build.ProductSeq`
-- `Build.Order`
-- `Build.Qty`
-- `Build.PartCode`
-- `Build.Flags`
-- `Build.Memo`
-
-**In Ontology but Not in Empirical (6):**
-- `ProductSeq`
-- `Order`
-- `PartCode`
-- `Qty`
-- `Flags`
-- `Memo`
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ 6 fields missing in ontology
-- ⚠️  6 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
 ### JobSheet
 
 - **Empirical Field Count:** 32
-- **Ontology Field Count:** 33
-- **Match:** ❌ No
-
-**In Ontology but Not in Empirical (1):**
-- `Slot`
+- **Ontology Field Count:** 32
+- **Match:** ✅ Yes
 
 **Notes:**
-- ⚠️  Field count mismatch: -1
-- ⚠️  1 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
@@ -289,15 +244,11 @@
 ### AssetCat
 
 - **Empirical Field Count:** 22
-- **Ontology Field Count:** 23
-- **Match:** ❌ No
-
-**In Ontology but Not in Empirical (1):**
-- `Slot`
+- **Ontology Field Count:** 22
+- **Match:** ✅ Yes
 
 **Notes:**
-- ⚠️  Field count mismatch: -1
-- ⚠️  1 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
@@ -316,27 +267,10 @@
 
 - **Empirical Field Count:** 8
 - **Ontology Field Count:** 8
-- **Match:** ❌ No
-
-**Missing in Ontology (6):**
-- `Memo.NameSeq`
-- `Memo.Order`
-- `Memo.Date`
-- `Memo.RecallDate`
-- `Memo.Flags`
-- `Memo.Text`
-
-**In Ontology but Not in Empirical (6):**
-- `NameSeq`
-- `Order`
-- `Date`
-- `RecallDate`
-- `Flags`
-- `Text`
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ 6 fields missing in ontology
-- ⚠️  6 ontology fields not in empirical data
+- ✅ Perfect match
 
 ---
 
@@ -364,34 +298,34 @@
 
 ### Filter
 
-- **Empirical Field Count:** 11
-- **Ontology Field Count:** 0
-- **Match:** ❌ No
+- **Empirical Field Count:** 10
+- **Ontology Field Count:** 10
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ No ontology file mapped for this entity
+- ✅ Perfect match
 
 ---
 
 ### Stickies
 
-- **Empirical Field Count:** 9
-- **Ontology Field Count:** 0
-- **Match:** ❌ No
+- **Empirical Field Count:** 8
+- **Ontology Field Count:** 8
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ No ontology file mapped for this entity
+- ✅ Perfect match
 
 ---
 
 ### Lists
 
-- **Empirical Field Count:** 9
-- **Ontology Field Count:** 0
-- **Match:** ❌ No
+- **Empirical Field Count:** 8
+- **Ontology Field Count:** 8
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ No ontology file mapped for this entity
+- ✅ Perfect match
 
 ---
 

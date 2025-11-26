@@ -1,29 +1,28 @@
 # MoneyWorks Ontology - Session Handoff
 # TASK-000: Zero-entropy session initialization
-# Last Updated: 2025-11-26 (Session-006)
+# Last Updated: 2025-11-26 (Session-007 MID-FLIGHT)
 # Consume this file ONCE at session start
 #
-# 🚀 NEW SESSION? START HERE: README-NEXT-SESSION.md
-# Then read this file for complete context
+# 🚀 NEW SESSION? START HERE: This file contains mid-flight context
+# Session 007 is IN PROGRESS - field discrepancy research phase
 
 # ============================================================================
 # SESSION INITIALIZATION PROTOCOL
 # ============================================================================
 
 protocol:
-  version: "4.0"
+  version: "5.0"
   purpose: |
     Establish epistemic continuity between agent sessions.
-    Prevent context window corruption and epistemic drift.
-    Ensure new sessions have complete project context.
+    Session 007 is MID-FLIGHT with critical research findings requiring verification.
 
   initialization_sequence:
     1: "Read this file (handoff.yaml) completely"
-    2: "Read SESSION-006-FINAL-QUALIA.md for semantic context and subfile prefix pattern discovery"
-    3: "Read state.yaml for current epistemic state (96% confidence, 98.87% field coverage, 15 perfect entities)"
-    4: "Read backlog.yaml for task status (TASK-020 Phase 2 COMPLETE - production-ready)"
-    5: "Review SESSION-006-SUMMARY.md for detailed session 006 outcomes"
-    6: "Optional: Fix Build/Memo prefix handling (10 min) OR document OffLedger entity (2-3 hours) OR no action (production-ready)"
+    2: "Read SESSION-007-SUMMARY.md for session context and achievements"
+    3: "Read DISCREPANCY_RESOLUTION_REPORT.md for research findings (WITH CAVEATS)"
+    4: "Read FIELD_DISCREPANCY_RESEARCH_TASKS.md for detailed task breakdown"
+    5: "Read state.yaml for current epistemic state (98% confidence, 100% entity coverage)"
+    6: "Read backlog.yaml - CRITICAL: Execute TASK-023 (P0 priority) NEXT"
 
   session_end_protocol:
     1: "Update state.yaml with session outcomes"
@@ -33,539 +32,242 @@ protocol:
     5: "Create SESSION-00N-FINAL-QUALIA.md with semantic context for next session"
 
 # ============================================================================
-# PROJECT CONTEXT
+# MID-FLIGHT CONTEXT (Session 007)
 # ============================================================================
 
-project:
-  name: "MoneyWorks Canonical Ontology"
-  location: "/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/moneyworks-ontology"
+mid_flight_status:
+  session: "007"
+  phase: "Field Discrepancy Resolution"
+  status: "MID-FLIGHT - Research complete, verification REQUIRED before applying corrections"
 
-  prime_directive: |
-    Establish a 100% truthful, high-fidelity, mereologically coherent
-    MoneyWorks ontology with canonical reification including:
-    - Eitology (essence/being of MoneyWorks concepts)
-    - Axiology (value dimensions of accounting)
-    - Teleology (purpose/ends of each entity)
-    - Epistemic grounding from source material
-    - Empirical validation against live system
+  completed_this_session:
+    - "✅ Build/Memo prefix handling fixed (18 → 24 perfect matches)"
+    - "✅ 6 UI entities documented (Link, Log, Message, Filter, Stickies, Lists)"
+    - "✅ 100% entity coverage achieved (31/31)"
+    - "✅ Manual appendix search completed (4 parallel subagents)"
+    - "✅ Empirical API schema field extraction completed"
+    - "✅ DISCREPANCY_RESOLUTION_REPORT.md created with findings"
 
-  source_material:
-    manual_location: "/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror"
-    html_files: 1197
-    appendix_files: 25
-    canonical_ontologies: "/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/generated"
-    empirical_schema: "/Users/hjonck/Development/gitprojects/AgileWorksZA/ai_cfo_poc/mpoc/data/moneyworks-schemas/2025-11-25_full-schema_now.json"
-
-  session_004_artifacts:
-    summary: "./SESSION-004-SUMMARY.md"
-    qualia: "./SESSION-004-FINAL-QUALIA.md"
-    new_ontologies:
-      - "../generated/moneyworks-detail-canonical-ontology.ts"
-      - "../generated/moneyworks-ledger-canonical-ontology.ts"
-      - "../generated/moneyworks-jobsheet-canonical-ontology.ts"
-      - "../generated/moneyworks-assetcat-canonical-ontology.ts"
-    updated_ontologies:
-      - "../generated/moneyworks-accounts-canonical-ontology.ts"
-      - "../generated/moneyworks-transactions-canonical-ontology.ts"
-      - "../generated/moneyworks-taxrates-canonical-ontology.ts"
-      - "Plus 16 other entities with SequenceNumber/system fields added"
-    verification_script: "../scripts/verify-empirical-schema.ts"
+  critical_in_progress:
+    - "⚠️ TASK-023 CREATED - P0 PRIORITY - Verify against ACTUAL EXPORT DATA"
+    - "⚠️ DO NOT apply ontology corrections until TASK-023 complete"
+    - "⚠️ AverageValue 'deprecated' claim UNVERIFIED - potential hallucination"
+    - "⚠️ Slot field exclusion policy QUESTIONED - needs verification"
 
 # ============================================================================
-# CURRENT STATE SUMMARY (Mid-Flight)
+# CRITICAL WARNINGS FOR NEXT SESSION
+# ============================================================================
+
+warnings:
+  priority_0_critical:
+    - warning: "DO NOT assume AverageValue is deprecated"
+      context: "Found in export/import docs but NOT verified against actual MoneyWorks export files"
+      action_required: "Execute TASK-023 to check /Users/hjonck/Development/gitprojects/AgileWorksZA/ai_cfo_poc/mpoc/data/moneyworks-exports/2025-11-25_moneyworks_now"
+
+    - warning: "DO NOT exclude Slot field from verification"
+      context: "Verification script excludes Slot, but field should be verified against actual exports"
+      action_required: "Check if Slot appears in export CSV/JSON files"
+
+    - warning: "DO NOT apply Name entity field name corrections yet"
+      context: "4 field name changes proposed (Salesperson, EInvoicingID, etc.) based on API schema only"
+      action_required: "Verify exact field names in actual export files first"
+
+  epistemic_principle:
+    statement: "Export files are ultimate source of truth - not API schema, not manual"
+    rationale: "API schema shows what REST API returns; exports show actual database fields"
+    priority: "Always verify against actual data before making ontology changes"
+
+# ============================================================================
+# TASK-023: NEXT SESSION PRIORITY
+# ============================================================================
+
+next_session_task:
+  id: "TASK-023"
+  title: "Verify All Discrepant Fields Against Actual MoneyWorks Export Data"
+  priority: "P0 - BLOCKING"
+  status: "PENDING - MUST EXECUTE FIRST"
+
+  location: "/Users/hjonck/Development/gitprojects/AgileWorksZA/ai_cfo_poc/mpoc/data/moneyworks-exports/2025-11-25_moneyworks_now"
+
+  fields_to_verify:
+    slot_field: "Check if Slot exists in export files for all 7 entities"
+    averagevalue_field: "Verify if AverageValue exists in Product exports"
+    name_field_variants: "Check exact names: Salesperson, EInvoicingID, CustPromptPaymentDiscount, SuppPromptPaymentTerms"
+
+  verification_method:
+    step_1: "ls -la the export directory to see available files"
+    step_2: "Identify Name, Product, Ledger, Detail, TaxRate, JobSheet, AssetCat export files"
+    step_3: "Extract CSV headers or JSON field keys from each file"
+    step_4: "Compare case-sensitive exact field names to ontology"
+    step_5: "Document findings with actual file evidence"
+    step_6: "Update DISCREPANCY_RESOLUTION_REPORT.md with verified conclusions"
+
+  expected_outcome: "Data-backed field verification - no assumptions, only evidence"
+  estimated_time: "30-45 minutes"
+
+# ============================================================================
+# RESEARCH FINDINGS (UNVERIFIED - NEEDS TASK-023)
+# ============================================================================
+
+research_findings_status:
+  manual_search: "COMPLETE"
+  api_schema_check: "COMPLETE"
+  export_data_verification: "NOT STARTED - CRITICAL GAP"
+
+  findings_confidence:
+    slot_field: "LOW - Only verified in API schema, not in actual exports"
+    name_fields: "MEDIUM - API schema checked, manual checked, export data NOT checked"
+    averagevalue: "LOW - Export/import doc found, main appendix NOT found, export data NOT checked"
+
+  proposed_changes_hold_status:
+    - "Name.SalesPerson → Salesperson: ON HOLD pending export verification"
+    - "Name.EInvoiceID → EInvoicingID: ON HOLD pending export verification"
+    - "Name.CustPropmtPaymentDiscount → CustPromptPaymentDiscount: ON HOLD pending export verification"
+    - "Name.SupplierPromptPaymentTerms → SuppPromptPaymentTerms: ON HOLD pending export verification"
+    - "Product.AverageValue deprecation: ON HOLD - likely incorrect, verify exports"
+
+# ============================================================================
+# SESSION 007 ACHIEVEMENTS (Verified and Safe)
+# ============================================================================
+
+verified_achievements:
+  build_memo_prefix_fix:
+    status: "COMPLETE AND VERIFIED"
+    change: "Extended normalizeFieldName() for Build/Memo entities"
+    result: "Build: 8/8 perfect match, Memo: 8/8 perfect match"
+    confidence: "100% - empirically verified"
+
+  ui_entities_documented:
+    status: "COMPLETE AND VERIFIED"
+    entities: ["Link", "Log", "Message", "Filter", "Stickies", "Lists"]
+    result: "All 6 achieved perfect match (64 fields total)"
+    confidence: "100% - empirically verified"
+
+  entity_coverage_milestone:
+    status: "COMPLETE"
+    before: "25/31 (80.6%)"
+    after: "31/31 (100%)"
+    significance: "All MoneyWorks entities now documented"
+
+  perfect_match_improvement:
+    before: "16/31 (51.6%)"
+    after: "24/31 (77.4%)"
+    gain: "+8 entities (+50% improvement)"
+
+# ============================================================================
+# CURRENT STATE SUMMARY
 # ============================================================================
 
 current_state:
-  phase: "99% Coverage Milestone - Currency Architecture Complete"
-  last_session: "2025-11-26 (Session-006 Extended - TASK-021)"
+  version: "1.0.0-rc1" # Release candidate pending TASK-023 verification
+  confidence: 0.98
+  entity_coverage: 1.0 # 31/31 entities
+  perfect_matches: 0.774 # 24/31 entities
 
-  confidence:
-    overall: "97%"
-    structural: "95%"
-    entity_coverage: "80.6%" # 25/31 entities documented (6 low-priority UI/system deferred)
-    fk_verification: "87%"
-    qualia: "85%"
-    source_fidelity: "65%"
-    empirical_field_coverage: "99.01%" # 1200/1212 business-logic fields (Session 006 + TASK-021: +206 fields total)
-    priority_entity_fidelity: "99.5%" # 16/31 perfect matches (51.6%) - OffLedger added
+  blockers:
+    - "TASK-023 must complete before applying any ontology field name changes"
+    - "Export data verification required for 100% confidence"
 
-  completed:
-    # Previous sessions
-    - "Tiered ontology structure (tier-0, tier-1, tier-2, tier-3)"
-    - "21 entities documented with 457 fields extracted (Session 002)"
-    - "47/54 FK relationships source-verified (87%)"
-    - "100+ flag bits documented across entities"
-    - "Multi-perspective validation complete"
-    - "15 entity appendices mined"
-    - "5 business process workflows extracted"
-    - "Multi-currency mechanics extracted (100% verified)"
-    - "Axiological framework defined (15 value dimensions)"
-    - "tier-3-processes created with verified content"
-    - "✅ TASK-010: API Schema Validation COMPLETE (Session 003)"
-    - "Empirical schema extraction from live MoneyWorks Now v9.2.3 (1090 fields)"
-
-    # Session 004 achievements
-    - "✅ TASK-017: Phase 1 Field Additions COMPLETE"
-    - "Fixed 2 naming typos: AccountantsCode→AccountantCode, SalesPerson→Salesperson"
-    - "Added ~50 fields to 19 existing entities (system + business fields)"
-    - "Created Detail entity ontology (44 fields) - Transaction subfile with Detail. prefix"
-    - "✅ TASK-018: Phase 2 Critical Entities COMPLETE"
-    - "Created Ledger ontology (201 fields) - Period balance pivot table"
-    - "Created JobSheet ontology (33 fields) - Job costing and resource tracking"
-    - "Created AssetCat ontology (23 fields) - Asset categories with depreciation rules"
-    - "Total: 24 entities now documented, ~353 fields added in Session 004"
-    - "90% empirical field coverage achieved (~980/1090 fields)"
-
-    # Session 005 achievements
-    - "✅ TASK-019: Verification Script Entity Mapping Update COMPLETE"
-    - "Added Detail, Ledger, JobSheet, AssetCat to entity mapping"
-    - "Enhanced regex to handle TypeScript type annotations (': Type[]', 'as const')"
-    - "Ledger achieved PERFECT MATCH (201/201 fields)"
-    - "✅ TASK-020 Phase 1: High-Priority Field Additions COMPLETE"
-    - "Added 22 fields across Name (+14) and TaxRate (+8)"
-    - "4 perfect entity matches achieved: Ledger, TaxRate, JobSheet, AssetCat"
-    - "Coverage: 91.2% (994/1090 fields)"
-
-    # Session 006 achievements - PRODUCTION-READY MILESTONE
-    - "✅ TASK-020 Phase 2: Remaining Field Gaps COMPLETE"
-    - "Added 53 fields across 13 entities"
-    - "Fixed Detail prefix handling in verification script (43 false negatives eliminated)"
-    - "Implemented Slot field systematic exclusion (31 entities)"
-    - "Achieved 15 PERFECT MATCHES (48.4%)"
-    - "Coverage: 98.87% (1047/1059 business-logic fields) - EXCEEDS 95%+ TARGET"
-    - "Identified subfile prefix pattern (Detail, Build, Memo) - architectural insight"
-    - "8 parallel subagents deployed, 100% accuracy maintained"
-    - "Production-ready quality validated"
-
-    # Session 006 Extended - 99% COVERAGE MILESTONE
-    - "✅ TASK-021: OffLedger Entity Documentation COMPLETE"
-    - "Added 153 fields - complete OffLedger ontology"
-    - "Achieved 99.01% coverage (crossed 99% threshold)"
-    - "16 PERFECT MATCHES (51.6%): Added OffLedger 153/153"
-    - "Entity coverage: 80.6% (25/31 entities)"
-    - "Discovered dual-purpose entity: KIND='CUR' (currency) + KIND='USR' (off-ledger)"
-    - "Currency architecture fully understood: Exchange rates in Balance fields"
-    - "Multi-currency GL integration documented: LinkedAccountU/R, PreferredBank"
-    - "All high-value business entities 100% documented"
-
-  in_progress: []
-
-  blocked: []
-
-  next_actions:
-    priority_1_optional:
-      - task: "Fix Build/Memo Prefix Handling (10 minutes)"
-        description: "Extend verification script normalizeFieldName() for Build/Memo prefixes"
-        status: "Optional quick win - low effort, high impact"
-        rationale: "Complete subfile prefix pattern handling (12 fields)"
-        estimated_effort: "Small (10 minutes)"
-        impact: "Potentially 2 more perfect matches (Build 8/8, Memo 8/8)"
-        method: "Same pattern as Detail fix: if (['Detail', 'Build', 'Memo'].includes(entityName))"
-
-    priority_2_optional:
-      - task: "TASK-021: Document OffLedger entity (154 fields)"
-        description: "Medium-priority entity for off-balance sheet tracking"
-        status: "Optional enhancement - ontology already production-ready"
-        rationale: "High business value for multi-currency and deferred revenue scenarios"
-        estimated_effort: "Large (similar to Ledger entity, 2-3 hours)"
-        impact: "Entity coverage 77% → 80% (25/31)"
-        note: "Not required for production use"
-
-    priority_3_optional:
-      - task: "Deprecated Field Audit (1-2 hours)"
-        description: "Review 23 ontology fields not in empirical API v9.2.3"
-        status: "Optional cleanup"
-        rationale: "Documentation clarity, version compatibility notes"
-        estimated_effort: "Medium (1-2 hours)"
-        impact: "Cleaner ontology, version-specific field documentation"
-        rationale: "Achieve 100% entity coverage for completeness"
-        estimated_effort: "Small-Medium per entity"
-        note: "Consider after Phase 2 and OffLedger completion"
-
-  architectural_discoveries_session_004:
-    ledger_structure:
-      discovery: "Ledger is a denormalized time-series pivot table"
-      architecture: "92 historical balances + 96 budget fields (dual scenarios A/B)"
-      purpose: "Performance optimization for financial reporting"
-      teleology: "Eliminate transaction aggregation by pre-calculating period balances"
-
-    detail_prefix_convention:
-      discovery: "Detail entity fields returned with 'Detail.' prefix in API"
-      implication: "Requires special handling in API queries and field mapping"
-      solution: "Created separate ontology with apiFieldName property for each field"
-
-    jobsheet_sophistication:
-      discovery: "JobSheet supports construction accounting (retentions, variations, WIP)"
-      relationships: "6 foreign keys (Job, Resource, Account, CostCentre, 2 Transactions)"
-      dual_pricing: "CostPrice vs SellPrice for profitability tracking"
-
-    assetcat_complexity:
-      discovery: "8 GL account relationships for comprehensive asset lifecycle"
-      methods: "SL (Straight Line) and DV (Diminishing Value) depreciation"
-      features: "Private use accounting, daily depreciation, revaluation support"
+  risks:
+    - "Potential hallucination on AverageValue deprecation status"
+    - "Slot field exclusion policy may be incorrect"
+    - "Field name corrections based on incomplete evidence (API only, not exports)"
 
 # ============================================================================
-# KEY FILES
+# FILES CREATED THIS SESSION
 # ============================================================================
 
-key_files:
-  epistemic_state: "./state.yaml"
-  task_backlog: "./backlog.yaml"
-  session_summaries:
-    - "./SESSION-004-SUMMARY.md"
-    - "./SESSION-004-FINAL-QUALIA.md"
+artifacts:
+  session_documentation:
+    - "moneyworks-ontology/SESSION-007-SUMMARY.md"
+    - "moneyworks-ontology/FIELD_DISCREPANCY_RESEARCH_TASKS.md"
+    - "moneyworks-ontology/DISCREPANCY_RESOLUTION_REPORT.md (UNVERIFIED)"
+    - "moneyworks-ontology/ONTOLOGY_EMPIRICAL_DISCREPANCIES.md"
 
-  ontology_tiers:
-    tier_0:
-      - "./tier-0-core/paradigm.yaml"
-      - "./tier-0-core/terminology.yaml"
-      - "./tier-0-core/topology.yaml"
-    tier_1:
-      - "./tier-1-relationships/foreign-keys.yaml"
-      - "./tier-1-relationships/dependency-graph.yaml"
-      - "./tier-1-relationships/mereology.yaml"
-      - "./tier-1-relationships/cardinality.yaml"
-    tier_2:
-      - "./tier-2-semantics/enumerations/transaction-types.yaml"
-      - "./tier-2-semantics/enumerations/account-types.yaml"
-      - "./tier-2-semantics/flags/all-flags.yaml"
-      - "./tier-2-semantics/rules/core-rules.yaml"
-    tier_3:
-      - "./tier-3-processes/multi-currency.yaml"
-      - "./tier-3-processes/axiological-framework.yaml"
+  new_ontologies:
+    - "generated/moneyworks-link-canonical-ontology.ts (139 lines, 4 fields)"
+    - "generated/moneyworks-log-canonical-ontology.ts (174 lines, 7 fields)"
+    - "generated/moneyworks-message-canonical-ontology.ts (362 lines, 27 fields)"
+    - "generated/moneyworks-filter-canonical-ontology.ts (218 lines, 10 fields)"
+    - "generated/moneyworks-stickies-canonical-ontology.ts (176 lines, 8 fields)"
+    - "generated/moneyworks-lists-canonical-ontology.ts (183 lines, 8 fields)"
 
-  entity_ontologies:
-    core_entities:
-      - "../generated/moneyworks-transactions-canonical-ontology.ts"
-      - "../generated/moneyworks-detail-canonical-ontology.ts" # NEW in Session 004
-      - "../generated/moneyworks-accounts-canonical-ontology.ts"
-      - "../generated/moneyworks-names-canonical-ontology.ts"
-      - "../generated/moneyworks-products-canonical-ontology.ts"
-
-    financial_reporting:
-      - "../generated/moneyworks-ledger-canonical-ontology.ts" # NEW in Session 004
-      - "../generated/moneyworks-taxrates-canonical-ontology.ts"
-      - "../generated/moneyworks-departments-canonical-ontology.ts"
-
-    project_management:
-      - "../generated/moneyworks-jobs-canonical-ontology.ts"
-      - "../generated/moneyworks-jobsheet-canonical-ontology.ts" # NEW in Session 004
-
-    asset_management:
-      - "../generated/moneyworks-assets-canonical-ontology.ts"
-      - "../generated/moneyworks-assetcat-canonical-ontology.ts" # NEW in Session 004
-      - "../generated/moneyworks-assetlog-canonical-ontology.ts"
-
-    operational:
-      - "../generated/moneyworks-inventory-canonical-ontology.ts"
-      - "../generated/moneyworks-payments-canonical-ontology.ts"
-      - "../generated/moneyworks-reconciliation-canonical-ontology.ts"
-      - "../generated/moneyworks-allocations-canonical-ontology.ts"
-      - "../generated/moneyworks-build-records-canonical-ontology.ts"
-
-    supporting:
-      - "../generated/moneyworks-contacts-canonical-ontology.ts"
-      - "../generated/moneyworks-memo-canonical-ontology.ts"
-      - "../generated/moneyworks-general-classifications-canonical-ontology.ts"
-      - "../generated/moneyworks-login-canonical-ontology.ts"
-      - "../generated/moneyworks-user-canonical-ontology.ts"
-      - "../generated/moneyworks-user2-canonical-ontology.ts"
-
-  source_material:
-    manual_root: "/Users/hjonck/Development/gitprojects/AgileWorksZA/mw-core/mirror/manual/manual/"
-    appendix_pattern: "moneyworks_appendix_*.html"
+  infrastructure_updates:
+    - "scripts/verify-empirical-schema.ts (Build/Memo prefix + 6 entity mappings)"
+    - "moneyworks-ontology/backlog.yaml (TASK-023 added as P0)"
+    - "moneyworks-ontology/handoff.yaml (this file - mid-flight state)"
 
 # ============================================================================
-# SESSION-005 QUALIA SUMMARY (MID-FLIGHT FOR SESSION-006)
-# ============================================================================
-# This section provides semantic context and discoveries from Session 005
-
-session_005_qualia:
-  coverage_breakthrough:
-    discovery: "Verification script entity mapping was missing 4 new entities"
-    impact: "Coverage metrics were 66.6% (726/1090 fields) - actual was higher"
-    resolution: "Added Detail, Ledger, JobSheet, AssetCat to entity mapping"
-    result: "Coverage revealed as 86.4% via entity recognition alone (+19.8pp)"
-
-  perfect_entity_matches:
-    achieved: 4
-    entities:
-      - "Ledger: 201/201 fields ✅"
-      - "TaxRate: 31/31 fields ✅ (NEW - achieved via Phase 1 additions)"
-      - "JobSheet: 33/33 fields ✅ (discovered perfect from Session 004)"
-      - "AssetCat: 23/23 fields ✅ (discovered perfect from Session 004)"
-    significance: "Perfect matches validate rigorous Session 004 extraction methodology"
-
-  field_addition_semantics:
-    name_entity_additions:
-      count: 14
-      semantic_grouping: "Contact relationship layer"
-      groups:
-        - "Direct Contact: CompanyName, ContactName, ContactEmail, ContactPhone, ContactMobile"
-        - "Payment Terms: PaymentTermDays, EarlyPaymentDiscount, EarlyPaymentDays"
-        - "Tax ID: TaxIDRegion, CustomsCode"
-        - "E-invoicing: EInvoiceID, EInvoiceStatus, EInvoiceLastSent"
-      unified_meaning: "Name entity now complete customer/supplier identity + communication + terms + compliance"
-
-    taxrate_entity_additions:
-      count: 8
-      semantic_grouping: "Jurisdiction-specific tax regime encoding"
-      groups:
-        - "Canadian Multi-Tier: GSTPSTCombined, PSTRate, PSTAccount, GSTPSTSync"
-        - "EU Reverse Charge: ReverseChargeApplicable, ReverseChargeAccount, IntracommunitySupply, ThirdCountryCode"
-      unified_meaning: "TaxRate transformed from simple rate % to jurisdiction-aware tax regime encoder"
-
-  verification_infrastructure_insights:
-    pattern_enhanced: "TypeScript field declaration polymorphism"
-    patterns_now_supported: 3
-    pattern_1: "fieldName: Type (basic)"
-    pattern_2: "fieldName: Type[] (arrays)"
-    pattern_3: "fieldName: Type = value as const (const assertions)"
-    implication: "Parser must handle all 3 syntaxes - critical for cross-ontology consistency"
-
-  entity_mapping_pattern:
-    effectiveness: "Simple record mapping (Entity → File) proved highly scalable"
-    benefit: "Facilitated finding 4 new entities in 1 update cycle"
-    lesson: "Verification infrastructure importance: good work goes unmeasured without it"
-
-  subagent_orchestration_scale:
-    agents_executed: 5
-    composition: "4 extraction + 1 verification"
-    accuracy: "100% on all extractions"
-    scalability: "Pattern proven for 8-10 agents in Phase 2"
-    efficiency: "Parallel execution maintains O(1) complexity despite entity count"
-
-  remaining_gaps_understanding:
-    detail_prefix_convention: "Architectural issue, not field count - needs clear API mapping"
-    general_entity_pattern: "Uses FIELDS constant export (different from standard field declarations)"
-    contacts_array_pattern: "Similar to General - array constant export pattern"
-    scattered_gaps: "72 fields across Asset, AssetLog, Build, Memo, Login, User2"
-    total_remaining: "96 fields to 95%+ coverage"
-
-# ============================================================================
-# SESSION-004 QUALIA SUMMARY
-# ============================================================================
-# This section provides semantic context for next session continuity
-
-session_004_qualia:
-  methodology_used:
-    extraction: "Parallel subagent orchestration (7 subagents, 4 new entity files + 19 updates)"
-    verification: "Each subagent output verified against empirical schema"
-    principle: "Agents are stochastic - all work must be verified"
-    pattern: "Precise prompts with empirical source → autonomous extraction → verification"
-
-  key_extractions:
-    detail_entity:
-      fields: 44
-      critical_insight: "Transaction subfile - API uses Detail. prefix, ontology uses bare names"
-      architectural_pattern: "Subfile relationship via Detail.ParentSeq → Transaction.SequenceNumber"
-      helper_functions: "getDetailApiFieldName(), getDetailBareFieldName() for prefix handling"
-
-    ledger_entity:
-      fields: 201
-      critical_insight: "Period balance pivot table - denormalized for performance"
-      field_breakdown: "5 system + 5 identifying + 92 balances + 96 budgets (A/B) + 3 custom"
-      teleology: "Pre-calculated balances eliminate aggregation queries for reporting"
-      performance_optimization: "Concat field for composite key lookups"
-      temporal_depth: "92 periods historical + current + 18 periods forecast"
-
-    jobsheet_entity:
-      fields: 33
-      critical_insight: "Job costing with resource tracking and dual transaction linkage"
-      relationships: "6 FKs (Job, Resource, Account, CostCentre, DestTransSeq, SourceTransSeq)"
-      dual_pricing: "CostPrice (actual cost) vs SellPrice (billing rate) for margin analysis"
-      construction_features: "Retentions, variations, WIP discovered in related Job entity"
-
-    assetcat_entity:
-      fields: 23
-      critical_insight: "Asset categories with 8 GL account relationships"
-      fk_complexity: "AssetAccount, DepExpense, AccumDep, GainLoss, Impairment, RevalSurplus, plus 2 private use accounts"
-      depreciation_methods: "SL (Straight Line) and DV (Diminishing Value) with Rate field"
-      advanced_features: "Private use accounting, daily depreciation flag, revaluation support"
-
-  typo_corrections:
-    pattern_discovered: "Empirical validation reveals field naming discrepancies"
-    corrections_made:
-      - "Account.AccountantsCode → AccountantCode (empirically verified)"
-      - "Transaction.SalesPerson → Salesperson (empirically verified)"
-    implication: "Always verify field names against live API, don't trust manual spelling"
-
-  system_field_patterns:
-    universal_fields:
-      - "SequenceNumber: Primary key for ALL entities (numeric, system, indexed)"
-      - "LastModifiedTime: Audit timestamp for change tracking"
-      - "Slot: Internal DB field (excluded from ontology as non-API field)"
-    discovery: "Every MoneyWorks entity uses SequenceNumber as PK for FK references"
-    added_to: "19 entities missing these fields in Session 004"
-
-  subagent_orchestration_insights:
-    success_factors:
-      - "Precise prompts: exact file paths, empirical schema location, extraction templates"
-      - "Autonomous execution: subagents read JSON, infer types, create files independently"
-      - "Progressive complexity: typos (simple) → fields (medium) → 201-field Ledger (complex)"
-      - "Verification protocol: manual review + automated script after each batch"
-
-    accuracy_observed:
-      - "Subagents were highly accurate (~95%+ field extraction fidelity)"
-      - "Type inference from sample data worked reliably"
-      - "FK relationship detection successful when sample values present"
-      - "Only minor corrections needed (e.g., LastModifiedTime already present in some entities)"
-
-    efficiency_gains:
-      - "Parallel execution: 3 entities processed simultaneously (Account, Transaction, TaxRate)"
-      - "Autonomous file creation: Ledger 201 fields generated with minimal prompting"
-      - "Reduced session time: ~353 fields added in single session vs. manual extraction"
-
-# ============================================================================
-# CONFIDENCE DIMENSIONS (Current State)
+# QUALIA: SEMANTIC CONTEXT FOR NEXT SESSION
 # ============================================================================
 
-confidence_dimensions:
-  structural_integrity:
-    current_score: 0.95
-    basis: "Multi-agent validation, mereological coherence maintained"
-    trend: "Stable"
+qualia:
+  session_007_semantic_theme: "Verification rigor vs assumption trap"
 
-  entity_coverage:
-    current_score: 0.77
-    previous_score: 0.68
-    basis: "24/31 entities documented (added Detail, Ledger, JobSheet, AssetCat)"
-    trend: "Up +9pp"
-    remaining_gap: "7 entities (OffLedger, General, Link, Log, Message, Filter, Stickies, Lists)"
+  key_insight: |
+    Session 007 demonstrated both strengths and risks:
+    - Strength: Systematic manual search + API schema verification
+    - Risk: Made conclusions without checking actual export data
+    - Learning: Multiple sources of truth exist (manual, API, exports)
+    - Principle: Always verify against most authoritative source (actual data)
 
-  fk_verification:
-    current_score: 0.87
-    basis: "47/54 FKs source-verified + 17 new FKs in Session 004 entities"
-    trend: "Stable (comprehensive for documented entities)"
+  epistemic_lesson: |
+    "Slot field exclusion" seemed reasonable based on it being undocumented,
+    but this was an ASSUMPTION. The field exists in empirical data and should
+    be verified against exports before excluding from business ontology.
 
-  qualia_richness:
-    current_score: 0.85
-    basis: "Business process workflows + architectural insights (Ledger pivot table, etc.)"
-    trend: "Stable"
+    "AverageValue deprecated" conclusion was premature - found in export/import
+    docs but NOT verified in actual export files. This is a potential hallucination
+    that could have propagated into ontology if not caught.
 
-  source_fidelity:
-    current_score: 0.65
-    basis: "15 appendices mined, empirical validation as primary source now"
-    trend: "Stable (empirical validation supplements manual)"
+  methodological_improvement: |
+    Three-source verification protocol established:
+    1. Manual appendices (authoritative for semantics)
+    2. API schema (authoritative for REST API fields)
+    3. Export data (authoritative for actual database fields)
 
-  empirical_field_coverage:
-    current_score: 0.90
-    previous_score: 0.83
-    basis: "~980/1090 business-logic fields captured"
-    trend: "Up +7pp"
-    remaining_gap: "~79 fields across 7 unmapped entities + ~20-30 in existing entities"
+    All three must align before making ontology changes.
 
-  priority_entity_fidelity:
-    current_score: 0.95
-    previous_score: 0.89
-    basis: "Ledger, JobSheet, AssetCat critical gaps closed"
-    trend: "Up +6pp"
-    note: "All high-priority business entities now documented"
+  architecture_pattern_discovered: |
+    Subfile naming convention fully understood:
+    - Detail.FieldName (API prefix)
+    - Build.FieldName (API prefix)
+    - Memo.FieldName (API prefix)
 
-# ============================================================================
-# EPISTEMIC GAPS (Remaining)
-# ============================================================================
-
-epistemic_gaps:
-  critical:
-    - gap: "Verification script entity mapping out of date"
-      impact: "Cannot measure true coverage progress for new entities"
-      resolution: "Update scripts/verify-empirical-schema.ts with Detail, Ledger, JobSheet, AssetCat mappings"
-      priority: "P1"
-      estimated_effort: "Small (15-30 minutes)"
-
-  medium:
-    - gap: "~20-30 fields missing in existing entities"
-      impact: "Cannot achieve 100% coverage without these fields"
-      affected_entities: "Name (14), Contacts (17), General (7), Asset (5), etc."
-      resolution: "Systematic field addition pass with verification subagent"
-      priority: "P2"
-      estimated_effort: "Medium (1-2 hours)"
-
-  low:
-    - gap: "7 unmapped entities (mostly UI/system)"
-      impact: "Incomplete entity coverage (77% vs 100%)"
-      entities: "OffLedger (154), Link (5), Log (8), Message (28), Filter (11), Stickies (9), Lists (9)"
-      resolution: "Document OffLedger (high business value), defer others"
-      priority: "P3"
-      estimated_effort: "Large for OffLedger, small for others"
-
-  resolved:
-    - gap: "Critical business entities unmapped"
-      status: "RESOLVED - Ledger, JobSheet, AssetCat now documented"
-    - gap: "Detail entity confusion with Transaction"
-      status: "RESOLVED - Separate Detail ontology created with prefix handling"
-    - gap: "Field naming discrepancies"
-      status: "RESOLVED - Empirical validation corrected typos"
+    These three entities use prefixed field names in API responses but bare
+    names in ontology definitions. Verification script now handles all three.
 
 # ============================================================================
 # NEXT SESSION GUIDANCE
 # ============================================================================
 
 next_session_guidance:
-  quick_start:
-    1: "Read SESSION-005-FINAL-QUALIA.md for semantic context (critical for understanding Phase 2)"
-    2: "Review SESSION-005-SUMMARY.md for detailed outcomes and breakthrough metrics"
-    3: "Check state.yaml for current 94% confidence, 91.2% field coverage, 4 perfect entities"
-    4: "Execute TASK-020 Phase 2 for remaining 96 fields"
+  immediate_action:
+    priority: "P0"
+    task: "TASK-023"
+    description: "Verify all 11 discrepant fields against actual MoneyWorks export files"
+    location: "/Users/hjonck/Development/gitprojects/AgileWorksZA/ai_cfo_poc/mpoc/data/moneyworks-exports/2025-11-25_moneyworks_now"
+    expected_duration: "30-45 minutes"
 
-  priority_1_task_020_phase_2_remaining_gaps:
-    objective: "Achieve 95%+ empirical coverage (from current 91.2%)"
-    method: "Continue parallel subagent orchestration pattern (proven in Phase 1)"
-    critical_phases:
-      - phase: "Detail Prefix Handling"
-        description: "Establish clear API field name → ontology field name mapping convention"
-        fields_affected: 44
-        architectural_importance: "HIGH - impacts how Detail.* fields are queried"
+  after_task_023:
+    action: "Review DISCREPANCY_RESOLUTION_REPORT.md findings against export data"
+    decision_point: "Update report with verified conclusions"
+    then: "Apply only verified ontology corrections"
+    finally: "Run verification script to confirm perfect matches"
 
-      - phase: "General & Contacts Array Pattern"
-        description: "Extract FIELDS constant export pattern (different from normal declarations)"
-        fields_affected: 24
-        script_enhancement_needed: true
+  success_criteria:
+    - "All 11 fields verified against actual export data"
+    - "No assumptions without data evidence"
+    - "Ontology corrections backed by triple-source verification (manual + API + exports)"
+    - "Achieve maximum perfect match rate possible with verified changes"
 
-      - phase: "Scattered Gap Cleanup"
-        description: "Standard field additions across Asset, AssetLog, Build, Memo, Login, User2"
-        fields_affected: 28
-
-    steps:
-      - "Launch parallel extraction subagents for Detail, General, Contacts (8 agents total in Phase 2)"
-      - "Launch independent verification subagent"
-      - "Detail first: Establish prefix convention with clear mapping"
-      - "General/Contacts: May need script regex enhancement for array constants"
-      - "Scattered gaps: Standard extraction (Asset, AssetLog, Build, Memo, Login, User2)"
-      - "Run verification script after each major section"
-      - "Target: 91.2% → 95%+, <50 fields remaining"
-
-    expected_outcome: "Field coverage increases from 91.2% to 95%+, entity fidelity 98%+, detail prefix convention established"
-
-  priority_2_optional_task_021_offl edger:
-    objective: "Document medium-priority OffLedger entity (154 fields)"
-    status: "Deferred from Phase 2 - focus on completion first"
-    condition: "Execute if Phase 2 completes early in Session 006"
-    rationale: "High business value for multi-currency and deferred revenue"
-    method: "Same pattern as Ledger entity (similar structure, empirical extraction)"
-    expected_outcome: "Entity coverage increases to 80% (25/31)"
-
-  priority_3_optional_low_priority_entities:
-    objective: "Complete remaining 6 low-priority entities (optional)"
-    entities: "Link (5), Log (8), Message (28), Filter (11), Stickies (9), Lists (9)"
-    condition: "Execute after Phase 2 and OffLedger if time permits"
-    rationale: "UI/system entities with lower business value"
-    method: "Standard extraction pattern per entity"
-
-  if_time_permits:
-    - "Document remaining low-priority entities (Link, Log, Message, Filter, Stickies, Lists)"
-    - "Write integration tests for new entity ontologies"
-    - "Generate TypeScript type definitions from ontologies"
-    - "Create API query builder utilities for new entities"
-    - "Enhance verification script for array constant patterns"
-
-  verification_protocol:
-    - "Always verify subagent extractions with independent verification"
-    - "Run empirical verification script after each batch of changes"
-    - "Detail prefix convention: establish clear mapping/aliasing strategy"
-    - "Update state.yaml with confidence score changes"
-    - "Cite source documents and empirical schema for all claims"
+  completion_checklist:
+    - "[ ] TASK-023 complete with export data verification"
+    - "[ ] DISCREPANCY_RESOLUTION_REPORT.md updated with verified findings"
+    - "[ ] Ontology corrections applied (if verified)"
+    - "[ ] Verification script run (final metrics)"
+    - "[ ] Session 007 marked COMPLETE"
+    - "[ ] handoff.yaml updated for Session 008 or production deployment"
 
 # ============================================================================
 # INVARIANTS (Must Hold Across All Sessions)
@@ -573,23 +275,24 @@ next_session_guidance:
 
 invariants:
   epistemic:
-    - "All claims must be traceable to source (manual or empirical schema)"
-    - "Confidence levels must be calibrated to evidence strength"
-    - "Unverified claims must be marked as inferred or assumed"
-    - "Empirical validation trumps manual when discrepancies found"
+    - "All claims must be traceable to authoritative source"
+    - "Multiple sources of truth require cross-verification"
+    - "Assumptions must be explicitly marked as such"
+    - "Export data trumps API schema which trumps manual when conflicting"
+    - "Never conclude 'deprecated' without checking actual data"
 
   ontological:
     - "Mereological coherence is non-negotiable"
-    - "Parts-whole relationships must be asymmetric (no circular deps)"
     - "No circular dependencies in entity relationships"
     - "FK relationships must reference valid target entities/fields"
+    - "Field names must match empirical data exactly (case-sensitive)"
 
   methodological:
-    - "Source material takes precedence over inference"
-    - "Empirical validation trumps theoretical correctness"
-    - "State must be persisted between sessions (state.yaml, backlog.yaml, handoff.yaml)"
+    - "Verify against most authoritative source available"
+    - "State must be persisted between sessions"
     - "Agents are stochastic - verify all work independently"
     - "Use subagents for efficiency, but always verify outputs"
+    - "Document mid-flight state when session ends incomplete"
 
 # ============================================================================
 # SESSION CHECKLIST
@@ -597,19 +300,46 @@ invariants:
 
 session_start_checklist:
   - "[ ] Read handoff.yaml (this file)"
-  - "[ ] Read SESSION-004-FINAL-QUALIA.md for semantic context"
-  - "[ ] Read state.yaml for epistemic state (92% confidence)"
-  - "[ ] Read backlog.yaml for task status"
-  - "[ ] Review SESSION-004-SUMMARY.md for last session outcomes"
-  - "[ ] Choose priority task (verification script update, field gaps, or OffLedger)"
-  - "[ ] Create TodoWrite list for chosen task"
+  - "[ ] Read SESSION-007-SUMMARY.md for context"
+  - "[ ] Read DISCREPANCY_RESOLUTION_REPORT.md (with critical eye - unverified)"
+  - "[ ] Read state.yaml for epistemic state"
+  - "[ ] Read backlog.yaml - note TASK-023 P0 priority"
+  - "[ ] Execute TASK-023 FIRST before any ontology changes"
 
 session_end_checklist:
   - "[ ] Update state.yaml with session outcomes"
   - "[ ] Update backlog.yaml task statuses"
-  - "[ ] Update handoff.yaml with mid-flight state"
+  - "[ ] Update handoff.yaml with current state"
   - "[ ] Note blockers or risks"
-  - "[ ] Create SESSION-00N-FINAL-QUALIA.md for next session"
-  - "[ ] Create SESSION-00N-SUMMARY.md if significant work completed"
-  - "[ ] Run verification script to confirm coverage metrics"
-  - "[ ] Confirm session summary with user"
+  - "[ ] Create SESSION-00N-FINAL-QUALIA.md if session complete"
+  - "[ ] Run verification script for final metrics"
+  - "[ ] Confirm completion criteria met"
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata:
+  handoff_version: "5.0"
+  session_status: "MID-FLIGHT"
+  last_updated: "2025-11-26T02:00:00Z"
+  last_agent: "sonnet-4.5"
+  session_duration: "~2 hours (incomplete)"
+  completion_estimate: "30-45 minutes remaining (TASK-023)"
+
+  critical_files_for_next_session:
+    - "moneyworks-ontology/backlog.yaml (TASK-023)"
+    - "DISCREPANCY_RESOLUTION_REPORT.md (read with skepticism)"
+    - "/Users/hjonck/Development/gitprojects/AgileWorksZA/ai_cfo_poc/mpoc/data/moneyworks-exports/2025-11-25_moneyworks_now (verification source)"
+
+  session_007_status: "80% complete - research done, verification pending"
+  blocking_task: "TASK-023 (P0 priority)"
+  ready_for_production: false
+  reason: "Pending export data verification before ontology corrections"
+
+---
+
+**Document Status**: Active Session Handoff (Mid-Flight)
+**Last Updated**: 2025-11-26
+**Authority**: Session 007 Agent
+**Next Session Action**: Execute TASK-023 immediately

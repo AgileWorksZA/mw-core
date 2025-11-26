@@ -96,16 +96,6 @@ export enum MoneyWorksDetailStatementControl {
 export const MONEYWORKS_DETAIL_FIELDS = [
   // System Fields
   {
-    fieldName: "Slot",
-    dataType: "N" as const,
-    canonicalDescription: "System-assigned slot number for internal record management. Not directly user-visible.",
-    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
-    isRequired: true,
-    isSystem: true,
-    isIndexed: false,
-    apiFieldName: "Slot"
-  },
-  {
     fieldName: "SequenceNumber",
     dataType: "N" as const,
     canonicalDescription: "Detail line primary key. Uniquely identifies this detail line across all transactions.",

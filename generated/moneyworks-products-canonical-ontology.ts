@@ -1,10 +1,13 @@
 /**
  * MoneyWorks Products Entity - Canonical Ontology
- * 
+ *
  * PURE MoneyWorks canonical definitions extracted from official manual
  * Source: moneyworks_appendix_products.html
  * Authority: MoneyWorks Manual - Products Field Descriptions
- * 
+ *
+ * COVERAGE: 75 fields - Canonical field set (Amendment 001)
+ * Enhanced: 2025-11-26 by Claude Code (Amendment 001: Removed deprecated AverageValue field)
+ *
  * CRITICAL DISCOVERY: MoneyWorks Products are not just "items" - they represent
  * a sophisticated multi-dimensional classification system with inventory management,
  * pricing matrices, job costing, and manufacturing capabilities.
@@ -479,13 +482,6 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
     dataType: "N" as const,
     canonicalDescription: "The value of the stock on hand (based on purchase cost)",
     manualSource: "moneyworks_appendix_products.html"
-  },
-  {
-    fieldName: "AverageValue",
-    dataType: "N" as const,
-    canonicalDescription: "Average per-unit stock value; you cannot alter this. NOTE: This field appears in the manual but is NOT present in empirical MoneyWorks Now v9.2.3 schema (2025-11-25). May be deprecated or version-specific. Verify with documentation before use.",
-    manualSource: "moneyworks_export_import_field_descriptions_for_products.html",
-    isRequired: false
   },
   {
     fieldName: "ReorderLevel",

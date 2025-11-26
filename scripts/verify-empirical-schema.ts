@@ -102,6 +102,12 @@ const ENTITY_MAPPING: Record<string, string> = {
   'User': 'moneyworks-user-canonical-ontology',
   'User2': 'moneyworks-user2-canonical-ontology',
   'OffLedger': 'moneyworks-offledger-canonical-ontology',
+  'Link': 'moneyworks-link-canonical-ontology',
+  'Log': 'moneyworks-log-canonical-ontology',
+  'Message': 'moneyworks-message-canonical-ontology',
+  'Filter': 'moneyworks-filter-canonical-ontology',
+  'Stickies': 'moneyworks-stickies-canonical-ontology',
+  'Lists': 'moneyworks-lists-canonical-ontology',
 };
 
 // ============================================================================
@@ -127,10 +133,14 @@ function extractFieldsFromOntology(filePath: string): string[] {
 }
 
 function normalizeFieldName(field: string, entityName?: string): string {
-  // Special handling for Detail entity: empirical API returns fields with "Detail." prefix
-  // but ontology defines them without prefix (e.g., "Detail.SequenceNumber" vs "SequenceNumber")
-  if (entityName === 'Detail' && field.startsWith('Detail.')) {
-    return field.substring(7); // Strip "Detail." prefix (7 characters)
+  // Special handling for subfile entities: empirical API returns fields with prefixes
+  // but ontologies define them without prefix (e.g., "Detail.SequenceNumber" vs "SequenceNumber")
+  // This applies to Detail, Build, and Memo entities (subfile naming convention)
+  if (entityName && ['Detail', 'Build', 'Memo'].includes(entityName)) {
+    const prefix = `${entityName}.`;
+    if (field.startsWith(prefix)) {
+      return field.substring(prefix.length);
+    }
   }
 
   // MoneyWorks API returns PascalCase, but exports use lowercase

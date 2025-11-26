@@ -103,15 +103,6 @@ export const MONEYWORKS_LEDGER_FIELDS: LedgerFieldDefinition[] = [
   // ==========================================================================
 
   {
-    fieldName: "Slot",
-    dataType: "N",
-    canonicalDescription: "Internal database slot identifier - used by MoneyWorks for record management",
-    manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
-    isSystem: true,
-    notes: "Internal use only - not for application logic"
-  },
-
-  {
     fieldName: "SequenceNumber",
     dataType: "N",
     canonicalDescription: "Primary key - unique sequential identifier for the ledger record",
