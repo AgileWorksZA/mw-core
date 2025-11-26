@@ -447,22 +447,45 @@ tasks:
         - "moneyworks-ontology/EMPIRICAL_VERIFICATION_REPORT.md (updated)"
 
   - id: TASK-021
-    title: "Document OffLedger Entity (154 fields) - Optional"
+    title: "Document OffLedger Entity (154 fields)"
     phase: validation
-    status: pending
-    priority: P3
+    status: completed
+    completed_date: "2025-11-26"
+    priority: P2
     depends_on: [TASK-020]
     description: |
-      Create canonical ontology for OffLedger entity - medium-priority entity
-      with high business value for multi-currency and deferred revenue scenarios.
-    rationale: |
-      Similar structure to Ledger (denormalized pivot table), likely contains
-      off-balance sheet tracking, currency balances, unearned revenue/expense.
-    fields: 154
-    complexity: "Large (similar to Ledger entity in Session 004)"
-    method: "Same pattern as Ledger: empirical extraction + architectural documentation"
-    expected_outcome: "Entity coverage increases to 80% (25/31)"
-    estimated_effort: "Large (similar to TASK-018a Ledger creation)"
+      Create canonical ontology for OffLedger entity - critical dual-purpose entity
+      for currency exchange rates AND off-balance sheet tracking.
+    outcomes:
+      - "OffLedger entity fully documented: 153 fields (154 minus Slot)"
+      - "Discovered dual-purpose architecture: KIND='CUR' (currency) vs KIND='USR' (off-ledger)"
+      - "Currency exchange rate storage mechanism revealed and documented"
+      - "Multi-currency GL integration fully mapped (LinkedAccountU/R, PreferredBank)"
+      - "Denormalized pivot table: 92 balance periods + 48 budget periods"
+      - "Achieved 99.01% empirical coverage (crossed 99% threshold)"
+      - "Perfect match: OffLedger 153/153 (16th perfect entity)"
+      - "Entity coverage: 77% → 80.6% (25/31 entities)"
+    field_structure:
+      total: 153
+      system: 2  # SequenceNumber, LastModifiedTime
+      identity: 4  # Kind, Name, Description, Flags
+      balance_periods: 92  # Balance00-91 (current to 91 periods ago)
+      budget_periods: 48  # Budget00-29 (historical) + BudgetNext01-18 (future)
+      currency_gl: 4  # LinkedAccountU, LinkedAccountR, PreferredBankCR, PreferredBankCP
+      custom: 3  # UserNum, UserText, TaggedText
+    currency_architecture:
+      exchange_rate_storage: "Balance fields store rates (not monetary amounts) for CUR records"
+      rate_convention: "Units of foreign currency per 1 unit local currency"
+      period_depth: "92 historical periods of exchange rates"
+      gl_automation: "Automatic FX gain/loss via linked GL accounts"
+      sample_data: "GBP currency: Balance00=12.000000 (12 ZAR = 1 GBP)"
+    complexity: "Large (1593 lines, similar to Ledger entity)"
+    method: "Single subagent with comprehensive manual + empirical documentation"
+    actual_effort: "~1 hour (efficient with proven pattern)"
+    artifacts:
+      - "generated/moneyworks-offledger-canonical-ontology.ts (NEW - 1593 lines)"
+      - "scripts/verify-empirical-schema.ts (OffLedger mapping added)"
+      - "moneyworks-ontology/state.yaml (99.01% coverage)"
 
   # === PHASE 6: REIFICATION (PENDING) ===
   - id: TASK-013
@@ -490,9 +513,9 @@ tasks:
 # ============================================================================
 
 current_sprint:
-  focus: "Production-Quality Ontology Achieved - 98.87% Coverage"
-  status: "Session 006 COMPLETE - 96% confidence, 98.87% field coverage, 15 perfect entities (48.4%)"
-  session_duration: "Session 006 (2025-11-26)"
+  focus: "99% Coverage Milestone - Currency Architecture Fully Documented"
+  status: "Session 006 Extended COMPLETE - 97% confidence, 99.01% field coverage, 16 perfect entities (51.6%), 25/31 entities (80.6%)"
+  session_duration: "Session 006 + TASK-021 (2025-11-26)"
 
   completed_session_005:
     - task: "TASK-019"
@@ -550,6 +573,20 @@ current_sprint:
         - "8 parallel subagents deployed, 100% accuracy"
         - "Identified subfile prefix pattern (Detail, Build, Memo)"
         - "Production-quality ontology validated"
+
+    - task: "TASK-021"
+      status: "COMPLETE"
+      outcome: "99.01% coverage achieved - crossed 99% threshold"
+      achievements:
+        - "OffLedger entity fully documented: 153 fields"
+        - "Perfect matches: 15 → 16 entities (51.6%)"
+        - "Entity coverage: 77% → 80.6% (25/31 entities)"
+        - "Coverage: 98.87% → 99.01% (+0.14pp)"
+        - "Currency architecture fully understood and documented"
+        - "Dual-purpose entity discovered: CUR (currency) + USR (off-ledger)"
+        - "Exchange rate storage mechanism revealed (Balance fields)"
+        - "Multi-currency GL integration fully mapped"
+        - "All high-value business entities now 100% documented"
 
   next_session_priorities:
     priority_1_optional:

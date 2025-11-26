@@ -609,6 +609,61 @@ sessions:
       - "Private use asset accounting shows sophisticated tax compliance architecture"
     next_priority: "Optional: Fix Build/Memo prefix handling (12 fields) or document OffLedger entity (154 fields, TASK-021)"
 
+  - id: "session-006-extended"
+    date: "2025-11-26"
+    agent: "sonnet-4.5"
+    focus: "TASK-021 - Document OffLedger Entity (Currency & Off-Balance Sheet)"
+    methodology: "Single subagent with comprehensive manual + empirical documentation"
+    outcomes:
+      - "TASK-021 COMPLETE: OffLedger entity fully documented (153 fields)"
+      - "Achieved 99.01% empirical coverage (1200/1212 business-logic fields)"
+      - "Crossed 99% coverage threshold - milestone achievement"
+      - "Perfect matches: 15 → 16 entities (51.6%)"
+      - "Entity coverage: 77% (24/31) → 80.6% (25/31)"
+      - "Discovered dual-purpose entity: Currency (CUR) + Off-Ledger (USR)"
+      - "Complete currency architecture now understood and documented"
+      - "Exchange rate storage mechanism revealed (Balance fields)"
+      - "Multi-currency GL integration fully mapped"
+    confidence_improvement:
+      before: 0.96
+      after: 0.97
+      delta: "+1 percentage point"
+    coverage_improvement:
+      field_coverage_before: 0.9887  # Session 006 end (1047/1059)
+      field_coverage_after: 0.9901   # TASK-021 end (1200/1212)
+      entity_coverage_before: 0.77   # 24/31 entities
+      entity_coverage_after: 0.806   # 25/31 entities
+      field_gain: 153  # OffLedger complete ontology
+      percentage_point_gain: 0.14  # From 98.87% to 99.01%
+    perfect_entity_matches:
+      count: 16
+      new_this_task: 1
+      entity: "OffLedger: 153/153 (Currency + Off-Ledger dual purpose)"
+      significance: "51.6% perfect match rate, 99.01% coverage - exceptional quality"
+    currency_architecture_discovered:
+      exchange_rate_storage: "One rate per currency per period in OffLedger.Balance fields"
+      rate_convention: "Units of foreign currency per one unit of local currency"
+      gl_integration:
+        - "LinkedAccountU: Unrealised FX gain/loss account"
+        - "LinkedAccountR: Realised FX gain/loss account"
+        - "PreferredBankCR/CP: Default bank accounts for currency transactions"
+      time_series_depth: "92 historical periods (Balance00-91) + 48 budget periods"
+      dual_purpose:
+        - "KIND='CUR': Currency exchange rates (Balance=rates)"
+        - "KIND='USR': Off-ledger balances (Balance=amounts)"
+    artifacts:
+      - "generated/moneyworks-offledger-canonical-ontology.ts (1593 lines, 153 fields)"
+      - "scripts/verify-empirical-schema.ts (OffLedger entity mapping added)"
+      - "moneyworks-ontology/state.yaml (coverage metrics updated to 99.01%)"
+      - "moneyworks-ontology/EMPIRICAL_VERIFICATION_REPORT.md (16 perfect matches)"
+    key_insights:
+      - "OffLedger is denormalized pivot table similar to Ledger architecture"
+      - "Semantic polymorphism: Same fields, different meanings based on Kind discriminator"
+      - "MoneyWorks currency mechanism fully understood: period-based rates in Balance fields"
+      - "All high-value business entities now 100% documented"
+      - "Remaining 6 entities are low-priority UI/system components (70 fields)"
+    next_priority: "Optional: Fix Build/Memo prefix (potentially 100%) OR proceed to production (99.01% excellent)"
+
 # ============================================================================
 # ACTIVE CONCERNS
 # ============================================================================

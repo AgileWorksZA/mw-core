@@ -76,18 +76,18 @@ project:
 # ============================================================================
 
 current_state:
-  phase: "Production-Ready - 98.87% Coverage Achieved - Optional Enhancements Available"
-  last_session: "2025-11-26 (Session-006)"
+  phase: "99% Coverage Milestone - Currency Architecture Complete"
+  last_session: "2025-11-26 (Session-006 Extended - TASK-021)"
 
   confidence:
-    overall: "96%"
+    overall: "97%"
     structural: "95%"
-    entity_coverage: "77%" # 24/31 entities documented (7 low-priority deferred)
+    entity_coverage: "80.6%" # 25/31 entities documented (6 low-priority UI/system deferred)
     fk_verification: "87%"
     qualia: "85%"
     source_fidelity: "65%"
-    empirical_field_coverage: "98.87%" # 1047/1059 business-logic fields (Session 006: +53 fields, +infrastructure)
-    priority_entity_fidelity: "99.2%" # 15/31 perfect matches (48.4%) - up from 4 in Session 005
+    empirical_field_coverage: "99.01%" # 1200/1212 business-logic fields (Session 006 + TASK-021: +206 fields total)
+    priority_entity_fidelity: "99.5%" # 16/31 perfect matches (51.6%) - OffLedger added
 
   completed:
     # Previous sessions
@@ -131,11 +131,22 @@ current_state:
     - "Added 53 fields across 13 entities"
     - "Fixed Detail prefix handling in verification script (43 false negatives eliminated)"
     - "Implemented Slot field systematic exclusion (31 entities)"
-    - "Achieved 15 PERFECT MATCHES (48.4%): Job, Account, Transaction, Detail, General, Department, Payments, Contacts, Inventory, AssetLog, BankRecs, Asset, AutoSplit, User, Login, User2, plus previous 4"
+    - "Achieved 15 PERFECT MATCHES (48.4%)"
     - "Coverage: 98.87% (1047/1059 business-logic fields) - EXCEEDS 95%+ TARGET"
     - "Identified subfile prefix pattern (Detail, Build, Memo) - architectural insight"
     - "8 parallel subagents deployed, 100% accuracy maintained"
     - "Production-ready quality validated"
+
+    # Session 006 Extended - 99% COVERAGE MILESTONE
+    - "✅ TASK-021: OffLedger Entity Documentation COMPLETE"
+    - "Added 153 fields - complete OffLedger ontology"
+    - "Achieved 99.01% coverage (crossed 99% threshold)"
+    - "16 PERFECT MATCHES (51.6%): Added OffLedger 153/153"
+    - "Entity coverage: 80.6% (25/31 entities)"
+    - "Discovered dual-purpose entity: KIND='CUR' (currency) + KIND='USR' (off-ledger)"
+    - "Currency architecture fully understood: Exchange rates in Balance fields"
+    - "Multi-currency GL integration documented: LinkedAccountU/R, PreferredBank"
+    - "All high-value business entities 100% documented"
 
   in_progress: []
 
