@@ -5,11 +5,11 @@
 
 metadata:
   project: moneyworks-canonical-ontology
-  version: "0.9.0"
-  last_session: "2025-11-26T12:00:00Z"
+  version: "0.9.1"
+  last_session: "2025-11-26T14:00:00Z"
   last_agent: "sonnet-4.5"
   session_count: 6
-  critical_blocker: null  # RESOLVED: 98.87% coverage achieved, 15 perfect entity matches
+  critical_blocker: null  # RESOLVED: 99.01% coverage achieved, 16 perfect entity matches, 25/31 entities (80.6%)
 
 # ============================================================================
 # EPISTEMIC CONFIDENCE DIMENSIONS
@@ -27,11 +27,11 @@ confidence:
       last_validated: "2025-11-25"
 
     entity_coverage:
-      score: 0.77
-      basis: "24/31 entities documented (all business entities complete)"
+      score: 0.806
+      basis: "25/31 entities documented (all high-value business entities complete)"
       last_validated: "2025-11-26"
-      gap: "OffLedger, Link, Log, Message, Filter, Stickies, Lists (7 entities - mostly UI/system)"
-      note: "General entity now complete (was in gap list)"
+      gap: "Link, Log, Message, Filter, Stickies, Lists (6 entities - all UI/system)"
+      note: "OffLedger entity completed in Session 006 continuation (TASK-021)"
 
     enumeration_accuracy:
       score: 1.0
@@ -53,17 +53,17 @@ confidence:
         total: 54
 
     empirical_field_coverage:
-      score: 0.9887
-      basis: "1047/1059 business-logic fields verified (Session 006: TASK-020 Phase 2 complete)"
+      score: 0.9901
+      basis: "1200/1212 business-logic fields verified (Session 006: TASK-021 complete)"
       last_validated: "2025-11-26"
       empirical_source: "MoneyWorks Now v9.2.3 (GMS Software Factory 2019 plus.moneyworks)"
       breakdown:
-        total_empirical_fields: 1090
-        business_logic_fields: 1059  # Excludes 31 Slot fields (system-internal)
-        business_logic_fields_captured: 1047
+        total_empirical_fields: 1244  # Including OffLedger
+        business_logic_fields: 1212  # Excludes 32 Slot fields (1059 + 153 OffLedger)
+        business_logic_fields_captured: 1200
         fields_missing_in_ontology: 12  # Build (6) + Memo (6) prefix convention issue
         ontology_fields_not_in_empirical: 23
-        perfect_entity_matches: 15  # Up from 4 in Session 005
+        perfect_entity_matches: 16  # Added OffLedger in Session 006 TASK-021
       improvement_session_006:
         task_020_phase_2_fields_added: 53  # Across 13 entities
         fields_recognized_via_slot_exclusion: 31  # Slot fields no longer counted as missing

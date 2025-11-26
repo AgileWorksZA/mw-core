@@ -101,6 +101,7 @@ const ENTITY_MAPPING: Record<string, string> = {
   'Login': 'moneyworks-login-canonical-ontology',
   'User': 'moneyworks-user-canonical-ontology',
   'User2': 'moneyworks-user2-canonical-ontology',
+  'OffLedger': 'moneyworks-offledger-canonical-ontology',
 };
 
 // ============================================================================

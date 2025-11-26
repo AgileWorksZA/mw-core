@@ -1,12 +1,12 @@
 # MoneyWorks Empirical Schema Verification Report
 
-**Generated:** 2025-11-25T23:38:07.015Z
+**Generated:** 2025-11-26T00:16:02.341Z
 **Task:** TASK-010 - API Schema Validation
 
 ## Executive Summary
 
-- **Perfect Matches:** 15/31 (48.4%)
-- **Entities with Discrepancies:** 16
+- **Perfect Matches:** 16/31 (51.6%)
+- **Entities with Discrepancies:** 15
 
 ## Detailed Results
 
@@ -353,12 +353,12 @@
 
 ### OffLedger
 
-- **Empirical Field Count:** 154
-- **Ontology Field Count:** 0
-- **Match:** ❌ No
+- **Empirical Field Count:** 153
+- **Ontology Field Count:** 153
+- **Match:** ✅ Yes
 
 **Notes:**
-- ❌ No ontology file mapped for this entity
+- ✅ Perfect match
 
 ---
 
