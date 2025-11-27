@@ -100,8 +100,20 @@
 			"name": "Import",
 			"description": "Import functionality - write operations to create/update records in MoneyWorks from SDK",
 			"storyCount": 1
+		},
+		{
+			"code": "REFS",
+			"name": "Reference Tables",
+			"description": "Simple reference/lookup tables - Job, Category1, Category2, and similar static data entities",
+			"storyCount": 1
+		},
+		{
+			"code": "SNAP",
+			"name": "Snapshot & Diff Tooling",
+			"description": "Developer tooling for reverse-engineering MoneyWorks behavior via table snapshots and diff analysis",
+			"storyCount": 1
 		}
 	],
-	"storyCounter": 5,
+	"storyCounter": 7,
 	"taskCounter": 21
 }

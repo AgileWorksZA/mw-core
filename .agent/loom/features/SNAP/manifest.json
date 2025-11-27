@@ -1,0 +1,6 @@
+{
+	"code": "SNAP",
+	"name": "Snapshot & Diff Tooling",
+	"description": "Developer tooling for reverse-engineering MoneyWorks behavior via table snapshots and diff analysis",
+	"storyCounter": 1
+}

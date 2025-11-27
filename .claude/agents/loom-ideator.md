@@ -220,11 +220,9 @@ Return exactly this format (under 500 tokens):
 **Complexity:** {Level}
 **Priority:** {Level}
 
-**Weave Consulted:** (knowledge applied to this story)
-- E:{pattern-id} - {Pattern applied from Weave}
-- Q:{painpoint-id} - {Pain point being avoided}
-- Π:{practice-id} - {Best practice followed}
-(List 2-5 Weave entries that informed this story's design)
+**Weave References:** {N} patterns/pain points
+- {Pattern name}
+- {Pain point to avoid}
 
 **Files Created:**
 - .agent/loom/features/{FEATURE}/stories/{STORY-ID}/story.json

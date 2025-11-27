@@ -111,12 +111,9 @@ Return exactly this format (under 500 tokens):
 
 **Story Updated:** .agent/loom/features/{FEATURE}/stories/{STORY-ID}/story.json
 
-**Weave Applied:** (patterns guiding task structure)
-- E:{pattern-id} - {Pattern that shaped the task breakdown}
-- Π:{practice-id} - {Best practice followed in planning}
-(List 1-3 Weave entries that informed the plan)
+**Reference Pattern:** {Pattern used, e.g., "9-step entity implementation from PROD-001"}
 
-**Reference Implementation:** {File/story used as template}
+**Dependencies:** {Key dependency notes if any}
 
 **Next Step:** Run `/loom:start {STORY-ID}` to begin implementation
 ```
