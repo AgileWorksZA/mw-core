@@ -4,6 +4,7 @@ import { parseArgs } from "node:util";
 import { commands } from "@moneyworks/cli/commands";
 import { loadConfig } from "@moneyworks/cli/config";
 import { createSmartClient } from "@moneyworks/data";
+import { goldCommand } from "@moneyworks/cli/commands/gold/index";
 
 // Parse command line arguments
 const { values, positionals } = parseArgs({
@@ -50,13 +51,19 @@ MoneyWorks CLI - Test MoneyWorks Core functionality
 Usage: mw <command> [options]
 
 Commands:
-  export TaxRate      Export tax rate records
-  import TaxRate      Import tax rate records  
-  eval <expression>   Evaluate a MWScript expression
-  version            Get MoneyWorks server version
-  list               List available documents
-  test-connection    Test connection to MoneyWorks
-  names <command>    Manage names (customers, suppliers, debtors, creditors)
+  export TaxRate        Export tax rate records
+  import TaxRate        Import tax rate records
+  eval <expression>     Evaluate a MWScript expression
+  version               Get MoneyWorks server version
+  list                  List available documents
+  test-connection       Test connection to MoneyWorks
+  names <command>       Manage names (customers, suppliers, debtors, creditors)
+
+  snapshot <label>      Capture current state of all tables
+  diff <before> <after> Compare two snapshots
+  action-map <b> <a>    Generate markdown action map from diff
+
+  gold <command>        Control MoneyWorks Gold UI (macOS automation)
 
 Options:
   -c, --config <file>  Config file path (default: ./mw-config.json)
@@ -68,7 +75,7 @@ Options:
 Export Formats:
   -e, --exportFormat:
     compact         Raw arrays for minimal overhead
-    compact-headers Arrays with field names in first row  
+    compact-headers Arrays with field names in first row
     full            Complete objects with field names (default)
     schema          Objects with full field metadata
 
@@ -79,6 +86,13 @@ Examples:
   mw export TaxRate --limit 10 --exportFormat compact-headers
   mw eval "Count(TaxRate)"
   mw test-connection
+
+  # Snapshot & Diff workflow
+  mw snapshot baseline
+  # (make changes in MoneyWorks)
+  mw snapshot after-change
+  mw diff baseline after-change
+  mw action-map baseline after-change --operation create-invoice
   `);
 	process.exit(0);
 }
@@ -89,6 +103,13 @@ async function main() {
 
 	try {
 		const command = positionals[0];
+
+		// Handle gold command separately (doesn't need MW client)
+		if (command === "gold") {
+			const goldArgs = process.argv.slice(process.argv.indexOf("gold") + 1);
+			await goldCommand(goldArgs);
+			return;
+		}
 
 		// Load config
 		const configPath = values.config as string;
