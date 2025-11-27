@@ -1,0 +1,7 @@
+{
+  "code": "AITOOLS",
+  "name": "AI Tools Integration",
+  "description": "Claude Code-like tool capabilities for the packages/ai app using Anthropic SDK's tool system - enabling file operations, bash execution, and code search",
+  "stories": ["AITOOLS-001"],
+  "createdAt": "2025-11-27T10:00:00.000Z"
+}

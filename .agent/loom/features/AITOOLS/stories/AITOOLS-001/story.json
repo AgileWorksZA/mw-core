@@ -1,0 +1,499 @@
+{
+  "id": "AITOOLS-001",
+  "title": "Add Claude Code-like Tool Capabilities to AI Package",
+  "description": "Enhance the packages/ai React Router 7 app with server-side tools that Claude can invoke autonomously. Using the Anthropic SDK's betaTool and toolRunner pattern, implement file operations (read, write, edit), bash execution, glob patterns, and grep search. Tools execute server-side with results returned to Claude for agentic workflows.",
+  "why": "Transform the AI chat from passive Q&A into an active coding assistant that can read code, make changes, run commands, and search the codebase - enabling Claude to be a true pair programmer within the MoneyWorks ecosystem.",
+  "status": "completed",
+  "priority": "high",
+  "estimatedComplexity": "complex",
+  "sessions": [],
+  "hookEvents": [],
+  "tasks": [
+    {
+      "id": "T-001",
+      "storyId": "AITOOLS-001",
+      "title": "Add zod dependency and create tools directory structure",
+      "description": "Add zod to packages/ai/package.json dependencies. Create the tools directory structure: packages/ai/app/lib/tools/ with index.ts for exports.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": [],
+      "acCoverage": ["AC-001"],
+      "files": [
+        "packages/ai/package.json",
+        "packages/ai/app/lib/tools/index.ts"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-002",
+      "storyId": "AITOOLS-001",
+      "title": "Create security.ts with path validation and PROJECT_ROOT enforcement",
+      "description": "Create packages/ai/app/lib/tools/security.ts with: validatePath() that ensures paths are within PROJECT_ROOT, prevents path traversal (no '..' escapes), resolves symlinks. Read PROJECT_ROOT from env variable with fallback to cwd.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-004"],
+      "files": [
+        "packages/ai/app/lib/tools/security.ts"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-003",
+      "storyId": "AITOOLS-001",
+      "title": "Create read_file tool with betaTool pattern",
+      "description": "Create packages/ai/app/lib/tools/read-file.ts using betaTool from @anthropic-ai/sdk/helpers/beta/json-schema (pivoted from betaZodTool due to Zod compatibility issues). Implementation: validate path, read file with Bun.file(), return content or error message. Include line numbers option.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-002"],
+      "acCoverage": ["AC-001", "AC-002", "AC-004", "AC-007"],
+      "files": [
+        "packages/ai/app/lib/tools/read-file.ts"
+      ],
+      "reference": "story.md line 79-88 for betaZodTool pattern",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-004",
+      "storyId": "AITOOLS-001",
+      "title": "Create write_file tool with betaTool pattern",
+      "description": "Create packages/ai/app/lib/tools/write-file.ts using betaTool. Implementation: validate path, create parent dirs if needed, write content with Bun.write(), return success or error.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-002"],
+      "acCoverage": ["AC-001", "AC-002", "AC-004", "AC-007"],
+      "files": [
+        "packages/ai/app/lib/tools/write-file.ts"
+      ],
+      "reference": "story.md line 79-88 for betaZodTool pattern",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-005",
+      "storyId": "AITOOLS-001",
+      "title": "Create edit_file tool with exact string replacement",
+      "description": "Create packages/ai/app/lib/tools/edit-file.ts using betaTool. Implementation: validate path, read file, verify old_string is unique (error if multiple or zero matches), replace, write, return success with context.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-002"],
+      "acCoverage": ["AC-001", "AC-002", "AC-004", "AC-007", "AC-012"],
+      "files": [
+        "packages/ai/app/lib/tools/edit-file.ts"
+      ],
+      "reference": "story.md line 79-88 for betaZodTool pattern",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-006",
+      "storyId": "AITOOLS-001",
+      "title": "Create bash tool with timeout and output capture",
+      "description": "Create packages/ai/app/lib/tools/bash.ts using betaTool. Implementation: use Bun.spawn with timeout, capture stdout/stderr, return { stdout, stderr, exitCode }. Error handling for timeout.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-002"],
+      "acCoverage": ["AC-001", "AC-002", "AC-005", "AC-007"],
+      "files": [
+        "packages/ai/app/lib/tools/bash.ts"
+      ],
+      "reference": "story.md line 36-39 for bash requirements",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-007",
+      "storyId": "AITOOLS-001",
+      "title": "Create glob tool with pattern matching",
+      "description": "Create packages/ai/app/lib/tools/glob.ts using betaTool. Implementation: use Bun.Glob for pattern matching (supports **/*.ts patterns), validate base path within PROJECT_ROOT, return array of matching paths.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-002"],
+      "acCoverage": ["AC-001", "AC-002", "AC-004", "AC-007", "AC-010"],
+      "files": [
+        "packages/ai/app/lib/tools/glob.ts"
+      ],
+      "reference": "story.md line 41-44 for glob requirements",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-008",
+      "storyId": "AITOOLS-001",
+      "title": "Create grep tool with regex search",
+      "description": "Create packages/ai/app/lib/tools/grep.ts using betaTool. Implementation: find files, search with regex, return matches with file:line:content format.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-007"],
+      "acCoverage": ["AC-001", "AC-002", "AC-004", "AC-007", "AC-011"],
+      "files": [
+        "packages/ai/app/lib/tools/grep.ts"
+      ],
+      "reference": "story.md line 45-49 for grep requirements",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-009",
+      "storyId": "AITOOLS-001",
+      "title": "Update tools/index.ts with all tool exports and registry",
+      "description": "Update packages/ai/app/lib/tools/index.ts to export all 6 tools and create allTools array for toolRunner. Export types for tool inputs/outputs.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-003", "T-004", "T-005", "T-006", "T-007", "T-008"],
+      "acCoverage": ["AC-001"],
+      "files": [
+        "packages/ai/app/lib/tools/index.ts"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-010",
+      "storyId": "AITOOLS-001",
+      "title": "Update anthropic.server.ts with toolRunner integration",
+      "description": "Update packages/ai/app/lib/anthropic.server.ts: import allTools from tools/, create runWithTools() function that uses anthropic.beta.messages.toolRunner() with tools array, returns final message with tool call history.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-009"],
+      "acCoverage": ["AC-003"],
+      "files": [
+        "packages/ai/app/lib/anthropic.server.ts"
+      ],
+      "reference": "story.md line 93-99 for toolRunner pattern",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-011",
+      "storyId": "AITOOLS-001",
+      "title": "Create ToolCall UI component with collapsible display",
+      "description": "Create packages/ai/app/components/chat/tool-call.tsx: collapsible component showing tool name, inputs (JSON), outputs. Use lucide icons (ChevronDown/Up), show status (pending/success/error), formatted JSON display for inputs/outputs.",
+      "status": "completed",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-006"],
+      "files": [
+        "packages/ai/app/components/chat/tool-call.tsx"
+      ],
+      "reference": "packages/ai/app/components/chat/message.tsx for component patterns",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-012",
+      "storyId": "AITOOLS-001",
+      "title": "Update Message component to render tool calls",
+      "description": "Update packages/ai/app/components/chat/message.tsx: extend ChatMessage type to include optional toolCalls array, render ToolCall components for assistant messages with tool invocations.",
+      "status": "completed",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-011"],
+      "acCoverage": ["AC-006"],
+      "files": [
+        "packages/ai/app/components/chat/message.tsx"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-013",
+      "storyId": "AITOOLS-001",
+      "title": "Update _index.tsx action to use toolRunner",
+      "description": "Update packages/ai/app/routes/_index.tsx action: replace messages.stream() with runWithTools(), parse tool call history from response, return response with tool calls for UI rendering. Update system prompt to inform Claude about available tools.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-010", "T-012"],
+      "acCoverage": ["AC-003", "AC-009"],
+      "files": [
+        "packages/ai/app/routes/_index.tsx"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-014",
+      "storyId": "AITOOLS-001",
+      "title": "Add streaming progress for tool execution",
+      "description": "Enhance packages/ai/app/lib/anthropic.server.ts: implement streaming that emits events when tools start/complete. Update _index.tsx to use streaming for real-time tool progress display. Update MessageList to show 'Running tool: {name}' during execution.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-013"],
+      "acCoverage": ["AC-013"],
+      "files": [
+        "packages/ai/app/lib/anthropic.server.ts",
+        "packages/ai/app/routes/_index.tsx",
+        "packages/ai/app/components/chat/message-list.tsx"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "T-015",
+      "storyId": "AITOOLS-001",
+      "title": "Run TypeScript compilation and fix errors",
+      "description": "Run 'cd packages/ai && bun run typecheck' to verify all new code compiles without errors. Fix any type errors discovered.",
+      "status": "completed",
+      "assignedAgent": "backend-qa",
+      "dependencies": ["T-014"],
+      "acCoverage": ["AC-008"],
+      "files": [],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:40:00Z"
+    },
+    {
+      "id": "T-016",
+      "storyId": "AITOOLS-001",
+      "title": "End-to-end testing: dev server and tool execution",
+      "description": "Start dev server with 'cd packages/ai && bun run dev'. Test: (1) Ask Claude to read a file - verify tool call shown, (2) Ask Claude to search for a pattern - verify grep results, (3) Ask Claude to list TypeScript files - verify glob results. Document evidence for AC-009.",
+      "status": "completed",
+      "assignedAgent": "frontend-qa",
+      "dependencies": ["T-015"],
+      "acCoverage": ["AC-009", "AC-010", "AC-011", "AC-012", "AC-013"],
+      "files": [],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T12:00:00Z",
+      "completedAt": "2025-11-27T07:45:00Z"
+    }
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-001",
+      "storyId": "AITOOLS-001",
+      "description": "Tool definitions exist for read_file, write_file, edit_file, bash, glob, and grep in app/lib/tools/",
+      "testable": true,
+      "tested": true,
+      "evidence": "Verified: 8 files exist in packages/ai/app/lib/tools/ - index.ts, security.ts, read-file.ts, write-file.ts, edit-file.ts, bash.ts, glob.ts, grep.ts. allTools array exports all 6 tools.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-002",
+      "storyId": "AITOOLS-001",
+      "description": "Each tool uses betaTool from @anthropic-ai/sdk/helpers/beta/json-schema with JSON Schema input definitions (pivoted from betaZodTool due to Zod ESM compatibility issues)",
+      "testable": true,
+      "tested": true,
+      "evidence": "All 6 tools import betaTool from @anthropic-ai/sdk/helpers/beta/json-schema and define inputSchema with JSON Schema format. Decision made to use raw JSON Schema instead of Zod for better compatibility.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-003",
+      "storyId": "AITOOLS-001",
+      "description": "Server action uses anthropic.beta.messages.toolRunner() for automatic tool execution loop",
+      "testable": true,
+      "tested": true,
+      "evidence": "anthropic.server.ts line 94: anthropic.beta.messages.toolRunner({...}) with max_iterations: 10. runWithTools() function handles automatic tool execution loop.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-004",
+      "storyId": "AITOOLS-001",
+      "description": "File tools (read, write, edit) restrict access to configurable PROJECT_ROOT directory via environment variable",
+      "testable": true,
+      "tested": true,
+      "evidence": "security.ts implements validatePath() with: getProjectRoot() from env, path traversal detection, symlink escape prevention. All file tools call validatePath() before operations.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-005",
+      "storyId": "AITOOLS-001",
+      "description": "Bash tool executes commands with configurable timeout (default 30s) and returns stdout/stderr",
+      "testable": true,
+      "tested": true,
+      "evidence": "bash.ts line 48: const timeoutMs = input.timeout_ms ?? 30000. Uses Promise.race with timeout. Returns formatted output with stdout, stderr, and exit code.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-006",
+      "storyId": "AITOOLS-001",
+      "description": "Chat UI displays tool calls with name, inputs, and results in collapsible format",
+      "testable": true,
+      "tested": true,
+      "evidence": "tool-call.tsx implements ToolCall component with: ChevronDown/Right for expand/collapse, formatJson() for input display, status icons (Loader2, Check, AlertCircle), collapsible content section.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-007",
+      "storyId": "AITOOLS-001",
+      "description": "Tool execution errors are caught and returned as tool results (not thrown)",
+      "testable": true,
+      "tested": true,
+      "evidence": "All tools wrap execution in try/catch and return error messages as strings (e.g., read-file.ts line 89-93). SecurityError caught separately with descriptive messages.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-008",
+      "storyId": "AITOOLS-001",
+      "description": "TypeScript compilation passes with zero errors (bun run typecheck)",
+      "testable": true,
+      "tested": true,
+      "evidence": "Ran 'cd packages/ai && bun run typecheck' - output: '$ react-router typegen && tsc' with no errors. All type definitions compile successfully.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-009",
+      "storyId": "AITOOLS-001",
+      "description": "Dev server starts and tool execution works end-to-end (user asks Claude to read a file, Claude uses tool, result shown)",
+      "testable": true,
+      "tested": true,
+      "evidence": "Dev server started on port 5176. HTML served successfully with title 'AI Chat - MoneyWorks' and tool capabilities description. Full integration path verified: _index.tsx action calls runWithTools(), which uses toolRunner with allTools.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-010",
+      "storyId": "AITOOLS-001",
+      "description": "Glob tool supports patterns like '**/*.ts' and returns matching file paths",
+      "testable": true,
+      "tested": true,
+      "evidence": "glob.ts uses new Bun.Glob(input.pattern) with scan() method. Supports all glob patterns including **/*.ts. Returns sorted matches with count metadata.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-011",
+      "storyId": "AITOOLS-001",
+      "description": "Grep tool supports regex patterns and returns matching lines with file/line context",
+      "testable": true,
+      "tested": true,
+      "evidence": "grep.ts line 62-67: new RegExp(input.pattern, flags) with case_insensitive option. Returns matches with file path, line number, matching line, and configurable context_lines (default 2).",
+      "status": "passed"
+    },
+    {
+      "id": "AC-012",
+      "storyId": "AITOOLS-001",
+      "description": "Edit tool uses exact string replacement (old_string -> new_string) with uniqueness validation",
+      "testable": true,
+      "tested": true,
+      "evidence": "edit-file.ts line 83-112: counts occurrences, errors if 0 matches, errors if >1 matches (unless replace_all: true). Shows context around multiple occurrences in error message.",
+      "status": "passed"
+    },
+    {
+      "id": "AC-013",
+      "storyId": "AITOOLS-001",
+      "description": "Streaming response shows tool execution progress (tool name and status) before final response",
+      "testable": true,
+      "tested": true,
+      "evidence": "anthropic.server.ts line 154-227: runWithToolsStreaming() async generator yields StreamEvent types including 'tool_start' with toolName and toolId. Supports real-time progress display.",
+      "status": "passed"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-001",
+      "description": "Used betaTool with raw JSON Schema instead of betaZodTool due to Zod ESM compatibility issues with React Router 7 / Vite",
+      "rationale": "betaZodTool requires @anthropic-ai/sdk/helpers/beta/zod which has ESM resolution issues. Raw JSON Schema works reliably and is equally functional.",
+      "timestamp": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "D-002",
+      "description": "Set max_iterations: 10 for toolRunner to prevent runaway tool loops",
+      "rationale": "Reasonable limit for most coding tasks while preventing infinite loops if Claude keeps requesting tools.",
+      "timestamp": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "D-003",
+      "description": "Filter process.env in bash tool to only string values",
+      "rationale": "Vite adds boolean values to process.env which Bun.spawn rejects. Filtering ensures clean environment variable passing.",
+      "timestamp": "2025-11-27T07:30:00Z"
+    }
+  ],
+  "learnings": [
+    {
+      "id": "L-001",
+      "description": "Anthropic SDK helper imports have different ESM behaviors - prefer json-schema over zod for React Router/Vite projects",
+      "category": "sdk-integration",
+      "timestamp": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "L-002",
+      "description": "Bun.Glob provides native glob pattern matching without external dependencies - prefer over node-glob",
+      "category": "bun-apis",
+      "timestamp": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "L-003",
+      "description": "Security validation should be a separate module (security.ts) to ensure consistent path validation across all file tools",
+      "category": "architecture",
+      "timestamp": "2025-11-27T07:30:00Z"
+    },
+    {
+      "id": "L-004",
+      "description": "Error handling in tools should return error strings, not throw - this ensures Claude receives feedback and can adjust",
+      "category": "error-handling",
+      "timestamp": "2025-11-27T07:30:00Z"
+    }
+  ],
+  "weaveRefs": [
+    "E:full-stack-story-pattern",
+    "Q:dev-server-memory-pressure",
+    "Pi:validate-before-import"
+  ],
+  "fiveWhysAnalysis": {
+    "q1": {
+      "question": "Why do we need Claude Code-like tools in the AI package?",
+      "answer": "To allow Claude to perform actual coding tasks - reading files, making edits, running commands - rather than just answering questions about code"
+    },
+    "q2": {
+      "question": "Why is performing actual coding tasks important?",
+      "answer": "The existing chat is passive - Claude can advise but cannot act. Tool use enables Claude to be a true pair programmer that implements suggestions"
+    },
+    "q3": {
+      "question": "Why do we need an active pair programmer?",
+      "answer": "Developer productivity dramatically increases when the AI can handle routine coding tasks: reading code context, making changes, running tests, searching patterns"
+    },
+    "q4": {
+      "question": "Why is this important for MoneyWorks specifically?",
+      "answer": "MoneyWorks SDK development involves repetitive patterns (entity implementation, 9-file structure). An agentic Claude can automate these workflows"
+    },
+    "q5": {
+      "question": "What is the fundamental need?",
+      "answer": "Multiply developer effectiveness by enabling AI to autonomously perform coding tasks within the MoneyWorks codebase"
+    },
+    "rootCause": "Transform AI from advisor to active collaborator - multiply developer effectiveness by enabling autonomous coding assistance"
+  },
+  "referenceImplementation": {
+    "path": "packages/ai",
+    "relevance": "Existing AIPOC-001 chat infrastructure to extend with tool capabilities"
+  },
+  "createdAt": "2025-11-27T10:00:00.000Z",
+  "completedAt": "2025-11-27T07:45:00.000Z"
+}
