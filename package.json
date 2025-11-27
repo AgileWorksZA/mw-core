@@ -6,14 +6,18 @@
     "dev": "bun run --watch src/index.ts",
     "build": "bun build ./src/index.ts --outdir ./dist --target bun",
     "build2": "bun build \\\n\t--compile \\\n\t--minify-whitespace \\\n\t--minify-syntax \\\n\t--target bun \\\n\t--outfile server \\\n\t./src/index.ts",
-    "start": "bun ./dist/index.js"
+    "start": "bun ./dist/index.js",
+    "snitch": "bun run moneyworks-mcp.ts"
   },
   "dependencies": {
     "@elysiajs/swagger": "^1.2.2",
-    "@modelcontextprotocol/sdk": "^1.7.0",
+    "@google/genai": "^0.6.1",
+    "@modelcontextprotocol/sdk": "^1.8.0",
     "@smithery/sdk": "^1.0.2",
     "@types/xml2js": "^0.4.14",
+    "ai": "^4.2.4",
     "axios": "^1.6.8",
+    "dotenv": "^16.4.7",
     "elysia": "latest",
     "fast-xml-parser": "^4.3.6",
     "jsdom": "^26.0.0",
