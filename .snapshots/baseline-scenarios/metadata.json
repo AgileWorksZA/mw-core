@@ -1,0 +1,16 @@
+{
+  "label": "baseline-scenarios",
+  "timestamp": "2025-11-26T22:51:50.757Z",
+  "tables": [
+    "TaxRate",
+    "Name",
+    "Account",
+    "Product",
+    "Transaction",
+    "Detail",
+    "Job",
+    "Payments",
+    "General"
+  ],
+  "totalRecords": 5237
+}

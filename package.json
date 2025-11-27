@@ -21,7 +21,8 @@
 		"mcp:start": "bun --cwd packages/mcp-server start",
 		"api": "bun --cwd packages/api dev",
 		"api:start": "bun --cwd packages/api start",
-		"api:build": "bun run build:deps && bun --cwd packages/api build"
+		"api:build": "bun run build:deps && bun --cwd packages/api build",
+		"ai": "bun --cwd packages/ai dev"
 	},
 	"type": "module",
 	"workspaces": ["packages/*"],

@@ -95,6 +95,33 @@
 			"tradeoff": "Adds complexity to role enum, but enables full MW compatibility",
 			"confidence": 0.9,
 			"context": "CONT-001 D-002: Extended beyond 16-bit for backward compatibility"
+		},
+		"radix-over-native-html": {
+			"id": "radix-over-native-html",
+			"option": "Use Radix UI primitives for chat UI components",
+			"rejectedBecause": "React 18/19 type conflicts in monorepo cause Radix components to show type errors",
+			"currentApproach": "Use native HTML elements (button, input, scroll div) with Tailwind styling",
+			"tradeoff": "Less abstraction and accessibility built-in, but avoids type system issues",
+			"confidence": 0.95,
+			"context": "AIPOC-001 D-001: Native HTML chosen over Radix due to type conflicts"
+		},
+		"json-in-response-vs-code-blocks": {
+			"id": "json-in-response-vs-code-blocks",
+			"option": "Return artifact JSON inline within AI response text",
+			"rejectedBecause": "Inline JSON mixes with conversational text, harder to parse reliably",
+			"currentApproach": "Use fenced ```artifacts code blocks for structured artifact data",
+			"tradeoff": "Requires regex parsing, but provides clean separation of text and data",
+			"confidence": 0.95,
+			"context": "ARTF-001 D-001: Code block format chosen for artifact data transport"
+		},
+		"full-pl-sections-vs-simplified-summary": {
+			"id": "full-pl-sections-vs-simplified-summary",
+			"option": "Include full P&L sections in daily transaction summary",
+			"rejectedBecause": "Sample MoneyWorks report shows simplified transaction type format, not full P&L",
+			"currentApproach": "Use simplified format: Type, Gross, GST, Nett, Count matching MW canonical report",
+			"tradeoff": "Less detail, but aligns with MoneyWorks report structure and keeps focused",
+			"confidence": 0.95,
+			"context": "DTXN-001 D-001: Chose simplified data model to match MoneyWorks Daily Transaction Summary format"
 		}
 	},
 	"possibleFutures": {
@@ -124,14 +151,68 @@
 			"blockers": "None - just needs registration in TableRegistry",
 			"outcome": "Product moves from 'upcoming' to 'available' status",
 			"confidence": 1.0
+		},
+		"ai-package-tool-use": {
+			"id": "ai-package-tool-use",
+			"future": "COMPLETED - Extend packages/ai with Anthropic Agent SDK tool use capabilities",
+			"likelihood": "completed",
+			"timeline": "Completed 2025-11-27",
+			"dependencies": [
+				"AIPOC-001 POC validates architecture ✅",
+				"Tool definitions for file operations ✅",
+				"Security review of tool permissions ✅"
+			],
+			"enabledBy": [
+				"packages/ai POC with streaming chat",
+				"Anthropic Agent SDK integration pattern",
+				"React Router 7 server actions"
+			],
+			"outcome": "AI assistant can read/write files, execute bash, search codebase via 6 tools",
+			"confidence": 1.0
+		},
+		"ai-skills-for-reports": {
+			"id": "ai-skills-for-reports",
+			"future": "Add Anthropic Skills API for generating polished Excel/PDF reports from MoneyWorks data",
+			"likelihood": "high",
+			"timeline": "Next feature after AITOOLS-001",
+			"dependencies": [
+				"AITOOLS-001 provides data fetching via tools ✅",
+				"Skills API integration (code-execution-2025-08-25 beta header)",
+				"xlsx/pdf skill configuration"
+			],
+			"enabledBy": [
+				"Tools fetch live MoneyWorks data",
+				"Skills generate formatted documents in sandbox",
+				"Hybrid architecture: tools for data, skills for presentation"
+			],
+			"outcome": "AI generates Executive Summary XLSX/PDF reports from live MoneyWorks data",
+			"confidence": 0.85
+		},
+		"ai-moneyworks-query-tools": {
+			"id": "ai-moneyworks-query-tools",
+			"future": "Add MoneyWorks-specific tools: query_accounts, get_transactions, run_report",
+			"likelihood": "high",
+			"timeline": "Next iteration of AI package",
+			"dependencies": [
+				"AITOOLS-001 establishes tool architecture ✅",
+				"@moneyworks/data SDK integration",
+				"Authentication handling for MW API calls"
+			],
+			"enabledBy": [
+				"betaTool pattern established",
+				"toolRunner integration working",
+				"Security validation module ready"
+			],
+			"outcome": "AI can directly query MoneyWorks data, analyze accounts, generate financial insights",
+			"confidence": 0.9
 		}
 	},
 	"metadata": {
 		"totalAlternatives": 2,
-		"totalRejectedOptions": 5,
-		"totalPossibleFutures": 2,
-		"averageConfidence": 0.91,
+		"totalRejectedOptions": 8,
+		"totalPossibleFutures": 5,
+		"averageConfidence": 0.92,
 		"lastCompaction": null,
-		"lastUpdated": "2025-11-25T12:00:00.000Z"
+		"lastUpdated": "2025-11-27T20:30:00.000Z"
 	}
 }

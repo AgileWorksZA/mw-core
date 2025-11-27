@@ -1,0 +1,1336 @@
+-1-
+
+MoneyWorks User Guide
+
+MoneyWorks User Guide
+
+19th Edition for MoneyWorks 9.2.1
+
+© 1992-2025, Cognito Software Ltd, All Rights Reserved.
+
+Acknowledgements
+
+Concept: Grant Cowie
+
+Design and Programming: Rowan Daniell
+
+Documentation: Grant Cowie, Rowan Daniell
+
+Special thanks to: Our MoneyWorks support consultants and our users, whose
+enthusiasm and ideas over the past three decades have served to make
+MoneyWorks the great product it is.
+
+Licence: This manual and the software therein described (MoneyWorks) are protected by
+copyright and are the exclusive property of Cognito Software Ltd and all rights are
+reserved. Cognito Software Ltd grants you licence to use this manual and software
+according to the clauses herein stated and your continued use of them confirms your
+agreement. The software may not, in whole or in part, be copied, reproduced, translated
+or reduced to any machine readable form without prior consent in writing from Cognito
+Software Ltd, except as a backup copy. This manual may not, in whole or in part, be
+copied, reproduced, translated or reduced to any machine readable form without prior
+consent in writing from Cognito Software Ltd. As final user, since this software is subject
+to the licence agreement, you may use this software only on one computer at a time,
+unless you have a separate licence for making further copies.
+
+Limited Warranty: Limited warranty on disk only, if supplied. To the original buyer only,
+Cognito Software Ltd warrants the disk on which this product is recorded as being free of
+defects in material and workmanship under normal use. Your sole and exclusive remedy
+in the event of a defect in material or workmanship under normal use is expressly limited
+to replacement of the defective item. To obtain replacement, promptly return the
+
+defective item to Cognito Software Ltd.
+
+No warranty on product software or manuals. Even though Cognito Software Ltd has
+tested the software and manual and reviewed their contents, Cognito Software Ltd and
+its distributors and dealers make no warranties, either expressed or implied, with respect
+to their fitness for a particular purpose. The program and the manuals are distributed
+solely on an “as is” basis. The entire risk as to their quality and performance is with you.
+Should either the software or the manuals or both prove defective, you, and not Cognito
+Software Ltd or its distributors or dealers, assume the entire cost of all necessary
+servicing, repair, or correction. Cognito Software Ltd and its distributors and dealers will
+not be liable for direct, indirect, incidental, or consequential damages resulting from any
+defect in the software or manual, even if they have been advised of the possibility of
+such damage.
+
+Nothing herein is intended to exclude, restrict or modify any rights, conditions or
+warranties implied by law and which by law cannot be excluded, restricted or modified.
+
+Licenced Fonts: Some fonts are subject to a licence granted by the owner of the font.
+This licence may provide that the font may NOT be embedded or otherwise distributed
+without a licence from the font owner. Users of the software are responsible for
+obtaining the necessary licence from the owner of the aforementioned fonts if the user
+wishes to embed them. Failure to obtain the necessary licences may expose the user to
+legal claims by the owners of these fonts. Cognito Software Ltd and its suppliers assume
+no responsibility for such claims.
+
+Copyrights: MoneyWorks program and documentation copyright © 1992-2017 Cognito
+Software Ltd. All rights reserved. Information in these documents is subject to change
+without notice and does not represent a commitment on the part of Cognito Software
+Ltd. It is against the law to copy the MoneyWorks program on magnetic tape, disk or any
+other medium for any purpose other than as an archival copy for the purchaser’s
+personal use. It is against the law to copy all or a portion of the MoneyWorks manual
+other than for the purchaser’s personal use.
+
+Trademarks: MoneyWorks® is a registered trademark of Cognito Software Ltd.
+
+Disclaimer: The personal and company names used in this manual and all example
+material are purely fictional. Any similarity to real people or companies is entirely
+coincidental.
+
+-2-
+
+Table of Contents
+
+Table of Contents
+
+Welcome to MoneyWorks . . . . . . . . . . . . . . . . . . . . . . . . 13
+Using This Guide . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .13
+
+Differences in Operation under MacOS and
+
+Windows  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .14
+If You have Problems  . . . . . . . . . . . . . . . . . . . . . . . . . . . .14
+Installing MoneyWorks  . . . . . . . . . . . . . . . . . . . . . . . . . .15
+The First Time you Run MoneyWorks . . . . . . . . . . . . . . .15
+Registering your copy of MoneyWorks  . . . . . . . . . . . .16
+MoneyWorks Updates  . . . . . . . . . . . . . . . . . . . . . . . . .16
+Getting Started  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+Quick Start  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .18
+Setup Information Required  . . . . . . . . . . . . . . . . . . . . . .19
+Setup Definitions  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .20
+Creating Your New File . . . . . . . . . . . . . . . . . . . . . . . . . . .20
+Setup Information  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .21
+Company Information . . . . . . . . . . . . . . . . . . . . . . . . . .21
+Periods  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .22
+Chart of Accounts  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .24
+Accounting for GST, VAT or Sales Tax . . . . . . . . . . . . . .25
+Accepting Your Setup  . . . . . . . . . . . . . . . . . . . . . . . . . .26
+The Setup Account  . . . . . . . . . . . . . . . . . . . . . . . . . . . .26
+Bank Balances  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .26
+Manually Entered Bank Balances  . . . . . . . . . . . . . . . .27
+Check Your Tax Rates  . . . . . . . . . . . . . . . . . . . . . . . . . . . .27
+Entering Outstanding Information  . . . . . . . . . . . . . . . . .28
+Accounting for Unpresented Items  . . . . . . . . . . . . . . .29
+Entering Opening Payables & Receivables  . . . . . . . . .29
+Entering your Opening Stock  . . . . . . . . . . . . . . . . . . . .32
+The Setup GST Report . . . . . . . . . . . . . . . . . . . . . . . . . .33
+Entering your Balance Sheet  . . . . . . . . . . . . . . . . . . . .33
+Removing the Setup Account . . . . . . . . . . . . . . . . . . . .34
+Managing Your File  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+Opening Your Document  . . . . . . . . . . . . . . . . . . . . . . .35
+Saving Your Document  . . . . . . . . . . . . . . . . . . . . . . . . .36
+Changing Documents  . . . . . . . . . . . . . . . . . . . . . . . . . .36
+Document Rollback or Revert  . . . . . . . . . . . . . . . . . . .36
+Document File Size  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .37
+Protecting Your Document  . . . . . . . . . . . . . . . . . . . . . . .38
+Creating a Password  . . . . . . . . . . . . . . . . . . . . . . . . . . .39
+Changing a Password  . . . . . . . . . . . . . . . . . . . . . . . . . .39
+Removing a Password . . . . . . . . . . . . . . . . . . . . . . . . . .39
+Opening a Document with a Password  . . . . . . . . . . . .39
+Backing Up Your Document  . . . . . . . . . . . . . . . . . . . . . . .40
+
+Creating a Backup Copy  . . . . . . . . . . . . . . . . . . . . . . . 40
+To Restore a Backup  . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+The Log File  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+Moving Your File to a Different Platform  . . . . . . . . . . . 42
+Communicating with Your Accountant  . . . . . . . . . . . . . 43
+Accountant’s Export  . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+Dropbox Sharing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 44
+Diagnostics  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 44
+Graphics and Logos . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+Managing Your Plug-ins  . . . . . . . . . . . . . . . . . . . . . . . . . 45
+MoneyWorks Now  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+Creating a MoneyWorks Now Account in MoneyWorks 48
+Migrating a MoneyWorks Document into the
+MoneyWorks Now cloud  . . . . . . . . . . . . . . . . . . . . . . . . 49
+
+Granting access to your MoneyWorks Now
+
+document  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 50
+Having Access Granted  . . . . . . . . . . . . . . . . . . . . . . . . 50
+MoneyWorks Services, Support and Maintenance  . . . . 52
+Accessing/Managing MoneyWorks Services  . . . . . . . . 52
+Registering your MoneyWorks File  . . . . . . . . . . . . . . 53
+Lodging a Credit Card  . . . . . . . . . . . . . . . . . . . . . . . . . 53
+Updating/Deleting a Lodged Credit Card  . . . . . . . . . 54
+MoneyWorks Support Details  . . . . . . . . . . . . . . . . . . 54
+Enabling a MoneyWorks Service  . . . . . . . . . . . . . . . . 54
+Renewing a Charged Service  . . . . . . . . . . . . . . . . . . . 54
+Disabling a MoneyWorks Service . . . . . . . . . . . . . . . . 55
+How MoneyWorks Services Work  . . . . . . . . . . . . . . . 55
+MoneyWorks Maintenance  . . . . . . . . . . . . . . . . . . . . . . 55
+Renewing your maintenance later . . . . . . . . . . . . . . . 56
+Chart of Accounts  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57
+Simple Chart of Accounts  . . . . . . . . . . . . . . . . . . . . . . 58
+Deciding on Your Chart of Accounts  . . . . . . . . . . . . . 58
+Security on your Accounts  . . . . . . . . . . . . . . . . . . . . . 59
+Structuring your Accounts  . . . . . . . . . . . . . . . . . . . . . 59
+Multilevel Account Structures  . . . . . . . . . . . . . . . . . . 59
+Creation Order of Your Chart of Accounts . . . . . . . . . 60
+Moneyworks Accounts . . . . . . . . . . . . . . . . . . . . . . . . . . 60
+Account Types  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 62
+Cloning an Existing MoneyWorks Document  . . . . . . . . 62
+Maintaining your Chart of Accounts  . . . . . . . . . . . . . . . 63
+The Accounts List  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 63
+Creating a new Account  . . . . . . . . . . . . . . . . . . . . . . . 63
+Bank Settings  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 65
+Digression on Credit Cards  . . . . . . . . . . . . . . . . . . . . . 66
+Comments  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 67
+Cashflow Reporting . . . . . . . . . . . . . . . . . . . . . . . . . . . 67
+Modifying an Account . . . . . . . . . . . . . . . . . . . . . . . . . 67
+
+-3-
+
+Changing an Account Code . . . . . . . . . . . . . . . . . . . . . 68
+Changing the Account Type  . . . . . . . . . . . . . . . . . . . . 68
+Changing the Security Level  . . . . . . . . . . . . . . . . . . . . 68
+Deleting an Account  . . . . . . . . . . . . . . . . . . . . . . . . . . 68
+Account Categories . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 69
+Company Details  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 70
+The Navigator . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 73
+Navigator Overview  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 73
+Getting Started  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 73
+Navigation  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 73
+Dashboard  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 74
+The Calendar  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 75
+Accessing the Calendar through mwScript  . . . . . . . . 77
+Using the Navigator  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 77
+Customising the Navigator  . . . . . . . . . . . . . . . . . . . . . 78
+Entry Windows, Data Validation and Sticky Notes  . . . . 79
+Anatomy of an Entry Window  . . . . . . . . . . . . . . . . . . 79
+Entry and Validation where a Code is Required  . . . . . . 81
+Drop Down Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 81
+Choices Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 82
+Creating a Record “On the Fly”  . . . . . . . . . . . . . . . . . . . 84
+Custom Validation Lists . . . . . . . . . . . . . . . . . . . . . . . . . . 84
+Creating a Validation List  . . . . . . . . . . . . . . . . . . . . . . 84
+Assigning a validation to an entry field  . . . . . . . . . . . 86
+Sticky Notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 88
+Working with Lists  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 90
+The Toolbar  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 91
+Selecting Records in a List  . . . . . . . . . . . . . . . . . . . . . . . 92
+Manipulating Records in a List  . . . . . . . . . . . . . . . . . . . . 93
+Sorting Records  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 93
+Locating a Record  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 95
+Finding Records using the Search Box  . . . . . . . . . . . . 95
+Find by Field . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 96
+Find by Formula . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 97
+Useful List Operations  . . . . . . . . . . . . . . . . . . . . . . . . . . 99
+Summing Selected Records  . . . . . . . . . . . . . . . . . . . . 99
+Colouring Records  . . . . . . . . . . . . . . . . . . . . . . . . . . . 100
+Find Related  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 100
+Replace Commands . . . . . . . . . . . . . . . . . . . . . . . . . . 103
+Copy and Paste  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 106
+Reading Records  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 106
+Customising Your List  . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+List Filters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 109
+Creating Filters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 110
+Modifying and Deleting Filters  . . . . . . . . . . . . . . . . . 111
+Printing and emailing  . . . . . . . . . . . . . . . . . . . . . . . . . . 112
+Page Settings  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 113
+
+Table of Contents
+
+Output Settings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 114
+Preview  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 114
+Output to Printer  . . . . . . . . . . . . . . . . . . . . . . . . . . . 114
+Output for email  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 115
+Output to Disk . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+Output to Excel, Word and Numbers  . . . . . . . . . . . 116
+Output to Clipboard  . . . . . . . . . . . . . . . . . . . . . . . . . 116
+Output to PDF  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+The Preview Window  . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+Changing the Margins and Leading . . . . . . . . . . . . . . . 118
+Printing Forms  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 119
+Printing a Form for the first time  . . . . . . . . . . . . . . . 119
+Messages on Forms  . . . . . . . . . . . . . . . . . . . . . . . . . 120
+Setting the default form  . . . . . . . . . . . . . . . . . . . . . . 121
+Choosing the start label  . . . . . . . . . . . . . . . . . . . . . . 121
+Printing Issues . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 121
+Using the Default Printer on Windows  . . . . . . . . . . 122
+Transactions  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 123
+Accessing and Viewing Transactions . . . . . . . . . . . . . . 123
+Viewing Transaction Lines  . . . . . . . . . . . . . . . . . . . . . . 123
+The Transaction Entry Window  . . . . . . . . . . . . . . . . . . 124
+Transaction Toolbar  . . . . . . . . . . . . . . . . . . . . . . . . . 124
+Transaction Fields  . . . . . . . . . . . . . . . . . . . . . . . . . . . 125
+Transaction Entry  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 127
+Entering a Transaction  . . . . . . . . . . . . . . . . . . . . . . . 127
+Delivery and Mail Addresses  . . . . . . . . . . . . . . . . . . 128
+Entering Detail Lines  . . . . . . . . . . . . . . . . . . . . . . . . . 129
+Entering Detail Lines by Account  . . . . . . . . . . . . . . . 130
+Entering Detail Lines by Item  . . . . . . . . . . . . . . . . . . 131
+Removing detail lines  . . . . . . . . . . . . . . . . . . . . . . . . 132
+Inserting Detail Lines  . . . . . . . . . . . . . . . . . . . . . . . . 133
+Reordering Detail Lines  . . . . . . . . . . . . . . . . . . . . . . 133
+Changing between By Accountand By ItemEntry  . 133
+Recording Jobs in Transactions  . . . . . . . . . . . . . . . . 133
+Adjusting GST/VAT/TAX Rounding  . . . . . . . . . . . . . . 134
+Sales Tax Override (USA and Canada Only) . . . . . . . 134
+Storing Source Images  . . . . . . . . . . . . . . . . . . . . . . . . . 135
+Transaction Entry Goodies . . . . . . . . . . . . . . . . . . . . . . 136
+Auto-Allocation  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 136
+Entering Details by Percentage  . . . . . . . . . . . . . . . . 136
+Entering the Transaction Date  . . . . . . . . . . . . . . . . . 137
+Using Calculations in Transactions . . . . . . . . . . . . . . 137
+Opening Your System Calculator  . . . . . . . . . . . . . . . 138
+Entering Long Text in Transactions  . . . . . . . . . . . . . 138
+Changing Field Attributes  . . . . . . . . . . . . . . . . . . . . . 138
+Displaying Margin Information  . . . . . . . . . . . . . . . . 139
+The Salesperson Field  . . . . . . . . . . . . . . . . . . . . . . . . 139
+
+Modifying and Deleting Transactions  . . . . . . . . . . . . . 139
+Changing Details of Transactions  . . . . . . . . . . . . . . . 140
+Duplicating a Transaction  . . . . . . . . . . . . . . . . . . . . . 140
+Deleting Transactions  . . . . . . . . . . . . . . . . . . . . . . . . 141
+Reversing Transactions  . . . . . . . . . . . . . . . . . . . . . . . 141
+Information on a Transaction Record  . . . . . . . . . . . 142
+Printing Transactions  . . . . . . . . . . . . . . . . . . . . . . . . . . 142
+Printing a Transaction List . . . . . . . . . . . . . . . . . . . . . 142
+Printing Invoices, Receipts and other Transaction
+
+Forms  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 143
+Printing Multiple Forms  . . . . . . . . . . . . . . . . . . . . . . 144
+Emailing Forms  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 145
+Posting Transactions . . . . . . . . . . . . . . . . . . . . . . . . . . . 147
+Recurring Transactions  . . . . . . . . . . . . . . . . . . . . . . . . . 147
+Making a Recurring Transaction . . . . . . . . . . . . . . . . 147
+Entering an Automatic Reversing Transaction  . . . . 149
+Changing the Recurrence Properties . . . . . . . . . . . . 150
+Stopping a Recurring Transaction  . . . . . . . . . . . . . . 150
+Finding Recurring Transactions  . . . . . . . . . . . . . . . . 150
+Setting up an Auto-Allocation for “Cash” Transactions 150
+To create a rule  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 151
+Test Conditions  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 152
+This expression  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 153
+Manually invoked rules . . . . . . . . . . . . . . . . . . . . . . . 153
+Cash Transactions  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 154
+Entering Payments  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 154
+Entering Receipts  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 156
+Printing Tax Receipts  . . . . . . . . . . . . . . . . . . . . . . . . . . 158
+Bank to Bank Transfers  . . . . . . . . . . . . . . . . . . . . . . . . . 158
+The Banking Command  . . . . . . . . . . . . . . . . . . . . . . . . 159
+To View the Items in a Banking  . . . . . . . . . . . . . . . . 160
+Manual Electronic Payments  . . . . . . . . . . . . . . . . . . . . 161
+Importing Bank Statements  . . . . . . . . . . . . . . . . . . . . . 161
+Importing CSV files  . . . . . . . . . . . . . . . . . . . . . . . . . . 163
+Editing the imported transactions  . . . . . . . . . . . . . . 164
+Allocating against invoices  . . . . . . . . . . . . . . . . . . . . 165
+Auto-Reconcile  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 166
+Cautionary notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . 167
+Bank Feeds  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 167
+Linking a bank account with a MoneyWorks GL bank
+
+account . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 167
+Using Bank Feeds  . . . . . . . . . . . . . . . . . . . . . . . . . . . 169
+Bank Reconciliation  . . . . . . . . . . . . . . . . . . . . . . . . . . . 169
+Reconciling Unposted Transactions  . . . . . . . . . . . . . 172
+Saving a Reconciliation  . . . . . . . . . . . . . . . . . . . . . . . 173
+Reviewing and Reprinting a Previous Reconciliation 173
+Problems with Bank Reconciliations  . . . . . . . . . . . . 173
+
+-4-
+
+Clearing Old Bank Reconciliations  . . . . . . . . . . . . . . 174
+Names  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 175
+Creating a New Name . . . . . . . . . . . . . . . . . . . . . . . . . . 176
+Details . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 177
+Pricing and Terms  . . . . . . . . . . . . . . . . . . . . . . . . . . . 177
+Bank  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 179
+Balances/History  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 180
+Contacts  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 181
+Roles  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 182
+Contact History  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 183
+AutoCode  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 184
+Modifying and Deleting Names  . . . . . . . . . . . . . . . . . . 185
+Head Office Billing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 185
+Importing your Address Book  . . . . . . . . . . . . . . . . . . . 186
+Items, Products and Jobs  . . . . . . . . . . . . . . . . . . . . . . . 175
+The Items File  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 187
+Creating a New Item  . . . . . . . . . . . . . . . . . . . . . . . . . 187
+Modifying and Deleting Items  . . . . . . . . . . . . . . . . . 189
+Printing a Product List  . . . . . . . . . . . . . . . . . . . . . . . . 189
+Item Reports and Enquiries  . . . . . . . . . . . . . . . . . . . 190
+The Job file  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 190
+Creating a New Job  . . . . . . . . . . . . . . . . . . . . . . . . . . 190
+Modifying a Job  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 190
+Deleting a Job  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 191
+Job Tagging Reports . . . . . . . . . . . . . . . . . . . . . . . . . . 191
+Debtors and Accounts Receivable  . . . . . . . . . . . . . . . . 192
+Sending Invoices  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 192
+Entering Sales Invoices  . . . . . . . . . . . . . . . . . . . . . . . 192
+Credit Notes  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 194
+Receiving a Deposit  . . . . . . . . . . . . . . . . . . . . . . . . . . 195
+Overriding the Prompt Payment Terms  . . . . . . . . . . 196
+Putting a Sales Invoice on Hold  . . . . . . . . . . . . . . . . 196
+Printing and emailing Sales Invoices  . . . . . . . . . . . . 197
+Creating Multiple Sales Invoices . . . . . . . . . . . . . . . . 198
+Receiving Payment for Sales Invoices  . . . . . . . . . . . . . 199
+Invoice Receipts as Receipt Transactions . . . . . . . . . 199
+Batch Debtor Receipts . . . . . . . . . . . . . . . . . . . . . . . . 201
+Using a Previous Over-payment to Pay a New
+
+Invoice . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 202
+Modifying Receipts That Have Been Entered  . . . . . 203
+Printing an Allocation Summary . . . . . . . . . . . . . . . . 203
+Accepting the Batch of Debtor Receipts  . . . . . . . . . 204
+Allocating Receipts to Invoices  . . . . . . . . . . . . . . . . . 205
+Handling Overpayments  . . . . . . . . . . . . . . . . . . . . . . 206
+Write Off Option  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 207
+Printing and emailing Statements  . . . . . . . . . . . . . . . . 208
+Ageing Debtor Balances  . . . . . . . . . . . . . . . . . . . . . . . . 208
+
+Table of Contents
+
+Creditors and Accounts Payable  . . . . . . . . . . . . . . . . . . 210
+Receiving Invoices  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 210
+Entering a Purchase Invoice  . . . . . . . . . . . . . . . . . . . 211
+Credit Notes  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 212
+Paying Your Creditors  . . . . . . . . . . . . . . . . . . . . . . . . . . 213
+Paying Creditors Individually  . . . . . . . . . . . . . . . . . . 213
+Overpaying a Creditor  . . . . . . . . . . . . . . . . . . . . . . . 214
+Paying a number of creditors . . . . . . . . . . . . . . . . . . 215
+Printing Cheques . . . . . . . . . . . . . . . . . . . . . . . . . . . . 219
+Electronic Payments  . . . . . . . . . . . . . . . . . . . . . . . . . 220
+Reprinting a Cheque or Remittance  . . . . . . . . . . . . 222
+Invoice/Order Automation  . . . . . . . . . . . . . . . . . . . . . . 223
+MoneyWorks eInvoicing  . . . . . . . . . . . . . . . . . . . . . . . 223
+eInvoice Link4 account  . . . . . . . . . . . . . . . . . . . . . . . 223
+Logging into eInvoicing . . . . . . . . . . . . . . . . . . . . . . . 225
+eInvoice Settings  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 225
+Identifying Customers and Suppliers . . . . . . . . . . . . 226
+Uploading your customer and supplier information 226
+Sending an eInvoice  . . . . . . . . . . . . . . . . . . . . . . . . . 227
+Retrieving eInvoices  . . . . . . . . . . . . . . . . . . . . . . . . . 227
+Invoice Response  . . . . . . . . . . . . . . . . . . . . . . . . . . . 228
+The Link4 Dashboard  . . . . . . . . . . . . . . . . . . . . . . . . 228
+Invoice/Order PDF Scanning  . . . . . . . . . . . . . . . . . . . . 228
+Setting up  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 229
+Submitting your Customer and/or Supplier details 230
+Submitting Samples  . . . . . . . . . . . . . . . . . . . . . . . . . 230
+Retrieving Transactions  . . . . . . . . . . . . . . . . . . . . . . 230
+Purchase Order Matching  . . . . . . . . . . . . . . . . . . . . . . 230
+Adjustments  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 232
+Cancel Transaction  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 233
+Contra Invoices  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 234
+Write Off Command  . . . . . . . . . . . . . . . . . . . . . . . . . . . 235
+Return Refund to Debtor  . . . . . . . . . . . . . . . . . . . . . . . 236
+Receive Refund from Creditor  . . . . . . . . . . . . . . . . . . . 237
+General Ledger Journals  . . . . . . . . . . . . . . . . . . . . . . . 238
+Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 240
+Standard Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . 241
+Printing Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 241
+Reports with Customised Settings . . . . . . . . . . . . . . 245
+Report Settings for Report Chains  . . . . . . . . . . . . . . 246
+Index to Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 246
+Overview of Main Reports . . . . . . . . . . . . . . . . . . . . . . 247
+Aged Payables  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 247
+Aged Receivables  . . . . . . . . . . . . . . . . . . . . . . . . . . . 248
+Age by Due Date  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 249
+Backdated Transactions  . . . . . . . . . . . . . . . . . . . . . . 249
+Balance Sheet  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 250
+
+Bank Register . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 250
+Cash Flow Report  . . . . . . . . . . . . . . . . . . . . . . . . . . . 250
+Cash Forecast Report  . . . . . . . . . . . . . . . . . . . . . . . . 251
+Cash Projection Report  . . . . . . . . . . . . . . . . . . . . . . 253
+Chart of Accounts  . . . . . . . . . . . . . . . . . . . . . . . . . . . 254
+Committed Budget  . . . . . . . . . . . . . . . . . . . . . . . . . . 254
+Daily Transaction Summary  . . . . . . . . . . . . . . . . . . . 254
+Department Listing  . . . . . . . . . . . . . . . . . . . . . . . . . . 254
+Debtors/Creditors Reconciliation . . . . . . . . . . . . . . . 255
+Executive Summary . . . . . . . . . . . . . . . . . . . . . . . . . . 255
+GST/VAT Report  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 255
+GST/VAT/HST Guide Form . . . . . . . . . . . . . . . . . . . . . 255
+Ledger Daily Chart . . . . . . . . . . . . . . . . . . . . . . . . . . . 255
+Ledger Report  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 256
+Overpayments Report . . . . . . . . . . . . . . . . . . . . . . . . 256
+Profit Financial Year Forecast  . . . . . . . . . . . . . . . . . . 256
+Profit and Loss for Month/Year to Date  . . . . . . . . . 256
+Profit Monthly/Yearly Comparison  . . . . . . . . . . . . . 257
+Profit Next Year Budgets . . . . . . . . . . . . . . . . . . . . . . 257
+Profit and Loss Comparison  . . . . . . . . . . . . . . . . . . . 257
+Recurring Transactions  . . . . . . . . . . . . . . . . . . . . . . . 257
+Sales Tax Report (USA, Canada)  . . . . . . . . . . . . . . . . 257
+Statement of Cash Flows  . . . . . . . . . . . . . . . . . . . . . 258
+Tax by Currency  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 259
+Tax Coding  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 259
+Transaction Postings  . . . . . . . . . . . . . . . . . . . . . . . . . 260
+Trial Balance  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 260
+Trial Balance to Date  . . . . . . . . . . . . . . . . . . . . . . . . . 260
+Other Financial Reports  . . . . . . . . . . . . . . . . . . . . . . . . 260
+Report Column Headings  . . . . . . . . . . . . . . . . . . . . . 260
+Report Outlines  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 262
+Product and Customer Sales Reports  . . . . . . . . . . . . . 262
+Stock & Job Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . 263
+Enquiries . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 265
+Account Enquiries . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 265
+Finding Account Balances . . . . . . . . . . . . . . . . . . . . . 265
+Product Enquiry  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 269
+Customer & Supplier Enquiry  . . . . . . . . . . . . . . . . . . . 271
+Payments History  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 271
+Periods  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 274
+Managing Financial Periods  . . . . . . . . . . . . . . . . . . . 274
+The Period Management Dialog Box  . . . . . . . . . . . . 274
+Opening a New Financial Year  . . . . . . . . . . . . . . . . . 278
+Changing Period Names  . . . . . . . . . . . . . . . . . . . . . . 278
+Preferences . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 279
+MoneyWorks Preferences  . . . . . . . . . . . . . . . . . . . . . . 279
+General . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 280
+
+-5-
+
+Fonts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 281
+Keys  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 282
+Documents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 283
+Emailing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 284
+Script Security  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 285
+Document Preferences  . . . . . . . . . . . . . . . . . . . . . . . . . 286
+Data Entry  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 286
+Sequence Nos  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 288
+Startup  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 289
+Terms  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 290
+GST/VAT/Tax  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 290
+PPD (Prompt Payment Discounts)  . . . . . . . . . . . . . . 291
+Fields  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 292
+Jobs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 293
+Locale  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 294
+GST, VAT, Sales Tax & Tax Codes  . . . . . . . . . . . . . . . . . . 295
+Checking your Tax Coding . . . . . . . . . . . . . . . . . . . . . . . 295
+GST and VAT  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 295
+The GST Report  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 297
+Anatomy of the GST Report  . . . . . . . . . . . . . . . . . . . 299
+Reprinting a GST/VAT Report  . . . . . . . . . . . . . . . . . . 300
+Changing the GST Parameters  . . . . . . . . . . . . . . . . . 301
+Filling out your GST Return . . . . . . . . . . . . . . . . . . . . 301
+Paying GST/VAT in Multiple Countries . . . . . . . . . . . . . 302
+Determining the GST/VAT Liability  . . . . . . . . . . . . . . 303
+Taxable Payments Report (Australia) . . . . . . . . . . . . . . 304
+WET Tax (Australia)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 305
+Customer Accounting (Singapore)  . . . . . . . . . . . . . . . . 306
+Setting up Customer Accounting  . . . . . . . . . . . . . . . 306
+Purchasing Prescribed Goods  . . . . . . . . . . . . . . . . . . 308
+Selling Prescribed Goods  . . . . . . . . . . . . . . . . . . . . . 308
+Postponed VAT Accounting (UK)  . . . . . . . . . . . . . . . . . 308
+Special Tax Code  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 309
+Special General Ledger Codes  . . . . . . . . . . . . . . . . . 310
+Special debtor/creditor code  . . . . . . . . . . . . . . . . . . 311
+Recording your Postponed VAT  . . . . . . . . . . . . . . . . 311
+The VAT Guide and MTD  . . . . . . . . . . . . . . . . . . . . . . 312
+Making Tax Digital (UK) . . . . . . . . . . . . . . . . . . . . . . . . . 313
+Using MTD in MoneyWorks  . . . . . . . . . . . . . . . . . . . 313
+HMRC Connect window  . . . . . . . . . . . . . . . . . . . . . . 315
+Submitting your VAT  . . . . . . . . . . . . . . . . . . . . . . . . . 316
+IRD Connect (New Zealand)  . . . . . . . . . . . . . . . . . . . . . 319
+Using IRD Connect in MoneyWorks  . . . . . . . . . . . . . 319
+IRD Connect window . . . . . . . . . . . . . . . . . . . . . . . . . 320
+Submitting your GST  . . . . . . . . . . . . . . . . . . . . . . . . . 321
+Singapore On-Line Filing . . . . . . . . . . . . . . . . . . . . . . . . 324
+Singapore GST InvoiceNow  . . . . . . . . . . . . . . . . . . . . . 327
+
+Table of Contents
+
+Activating and Deactivating InvoiceNow . . . . . . . . . 327
+Submitting data to GST InvoiceNow  . . . . . . . . . . . . 328
+IRAS log  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 329
+Fiji VAT Monitoring System  . . . . . . . . . . . . . . . . . . . . . 330
+VMS Configuration  . . . . . . . . . . . . . . . . . . . . . . . . . . 330
+VMS settings  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 330
+Changes in MoneyWorks Operations  . . . . . . . . . . . 332
+Using E-SDC  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 336
+Bypassing VMS  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 337
+Printing Fiscal invoices  . . . . . . . . . . . . . . . . . . . . . . . 337
+Sales Tax and PST  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 338
+The Sales Tax Report . . . . . . . . . . . . . . . . . . . . . . . . . 338
+Paying your Sales Tax  . . . . . . . . . . . . . . . . . . . . . . . . 340
+Tax Codes  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 340
+Reversed Tax  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 343
+1099 Forms (US)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 345
+Of Budgets, Balances & Reminders . . . . . . . . . . . . . . . . 346
+Entering Budget Data  . . . . . . . . . . . . . . . . . . . . . . . . 346
+Navigating in the Budget Editor . . . . . . . . . . . . . . . . 346
+Manipulating Data  . . . . . . . . . . . . . . . . . . . . . . . . . . 348
+Copying and Pasting Data . . . . . . . . . . . . . . . . . . . . . 348
+Importing Budgets  . . . . . . . . . . . . . . . . . . . . . . . . . . 348
+Printing Budgets  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 349
+Account Balances  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 350
+Off-Ledger Values  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 350
+Reminder Messages  . . . . . . . . . . . . . . . . . . . . . . . . . . . 351
+Adding Reminder Messages . . . . . . . . . . . . . . . . . . . 352
+Deleting Reminder Messages  . . . . . . . . . . . . . . . . . 353
+Users, Privileges & Security . . . . . . . . . . . . . . . . . . . . . . 353
+MoneyWorks Security  . . . . . . . . . . . . . . . . . . . . . . . . . 353
+Password Protecting your File  . . . . . . . . . . . . . . . . . 353
+Setting up Roles  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 356
+To set up an additional user . . . . . . . . . . . . . . . . . . . 356
+To change a user’s privileges or role  . . . . . . . . . . . . 358
+To change the privileges for a role . . . . . . . . . . . . . . 358
+To delete a user or role . . . . . . . . . . . . . . . . . . . . . . . 358
+To change or remove a password  . . . . . . . . . . . . . . 358
+Logging in when you Open a document . . . . . . . . . . . 359
+Protecting Reports and Forms by Signing . . . . . . . . . . 360
+To Sign Forms and Reports . . . . . . . . . . . . . . . . . . . . 360
+MoneyWorks Security Levels . . . . . . . . . . . . . . . . . . . . 361
+MoneyWorks Privileges  . . . . . . . . . . . . . . . . . . . . . . . . 361
+Copying Settings between users  . . . . . . . . . . . . . . . 363
+MoneyWorks Procedures Wiki  . . . . . . . . . . . . . . . . . . . 364
+Accessing the Wiki  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 364
+Editing a Wiki Page  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 365
+Deleting a Wiki page  . . . . . . . . . . . . . . . . . . . . . . . . . . 367
+
+Searching the Wiki  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 367
+Printing a Wiki Page  . . . . . . . . . . . . . . . . . . . . . . . . . . . 368
+Sharing your Document over a Network  . . . . . . . . . . . 369
+What you will need  . . . . . . . . . . . . . . . . . . . . . . . . . . 369
+Accessing a shared document  . . . . . . . . . . . . . . . . . . . 369
+Connecting to the local network  . . . . . . . . . . . . . . . 370
+Connecting to a document on another network  . . 371
+Connecting to MoneyWorks Now  . . . . . . . . . . . . . . 372
+Common Connection Errors  . . . . . . . . . . . . . . . . . . . 373
+Closing a connection to a Server  . . . . . . . . . . . . . . . 373
+To see who is connected . . . . . . . . . . . . . . . . . . . . . . 373
+Sending a Broadcast Message to Other Users  . . . . 374
+Uploading Reports and Forms  . . . . . . . . . . . . . . . . . 374
+Server-Side Reporting on Datacentre  . . . . . . . . . . . 374
+What’s different when you are Sharing  . . . . . . . . . . . 374
+Single-User mode operations . . . . . . . . . . . . . . . . . . 375
+Operations that may be affected by other users  . . 375
+Uploading a File to Datacentre or MoneyWorks Now 376
+MoneyWorks Datacentre Server setup  . . . . . . . . . . . . 378
+Upgrading a Datacentre  . . . . . . . . . . . . . . . . . . . . . . . . 379
+Installation  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 379
+MoneyWorks Documents Directory  . . . . . . . . . . . . 380
+Installing Client Software  . . . . . . . . . . . . . . . . . . . . . 380
+Starting the Datacentre  . . . . . . . . . . . . . . . . . . . . . . . . 381
+Place your documents  . . . . . . . . . . . . . . . . . . . . . . . 381
+Configuration  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 382
+Backups  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 383
+Restoring a Backup  . . . . . . . . . . . . . . . . . . . . . . . . . . 385
+Starting  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 386
+Service Control  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 386
+Datacentre Services  . . . . . . . . . . . . . . . . . . . . . . . . . . . 387
+Enabling SSL encrypted connections  . . . . . . . . . . . . 388
+Web Apps . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 389
+Advanced settings  . . . . . . . . . . . . . . . . . . . . . . . . . . . 390
+Troubleshooting  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 392
+Using the Folders tab  . . . . . . . . . . . . . . . . . . . . . . . . . . 392
+Updating the Datacentre software  . . . . . . . . . . . . . . . 394
+Using MoneyWorks Datacentre . . . . . . . . . . . . . . . . . . 395
+Document Maintenance . . . . . . . . . . . . . . . . . . . . . . 396
+Uninstalling  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 398
+Remote Connections  . . . . . . . . . . . . . . . . . . . . . . . . . . 398
+Requirements  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 398
+Setup  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 398
+Performance  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 398
+Security  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 399
+Items, Products and Inventory  . . . . . . . . . . . . . . . . . . . 399
+The Item File  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 187
+
+-6-
+
+Creating a New Item  . . . . . . . . . . . . . . . . . . . . . . . . . . . 400
+Details . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 401
+Buying Info  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 403
+Sell Prices  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 405
+Inventory  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 408
+History  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 408
+Costing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 409
+Bill of Materials (BOM)  . . . . . . . . . . . . . . . . . . . . . . . 409
+Modifying and Deleting Product Items and Resources 411
+Printing a Product List . . . . . . . . . . . . . . . . . . . . . . . . . . 189
+Updating Inventory  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 412
+Posting stock transactions without Enable Job Costing
+& Time Billing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 412
+
+Posting stock transactions with Enable Job Costing &
+
+Time Billing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 413
+Negative stock  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 413
+Stock Valuation  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 414
+Stock Journals  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 414
+Entering a Stock Journal  . . . . . . . . . . . . . . . . . . . . . . 414
+Building Products  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 418
+Stock Enquiries  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 418
+Stocktaking  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 419
+Overview of a MoneyWorks stocktake  . . . . . . . . . . 420
+Entering your new stock counts  . . . . . . . . . . . . . . . . 420
+Committing the Stocktake  . . . . . . . . . . . . . . . . . . . . 421
+To complete the stocktake  . . . . . . . . . . . . . . . . . . . . 422
+Stocktake Report  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 422
+Locations, Serial Numbers and Batches  . . . . . . . . . . . . 423
+Locations  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 423
+Specifying Locations  . . . . . . . . . . . . . . . . . . . . . . . . . 423
+Specifying locations on transactions  . . . . . . . . . . . . 424
+Serial Numbers and Batches  . . . . . . . . . . . . . . . . . . . . 425
+Specifying that a product is to be tracked by serial/
+
+batch  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 425
+Allocating serial and batch numbers  . . . . . . . . . . . . 426
+Assigning serial and batch numbers to sales . . . . . . 427
+Serials, Batches and Jobs  . . . . . . . . . . . . . . . . . . . . . . . 427
+Stock Transfer Journals  . . . . . . . . . . . . . . . . . . . . . . . . 428
+Importing transactions with serials/batches or
+locations  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 429
+Order Entry  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 429
+Purchase Orders  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 346
+Entering a Purchase Order  . . . . . . . . . . . . . . . . . . . . 429
+Paying a Deposit with Order . . . . . . . . . . . . . . . . . . . 431
+Receiving the Goods and Invoice  . . . . . . . . . . . . . . . 433
+A Note on Deposits  . . . . . . . . . . . . . . . . . . . . . . . . . . 435
+Landing Costs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 436
+
+Table of Contents
+
+Sales Orders  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 437
+Entering a Sales Order  . . . . . . . . . . . . . . . . . . . . . . . 437
+Shipping Goods  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 439
+Updating the Ship Quantities on a Sales Order  . . . 440
+Quotes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 440
+When a Quote is Accepted  . . . . . . . . . . . . . . . . . . . 441
+Quote Templates . . . . . . . . . . . . . . . . . . . . . . . . . . . . 442
+Batch Processing of Sales Orders and Quotes  . . . . . . 442
+Batch Reordering  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 443
+Determining Backorders  . . . . . . . . . . . . . . . . . . . . . . . 443
+Remote Warehousing  . . . . . . . . . . . . . . . . . . . . . . . . . 444
+Inwards Goods  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 444
+Outwards Goods  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 444
+Stock Transfers and Requisitions  . . . . . . . . . . . . . . . 445
+Stocktake  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 445
+Remote Fulfilment Data Requirements . . . . . . . . . . 446
+Multi-currency  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 446
+Setting up Multi-Currency  . . . . . . . . . . . . . . . . . . . . . . 446
+Specifying a Currency  . . . . . . . . . . . . . . . . . . . . . . . . 447
+To Add a Control Account After Creating the
+
+Currency . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 447
+Deleting a Currency  . . . . . . . . . . . . . . . . . . . . . . . . . 448
+Setting the Exchange Rate  . . . . . . . . . . . . . . . . . . . . . . 448
+Transferring funds to/from a foreign bank account  . 449
+
+Sending and Receiving Invoices in a Different
+
+Currency . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 449
+Entering a Foreign Currency Transaction  . . . . . . . . . . 450
+The Transaction Exchange Rate  . . . . . . . . . . . . . . . . 450
+Duplicating and recurring foreign currency
+
+transactions  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 451
+Paying a Foreign Currency Invoice . . . . . . . . . . . . . . 451
+Purchasing Items . . . . . . . . . . . . . . . . . . . . . . . . . . . . 452
+Realised and Unrealised Gains and Losses . . . . . . . . . 452
+Multi-currencies: Behind the Scenes  . . . . . . . . . . . . . 452
+Ledger Balances  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 452
+Exchange Rates  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 453
+Currency Gain/Loss . . . . . . . . . . . . . . . . . . . . . . . . . . 453
+Departmental Accounts . . . . . . . . . . . . . . . . . . . . . . . . . 454
+Department Example  . . . . . . . . . . . . . . . . . . . . . . . . 454
+Departments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 457
+Adding a new Department . . . . . . . . . . . . . . . . . . . . 457
+Deleting a Department . . . . . . . . . . . . . . . . . . . . . . . 459
+Department Groups  . . . . . . . . . . . . . . . . . . . . . . . . . . . 459
+Creating a Departmental Group  . . . . . . . . . . . . . . . 459
+Modifying a Group  . . . . . . . . . . . . . . . . . . . . . . . . . . 460
+Deleting a Department Group  . . . . . . . . . . . . . . . . . 461
+Associating Departments with Accounts  . . . . . . . . . . 461
+
+Department Classifications  . . . . . . . . . . . . . . . . . . . . . 462
+Adding a New Classification  . . . . . . . . . . . . . . . . . . . 286
+Using Products with Departments  . . . . . . . . . . . . . . . 463
+Job Costing Tutorial  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 464
+An Overview of Job Costing  . . . . . . . . . . . . . . . . . . . 464
+Turning on Job Costing  . . . . . . . . . . . . . . . . . . . . . . . 464
+Adding a New Job  . . . . . . . . . . . . . . . . . . . . . . . . . . . 465
+Recording Time  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 466
+Recording Disbursements . . . . . . . . . . . . . . . . . . . . . 468
+Timesheet Entry  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 469
+Invoicing the Job  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 470
+Job Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 471
+Job Control  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 473
+Setting up Your Jobs  . . . . . . . . . . . . . . . . . . . . . . . . . . . 473
+Job Preferences  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 473
+The Job file  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 190
+Creating a New Job  . . . . . . . . . . . . . . . . . . . . . . . . . . 190
+Modifying a Job  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 476
+Deleting a Job  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 191
+The Job Sheet File . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 476
+To Manually Enter a Job Entry  . . . . . . . . . . . . . . . . . 477
+Automatic Entry from the Transaction File  . . . . . . . 479
+Modifying Job Sheet Entries . . . . . . . . . . . . . . . . . . . 480
+Deleting Job Sheet Items  . . . . . . . . . . . . . . . . . . . . . 480
+Timesheet Entry  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 480
+Tips on Timesheet Entry  . . . . . . . . . . . . . . . . . . . . . . 481
+Stock Requisitions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 481
+Cost and Sell Pricing  . . . . . . . . . . . . . . . . . . . . . . . . . . . 482
+Sell Price . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 482
+Costs with Job Tracking . . . . . . . . . . . . . . . . . . . . . . . 482
+The Work-in-Progress Journal  . . . . . . . . . . . . . . . . . . . 483
+Job Billing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 484
+Creating an Invoice for a Job  . . . . . . . . . . . . . . . . . . 484
+Project Billing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 486
+Writing off a job  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 486
+Job Budgets  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 487
+Job Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 488
+Job Forms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 489
+Fixed Assets  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 490
+Overview  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 490
+Transferring assets from an Existing Register  . . . . . 490
+Asset Categories  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 490
+The Asset Category Window  . . . . . . . . . . . . . . . . . . 491
+Asset List  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 492
+The Asset Window  . . . . . . . . . . . . . . . . . . . . . . . . . . 493
+Depreciation  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 496
+Asset Revaluation  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 497
+
+-7-
+
+Asset Disposal and Write-offs  . . . . . . . . . . . . . . . . . . . 499
+Asset Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 500
+Asset Report . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 500
+Asset Register  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 500
+Importing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 501
+Importing Asset Categories  . . . . . . . . . . . . . . . . . . . 501
+Importing Assets  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 502
+Report Writing Tutorial  . . . . . . . . . . . . . . . . . . . . . . . . . 503
+Creating Your Own Reports  . . . . . . . . . . . . . . . . . . . 503
+Creating Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 503
+Defining a Part  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 504
+Defining a Column  . . . . . . . . . . . . . . . . . . . . . . . . . . . 505
+Previewing the Report  . . . . . . . . . . . . . . . . . . . . . . . 506
+Modifying the Report  . . . . . . . . . . . . . . . . . . . . . . . . 507
+Inserting a Part  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 507
+Saving the Report  . . . . . . . . . . . . . . . . . . . . . . . . . . . 508
+Working with Accumulators  . . . . . . . . . . . . . . . . . . . 508
+Cells  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 509
+Column Calculations  . . . . . . . . . . . . . . . . . . . . . . . . . 510
+Percentage Breakdowns  . . . . . . . . . . . . . . . . . . . . . . 510
+Report Settings  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 511
+Heading Expressions  . . . . . . . . . . . . . . . . . . . . . . . . . 512
+The Final Report  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 512
+Closing the Report . . . . . . . . . . . . . . . . . . . . . . . . . . . 512
+Extending the Report  . . . . . . . . . . . . . . . . . . . . . . . . 513
+A Quick Customer Report . . . . . . . . . . . . . . . . . . . . . . . 513
+Custom Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 515
+Creating a New Report  . . . . . . . . . . . . . . . . . . . . . . . 515
+Modifying an Existing Report  . . . . . . . . . . . . . . . . . . 515
+Working with the Report Editor . . . . . . . . . . . . . . . . . . 516
+Changing the Page Size of the Report  . . . . . . . . . . . 519
+Testing the Report  . . . . . . . . . . . . . . . . . . . . . . . . . . . 519
+Protecting your Report  . . . . . . . . . . . . . . . . . . . . . . . 520
+Report Parts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 520
+Heading Part  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 520
+Account Code  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 522
+Accounts of Type  . . . . . . . . . . . . . . . . . . . . . . . . . . . 522
+Accounts of Category  . . . . . . . . . . . . . . . . . . . . . . . . 522
+Range of Accounts  . . . . . . . . . . . . . . . . . . . . . . . . . . 523
+Find Accounts  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 523
+Find Ledgers  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 523
+Blank  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 523
+Page Break  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 523
+Company Logo  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 523
+Line  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 523
+Column Headings  . . . . . . . . . . . . . . . . . . . . . . . . . . . 523
+Accumulator Operations  . . . . . . . . . . . . . . . . . . . . . 523
+
+Table of Contents
+
+If...Else if...End if  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 524
+For Each...break...continue...End For  . . . . . . . . . . . 525
+Break  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 526
+Continue  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 526
+End For  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 526
+Remark  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 526
+Chart  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 526
+Composite Charts  . . . . . . . . . . . . . . . . . . . . . . . . . . . 527
+Running Headers and Footers  . . . . . . . . . . . . . . . . . 528
+Reporting Options . . . . . . . . . . . . . . . . . . . . . . . . . . . 528
+Adornment  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 529
+Setting the Style & Font  . . . . . . . . . . . . . . . . . . . . . . 529
+Report Columns  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 530
+Report Column Types  . . . . . . . . . . . . . . . . . . . . . . . . 530
+Column Format Options  . . . . . . . . . . . . . . . . . . . . . . 533
+Report Cells . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 534
+Creating or Modifying a Cell
+ . . . . . . . . . . . . . . . . . . 534
+Removing a Cell . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 536
+Setting the Report Preferences  . . . . . . . . . . . . . . . . 536
+Custom Settings  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 539
+Setting the Help Text . . . . . . . . . . . . . . . . . . . . . . . . . 541
+Report Signing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 542
+Sequential Report Chains  . . . . . . . . . . . . . . . . . . . . . . 542
+Creating a New Report Chain . . . . . . . . . . . . . . . . . . 543
+Opening and Modifying a Report Chain  . . . . . . . . . 544
+Hot Links  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 544
+Analysis Reports . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 548
+Analysis Tutorial  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 548
+Creating an Analysis Report  . . . . . . . . . . . . . . . . . . . 548
+Adding other breakdown fields  . . . . . . . . . . . . . . . . 550
+Adding additional columns  . . . . . . . . . . . . . . . . . . . 551
+Selecting records for breakdown . . . . . . . . . . . . . . . 551
+Changing the breakdown fields  . . . . . . . . . . . . . . . . 551
+Table view  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 552
+Chart View  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 553
+Preselecting the source records  . . . . . . . . . . . . . . . 553
+Specifying the source records at print time  . . . . . . 554
+Saving an Analysis Report  . . . . . . . . . . . . . . . . . . . . 554
+Printing An Existing Analysis Report  . . . . . . . . . . . . . . 555
+Printing from selected records  . . . . . . . . . . . . . . . . 555
+To print using a preset search  . . . . . . . . . . . . . . . . . 555
+To print using a user specifiable search  . . . . . . . . . 555
+Transaction Based Analysis Settings  . . . . . . . . . . . . 556
+Job Sheet Based Analysis Settings  . . . . . . . . . . . . . . 557
+Anatomy of an Analysis Report  . . . . . . . . . . . . . . . . . . 557
+Creating a New Analysis . . . . . . . . . . . . . . . . . . . . . . . . 558
+Modifying an Analysis Definition . . . . . . . . . . . . . . . 560
+
+Analysis Definition Options  . . . . . . . . . . . . . . . . . . . 560
+Analysis Column Settings  . . . . . . . . . . . . . . . . . . . . . 563
+Report Preferences  . . . . . . . . . . . . . . . . . . . . . . . . . . 564
+Setting the Help Text . . . . . . . . . . . . . . . . . . . . . . . . . 565
+Exporting & Importing . . . . . . . . . . . . . . . . . . . . . . . . . . 565
+Exporting  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 565
+Exporting When Printing  . . . . . . . . . . . . . . . . . . . . . 565
+Exporting Transactions  . . . . . . . . . . . . . . . . . . . . . . . 566
+Exporting from Other Lists  . . . . . . . . . . . . . . . . . . . . 566
+Exporting Account Balances and Budgets  . . . . . . . . 567
+Importing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 568
+Importing the Chart of Accounts . . . . . . . . . . . . . . . . . 568
+Importing into Other Files  . . . . . . . . . . . . . . . . . . . . . . 570
+Import File Format  . . . . . . . . . . . . . . . . . . . . . . . . . . 571
+Using Calculations in Imports . . . . . . . . . . . . . . . . . . 572
+
+Transaction Importing  . . . . . . . . . . . . . . . . . . . . . . . . . 573
+Importing into Detail Lines  . . . . . . . . . . . . . . . . . . . . 576
+Importing Serial Numbers and Locations  . . . . . . . . 576
+Repeating Fields  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 576
+Importing General Journals  . . . . . . . . . . . . . . . . . . . 576
+Transaction Import Errors . . . . . . . . . . . . . . . . . . . . . 576
+Importing Payments/Receipts on Invoices  . . . . . . . . . 578
+
+A note on exporting Payments/Receipts on
+
+Invoices . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 578
+Product Importing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 579
+Field Descriptions for Products  . . . . . . . . . . . . . . . . 579
+Product Import Errors . . . . . . . . . . . . . . . . . . . . . . . . 579
+Names Importing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 580
+Name Field Descriptions . . . . . . . . . . . . . . . . . . . . . . 580
+Import Names Error Messages  . . . . . . . . . . . . . . . . 580
+Job Importing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 580
+Job Sheet Item Importing . . . . . . . . . . . . . . . . . . . . . . . 581
+Importing Tax Rates  . . . . . . . . . . . . . . . . . . . . . . . . . . . 581
+Importing Direct from other Applications  . . . . . . . . . 581
+XML Importing  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 581
+Forms Designer  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 584
+Anatomy of forms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 585
+Creating a Form  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 586
+Modifying an Existing Form  . . . . . . . . . . . . . . . . . . . 587
+The Document Window  . . . . . . . . . . . . . . . . . . . . . . . . 587
+Setting the Form Size  . . . . . . . . . . . . . . . . . . . . . . . . 588
+Sections  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 590
+To create a new section  . . . . . . . . . . . . . . . . . . . . . . 590
+To change the section that you are working on  . . . 590
+To delete a section  . . . . . . . . . . . . . . . . . . . . . . . . . . 590
+Conditional printing of sections  . . . . . . . . . . . . . . . . 591
+Notes on sections  . . . . . . . . . . . . . . . . . . . . . . . . . . . 591
+
+-8-
+
+Tools and Controls  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 592
+The Selection Arrow Tool  . . . . . . . . . . . . . . . . . . . . . 592
+The Rectangle Tools . . . . . . . . . . . . . . . . . . . . . . . . . . 593
+The Picture Tool  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 594
+The Line Tool  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 594
+The Text Tool  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 594
+The Calculation Box Tool  . . . . . . . . . . . . . . . . . . . . . . 596
+The List Box Tool  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 598
+List Options  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 602
+The Show toolbar button  . . . . . . . . . . . . . . . . . . . . . 604
+Formatting Objects  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 604
+Borders, Fills and Pen Widths . . . . . . . . . . . . . . . . . . 605
+Transparency  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 606
+Font, Size, Style, Text Colour and Alignment  . . . . . . 606
+Visibility  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 607
+Arranging Objects  . . . . . . . . . . . . . . . . . . . . . . . . . . . 608
+Form Options . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 609
+Testing Your Form  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 610
+Securing Your Form . . . . . . . . . . . . . . . . . . . . . . . . . . . . 611
+Printing Multiple Forms  . . . . . . . . . . . . . . . . . . . . . . . . 611
+Adding a Hot Link (Hyperlink) to a Form . . . . . . . . . . . 612
+Customising the Navigator  . . . . . . . . . . . . . . . . . . . . . . 613
+Calculations and things  . . . . . . . . . . . . . . . . . . . . . . . . . 615
+Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 615
+Operators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 616
+Field References and Identifiers  . . . . . . . . . . . . . . . . . 616
+Global Variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 605
+Fields in Reports  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 618
+Fields in Forms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 618
+Form Environment Variables  . . . . . . . . . . . . . . . . . . 619
+Operator Types  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 619
+Mathematical Operators . . . . . . . . . . . . . . . . . . . . . . 620
+Comparison (Relational) Operators  . . . . . . . . . . . . . 620
+Logical (Boolean) Operators  . . . . . . . . . . . . . . . . . . . 620
+Text Operators  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 621
+Date Operators  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 621
+Precedence  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 621
+Relational Searches . . . . . . . . . . . . . . . . . . . . . . . . . . . . 621
+Selections  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 623
+Functions  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 624
+Function and Handler Summary  . . . . . . . . . . . . . . . . . 624
+Abs (number)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 629
+AgeByPeriod (per, relativeToPer)  . . . . . . . . . . . . . . . 629
+Allowed (privilegeName)  . . . . . . . . . . . . . . . . . . . . . 630
+Analyse (basis, sourceFile, searchExpression,
+
+breakDownFields, outputFields, fromDate, toDate [,
+kind] [, filterFunct])  . . . . . . . . . . . . . . . . . . . . . . . . 630
+
+Table of Contents
+
+AvailableStockForBatch (productSeq, batchNum,
+
+location, exclOrderSeqNum)  . . . . . . . . . . . . . . . . 631
+Average (number, ...)  . . . . . . . . . . . . . . . . . . . . . . . . 631
+Base64Decode (base64text)  . . . . . . . . . . . . . . . . . . 631
+Base64Encode (text [, boolBreakLines])  . . . . . . . . . 631
+BaseName (path)  . . . . . . . . . . . . . . . . . . . . . . . . . . . 632
+ByteLength (text)  . . . . . . . . . . . . . . . . . . . . . . . . . . . 632
+CalcDueDate (date, terms) . . . . . . . . . . . . . . . . . . . . 632
+Char (num)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 633
+Checksum (text [, hash]) . . . . . . . . . . . . . . . . . . . . . . 633
+Choose (selector, ...)  . . . . . . . . . . . . . . . . . . . . . . . . . 633
+ClearFlag (num, mask)  . . . . . . . . . . . . . . . . . . . . . . . 634
+Code128 (text)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 634
+Concat (text, ...) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 634
+ConcatAllWith (separator, text, ...)  . . . . . . . . . . . . . 634
+ConcatWith (separator, text, ...)  . . . . . . . . . . . . . . . 634
+Count (value, ...)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 635
+CountElements (array)  . . . . . . . . . . . . . . . . . . . . . . . 635
+CountLines (text [, asciiDelimiter])  . . . . . . . . . . . . . 635
+CreateSelection (tableName, searchExpr, [sortExpr],
+
+[descending])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 636
+CreateTable ([numberOfColumns])  . . . . . . . . . . . . . 636
+CSV (values, ...)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 636
+CurrencyConvert (amount, FromCurrency, ToCurrency
+
+[, periodOrDate])  . . . . . . . . . . . . . . . . . . . . . . . . . . 636
+CurrencyFormat (amt, currencycode)  . . . . . . . . . . . 637
+CurrencyName ([isoCode], [bLongForm])  . . . . . . . . 637
+CurrentPeriod ()  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 637
+Date (day, month, year)  . . . . . . . . . . . . . . . . . . . . . . 638
+DateToPeriod (date)  . . . . . . . . . . . . . . . . . . . . . . . . . 638
+DateToText (date, [format])  . . . . . . . . . . . . . . . . . . . 639
+Day (date)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 639
+DayOfWeek (date)  . . . . . . . . . . . . . . . . . . . . . . . . . . 640
+Dice (table, rownum, colnum)  . . . . . . . . . . . . . . . . . 640
+DollarsToEnglish (amount [, CurrencyCode] [,
+
+languageCode])  . . . . . . . . . . . . . . . . . . . . . . . . . . . 641
+Esc (text)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 641
+ExpandDetail (expressionText [, searchExpression] [,
+
+rangeStart][, rangeEnd])  . . . . . . . . . . . . . . . . . . . . 641
+ExpandList (listName, expressionText)  . . . . . . . . . . 642
+FieldLabel (fieldnametxt [, enumeration])  . . . . . . . 642
+Find (fileName.fieldNameText, searchFnText [, limit] [,
+
+delim] [, sortFieldText] [, runOnServer])  . . . . . . . 643
+FirstUnlockedPeriod ()  . . . . . . . . . . . . . . . . . . . . . . . 644
+GetAllContactEmailsForRole ( nameCode, role [,
+
+detailed] ) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 644
+GetAppPreference (preferenceName)  . . . . . . . . . . 644
+
+GetBalance (searchExpression, PeriodorDate [,
+
+Budget])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 645
+
+GetContactForRole (rolebits [,
+
+requestedfieldname])  . . . . . . . . . . . . . . . . . . . . . . 645
+GetDatabaseFields (fileName)  . . . . . . . . . . . . . . . . . 645
+GetDatabaseFieldSize (fileName, fieldName)  . . . . . 646
+GetDatabaseFiles  . . . . . . . . . . . . . . . . . . . . . . . . . . . 646
+GetMovement (searchExpression, fromPeriodOrDate,
+
+toPeriodOrDate[, Budget])  . . . . . . . . . . . . . . . . . . 646
+
+GetOffBalance (searchExpression, dateOrPeriod [,
+
+doBudget])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 647
+GetPlugins (pluginType, which [, extension])  . . . . . 647
+GetTaxRate (taxCode, date [,bReversed])  . . . . . . . . 647
+GetUIField (windowID, fieldname)  . . . . . . . . . . . . . 647
+HavePicture (mnemonic)  . . . . . . . . . . . . . . . . . . . . . 648
+Head (listText, numberOfItems, asciiDelimiter)  . . . 648
+HexDecode (hextext)  . . . . . . . . . . . . . . . . . . . . . . . . 648
+HexEncode (text) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 649
+HMAC (data, key, hash) . . . . . . . . . . . . . . . . . . . . . . . 649
+If (condition, result1, result2)  . . . . . . . . . . . . . . . . . 649
+Import (text [, mapname])  . . . . . . . . . . . . . . . . . . . . 649
+IncrementUserSeq (key)  . . . . . . . . . . . . . . . . . . . . . . 650
+Int (number)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 650
+IntersectSelection (sel1, sel2OrExprText, [sortExpr],
+
+[descending])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 650
+Left (string, count [, boolInBytes])  . . . . . . . . . . . . . . 650
+Length (string [, boolInBytes])  . . . . . . . . . . . . . . . . . 651
+Log10 (number) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 651
+Log2 (number) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 651
+LogN (number)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 651
+Lookup (code, fieldname) . . . . . . . . . . . . . . . . . . . . . 651
+Lower (string)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 652
+MakeGUID ()  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 652
+Match (number, number, ...)  . . . . . . . . . . . . . . . . . . 652
+Max (number, ...) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 652
+Mid (string, start, count [, boolInBytes])  . . . . . . . . . 653
+Min (number, ...)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 653
+Mod (dividend, divisor)  . . . . . . . . . . . . . . . . . . . . . . 653
+Month (date)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 653
+NumToEnglish (integer [, language])  . . . . . . . . . . . . 654
+NumToPeriod (PeriodIndex)  . . . . . . . . . . . . . . . . . . . 654
+NumToText (number [, format]) . . . . . . . . . . . . . . . . 654
+Pad (text, width [, padChar] [, justify = "L|R"])  . . . . 654
+ParseCSV (csvtext [, fieldSeparator] )  . . . . . . . . . . . 655
+PeriodName (period)  . . . . . . . . . . . . . . . . . . . . . . . . 655
+PeriodOffset (period, offset)  . . . . . . . . . . . . . . . . . . 655
+PeriodToDate (period)  . . . . . . . . . . . . . . . . . . . . . . . 656
+
+-9-
+
+PeriodToNum (period)  . . . . . . . . . . . . . . . . . . . . . . . 656
+PositionInText (string, pattern [, startChar] [,
+
+boolInBytes])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 656
+Pow (value, exponent)  . . . . . . . . . . . . . . . . . . . . . . . 657
+ProductSOHForLocation(prodcode [, loc])  . . . . . . . 657
+Proper (string)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 657
+Quarter (DateOrPeriod [, numQuarters=4] [,
+
+prefix="Q"])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 657
+Random (modulus)  . . . . . . . . . . . . . . . . . . . . . . . . . . 657
+RecordsSelected (selection)  . . . . . . . . . . . . . . . . . . . 658
+Regex_Match (string, regex) . . . . . . . . . . . . . . . . . . . 658
+Regex_GetMatches (string, regex)  . . . . . . . . . . . . . . 659
+Regex_Replace (string, regex, replacementex)  . . . . 659
+Regex_Search (string, regex [, startOffset]) . . . . . . . 660
+Regex_SearchStr (string, regex)  . . . . . . . . . . . . . . . . 660
+RemoveLeading (string, count [, boolInBytes])  . . . . 661
+RemoveTrailing (string, count [, boolInBytes])  . . . . 661
+Replace (string, pattern, txt) . . . . . . . . . . . . . . . . . . . 662
+ReplaceField (fileDotFieldname, selection |
+
+searchxExprText, expression)  . . . . . . . . . . . . . . . . 662
+Right (string, count [, boolInBytes])  . . . . . . . . . . . . . 662
+Round (number, places [, mode]) . . . . . . . . . . . . . . . 663
+SetAppPreference (preferenceName, value) . . . . . . 663
+SetBudget (Budget, LedgerCode, Date, Value)  . . . . 663
+SetFlag (num, num)  . . . . . . . . . . . . . . . . . . . . . . . . . . 663
+Sign (num)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 664
+Slice (listText, itemNumber, delimiter)  . . . . . . . . . . 664
+SOHForLocation (location)  . . . . . . . . . . . . . . . . . . . . 664
+StocktakeNewQtyForLocation (location)  . . . . . . . . . 664
+StocktakeStartQtyForLocation (location) . . . . . . . . . 665
+Sort (tabDelimTable, sortColumn1, [sortType],
+
+[descending], [skipfirst])  . . . . . . . . . . . . . . . . . . . . 665
+Sqrt (num)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 666
+SuggestNameCode (Name) . . . . . . . . . . . . . . . . . . . . 666
+SubTotal (listNameDotColumnName)  . . . . . . . . . . . 666
+Sum (number, ...)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 666
+SumDetail ("expression", detail.searchExpr [,
+
+transaction.searchExpr])  . . . . . . . . . . . . . . . . . . . . 667
+
+SumSelection ("filename.expression",
+
+searchExprOrSel)  . . . . . . . . . . . . . . . . . . . . . . . . . . 667
+TableAccumulate (tab, key, value1, ...)  . . . . . . . . . . 668
+TableAccumulateColumn (table, key, columnNum,
+
+value)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 668
+TableFind (table, key)  . . . . . . . . . . . . . . . . . . . . . . . . 668
+TableGet (table [, IndexOrKey, Colnum])  . . . . . . . . . 669
+Tail (listText, numberOfItems, asciiDelimiter)  . . . . . 669
+TestFlags (number, mask)  . . . . . . . . . . . . . . . . . . . . . 670
+
+Table of Contents
+
+TextToDate (text [, format])  . . . . . . . . . . . . . . . . . . . 670
+TextToNum (text [, specialFormat])  . . . . . . . . . . . . . 671
+Time ()  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 671
+TimeAdd (datetime, secs)  . . . . . . . . . . . . . . . . . . . . 672
+TimeDiff (datetime1, datetime2) . . . . . . . . . . . . . . . 672
+Timestamp ( [zone] [, format]) . . . . . . . . . . . . . . . . . 673
+Today ()  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 673
+Transpose (table)  . . . . . . . . . . . . . . . . . . . . . . . . . . . 674
+Trim (string [, boolNewlinesAndTabsToo])  . . . . . . . 674
+TypeOf (variable) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 675
+Unicode (string)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 675
+UnionSelection (sel1, sel2 | searchxExprText,
+
+[sortExpr], [descending])  . . . . . . . . . . . . . . . . . . . 675
+Upper (string)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 676
+URLEncode (text [, optDelim])  . . . . . . . . . . . . . . . . . 676
+Val (exprText [, bRunOnServer])  . . . . . . . . . . . . . . . 676
+WeekOfYear (Date)  . . . . . . . . . . . . . . . . . . . . . . . . . . 676
+Year (date)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 677
+Script-only Functions  . . . . . . . . . . . . . . . . . . . . . . . . . . 677
+AddListLine (listRef)  . . . . . . . . . . . . . . . . . . . . . . . . . 677
+AddStatementTransaction (ref, date, tofrom, desc,
+
+amt)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 678
+AddSafePath (prompt)  . . . . . . . . . . . . . . . . . . . . . . . 678
+Alert (message1, message2, ok, cancel, other,
+
+timeoutsecs)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 679
+
+AppendColumnToStdEditList (listHandle,
+
+columnFieldName, columnDefinition) . . . . . . . . . 679
+
+AppendPopupItems (windowRef, itemID,
+
+itemString)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 680
+Ask (controlType, name, value, definition, …)  . . . . 680
+Authenticate (username, password [,
+
+privilegeName]) . . . . . . . . . . . . . . . . . . . . . . . . . . . 681
+
+AutoFillAcctDeptField (windowRef, itemID,
+
+bWantDept)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 681
+AutoFillField (windowRef, itemID, tablename) . . . . 682
+ValidateFieldWithValidationString (windowRef, itemID,
+validationDefinition)  . . . . . . . . . . . . . . . . . . . . . . . 682
+
+CancelTransaction (seqNum [, optionalDescription,
+
+optionalDate])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 683
+ChangePrimaryKeyCode (table, oldCode, newCode)683
+CheckCodeField (windowRef, itemID, tableName,
+
+...)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 683
+ChooseFromList (prompt, tabularText [, mode])  . . 684
+Clicks () . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 684
+CloseDocument ()  . . . . . . . . . . . . . . . . . . . . . . . . . . . 684
+CloseWindow (windowRef)  . . . . . . . . . . . . . . . . . . . 684
+CopyUserSettings (srcUserInitials, destUserInitials) 685
+
+CreateArray ( [key, value, ... ])  . . . . . . . . . . . . . . . . . 685
+CreateFolder (parentFolderPath, newFolderName) 685
+CreateListWindow (id, recordFormID, table, search,
+
+headingString, columnsString [, modes [, properties]
+])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 686
+
+CreateWindow (your_wind_id [, mode [,
+
+properties]])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 687
+Curl_Close (curlhandle)  . . . . . . . . . . . . . . . . . . . . . . 687
+Curl_Exec (curlhandle)  . . . . . . . . . . . . . . . . . . . . . . . 687
+Curl_GetInfo (curlhandle, info)  . . . . . . . . . . . . . . . . 688
+Curl_Init ([optional_url])  . . . . . . . . . . . . . . . . . . . . . 689
+Curl_SetOpt (curlhandle, option, value)  . . . . . . . . . 689
+Curl_StrError (CURLError) . . . . . . . . . . . . . . . . . . . . . 690
+DeleteElement (array, key)  . . . . . . . . . . . . . . . . . . . . 691
+DeleteListLine (listRef, rowNum)  . . . . . . . . . . . . . . . 691
+DeletePopupItems (windowRef, itemID) . . . . . . . . . 691
+DisplaySelection (sel, viewName)  . . . . . . . . . . . . . . 691
+DisplayStickyNote (winRef, tableName, seqNum)  . 692
+DoForm (formName, format, search [, parameters,
+
+...]) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 692
+
+DoReport (reportName, format, title,
+
+parameters...)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 692
+ElementExists (array, key) . . . . . . . . . . . . . . . . . . . . . 694
+ExchangeListRows (listRef, rowA, rowB)  . . . . . . . . . 694
+External (command, parameters, ...) . . . . . . . . . . . . 694
+Export (table, format, output [, search, sort, dir, start,
+
+limit])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 695
+ExportImage (domain, ident)
+ . . . . . . . . . . . . . . . . . 696
+File_Close (filehandle)  . . . . . . . . . . . . . . . . . . . . . . . 696
+File_GetLength (filehandle)  . . . . . . . . . . . . . . . . . . . 696
+File_GetMark (filehandle)  . . . . . . . . . . . . . . . . . . . . 697
+File_Move (srcPath, destPath)  . . . . . . . . . . . . . . . . . 697
+File_Open (path [, mode="r"])
+ . . . . . . . . . . . . . . . . 697
+File_Path (fd)  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 698
+File_Read (filehandle [, optionalCount])  . . . . . . . . . 699
+File_ReadLine (filehandle)  . . . . . . . . . . . . . . . . . . . . 699
+File_SetMark (filehandle, offset)  . . . . . . . . . . . . . . . 700
+File_Write (filehandle, string)  . . . . . . . . . . . . . . . . . 700
+FindRecordsInListWindow (winRef, searchExpr)  . . 700
+GetActiveListColumn (listRef) . . . . . . . . . . . . . . . . . . 701
+GetActiveListRow (listRef)  . . . . . . . . . . . . . . . . . . . . 701
+GetClipboardText ()  . . . . . . . . . . . . . . . . . . . . . . . . . . 701
+GetDialogHandle (listRef)  . . . . . . . . . . . . . . . . . . . . . 702
+GetFieldCount (windowRef) . . . . . . . . . . . . . . . . . . . 702
+GetFieldName (windowRef, fieldNum)  . . . . . . . . . . 702
+GetFieldNumber (windowRef, fieldNameString)  . . 702
+
+-10-
+
+GetFieldValue (windowRef, fieldNumOrName [,
+
+boolPeriodDecode]) . . . . . . . . . . . . . . . . . . . . . . . . 703
+GetLastErrorMessage ()  . . . . . . . . . . . . . . . . . . . . . . 703
+GetListContents (listRef [, bSelectedOnly] [,
+
+bAsSelection])  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 703
+
+GetListField (listRef, rowNum,
+
+columnNumOrName)  . . . . . . . . . . . . . . . . . . . . . . 703
+GetListHandle (windowRef, listName)  . . . . . . . . . . . 704
+GetListLineCount (listRef)  . . . . . . . . . . . . . . . . . . . . . 704
+GetListName (listRef)  . . . . . . . . . . . . . . . . . . . . . . . . 705
+GetMutex (name)  . . . . . . . . . . . . . . . . . . . . . . . . . . . 705
+GetNextReference (transType [, bank])  . . . . . . . . . . 705
+GetPersistent (table, key1, key2)  . . . . . . . . . . . . . . . 706
+GetProfile ()  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 706
+_NTDump ()  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 706
+GetRecordForListRow (listHandle,
+
+rowNumZeroBased) . . . . . . . . . . . . . . . . . . . . . . . . 706
+GetScriptText (scriptName)  . . . . . . . . . . . . . . . . . . . 707
+GetTaggedValue (taggedTextString, tag)  . . . . . . . . . 707
+GetWindowByID (idString)  . . . . . . . . . . . . . . . . . . . . 707
+GetWindowID (windowRef)  . . . . . . . . . . . . . . . . . . . 707
+GetWindowName (windowRef)  . . . . . . . . . . . . . . . . 707
+GetWindowProperty (windowRef, propertyName) 707
+GotoField (windowRef, fieldID, [selStart], [selEnd]) 707
+GotoListField (listRef, rowNum0,
+
+columnNum0OrName, [selStart], [selEnd])  . . . . . 708
+GotoNextField (windowRef)  . . . . . . . . . . . . . . . . . . . 708
+ImportImage (domain, ident, path)  . . . . . . . . . . . . . 708
+InsertEditListObject (windowHandle, itemID,
+column_definition, optional_initial_data,
+optional_mode)  . . . . . . . . . . . . . . . . . . . . . . . . . . . 709
+
+InsertListObject (windowHandle, itemID,
+
+column_definition, optional_initial_data,
+optional_mode)  . . . . . . . . . . . . . . . . . . . . . . . . . . . 709
+InsertVars (string [, startdelim, enddelim])  . . . . . . . 710
+InstallMenuCommand (menuItemText,
+
+handlerNameString)  . . . . . . . . . . . . . . . . . . . . . . . 711
+
+InstallToolbarIcon (windowRef,
+
+handlerNameString)  . . . . . . . . . . . . . . . . . . . . . . . 711
+JSON_AsXML (jsonString)  . . . . . . . . . . . . . . . . . . . . . 711
+JSON_Free (handle) . . . . . . . . . . . . . . . . . . . . . . . . . . 711
+JSON_Get (JSON_object, id [, id, ... ])  . . . . . . . . . . . 711
+JSON_Parse (jsonText) . . . . . . . . . . . . . . . . . . . . . . . . 712
+LoadHTMLInWebView (windowRef, itemID, html)  . 712
+LoadPicture (windowRef, itemID, pictureSpec) . . . . 712
+LoadURLInWebView (windowRef, itemID, url)  . . . . 713
+
+

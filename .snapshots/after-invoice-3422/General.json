@@ -1,0 +1,142 @@
+{
+  "tableName": "General",
+  "recordCount": 15,
+  "records": [
+    {
+      "_primaryKey": 0,
+      "Sequencenumber": 0,
+      "LastModifiedTime": 5,
+      "Code": "2025-06-11 15:40:37",
+      "Description": "",
+      "Date": "2024/25",
+      "Long": null
+    },
+    {
+      "_primaryKey": 1,
+      "Sequencenumber": 1,
+      "LastModifiedTime": 4,
+      "Code": "2025-06-11 15:40:37",
+      "Description": "",
+      "Date": "2023/24",
+      "Long": null
+    },
+    {
+      "_primaryKey": 2,
+      "Sequencenumber": 2,
+      "LastModifiedTime": 3,
+      "Code": "2025-06-11 15:40:37",
+      "Description": "",
+      "Date": "2022/23",
+      "Long": null
+    },
+    {
+      "_primaryKey": 3,
+      "Sequencenumber": 3,
+      "LastModifiedTime": 2,
+      "Code": "2025-06-11 15:40:37",
+      "Description": "",
+      "Date": "2021/22",
+      "Long": null
+    },
+    {
+      "_primaryKey": 4,
+      "Sequencenumber": 4,
+      "LastModifiedTime": 6,
+      "Code": "2012-12-19 16:51:22",
+      "Description": "SALES",
+      "Date": "Sales",
+      "Long": null
+    },
+    {
+      "_primaryKey": 5,
+      "Sequencenumber": 5,
+      "LastModifiedTime": 7,
+      "Code": "2012-12-19 16:51:22",
+      "Description": "INC",
+      "Date": "Other Income",
+      "Long": null
+    },
+    {
+      "_primaryKey": 6,
+      "Sequencenumber": 6,
+      "LastModifiedTime": 8,
+      "Code": "2012-12-19 16:51:22",
+      "Description": "COGS",
+      "Date": "Cost of Sales",
+      "Long": null
+    },
+    {
+      "_primaryKey": 7,
+      "Sequencenumber": 7,
+      "LastModifiedTime": 9,
+      "Code": "2012-12-19 16:51:22",
+      "Description": "WAGES",
+      "Date": "Wages",
+      "Long": null
+    },
+    {
+      "_primaryKey": 8,
+      "Sequencenumber": 8,
+      "LastModifiedTime": 10,
+      "Code": "2012-12-19 16:51:22",
+      "Description": "ADMIN",
+      "Date": "Administration/Overhead",
+      "Long": null
+    },
+    {
+      "_primaryKey": 9,
+      "Sequencenumber": 9,
+      "LastModifiedTime": 11,
+      "Code": "2012-12-19 16:51:22",
+      "Description": "PROMO",
+      "Date": "Promotional",
+      "Long": null
+    },
+    {
+      "_primaryKey": 10,
+      "Sequencenumber": 10,
+      "LastModifiedTime": 12,
+      "Code": "2012-12-19 16:51:22",
+      "Description": "OTHER",
+      "Date": "Other Expenses",
+      "Long": null
+    },
+    {
+      "_primaryKey": 11,
+      "Sequencenumber": 11,
+      "LastModifiedTime": 13,
+      "Code": "2012-12-19 10:51:49",
+      "Description": "GST",
+      "Date": "GST",
+      "Long": null
+    },
+    {
+      "_primaryKey": 12,
+      "Sequencenumber": 12,
+      "LastModifiedTime": 14,
+      "Code": "2012-12-19 10:51:49",
+      "Description": "FA",
+      "Date": "Fixed Assets",
+      "Long": null
+    },
+    {
+      "_primaryKey": 13,
+      "Sequencenumber": 13,
+      "LastModifiedTime": 15,
+      "Code": "2012-12-19 10:51:49",
+      "Description": "FADEPN",
+      "Date": null,
+      "Long": null
+    },
+    {
+      "_primaryKey": 14,
+      "Sequencenumber": 14,
+      "LastModifiedTime": 16,
+      "Code": "2025-06-11 15:40:37",
+      "Description": "",
+      "Date": "2025/26",
+      "Long": null
+    }
+  ],
+  "capturedAt": "2025-11-25T23:24:35.941Z"
+}

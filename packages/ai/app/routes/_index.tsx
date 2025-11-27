@@ -6,14 +6,18 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { MessageList } from "~/components/chat/message-list";
-import { runWithTools, type ToolCallInfo, type ChatMessage as ServerChatMessage } from "~/lib/anthropic.server";
+import { SessionStats } from "~/components/chat/session-stats";
+import { SplitPanelLayout } from "~/components/layout/split-panel-layout";
+import { ArtifactPanel } from "~/components/artifacts/artifact-panel";
+import { runWithTools, estimateCost, type ToolCallInfo, type ChatMessage as ServerChatMessage } from "~/lib/anthropic.server";
 import type { ChatMessage } from "~/components/chat/message";
 import type { ToolCallData } from "~/components/chat/tool-call";
+import type { Artifact } from "~/lib/artifacts/types";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "AI Chat - MoneyWorks" },
-    { name: "description", content: "Chat with AI powered by Claude - with tool capabilities" },
+    { title: "MoneyWorks AI Assistant" },
+    { name: "description", content: "Query your MoneyWorks data with AI" },
   ];
 }
 
@@ -21,6 +25,13 @@ interface ActionResponse {
   response?: string | null;
   error?: string | null;
   toolCalls?: ToolCallData[];
+  artifacts?: Artifact[];
+  stats?: {
+    toolCalls: number;
+    inputTokens: number;
+    outputTokens: number;
+    estimatedCost: number;
+  };
 }
 
 export async function action({ request }: Route.ActionArgs): Promise<ActionResponse> {
@@ -57,8 +68,17 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionRespo
   ];
 
   try {
-    // Run with tools using the toolRunner
+    console.log("[Chat] User prompt:", message);
+    console.log("[Chat] History length:", history.length);
+
+    // Run with tools using the Anthropic SDK
     const result = await runWithTools(messages);
+
+    console.log("[Chat] Response length:", result.response.length);
+    console.log("[Chat] Response preview:", result.response.substring(0, 200) + "...");
+    if (result.artifacts) {
+      console.log("[Chat] Artifacts:", result.artifacts.length);
+    }
 
     // Convert ToolCallInfo to ToolCallData format for UI
     const toolCalls: ToolCallData[] = result.toolCalls.map((tc) => ({
@@ -67,11 +87,19 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionRespo
       input: tc.input,
       output: tc.output,
       status: tc.status === "error" ? "error" : "success",
+      durationMs: tc.durationMs,
     }));
 
     return {
       response: result.response,
       toolCalls,
+      artifacts: result.artifacts,
+      stats: {
+        toolCalls: result.stats.toolCalls,
+        inputTokens: result.inputTokens,
+        outputTokens: result.outputTokens,
+        estimatedCost: estimateCost(result.inputTokens, result.outputTokens),
+      },
       error: null,
     };
   } catch (error) {
@@ -87,6 +115,13 @@ export default function ChatPage() {
   const actionData = useActionData<ActionResponse>();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [currentArtifacts, setCurrentArtifacts] = useState<Artifact[]>([]);
+  const [sessionStats, setSessionStats] = useState({
+    totalToolCalls: 0,
+    totalInputTokens: 0,
+    totalOutputTokens: 0,
+    totalCost: 0,
+  });
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -103,6 +138,21 @@ export default function ChatPage() {
           toolCalls: actionData.toolCalls,
         },
       ]);
+
+      // Update artifacts if present
+      if (actionData.artifacts && actionData.artifacts.length > 0) {
+        setCurrentArtifacts(actionData.artifacts);
+      }
+
+      // Update session stats
+      if (actionData.stats) {
+        setSessionStats((prev) => ({
+          totalToolCalls: prev.totalToolCalls + actionData.stats!.toolCalls,
+          totalInputTokens: prev.totalInputTokens + actionData.stats!.inputTokens,
+          totalOutputTokens: prev.totalOutputTokens + actionData.stats!.outputTokens,
+          totalCost: prev.totalCost + actionData.stats!.estimatedCost,
+        }));
+      }
     }
   }, [actionData]);
 
@@ -133,58 +183,93 @@ export default function ChatPage() {
     }
   }, [navigation.state]);
 
-  return (
-    <div className="h-screen flex flex-col p-4 max-w-4xl mx-auto">
-      <Card className="flex-1 flex flex-col overflow-hidden">
-        <CardHeader className="border-b">
+  // Clear session
+  const handleClearSession = () => {
+    setMessages([]);
+    setCurrentArtifacts([]);
+    setSessionStats({
+      totalToolCalls: 0,
+      totalInputTokens: 0,
+      totalOutputTokens: 0,
+      totalCost: 0,
+    });
+  };
+
+  // Chat panel content
+  const chatPanel = (
+    <Card className="h-full flex flex-col">
+      <CardHeader className="border-b flex-shrink-0">
+        <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <span>AI Chat</span>
+            <span>MoneyWorks AI</span>
             <span className="text-xs font-normal text-muted-foreground">
-              Powered by Claude with Tools
+              Powered by Claude
             </span>
           </CardTitle>
-        </CardHeader>
+          <SessionStats
+            toolCalls={sessionStats.totalToolCalls}
+            inputTokens={sessionStats.totalInputTokens}
+            outputTokens={sessionStats.totalOutputTokens}
+            estimatedCost={sessionStats.totalCost}
+            onClear={handleClearSession}
+          />
+        </div>
+      </CardHeader>
 
-        <CardContent className="flex-1 overflow-hidden p-0">
-          <MessageList messages={messages} isLoading={isSubmitting} />
-        </CardContent>
+      <CardContent className="flex-1 min-h-0 p-0">
+        <MessageList messages={messages} isLoading={isSubmitting} />
+      </CardContent>
 
-        <CardFooter className="border-t p-4">
-          <Form
-            ref={formRef}
-            method="post"
-            onSubmit={handleSubmit}
-            className="flex gap-2 w-full"
-          >
-            <input
-              type="hidden"
-              name="history"
-              value={JSON.stringify(messages)}
-            />
-            <Input
-              ref={inputRef}
-              name="message"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask me to read files, search code, or run commands..."
-              disabled={isSubmitting}
-              autoComplete="off"
-              className="flex-1"
-            />
-            <Button type="submit" disabled={isSubmitting || !inputValue.trim()}>
-              <Send className="size-4" />
-              <span className="sr-only">Send</span>
-            </Button>
-          </Form>
+      <CardFooter className="border-t p-4 flex-shrink-0">
+        <Form
+          ref={formRef}
+          method="post"
+          onSubmit={handleSubmit}
+          className="flex gap-2 w-full"
+        >
+          <input
+            type="hidden"
+            name="history"
+            value={JSON.stringify(messages)}
+          />
+          <Input
+            ref={inputRef}
+            name="message"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask about accounts, transactions, reports..."
+            disabled={isSubmitting}
+            autoComplete="off"
+            className="flex-1"
+          />
+          <Button type="submit" disabled={isSubmitting || !inputValue.trim()}>
+            <Send className="size-4" />
+            <span className="sr-only">Send</span>
+          </Button>
+        </Form>
 
-          {actionData?.error && (
-            <p className="text-sm text-destructive mt-2 w-full">
-              {actionData.error}
-            </p>
-          )}
-        </CardFooter>
-      </Card>
+        {actionData?.error && (
+          <p className="text-sm text-destructive mt-2 w-full">
+            {actionData.error}
+          </p>
+        )}
+      </CardFooter>
+    </Card>
+  );
+
+  // Artifact panel content
+  const artifactPanel = (
+    <ArtifactPanel artifacts={currentArtifacts} />
+  );
+
+  return (
+    <div className="h-screen p-4">
+      <SplitPanelLayout
+        leftPanel={chatPanel}
+        rightPanel={artifactPanel}
+        showRightPanel={currentArtifacts.length > 0}
+      />
     </div>
   );
 }

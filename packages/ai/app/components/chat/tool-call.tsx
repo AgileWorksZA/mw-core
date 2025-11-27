@@ -3,7 +3,7 @@
  */
 
 import { useState } from "react";
-import { ChevronDown, ChevronRight, Terminal, Check, AlertCircle, Loader2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Terminal, Check, AlertCircle, Loader2, Clock } from "lucide-react";
 import { cn } from "~/lib/utils";
 
 export interface ToolCallData {
@@ -12,6 +12,7 @@ export interface ToolCallData {
   input: Record<string, unknown>;
   output: string;
   status: "pending" | "success" | "error";
+  durationMs?: number;
 }
 
 interface ToolCallProps {
@@ -31,14 +32,24 @@ function formatJson(obj: unknown): string {
 }
 
 /**
+ * Format duration in human-readable form
+ */
+function formatDuration(ms: number | undefined): string {
+  if (ms === undefined) return "";
+  if (ms < 1000) return `${ms}ms`;
+  return `${(ms / 1000).toFixed(1)}s`;
+}
+
+/**
  * Get icon based on tool name
  */
 function getToolIcon(name: string) {
+  // Could expand this with different icons per tool
   return Terminal;
 }
 
 /**
- * Get status icon and color
+ * Get status display properties
  */
 function getStatusDisplay(status: ToolCallData["status"]) {
   switch (status) {
@@ -48,6 +59,7 @@ function getStatusDisplay(status: ToolCallData["status"]) {
         color: "text-yellow-500",
         bgColor: "bg-yellow-500/10",
         animate: "animate-spin",
+        label: "Running",
       };
     case "success":
       return {
@@ -55,6 +67,7 @@ function getStatusDisplay(status: ToolCallData["status"]) {
         color: "text-green-500",
         bgColor: "bg-green-500/10",
         animate: "",
+        label: "Success",
       };
     case "error":
       return {
@@ -62,8 +75,23 @@ function getStatusDisplay(status: ToolCallData["status"]) {
         color: "text-red-500",
         bgColor: "bg-red-500/10",
         animate: "",
+        label: "Error",
       };
   }
+}
+
+/**
+ * Get a friendly tool name
+ */
+function getToolDisplayName(name: string): string {
+  const displayNames: Record<string, string> = {
+    mw_tables: "List Tables",
+    mw_schema: "Get Schema",
+    mw_query: "Query Data",
+    mw_eval: "Evaluate Expression",
+    mw_report: "Generate Report",
+  };
+  return displayNames[name] || name;
 }
 
 export function ToolCall({ toolCall, defaultExpanded = false }: ToolCallProps) {
@@ -92,11 +120,28 @@ export function ToolCall({ toolCall, defaultExpanded = false }: ToolCallProps) {
         </div>
 
         {/* Tool name */}
-        <span className="font-mono text-sm font-medium flex-1">{toolCall.name}</span>
+        <span className="font-mono text-sm font-medium">
+          {getToolDisplayName(toolCall.name)}
+        </span>
+        <span className="text-xs text-muted-foreground font-mono">
+          ({toolCall.name})
+        </span>
+
+        {/* Spacer */}
+        <span className="flex-1" />
+
+        {/* Duration */}
+        {toolCall.durationMs !== undefined && (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground mr-2">
+            <Clock className="size-3" />
+            <span>{formatDuration(toolCall.durationMs)}</span>
+          </div>
+        )}
 
         {/* Status indicator */}
-        <div className={cn("p-1 rounded", statusDisplay.bgColor)}>
-          <StatusIcon className={cn("size-3.5", statusDisplay.color, statusDisplay.animate)} />
+        <div className={cn("px-2 py-0.5 rounded text-xs flex items-center gap-1", statusDisplay.bgColor)}>
+          <StatusIcon className={cn("size-3", statusDisplay.color, statusDisplay.animate)} />
+          <span className={statusDisplay.color}>{statusDisplay.label}</span>
         </div>
       </button>
 
@@ -120,7 +165,7 @@ export function ToolCall({ toolCall, defaultExpanded = false }: ToolCallProps) {
                 toolCall.status === "error" && "text-red-500"
               )}
             >
-              {toolCall.output || "(no output)"}
+              {toolCall.output || "(no output yet)"}
             </pre>
           </div>
         </div>
@@ -135,9 +180,10 @@ export function ToolCall({ toolCall, defaultExpanded = false }: ToolCallProps) {
 interface ToolCallInlineProps {
   name: string;
   status: "pending" | "success" | "error";
+  durationMs?: number;
 }
 
-export function ToolCallInline({ name, status }: ToolCallInlineProps) {
+export function ToolCallInline({ name, status, durationMs }: ToolCallInlineProps) {
   const statusDisplay = getStatusDisplay(status);
   const StatusIcon = statusDisplay.icon;
 
@@ -150,6 +196,9 @@ export function ToolCallInline({ name, status }: ToolCallInlineProps) {
     >
       <StatusIcon className={cn("size-3", statusDisplay.color, statusDisplay.animate)} />
       <span className="text-muted-foreground">{name}</span>
+      {durationMs !== undefined && (
+        <span className="text-muted-foreground/70">{formatDuration(durationMs)}</span>
+      )}
     </span>
   );
 }

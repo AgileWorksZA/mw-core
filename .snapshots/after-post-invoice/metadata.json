@@ -1,0 +1,16 @@
+{
+  "label": "after-post-invoice",
+  "timestamp": "2025-11-26T23:02:43.399Z",
+  "tables": [
+    "TaxRate",
+    "Name",
+    "Account",
+    "Product",
+    "Transaction",
+    "Detail",
+    "Job",
+    "Payments",
+    "General"
+  ],
+  "totalRecords": 5237
+}

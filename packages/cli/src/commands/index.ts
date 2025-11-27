@@ -3,6 +3,7 @@ import { exportCommand } from "@moneyworks/cli/commands/export";
 import { importCommand } from "@moneyworks/cli/commands/import";
 import { listCommand } from "@moneyworks/cli/commands/list";
 import { namesCommand } from "@moneyworks/cli/commands/names";
+import { reportCommand } from "@moneyworks/cli/commands/report";
 import { testConnectionCommand } from "@moneyworks/cli/commands/test-connection";
 import { versionCommand } from "@moneyworks/cli/commands/version";
 import type { SmartMoneyWorksClient } from "@moneyworks/data";
@@ -19,6 +20,7 @@ export const commands: Record<string, CommandHandler> = {
 	eval: evalCommand,
 	version: versionCommand,
 	list: listCommand,
+	report: reportCommand,
 	"test-connection": testConnectionCommand,
 	names: namesCommand,
 };

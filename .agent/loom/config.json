@@ -112,8 +112,38 @@
 			"name": "Snapshot & Diff Tooling",
 			"description": "Developer tooling for reverse-engineering MoneyWorks behavior via table snapshots and diff analysis",
 			"storyCount": 1
+		},
+		{
+			"code": "AIPOC",
+			"name": "AI Package POC",
+			"description": "Proof of concept for packages/ai - React Router 7 app with Anthropic Agent SDK integration for AI chat",
+			"storyCount": 1
+		},
+		{
+			"code": "AITOOLS",
+			"name": "AI Tools Integration",
+			"description": "Claude Code-like tool capabilities for the packages/ai app using Anthropic SDK's tool system - file ops, bash, glob, grep",
+			"storyCount": 1
+		},
+		{
+			"code": "AIUX",
+			"name": "AI UX & MoneyWorks Tools",
+			"description": "AI chat UX improvements and custom MoneyWorks-specific tools for efficient querying and reporting",
+			"storyCount": 1
+		},
+		{
+			"code": "ARTF",
+			"name": "Artifact Display System",
+			"description": "Professional artifact/report display system for AI chat - split-panel layout with pre-built components for financial reports, charts, tables, and metrics",
+			"storyCount": 1
+		},
+		{
+			"code": "DTXN",
+			"name": "Daily Transaction Summary",
+			"description": "Daily transaction summary report and artifact for AI assistant - P&L style summary with balance position changes",
+			"storyCount": 1
 		}
 	],
-	"storyCounter": 7,
+	"storyCounter": 12,
 	"taskCounter": 21
 }

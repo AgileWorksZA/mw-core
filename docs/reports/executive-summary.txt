@@ -1,0 +1,65 @@
+Acme Widgets Ltd
+Executive Summary for 12 Months to January 31, 2025
+
+																																							12 Months Ending
+																																							2025-01-31		2024-01-31
+Income and Profitability
+
+▲	Sales																																						533,379	100.0%	50,971	100.0%
+▲	Less: Cost of Sales																																						149,486	28.0%	29,433	57.7%
+▲	Gross Margin																																						383,893	72.0%	21,538	42.3%
+▲	Add: Other Income																																						822	0.2%	0	0.0%
+▲	Less: Expenses																																						279,650	52.4%	7,878	15.5%
+▲	Net Profit																																						105,066	19.7%	13,659	26.8%
+
+Number of Invoices Issued for period																																							237		0
+	Total Value of Invoices																																						126,449	▲	0
+	Average Value of Invoices																																						534		-
+
+
+Cash
+
+Opening Cash Balance																																							16,184		0
+	Cash Received																																						572,381	▲	0
+	Cash Spent																																						580,342	▲	0
+Cash Surplus (Deficit)																																							(7,962)		0
+   Adjustments: Journals/Currency Gain (Loss)																																							0		16,184
+Closing Bank Balance																																							8,222	▼	16,184
+
+Balance Sheet
+
+	Current Assets																																						63,425	▲	34,144
+	Current Liabilities																																						19,962	▲	15,485
+
+	Current Ratio																																						3.18	▲	2.20
+	Quick Ratio																																						3.05	▲	2.11
+	Cash Ratio																																						0.41	▼	1.05
+
+Inventory
+
+Opening Stock																																							1,512	▲	0
+	Add: Purchases																																						47,938	▲	0
+	Less: Closing Stock																																						2,522	▲	1,512
+Cost of Sales																																							46,928	▲	(1,512)
+
+Inventory Turnover																																							23.27	▲	(2.00)
+Inventory Period																																							16	▲	-182.50
+
+Payables and Receivables
+
+	Payables																																						13,250	▲	7,839
+	Receivables																																						52,682	▲	10,854
+
+Aged Receivables																																							Aged Payables
+	Current (0%)	0																																					        Current (0%)		0
+	30 Days (27%)	14,561																																					        30 Days (6%)		824
+	60 Days (24%)	12,570																																					        60 Days (46%)		6,111
+	90+ Days (49%)	26,128																																					        90+ Days (48%)		6,315
+
+																																							
+
+Credit Sales for previous 12 months																																							126,449	▲	10,854
+Receivables Turnover																																							3.98	▲	2.00
+Average Collection Days																																							91.70	▼	182.50
+
+

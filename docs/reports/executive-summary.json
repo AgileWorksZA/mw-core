@@ -1,0 +1,302 @@
+{
+  "metadata": {
+    "reportType": "executive-summary",
+    "title": "Executive Summary",
+    "companyName": "Acme Widgets Ltd",
+    "currentPeriod": {
+      "startDate": "2025-01-01",
+      "endDate": "2025-11-27",
+      "description": "12 Months to November 26, 2025"
+    },
+    "priorPeriod": {
+      "startDate": "",
+      "endDate": "",
+      "description": "12 Months Ending November 26, 2024"
+    },
+    "generatedAt": "2025-11-27T05:43:14.472Z",
+    "currency": "NZD",
+    "schemaVersion": "1.0.0"
+  },
+  "incomeProfitability": {
+    "sales": {
+      "value": 533379,
+      "formatted": "533,379",
+      "percentage": 100,
+      "priorValue": 50971,
+      "priorPercentage": 100,
+      "trend": "up"
+    },
+    "costOfSales": {
+      "value": 149486,
+      "formatted": "149,486",
+      "percentage": 28,
+      "priorValue": 29433,
+      "priorPercentage": 57.7,
+      "trend": "up"
+    },
+    "grossMargin": {
+      "value": 383893,
+      "formatted": "383,893",
+      "percentage": 72,
+      "priorValue": 21538,
+      "priorPercentage": 42.3,
+      "trend": "up"
+    },
+    "otherIncome": {
+      "value": 822,
+      "formatted": "822",
+      "percentage": 0.2,
+      "priorValue": 0,
+      "priorPercentage": 0,
+      "trend": "up"
+    },
+    "expenses": {
+      "value": 279650,
+      "formatted": "279,650",
+      "percentage": 52.4,
+      "priorValue": 7878,
+      "priorPercentage": 15.5,
+      "trend": "up"
+    },
+    "netProfit": {
+      "value": 105066,
+      "formatted": "105,066",
+      "percentage": 19.7,
+      "priorValue": 13659,
+      "priorPercentage": 26.8,
+      "trend": "up"
+    }
+  },
+  "invoiceStatistics": {
+    "invoiceCount": {
+      "value": 237,
+      "formatted": "237.00",
+      "priorValue": 0,
+      "trend": "up"
+    },
+    "totalValue": {
+      "value": 126449,
+      "formatted": "126,449",
+      "priorValue": 0,
+      "trend": "up"
+    },
+    "averageValue": {
+      "value": 534,
+      "formatted": "534.00",
+      "priorValue": 0,
+      "trend": "up"
+    }
+  },
+  "cash": {
+    "openingBalance": {
+      "value": 16184,
+      "formatted": "16,184",
+      "priorValue": 0,
+      "trend": "up"
+    },
+    "cashReceived": {
+      "value": 572381,
+      "formatted": "572,381",
+      "priorValue": 0,
+      "trend": "up"
+    },
+    "cashSpent": {
+      "value": 580342,
+      "formatted": "580,342",
+      "priorValue": 0,
+      "trend": "up"
+    },
+    "surplusDeficit": {
+      "value": -7962,
+      "formatted": "(7,962)",
+      "priorValue": 0,
+      "trend": "down"
+    },
+    "adjustments": {
+      "value": 0,
+      "formatted": "0",
+      "priorValue": 16184,
+      "trend": "down"
+    },
+    "closingBalance": {
+      "value": 8222,
+      "formatted": "8,222",
+      "priorValue": 16184,
+      "trend": "down"
+    }
+  },
+  "balanceSheet": {
+    "currentAssets": {
+      "value": 63425,
+      "formatted": "63,425",
+      "priorValue": 34144,
+      "trend": "up"
+    },
+    "currentLiabilities": {
+      "value": 19962,
+      "formatted": "19,962",
+      "priorValue": 15485,
+      "trend": "up"
+    },
+    "ratios": {
+      "currentRatio": {
+        "value": 3.18,
+        "formatted": "3.18",
+        "priorValue": 2.2,
+        "trend": "up"
+      },
+      "quickRatio": {
+        "value": 3.05,
+        "formatted": "3.05",
+        "priorValue": 2.11,
+        "trend": "up"
+      },
+      "cashRatio": {
+        "value": 0.41,
+        "formatted": "0.41",
+        "priorValue": 1.05,
+        "trend": "down"
+      }
+    }
+  },
+  "inventory": {
+    "openingStock": {
+      "value": 1512,
+      "formatted": "1,512",
+      "priorValue": 0,
+      "trend": "up"
+    },
+    "purchases": {
+      "value": 47938,
+      "formatted": "47,938",
+      "priorValue": 0,
+      "trend": "up"
+    },
+    "closingStock": {
+      "value": 2522,
+      "formatted": "2,522",
+      "priorValue": 1512,
+      "trend": "up"
+    },
+    "costOfSales": {
+      "value": 46928,
+      "formatted": "46,928",
+      "priorValue": -1512,
+      "trend": "up"
+    },
+    "metrics": {
+      "inventoryTurnover": {
+        "value": 23.27,
+        "formatted": "23.27",
+        "priorValue": -2,
+        "trend": "up",
+        "unit": "times"
+      },
+      "inventoryPeriod": {
+        "value": 16,
+        "formatted": "16.00",
+        "priorValue": -182.5,
+        "trend": "up",
+        "unit": "days"
+      }
+    }
+  },
+  "payablesReceivables": {
+    "payables": {
+      "total": {
+        "value": 13250,
+        "formatted": "13,250",
+        "priorValue": 7839,
+        "trend": "up"
+      },
+      "aging": [
+        {
+          "label": "Current",
+          "daysFrom": 0,
+          "daysTo": 0,
+          "amount": 0,
+          "percentage": 0
+        },
+        {
+          "label": "30 Days",
+          "daysFrom": 1,
+          "daysTo": 30,
+          "amount": 824,
+          "percentage": 6
+        },
+        {
+          "label": "60 Days",
+          "daysFrom": 31,
+          "daysTo": 60,
+          "amount": 6111,
+          "percentage": 46
+        },
+        {
+          "label": "90+ Days",
+          "daysFrom": 61,
+          "daysTo": null,
+          "amount": 6315,
+          "percentage": 48
+        }
+      ]
+    },
+    "receivables": {
+      "total": {
+        "value": 52682,
+        "formatted": "52,682",
+        "priorValue": 10854,
+        "trend": "up"
+      },
+      "aging": [
+        {
+          "label": "Current",
+          "daysFrom": 0,
+          "daysTo": 0,
+          "amount": 0,
+          "percentage": 0
+        },
+        {
+          "label": "30 Days",
+          "daysFrom": 1,
+          "daysTo": 30,
+          "amount": 14561,
+          "percentage": 27
+        },
+        {
+          "label": "60 Days",
+          "daysFrom": 31,
+          "daysTo": 60,
+          "amount": 12570,
+          "percentage": 24
+        },
+        {
+          "label": "90+ Days",
+          "daysFrom": 61,
+          "daysTo": null,
+          "amount": 26128,
+          "percentage": 49
+        }
+      ],
+      "creditSales": {
+        "value": 126449,
+        "formatted": "126,449",
+        "priorValue": 10854,
+        "trend": "up"
+      },
+      "turnover": {
+        "value": 3.98,
+        "formatted": "3.98",
+        "priorValue": 2,
+        "trend": "up",
+        "unit": "times"
+      },
+      "averageCollectionDays": {
+        "value": 91.7,
+        "formatted": "91.70",
+        "priorValue": 182.5,
+        "trend": "down",
+        "unit": "days"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "label": "test-gaps",
+  "timestamp": "2025-11-25T21:40:25.815Z",
+  "tables": [
+    "TaxRate",
+    "Name",
+    "Account",
+    "Product",
+    "Transaction",
+    "Detail",
+    "Job",
+    "General"
+  ],
+  "totalRecords": 4944
+}

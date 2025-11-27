@@ -1,0 +1,16 @@
+{
+  "label": "after-invoice-3422",
+  "timestamp": "2025-11-25T23:24:35.543Z",
+  "tables": [
+    "TaxRate",
+    "Name",
+    "Account",
+    "Product",
+    "Transaction",
+    "Detail",
+    "Job",
+    "Payments",
+    "General"
+  ],
+  "totalRecords": 5237
+}

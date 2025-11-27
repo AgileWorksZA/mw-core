@@ -292,6 +292,181 @@
 			],
 			"rationale": "MoneyWorks error responses can be cryptic - client-side validation provides clearer feedback",
 			"evidence": ["IMPT-001 L-003: Validation before send saves round trips and improves error messages"]
+		},
+		"react-type-conflicts-pattern": {
+			"id": "react-type-conflicts-pattern",
+			"name": "Monorepo React Version Type Conflicts",
+			"description": "Monorepos with mixed React 18/19 versions cause type conflicts with UI libraries like Radix UI that have strict React type dependencies",
+			"type": "compatibility-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/ai", "AIPOC-001"],
+			"symptoms": [
+				"Radix UI components show type errors despite correct code",
+				"Type 'Element' is not assignable errors",
+				"React.ReactNode incompatibility warnings"
+			],
+			"workaround": "Use native HTML elements instead of Radix primitives when type conflicts occur",
+			"rootCause": "Root package.json has React 18 types, but new packages use React 19",
+			"permanentFix": "Standardize React version across all workspace packages",
+			"evidence": ["AIPOC-001 D-001: Native HTML chosen over Radix due to type conflicts"]
+		},
+		"react-router-7-explicit-routing-pattern": {
+			"id": "react-router-7-explicit-routing-pattern",
+			"name": "React Router 7 Explicit Route Configuration",
+			"description": "React Router v7 requires explicit route configuration in app/routes.ts using index() and route() helpers with 'satisfies RouteConfig' pattern",
+			"type": "framework-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/ai/app/routes.ts", "packages/web/app/routes.ts", "AIPOC-001"],
+			"implementation": {
+				"file": "app/routes.ts",
+				"pattern": "index('routes/_index.tsx') satisfies RouteConfig",
+				"helpers": ["index()", "route()"]
+			},
+			"rationale": "No automatic file-based routing in v7 - routes must be explicitly registered",
+			"evidence": ["AIPOC-001 AC-002: Verified explicit route configuration in app/routes.ts"]
+		},
+		"anthropic-server-streaming-pattern": {
+			"id": "anthropic-server-streaming-pattern",
+			"name": "Anthropic SDK Server-Side Streaming",
+			"description": "Use @anthropic-ai/sdk with messages.stream() and async iteration for server-side AI responses in React Router actions",
+			"type": "integration-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/ai/app/lib/anthropic.server.ts", "packages/ai/app/routes/_index.tsx", "AIPOC-001"],
+			"implementation": {
+				"client": "anthropic.server.ts exports configured Anthropic client",
+				"streaming": "for await (const event of anthropic.messages.stream())",
+				"serverFile": "*.server.ts suffix for server-only code"
+			},
+			"rationale": "Server-side streaming keeps API keys secure and enables SSR-friendly AI integration",
+			"evidence": ["AIPOC-001 AC-007: Server action uses anthropic.messages.stream() with for await loop"]
+		},
+		"tailwind-v4-vite-plugin-pattern": {
+			"id": "tailwind-v4-vite-plugin-pattern",
+			"name": "Tailwind CSS v4 Vite Plugin",
+			"description": "Tailwind CSS v4 uses @tailwindcss/vite plugin directly - no PostCSS configuration required",
+			"type": "build-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/ai/vite.config.ts", "AIPOC-001"],
+			"implementation": {
+				"plugin": "@tailwindcss/vite",
+				"viteConfig": "import tailwindcss from '@tailwindcss/vite'; plugins: [tailwindcss()]"
+			},
+			"rationale": "v4 simplifies setup by eliminating PostCSS config - plugin handles everything",
+			"evidence": ["AIPOC-001 AC-003: Tailwind integrated with @tailwindcss/vite plugin"]
+		},
+		"betatool-json-schema-pattern": {
+			"id": "betatool-json-schema-pattern",
+			"name": "betaTool with JSON Schema for Anthropic SDK",
+			"description": "Use betaTool from @anthropic-ai/sdk/helpers/beta/json-schema instead of betaZodTool for React Router 7 / Vite projects to avoid Zod ESM compatibility issues",
+			"type": "integration-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/ai/app/lib/tools/", "AITOOLS-001"],
+			"implementation": {
+				"import": "import { betaTool } from '@anthropic-ai/sdk/helpers/beta/json-schema'",
+				"pattern": "betaTool({ name, description, inputSchema: { type: 'object', properties: {...} }, run: async (input) => {...} })"
+			},
+			"rationale": "betaZodTool requires Zod's toJSONSchema which has ESM compatibility issues in Vite/React Router environments",
+			"evidence": ["AITOOLS-001: All 6 tools use betaTool successfully", "betaZodTool caused import errors in Vite dev server"]
+		},
+		"anthropic-toolrunner-pattern": {
+			"id": "anthropic-toolrunner-pattern",
+			"name": "Anthropic toolRunner for Automatic Tool Execution",
+			"description": "Use anthropic.beta.messages.toolRunner() for automatic tool execution loops - handles tool_use stop reason and re-submission automatically",
+			"type": "integration-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/ai/app/lib/anthropic.server.ts", "AITOOLS-001"],
+			"implementation": {
+				"import": "import Anthropic from '@anthropic-ai/sdk'",
+				"usage": "const response = await anthropic.beta.messages.toolRunner({ model, max_tokens, tools: [tool1, tool2], messages })"
+			},
+			"rationale": "toolRunner abstracts the tool execution loop - automatically calls tools and re-submits results until Claude responds without tool_use",
+			"evidence": ["AITOOLS-001 AC-003: Server action uses toolRunner for automatic tool execution loop"]
+		},
+		"tools-vs-skills-distinction": {
+			"id": "tools-vs-skills-distinction",
+			"name": "Anthropic Tools vs Skills Architecture",
+			"description": "Tools execute server-side with full system access (files, bash, network). Skills run in Anthropic's sandboxed container for document generation (XLSX, PDF) with NO network access.",
+			"type": "architectural-pattern",
+			"confidence": 1.0,
+			"observedIn": ["AITOOLS-001 research phase"],
+			"comparison": {
+				"tools": {
+					"execution": "Your server",
+					"network": "Yes - can call external APIs",
+					"filesystem": "Your local files",
+					"bestFor": "File operations, bash, external API calls"
+				},
+				"skills": {
+					"execution": "Anthropic sandboxed container",
+					"network": "No - isolated",
+					"filesystem": "Container /skills/ directory only",
+					"bestFor": "Document generation (XLSX, PPTX, PDF, DOCX)"
+				}
+			},
+			"rationale": "Use tools for interactive system access, skills for polished document generation",
+			"evidence": ["Research: Skills API docs show no network access", "User clarified skills can do code execution but in sandbox"]
+		},
+		"artifact-code-block-pattern": {
+			"id": "artifact-code-block-pattern",
+			"name": "AI Artifact Code Block Transport",
+			"description": "AI returns structured artifact data in fenced ```artifacts code blocks, parsed by frontend regex. Clean separation of conversational text from structured data.",
+			"type": "integration-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/ai/app/lib/anthropic.server.ts", "ARTF-001"],
+			"implementation": {
+				"aiFormat": "```artifacts\\n[{...artifact JSON...}]\\n```",
+				"parsing": "parseArtifacts() extracts JSON from code block via regex",
+				"separation": "Chat text flows normally, artifacts extracted separately"
+			},
+			"rationale": "Code blocks are easy to parse and maintain clean separation from conversational content",
+			"evidence": ["ARTF-001 D-001: Chose code block format for artifact data transport"]
+		},
+		"discriminated-union-rendering-pattern": {
+			"id": "discriminated-union-rendering-pattern",
+			"name": "Discriminated Union Type-Safe Rendering",
+			"description": "Use TypeScript discriminated unions with type guards for type-safe component selection when rendering multiple artifact types",
+			"type": "type-safety-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/ai/app/lib/artifacts/types.ts", "packages/ai/app/components/artifacts/artifact-renderer.tsx", "ARTF-001"],
+			"implementation": {
+				"unionType": "ArtifactData = BarChartData | PieChartData | BalanceSheetData | ...",
+				"typeGuards": "isBarChartData(), isPieChartData(), isBalanceSheetData()",
+				"rendering": "switch(artifact.type) with type-narrowed data"
+			},
+			"rationale": "Compile-time safety ensures correct component receives correct data shape",
+			"evidence": ["ARTF-001: 9 artifact types with type-safe rendering via discriminated unions"]
+		},
+		"split-panel-responsive-pattern": {
+			"id": "split-panel-responsive-pattern",
+			"name": "Split Panel Responsive Layout",
+			"description": "Desktop split-panel (60/40) with mobile drawer overlay pattern for chat + artifact display",
+			"type": "ui-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/ai/app/components/layout/split-panel-layout.tsx", "ARTF-001"],
+			"implementation": {
+				"desktop": "flex with w-[60%] chat, w-[40%] artifacts",
+				"mobile": "Full-width chat with fixed bottom button to open drawer",
+				"breakpoint": "768px (md: in Tailwind)"
+			},
+			"rationale": "Split panel works well on wide screens, drawer overlay preserves chat real estate on mobile",
+			"evidence": ["ARTF-001 AC-001, AC-003: Split panel desktop, drawer mobile"]
+		},
+		"artifact-implementation-5-step-pattern": {
+			"id": "artifact-implementation-5-step-pattern",
+			"name": "5-Step Artifact Implementation Pattern",
+			"description": "Standard pattern for adding new AI artifacts: (1) Types + type guards in types.ts, (2) React component, (3) Renderer integration with discriminated union, (4) Tool enhancement with report definition/generation, (5) System prompt documentation",
+			"type": "implementation-pattern",
+			"confidence": 1.0,
+			"observedIn": ["DTXN-001: Daily transaction summary artifact", "packages/ai artifact structure"],
+			"steps": [
+				"1. Add artifact type to ArtifactType union and create data interface with type guard in types.ts",
+				"2. Create React component for visual rendering in components/artifacts/{name}.tsx",
+				"3. Add discriminated union case in artifact-renderer.tsx with type guard check",
+				"4. Add report definition to mw-report tool and implement generation logic",
+				"5. Document artifact structure and usage in system prompt (anthropic.server.ts)"
+			],
+			"rationale": "Proven pattern enables consistent artifact implementation with all necessary integration points",
+			"evidence": ["DTXN-001: Completed in < 1 day following this pattern", "References bank-reconciliation-status as prior example"]
 		}
 	},
 	"validations": {
@@ -332,12 +507,12 @@
 	"knowledgeGaps": [],
 	"metadata": {
 		"totalConcepts": 0,
-		"totalPatterns": 16,
+		"totalPatterns": 28,
 		"totalValidations": 1,
 		"averageConfidence": 0.97,
-		"highConfidenceConcepts": 16,
+		"highConfidenceConcepts": 28,
 		"lowConfidenceConcepts": 0,
 		"knowledgeGaps": 0,
-		"lastValidation": "2025-11-25T12:00:00.000Z"
+		"lastValidation": "2025-11-27T20:30:00.000Z"
 	}
 }

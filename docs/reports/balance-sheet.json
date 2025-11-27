@@ -1,0 +1,300 @@
+{
+  "metadata": {
+    "reportType": "balance-sheet",
+    "title": "Balance Sheet",
+    "companyName": "Acme Widgets Ltd",
+    "currentPeriod": {
+      "startDate": "",
+      "endDate": "2025-11-27",
+      "description": "As at November 26, 2025"
+    },
+    "generatedAt": "2025-11-27T05:54:18.673Z",
+    "currency": "NZD",
+    "schemaVersion": "1.0.0"
+  },
+  "options": {
+    "asOfDate": "2025-11-27",
+    "omitZeroBalance": true,
+    "includeUnposted": false,
+    "printMovements": false,
+    "showDepartments": false,
+    "cashBasis": false,
+    "showAccountCodes": false,
+    "sort": "accountCode",
+    "currency": "NZD"
+  },
+  "assets": {
+    "currentAssets": {
+      "title": "CURRENT ASSETS",
+      "items": [
+        {
+          "accountName": "Main Bank Account",
+          "thisYear": {
+            "value": 8221.85,
+            "formatted": "8,222"
+          },
+          "lastYearEnd": {
+            "value": 42239.72,
+            "formatted": "42,240"
+          },
+          "indentLevel": 1
+        },
+        {
+          "accountName": "Stock On Hand",
+          "thisYear": {
+            "value": 2521.52,
+            "formatted": "2,522"
+          },
+          "lastYearEnd": {
+            "value": 1523.37,
+            "formatted": "1,523"
+          },
+          "indentLevel": 1
+        },
+        {
+          "accountName": "GST Paid",
+          "thisYear": {
+            "value": 0,
+            "formatted": "0"
+          },
+          "lastYearEnd": {
+            "value": 18466.4,
+            "formatted": "18,466"
+          },
+          "indentLevel": 1
+        },
+        {
+          "accountName": "Accounts Receivable",
+          "thisYear": {
+            "value": 52681.57,
+            "formatted": "52,682"
+          },
+          "lastYearEnd": {
+            "value": 12557.9,
+            "formatted": "12,558"
+          },
+          "indentLevel": 1
+        }
+      ],
+      "subtotal": {
+        "accountName": "",
+        "thisYear": {
+          "value": 63424.94,
+          "formatted": "63,425"
+        },
+        "lastYearEnd": {
+          "value": 74787.39,
+          "formatted": "74,787"
+        },
+        "indentLevel": 0,
+        "isSubtotal": true
+      }
+    },
+    "fixedAssets": {
+      "title": "FIXED ASSETS",
+      "items": [
+        {
+          "accountName": "Office Equipment",
+          "thisYear": {
+            "value": 5771.74,
+            "formatted": "5,772"
+          },
+          "lastYearEnd": {
+            "value": 0,
+            "formatted": "0"
+          },
+          "indentLevel": 1
+        },
+        {
+          "accountName": "Plant",
+          "thisYear": {
+            "value": 33241.32,
+            "formatted": "33,241"
+          },
+          "lastYearEnd": {
+            "value": 8310.33,
+            "formatted": "8,310"
+          },
+          "indentLevel": 1
+        }
+      ],
+      "subtotal": {
+        "accountName": "",
+        "thisYear": {
+          "value": 39013.06,
+          "formatted": "39,013"
+        },
+        "lastYearEnd": {
+          "value": 8310.33,
+          "formatted": "8,310"
+        },
+        "indentLevel": 0,
+        "isSubtotal": true
+      }
+    },
+    "total": {
+      "accountName": "TOTAL ASSETS",
+      "thisYear": {
+        "value": 102438,
+        "formatted": "102,438"
+      },
+      "lastYearEnd": {
+        "value": 83097.72,
+        "formatted": "83,098"
+      },
+      "indentLevel": 0,
+      "isTotal": true
+    }
+  },
+  "liabilities": {
+    "currentLiabilities": {
+      "title": "CURRENT LIABILITIES",
+      "items": [
+        {
+          "accountName": "GST Received",
+          "thisYear": {
+            "value": 0,
+            "formatted": "0"
+          },
+          "lastYearEnd": {
+            "value": 25406.54,
+            "formatted": "25,407"
+          },
+          "indentLevel": 1
+        },
+        {
+          "accountName": "Accounts Payable",
+          "thisYear": {
+            "value": 13250.01,
+            "formatted": "13,250"
+          },
+          "lastYearEnd": {
+            "value": 6096.49,
+            "formatted": "6,096"
+          },
+          "indentLevel": 1
+        },
+        {
+          "accountName": "GST Holding",
+          "thisYear": {
+            "value": 6712.28,
+            "formatted": "6,712"
+          },
+          "lastYearEnd": {
+            "value": 0,
+            "formatted": "0"
+          },
+          "indentLevel": 1
+        }
+      ],
+      "subtotal": {
+        "accountName": "",
+        "thisYear": {
+          "value": 19962.29,
+          "formatted": "19,962"
+        },
+        "lastYearEnd": {
+          "value": 31503.03,
+          "formatted": "31,503"
+        },
+        "indentLevel": 0,
+        "isSubtotal": true
+      }
+    }
+  },
+  "equity": {
+    "section": {
+      "title": "EQUITY",
+      "items": [
+        {
+          "accountName": "Authorised Capital",
+          "thisYear": {
+            "value": 5000,
+            "formatted": "5,000"
+          },
+          "lastYearEnd": {
+            "value": 5000,
+            "formatted": "5,000"
+          },
+          "indentLevel": 1
+        },
+        {
+          "accountName": "Retained Earnings",
+          "thisYear": {
+            "value": 52219.69,
+            "formatted": "52,220"
+          },
+          "lastYearEnd": {
+            "value": 0,
+            "formatted": "0"
+          },
+          "indentLevel": 1
+        },
+        {
+          "accountName": "Drawings",
+          "thisYear": {
+            "value": -41250,
+            "formatted": "(41,250)"
+          },
+          "lastYearEnd": {
+            "value": -5625,
+            "formatted": "(5,625)"
+          },
+          "indentLevel": 1
+        }
+      ],
+      "subtotal": {
+        "accountName": "",
+        "thisYear": {
+          "value": 15969.690000000002,
+          "formatted": "15,970"
+        },
+        "lastYearEnd": {
+          "value": -625,
+          "formatted": "(625)"
+        },
+        "indentLevel": 0,
+        "isSubtotal": true
+      }
+    },
+    "currentYearSurplus": {
+      "accountName": "Plus Current Year Operating Surplus/(Deficit)",
+      "thisYear": {
+        "value": 66506.02,
+        "formatted": "66,506"
+      },
+      "lastYearEnd": {
+        "value": 52219.69,
+        "formatted": "52,220"
+      },
+      "indentLevel": 1
+    },
+    "totalCapitalFunds": {
+      "accountName": "TOTAL CAPITAL FUNDS",
+      "thisYear": {
+        "value": 82475.71,
+        "formatted": "82,476"
+      },
+      "lastYearEnd": {
+        "value": 51594.69,
+        "formatted": "51,595"
+      },
+      "indentLevel": 0,
+      "isTotal": true
+    }
+  },
+  "liabilitiesAndEquity": {
+    "accountName": "LIABILITIES AND EQUITY",
+    "thisYear": {
+      "value": 102438,
+      "formatted": "102,438"
+    },
+    "lastYearEnd": {
+      "value": 83097.72,
+      "formatted": "83,098"
+    },
+    "indentLevel": 0,
+    "isTotal": true
+  },
+  "isBalanced": true
+}
