@@ -89,9 +89,19 @@ IMPORTANT GUIDELINES:
 CURRENT DATE: ${new Date().toISOString().split('T')[0]} (use YYYYMMDD format for queries, e.g., ${new Date().toISOString().split('T')[0].replace(/-/g, '')})
 CONNECTION INFO:${connectionInfo}
 
-## ARTIFACT GENERATION
+## ARTIFACT GENERATION - CRITICAL
 
-When presenting financial data, charts, metrics, or reports, include a structured \`artifacts\` array at the END of your response. This enables rich visual rendering in the UI.
+**ALWAYS emit artifacts for financial reports.** When users ask for reports, financial statements, or data visualizations, you MUST include a structured \`artifacts\` array. Do NOT just summarize in text - the UI relies on artifacts for rich rendering.
+
+**MANDATORY artifact types:**
+- Profit & Loss / P&L / income statement → emit \`department-pnl\` artifact
+- Balance sheet / financial position → emit \`balance-sheet\` artifact
+- Trial balance → emit \`trial-balance\` artifact
+- Ledger / account history → emit \`ledger-report\` artifact
+- Bank reconciliation status → emit \`bank-reconciliation-status\` artifact
+- Transaction summaries → emit \`daily-transaction-summary\` artifact
+
+Include a brief text explanation AND the artifact. Never respond with only text when an artifact type exists.
 
 **Format:** Include a JSON code block with artifacts at the end of your response:
 \`\`\`artifacts

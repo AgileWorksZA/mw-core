@@ -317,14 +317,49 @@
 			],
 			"confidence": 1.0,
 			"evidence": ["DTXN-001 L-001: Discovered during daily transaction summary implementation"]
+		},
+		"defensive-artifact-rendering": {
+			"id": "defensive-artifact-rendering",
+			"what": "Use defensive coding with fallbacks when rendering AI-generated artifacts",
+			"when": "Building artifact React components that receive AI-generated data",
+			"how": "Provide default values for all optional fields: const suppliers = data.suppliers || []; const currency = data.currency || 'NZD';",
+			"why": "AI-generated data structures may vary or have missing fields - defensive coding provides better UX than rendering nothing",
+			"benefits": [
+				"Component renders even with partial data",
+				"Better user experience",
+				"Graceful degradation"
+			],
+			"tradeoffs": [
+				"May hide data issues",
+				"Extra null checking code"
+			],
+			"confidence": 0.95,
+			"evidence": ["APAY-001 D-001: Chose defensive pattern from department-pnl.tsx over strict type guards"]
+		},
+		"moneyworks-canonical-terminology-in-ui": {
+			"id": "moneyworks-canonical-terminology-in-ui",
+			"what": "Preserve exact MoneyWorks terminology in UI labels (e.g., 'as at' not 'as of')",
+			"when": "Building UI components that display MoneyWorks report data",
+			"how": "Match exact field labels from MoneyWorks reports: 'Accounts Payable as at', 'GST' not 'Tax', aging bucket names",
+			"why": "Maintains canonical DSL purity and matches what users expect from MoneyWorks reports",
+			"benefits": [
+				"Consistent terminology with MoneyWorks",
+				"Users recognize familiar report format",
+				"Preserves DSL integrity"
+			],
+			"tradeoffs": [
+				"May seem non-standard to non-MW users"
+			],
+			"confidence": 1.0,
+			"evidence": ["APAY-001 L-002: Preserved 'as at' terminology from MoneyWorks"]
 		}
 	},
 	"metadata": {
 		"totalWowPatterns": 3,
 		"totalDelegationStrategies": 1,
-		"totalBestPractices": 18,
+		"totalBestPractices": 20,
 		"averageConfidence": 0.94,
 		"lastCompaction": null,
-		"lastUpdated": "2025-11-27T20:30:00.000Z"
+		"lastUpdated": "2025-11-28T16:30:00.000Z"
 	}
 }

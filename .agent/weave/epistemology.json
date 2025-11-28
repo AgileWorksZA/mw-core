@@ -457,7 +457,7 @@
 			"description": "Standard pattern for adding new AI artifacts: (1) Types + type guards in types.ts, (2) React component, (3) Renderer integration with discriminated union, (4) Tool enhancement with report definition/generation, (5) System prompt documentation",
 			"type": "implementation-pattern",
 			"confidence": 1.0,
-			"observedIn": ["DTXN-001: Daily transaction summary artifact", "packages/ai artifact structure"],
+			"observedIn": ["DTXN-001: Daily transaction summary artifact", "packages/ai artifact structure", "APAY-001: Aged payables report"],
 			"steps": [
 				"1. Add artifact type to ArtifactType union and create data interface with type guard in types.ts",
 				"2. Create React component for visual rendering in components/artifacts/{name}.tsx",
@@ -466,7 +466,33 @@
 				"5. Document artifact structure and usage in system prompt (anthropic.server.ts)"
 			],
 			"rationale": "Proven pattern enables consistent artifact implementation with all necessary integration points",
-			"evidence": ["DTXN-001: Completed in < 1 day following this pattern", "References bank-reconciliation-status as prior example"]
+			"evidence": ["DTXN-001: Completed in < 1 day following this pattern", "References bank-reconciliation-status as prior example", "APAY-001: Aged payables with expandable rows confirmed pattern"]
+		},
+		"aging-report-progressive-urgency-pattern": {
+			"id": "aging-report-progressive-urgency-pattern",
+			"name": "Progressive Urgency Visual Indicators for Aging Reports",
+			"description": "Use red (critical) for 3+ months overdue, amber (warning) for 2 months overdue in aging reports. Apply to row backgrounds, text color, and status icons.",
+			"type": "ui-pattern",
+			"confidence": 1.0,
+			"observedIn": ["packages/ai/app/components/artifacts/aged-payables-report.tsx", "packages/ai/app/components/artifacts/stocktake-report.tsx"],
+			"implementation": {
+				"critical": "bg-red-100 dark:bg-red-950/40, text-red-600, AlertCircle icon",
+				"warning": "bg-amber-100 dark:bg-amber-950/40, text-amber-600, AlertTriangle icon",
+				"normal": "hover:bg-muted/30"
+			},
+			"rationale": "Progressive urgency helps users quickly identify items requiring immediate attention while not alarming them about normal items",
+			"evidence": ["APAY-001 AC-006: Visual indicators implemented for overdue amounts", "stocktake-report.tsx: Same pattern for low stock alerts"]
+		},
+		"nested-tbody-expandable-rows-pattern": {
+			"id": "nested-tbody-expandable-rows-pattern",
+			"name": "Nested tbody for Expandable Table Rows",
+			"description": "Use nested tbody elements to group parent-child rows in expandable tables. Each expandable section gets its own tbody, allowing proper table structure while enabling independent expansion.",
+			"type": "ui-pattern",
+			"confidence": 0.95,
+			"observedIn": ["packages/ai/app/components/artifacts/aged-payables-report.tsx"],
+			"implementation": "suppliers.map(supplier => <tbody key={supplier.code}><SupplierRow/>{isExpanded && invoices.map(inv => <InvoiceRow/>)}</tbody>)",
+			"rationale": "Maintains proper HTML table semantics while allowing independent grouping of supplier/invoice rows",
+			"evidence": ["APAY-001 D-002: Chose nested tbody over conditional row rendering"]
 		}
 	},
 	"validations": {
@@ -507,12 +533,12 @@
 	"knowledgeGaps": [],
 	"metadata": {
 		"totalConcepts": 0,
-		"totalPatterns": 28,
+		"totalPatterns": 30,
 		"totalValidations": 1,
 		"averageConfidence": 0.97,
-		"highConfidenceConcepts": 28,
+		"highConfidenceConcepts": 30,
 		"lowConfidenceConcepts": 0,
 		"knowledgeGaps": 0,
-		"lastValidation": "2025-11-27T20:30:00.000Z"
+		"lastValidation": "2025-11-28T16:30:00.000Z"
 	}
 }

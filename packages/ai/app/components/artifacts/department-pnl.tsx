@@ -150,6 +150,11 @@ function PnLSectionComponent({
 }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
+  // Defensive: ensure arrays exist
+  const items = section?.items || [];
+  const total = section?.total || { name: "Total", values: [], isTotal: true };
+  const sectionName = section?.name || "Section";
+
   return (
     <div className="mb-2">
       {/* Section Header - Clickable */}
@@ -164,16 +169,16 @@ function PnLSectionComponent({
           ) : (
             <ChevronRight className="size-4 text-muted-foreground" />
           )}
-          <span className="font-semibold text-sm">{section.name}</span>
+          <span className="font-semibold text-sm">{sectionName}</span>
           <span className="text-xs text-muted-foreground">
-            ({section.items.length} account{section.items.length !== 1 ? "s" : ""})
+            ({items.length} account{items.length !== 1 ? "s" : ""})
           </span>
         </div>
         <div className="flex items-center gap-4">
           {/* Show section totals in header when collapsed */}
           {!isExpanded && (
             <div className="flex gap-4 text-xs">
-              {section.total.values.map((value, idx) => (
+              {(total.values || []).map((value, idx) => (
                 <span
                   key={idx}
                   className={cn("font-mono", value < 0 && "text-red-600")}
@@ -191,7 +196,7 @@ function PnLSectionComponent({
         <div className="border border-t-0 rounded-b overflow-hidden">
           <table className="w-full text-sm">
             <tbody>
-              {section.items.map((item, idx) => (
+              {items.map((item, idx) => (
                 <LineItemRow
                   key={item.code || idx}
                   item={item}
@@ -202,7 +207,7 @@ function PnLSectionComponent({
               ))}
               {/* Section Total */}
               <LineItemRow
-                item={section.total}
+                item={total}
                 periods={periods}
                 currency={currency}
                 isOdd={false}
@@ -295,6 +300,19 @@ function CalculatedRow({
 export function DepartmentPnL({ data, className }: DepartmentPnLProps) {
   const currency = data.currency || "NZD";
 
+  // Defensive: ensure sections exist with proper structure
+  const sections = data.sections || {};
+  const defaultSection: PnLSection = { name: "", items: [], total: { name: "Total", code: "", values: [], isTotal: true } };
+  const defaultLineItem: PnLLineItem = { name: "", code: "", values: [] };
+
+  const sales = sections.sales || defaultSection;
+  const costOfSales = sections.costOfSales || defaultSection;
+  const grossMargin = sections.grossMargin || defaultLineItem;
+  const otherIncome = sections.otherIncome || defaultSection;
+  const netIncome = sections.netIncome || defaultLineItem;
+  const expenses = sections.expenses || defaultSection;
+  const profitLoss = sections.profitLoss || defaultLineItem;
+
   return (
     <Card className={cn("overflow-hidden", className)}>
       <CardHeader className="pb-2">
@@ -340,50 +358,50 @@ export function DepartmentPnL({ data, className }: DepartmentPnLProps) {
       <CardContent className="space-y-2 pt-2">
         {/* Sales Section */}
         <PnLSectionComponent
-          section={data.sections.sales}
+          section={sales}
           periods={data.periods}
           currency={currency}
         />
 
         {/* Cost of Sales Section */}
         <PnLSectionComponent
-          section={data.sections.costOfSales}
+          section={costOfSales}
           periods={data.periods}
           currency={currency}
         />
 
         {/* Gross Margin (Calculated) */}
         <CalculatedRow
-          item={data.sections.grossMargin}
+          item={grossMargin}
           periods={data.periods}
           currency={currency}
         />
 
         {/* Other Income Section */}
         <PnLSectionComponent
-          section={data.sections.otherIncome}
+          section={otherIncome}
           periods={data.periods}
           currency={currency}
-          defaultExpanded={data.sections.otherIncome.items.length > 0}
+          defaultExpanded={(otherIncome.items?.length || 0) > 0}
         />
 
         {/* Net Income (Calculated) */}
         <CalculatedRow
-          item={data.sections.netIncome}
+          item={netIncome}
           periods={data.periods}
           currency={currency}
         />
 
         {/* Expenses Section */}
         <PnLSectionComponent
-          section={data.sections.expenses}
+          section={expenses}
           periods={data.periods}
           currency={currency}
         />
 
         {/* Profit/Loss (Final Calculated Row) */}
         <CalculatedRow
-          item={data.sections.profitLoss}
+          item={profitLoss}
           periods={data.periods}
           currency={currency}
           variant="final"
@@ -392,7 +410,7 @@ export function DepartmentPnL({ data, className }: DepartmentPnLProps) {
         {/* Report Footer */}
         <div className="pt-4 border-t text-xs text-muted-foreground flex justify-between">
           <span>
-            Generated: {new Date(data.generatedAt).toLocaleString()}
+            Generated: {data.generatedAt ? new Date(data.generatedAt).toLocaleString() : new Date().toLocaleString()}
           </span>
           <span>Currency: {currency}</span>
         </div>

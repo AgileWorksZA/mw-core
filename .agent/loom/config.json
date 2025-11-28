@@ -142,8 +142,32 @@
 			"name": "Daily Transaction Summary",
 			"description": "Daily transaction summary report and artifact for AI assistant - P&L style summary with balance position changes",
 			"storyCount": 1
+		},
+		{
+			"code": "LDGR",
+			"name": "Ledger Report",
+			"description": "General Ledger Report artifact for AI assistant - shows all transactions per account with running balances over a date range",
+			"storyCount": 1
+		},
+		{
+			"code": "DPNL",
+			"name": "Department Profit & Loss",
+			"description": "Department-level Profit & Loss report artifact with multi-period comparison and YTD support",
+			"storyCount": 1
+		},
+		{
+			"code": "STCK",
+			"name": "Stocktake Report",
+			"description": "Stocktake Report artifact for AI assistant - visual inventory snapshot with stock on hand, low stock warnings, and negative stock alerts",
+			"storyCount": 1
+		},
+		{
+			"code": "APAY",
+			"name": "Aged Payables Report",
+			"description": "Aged Payables Report artifact for AI assistant - displays supplier payment aging with buckets (Current, 30, 60, 90+ days), invoice details, and overdue visual indicators",
+			"storyCount": 1
 		}
 	],
-	"storyCounter": 12,
-	"taskCounter": 21
+	"storyCounter": 16,
+	"taskCounter": 37
 }

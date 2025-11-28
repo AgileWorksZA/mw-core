@@ -21,7 +21,9 @@ export type ArtifactType =
   | "bank-reconciliation-status"
   | "daily-transaction-summary"
   | "ledger-report"
-  | "department-pnl";
+  | "department-pnl"
+  | "stocktake-report"
+  | "aged-payables";
 
 /**
  * Trend direction for metric cards
@@ -493,6 +495,145 @@ export interface DepartmentPnLData {
 }
 
 /**
+ * Stocktake report line item
+ * Represents a single product/item in the stocktake
+ */
+export interface StocktakeReportItem {
+  /** Product/item code */
+  code: string;
+  /** Product/item description */
+  description: string;
+  /** Current stock on hand quantity */
+  stockOnHand: number;
+}
+
+/**
+ * Data for stocktake report artifacts
+ * Displays inventory status with visual indicators for stock levels
+ */
+export interface StocktakeReportData {
+  /** Company name */
+  companyName?: string;
+  /** Report date in YYYY-MM-DD format */
+  reportDate: string;
+  /** Optional report title */
+  reportTitle?: string;
+  /** Currency code (for potential value display) */
+  currency?: string;
+  /** Stock items to display */
+  items: StocktakeReportItem[];
+  /** Summary statistics */
+  summary?: {
+    /** Total number of items in the report */
+    totalItems: number;
+    /** Count of items with zero stock */
+    zeroStockCount: number;
+    /** Count of items with negative stock */
+    negativeStockCount: number;
+    /** Total stock on hand across all items */
+    totalStock: number;
+  };
+  /** When the report was generated */
+  generatedAt?: string;
+}
+
+// =============================================================================
+// Aged Payables Report Types
+// =============================================================================
+
+/**
+ * Individual invoice line in aged payables report
+ * Represents a single creditor invoice with aging breakdown
+ */
+export interface AgedPayablesInvoice {
+  /** Account code (e.g., "2500" for creditors) */
+  accountCode: string;
+  /** Transaction line index */
+  lineIndex: number;
+  /** Invoice reference/number */
+  reference: string;
+  /** Invoice date in YYYY-MM-DD format */
+  date: string;
+  /** Description (typically supplier name + memo) */
+  description: string;
+  /** Amount in 90+ days bucket */
+  threeMonthsPlus: number;
+  /** Amount in 60-89 days bucket */
+  twoMonths: number;
+  /** Amount in 30-59 days bucket */
+  oneMonth: number;
+  /** Amount in 0-29 days bucket */
+  current: number;
+  /** GST/Tax amount */
+  gst: number;
+  /** Total outstanding amount */
+  total: number;
+}
+
+/**
+ * Supplier summary row in aged payables report
+ * Contains aging totals and optional invoice details for drill-down
+ */
+export interface AgedPayablesSupplier {
+  /** Supplier code */
+  code: string;
+  /** Supplier name */
+  name: string;
+  /** Phone number (optional) */
+  phone?: string;
+  /** Amount in 90+ days bucket */
+  threeMonthsPlus: number;
+  /** Amount in 60-89 days bucket */
+  twoMonths: number;
+  /** Amount in 30-59 days bucket */
+  oneMonth: number;
+  /** Amount in 0-29 days bucket */
+  current: number;
+  /** GST/Tax amount */
+  gst: number;
+  /** Total outstanding amount */
+  total: number;
+  /** Optional invoice details for expandable view */
+  invoices?: AgedPayablesInvoice[];
+}
+
+/**
+ * Complete aged payables report data
+ * Displays supplier payment aging organized by aging buckets
+ */
+export interface AgedPayablesData {
+  /** Report date reference (e.g., "Jan:2024/25") */
+  asAt: string;
+  /** Company name */
+  companyName?: string;
+  /** Report title (optional) */
+  reportTitle?: string;
+  /** Currency code (e.g., "NZD") */
+  currency?: string;
+  /** Supplier rows with aging data */
+  suppliers: AgedPayablesSupplier[];
+  /** Grand totals for each aging bucket */
+  totals: {
+    /** Total 90+ days */
+    threeMonthsPlus: number;
+    /** Total 60-89 days */
+    twoMonths: number;
+    /** Total 30-59 days */
+    oneMonth: number;
+    /** Total 0-29 days */
+    current: number;
+    /** Total GST */
+    gst: number;
+    /** Grand total */
+    total: number;
+  };
+  /** Accounts Payable balance as at date (should match total) */
+  accountsPayableTotal?: number;
+  /** When the report was generated */
+  generatedAt?: string;
+}
+
+/**
  * Union type for all artifact data types
  */
 export type ArtifactData =
@@ -507,7 +648,9 @@ export type ArtifactData =
   | BankReconciliationStatusData
   | DailyTransactionSummaryData
   | LedgerReportData
-  | DepartmentPnLData;
+  | DepartmentPnLData
+  | StocktakeReportData
+  | AgedPayablesData;
 
 /**
  * Main Artifact interface
@@ -581,6 +724,14 @@ export function isLedgerReportData(data: ArtifactData): data is LedgerReportData
 
 export function isDepartmentPnLData(data: ArtifactData): data is DepartmentPnLData {
   return "sections" in data && "periods" in data && "reportTitle" in data && "generatedAt" in data;
+}
+
+export function isStocktakeReportData(data: ArtifactData): data is StocktakeReportData {
+  return "items" in data && "reportDate" in data && Array.isArray((data as StocktakeReportData).items);
+}
+
+export function isAgedPayablesData(data: ArtifactData): data is AgedPayablesData {
+  return "suppliers" in data && "asAt" in data && Array.isArray((data as AgedPayablesData).suppliers);
 }
 
 /**

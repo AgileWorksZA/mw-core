@@ -86,6 +86,16 @@
 			"frequency": "per-custom-label-implementation",
 			"resolution": "Use nullish coalescing or early returns when accessing PieLabelRenderProps",
 			"evidence": ["ARTF-001 L-001: Recharts PieLabelRenderProps has optional properties needing null checking"]
+		},
+		"loom-story-path-mismatch": {
+			"id": "loom-story-path-mismatch",
+			"title": "Loom retrospective script looks in wrong path for stories",
+			"description": "story-retrospective.ts expects stories at .claude/loom/stories/{id}.json but actual path is .agent/loom/features/{FEATURE}/stories/{ID}/story.json",
+			"severity": "low",
+			"impact": "Script fails to find story for retrospective generation, requires manual workaround",
+			"observedIn": ["APAY-001 finalization"],
+			"frequency": "every finalization",
+			"resolution": "Update script path or manually generate retrospective"
 		}
 	},
 	"solutions": {
@@ -342,11 +352,11 @@
 	"cognitiveLoad": {},
 	"metadata": {
 		"totalExperiences": 0,
-		"totalPainPoints": 6,
+		"totalPainPoints": 7,
 		"totalSolutions": 3,
 		"totalWorkflows": 4,
 		"totalBestPractices": 9,
 		"totalPatterns": 0,
-		"lastUpdated": "2025-11-27T17:30:00.000Z"
+		"lastUpdated": "2025-11-28T16:30:00.000Z"
 	}
 }

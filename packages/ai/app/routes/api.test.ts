@@ -58,6 +58,7 @@ async function runPrompt(prompt: string) {
       prompt,
       response: result.response,
       toolCalls: result.toolCalls,
+      artifacts: result.artifacts || [],
     });
   } catch (error) {
     console.error("[API Test] Error:", error);
