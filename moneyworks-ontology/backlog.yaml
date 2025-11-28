@@ -22,16 +22,89 @@ epic:
     - "Capture semantics ontologically (eitology, axiology, teleology)"
     - "Achieve empirical validation against live MoneyWorks"
     - "Enable AI agents to deeply understand MoneyWorks domain"
+    - "100% coherence for code generation (no errors can propagate)"
   success_criteria:
     - "Source fidelity: 95%+ manual coverage"
     - "Epistemic confidence: 85%+ overall"
     - "FK verification: 90%+ source-verified"
     - "Qualia richness: 8/10+ score"
     - "Zero empirical contradictions"
+    - "100% field count accuracy (code generation requirement)"
+    - "Zero duplicate field definitions (type safety requirement)"
+    - "100% dataType standardization (compiler requirement)"
   current_progress:
-    confidence: 0.82
+    confidence: 0.99
     fk_verification: 0.87
     qualia_average: 0.85
+    perfect_match_rate: 1.0
+    entity_coverage: 1.0
+
+# ============================================================================
+# PRODUCTION READINESS CHECKLIST
+# ============================================================================
+
+production_readiness:
+  status: "NOT READY - Phase 1 remediation required"
+  blocker_summary: "Quality issues will cause code generation failures"
+
+  phase_0_critical_blockers:
+    status: "COMPLETE ✅"
+    completion_date: "2025-11-26"
+    tasks: [TASK-024]
+
+  phase_1_quality_issues:
+    status: "PENDING ⚠️"
+    priority: "P0-NEXT (REQUIRED for production)"
+    tasks: [TASK-025]
+    estimated_time: "9 hours"
+    rationale: |
+      Code generation from ontology requires 100% accuracy.
+      Current quality issues (duplicates, non-standard types, outdated docs)
+      will propagate to generated code causing runtime and compilation errors.
+
+  phase_2_automation:
+    status: "PENDING"
+    priority: "P1 (HIGH - prevent regression)"
+    tasks: [TASK-026]
+    estimated_time: "2 days"
+    rationale: |
+      After manual fixes, automated validation prevents regression.
+      Essential for maintaining coherence as ontology evolves.
+
+  production_go_criteria:
+    - requirement: "All Phase 0 blockers resolved"
+      status: "✅ COMPLETE"
+      verified: "2025-11-26"
+
+    - requirement: "All Phase 1 quality issues resolved"
+      status: "❌ PENDING"
+      blockers:
+        - "20 duplicate field definitions"
+        - "6 files with non-standard dataTypes"
+        - "ARCHITECTURE.md outdated (20 vs 31 entities)"
+        - "Epistemic state metric inconsistencies"
+
+    - requirement: "Zero duplicate field definitions"
+      status: "❌ PENDING"
+      impact: "CRITICAL - causes ambiguous type definitions"
+
+    - requirement: "100% dataType standardization"
+      status: "❌ PENDING"
+      impact: "HIGH - non-standard types cause compiler errors"
+
+    - requirement: "Documentation coherence"
+      status: "❌ PENDING"
+      impact: "MEDIUM - incorrect implementation decisions"
+
+    - requirement: "Automated validation CI"
+      status: "❌ PENDING"
+      impact: "HIGH - prevents future regression"
+
+  deployment_decision:
+    current_status: "NO-GO ❌"
+    reason: "Phase 1 remediation required - quality issues will propagate to generated code"
+    next_milestone: "Complete TASK-025 (9 hours)"
+    estimated_production_ready: "After Phase 1 + Phase 2 (11 hours total)"
 
 # ============================================================================
 # TASK HIERARCHY
@@ -955,15 +1028,20 @@ statuses:
       - "Production readiness decision can be made"
 
   - id: TASK-025
-    title: "Phase 1 High-Priority Remediation - Quality Issues"
+    title: "Phase 1 High-Priority Remediation - Quality Issues (REQUIRED FOR PRODUCTION)"
     phase: quality
     status: pending
-    priority: P1
+    priority: P0-NEXT
     depends_on: [TASK-024]
     created: "2025-11-26"
     description: |
-      Address high-priority quality issues before production deployment.
-      These issues affect ontology accuracy and consistency.
+      ⚠️ CRITICAL: Required for production deployment - not optional.
+
+      The ontology will be used for code generation. Errors in the ontology will
+      propagate to generated code, causing cascading failures. 100% accuracy and
+      coherence is MANDATORY before production use.
+
+      These issues affect ontology accuracy and consistency and MUST be fixed.
     
     issues_to_fix:
       issue_1:
@@ -995,21 +1073,39 @@ statuses:
         time: "1 hour"
     
     acceptance_criteria:
-      - "No duplicate field definitions in any ontology file"
-      - "All dataTypes documented and standardized"
-      - "ARCHITECTURE.md reflects 31 entities"
-      - "Epistemic state metrics consistent"
-    
+      - "Zero duplicate field definitions in any ontology file (verified by script)"
+      - "All dataTypes are standard (T, N, D, A, S) or explicitly documented"
+      - "ARCHITECTURE.md entity count = 31 (matches implementation)"
+      - "Epistemic state metrics consistent (no contradictions)"
+      - "Perfect match timeline documented (4-stage evolution)"
+      - "System field properties standardized (isSystem)"
+
     time_estimate: "9 hours"
 
+    rationale: |
+      Code generation requires 100% accurate ontology. Any errors will propagate:
+      - Duplicate fields → ambiguous type definitions → runtime errors
+      - Non-standard types → type system failures → compilation errors
+      - Outdated docs → incorrect implementation decisions
+      - Inconsistent metrics → loss of confidence in system
+
+      This is NOT optional cleanup - it's essential quality assurance before
+      the ontology becomes the source of truth for generated code.
+
   - id: TASK-026
-    title: "Automated Coherence Validation CI Pipeline"
+    title: "Automated Coherence Validation CI Pipeline (PREVENT REGRESSION)"
     phase: automation
     status: pending
-    priority: P2
+    priority: P1
     depends_on: [TASK-025]
     created: "2025-11-26"
     description: |
+      ⚠️ HIGH PRIORITY: Prevent regression after manual fixes.
+
+      After spending 9+ hours fixing quality issues manually, we MUST prevent
+      these issues from reoccurring. Automated validation is essential to
+      maintain 100% coherence as the ontology evolves.
+
       Create automated CI pipeline to prevent coherence issues.
       Validate field counts, detect duplicates, check metric consistency.
     
