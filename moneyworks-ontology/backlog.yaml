@@ -1161,18 +1161,21 @@ statuses:
   - id: TASK-026
     title: "Automated Coherence Validation CI Pipeline (PREVENT REGRESSION)"
     phase: automation
-    status: pending
-    priority: P1
-    depends_on: [TASK-025]
+    status: planned
+    priority: P0-NEXT
+    depends_on: [TASK-025, TASK-027, PRODUCTION-REVIEW]
     created: "2025-11-26"
+    reified: "2025-11-28"
     description: |
-      ⚠️ HIGH PRIORITY: Prevent regression after manual fixes.
+      🎯 NEXT PRIORITY: Protect quality investment with automation.
 
-      After Phase 1 remediation (2.5 hours), automated validation prevents
-      these issues from reoccurring. Essential to maintain 100% coherence
-      as the ontology evolves.
+      After Phase 1 remediation (2.5h) + Phase 2 cleanup (0.75h) = 3.25 hours
+      of manual quality work, automated CI is essential to prevent regression.
 
-      Create automated CI pipeline to prevent coherence issues.
+      Ontology now at v1.0.0 production-ready. Awaiting production team review
+      before proceeding with automation implementation.
+
+      Create automated CI pipeline to maintain 100% coherence as ontology evolves.
       Validate field counts, detect duplicates, check metric consistency.
     
     components:
@@ -1189,6 +1192,73 @@ statuses:
       - "Pre-commit hook prevents committing wrong field counts"
     
     time_estimate: "2 days"
+
+  - id: PRODUCTION-REVIEW
+    title: "Production Team Review - Ontology v1.0.0"
+    phase: review
+    status: pending
+    priority: P0-NEXT
+    depends_on: [TASK-025, TASK-027]
+    created: "2025-11-28"
+    description: |
+      🔍 PRODUCTION TEAM REVIEW CHECKPOINT
+
+      MoneyWorks Canonical Ontology v1.0.0 is production-ready and awaiting
+      review from the production project team before proceeding with TASK-026
+      (CI automation).
+
+      Review Focus Areas:
+      1. Code quality fixes (Phase 1)
+         - Zero duplicate field definitions
+         - 100% dataType standardization
+         - System field property consistency
+
+      2. Documentation quality (Phase 2)
+         - Epistemic state metrics accuracy
+         - Perfect match timeline clarity
+         - Confidence dimension explanations
+
+      3. Production readiness
+         - All 31 entities with 100% perfect match
+         - 1212/1212 fields (100% coverage)
+         - Zero quality blockers
+         - Type safety guaranteed
+         - Compiler safety guaranteed
+
+    review_artifacts:
+      - "SESSION-008-COMPLETE.md (comprehensive summary)"
+      - "SESSION-008-PHASE-1-COMPLETION.md (Phase 1 details)"
+      - "SESSION-009-HANDOFF.yaml (next session context)"
+      - "state.yaml (v1.0.0, all metrics current)"
+      - "backlog.yaml (production status GO)"
+      - "16 ontology TypeScript files (quality fixes)"
+
+    review_questions_for_production_team:
+      - "Does the ontology meet code generation requirements?"
+      - "Are there any concerns with the quality fixes applied?"
+      - "Any questions about the dataType standardization decisions?"
+      - "Is the documentation clear and sufficient?"
+      - "Should we proceed with TASK-026 (CI automation)?"
+      - "Any additional requirements before deployment?"
+
+    acceptance_criteria:
+      - "Production team acknowledges review completion"
+      - "All questions and concerns addressed"
+      - "Go/No-Go decision documented for TASK-026"
+      - "Any additional requirements captured as new tasks"
+
+    time_estimate: "Production team dependent"
+    blocking: "TASK-026 blocked pending review"
+
+    next_steps_if_approved:
+      - "Proceed with TASK-026 (CI automation)"
+      - "2 day implementation"
+      - "Prevents regression of manual fixes"
+
+    next_steps_if_changes_needed:
+      - "Create new tasks for required changes"
+      - "Address production team feedback"
+      - "Re-submit for review after changes"
 
   - id: TASK-027
     title: "Phase 2 Documentation Cleanup - Epistemic State & Timeline"
