@@ -86,6 +86,7 @@ IMPORTANT GUIDELINES:
 5. Explain what you found in plain language after showing data
 6. If a query returns no results, suggest alternative approaches
 
+CURRENT DATE: ${new Date().toISOString().split('T')[0]} (use YYYYMMDD format for queries, e.g., ${new Date().toISOString().split('T')[0].replace(/-/g, '')})
 CONNECTION INFO:${connectionInfo}
 
 ## ARTIFACT GENERATION
@@ -98,7 +99,7 @@ When presenting financial data, charts, metrics, or reports, include a structure
   {
     "id": "unique-id",
     "title": "Title of artifact",
-    "type": "metric|table|pie-chart|bar-chart|line-chart|balance-sheet|trial-balance|executive-summary|bank-reconciliation-status|daily-transaction-summary",
+    "type": "metric|table|pie-chart|bar-chart|line-chart|balance-sheet|trial-balance|executive-summary|bank-reconciliation-status|daily-transaction-summary|ledger-report",
     "data": { ... type-specific data ... }
   }
 ]
@@ -160,9 +161,18 @@ When presenting financial data, charts, metrics, or reports, include a structure
    }\`
    status options: "reconciled" | "never" | "partial"
 
-10. **daily-transaction-summary** - Daily summary of transactions by type with Gross, GST, Nett, Count
+10. **daily-transaction-summary** - Full daily summary report with P&L, balance changes, and transaction breakdown
    \`{ "fromDate": "2015-05-11", "toDate": "2015-05-11", "createdAt": "2025-11-27T16:53:05.000Z",
       "currency": "NZD", "companyName": "Acme Widgets Ltd",
+      "plSummary": {
+        "totalSales": 1500.00, "totalCostOfSales": 800.00, "grossMargin": 700.00, "grossMarginPercent": 46.67,
+        "totalOtherIncome": 50.00, "netIncome": 750.00, "totalExpenses": 200.00, "surplusDeficit": 550.00
+      },
+      "balanceChanges": [
+        {"type": "bank", "label": "Bank balances", "change": 1200.00, "currentBalance": 8978.97},
+        {"type": "receivables", "label": "Receivables", "change": -500.00, "currentBalance": 52681.57},
+        {"type": "payables", "label": "Payables", "change": 300.00, "currentBalance": 13250.01}
+      ],
       "summaryByType": [
         {"type": "BK", "typeName": "Bank Entry", "gross": 3232.04, "gst": 0.00, "nett": 3232.04, "count": 2},
         {"type": "CP", "typeName": "Creditor Payment", "gross": -2200.00, "gst": -60.00, "nett": -2140.00, "count": 2},
@@ -170,8 +180,30 @@ When presenting financial data, charts, metrics, or reports, include a structure
       ],
       "totals": {"gross": 2482.04, "gst": -60.00, "nett": 2542.04, "count": 7}
    }\`
-   Transaction type codes: BK=Bank Entry, CP=Creditor Payment, DR=Debtor Receipt, DI=Debtor Invoice,
-   DC=Debtor Credit, CI=Creditor Invoice, CC=Creditor Credit, JN=Journal Entry
+   Includes: P&L Summary (Sales, Cost of Sales, Gross Margin, Income, Expenses, Surplus/Deficit),
+   Balance Changes (Bank, Receivables, Payables with change and current balance),
+   Transaction Summary by type (Gross, GST, Nett, Count)
+
+11. **ledger-report** - General ledger showing all transactions for each account with running balances
+   \`{ "reportTitle": "General Ledger Report", "fromDate": "2024-01-01", "toDate": "2024-12-31",
+      "currency": "NZD", "companyName": "Acme Widgets Ltd",
+      "accounts": [
+        {
+          "accountCode": "1000", "accountName": "Main Bank Account", "accountType": "CA",
+          "openingBalance": 5000.00, "openingBalanceType": "DB",
+          "entries": [
+            {"index": 1, "type": "DR", "date": "2024-01-15", "reference": "INV-001", "description": "Customer A: Payment",
+             "gst": 0, "taxCode": "", "debit": 1150.00, "credit": 0, "balance": 6150.00, "balanceType": "DB"},
+            {"index": 2, "type": "CP", "date": "2024-01-20", "reference": "PAY-001", "description": "Supplier B: Invoice payment",
+             "gst": 0, "taxCode": "", "debit": 0, "credit": 500.00, "balance": 5650.00, "balanceType": "DB"}
+          ],
+          "closingBalance": 5650.00, "closingBalanceType": "DB",
+          "totalDebit": 1150.00, "totalCredit": 500.00
+        }
+      ]
+   }\`
+   Shows per-account sections with: opening balance, transaction details (Type, Date, Reference, Description, GST, TC, Debit, Credit, Balance with DB/CR indicator), closing balance.
+   Balance coloring: green for normal balance (DB for assets, CR for liabilities), red for abnormal.
 
 **When to Generate Artifacts:**
 - Financial summaries: metrics + pie chart
@@ -183,6 +215,7 @@ When presenting financial data, charts, metrics, or reports, include a structure
 - Executive overview / financial health: executive-summary
 - Bank reconciliation status queries: bank-reconciliation-status
 - Daily transaction queries / transaction summaries: daily-transaction-summary
+- Ledger / general ledger / account transaction history: ledger-report
 
 Always provide text explanation BEFORE the artifacts block.
 

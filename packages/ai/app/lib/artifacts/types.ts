@@ -19,7 +19,8 @@ export type ArtifactType =
   | "trial-balance"
   | "executive-summary"
   | "bank-reconciliation-status"
-  | "daily-transaction-summary";
+  | "daily-transaction-summary"
+  | "ledger-report";
 
 /**
  * Trend direction for metric cards
@@ -282,8 +283,44 @@ export interface TransactionTypeSummary {
 }
 
 /**
+ * P&L Summary section for daily summary report
+ */
+export interface DailyPLSummary {
+  /** Total sales revenue */
+  totalSales: number;
+  /** Total cost of sales */
+  totalCostOfSales: number;
+  /** Gross margin (Sales - Cost of Sales) */
+  grossMargin: number;
+  /** Gross margin percentage */
+  grossMarginPercent?: number;
+  /** Total other income */
+  totalOtherIncome: number;
+  /** Net income (Gross margin + Other income) */
+  netIncome: number;
+  /** Total expenses */
+  totalExpenses: number;
+  /** Surplus/Deficit (Net income - Expenses) */
+  surplusDeficit: number;
+}
+
+/**
+ * Balance change item for daily summary report
+ */
+export interface BalanceChange {
+  /** Type of balance (bank, receivables, payables) */
+  type: "bank" | "receivables" | "payables";
+  /** Label for display */
+  label: string;
+  /** Change amount (positive = increased, negative = decreased) */
+  change: number;
+  /** Current balance as of report date */
+  currentBalance: number;
+}
+
+/**
  * Data for daily transaction summary artifacts
- * Displays transaction totals by type for a specific date
+ * Full daily summary report with P&L, balance changes, and transaction breakdown
  */
 export interface DailyTransactionSummaryData {
   /** Date range start in YYYY-MM-DD format */
@@ -296,6 +333,10 @@ export interface DailyTransactionSummaryData {
   currency?: string;
   /** Company name */
   companyName?: string;
+  /** P&L Summary section */
+  plSummary?: DailyPLSummary;
+  /** Balance changes section */
+  balanceChanges?: BalanceChange[];
   /** Summary rows by transaction type */
   summaryByType: TransactionTypeSummary[];
   /** Totals row */
@@ -305,6 +346,81 @@ export interface DailyTransactionSummaryData {
     nett: number;
     count: number;
   };
+}
+
+/**
+ * Transaction entry in a ledger report
+ * Type codes: CP=Creditor Payment, CR=Creditor Credit, DI=Debtor Invoice,
+ * CI=Creditor Invoice, JN=Journal, DD=Direct Debit, EFT=Electronic Transfer
+ */
+export interface LedgerEntry {
+  /** Transaction line index */
+  index: number;
+  /** Transaction type code (CP, CR, DI, CI, JN, DD, EFT, etc.) */
+  type: string;
+  /** Transaction date in YYYY-MM-DD format */
+  date: string;
+  /** Transaction reference/document number */
+  reference: string;
+  /** Transaction description (Name:Memo pattern) */
+  description: string;
+  /** GST/Tax amount */
+  gst: number;
+  /** Tax code applied */
+  taxCode: string;
+  /** Debit amount */
+  debit: number;
+  /** Credit amount */
+  credit: number;
+  /** Running balance */
+  balance: number;
+  /** Balance type indicator: DB=Debit, CR=Credit */
+  balanceType: "DB" | "CR";
+}
+
+/**
+ * Account section in a ledger report
+ */
+export interface LedgerAccount {
+  /** Account code */
+  accountCode: string;
+  /** Account name/description */
+  accountName: string;
+  /** Account type code (BK, CA, FA, CL, LL, EQ, IN, EX, etc.) */
+  accountType: string;
+  /** Opening balance for the period */
+  openingBalance: number;
+  /** Opening balance type: DB=Debit, CR=Credit */
+  openingBalanceType: "DB" | "CR";
+  /** Transaction entries for this account */
+  entries: LedgerEntry[];
+  /** Closing balance for the period */
+  closingBalance: number;
+  /** Closing balance type: DB=Debit, CR=Credit */
+  closingBalanceType: "DB" | "CR";
+  /** Total debits for the period */
+  totalDebit: number;
+  /** Total credits for the period */
+  totalCredit: number;
+}
+
+/**
+ * Data for ledger report artifacts
+ * General ledger showing all transactions for each account with running balances
+ */
+export interface LedgerReportData {
+  /** Company name */
+  companyName?: string;
+  /** Report title */
+  reportTitle: string;
+  /** Period start date in YYYY-MM-DD format */
+  fromDate: string;
+  /** Period end date in YYYY-MM-DD format */
+  toDate: string;
+  /** Currency code */
+  currency?: string;
+  /** Accounts with their transactions */
+  accounts: LedgerAccount[];
 }
 
 /**
@@ -320,7 +436,8 @@ export type ArtifactData =
   | TrialBalanceData
   | ExecutiveSummaryData
   | BankReconciliationStatusData
-  | DailyTransactionSummaryData;
+  | DailyTransactionSummaryData
+  | LedgerReportData;
 
 /**
  * Main Artifact interface
@@ -386,6 +503,10 @@ export function isBankReconciliationStatusData(data: ArtifactData): data is Bank
 
 export function isDailyTransactionSummaryData(data: ArtifactData): data is DailyTransactionSummaryData {
   return "summaryByType" in data && "fromDate" in data && "toDate" in data;
+}
+
+export function isLedgerReportData(data: ArtifactData): data is LedgerReportData {
+  return "accounts" in data && "reportTitle" in data && "fromDate" in data && "toDate" in data;
 }
 
 /**

@@ -175,6 +175,48 @@ export async function testConnection(): Promise<{ success: boolean; message: str
 }
 
 /**
+ * Parse nested detail records from a subfile XML block
+ */
+function parseNestedDetails(subfileXml: string): Record<string, unknown>[] {
+  const details: Record<string, unknown>[] = [];
+
+  // Match all detail elements within the subfile
+  const detailPattern = /<detail>([\s\S]*?)<\/detail>/gi;
+  const detailMatches = subfileXml.matchAll(detailPattern);
+
+  for (const detailMatch of detailMatches) {
+    const detailXml = detailMatch[1];
+    const detail: Record<string, unknown> = {};
+
+    // Extract fields from detail record
+    const fieldPattern = /<([\w.]+)(?:\s+[^>]*)?>([^<]*)<\/\1>/g;
+    const fieldMatches = detailXml.matchAll(fieldPattern);
+
+    for (const fieldMatch of fieldMatches) {
+      const fieldName = fieldMatch[1];
+      const value = fieldMatch[2];
+
+      // Keep dotted field names as-is (e.g., detail.account)
+      detail[fieldName] = value;
+
+      // Also add normalized versions for convenience
+      if (fieldName.includes('.')) {
+        const parts = fieldName.split('.');
+        const lastPart = parts[parts.length - 1];
+        const pascalLast = lastPart.charAt(0).toUpperCase() + lastPart.slice(1);
+        detail[pascalLast] = value;
+      }
+    }
+
+    if (Object.keys(detail).length > 0) {
+      details.push(detail);
+    }
+  }
+
+  return details;
+}
+
+/**
  * Parse XML response into records
  * This is a workaround for TSV field mapping issues
  */
@@ -223,6 +265,17 @@ function parseXMLRecords(xml: string): Record<string, unknown>[] {
         // Convert to PascalCase for simple field names
         const pascalName = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
         record[pascalName] = value;
+      }
+    }
+
+    // Parse nested subfiles (e.g., Detail records within Transaction)
+    const subfilePattern = /<subfile\s+name="Detail">([\s\S]*?)<\/subfile>/gi;
+    const subfileMatches = recordXml.matchAll(subfilePattern);
+
+    for (const subfileMatch of subfileMatches) {
+      const nestedDetails = parseNestedDetails(subfileMatch[1]);
+      if (nestedDetails.length > 0) {
+        record._details = nestedDetails;
       }
     }
 

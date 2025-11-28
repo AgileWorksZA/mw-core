@@ -18,6 +18,7 @@ import {
   isExecutiveSummaryData,
   isBankReconciliationStatusData,
   isDailyTransactionSummaryData,
+  isLedgerReportData,
 } from "~/lib/artifacts/types";
 import { MetricCard } from "./metric-card";
 import { DataTable } from "./data-table";
@@ -29,6 +30,7 @@ import { TrialBalance } from "./trial-balance";
 import { ExecutiveSummary } from "./executive-summary";
 import { BankReconciliationStatus } from "./bank-reconciliation-status";
 import { DailyTransactionSummary } from "./daily-transaction-summary";
+import { LedgerReport } from "./ledger-report";
 
 interface ArtifactRendererProps {
   artifact: Artifact;
@@ -97,6 +99,12 @@ export function ArtifactRenderer({ artifact, className }: ArtifactRendererProps)
     case "daily-transaction-summary":
       if (isDailyTransactionSummaryData(data)) {
         return <DailyTransactionSummary data={data} className={className} />;
+      }
+      break;
+
+    case "ledger-report":
+      if (isLedgerReportData(data)) {
+        return <LedgerReport data={data} className={className} />;
       }
       break;
   }

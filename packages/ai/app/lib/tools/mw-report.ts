@@ -112,6 +112,15 @@ const REPORT_DEFINITIONS: Record<string, ReportDefinition> = {
     // Query transactions for a specific date, group by Type (BK, CP, DR, DI, DC, CI, CC, JN)
     // Sum Gross, GST, Nett amounts and count per type
   },
+  ledger_report: {
+    name: "Ledger Report",
+    description: "General ledger showing all transactions for each account with running balances over a date range",
+    queryBased: true,
+    table: "Detail",
+    // Query Detail table postings grouped by account for date range
+    // Calculate running balance for each transaction
+    // Show opening/closing balances with DB/CR indicators
+  },
 };
 
 /**
@@ -133,8 +142,10 @@ Available reports:
 - tax_summary: Tax codes and rates
 - bank_reconciliation_status: Reconciliation status of all bank/cash accounts
 - daily_transaction_summary: Summary of transactions by type for a date (Gross, GST, Nett, Count)
+- ledger_report: General ledger showing all transactions per account with running balances
 
-Use asOf date (YYYYMMDD format) for historical reports where applicable.`,
+Use asOf date (YYYYMMDD format) for historical reports where applicable.
+For ledger_report, use fromDate and toDate (YYYYMMDD) for date range, and optional accountFilter to limit to specific account codes.`,
   input_schema: {
     type: "object" as const,
     properties: {
@@ -146,6 +157,18 @@ Use asOf date (YYYYMMDD format) for historical reports where applicable.`,
       asOf: {
         type: "string",
         description: "Report as-of date in YYYYMMDD format (optional, for historical reports)",
+      },
+      fromDate: {
+        type: "string",
+        description: "Start date in YYYYMMDD format (for ledger_report)",
+      },
+      toDate: {
+        type: "string",
+        description: "End date in YYYYMMDD format (for ledger_report)",
+      },
+      accountFilter: {
+        type: "string",
+        description: "Optional account code to filter (for ledger_report, e.g., '1000' for a single account)",
       },
       limit: {
         type: "number",
@@ -162,6 +185,9 @@ Use asOf date (YYYYMMDD format) for historical reports where applicable.`,
 export async function runMwReport(input: {
   report: string;
   asOf?: string;
+  fromDate?: string;
+  toDate?: string;
+  accountFilter?: string;
   limit?: number;
 }): Promise<string> {
   try {
@@ -428,6 +454,7 @@ export async function runMwReport(input: {
       }
 
       // For daily transaction summary, query transactions for the date and group by type
+      // Also calculate P&L summary and balance changes
       if (input.report === "daily_transaction_summary") {
         // Transaction type code to name mapping
         const TRANSACTION_TYPE_NAMES: Record<string, string> = {
@@ -441,18 +468,142 @@ export async function runMwReport(input: {
           JN: "Journal Entry",
         };
 
+        // Account type codes for P&L classification
+        // MoneyWorks uses: IN=Income, EX=Expense, CS=Cost of Sales, OI=Other Income
+        const incomeTypes = ["IN", "SA"]; // Sales/Income
+        const costOfSalesTypes = ["CS", "CG"]; // Cost of Sales/Cost of Goods
+        const otherIncomeTypes = ["OI"]; // Other Income
+        const expenseTypes = ["EX", "OH"]; // Expenses/Overhead
+        // Balance sheet types for balance changes
+        const bankTypes = ["BK", "CA"]; // Bank accounts (Bank, Current Asset with bank names)
+        const receivableTypes = ["AR"]; // Accounts Receivable
+        const payableTypes = ["AP"]; // Accounts Payable
+
         // Use asOf date or default to today in YYYYMMDD format
         const today = new Date();
         const defaultDate = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`;
         const targetDate = input.asOf || defaultDate;
 
-        // Query transactions for the target date
+        // Format date from YYYYMMDD to YYYY-MM-DD
+        const formatDate = (yyyymmdd: string): string => {
+          if (yyyymmdd.length !== 8) return yyyymmdd;
+          return `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6, 8)}`;
+        };
+
+        // Query transactions for the target date with their sequence numbers
         // MoneyWorks uses TransDate field in YYYYMMDD format
         const transactions = await queryTable("Transaction", {
           filter: `TransDate='${targetDate}'`,
-          fields: ["Type", "Gross", "GST", "Nett"],
+          fields: ["Type", "Gross", "GST", "Nett", "SequenceNumber"],
           limit: 5000,
         });
+
+        // Query all accounts to get types
+        const accounts = await queryTable("Account", {
+          fields: ["Code", "Description", "Type"],
+          limit: 1000,
+        });
+
+        // Build account type lookup
+        const accountTypes: Record<string, string> = {};
+        for (const acc of accounts) {
+          accountTypes[String(acc.Code)] = String(acc.Type || "");
+        }
+
+        // Get transaction sequence numbers for this date
+        const txnSequences = transactions.map((t) =>
+          String(t.SequenceNumber || t.sequencenumber || "")
+        ).filter((s) => s && s !== "0");
+
+        // Query detail postings for transactions on this date
+        // Details link to transactions via sequencenumber field
+        let details: Record<string, unknown>[] = [];
+        if (txnSequences.length > 0) {
+          // Build filter for the transaction sequences (limit to avoid too-long query)
+          // If too many transactions, we'll process in batches or skip P&L
+          if (txnSequences.length <= 100) {
+            const seqFilter = txnSequences.map((s) => `detail.sequencenumber='${s}'`).join(" or ");
+            details = await queryTable("Detail", {
+              fields: ["detail.account", "detail.debit", "detail.credit", "detail.sequencenumber"],
+              filter: seqFilter,
+              limit: 10000,
+            });
+          } else {
+            // Too many transactions - query all details for date range would be expensive
+            // Skip P&L calculation for very busy days
+            console.log(`[mw-report] Skipping P&L calculation: ${txnSequences.length} transactions exceeds limit`);
+          }
+        }
+
+        // Calculate P&L amounts by account type
+        let totalSales = 0;
+        let totalCostOfSales = 0;
+        let totalOtherIncome = 0;
+        let totalExpenses = 0;
+
+        // Calculate balance changes by account type
+        let bankChange = 0;
+        let receivablesChange = 0;
+        let payablesChange = 0;
+
+        for (const detail of details) {
+          const account = String(detail["detail.account"] || detail["Detail.Account"] || detail.Account || "").replace(/-$/, "");
+          const debit = parseFloat(String(detail["detail.debit"] || detail["Detail.Debit"] || detail.Debit || 0));
+          const credit = parseFloat(String(detail["detail.credit"] || detail["Detail.Credit"] || detail.Credit || 0));
+          const accType = accountTypes[account] || "";
+
+          // P&L accounts (credit increases income, debit increases expense)
+          if (incomeTypes.includes(accType)) {
+            totalSales += credit - debit; // Income is credit-positive
+          } else if (costOfSalesTypes.includes(accType)) {
+            totalCostOfSales += debit - credit; // Cost is debit-positive
+          } else if (otherIncomeTypes.includes(accType)) {
+            totalOtherIncome += credit - debit; // Other income is credit-positive
+          } else if (expenseTypes.includes(accType)) {
+            totalExpenses += debit - credit; // Expense is debit-positive
+          }
+
+          // Balance changes (net movement for the day)
+          if (bankTypes.includes(accType)) {
+            bankChange += debit - credit; // Bank is debit-positive (asset)
+          } else if (receivableTypes.includes(accType)) {
+            receivablesChange += debit - credit; // AR is debit-positive (asset)
+          } else if (payableTypes.includes(accType)) {
+            payablesChange += credit - debit; // AP is credit-positive (liability)
+          }
+        }
+
+        // Calculate P&L derived values
+        const grossMargin = totalSales - totalCostOfSales;
+        const grossMarginPercent = totalSales !== 0 ? (grossMargin / totalSales) * 100 : 0;
+        const netIncome = grossMargin + totalOtherIncome;
+        const surplusDeficit = netIncome - totalExpenses;
+
+        // Query current balances for bank, receivables, payables
+        // Sum up account balances by type from all detail postings
+        const allDetails = await queryTable("Detail", {
+          fields: ["detail.account", "detail.debit", "detail.credit"],
+          limit: 50000,
+        });
+
+        let currentBankBalance = 0;
+        let currentReceivablesBalance = 0;
+        let currentPayablesBalance = 0;
+
+        for (const detail of allDetails) {
+          const account = String(detail["detail.account"] || detail["Detail.Account"] || detail.Account || "").replace(/-$/, "");
+          const debit = parseFloat(String(detail["detail.debit"] || detail["Detail.Debit"] || detail.Debit || 0));
+          const credit = parseFloat(String(detail["detail.credit"] || detail["Detail.Credit"] || detail.Credit || 0));
+          const accType = accountTypes[account] || "";
+
+          if (bankTypes.includes(accType)) {
+            currentBankBalance += debit - credit;
+          } else if (receivableTypes.includes(accType)) {
+            currentReceivablesBalance += debit - credit;
+          } else if (payableTypes.includes(accType)) {
+            currentPayablesBalance += credit - debit;
+          }
+        }
 
         // Group by transaction type and calculate totals
         interface TypeSummary {
@@ -505,12 +656,6 @@ export async function runMwReport(input: {
           a.type.localeCompare(b.type)
         );
 
-        // Format date from YYYYMMDD to YYYY-MM-DD
-        const formatDate = (yyyymmdd: string): string => {
-          if (yyyymmdd.length !== 8) return yyyymmdd;
-          return `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6, 8)}`;
-        };
-
         // Override reportData with processed summary
         reportData = summaryArray as unknown as Record<string, unknown>[];
 
@@ -518,6 +663,39 @@ export async function runMwReport(input: {
           fromDate: formatDate(targetDate),
           toDate: formatDate(targetDate),
           createdAt: new Date().toISOString(),
+          // P&L Summary section
+          plSummary: {
+            totalSales,
+            totalCostOfSales,
+            grossMargin,
+            grossMarginPercent,
+            totalOtherIncome,
+            netIncome,
+            totalExpenses,
+            surplusDeficit,
+          },
+          // Balance changes section
+          balanceChanges: [
+            {
+              type: "bank",
+              label: "Bank balances",
+              change: bankChange,
+              currentBalance: currentBankBalance,
+            },
+            {
+              type: "receivables",
+              label: "Receivables",
+              change: receivablesChange,
+              currentBalance: currentReceivablesBalance,
+            },
+            {
+              type: "payables",
+              label: "Payables",
+              change: payablesChange,
+              currentBalance: currentPayablesBalance,
+            },
+          ],
+          // Transaction summary section
           summaryByType: summaryArray,
           totals: {
             gross: totalGross,
@@ -525,6 +703,236 @@ export async function runMwReport(input: {
             nett: totalNett,
             count: totalCount,
           },
+        };
+      }
+
+      // For ledger_report, query Transaction with embedded Detail records
+      if (input.report === "ledger_report") {
+        // Transaction type code to name mapping
+        const TRANSACTION_TYPE_CODES: Record<string, string> = {
+          BK: "BK", // Bank Entry
+          CP: "CP", // Creditor Payment
+          CR: "CR", // Creditor Receipt
+          DR: "DR", // Debtor Receipt
+          DI: "DI", // Debtor Invoice
+          DC: "DC", // Debtor Credit
+          CI: "CI", // Creditor Invoice
+          CC: "CC", // Creditor Credit
+          JN: "JN", // Journal Entry
+          DD: "DD", // Direct Debit
+          EFT: "EFT", // Electronic Transfer
+        };
+
+        // Format date from YYYYMMDD to YYYY-MM-DD
+        const formatDateDisplay = (yyyymmdd: string): string => {
+          if (!yyyymmdd || yyyymmdd.length !== 8) return yyyymmdd || "";
+          return `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6, 8)}`;
+        };
+
+        // Get date range - default to current year if not specified
+        const today = new Date();
+        const yearStart = `${today.getFullYear()}0101`;
+        const yearEnd = `${today.getFullYear()}1231`;
+        const fromDate = input.fromDate || yearStart;
+        const toDate = input.toDate || yearEnd;
+
+        // Query all accounts
+        const accounts = await queryTable("Account", {
+          fields: ["Code", "Description", "Type"],
+          limit: 1000,
+        });
+
+        // Build account lookup
+        const accountInfo: Record<string, { name: string; type: string }> = {};
+        for (const acc of accounts) {
+          const code = String(acc.Code || "");
+          accountInfo[code] = {
+            name: String(acc.Description || code),
+            type: String(acc.Type || ""),
+          };
+        }
+
+        // Query transactions for the date range - they include embedded Detail records via _details
+        const transactions = await queryTable("Transaction", {
+          filter: `TransDate>='${fromDate}' and TransDate<='${toDate}'`,
+          limit: 10000,
+        });
+
+        // Query transactions BEFORE the date range for opening balances
+        const priorTransactions = await queryTable("Transaction", {
+          filter: `TransDate<'${fromDate}'`,
+          limit: 20000,
+        });
+
+        // Calculate opening balances from prior transactions
+        const openingBalances: Record<string, number> = {};
+        for (const txn of priorTransactions) {
+          const details = txn._details as Record<string, unknown>[] || [];
+          for (const detail of details) {
+            const account = String(detail["detail.account"] || detail.Account || "").replace(/-$/, "");
+            // Nested details use net field, standalone uses debit/credit
+            const net = parseFloat(String(detail["detail.net"] || detail.Net || detail["detail.debit"] || detail.Debit || 0));
+            // For opening balance, positive net is a debit (increases the account)
+            const debit = net > 0 ? net : 0;
+            const credit = net < 0 ? Math.abs(net) : 0;
+
+            if (!openingBalances[account]) openingBalances[account] = 0;
+            openingBalances[account] += debit - credit;
+          }
+        }
+
+        // Collect all detail entries grouped by account
+        interface DetailEntry {
+          txnType: string;
+          txnDate: string;
+          txnRef: string;
+          txnDesc: string;
+          debit: number;
+          credit: number;
+          gst: number;
+          taxCode: string;
+        }
+
+        const detailsByAccount: Record<string, DetailEntry[]> = {};
+
+        for (const txn of transactions) {
+          const txnType = String(txn.Type || txn.type || "");
+          const txnDate = formatDateDisplay(String(txn.Transdate || txn.TransDate || txn.transdate || ""));
+          const txnRef = String(txn.Ourref || txn.OurRef || txn.ourref || "");
+          const nameCode = String(txn.Namecode || txn.NameCode || txn.namecode || txn.Tofrom || txn.tofrom || "");
+          const memo = String(txn.Description || txn.description || "");
+          const txnDesc = nameCode && memo ? `${nameCode}: ${memo}` : nameCode || memo || "";
+
+          // Get embedded details from _details property
+          const details = txn._details as Record<string, unknown>[] || [];
+
+          for (const detail of details) {
+            const account = String(detail["detail.account"] || detail.Account || "").replace(/-$/, "");
+            // Nested details use net field, standalone uses debit/credit
+            const net = parseFloat(String(detail["detail.net"] || detail.Net || detail["detail.debit"] || detail.Debit || 0));
+            // Positive net is a debit, negative would be credit
+            const debit = net > 0 ? net : 0;
+            const credit = net < 0 ? Math.abs(net) : 0;
+            const gst = parseFloat(String(detail["detail.gst"] || detail.Gst || detail["detail.tax"] || detail.Tax || 0));
+            const taxCode = String(detail["detail.taxcode"] || detail.Taxcode || "");
+
+            // Skip if account filter specified and doesn't match
+            if (input.accountFilter && account !== input.accountFilter) continue;
+
+            if (!detailsByAccount[account]) {
+              detailsByAccount[account] = [];
+            }
+            detailsByAccount[account].push({
+              txnType,
+              txnDate,
+              txnRef,
+              txnDesc,
+              debit,
+              credit,
+              gst,
+              taxCode,
+            });
+          }
+        }
+
+        // Build ledger accounts structure
+        interface LedgerAccountData {
+          accountCode: string;
+          accountName: string;
+          accountType: string;
+          openingBalance: number;
+          openingBalanceType: "DB" | "CR";
+          entries: Array<{
+            index: number;
+            type: string;
+            date: string;
+            reference: string;
+            description: string;
+            gst: number;
+            taxCode: string;
+            debit: number;
+            credit: number;
+            balance: number;
+            balanceType: "DB" | "CR";
+          }>;
+          closingBalance: number;
+          closingBalanceType: "DB" | "CR";
+          totalDebit: number;
+          totalCredit: number;
+        }
+
+        const ledgerAccounts: LedgerAccountData[] = [];
+
+        // Process each account that has postings
+        const accountCodes = input.accountFilter
+          ? [input.accountFilter]
+          : Object.keys(detailsByAccount).sort();
+
+        for (const accountCode of accountCodes) {
+          const accountDetails = detailsByAccount[accountCode] || [];
+          if (accountDetails.length === 0 && !input.accountFilter) continue;
+
+          const info = accountInfo[accountCode] || { name: accountCode, type: "" };
+          const opening = openingBalances[accountCode] || 0;
+
+          // Sort details by transaction date
+          const sortedDetails = [...accountDetails].sort((a, b) => {
+            return a.txnDate.localeCompare(b.txnDate);
+          });
+
+          // Build entries with running balance
+          let runningBalance = opening;
+          let totalDebit = 0;
+          let totalCredit = 0;
+
+          const entries: LedgerAccountData["entries"] = [];
+
+          for (let i = 0; i < sortedDetails.length; i++) {
+            const d = sortedDetails[i];
+
+            runningBalance += d.debit - d.credit;
+            totalDebit += d.debit;
+            totalCredit += d.credit;
+
+            entries.push({
+              index: i + 1,
+              type: TRANSACTION_TYPE_CODES[d.txnType] || d.txnType,
+              date: d.txnDate,
+              reference: d.txnRef,
+              description: d.txnDesc,
+              gst: d.gst,
+              taxCode: d.taxCode,
+              debit: d.debit,
+              credit: d.credit,
+              balance: Math.abs(runningBalance),
+              balanceType: runningBalance >= 0 ? "DB" : "CR",
+            });
+          }
+
+          const closingBalance = runningBalance;
+
+          ledgerAccounts.push({
+            accountCode,
+            accountName: info.name,
+            accountType: info.type,
+            openingBalance: Math.abs(opening),
+            openingBalanceType: opening >= 0 ? "DB" : "CR",
+            entries,
+            closingBalance: Math.abs(closingBalance),
+            closingBalanceType: closingBalance >= 0 ? "DB" : "CR",
+            totalDebit,
+            totalCredit,
+          });
+        }
+
+        // Override reportData with ledger accounts
+        reportData = ledgerAccounts as unknown as Record<string, unknown>[];
+
+        additionalInfo = {
+          reportTitle: "General Ledger Report",
+          fromDate: formatDateDisplay(fromDate),
+          toDate: formatDateDisplay(toDate),
+          accounts: ledgerAccounts,
         };
       }
     } else {
