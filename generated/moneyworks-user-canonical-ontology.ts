@@ -36,7 +36,7 @@ export const MONEYWORKS_USER_FIELDS = [
     canonicalDescription: "Primary key - unique user data record identifier",
     manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
     isRequired: true,
-    isSystemField: true,
+    isSystem: true,
     isIndexed: true
   },
   {
@@ -46,7 +46,7 @@ export const MONEYWORKS_USER_FIELDS = [
     canonicalDescription: "The date and time that this record was last changed.",
     manualSource: "moneyworks_appendix_user_file.html",
     isRequired: false,
-    isSystemField: true
+    isSystem: true
   },
   {
     fieldName: "Key",
@@ -80,35 +80,35 @@ export const MONEYWORKS_USER_FIELDS = [
 export const MONEYWORKS_USER_BUSINESS_RULES = [
   {
     entitySource: "User",
-    fieldName: "Key",
+    targetField: "Key",
     ruleType: "uniqueness" as const,
     canonicalRule: "Keys must be unique across all plug-ins and scripts",
     manualSource: "moneyworks_appendix_user_file.html"
   },
   {
-    entitySource: "User", 
-    fieldName: "Data",
+    entitySource: "User",
+    targetField: "Data",
     ruleType: "deletion" as const,
     canonicalRule: "If Data is empty when updating existing record, the record will be deleted",
     manualSource: "moneyworks_appendix_user_file.html"
   },
   {
     entitySource: "User",
-    fieldName: "Key",
+    targetField: "Key",
     ruleType: "conflict_management" as const,
     canonicalRule: "Plug-ins use their own set of keys, requiring conflict management",
     manualSource: "moneyworks_appendix_user_file.html"
   },
   {
     entitySource: "User",
-    fieldName: "*",
+    targetField: "*",
     ruleType: "import_format" as const,
     canonicalRule: "Records can be inserted by importing with pseudo-map ':/User' or using SetPersistent function",
     manualSource: "moneyworks_appendix_user_file.html"
   },
   {
     entitySource: "User",
-    fieldName: "*",
+    targetField: "*",
     ruleType: "field_format" as const,
     canonicalRule: "Import format: Key (first field) + Data (second field, tab-separated)",
     manualSource: "moneyworks_appendix_user_file.html"
@@ -209,7 +209,7 @@ export interface MoneyWorksUserField {
   manualSource: string;
   isRequired?: boolean;
   isIndexed?: boolean;
-  isSystemField?: boolean;
+  isSystem?: boolean;
   businessRule?: string;
 }
 

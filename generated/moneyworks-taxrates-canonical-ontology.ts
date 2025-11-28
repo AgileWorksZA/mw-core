@@ -204,11 +204,12 @@ export const MONEYWORKS_TAX_RATE_FIELDS = [
   // ============================================================================
   {
     fieldName: "Combination",
-    dataType: "B" as const,
+    dataType: "N" as const,
     canonicalDescription: "Boolean flag indicating whether this is a combined tax rate (GST+PST or similar multi-tier configuration)",
     manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
     isRequired: false,
-    defaultValue: false
+    defaultValue: 0,
+    notes: "Stored as numeric 0 (false) or 1 (true)"
   },
   {
     fieldName: "Combine",

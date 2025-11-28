@@ -273,11 +273,11 @@ export const MONEYWORKS_ASSETCAT_FIELDS = [
   },
   {
     fieldName: "DailyDepreciation",
-    dataType: "B" as const,
+    dataType: "N" as const,
     canonicalDescription: "Boolean flag to enable daily depreciation calculations (vs. period-based)",
     manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
     isRequired: false,
-    notes: "When true, depreciation is calculated daily rather than at period end"
+    notes: "When true (1), depreciation is calculated daily rather than at period end; stored as numeric 0/1"
   }
 ] as const;
 

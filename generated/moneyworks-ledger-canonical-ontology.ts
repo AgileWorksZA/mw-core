@@ -1671,10 +1671,11 @@ export const MONEYWORKS_LEDGER_FIELDS: LedgerFieldDefinition[] = [
 
   {
     fieldName: "TaggedText",
-    dataType: "M",
+    dataType: "T" as const,
     canonicalDescription: "Structured key-value storage field for extensible metadata using XML-like tags",
     manualSource: "Empirical API validation - observed: '' (empty string)",
     defaultValue: "",
+    maxLength: 255,
     notes: "Format: <tag1>value</tag1><tag2>value</tag2> - enables dynamic field extension without schema changes"
   }
 ];

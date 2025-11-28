@@ -109,7 +109,7 @@ export const MONEYWORKS_JOBSHEET_FIELDS = [
   },
   {
     fieldName: "CostPrice",
-    dataType: "$ " as const,
+    dataType: "A" as const,
     canonicalDescription: "Cost price per unit - actual cost to business",
     manualSource: "Empirical API validation (sample value: 235000.00)",
     isRequired: true,
@@ -117,7 +117,7 @@ export const MONEYWORKS_JOBSHEET_FIELDS = [
   },
   {
     fieldName: "SellPrice",
-    dataType: "$ " as const,
+    dataType: "A" as const,
     canonicalDescription: "Sell price per unit - billing rate to customer",
     manualSource: "Empirical API validation (sample value: 282000.00)",
     isRequired: true,
@@ -125,7 +125,7 @@ export const MONEYWORKS_JOBSHEET_FIELDS = [
   },
   {
     fieldName: "BillValue",
-    dataType: "$ " as const,
+    dataType: "A" as const,
     canonicalDescription: "Total billable value for this entry (SellPrice × Qty)",
     manualSource: "Empirical API validation",
     semanticNotes: "Calculated field representing amount to be billed to customer"

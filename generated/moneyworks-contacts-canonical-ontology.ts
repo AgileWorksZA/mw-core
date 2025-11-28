@@ -207,23 +207,23 @@ export const MONEYWORKS_CONTACTS_FIELDS: MoneyWorksCanonicalContactField[] = [
 export const MONEYWORKS_CONTACTS_BUSINESS_RULES = [
   {
     entitySource: "Contacts",
-    fieldName: "ParentSeq",
+    targetField: "ParentSeq",
     ruleType: "relationship" as const,
     canonicalRule: "Contact must reference valid Name entity via ParentSeq → Names.Seq",
     manualSource: "moneyworks_appendix_contacts.html - Contacts table is subfile of Name table"
   },
-  
+
   {
     entitySource: "Contacts",
-    fieldName: "Role",
+    targetField: "Role",
     ruleType: "constraint" as const,
     canonicalRule: "Role field uses bit mapping with each bit representing distinct contact role",
     manualSource: "moneyworks_appendix_contacts.html - Role field description"
   },
-  
+
   {
     entitySource: "Contacts",
-    fieldName: "Order",
+    targetField: "Order",
     ruleType: "constraint" as const,
     canonicalRule: "Order determines contact sequence within parent Name entity",
     manualSource: "moneyworks_appendix_contacts.html - Order field description"
@@ -232,42 +232,42 @@ export const MONEYWORKS_CONTACTS_BUSINESS_RULES = [
   // ============================================================================
   // DUAL-LAYER CONTACT ARCHITECTURE BUSINESS RULES
   // ============================================================================
-  
+
   {
     entitySource: "Contacts vs Names",
-    fieldName: "Contact Architecture",
+    targetField: "Contact Architecture",
     ruleType: "architectural" as const,
     canonicalRule: "Contacts subfile complements Names built-in Contact1/Contact2 fields - use Names for simple scenarios, Contacts for complex hierarchies",
     manualSource: "moneyworks_appendix_contacts.html + moneyworks_appendix_names.html analysis"
   },
-  
+
   {
     entitySource: "Contacts vs Names",
-    fieldName: "Field Capacity Strategy",
+    targetField: "Field Capacity Strategy",
     ruleType: "capacity" as const,
     canonicalRule: "Contacts provides larger capacity for Contact(39), Mobile(19), Position(39), AfterHours(19) vs Names fields; Names provides larger email capacity(80)",
     manualSource: "Field capacity analysis across both entities"
   },
-  
+
   {
     entitySource: "Contacts",
-    fieldName: "Unlimited Expansion",
+    targetField: "Unlimited Expansion",
     ruleType: "architectural" as const,
     canonicalRule: "Contacts entity provides unlimited contacts per Name via subfile architecture, overcoming Names 2-contact limitation",
     manualSource: "moneyworks_appendix_contacts.html - subfile architecture"
   },
-  
+
   {
     entitySource: "Contacts vs Names",
-    fieldName: "Performance Optimization",
+    targetField: "Performance Optimization",
     ruleType: "performance" as const,
     canonicalRule: "Names Contact1/Contact2 embedded for fast access, Contacts subfile for detailed management - choose based on access patterns",
     manualSource: "Architectural analysis of embedded vs subfile access patterns"
   },
-  
+
   {
     entitySource: "Contacts",
-    fieldName: "International Support",
+    targetField: "International Support",
     ruleType: "capacity" as const,
     canonicalRule: "Contacts entity optimized for international operations with larger field capacities for names, mobile numbers, and positions",
     manualSource: "Field capacity comparison analysis"

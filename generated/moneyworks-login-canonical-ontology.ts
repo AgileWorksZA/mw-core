@@ -229,7 +229,7 @@ export const MONEYWORKS_LOGIN_FIELDS = [
   },
   {
     fieldName: "Initials",
-    dataType: "3" as const,
+    dataType: "T" as const,
     maxLength: undefined,
     canonicalDescription: "The user initials.",
     manualSource: "moneyworks_appendix_login_file.html",
@@ -243,7 +243,7 @@ export const MONEYWORKS_LOGIN_FIELDS = [
     canonicalDescription: "The date and time that this record was last changed.",
     manualSource: "moneyworks_appendix_login_file.html",
     isRequired: false,
-    isSystemField: true
+    isSystem: true
   },
   {
     fieldName: "Name",
@@ -362,84 +362,84 @@ export const MONEYWORKS_LOGIN_FIELDS = [
 export const MONEYWORKS_LOGIN_BUSINESS_RULES = [
   {
     entitySource: "Login",
-    fieldName: "Name",
+    targetField: "Name",
     ruleType: "uniqueness" as const,
     canonicalRule: "User Name must be unique across all users in the system",
     manualSource: "moneyworks_appendix_login_file.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Initials",
+    targetField: "Initials",
     ruleType: "uniqueness" as const,
     canonicalRule: "User Initials should be unique for tracking and attribution purposes",
     manualSource: "moneyworks_appendix_login_file.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Password",
+    targetField: "Password",
     ruleType: "security" as const,
     canonicalRule: "Passwords are stored encrypted and never accessible in plain text",
     manualSource: "moneyworks_appendix_login_file.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Privileges",
+    targetField: "Privileges",
     ruleType: "authorization" as const,
     canonicalRule: "Privilege map encodes specific access rights and restrictions for user",
     manualSource: "moneyworks_appendix_login_file.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Privileges",
+    targetField: "Privileges",
     ruleType: "privilege_encoding" as const,
     canonicalRule: "65-character encoded string representing on/off state of 80+ individual privileges",
     manualSource: "moneyworks_privileges_moneyworks_privileges.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Privileges",
+    targetField: "Privileges",
     ruleType: "privilege_access" as const,
     canonicalRule: "Privileges tested using Allowed('privilegeName') function with exact string names",
     manualSource: "moneyworks_calculations_allowed.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Privileges",
+    targetField: "Privileges",
     ruleType: "privilege_categories" as const,
     canonicalRule: "Privileges organized in 11 categories: Administration, Purchases, Creditors, Sales, Debtors, Cash, General Ledger, Jobs, Products, Names, Other",
     manualSource: "moneyworks_privileges_moneyworks_privileges.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Privileges",
+    targetField: "Privileges",
     ruleType: "custom_privileges" as const,
     canonicalRule: "User Privilege 1-6 available for custom script access control using Allowed() function",
     manualSource: "moneyworks_privileges_moneyworks_privileges.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Role",
+    targetField: "Role",
     ruleType: "role_based_access" as const,
     canonicalRule: "Role determines base privilege set that can be customized per user",
     manualSource: "moneyworks_appendix_login_file.html"
   },
   {
     entitySource: "Login",
-    fieldName: "SecurityLevel",
+    targetField: "SecurityLevel",
     ruleType: "hierarchical_access" as const,
     canonicalRule: "Security level provides hierarchical access control mechanism",
     manualSource: "moneyworks_appendix_login_file.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Email",
+    targetField: "Email",
     ruleType: "communication" as const,
     canonicalRule: "Email used for user communication and notifications",
     manualSource: "moneyworks_appendix_login_file.html"
   },
   {
     entitySource: "Login",
-    fieldName: "Category",
+    targetField: "Category",
     ruleType: "organization" as const,
     canonicalRule: "Category groups users by business function or organizational unit",
     manualSource: "moneyworks_appendix_login_file.html"
@@ -594,13 +594,13 @@ export interface MoneyWorksLogin {
  */
 export interface MoneyWorksLoginField {
   fieldName: string;
-  dataType: "T" | "N" | "S" | "3";
+  dataType: "T" | "N" | "S";
   maxLength?: number;
   canonicalDescription: string;
   manualSource: string;
   isRequired?: boolean;
   isIndexed?: boolean;
-  isSystemField?: boolean;
+  isSystem?: boolean;
   businessRule?: string;
   securityNote?: string;
 }

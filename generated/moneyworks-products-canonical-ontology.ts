@@ -383,8 +383,8 @@ export const MONEYWORKS_PRODUCT_FIELDS = [
   },
   {
     fieldName: "UseMultiplePrices",
-    dataType: "B" as const,
-    canonicalDescription: "True if using multiple sell prices",
+    dataType: "N" as const,
+    canonicalDescription: "True (1) if using multiple sell prices, False (0) otherwise",
     manualSource: "moneyworks_appendix_products.html"
   },
   {

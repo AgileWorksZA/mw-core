@@ -108,13 +108,14 @@ export const MONEYWORKS_DETAIL_FIELDS = [
   },
   {
     fieldName: "LastModifiedTime",
-    dataType: "DT" as const,
+    dataType: "S" as const,
     canonicalDescription: "Timestamp of last modification. Format: YYYYMMDDHHmmss. Critical for audit trail and synchronization.",
     manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
     isRequired: true,
     isSystem: true,
     isIndexed: true,
-    apiFieldName: "Detail.LastModifiedTime"
+    apiFieldName: "Detail.LastModifiedTime",
+    notes: "Timestamp string in YYYYMMDDHHmmss format"
   },
 
   // Parent Relationship

@@ -167,8 +167,8 @@ export const MONEYWORKS_NAME_FIELDS = [
   },
   {
     fieldName: "Hold",
-    dataType: "B" as const,
-    canonicalDescription: "\"True\" if the debtor is on hold (\"False\" otherwise)",
+    dataType: "N" as const,
+    canonicalDescription: "\"True\" (1) if the debtor is on hold, \"False\" (0) otherwise",
     manualSource: "moneyworks_appendix_names.html"
   },
   {

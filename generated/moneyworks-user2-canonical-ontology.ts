@@ -39,7 +39,7 @@ export const MONEYWORKS_USER2_FIELDS = [
     canonicalDescription: "Primary key - unique user2 data record identifier",
     manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
     isRequired: true,
-    isSystemField: true,
+    isSystem: true,
     isIndexed: true
   },
   {
@@ -49,7 +49,7 @@ export const MONEYWORKS_USER2_FIELDS = [
     canonicalDescription: "The date and time that this record was last changed.",
     manualSource: "moneyworks_appendix_user2_file.html",
     isRequired: false,
-    isSystemField: true
+    isSystem: true
   },
   {
     fieldName: "DevKey",
@@ -246,49 +246,49 @@ export const MONEYWORKS_USER2_FIELDS = [
 export const MONEYWORKS_USER2_BUSINESS_RULES = [
   {
     entitySource: "User2",
-    fieldName: "DevKey",
+    targetField: "DevKey",
     ruleType: "allocation" as const,
     canonicalRule: "DevKey must be > 65535 for user scripts; <= 65535 reserved for plug-ins and pre-allocated by Cognito",
     manualSource: "moneyworks_appendix_user2_file.html"
   },
   {
     entitySource: "User2",
-    fieldName: "Key",
+    targetField: "Key",
     ruleType: "uniqueness" as const,
     canonicalRule: "Key must be unique within DevKey context",
     manualSource: "moneyworks_appendix_user2_file.html"
   },
   {
     entitySource: "User2",
-    fieldName: "*",
+    targetField: "*",
     ruleType: "update_behavior" as const,
     canonicalRule: "Record update is complete rewrite - cannot update individual fields",
     manualSource: "moneyworks_appendix_user2_file.html"
   },
   {
     entitySource: "User2",
-    fieldName: "*",
+    targetField: "*",
     ruleType: "deletion" as const,
     canonicalRule: "If only DevKey and Key are present and all other fields missing, record is deleted",
     manualSource: "moneyworks_appendix_user2_file.html"
   },
   {
     entitySource: "User2",
-    fieldName: "*",
+    targetField: "*",
     ruleType: "import_format" as const,
     canonicalRule: "Records can be inserted with pseudo-map ':/User2', XML import, or SetPersistent function",
     manualSource: "moneyworks_appendix_user2_file.html"
   },
   {
     entitySource: "User2",
-    fieldName: "*",
+    targetField: "*",
     ruleType: "field_order" as const,
     canonicalRule: "Tab-delimited import: DevKey, Key, then fields in table order",
     manualSource: "moneyworks_appendix_user2_file.html"
   },
   {
     entitySource: "User2",
-    fieldName: "*",
+    targetField: "*",
     ruleType: "optional_fields" as const,
     canonicalRule: "Apart from DevKey and Key, all fields are optional; missing fields treated as empty/zero",
     manualSource: "moneyworks_appendix_user2_file.html"
@@ -432,7 +432,7 @@ export interface MoneyWorksUser2Field {
   manualSource: string;
   isRequired?: boolean;
   isIndexed?: boolean;
-  isSystemField?: boolean;
+  isSystem?: boolean;
   businessRule?: string;
   versionNote?: string;
 }

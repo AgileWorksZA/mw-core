@@ -104,15 +104,15 @@ export const MONEYWORKS_PAYMENTS_BUSINESS_RULES = [
     ruleName: "PAYMENT_INVOICE_LINKING",
     ruleType: "relationship" as const,
     entitySource: "Payments",
-    fieldName: "CashTrans,InvoiceID",
+    targetField: "CashTrans,InvoiceID",
     canonicalRule: "Payments table creates many-to-many relationship between payment transactions and invoices",
     manualSource: "moneyworks_appendix_payments_file.html"
   },
   {
     ruleName: "OVERPAYMENT_ENCODING",
     ruleType: "constraint" as const,
-    entitySource: "Payments", 
-    fieldName: "InvoiceID",
+    entitySource: "Payments",
+    targetField: "InvoiceID",
     canonicalRule: "For debtor overpayments where no invoice exists, InvoiceID stores Names.Seq with high bit set (negative value = Names.Seq + 2147483648)",
     manualSource: "moneyworks_appendix_payments_file.html"
   },
@@ -120,15 +120,15 @@ export const MONEYWORKS_PAYMENTS_BUSINESS_RULES = [
     ruleName: "ALLOCATION_TRACKING",
     ruleType: "validation" as const,
     entitySource: "Payments",
-    fieldName: "Amount",
+    targetField: "Amount",
     canonicalRule: "Amount represents portion of payment allocated to specific invoice, enabling partial and multiple payment scenarios",
     manualSource: "moneyworks_appendix_payments_file.html"
   },
   {
-    ruleName: "TAX_CYCLE_TRACKING", 
+    ruleName: "TAX_CYCLE_TRACKING",
     ruleType: "validation" as const,
     entitySource: "Payments",
-    fieldName: "GSTCycle",
+    targetField: "GSTCycle",
     canonicalRule: "GSTCycle tracks when payment was processed for tax reporting. Negative values indicate invoice/accruals basis processing",
     manualSource: "moneyworks_appendix_payments_file.html"
   },
@@ -136,7 +136,7 @@ export const MONEYWORKS_PAYMENTS_BUSINESS_RULES = [
     ruleName: "RELATIONAL_SEARCH_CAPABILITY",
     ruleType: "validation" as const,
     entitySource: "Payments",
-    fieldName: "CashTrans,InvoiceID", 
+    targetField: "CashTrans,InvoiceID",
     canonicalRule: "Payments table enables relational searches to find all payments for an invoice or all invoices for a payment",
     manualSource: "moneyworks_appendix_payments_file.html"
   }

@@ -495,8 +495,8 @@ export const MONEYWORKS_TRANSACTION_FIELDS = [
   },
   {
     fieldName: "Hold",
-    dataType: "B" as const,
-    canonicalDescription: "True if the transaction is on hold",
+    dataType: "N" as const,
+    canonicalDescription: "True (1) if the transaction is on hold, False (0) otherwise",
     manualSource: "moneyworks_appendix_transactions.html",
     relationshipTarget: "transaction status",
     relationshipRule: "Prevents processing of held transactions"
@@ -639,8 +639,8 @@ export const MONEYWORKS_TRANSACTION_FIELDS = [
   },
   {
     fieldName: "Recurring",
-    dataType: "B" as const,
-    canonicalDescription: "\"True\" if the transaction is a recurring transaction. \"False\" if it isn't.",
+    dataType: "N" as const,
+    canonicalDescription: "\"True\" (1) if the transaction is a recurring transaction, \"False\" (0) if it isn't.",
     manualSource: "moneyworks_appendix_transactions.html",
     relationshipTarget: "recurring transactions",
     relationshipRule: "Marks transaction as recurring template"
@@ -1088,7 +1088,7 @@ export const MONEYWORKS_DETAIL_FIELDS = [
   },
   {
     fieldName: "Detail.OrderStatus",
-    dataType: "B" as const,
+    dataType: "N" as const,
     canonicalDescription: "0 if not shipped or part shipped, 1 if fully shipped",
     manualSource: "moneyworks_appendix_transactions.html",
     relationshipTarget: "order fulfillment",

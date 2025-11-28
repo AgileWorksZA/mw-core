@@ -255,7 +255,7 @@ export interface MoneyWorksCustomFieldDefinition {
   fieldName: string;
   defaultLabel: string;
   maxLength: number;
-  dataType: "T" | "N" | "B" | "A" | "D";
+  dataType: "T" | "N" | "D" | "A" | "S";
   fieldLength?: number;
   description: string;
   manualSource: string;

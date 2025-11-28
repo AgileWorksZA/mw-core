@@ -55,7 +55,7 @@ export const MONEYWORKS_ALLOCATION_FIELDS = [
     canonicalDescription: "Primary key - unique allocation rule identifier",
     manualSource: "Empirical API validation (MoneyWorks Now v9.2.3)",
     isRequired: true,
-    isSystemField: true,
+    isSystem: true,
     isIndexed: true
   },
   {
@@ -64,7 +64,7 @@ export const MONEYWORKS_ALLOCATION_FIELDS = [
     canonicalDescription: "The date and time that this record was last changed.",
     manualSource: "moneyworks_appendix_allocation_file.html",
     isRequired: false,
-    isSystemField: true
+    isSystem: true
   },
   {
     fieldName: "MatchFunction",
@@ -181,52 +181,52 @@ export const MONEYWORKS_ALLOCATION_FIELDS = [
 export const MONEYWORKS_ALLOCATION_BUSINESS_RULES = [
   {
     entitySource: "Allocations",
-    fieldName: "Priority",
+    targetField: "Priority",
     ruleType: "processing" as const,
     canonicalRule: "Rules processed in priority order, lower numbers processed first",
     manualSource: "moneyworks_appendix_allocation_file.html",
     businessContext: "Multiple rules may match same transaction, priority determines which rule applies"
   },
-  
+
   {
     entitySource: "Allocations",
-    fieldName: "MatchFunction",
+    targetField: "MatchFunction",
     ruleType: "pattern_matching" as const,
     canonicalRule: "Supports text matching against transaction fields including description, payee, reference",
     manualSource: "moneyworks_appendix_allocation_file.html",
     businessContext: "Pattern matching enables automated transaction categorization during bank import"
   },
-  
+
   {
-    entitySource: "Allocations", 
-    fieldName: "SplitAcct1-4",
+    entitySource: "Allocations",
+    targetField: "SplitAcct1-4",
     ruleType: "validation" as const,
     canonicalRule: "All split accounts must reference valid accounts in chart of accounts",
     manualSource: "moneyworks_appendix_allocation_file.html",
     businessContext: "Account validation ensures allocation targets exist and are properly configured"
   },
-  
+
   {
     entitySource: "Allocations",
-    fieldName: "SplitAmount1-3 + SplitMode",
+    targetField: "SplitAmount1-3 + SplitMode",
     ruleType: "calculation" as const,
     canonicalRule: "Split amounts interpreted based on SplitMode: percentage (0-100), fixed amounts, or ratios",
     manualSource: "moneyworks_appendix_allocation_file.html",
     businessContext: "Flexible calculation modes support various allocation scenarios (overhead, cost distribution, etc.)"
   },
-  
+
   {
     entitySource: "Allocations",
-    fieldName: "MatchName",
+    targetField: "MatchName",
     ruleType: "identification" as const,
     canonicalRule: "Human-readable rule name for identification and management purposes",
     manualSource: "moneyworks_appendix_allocation_file.html",
     businessContext: "Named rules enable organized allocation rule management and troubleshooting"
   },
-  
+
   {
     entitySource: "Allocations",
-    fieldName: "LastModifiedTime",
+    targetField: "LastModifiedTime",
     ruleType: "audit" as const,
     canonicalRule: "System automatically tracks rule modification timestamps for audit trail",
     manualSource: "moneyworks_appendix_allocation_file.html",
