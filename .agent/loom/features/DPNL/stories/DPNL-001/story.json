@@ -1,0 +1,303 @@
+{
+  "id": "DPNL-001",
+  "title": "Department Profit & Loss Report Artifact",
+  "description": "Implement a 'department-pnl' artifact type for the MoneyWorks AI assistant that displays a multi-period Profit & Loss report by department. Supports configurable number of comparison periods (default 3 years YTD), standard P&L sections (Sales, Cost of Sales, Gross Margin, Other Income, Net Income, Expenses, Profit/Loss), and optional department filtering. Follows the established 5-step artifact pattern: TypeScript types, React component, artifact-renderer integration, mw-report tool enhancement, and system prompt documentation.",
+  "why": "Enable data-driven management decisions by providing comparative departmental performance visibility directly in the AI assistant, eliminating the friction of exporting to Excel for multi-period P&L analysis.",
+  "status": "completed",
+  "priority": "high",
+  "estimatedComplexity": "moderate",
+  "sessions": [],
+  "hookEvents": [],
+  "tasks": [
+    {
+      "id": "T-001",
+      "storyId": "DPNL-001",
+      "title": "Add DepartmentPnLData interfaces to types.ts",
+      "description": "Add 'department-pnl' to ArtifactType union. Create PnLLineItem interface (code, name, values array for each period, percentChange). Create PnLSection interface (title, items[], subtotal values[]). Create DepartmentPnLData interface (companyName, reportTitle, periods[], department, sections: {sales, costOfSales, grossMargin, otherIncome, netIncome, expenses, profitLoss}, currency). Create isDepartmentPnLData type guard. Add DepartmentPnLData to ArtifactData union.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": [],
+      "acCoverage": ["AC-001", "AC-002", "AC-003"],
+      "files": [
+        "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/ai/app/lib/artifacts/types.ts"
+      ],
+      "reference": "LedgerReportData interface in same file",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T23:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-002",
+      "storyId": "DPNL-001",
+      "title": "Create DepartmentPnL React component",
+      "description": "Create new component file department-pnl.tsx. Display report header with company name, title, and period columns. Implement collapsible P&L sections (Sales, Cost of Sales, etc.) with expandable account details. Show section subtotals with styling. Display calculated rows (Gross Margin, Net Income, Profit/Loss) with distinct styling. Show percent change column for YoY comparison. Use semantic coloring (green for positive profit/growth, red for negative). Implement responsive layout for multiple period columns.",
+      "status": "pending",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-004", "AC-005", "AC-006", "AC-007"],
+      "files": [
+        "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/ai/app/components/artifacts/department-pnl.tsx"
+      ],
+      "reference": "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/ai/app/components/artifacts/ledger-report.tsx",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T23:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-003",
+      "storyId": "DPNL-001",
+      "title": "Integrate component into ArtifactRenderer",
+      "description": "Import isDepartmentPnLData from types.ts. Import DepartmentPnL component. Add new case 'department-pnl' in switch statement with type guard check.",
+      "status": "pending",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-001", "T-002"],
+      "acCoverage": ["AC-008"],
+      "files": [
+        "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/ai/app/components/artifacts/artifact-renderer.tsx"
+      ],
+      "reference": "ledger-report case in same file",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T23:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-004",
+      "storyId": "DPNL-001",
+      "title": "Add department_pnl definition to mw-report.ts",
+      "description": "Add 'department_pnl' entry to REPORT_DEFINITIONS object. Update mwReportToolDef.description to include new report type. Add input_schema parameters for numberOfPeriods (default 3), department (optional), and asOf (optional, defaults to today for YTD calculation).",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": [],
+      "acCoverage": ["AC-009"],
+      "files": [
+        "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/ai/app/lib/tools/mw-report.ts"
+      ],
+      "reference": "ledger_report definition in same file",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T23:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-005",
+      "storyId": "DPNL-001",
+      "title": "Implement department_pnl report generation logic",
+      "description": "In runMwReport function, add handler for 'department_pnl' report. Query Account table to get P&L accounts (IN/SA for Sales, CS/CG for Cost of Sales, OI for Other Income, EX/OH for Expenses). Query Detail table for postings in each period (YTD from period start to asOf date). Group postings by account. Calculate period values for each account. Compute Gross Margin (Sales - COS), Net Income (Gross Margin + Other Income), Profit/Loss (Net Income - Expenses). Calculate percent change between adjacent periods. Build sections matching P&L structure. If department parameter provided, filter postings by department code. Return structured data matching DepartmentPnLData interface.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-004"],
+      "acCoverage": ["AC-010", "AC-011", "AC-012"],
+      "files": [
+        "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/ai/app/lib/tools/mw-report.ts"
+      ],
+      "reference": "ledger_report handler in same file for Detail table queries",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T23:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-006",
+      "storyId": "DPNL-001",
+      "title": "Update system prompt with department-pnl artifact documentation",
+      "description": "In buildSystemPrompt() function in anthropic.server.ts, add documentation for 'department-pnl' artifact type. Include example JSON structure with multiple periods and sections. Add usage guidance in 'When to Generate Artifacts' section.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-013"],
+      "files": [
+        "/Users/hgeldenhuys/WebstormProjects/mw-core/packages/ai/app/lib/anthropic.server.ts"
+      ],
+      "reference": "ledger-report documentation in same file",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T23:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-007",
+      "storyId": "DPNL-001",
+      "title": "Run TypeScript compilation verification",
+      "description": "Execute 'bun run typecheck' from packages/ai directory. Verify no new TypeScript errors related to DPNL-001 changes.",
+      "status": "pending",
+      "assignedAgent": "qa",
+      "dependencies": ["T-001", "T-002", "T-003", "T-004", "T-005", "T-006"],
+      "acCoverage": ["AC-014"],
+      "files": [],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T23:00:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-008",
+      "storyId": "DPNL-001",
+      "title": "Integration test: AI artifact generation",
+      "description": "Start dev server and test with prompts: 'Show me a profit and loss report for the last 3 years', 'Show P&L for department SALES', 'Generate a 5-year P&L comparison'. Verify sections expand/collapse. Test percent change coloring. Verify calculations (Gross Margin, Net Income, Profit/Loss) are correct.",
+      "status": "pending",
+      "assignedAgent": "qa",
+      "dependencies": ["T-007"],
+      "acCoverage": ["AC-015"],
+      "files": [],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T23:00:00.000Z",
+      "completedAt": null
+    }
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-001",
+      "storyId": "DPNL-001",
+      "description": "ArtifactType union in types.ts includes 'department-pnl'",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-002",
+      "storyId": "DPNL-001",
+      "description": "PnLLineItem interface defines: code (string), name (string), values (number[] for each period), percentChange (number|null for YoY comparison)",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-003",
+      "storyId": "DPNL-001",
+      "description": "DepartmentPnLData interface defines: companyName, reportTitle, periods[], department?, currency, and sections object with sales, costOfSales, grossMargin, otherIncome, netIncome, expenses, profitLoss",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-004",
+      "storyId": "DPNL-001",
+      "description": "DepartmentPnL component displays header with company name, report title, and period column headers (e.g., 'Mar:2022/23', 'Mar:2023/24')",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-005",
+      "storyId": "DPNL-001",
+      "description": "Component renders expandable/collapsible P&L sections: SALES (4xxx accounts), COST OF SALES (6xxx), GROSS MARGIN (calculated), OTHER INCOME (5xxx), NET INCOME (calculated), EXPENSES (7xxx), PROFIT/LOSS (calculated)",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-006",
+      "storyId": "DPNL-001",
+      "description": "Each section shows individual account rows with code, name, and values per period, plus section subtotal row",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-007",
+      "storyId": "DPNL-001",
+      "description": "Percent change column displays YoY comparison with semantic coloring (green for positive growth, red for negative)",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-008",
+      "storyId": "DPNL-001",
+      "description": "ArtifactRenderer.tsx includes case for 'department-pnl' type with proper isDepartmentPnLData type guard check",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-009",
+      "storyId": "DPNL-001",
+      "description": "mw_report tool includes 'department_pnl' report type in REPORT_DEFINITIONS with numberOfPeriods (default 3), department (optional), and asOf (optional) parameters",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-010",
+      "storyId": "DPNL-001",
+      "description": "Report generation correctly categorizes accounts by type: IN/SA for Sales, CS/CG for Cost of Sales, OI for Other Income, EX/OH for Expenses",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-011",
+      "storyId": "DPNL-001",
+      "description": "Report correctly calculates derived values: Gross Margin = Sales - COS, Net Income = Gross Margin + Other Income, Profit/Loss = Net Income - Expenses",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-012",
+      "storyId": "DPNL-001",
+      "description": "Report supports department filtering - when department parameter provided, only postings with matching department code are included",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-013",
+      "storyId": "DPNL-001",
+      "description": "System prompt in anthropic.server.ts documents department-pnl artifact structure with example JSON showing multi-period format",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-014",
+      "storyId": "DPNL-001",
+      "description": "TypeScript compilation passes with zero new errors related to DPNL-001 changes",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-015",
+      "storyId": "DPNL-001",
+      "description": "AI can generate and display department P&L artifact via natural language request with configurable periods and optional department filter",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    }
+  ],
+  "decisions": [],
+  "learnings": [],
+  "weaveRefs": [
+    "E:artifact-implementation-5-step-pattern",
+    "E:discriminated-union-rendering-pattern",
+    "E:artifact-code-block-pattern",
+    "E:canonical-dsl-pattern",
+    "Q:preserve-canonical-dsl",
+    "Q:multi-format-support",
+    "Pi:incremental-artifact-component-implementation"
+  ],
+  "createdAt": "2025-11-27T23:00:00.000Z",
+  "completedAt": null
+}

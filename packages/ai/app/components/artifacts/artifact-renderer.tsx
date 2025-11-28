@@ -19,6 +19,7 @@ import {
   isBankReconciliationStatusData,
   isDailyTransactionSummaryData,
   isLedgerReportData,
+  isDepartmentPnLData,
 } from "~/lib/artifacts/types";
 import { MetricCard } from "./metric-card";
 import { DataTable } from "./data-table";
@@ -31,6 +32,7 @@ import { ExecutiveSummary } from "./executive-summary";
 import { BankReconciliationStatus } from "./bank-reconciliation-status";
 import { DailyTransactionSummary } from "./daily-transaction-summary";
 import { LedgerReport } from "./ledger-report";
+import { DepartmentPnL } from "./department-pnl";
 
 interface ArtifactRendererProps {
   artifact: Artifact;
@@ -105,6 +107,12 @@ export function ArtifactRenderer({ artifact, className }: ArtifactRendererProps)
     case "ledger-report":
       if (isLedgerReportData(data)) {
         return <LedgerReport data={data} className={className} />;
+      }
+      break;
+
+    case "department-pnl":
+      if (isDepartmentPnLData(data)) {
+        return <DepartmentPnL data={data} className={className} />;
       }
       break;
   }

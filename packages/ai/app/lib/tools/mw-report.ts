@@ -121,6 +121,15 @@ const REPORT_DEFINITIONS: Record<string, ReportDefinition> = {
     // Calculate running balance for each transaction
     // Show opening/closing balances with DB/CR indicators
   },
+  department_pnl: {
+    name: "Department Profit & Loss",
+    description: "Multi-period Profit & Loss statement with optional department breakdown. Shows Sales, Cost of Sales, Gross Margin, Other Income, Net Income, Expenses, and Profit/Loss",
+    queryBased: true,
+    table: "Transaction",
+    // Query Transaction table with embedded _details for P&L accounts
+    // Account types: IN/SA=Sales, CS/CG=Cost of Sales, OI=Other Income, EX/OH=Expenses
+    // Calculate totals per period and derived values (Gross Margin, Net Income, Profit/Loss)
+  },
 };
 
 /**
@@ -143,9 +152,11 @@ Available reports:
 - bank_reconciliation_status: Reconciliation status of all bank/cash accounts
 - daily_transaction_summary: Summary of transactions by type for a date (Gross, GST, Nett, Count)
 - ledger_report: General ledger showing all transactions per account with running balances
+- department_pnl: Multi-period Profit & Loss with Sales, COS, Gross Margin, Other Income, Expenses, and Profit/Loss
 
 Use asOf date (YYYYMMDD format) for historical reports where applicable.
-For ledger_report, use fromDate and toDate (YYYYMMDD) for date range, and optional accountFilter to limit to specific account codes.`,
+For ledger_report, use fromDate and toDate (YYYYMMDD) for date range, and optional accountFilter to limit to specific account codes.
+For department_pnl, use numberOfPeriods (default 3 years YTD), optional department filter, and optional asOf date.`,
   input_schema: {
     type: "object" as const,
     properties: {
@@ -170,6 +181,14 @@ For ledger_report, use fromDate and toDate (YYYYMMDD) for date range, and option
         type: "string",
         description: "Optional account code to filter (for ledger_report, e.g., '1000' for a single account)",
       },
+      numberOfPeriods: {
+        type: "number",
+        description: "Number of YTD periods to show (for department_pnl, default: 3)",
+      },
+      department: {
+        type: "string",
+        description: "Optional department code to filter (for department_pnl)",
+      },
       limit: {
         type: "number",
         description: "Maximum records to return (default: 500)",
@@ -188,6 +207,8 @@ export async function runMwReport(input: {
   fromDate?: string;
   toDate?: string;
   accountFilter?: string;
+  numberOfPeriods?: number;
+  department?: string;
   limit?: number;
 }): Promise<string> {
   try {
@@ -933,6 +954,337 @@ export async function runMwReport(input: {
           fromDate: formatDateDisplay(fromDate),
           toDate: formatDateDisplay(toDate),
           accounts: ledgerAccounts,
+        };
+      }
+
+      // For department_pnl, build multi-period P&L report
+      if (input.report === "department_pnl") {
+        // P&L Account type classifications
+        const salesTypes = ["IN", "SA"]; // Income/Sales
+        const costOfSalesTypes = ["CS", "CG"]; // Cost of Sales/Cost of Goods
+        const otherIncomeTypes = ["OI"]; // Other Income
+        const expenseTypes = ["EX", "OH"]; // Expense/Overhead
+
+        // Configuration
+        const numberOfPeriods = input.numberOfPeriods || 3;
+        const departmentFilter = input.department || null;
+
+        // Get current date or asOf date
+        const today = new Date();
+        let asOfDate: Date;
+        if (input.asOf && input.asOf.length === 8) {
+          asOfDate = new Date(
+            parseInt(input.asOf.slice(0, 4)),
+            parseInt(input.asOf.slice(4, 6)) - 1,
+            parseInt(input.asOf.slice(6, 8))
+          );
+        } else {
+          asOfDate = today;
+        }
+
+        // Query General table to get fiscal year start month (FYStartMonth field)
+        // Default to April (month 4) if not available - common for NZ/AU businesses
+        let fyStartMonth = 4; // April = month 4 (1-indexed)
+        try {
+          const generalData = await queryTable("General", {
+            fields: ["FYStartMonth"],
+            limit: 1,
+          });
+          if (generalData.length > 0 && generalData[0].FYStartMonth) {
+            fyStartMonth = parseInt(String(generalData[0].FYStartMonth)) || 4;
+          }
+        } catch {
+          // Use default
+        }
+
+        // Get company name from General table
+        let companyName = "Company";
+        try {
+          const generalData = await queryTable("General", {
+            fields: ["Company"],
+            limit: 1,
+          });
+          if (generalData.length > 0 && generalData[0].Company) {
+            companyName = String(generalData[0].Company);
+          }
+        } catch {
+          // Use default
+        }
+
+        // Query all accounts with their types
+        const accounts = await queryTable("Account", {
+          fields: ["Code", "Description", "Type"],
+          limit: 1000,
+        });
+
+        // Build account lookup: code -> {name, type}
+        const accountInfo: Record<string, { name: string; type: string }> = {};
+        for (const acc of accounts) {
+          const code = String(acc.Code || "");
+          accountInfo[code] = {
+            name: String(acc.Description || code),
+            type: String(acc.Type || ""),
+          };
+        }
+
+        // Helper to format fiscal year period label (e.g., "Mar:2023/24")
+        const formatPeriodLabel = (periodEnd: Date): string => {
+          const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          const month = periodEnd.getMonth();
+          const year = periodEnd.getFullYear();
+
+          // Fiscal year calculation: if month >= fyStartMonth, we're in FY year/year+1, else FY year-1/year
+          const fyEnd = month >= fyStartMonth - 1 ? year + 1 : year;
+          const fyStart = fyEnd - 1;
+
+          return `${monthNames[month]}:${fyStart}/${String(fyEnd).slice(2)}`;
+        };
+
+        // Helper to get fiscal year start date for a given date
+        const getFYStart = (date: Date): Date => {
+          const year = date.getFullYear();
+          const month = date.getMonth() + 1; // 1-indexed
+
+          // If we're past or at FY start month, FY started this calendar year
+          // Otherwise, FY started last calendar year
+          const fyStartYear = month >= fyStartMonth ? year : year - 1;
+          return new Date(fyStartYear, fyStartMonth - 1, 1); // Month is 0-indexed in Date constructor
+        };
+
+        // Build period ranges (YTD for each fiscal year, working backwards)
+        interface PeriodRange {
+          label: string;
+          startDate: string; // YYYYMMDD
+          endDate: string; // YYYYMMDD
+        }
+
+        const periods: PeriodRange[] = [];
+
+        for (let i = 0; i < numberOfPeriods; i++) {
+          // For each period, calculate the equivalent YTD date in that fiscal year
+          const periodAsOf = new Date(asOfDate);
+          periodAsOf.setFullYear(asOfDate.getFullYear() - i);
+
+          const fyStart = getFYStart(periodAsOf);
+
+          const startDate = `${fyStart.getFullYear()}${String(fyStart.getMonth() + 1).padStart(2, "0")}01`;
+          const endDate = `${periodAsOf.getFullYear()}${String(periodAsOf.getMonth() + 1).padStart(2, "0")}${String(periodAsOf.getDate()).padStart(2, "0")}`;
+
+          periods.unshift({
+            label: formatPeriodLabel(periodAsOf),
+            startDate,
+            endDate,
+          });
+        }
+
+        // Query transactions for the full date range (oldest period start to newest period end)
+        const oldestStart = periods[0].startDate;
+        const newestEnd = periods[periods.length - 1].endDate;
+
+        const transactions = await queryTable("Transaction", {
+          filter: `TransDate>='${oldestStart}' and TransDate<='${newestEnd}'`,
+          limit: 50000,
+        });
+
+        // Build per-account, per-period totals
+        // accountTotals[accountCode][periodIndex] = net amount
+        const accountTotals: Record<string, number[]> = {};
+
+        // Process each transaction's embedded details
+        for (const txn of transactions) {
+          const txnDateStr = String(txn.Transdate || txn.TransDate || txn.transdate || "");
+          if (!txnDateStr || txnDateStr.length !== 8) continue;
+
+          // Find which period this transaction belongs to
+          let periodIndex = -1;
+          for (let p = 0; p < periods.length; p++) {
+            if (txnDateStr >= periods[p].startDate && txnDateStr <= periods[p].endDate) {
+              periodIndex = p;
+              break;
+            }
+          }
+          if (periodIndex === -1) continue;
+
+          // Get embedded details
+          const details = txn._details as Record<string, unknown>[] || [];
+
+          for (const detail of details) {
+            const account = String(detail["detail.account"] || detail.Account || "").replace(/-$/, "");
+            if (!account) continue;
+
+            // Apply department filter if specified
+            if (departmentFilter) {
+              const detailDept = String(detail["detail.department"] || detail.Department || detail["detail.costcentre"] || detail.Costcentre || "");
+              if (detailDept !== departmentFilter) continue;
+            }
+
+            // Get net amount (positive = debit side, negative = credit side in MW)
+            const net = parseFloat(String(detail["detail.net"] || detail.Net || 0));
+
+            // Initialize if needed
+            if (!accountTotals[account]) {
+              accountTotals[account] = new Array(numberOfPeriods).fill(0);
+            }
+
+            accountTotals[account][periodIndex] += net;
+          }
+        }
+
+        // Helper to build a P&L section from account types
+        interface PnLLineItemData {
+          code: string;
+          name: string;
+          values: number[];
+          percentChange?: number;
+          isTotal?: boolean;
+          isCalculated?: boolean;
+        }
+
+        interface PnLSectionData {
+          name: string;
+          items: PnLLineItemData[];
+          total: PnLLineItemData;
+        }
+
+        const buildSection = (sectionName: string, accountTypes: string[]): PnLSectionData => {
+          const items: PnLLineItemData[] = [];
+          const sectionTotals = new Array(numberOfPeriods).fill(0);
+
+          // Find all accounts of the specified types
+          for (const [code, info] of Object.entries(accountInfo)) {
+            if (!accountTypes.includes(info.type)) continue;
+
+            const values = accountTotals[code] || new Array(numberOfPeriods).fill(0);
+
+            // In MoneyWorks embedded details, detail.net is positive for income credits
+            // and positive for expense debits - both represent "increases" to the account
+            // For P&L display: income should show as positive, expenses as positive costs
+            // So we DON'T need to negate - the raw values are already correct
+            const adjustedValues = [...values];
+
+            // Skip accounts with all zeros
+            if (adjustedValues.every((v) => Math.abs(v) < 0.01)) continue;
+
+            // Calculate percent change (last two periods)
+            let percentChange: number | undefined;
+            if (numberOfPeriods >= 2) {
+              const current = adjustedValues[numberOfPeriods - 1];
+              const previous = adjustedValues[numberOfPeriods - 2];
+              if (previous !== 0) {
+                percentChange = ((current - previous) / Math.abs(previous)) * 100;
+              }
+            }
+
+            items.push({
+              code,
+              name: info.name,
+              values: adjustedValues,
+              percentChange,
+            });
+
+            // Add to section totals
+            for (let p = 0; p < numberOfPeriods; p++) {
+              sectionTotals[p] += adjustedValues[p];
+            }
+          }
+
+          // Sort items by account code
+          items.sort((a, b) => a.code.localeCompare(b.code));
+
+          // Calculate percent change for total
+          let totalPercentChange: number | undefined;
+          if (numberOfPeriods >= 2) {
+            const current = sectionTotals[numberOfPeriods - 1];
+            const previous = sectionTotals[numberOfPeriods - 2];
+            if (previous !== 0) {
+              totalPercentChange = ((current - previous) / Math.abs(previous)) * 100;
+            }
+          }
+
+          return {
+            name: sectionName,
+            items,
+            total: {
+              code: "",
+              name: `Total ${sectionName}`,
+              values: sectionTotals,
+              percentChange: totalPercentChange,
+              isTotal: true,
+            },
+          };
+        };
+
+        // Build sections
+        const salesSection = buildSection("SALES", salesTypes);
+        const costOfSalesSection = buildSection("COST OF SALES", costOfSalesTypes);
+        const otherIncomeSection = buildSection("OTHER INCOME", otherIncomeTypes);
+        const expensesSection = buildSection("EXPENSES", expenseTypes);
+
+        // Calculate derived values
+        const grossMarginValues = salesSection.total.values.map((v, i) => v - costOfSalesSection.total.values[i]);
+        const netIncomeValues = grossMarginValues.map((v, i) => v + otherIncomeSection.total.values[i]);
+        const profitLossValues = netIncomeValues.map((v, i) => v - expensesSection.total.values[i]);
+
+        // Helper to calc percent change for calculated row
+        const calcPercentChange = (values: number[]): number | undefined => {
+          if (numberOfPeriods < 2) return undefined;
+          const current = values[numberOfPeriods - 1];
+          const previous = values[numberOfPeriods - 2];
+          if (previous !== 0) {
+            return ((current - previous) / Math.abs(previous)) * 100;
+          }
+          return undefined;
+        };
+
+        const grossMargin: PnLLineItemData = {
+          code: "",
+          name: "Gross Margin",
+          values: grossMarginValues,
+          percentChange: calcPercentChange(grossMarginValues),
+          isCalculated: true,
+        };
+
+        const netIncome: PnLLineItemData = {
+          code: "",
+          name: "Net Income",
+          values: netIncomeValues,
+          percentChange: calcPercentChange(netIncomeValues),
+          isCalculated: true,
+        };
+
+        const profitLoss: PnLLineItemData = {
+          code: "",
+          name: "Profit / (Loss)",
+          values: profitLossValues,
+          percentChange: calcPercentChange(profitLossValues),
+          isCalculated: true,
+        };
+
+        // Build final report data
+        const pnlData = {
+          companyName,
+          reportTitle: departmentFilter
+            ? `Profit & Loss - Department: ${departmentFilter}`
+            : "Profit & Loss Statement",
+          periods: periods.map((p) => p.label),
+          department: departmentFilter || undefined,
+          currency: "NZD",
+          sections: {
+            sales: salesSection,
+            costOfSales: costOfSalesSection,
+            grossMargin,
+            otherIncome: otherIncomeSection,
+            netIncome,
+            expenses: expensesSection,
+            profitLoss,
+          },
+          generatedAt: new Date().toISOString(),
+        };
+
+        reportData = [pnlData] as unknown as Record<string, unknown>[];
+
+        additionalInfo = {
+          ...pnlData,
         };
       }
     } else {

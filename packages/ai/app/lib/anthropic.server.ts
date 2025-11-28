@@ -99,7 +99,7 @@ When presenting financial data, charts, metrics, or reports, include a structure
   {
     "id": "unique-id",
     "title": "Title of artifact",
-    "type": "metric|table|pie-chart|bar-chart|line-chart|balance-sheet|trial-balance|executive-summary|bank-reconciliation-status|daily-transaction-summary|ledger-report",
+    "type": "metric|table|pie-chart|bar-chart|line-chart|balance-sheet|trial-balance|executive-summary|bank-reconciliation-status|daily-transaction-summary|ledger-report|department-pnl",
     "data": { ... type-specific data ... }
   }
 ]
@@ -205,6 +205,46 @@ When presenting financial data, charts, metrics, or reports, include a structure
    Shows per-account sections with: opening balance, transaction details (Type, Date, Reference, Description, GST, TC, Debit, Credit, Balance with DB/CR indicator), closing balance.
    Balance coloring: green for normal balance (DB for assets, CR for liabilities), red for abnormal.
 
+12. **department-pnl** - Multi-period Profit & Loss statement with optional department filtering
+   \`{ "companyName": "Acme Widgets Ltd", "reportTitle": "Profit & Loss Statement",
+      "periods": ["Nov:2022/23", "Nov:2023/24", "Nov:2024/25"],
+      "department": null, "currency": "NZD", "generatedAt": "2025-11-27T12:00:00.000Z",
+      "sections": {
+        "sales": {
+          "name": "SALES",
+          "items": [
+            {"code": "4000", "name": "Sales - Widgets", "values": [45000, 52000, 58000], "percentChange": 11.5},
+            {"code": "4100", "name": "Sales - Services", "values": [15000, 18000, 22000], "percentChange": 22.2}
+          ],
+          "total": {"code": "", "name": "Total SALES", "values": [60000, 70000, 80000], "percentChange": 14.3, "isTotal": true}
+        },
+        "costOfSales": {
+          "name": "COST OF SALES",
+          "items": [{"code": "6000", "name": "Direct Materials", "values": [20000, 23000, 26000], "percentChange": 13.0}],
+          "total": {"code": "", "name": "Total COST OF SALES", "values": [20000, 23000, 26000], "percentChange": 13.0, "isTotal": true}
+        },
+        "grossMargin": {"code": "", "name": "Gross Margin", "values": [40000, 47000, 54000], "percentChange": 14.9, "isCalculated": true},
+        "otherIncome": {
+          "name": "OTHER INCOME",
+          "items": [],
+          "total": {"code": "", "name": "Total OTHER INCOME", "values": [0, 0, 0], "isTotal": true}
+        },
+        "netIncome": {"code": "", "name": "Net Income", "values": [40000, 47000, 54000], "percentChange": 14.9, "isCalculated": true},
+        "expenses": {
+          "name": "EXPENSES",
+          "items": [
+            {"code": "7000", "name": "Wages", "values": [25000, 28000, 30000], "percentChange": 7.1},
+            {"code": "7100", "name": "Rent", "values": [6000, 6000, 6500], "percentChange": 8.3}
+          ],
+          "total": {"code": "", "name": "Total EXPENSES", "values": [31000, 34000, 36500], "percentChange": 7.4, "isTotal": true}
+        },
+        "profitLoss": {"code": "", "name": "Profit / (Loss)", "values": [9000, 13000, 17500], "percentChange": 34.6, "isCalculated": true}
+      }
+   }\`
+   Use mw_report with report="department_pnl", numberOfPeriods (default 3), optional department filter, and optional asOf date.
+   Shows collapsible sections for Sales, COS, Other Income, Expenses with calculated Gross Margin, Net Income, and Profit/Loss rows.
+   YoY percent change shown with color coding (green positive, red negative).
+
 **When to Generate Artifacts:**
 - Financial summaries: metrics + pie chart
 - Account queries: table
@@ -216,6 +256,7 @@ When presenting financial data, charts, metrics, or reports, include a structure
 - Bank reconciliation status queries: bank-reconciliation-status
 - Daily transaction queries / transaction summaries: daily-transaction-summary
 - Ledger / general ledger / account transaction history: ledger-report
+- Profit & Loss / P&L / income statement / department performance: department-pnl
 
 Always provide text explanation BEFORE the artifacts block.
 

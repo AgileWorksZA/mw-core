@@ -20,7 +20,8 @@ export type ArtifactType =
   | "executive-summary"
   | "bank-reconciliation-status"
   | "daily-transaction-summary"
-  | "ledger-report";
+  | "ledger-report"
+  | "department-pnl";
 
 /**
  * Trend direction for metric cards
@@ -424,6 +425,74 @@ export interface LedgerReportData {
 }
 
 /**
+ * P&L Line Item (individual account or calculated row)
+ * Represents a single row in the P&L report - either an account or a calculated total
+ */
+export interface PnLLineItem {
+  /** Account code (e.g., "4000") or empty for totals/calculated rows */
+  code: string;
+  /** Account name (e.g., "Sales") or section name for totals */
+  name: string;
+  /** Values for each period (matches periods array length) */
+  values: number[];
+  /** Year-over-year change percentage (comparing last two periods) */
+  percentChange?: number;
+  /** True for subtotal/total rows */
+  isTotal?: boolean;
+  /** True for calculated rows like Gross Margin, Net Income, Profit/Loss */
+  isCalculated?: boolean;
+}
+
+/**
+ * P&L Section (Sales, Cost of Sales, Other Income, Expenses)
+ * Groups related accounts with a section total
+ */
+export interface PnLSection {
+  /** Section name (e.g., "SALES", "COST OF SALES", "EXPENSES") */
+  name: string;
+  /** Individual account line items in this section */
+  items: PnLLineItem[];
+  /** Section total row */
+  total: PnLLineItem;
+}
+
+/**
+ * Department Profit & Loss Report Data
+ * Multi-period P&L with standard sections and calculated rows
+ */
+export interface DepartmentPnLData {
+  /** Company name */
+  companyName: string;
+  /** Report title (e.g., "Profit & Loss Statement") */
+  reportTitle: string;
+  /** Period labels (e.g., ["Mar:2022/23", "Mar:2023/24", "Mar:2024/25"]) */
+  periods: string[];
+  /** Optional department filter applied */
+  department?: string;
+  /** Currency code (e.g., "NZD") */
+  currency?: string;
+  /** P&L sections with calculated rows */
+  sections: {
+    /** Sales/Revenue section (account types IN, SA) */
+    sales: PnLSection;
+    /** Cost of Sales section (account types CS, CG) */
+    costOfSales: PnLSection;
+    /** Gross Margin = Sales - Cost of Sales */
+    grossMargin: PnLLineItem;
+    /** Other Income section (account type OI) */
+    otherIncome: PnLSection;
+    /** Net Income = Gross Margin + Other Income */
+    netIncome: PnLLineItem;
+    /** Expenses section (account types EX, OH) */
+    expenses: PnLSection;
+    /** Profit/Loss = Net Income - Expenses */
+    profitLoss: PnLLineItem;
+  };
+  /** When the report was generated */
+  generatedAt: string;
+}
+
+/**
  * Union type for all artifact data types
  */
 export type ArtifactData =
@@ -437,7 +506,8 @@ export type ArtifactData =
   | ExecutiveSummaryData
   | BankReconciliationStatusData
   | DailyTransactionSummaryData
-  | LedgerReportData;
+  | LedgerReportData
+  | DepartmentPnLData;
 
 /**
  * Main Artifact interface
@@ -507,6 +577,10 @@ export function isDailyTransactionSummaryData(data: ArtifactData): data is Daily
 
 export function isLedgerReportData(data: ArtifactData): data is LedgerReportData {
   return "accounts" in data && "reportTitle" in data && "fromDate" in data && "toDate" in data;
+}
+
+export function isDepartmentPnLData(data: ArtifactData): data is DepartmentPnLData {
+  return "sections" in data && "periods" in data && "reportTitle" in data && "generatedAt" in data;
 }
 
 /**

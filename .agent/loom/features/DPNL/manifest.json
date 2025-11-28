@@ -1,0 +1,14 @@
+{
+  "code": "DPNL",
+  "name": "Department Profit & Loss",
+  "description": "Department-level Profit & Loss report artifact with multi-period comparison and YTD support",
+  "stories": [
+    {
+      "id": "DPNL-001",
+      "title": "Department P&L Report Artifact",
+      "status": "planned"
+    }
+  ],
+  "createdAt": "2025-11-27T23:00:00.000Z",
+  "lastUpdated": "2025-11-27T23:00:00.000Z"
+}
