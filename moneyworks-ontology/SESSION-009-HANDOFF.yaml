@@ -115,31 +115,51 @@ next_session_options:
 
   option_1_recommended:
     title: "Phase 2: Automated Coherence Validation CI (TASK-026)"
-    priority: "P1 (HIGH - prevents regression)"
-    time_estimate: "2 days"
+    priority: "P0-NEXT (after PRODUCTION-REVIEW)"
+    status: "DESIGN LOCKED ✅"
+    time_estimate: "2 days (14 hours across 3 sessions)"
+
+    design_artifacts:
+      canonical_design: "moneyworks-ontology/TASK-026-DESIGN.md"
+      implementation_plan: "moneyworks-ontology/TASK-026-IMPLEMENTATION-PLAN.md"
+      design_version: "1.0 (locked 2025-11-28)"
+
     rationale: |
-      After investing 2.5 hours in manual quality fixes, automated CI
-      prevents regression. Essential for long-term ontology maintenance
-      as the codebase evolves.
+      After investing 3.25 hours in manual quality fixes (Phase 1 + Phase 2),
+      automated CI prevents regression. Essential for long-term ontology
+      maintenance as the codebase evolves.
+
+      Design is LOCKED and mereologically coherent with AYIOS protocols.
+      Ready for multi-session implementation with zero-entropy context transfer.
 
     components:
-      - "Field count validator (actual vs header claims)"
-      - "Duplicate field detector"
-      - "DataType consistency checker"
-      - "Metric coherence validator (cross-file)"
-      - "Pre-commit hooks for automatic validation"
+      - "Component 1: Field count validator (actual vs header claims)"
+      - "Component 2: Duplicate field detector"
+      - "Component 3: DataType consistency checker"
+      - "Component 4: Metric coherence validator (cross-file)"
+      - "Component 5: Integration layer (pre-commit + GitHub Actions + CLI)"
 
-    benefits:
-      - "Prevents quality issues from being reintroduced"
-      - "Maintains 100% coherence as ontology evolves"
-      - "Automated validation faster than manual review"
-      - "Protects 2.5 hour Phase 1 investment"
+    implementation_approach:
+      sessions: 3
+      session_1: "Foundation - Validators 1-3 (6 hours)"
+      session_2: "Integration - Components 4-5 (6 hours)"
+      session_3: "Documentation & Production (2 hours)"
+
+    protocol_compliance:
+      - "Zero-entropy context transfer (locked design)"
+      - "Mereological coherence (clear whole→parts hierarchy)"
+      - "AYIOS protocol aligned (session handoff documented)"
+      - "Multi-session ready (session boundaries defined)"
+      - "Empirically grounded (validates Phase 1 fixes)"
 
     acceptance_criteria:
       - "CI fails if field counts are inaccurate"
       - "CI detects duplicate field definitions"
       - "CI validates metric consistency across files"
       - "Pre-commit hook prevents committing quality issues"
+      - "Performance < 5 seconds for pre-commit"
+      - "90%+ test coverage"
+      - "Comprehensive documentation"
 
   option_2_alternative:
     title: "Deploy to Production Immediately"
