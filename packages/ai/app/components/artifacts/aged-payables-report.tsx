@@ -37,14 +37,23 @@ interface AgedPayablesReportProps {
 }
 
 /**
+ * Safely coerce a value to number
+ */
+function toNum(value: number | string | undefined | null): number {
+  if (value === undefined || value === null) return 0;
+  const num = typeof value === "string" ? parseFloat(value) : value;
+  return isNaN(num) ? 0 : num;
+}
+
+/**
  * Get row styling based on aging severity
  * Red for 3+ months overdue, amber for 2 months
  */
 function getAgingRowClass(supplier: AgedPayablesSupplier): string {
-  if (supplier.threeMonthsPlus > 0) {
+  if (toNum(supplier.threeMonthsPlus) > 0) {
     return "bg-red-100 dark:bg-red-950/40 hover:bg-red-200 dark:hover:bg-red-950/60";
   }
-  if (supplier.twoMonths > 0) {
+  if (toNum(supplier.twoMonths) > 0) {
     return "bg-amber-100 dark:bg-amber-950/40 hover:bg-amber-200 dark:hover:bg-amber-950/60";
   }
   return "hover:bg-muted/30";
@@ -54,10 +63,10 @@ function getAgingRowClass(supplier: AgedPayablesSupplier): string {
  * Aging severity indicator icon
  */
 function AgingIndicator({ supplier }: { supplier: AgedPayablesSupplier }) {
-  if (supplier.threeMonthsPlus > 0) {
+  if (toNum(supplier.threeMonthsPlus) > 0) {
     return <AlertCircle className="size-4 text-red-600" />;
   }
-  if (supplier.twoMonths > 0) {
+  if (toNum(supplier.twoMonths) > 0) {
     return <AlertTriangle className="size-4 text-amber-600" />;
   }
   return null;
@@ -100,10 +109,10 @@ function InvoiceRow({
       <td
         className={cn(
           "py-1.5 px-3 text-right font-mono",
-          invoice.threeMonthsPlus > 0 && "text-red-600 font-semibold"
+          toNum(invoice.threeMonthsPlus) > 0 && "text-red-600 font-semibold"
         )}
       >
-        {invoice.threeMonthsPlus !== 0
+        {toNum(invoice.threeMonthsPlus) !== 0
           ? formatCurrency(invoice.threeMonthsPlus, currency)
           : ""}
       </td>
@@ -111,22 +120,22 @@ function InvoiceRow({
       <td
         className={cn(
           "py-1.5 px-3 text-right font-mono",
-          invoice.twoMonths > 0 && "text-amber-600"
+          toNum(invoice.twoMonths) > 0 && "text-amber-600"
         )}
       >
-        {invoice.twoMonths !== 0
+        {toNum(invoice.twoMonths) !== 0
           ? formatCurrency(invoice.twoMonths, currency)
           : ""}
       </td>
       {/* 1 Month */}
       <td className="py-1.5 px-3 text-right font-mono">
-        {invoice.oneMonth !== 0
+        {toNum(invoice.oneMonth) !== 0
           ? formatCurrency(invoice.oneMonth, currency)
           : ""}
       </td>
       {/* Current */}
       <td className="py-1.5 px-3 text-right font-mono">
-        {invoice.current !== 0
+        {toNum(invoice.current) !== 0
           ? formatCurrency(invoice.current, currency)
           : ""}
       </td>
@@ -194,10 +203,10 @@ function SupplierRow({
       <td
         className={cn(
           "py-2 px-3 text-right font-mono",
-          supplier.threeMonthsPlus > 0 && "text-red-600 font-semibold"
+          toNum(supplier.threeMonthsPlus) > 0 && "text-red-600 font-semibold"
         )}
       >
-        {supplier.threeMonthsPlus !== 0
+        {toNum(supplier.threeMonthsPlus) !== 0
           ? formatCurrency(supplier.threeMonthsPlus, currency)
           : ""}
       </td>
@@ -205,22 +214,22 @@ function SupplierRow({
       <td
         className={cn(
           "py-2 px-3 text-right font-mono",
-          supplier.twoMonths > 0 && "text-amber-600 font-semibold"
+          toNum(supplier.twoMonths) > 0 && "text-amber-600 font-semibold"
         )}
       >
-        {supplier.twoMonths !== 0
+        {toNum(supplier.twoMonths) !== 0
           ? formatCurrency(supplier.twoMonths, currency)
           : ""}
       </td>
       {/* 1 Month */}
       <td className="py-2 px-3 text-right font-mono">
-        {supplier.oneMonth !== 0
+        {toNum(supplier.oneMonth) !== 0
           ? formatCurrency(supplier.oneMonth, currency)
           : ""}
       </td>
       {/* Current */}
       <td className="py-2 px-3 text-right font-mono">
-        {supplier.current !== 0
+        {toNum(supplier.current) !== 0
           ? formatCurrency(supplier.current, currency)
           : ""}
       </td>
@@ -248,14 +257,14 @@ export function AgedPayablesReport({ data, className }: AgedPayablesReportProps)
   const asAt = data.asAt || "";
   const reportTitle = data.reportTitle || "Outstanding Balances for Payables";
 
-  // Calculate totals if not provided
+  // Calculate totals if not provided (with defensive coercion)
   const totals = data.totals || {
-    threeMonthsPlus: suppliers.reduce((sum, s) => sum + s.threeMonthsPlus, 0),
-    twoMonths: suppliers.reduce((sum, s) => sum + s.twoMonths, 0),
-    oneMonth: suppliers.reduce((sum, s) => sum + s.oneMonth, 0),
-    current: suppliers.reduce((sum, s) => sum + s.current, 0),
-    gst: suppliers.reduce((sum, s) => sum + s.gst, 0),
-    total: suppliers.reduce((sum, s) => sum + s.total, 0),
+    threeMonthsPlus: suppliers.reduce((sum, s) => sum + toNum(s.threeMonthsPlus), 0),
+    twoMonths: suppliers.reduce((sum, s) => sum + toNum(s.twoMonths), 0),
+    oneMonth: suppliers.reduce((sum, s) => sum + toNum(s.oneMonth), 0),
+    current: suppliers.reduce((sum, s) => sum + toNum(s.current), 0),
+    gst: suppliers.reduce((sum, s) => sum + toNum(s.gst), 0),
+    total: suppliers.reduce((sum, s) => sum + toNum(s.total), 0),
   };
 
   const toggleSupplier = (code: string) => {
@@ -270,11 +279,11 @@ export function AgedPayablesReport({ data, className }: AgedPayablesReportProps)
     });
   };
 
-  // Count suppliers with overdue amounts
+  // Count suppliers with overdue amounts (with defensive coercion)
   const overdueCount = suppliers.filter(
-    (s) => s.threeMonthsPlus > 0 || s.twoMonths > 0
+    (s) => toNum(s.threeMonthsPlus) > 0 || toNum(s.twoMonths) > 0
   ).length;
-  const criticalCount = suppliers.filter((s) => s.threeMonthsPlus > 0).length;
+  const criticalCount = suppliers.filter((s) => toNum(s.threeMonthsPlus) > 0).length;
 
   return (
     <Card className={cn("overflow-hidden", className)}>
@@ -394,7 +403,7 @@ export function AgedPayablesReport({ data, className }: AgedPayablesReportProps)
                 <td
                   className={cn(
                     "py-3 px-3 text-right font-mono",
-                    totals.threeMonthsPlus > 0 && "text-red-600"
+                    toNum(totals.threeMonthsPlus) > 0 && "text-red-600"
                   )}
                 >
                   {formatCurrency(totals.threeMonthsPlus, currency)}
@@ -402,7 +411,7 @@ export function AgedPayablesReport({ data, className }: AgedPayablesReportProps)
                 <td
                   className={cn(
                     "py-3 px-3 text-right font-mono",
-                    totals.twoMonths > 0 && "text-amber-600"
+                    toNum(totals.twoMonths) > 0 && "text-amber-600"
                   )}
                 >
                   {formatCurrency(totals.twoMonths, currency)}

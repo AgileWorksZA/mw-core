@@ -751,13 +751,17 @@ export const DEFAULT_CHART_COLORS = [
 /**
  * Format a number as currency
  */
-export function formatCurrency(value: number, currency = "USD"): string {
+export function formatCurrency(value: number | string | undefined | null, currency = "USD"): string {
+  // Defensive: handle undefined, null, strings, and NaN
+  const numValue = typeof value === "string" ? parseFloat(value) : (value ?? 0);
+  if (isNaN(numValue)) return "$0.00";
+
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(value);
+  }).format(numValue);
 }
 
 /**
