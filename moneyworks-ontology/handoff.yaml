@@ -1,52 +1,73 @@
-# MoneyWorks Ontology - Session Handoff
-# TASK-000: Zero-entropy session initialization
-# Last Updated: 2025-11-26 (Session-007 MID-FLIGHT)
-# Consume this file ONCE at session start
+# MoneyWorks Ontology - Session Handoff (LEGACY - See SESSION-008-HANDOFF.yaml)
+# DEPRECATED: This file is from Session 007 mid-flight state
+# Last Updated: 2025-11-26 (Session-007 COMPLETE)
 #
-# 🚀 NEW SESSION? START HERE: This file contains mid-flight context
-# Session 007 is IN PROGRESS - field discrepancy research phase
+# ⚠️ FOR CURRENT SESSION: Read SESSION-008-HANDOFF.yaml instead
+# This file preserved for historical reference only
 
 # ============================================================================
-# SESSION INITIALIZATION PROTOCOL
+# DEPRECATION NOTICE
 # ============================================================================
 
-protocol:
-  version: "5.0"
-  purpose: |
-    Establish epistemic continuity between agent sessions.
-    Session 007 is MID-FLIGHT with critical research findings requiring verification.
-
-  initialization_sequence:
-    1: "Read this file (handoff.yaml) completely"
-    2: "Read SESSION-007-SUMMARY.md for session context and achievements"
-    3: "Read DISCREPANCY_RESOLUTION_REPORT.md for research findings (WITH CAVEATS)"
-    4: "Read FIELD_DISCREPANCY_RESEARCH_TASKS.md for detailed task breakdown"
-    5: "Read state.yaml for current epistemic state (98% confidence, 100% entity coverage)"
-    6: "Read backlog.yaml - CRITICAL: Execute TASK-023 (P0 priority) NEXT"
-
-  session_end_protocol:
-    1: "Update state.yaml with session outcomes"
-    2: "Update backlog.yaml task statuses"
-    3: "Update handoff.yaml with mid-flight state"
-    4: "Note any blockers or risks discovered"
-    5: "Create SESSION-00N-FINAL-QUALIA.md with semantic context for next session"
+deprecation:
+  status: "SUPERSEDED"
+  superseded_by: "SESSION-008-HANDOFF.yaml"
+  reason: "Session 007 completed; comprehensive handoff created for Session 008"
+  preserved_for: "Historical reference and audit trail"
 
 # ============================================================================
-# MID-FLIGHT CONTEXT (Session 007)
+# SESSION 007 FINAL STATUS (COMPLETED)
 # ============================================================================
 
-mid_flight_status:
-  session: "007"
-  phase: "Field Discrepancy Resolution"
-  status: "MID-FLIGHT - Research complete, verification REQUIRED before applying corrections"
+session_007_final:
+  status: "COMPLETE"
+  phase: "Empirical Validation + Coherence Analysis"
+  completion_date: "2025-11-26"
 
-  completed_this_session:
-    - "✅ Build/Memo prefix handling fixed (18 → 24 perfect matches)"
-    - "✅ 6 UI entities documented (Link, Log, Message, Filter, Stickies, Lists)"
-    - "✅ 100% entity coverage achieved (31/31)"
-    - "✅ Manual appendix search completed (4 parallel subagents)"
-    - "✅ Empirical API schema field extraction completed"
-    - "✅ DISCREPANCY_RESOLUTION_REPORT.md created with findings"
+  achievements:
+    - "✅ Amendment 001 applied (4 Name corrections, 1 Product removal, Slot removal)"
+    - "✅ 100% perfect match achieved (31/31 entities)"
+    - "✅ Coherence analysis completed (4 specialized subagents)"
+    - "✅ Critical issues identified and documented"
+    - "✅ Production readiness assessed (NO-GO, 12 hours to ready)"
+
+  final_metrics:
+    confidence: 0.99
+    perfect_match_rate: 1.0
+    entity_coverage: 1.0
+    architectural_coherence: 0.99
+    implementation_quality: 0.65
+
+# ============================================================================
+# RESOLUTION OF MID-FLIGHT STATE
+# ============================================================================
+
+resolution:
+  task_023_status: "COMPLETED"
+  evidence:
+    - "XML export verification performed on 2025-11-26"
+    - "4 Name field corrections validated and applied"
+    - "AverageValue field confirmed absent, removed from ontology"
+    - "Slot field confirmed absent from exports, removed from 6 entities"
+    - "100% perfect match achieved after corrections"
+
+  amendments_applied:
+    - "SalesPerson → Salesperson"
+    - "EInvoiceID → EInvoicingID"
+    - "CustPropmtPaymentDiscount → CustPromptPaymentDiscount"
+    - "SupplierPromptPaymentTerms → SuppPromptPaymentTerms"
+    - "AverageValue removed from Product entity"
+    - "Slot removed from 6 entities"
+
+# ============================================================================
+# FORWARD POINTER
+# ============================================================================
+
+next_session:
+  handoff_file: "SESSION-008-HANDOFF.yaml"
+  first_task: "TASK-024 (Phase 0 Critical Remediation)"
+  priority: "P0 - Execute immediately"
+  time_estimate: "3 hours"
 
   critical_in_progress:
     - "⚠️ TASK-023 CREATED - P0 PRIORITY - Verify against ACTUAL EXPORT DATA"
