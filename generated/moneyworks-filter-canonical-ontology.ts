@@ -5,6 +5,8 @@
  * Source: Full schema export 2025-11-25
  * Authority: Empirical API validation
  *
+ * COVERAGE: 12 fields
+ *
  * ENTITY PURPOSE: User-defined filters for list view customization
  * - Stores saved filter expressions for data views
  * - Supports per-user and per-file filter preferences

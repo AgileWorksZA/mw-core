@@ -6,6 +6,8 @@
  * Authority: MoneyWorks Manual - Tax Rate Field Descriptions
  * Enhanced: Empirical API validation (MoneyWorks Now v9.2.3)
  *
+ * COVERAGE: 30 fields
+ *
  * CRITICAL DISCOVERY: MoneyWorks TaxRates support sophisticated tax systems with
  * historical rate management, multi-tier taxation (GST+PST), reversed charge mechanics,
  * and automatic GST finalization tracking - essential for international business compliance.

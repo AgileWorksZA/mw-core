@@ -5,6 +5,8 @@
  * Source: Full schema export 2025-11-25
  * Authority: Empirical API validation
  *
+ * COVERAGE: 6 fields
+ *
  * ENTITY PURPOSE: Department-to-Group linking table
  * - Maps departments to account groups for organizational reporting
  * - Supports multi-dimensional analysis and consolidation

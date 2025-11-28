@@ -1,10 +1,12 @@
 /**
  * MoneyWorks User2 Entity - Canonical Ontology
- * 
+ *
  * PURE MoneyWorks canonical definitions extracted from official manual
  * Source: moneyworks_appendix_user2_file.html
  * Authority: MoneyWorks Manual - User2 File Field Descriptions
- * 
+ *
+ * COVERAGE: 33 fields
+ *
  * CRITICAL DISCOVERY: MoneyWorks User2 is enhanced persistent storage system:
  * - Extended key length (28 chars vs 9 in User file)
  * - DevKey system for conflict avoidance (developer key allocation)

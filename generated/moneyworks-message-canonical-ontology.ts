@@ -5,6 +5,8 @@
  * Source: Full schema export 2025-11-25
  * Authority: Empirical API validation
  *
+ * COVERAGE: 29 fields
+ *
  * ENTITY PURPOSE: Recurring reminders and message scheduling system
  * - Manages scheduled reminders and notifications
  * - Supports complex recurrence patterns (daily, weekly, monthly)

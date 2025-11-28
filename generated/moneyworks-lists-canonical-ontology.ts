@@ -5,6 +5,8 @@
  * Source: Full schema export 2025-11-25
  * Authority: Empirical API validation
  *
+ * COVERAGE: 10 fields
+ *
  * ENTITY PURPOSE: Validation lists and dropdown options
  * - Stores custom validation list items for data entry
  * - Provides dropdown/picklist values for form fields

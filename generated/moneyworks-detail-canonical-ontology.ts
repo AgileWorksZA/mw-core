@@ -9,7 +9,7 @@
  * - This ontology documents bare field names (without prefix)
  * - Relationship: Detail.ParentSeq → Transaction.SequenceNumber
  *
- * COVERAGE: 44/44 fields (100%)
+ * COVERAGE: 45 fields
  * EMPIRICAL SOURCE: /Users/hjonck/Development/gitprojects/AgileWorksZA/ai_cfo_poc/mpoc/data/moneyworks-schemas/2025-11-25_full-schema_now.json
  *
  * MEREOLOGICAL STRUCTURE:

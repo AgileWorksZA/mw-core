@@ -5,10 +5,12 @@
  * Source: moneyworks_appendix_transactions.html
  * Authority: MoneyWorks Manual - Transactions and Detail Field Descriptions
  * 
+ * COVERAGE: 111 fields
+ *
  * CRITICAL ARCHITECTURAL DISCOVERIES:
  * 1. DUAL-ENTITY STRUCTURE: Transactions has a separate Detail subfile
- *    - Transaction entity: Main transaction header with 65+ fields
- *    - Detail entity: Transaction lines with 40+ fields (Detail.ParentSeq → Transaction.SequenceNumber)
+ *    - Transaction entity: Main transaction header (111 fields)
+ *    - Detail entity: Transaction lines with 45 fields (Detail.ParentSeq → Transaction.SequenceNumber)
  * 
  * 2. COMPREHENSIVE TRANSACTION TYPE SYSTEM:
  *    - 17 canonical transaction types covering all business scenarios

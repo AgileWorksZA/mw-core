@@ -1,10 +1,12 @@
 /**
  * MoneyWorks Accounts Entity - Canonical Ontology
- * 
+ *
  * PURE MoneyWorks canonical definitions extracted from official manual
  * Source: moneyworks_appendix_accounts.html
  * Authority: MoneyWorks Manual - Accounts Field Descriptions
- * 
+ *
+ * COVERAGE: 35 fields
+ *
  * CRITICAL ARCHITECTURAL DISCOVERIES:
  * 1. COMPREHENSIVE CHART OF ACCOUNTS SYSTEM:
  *    - 26 canonical account fields covering complete financial account management

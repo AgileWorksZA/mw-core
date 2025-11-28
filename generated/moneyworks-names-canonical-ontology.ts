@@ -5,7 +5,7 @@
  * Source: moneyworks_appendix_names.html
  * Authority: MoneyWorks Manual - Names Field Descriptions
  *
- * COVERAGE: 102 fields - Canonical field names corrected (Amendment 001, Slot removed)
+ * COVERAGE: 107 fields - Canonical field names corrected (Amendment 001, Slot removed)
  * Enhanced: 2025-11-26 by Claude Code (Amendment 001: Corrected 4 field names, removed 4 duplicates, removed Slot field)
  * Previous: 2025-07-12 by ont1 (added 57 fields from 39 to achieve 96)
  *

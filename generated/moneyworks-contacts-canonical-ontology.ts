@@ -1,10 +1,12 @@
 /**
  * MoneyWorks Contacts Entity - Canonical Ontology
- * 
+ *
  * PURE MoneyWorks canonical definitions extracted from official manual
  * Source: moneyworks_appendix_contacts.html
  * Authority: MoneyWorks Manual - Contacts Field Descriptions
- * 
+ *
+ * COVERAGE: 25 fields
+ *
  * CRITICAL DISCOVERIES:
  * 1. MoneyWorks Dual-Layer Contact Architecture:
  *    - Names Entity: Built-in Contact1/Contact2 fields (embedded, fast access, limited to 2 contacts)
