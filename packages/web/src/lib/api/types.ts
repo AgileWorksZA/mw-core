@@ -220,11 +220,50 @@ export interface TaxRateRecord {
 	Type: number;
 }
 
-/** Account record from /tables/account (subset) */
+/** Account record from /tables/account */
 export interface AccountRecord {
 	Code: string;
 	Description: string;
 	Type: string;
+	Group: string;
+	Category: string;
+	Category2: string;
+	Category3: string;
+	Category4: string;
+	Pandl: string;
+	TaxCode: string;
+	Flags: number;
+	System: string;
+	Colour: number;
+	Currency: string;
+	BankAccountNumber: string;
+	Accountantcode: string;
+	Comments: string;
+	SecurityLevel: number;
+}
+
+export const ACCOUNT_TYPE_LABELS: Record<string, string> = {
+	CA: 'Current Asset',
+	FA: 'Fixed Asset',
+	CL: 'Current Liability',
+	SF: 'Equity',
+	IN: 'Income',
+	CS: 'Cost of Sales',
+	EX: 'Expense',
+	SA: 'Other Income/Exp'
+};
+
+export interface AccountListItem {
+	code: string;
+	description: string;
+	type: string;
+	typeLabel: string;
+	group: string;
+	category: string;
+	taxCode: string;
+	colour: number;
+	system: string;
+	bankAccountNumber: string;
 }
 
 // =================== BFF Screen shapes ===================

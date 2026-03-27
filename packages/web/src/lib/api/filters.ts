@@ -46,3 +46,18 @@ export const ITEM_FILTERS: Record<string, { label: string; filter?: string }> = 
 };
 
 export type ItemFilterKey = keyof typeof ITEM_FILTERS;
+
+/** MWScript filter expressions for the Chart of Accounts */
+export const ACCOUNT_FILTERS: Record<string, { label: string; filter?: string }> = {
+	all: { label: 'All Accounts' },
+	'current-assets': { label: 'Current Assets', filter: 'Type="CA"' },
+	'fixed-assets': { label: 'Fixed Assets', filter: 'Type="FA"' },
+	'current-liabilities': { label: 'Current Liabilities', filter: 'Type="CL"' },
+	equity: { label: 'Equity', filter: 'Type="SF"' },
+	income: { label: 'Income', filter: 'Type="IN"' },
+	'cost-of-sales': { label: 'Cost of Sales', filter: 'Type="CS"' },
+	expenses: { label: 'Expenses', filter: 'Type="EX"' },
+	'other-income': { label: 'Other Income/Exp', filter: 'Type="SA"' }
+};
+
+export type AccountFilterKey = keyof typeof ACCOUNT_FILTERS;
