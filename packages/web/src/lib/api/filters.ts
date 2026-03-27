@@ -34,3 +34,15 @@ export const TRANSACTION_STATUS_FILTERS: Record<string, { label: string; filter?
 
 export type TransactionTypeFilterKey = keyof typeof TRANSACTION_TYPE_FILTERS;
 export type TransactionStatusFilterKey = keyof typeof TRANSACTION_STATUS_FILTERS;
+
+/** MWScript filter expressions for the Items list */
+export const ITEM_FILTERS: Record<string, { label: string; filter?: string }> = {
+	all: { label: 'All Items' },
+	products: { label: 'Products', filter: 'Type="P"' },
+	resources: { label: 'Resources', filter: 'Type="S"' },
+	time: { label: 'Time', filter: 'Type="T"' },
+	'ship-methods': { label: 'Ship Methods', filter: 'Type="A"' },
+	other: { label: 'Other', filter: 'Type="O"' }
+};
+
+export type ItemFilterKey = keyof typeof ITEM_FILTERS;

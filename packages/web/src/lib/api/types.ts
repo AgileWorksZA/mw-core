@@ -168,7 +168,7 @@ export interface DetailRecord {
 	TransactionType: string;
 }
 
-/** Product record from /tables/product (subset) */
+/** Product record from /tables/product */
 export interface ProductRecord {
 	Code: string;
 	Description: string;
@@ -176,6 +176,39 @@ export interface ProductRecord {
 	Costprice: number;
 	Taxcode: string;
 	Sellunit: string;
+	Supplier: string;
+	Supplierscode: string;
+	Comment: string;
+	Category1: string;
+	Category2: string;
+	Category3: string;
+	Category4: string;
+	Salesacct: string;
+	Cogacct: string;
+	Stockacct: string;
+	Buyunit: string;
+	Buyprice: number;
+	Buytaxcodeoverride: string;
+	Selltaxcodeoverride: string;
+	Plussage: number;
+	Stockonhand: number;
+	Stockvalue: number;
+	Reorderlevel: number;
+	Flags: number;
+	Colour: number;
+	Type: string;
+	Usemultipleprices: number;
+	Sellpriceb: number;
+	Sellpricec: number;
+	Sellpriced: number;
+	Sellpricee: number;
+	Sellpricef: number;
+	Selldiscount: number;
+	Barcode: string;
+	Conversionfactor: number;
+	Marginwarning: number;
+	Sellweight: number;
+	Leadtimedays: number;
 }
 
 /** Tax rate record from /tables/taxrate */
@@ -400,5 +433,84 @@ export interface TransactionScreenData {
 		taxCodes: Array<{ code: string; name: string; rate: number }>;
 		accounts: Array<{ code: string; description: string; type: string }>;
 		products: Array<{ code: string; description: string; price: number; unit: string }>;
+	};
+}
+
+// =================== Items Screen types ===================
+
+export interface ItemListItem {
+	code: string;
+	description: string;
+	sellPrice: number;
+	unit: string;
+	stockOnHand: number;
+	colour: number;
+	type: string;
+	supplier: string;
+	category1: string;
+}
+
+export interface ItemScreenData {
+	item: {
+		header: {
+			code: string;
+			description: string;
+			type: string;
+			colour: number;
+			category1: string;
+			category2: string;
+			category3: string;
+			category4: string;
+			barcode: string;
+			comment: string;
+		};
+		flags: {
+			weBuy: boolean;
+			weSell: boolean;
+			weCount: boolean;
+			weStock: boolean;
+		};
+		controlAccounts: {
+			salesAcct: string;
+			salesAcctDesc: string;
+			cogsAcct: string;
+			cogsAcctDesc: string;
+			stockAcct: string;
+			stockAcctDesc: string;
+		};
+		buying: {
+			supplier: string;
+			supplierCode: string;
+			buyPrice: number;
+			buyUnit: string;
+			buyTaxCode: string;
+			plussage: number;
+			reorderLevel: number;
+			leadTimeDays: number;
+			conversionFactor: number;
+		};
+		selling: {
+			sellPrice: number;
+			sellUnit: string;
+			sellTaxCode: string;
+			discount: number;
+			marginWarning: number;
+			sellWeight: number;
+			useMultiplePrices: boolean;
+			priceB: number;
+			priceC: number;
+			priceD: number;
+			priceE: number;
+			priceF: number;
+		};
+		inventory: {
+			stockOnHand: number;
+			stockValue: number;
+			costPrice: number;
+		};
+	};
+	lookups: {
+		taxCodes: Array<{ code: string; name: string; rate: number }>;
+		accounts: Array<{ code: string; description: string; type: string }>;
 	};
 }
