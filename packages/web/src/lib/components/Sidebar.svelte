@@ -2,16 +2,35 @@
 	let { company, pathname }: { company: string; pathname: string } = $props();
 
 	const navItems = [
-		{ href: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
-		{ href: '/transactions', label: 'Transactions', icon: 'file-text' },
-		{ href: '/names', label: 'Names', icon: 'users' },
-		{ href: '/items', label: 'Items', icon: 'box' },
-		{ href: '/accounts', label: 'Accounts', icon: 'ledger' },
-		{ href: '/enquiry/sales', label: 'Sales Enquiry', icon: 'search' },
-		{ href: '/enquiry/purchases', label: 'Purchase Enquiry', icon: 'cart' },
+		{ href: '/dashboard', label: 'Overview', icon: 'dashboard', group: 'Dashboards' },
+		{ href: '/dashboard/daily-summary', label: 'Daily Summary', icon: 'calendar', group: 'Dashboards' },
+		{ href: '/dashboard/income-expenses', label: 'Income & Expenses', icon: 'trending', group: 'Dashboards' },
+		{ href: '/transactions', label: 'Transactions', icon: 'file-text', group: 'Day-to-Day' },
+		{ href: '/receivables', label: 'Receivables', icon: 'arrow-down', group: 'Day-to-Day' },
+		{ href: '/payables', label: 'Payables', icon: 'arrow-up', group: 'Day-to-Day' },
+		{ href: '/names', label: 'Names', icon: 'users', group: 'Master Data' },
+		{ href: '/items', label: 'Items', icon: 'box', group: 'Master Data' },
+		{ href: '/accounts', label: 'Accounts', icon: 'ledger', group: 'Master Data' },
+		{ href: '/enquiry/sales', label: 'Sales Enquiry', icon: 'search', group: 'Enquiries' },
+		{ href: '/enquiry/purchases', label: 'Purchase Enquiry', icon: 'cart', group: 'Enquiries' },
 	];
 
+	// Group items for section headers
+	const groups = $derived((() => {
+		const result: { label: string; items: typeof navItems }[] = [];
+		let currentGroup = '';
+		for (const item of navItems) {
+			if (item.group !== currentGroup) {
+				currentGroup = item.group;
+				result.push({ label: currentGroup, items: [] });
+			}
+			result[result.length - 1].items.push(item);
+		}
+		return result;
+	})());
+
 	function isActive(href: string): boolean {
+		if (href === '/dashboard') return pathname === '/dashboard';
 		return pathname.startsWith(href);
 	}
 </script>
@@ -26,15 +45,17 @@
 	</div>
 
 	<!-- Navigation -->
-	<nav class="flex-1 px-2 py-3">
-		{#each navItems as item}
-			<a
-				href={item.href}
-				class="mb-0.5 flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors
-					{isActive(item.href)
-						? 'bg-sidebar-accent text-sidebar-foreground font-medium'
-						: 'text-sidebar-foreground/70 hover:bg-sidebar-muted hover:text-sidebar-foreground'}"
-			>
+	<nav class="flex-1 overflow-auto px-2 py-3">
+		{#each groups as group}
+			<div class="mb-1 px-3 pt-3 pb-1 text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest first:pt-0">{group.label}</div>
+			{#each group.items as item}
+				<a
+					href={item.href}
+					class="mb-0.5 flex items-center gap-2.5 rounded-md px-3 py-1.5 text-sm transition-colors
+						{isActive(item.href)
+							? 'bg-sidebar-accent text-sidebar-foreground font-medium'
+							: 'text-sidebar-foreground/70 hover:bg-sidebar-muted hover:text-sidebar-foreground'}"
+				>
 				{#if item.icon === 'dashboard'}
 				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 					<rect x="3" y="3" width="7" height="7" rx="1" />
@@ -78,9 +99,30 @@
 					<circle cx="20" cy="21" r="1" />
 					<path stroke-linecap="round" stroke-linejoin="round" d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
 				</svg>
+			{:else if item.icon === 'calendar'}
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<rect x="3" y="4" width="18" height="18" rx="2" />
+					<line x1="16" y1="2" x2="16" y2="6" />
+					<line x1="8" y1="2" x2="8" y2="6" />
+					<line x1="3" y1="10" x2="21" y2="10" />
+				</svg>
+			{:else if item.icon === 'trending'}
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<polyline points="23,6 13.5,15.5 8.5,10.5 1,18" />
+					<polyline points="17,6 23,6 23,12" />
+				</svg>
+			{:else if item.icon === 'arrow-down'}
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" />
+				</svg>
+			{:else if item.icon === 'arrow-up'}
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" />
+				</svg>
 				{/if}
 				{item.label}
-			</a>
+				</a>
+			{/each}
 		{/each}
 	</nav>
 
