@@ -14,6 +14,8 @@
 		{ href: '/payables', label: 'Payables', icon: 'arrow-up', group: 'Purchases' },
 		{ href: '/receipts', label: 'Receipts', icon: 'arrow-down', group: 'Cash & Banking' },
 		{ href: '/payments', label: 'Payments', icon: 'arrow-up', group: 'Cash & Banking' },
+		{ href: '/journals', label: 'Journals', icon: 'file-text', group: 'Cash & Banking' },
+		{ href: '/bank-reconciliation', label: 'Bank Reconciliation', icon: 'ledger', group: 'Cash & Banking' },
 		{ href: '/transactions', label: 'All Transactions', icon: 'file-text', group: 'Cash & Banking' },
 		{ href: '/names', label: 'Names', icon: 'users', group: 'Master Data' },
 		{ href: '/items', label: 'Items', icon: 'box', group: 'Master Data' },
