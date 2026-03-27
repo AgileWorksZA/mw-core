@@ -16,15 +16,18 @@
 		{ href: '/receipts', label: 'Receipts', icon: 'arrow-down', group: 'Cash & Banking' },
 		{ href: '/payments', label: 'Payments', icon: 'arrow-up', group: 'Cash & Banking' },
 		{ href: '/journals', label: 'Journals', icon: 'file-text', group: 'Cash & Banking' },
+		{ href: '/funds-transfer', label: 'Funds Transfer', icon: 'trending', group: 'Cash & Banking' },
 		{ href: '/bank-reconciliation', label: 'Bank Reconciliation', icon: 'ledger', group: 'Cash & Banking' },
 		{ href: '/transactions', label: 'All Transactions', icon: 'file-text', group: 'Cash & Banking' },
 		{ href: '/names', label: 'Names', icon: 'users', group: 'Master Data' },
 		{ href: '/items', label: 'Items', icon: 'box', group: 'Master Data' },
 		{ href: '/accounts', label: 'Accounts', icon: 'ledger', group: 'Master Data' },
+		{ href: '/assets', label: 'Fixed Assets', icon: 'box', group: 'Master Data' },
 		{ href: '/enquiry/sales', label: 'Sales Enquiry', icon: 'search', group: 'Enquiries' },
 		{ href: '/enquiry/purchases', label: 'Purchase Enquiry', icon: 'cart', group: 'Enquiries' },
-		{ href: '/reports', label: 'Reports', icon: 'file-text', group: 'Reports' },
-		{ href: '/todo', label: 'To Do', icon: 'dashboard', group: 'Reports' },
+		{ href: '/reports', label: 'Reports', icon: 'file-text', group: 'Reports & Tools' },
+		{ href: '/todo', label: 'To Do', icon: 'dashboard', group: 'Reports & Tools' },
+		{ href: '/preferences', label: 'Preferences', icon: 'dashboard', group: 'Reports & Tools' },
 	];
 
 	// Group items for section headers
