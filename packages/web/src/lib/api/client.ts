@@ -54,6 +54,32 @@ export async function apiPost<T>(path: string, body: unknown, token: string): Pr
 	return res.json();
 }
 
+/** Evaluate a MWScript expression via the eval API */
+export async function apiEval(expression: string, token: string): Promise<string> {
+	try {
+		const result = await apiPost<{ data: { result: string } }>('/eval', { expression }, token);
+		return result.data.result;
+	} catch {
+		return '';
+	}
+}
+
+/** Evaluate multiple MWScript expressions in parallel, returning results keyed by label */
+export async function apiEvalBatch(
+	expressions: Record<string, string>,
+	token: string
+): Promise<Record<string, string>> {
+	const keys = Object.keys(expressions);
+	const results = await Promise.all(
+		keys.map((key) => apiEval(expressions[key], token))
+	);
+	const out: Record<string, string> = {};
+	for (let i = 0; i < keys.length; i++) {
+		out[keys[i]] = results[i];
+	}
+	return out;
+}
+
 /** Unauthenticated POST (for login) */
 export async function apiPostPublic<T>(path: string, body: unknown): Promise<T> {
 	const res = await fetch(`${API_BASE}${path}`, {

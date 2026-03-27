@@ -4,26 +4,25 @@
  * @moneyworks-dsl PURE
  */
 
-import type { SmartMoneyWorksClient } from "@moneyworks/data";
 import { Elysia, t } from "elysia";
 import { ErrorSchema, SuccessResponse } from "../schemas/common";
 import { EvalRequestSchema, EvalResponseSchema } from "../schemas/eval";
 import type { CacheService } from "../services/cache";
+import "../types/context";
 
 /**
  * Create eval routes
  */
-export function createEvalRoutes(
-	client: SmartMoneyWorksClient,
-	cache?: CacheService,
-) {
+export function createEvalRoutes(cache?: CacheService) {
 	return (
 		new Elysia({ prefix: "/eval" })
 			.post(
 				"/",
-				async ({ body, set, headers }) => {
+				async (context) => {
+					const { body, set, headers, mwClient } = context as any;
+					if (!mwClient) throw new Error("No authenticated client");
 					const requestId = headers["x-request-id"] || "unknown";
-					const { expression, context } = body;
+					const { expression, context: evalContext } = body;
 
 					if (!expression || expression.trim().length === 0) {
 						set.status = 400;
@@ -35,7 +34,7 @@ export function createEvalRoutes(
 					try {
 						// Note: MoneyWorks REST API doesn't support context,
 						// but we keep it in the API for future enhancement
-						const result = await client.evaluate(expression);
+						const result = await mwClient.evaluate(expression);
 
 						const executionTime = performance.now() - startTime;
 
@@ -92,7 +91,9 @@ export function createEvalRoutes(
 			// Template evaluation endpoint
 			.post(
 				"/template/:table",
-				async ({ params, body, set, headers }): Promise<any> => {
+				async (ctx): Promise<any> => {
+					const { params, body, set, headers, mwClient } = ctx as any;
+					if (!mwClient) throw new Error("No authenticated client");
 					const requestId = headers["x-request-id"] || "unknown";
 					const { table } = params;
 					const { template, limit = 100, filter } = body;
@@ -120,7 +121,7 @@ export function createEvalRoutes(
 						}
 
 						// Get field list for the table to validate template
-						const tableInfo = await client.getTableInfo(table);
+						const tableInfo = await mwClient.getTableInfo(table);
 						if (!tableInfo) {
 							set.status = 404;
 							throw new Error(`NOT_FOUND: Table '${table}' not found`);
@@ -140,7 +141,7 @@ export function createEvalRoutes(
 						}
 
 						// Use smartExport which handles template format
-						const rawData = await client.smartExport(table, options);
+						const rawData = await mwClient.smartExport(table, options);
 
 						// Split results and clean up
 						const results =

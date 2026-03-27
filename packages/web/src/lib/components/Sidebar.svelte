@@ -8,6 +8,7 @@
 		{ href: '/items', label: 'Items', icon: 'box' },
 		{ href: '/accounts', label: 'Accounts', icon: 'ledger' },
 		{ href: '/enquiry/sales', label: 'Sales Enquiry', icon: 'search' },
+		{ href: '/enquiry/purchases', label: 'Purchase Enquiry', icon: 'cart' },
 	];
 
 	function isActive(href: string): boolean {
@@ -70,6 +71,12 @@
 				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
 					<path stroke-linecap="round" stroke-linejoin="round" d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+				</svg>
+			{:else if item.icon === 'cart'}
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<circle cx="9" cy="21" r="1" />
+					<circle cx="20" cy="21" r="1" />
+					<path stroke-linecap="round" stroke-linejoin="round" d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
 				</svg>
 				{/if}
 				{item.label}
