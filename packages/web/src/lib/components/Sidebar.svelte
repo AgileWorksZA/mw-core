@@ -2,10 +2,12 @@
 	let { company, pathname }: { company: string; pathname: string } = $props();
 
 	const navItems = [
+		{ href: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
 		{ href: '/transactions', label: 'Transactions', icon: 'file-text' },
 		{ href: '/names', label: 'Names', icon: 'users' },
 		{ href: '/items', label: 'Items', icon: 'box' },
 		{ href: '/accounts', label: 'Accounts', icon: 'ledger' },
+		{ href: '/enquiry/sales', label: 'Sales Enquiry', icon: 'search' },
 	];
 
 	function isActive(href: string): boolean {
@@ -32,7 +34,19 @@
 						? 'bg-sidebar-accent text-sidebar-foreground font-medium'
 						: 'text-sidebar-foreground/70 hover:bg-sidebar-muted hover:text-sidebar-foreground'}"
 			>
-				{#if item.icon === 'file-text'}
+				{#if item.icon === 'dashboard'}
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<rect x="3" y="3" width="7" height="7" rx="1" />
+					<rect x="14" y="3" width="7" height="7" rx="1" />
+					<rect x="3" y="14" width="7" height="7" rx="1" />
+					<rect x="14" y="14" width="7" height="7" rx="1" />
+				</svg>
+			{:else if item.icon === 'search'}
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<circle cx="11" cy="11" r="8" />
+					<line x1="21" y1="21" x2="16.65" y2="16.65" />
+				</svg>
+			{:else if item.icon === 'file-text'}
 				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
 					<polyline points="14,2 14,8 20,8" />
