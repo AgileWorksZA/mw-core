@@ -12,6 +12,7 @@
 		{ href: '/orders/purchases', label: 'Purchase Orders', icon: 'file-text', group: 'Purchases' },
 		{ href: '/invoices/purchases', label: 'Purchase Invoices', icon: 'file-text', group: 'Purchases' },
 		{ href: '/payables', label: 'Payables', icon: 'arrow-up', group: 'Purchases' },
+		{ href: '/banking', label: 'Banking', icon: 'ledger', group: 'Cash & Banking' },
 		{ href: '/receipts', label: 'Receipts', icon: 'arrow-down', group: 'Cash & Banking' },
 		{ href: '/payments', label: 'Payments', icon: 'arrow-up', group: 'Cash & Banking' },
 		{ href: '/journals', label: 'Journals', icon: 'file-text', group: 'Cash & Banking' },
@@ -22,6 +23,8 @@
 		{ href: '/accounts', label: 'Accounts', icon: 'ledger', group: 'Master Data' },
 		{ href: '/enquiry/sales', label: 'Sales Enquiry', icon: 'search', group: 'Enquiries' },
 		{ href: '/enquiry/purchases', label: 'Purchase Enquiry', icon: 'cart', group: 'Enquiries' },
+		{ href: '/reports', label: 'Reports', icon: 'file-text', group: 'Reports' },
+		{ href: '/todo', label: 'To Do', icon: 'dashboard', group: 'Reports' },
 	];
 
 	// Group items for section headers
