@@ -869,6 +869,142 @@ export const PRODUCT_TSV_FIELD_MAPPING = [
 ];
 
 /**
+ * Transaction table TSV field mapping
+ * TSV has 75 columns (74 header fields + 1 extra _Timestamp at position 2)
+ * Based on actual MoneyWorks TSV export analysis
+ */
+export const TRANSACTION_TSV_FIELD_MAPPING = [
+	{ position: 0, xmlName: "_internalid", pascalName: "_InternalId", dataType: "number" as const },
+	{ position: 1, xmlName: "sequencenumber", pascalName: "Sequencenumber", dataType: "number" as const },
+	{ position: 2, xmlName: "_timestamp", pascalName: "_Timestamp", dataType: "string" as const },
+	{ position: 3, xmlName: "ourref", pascalName: "Ourref", dataType: "string" as const },
+	{ position: 4, xmlName: "transdate", pascalName: "Transdate", dataType: "date" as const },
+	{ position: 5, xmlName: "enterdate", pascalName: "Enterdate", dataType: "date" as const },
+	{ position: 6, xmlName: "duedate", pascalName: "Duedate", dataType: "date" as const },
+	{ position: 7, xmlName: "period", pascalName: "Period", dataType: "number" as const },
+	{ position: 8, xmlName: "type", pascalName: "Type", dataType: "string" as const },
+	{ position: 9, xmlName: "theirref", pascalName: "Theirref", dataType: "string" as const },
+	{ position: 10, xmlName: "namecode", pascalName: "Namecode", dataType: "string" as const },
+	{ position: 11, xmlName: "flag", pascalName: "Flag", dataType: "string" as const },
+	{ position: 12, xmlName: "description", pascalName: "Description", dataType: "string" as const },
+	{ position: 13, xmlName: "gross", pascalName: "Gross", dataType: "number" as const },
+	{ position: 14, xmlName: "analysis", pascalName: "Analysis", dataType: "string" as const },
+	{ position: 15, xmlName: "contra", pascalName: "Contra", dataType: "string" as const },
+	{ position: 16, xmlName: "tofrom", pascalName: "Tofrom", dataType: "string" as const },
+	{ position: 17, xmlName: "status", pascalName: "Status", dataType: "string" as const },
+	{ position: 18, xmlName: "hold", pascalName: "Hold", dataType: "boolean" as const },
+	{ position: 19, xmlName: "datepaid", pascalName: "Datepaid", dataType: "date" as const },
+	{ position: 20, xmlName: "amtpaid", pascalName: "Amtpaid", dataType: "number" as const },
+	{ position: 21, xmlName: "payamount", pascalName: "Payamount", dataType: "number" as const },
+	{ position: 22, xmlName: "aging", pascalName: "Aging", dataType: "number" as const },
+	{ position: 23, xmlName: "taxamount", pascalName: "Taxamount", dataType: "number" as const },
+	{ position: 24, xmlName: "taxcycle", pascalName: "Taxcycle", dataType: "number" as const },
+	{ position: 25, xmlName: "recurring", pascalName: "Recurring", dataType: "boolean" as const },
+	{ position: 26, xmlName: "printed", pascalName: "Printed", dataType: "number" as const },
+	{ position: 27, xmlName: "flags", pascalName: "Flags", dataType: "number" as const },
+	{ position: 28, xmlName: "taxprocessed", pascalName: "Taxprocessed", dataType: "number" as const },
+	{ position: 29, xmlName: "salesperson", pascalName: "Salesperson", dataType: "string" as const },
+	{ position: 30, xmlName: "colour", pascalName: "Colour", dataType: "number" as const },
+	{ position: 31, xmlName: "bankjnseq", pascalName: "Bankjnseq", dataType: "number" as const },
+	{ position: 32, xmlName: "paymentmethod", pascalName: "Paymentmethod", dataType: "number" as const },
+	{ position: 33, xmlName: "timeposted", pascalName: "Timeposted", dataType: "string" as const },
+	{ position: 34, xmlName: "securitylevel", pascalName: "Securitylevel", dataType: "number" as const },
+	{ position: 35, xmlName: "user1", pascalName: "User1", dataType: "string" as const },
+	{ position: 36, xmlName: "user2", pascalName: "User2", dataType: "string" as const },
+	{ position: 37, xmlName: "user3", pascalName: "User3", dataType: "string" as const },
+	{ position: 38, xmlName: "promptpaymentdate", pascalName: "Promptpaymentdate", dataType: "date" as const },
+	{ position: 39, xmlName: "promptpaymentamt", pascalName: "Promptpaymentamt", dataType: "number" as const },
+	{ position: 40, xmlName: "prodpricecode", pascalName: "Prodpricecode", dataType: "string" as const },
+	{ position: 41, xmlName: "mailingaddress", pascalName: "Mailingaddress", dataType: "string" as const },
+	{ position: 42, xmlName: "deliveryaddress", pascalName: "Deliveryaddress", dataType: "string" as const },
+	{ position: 43, xmlName: "freightcode", pascalName: "Freightcode", dataType: "string" as const },
+	{ position: 44, xmlName: "freightamount", pascalName: "Freightamount", dataType: "number" as const },
+	{ position: 45, xmlName: "freightdetails", pascalName: "Freightdetails", dataType: "string" as const },
+	{ position: 46, xmlName: "specialbank", pascalName: "Specialbank", dataType: "string" as const },
+	{ position: 47, xmlName: "specialbranch", pascalName: "Specialbranch", dataType: "string" as const },
+	{ position: 48, xmlName: "specialaccount", pascalName: "Specialaccount", dataType: "string" as const },
+	{ position: 49, xmlName: "currency", pascalName: "Currency", dataType: "string" as const },
+	{ position: 50, xmlName: "exchangerate", pascalName: "Exchangerate", dataType: "number" as const },
+	{ position: 51, xmlName: "enteredby", pascalName: "Enteredby", dataType: "string" as const },
+	{ position: 52, xmlName: "postedby", pascalName: "Postedby", dataType: "string" as const },
+	{ position: 53, xmlName: "amtwrittenoff", pascalName: "Amtwrittenoff", dataType: "number" as const },
+	{ position: 54, xmlName: "ordertotal", pascalName: "Ordertotal", dataType: "number" as const },
+	{ position: 55, xmlName: "ordershipped", pascalName: "Ordershipped", dataType: "number" as const },
+	{ position: 56, xmlName: "orderdeposit", pascalName: "Orderdeposit", dataType: "number" as const },
+	{ position: 57, xmlName: "originatingorderseq", pascalName: "Originatingorderseq", dataType: "number" as const },
+	{ position: 58, xmlName: "currencytransferseq", pascalName: "Currencytransferseq", dataType: "number" as const },
+	{ position: 59, xmlName: "promptpaymentterms", pascalName: "Promptpaymentterms", dataType: "number" as const },
+	{ position: 60, xmlName: "promptpaymentdisc", pascalName: "Promptpaymentdisc", dataType: "number" as const },
+	{ position: 61, xmlName: "approvedby1", pascalName: "Approvedby1", dataType: "string" as const },
+	{ position: 62, xmlName: "approvedby2", pascalName: "Approvedby2", dataType: "string" as const },
+	{ position: 63, xmlName: "usernum", pascalName: "UserNum", dataType: "number" as const },
+	{ position: 64, xmlName: "usertext", pascalName: "UserText", dataType: "string" as const },
+	{ position: 65, xmlName: "user4", pascalName: "User4", dataType: "string" as const },
+	{ position: 66, xmlName: "user5", pascalName: "User5", dataType: "string" as const },
+	{ position: 67, xmlName: "user6", pascalName: "User6", dataType: "string" as const },
+	{ position: 68, xmlName: "user7", pascalName: "User7", dataType: "string" as const },
+	{ position: 69, xmlName: "user8", pascalName: "User8", dataType: "string" as const },
+	{ position: 70, xmlName: "taggedtext", pascalName: "TaggedText", dataType: "string" as const },
+	{ position: 71, xmlName: "emailed", pascalName: "Emailed", dataType: "number" as const },
+	{ position: 72, xmlName: "transferred", pascalName: "Transferred", dataType: "number" as const },
+	{ position: 73, xmlName: "subfile", pascalName: "Subfile", dataType: "number" as const },
+	{ position: 74, xmlName: "detail", pascalName: "Detail", dataType: "number" as const },
+];
+
+/**
+ * Detail (transaction line items) table TSV field mapping
+ * TSV has 45 columns (42 XML fields + 3 extras: Sequencenumber, LastModifiedTime, _Timestamp)
+ * Based on actual MoneyWorks TSV export analysis and XML field order verification
+ */
+export const DETAIL_TSV_FIELD_MAPPING = [
+	{ position: 0, xmlName: "_internalid", pascalName: "_InternalId", dataType: "number" as const },
+	{ position: 1, xmlName: "sequencenumber", pascalName: "Sequencenumber", dataType: "number" as const },
+	{ position: 2, xmlName: "_timestamp", pascalName: "_Timestamp", dataType: "string" as const },
+	{ position: 3, xmlName: "parentseq", pascalName: "ParentSeq", dataType: "number" as const },
+	{ position: 4, xmlName: "sort", pascalName: "Sort", dataType: "number" as const },
+	{ position: 5, xmlName: "account", pascalName: "Account", dataType: "string" as const },
+	{ position: 6, xmlName: "dept", pascalName: "Dept", dataType: "string" as const },
+	{ position: 7, xmlName: "postedqty", pascalName: "PostedQty", dataType: "number" as const },
+	{ position: 8, xmlName: "taxcode", pascalName: "TaxCode", dataType: "string" as const },
+	{ position: 9, xmlName: "gross", pascalName: "Gross", dataType: "number" as const },
+	{ position: 10, xmlName: "tax", pascalName: "Tax", dataType: "number" as const },
+	{ position: 11, xmlName: "debit", pascalName: "Debit", dataType: "number" as const },
+	{ position: 12, xmlName: "credit", pascalName: "Credit", dataType: "number" as const },
+	{ position: 13, xmlName: "description", pascalName: "Description", dataType: "string" as const },
+	{ position: 14, xmlName: "stockqty", pascalName: "StockQty", dataType: "number" as const },
+	{ position: 15, xmlName: "stockcode", pascalName: "StockCode", dataType: "string" as const },
+	{ position: 16, xmlName: "costprice", pascalName: "CostPrice", dataType: "number" as const },
+	{ position: 17, xmlName: "unitprice", pascalName: "UnitPrice", dataType: "number" as const },
+	{ position: 18, xmlName: "statement", pascalName: "Statement", dataType: "number" as const },
+	{ position: 19, xmlName: "jobcode", pascalName: "JobCode", dataType: "string" as const },
+	{ position: 20, xmlName: "saleunit", pascalName: "SaleUnit", dataType: "string" as const },
+	{ position: 21, xmlName: "discount", pascalName: "Discount", dataType: "number" as const },
+	{ position: 22, xmlName: "flags", pascalName: "Flags", dataType: "number" as const },
+	{ position: 23, xmlName: "orderqty", pascalName: "OrderQty", dataType: "number" as const },
+	{ position: 24, xmlName: "backorderqty", pascalName: "BackorderQty", dataType: "number" as const },
+	{ position: 25, xmlName: "prevshipqty", pascalName: "PrevShipQty", dataType: "number" as const },
+	{ position: 26, xmlName: "basecurrencynet", pascalName: "BaseCurrencyNet", dataType: "number" as const },
+	{ position: 27, xmlName: "serialnumber", pascalName: "SerialNumber", dataType: "number" as const },
+	{ position: 28, xmlName: "period", pascalName: "Period", dataType: "number" as const },
+	{ position: 29, xmlName: "transactiontype", pascalName: "TransactionType", dataType: "string" as const },
+	{ position: 30, xmlName: "securitylevel", pascalName: "SecurityLevel", dataType: "number" as const },
+	{ position: 31, xmlName: "stocklocation", pascalName: "StockLocation", dataType: "string" as const },
+	{ position: 32, xmlName: "orderstatus", pascalName: "OrderStatus", dataType: "boolean" as const },
+	{ position: 33, xmlName: "expensedtax", pascalName: "ExpensedTax", dataType: "number" as const },
+	{ position: 34, xmlName: "date", pascalName: "Date", dataType: "date" as const },
+	{ position: 35, xmlName: "moreflags", pascalName: "MoreFlags", dataType: "number" as const },
+	{ position: 36, xmlName: "usernum", pascalName: "UserNum", dataType: "number" as const },
+	{ position: 37, xmlName: "usertext", pascalName: "UserText", dataType: "string" as const },
+	{ position: 38, xmlName: "taggedtext", pascalName: "TaggedText", dataType: "string" as const },
+	{ position: 39, xmlName: "noninvrcvdnotinvoicedqty", pascalName: "NonInvRcvdNotInvoicedQty", dataType: "number" as const },
+	{ position: 40, xmlName: "custom1", pascalName: "Custom1", dataType: "string" as const },
+	{ position: 41, xmlName: "custom2", pascalName: "Custom2", dataType: "string" as const },
+	{ position: 42, xmlName: "originalunitcost", pascalName: "OriginalUnitCost", dataType: "number" as const },
+	{ position: 43, xmlName: "_extra1", pascalName: "_Extra1", dataType: "number" as const },
+	{ position: 44, xmlName: "_extra2", pascalName: "_Extra2", dataType: "string" as const },
+];
+
+/**
  * Get TSV field mapping for a table
  */
 export function getTSVFieldMapping(tableName: string) {
@@ -879,6 +1015,10 @@ export function getTSVFieldMapping(tableName: string) {
 			return NAME_TSV_FIELD_MAPPING;
 		case "PRODUCT":
 			return PRODUCT_TSV_FIELD_MAPPING;
+		case "TRANSACTION":
+			return TRANSACTION_TSV_FIELD_MAPPING;
+		case "DETAIL":
+			return DETAIL_TSV_FIELD_MAPPING;
 		default:
 			// For other tables, we'll need to discover dynamically
 			return null;
