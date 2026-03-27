@@ -1,0 +1,8 @@
+{
+  "code": "DTXN",
+  "name": "Daily Transaction Summary",
+  "description": "Daily transaction summary report and artifact for AI assistant - P&L style summary with balance position changes",
+  "stories": ["DTXN-001"],
+  "storyCounter": 1,
+  "createdAt": "2025-11-27T21:00:00.000Z"
+}

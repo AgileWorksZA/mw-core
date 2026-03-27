@@ -1,0 +1,74 @@
+Acme Widgets Ltd
+Profit & Loss Statement for the Period Ended January 31, 2025
+
+
+					Month											Year to Date
+					Actual				Budget	Variance				Last Year		Actual YTD	Budget	Variance	Last YTD
+
+Sales
+
+	Sales				0				52,104	-52,104				50,971		366,286	288,104	78,182	50,971
+	Repairs				0				0	0				0		48,371	400,000	-351,629	0
+	Freight Recovered				0				0	0				0		0	13,500	-13,500	0
+					0				52,104	-52,104				50,971		414,657	701,604	-286,947	50,971
+
+Less: Cost of Sales
+
+	Purchases				0				35,504	-35,504				29,241		90,720	271,504	-180,784	29,241
+	Freight				0				196	-196				192		1,954	2,256	-302	192
+	Total Cost of Sales				0				35,700	-35,700				29,433		92,674	273,760	-181,086	29,433
+
+Gross Margin					0				16,404	-16,404				21,538		321,983	427,844	-105,861	21,538
+
+Gross Margin %					-				31.48%	-				42.25%		77.65%	60.98%	16.67%	42.25%
+
+Other Income
+
+	Consulting Income				0				0	0				0		0	0	0	0
+	Dividends Received				0				0	0				0		0	0	0	0
+	Interest Received				0				0	0				0		822	0	822	0
+	Other Income				0				0	0				0		0	0	0	0
+	Total Other Income				0				0	0				0		822	0	822	0
+
+Net Income					0				16,404	-16,404				21,538		322,805	427,844	-105,039	21,538
+
+Less: Other Expenses
+
+	Accounting Fees				0				0	0				0		0	0	0	0
+	Audit Fees				0				0	0				0		0	0	0	0
+	Advertising				0				2,039	-2,039				2,207		188,903	38,039	150,864	2,207
+	Bank Fees				0				25	-25				25		427	385	42	25
+	Cleaning				0				0	0				0		0	0	0	0
+	Client entertainment				0				66	-66				64		64	966	-902	64
+	Consulting Fees				0				0	0				0		0	0	0	0
+	Computer Expenses				0				0	0				0		0	0	0	0
+	Conferences & Training				0				75	-75				73		2,680	2,075	605	73
+	Equipment Hire				0				143	-143				140		1,489	1,043	446	140
+	General Expenses				0				0	0				0		0	0	0	0
+	General Expenses No GST				0				0	0				0		0	0	0	0
+	Insurance				0				0	0				0		5,441	1,460	3,981	0
+	Interest Bank				0				0	0				0		0	0	0	0
+	Interest HP				0				0	0				0		0	0	0	0
+	Legal Exps Deductible				0				0	0				0		0	0	0	0
+	Maintenance Plant				0				0	0				0		856	900	-44	0
+	Maintenance Property				0				0	0				0		0	0	0	0
+	Phone				0				456	-456				446		4,720	456	4,264	446
+	Photocopier				0				108	-108				106		1,036	108	928	106
+	Post				0				0	0				0		0	0	0	0
+	Power & Utilities				0				231	-231				226		2,382	1,466	916	226
+	Rates				0				750	-750				734		2,935	4,500	-1,565	734
+	Rent				0				2,406	-2,406				2,354		32,099	19,110	12,989	2,354
+	Stationery				0				182	-182				179		1,260	1,166	94	179
+	Subscriptions				0				0	0				0		264	180	84	0
+	Travel Local				0				0	0				0		0	2,700	-2,700	0
+	Travel Overseas				0				0	0				0		0	0	0	0
+	Vehicle Expenses				0				42	-42				42		502	492	10	42
+	Wages				0				6,000	-6,000				1,283		11,506	17,100	-5,594	1,283
+	Accident Compensation				0				0	0				0		0	0	0	0
+	Depreciation				0				0	0				0		0	0	0	0
+	Loss On Asset Disposal				0				0	0				0		0	0	0	0
+	Currency Gain/Loss				0				0	0				0		0	0	0	0
+	Unallocated				0				0	0				0		0	0	0	0
+	Total Expenses				0				12,523	-12,523				7,878		256,565	92,146	164,419	7,878
+
+Profit (Loss)					0				3,881	-3,881				13,659		66,240	335,698	-269,458	13,659

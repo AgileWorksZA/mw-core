@@ -1,0 +1,14 @@
+{
+  "code": "APAY",
+  "name": "Aged Payables Report",
+  "description": "Aged Payables Report artifact for AI assistant - displays supplier payment aging with buckets (Current, 30, 60, 90+ days), invoice details, and overdue visual indicators",
+  "stories": [
+    {
+      "id": "APAY-001",
+      "title": "Aged Payables Report Artifact",
+      "status": "planned"
+    }
+  ],
+  "createdAt": "2025-11-28T14:00:00.000Z",
+  "lastUpdated": "2025-11-28T14:00:00.000Z"
+}

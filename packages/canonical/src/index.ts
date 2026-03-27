@@ -23,6 +23,9 @@ export * as Contacts from "./entities/contacts";
 export * as Transactions from "./entities/transactions";
 export * as Details from "./entities/details";
 
+// Export reports module
+export * as Reports from "./reports";
+
 /**
  * @ai-instruction Usage examples:
  *

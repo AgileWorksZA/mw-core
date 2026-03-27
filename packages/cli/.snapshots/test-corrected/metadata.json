@@ -1,0 +1,16 @@
+{
+  "label": "test-corrected",
+  "timestamp": "2025-11-25T21:52:11.393Z",
+  "tables": [
+    "TaxRate",
+    "Name",
+    "Account",
+    "Product",
+    "Transaction",
+    "Detail",
+    "Job",
+    "Payments",
+    "General"
+  ],
+  "totalRecords": 5213
+}

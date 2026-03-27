@@ -188,14 +188,178 @@
 			],
 			"confidence": 0.9,
 			"evidence": ["IMPT-001 D-001: Changed default from insert to replace for better DX"]
+		},
+		"mirror-existing-package-structure": {
+			"id": "mirror-existing-package-structure",
+			"what": "When creating new packages, mirror the structure of existing similar packages",
+			"when": "Adding new React Router 7 / Tailwind web packages to monorepo",
+			"how": "Copy vite.config.ts, react-router.config.ts, tsconfig.json, app/routes.ts patterns from packages/web",
+			"why": "Ensures consistency, reduces cognitive load, leverages proven configurations",
+			"benefits": [
+				"100% implementation success on first attempt",
+				"Consistent tooling across packages",
+				"Faster setup time",
+				"Proven patterns already debugged"
+			],
+			"tradeoffs": [
+				"May carry over unnecessary configuration",
+				"Must manually adjust port numbers"
+			],
+			"confidence": 0.95,
+			"evidence": ["AIPOC-001: Mirrored packages/web structure for packages/ai - all 12 ACs passed first try"]
+		},
+		"unique-port-per-package": {
+			"id": "unique-port-per-package",
+			"what": "Assign unique dev server ports to each web package to avoid conflicts",
+			"when": "Adding new React Router / Vite packages",
+			"how": "Increment from existing packages: web=5174, ai=5175, next=5176, etc.",
+			"why": "Prevents port conflicts when running multiple dev servers simultaneously",
+			"benefits": [
+				"Can run multiple packages simultaneously",
+				"Clear port-to-package mapping",
+				"No manual port override needed"
+			],
+			"confidence": 0.95,
+			"evidence": ["AIPOC-001: Used port 5175 for packages/ai to avoid conflict with packages/web on 5174"]
+		},
+		"tool-error-string-pattern": {
+			"id": "tool-error-string-pattern",
+			"what": "Return error strings from Anthropic SDK tools instead of throwing exceptions",
+			"when": "Implementing tool run functions with betaTool",
+			"how": "Wrap tool logic in try-catch, return descriptive error string on failure",
+			"why": "toolRunner expects tools to return results, not throw - errors returned as strings let Claude see and respond to failures",
+			"benefits": [
+				"Claude receives tool feedback even on errors",
+				"No broken tool execution loops",
+				"Better error context for AI reasoning"
+			],
+			"tradeoffs": [
+				"Must remember to catch all exceptions",
+				"Error strings less structured than Error objects"
+			],
+			"confidence": 0.95,
+			"evidence": ["AITOOLS-001 AC-007: Tool errors caught and returned as results"]
+		},
+		"security-module-separation": {
+			"id": "security-module-separation",
+			"what": "Create dedicated security.ts module for path validation and access control",
+			"when": "Implementing file-system tools for AI agents",
+			"how": "Single validatePath() function checks: within PROJECT_ROOT, no symlink escapes, resolves relative paths",
+			"why": "Centralized security logic ensures consistent validation across all file tools",
+			"benefits": [
+				"Single point of security validation",
+				"Consistent behavior across read/write/edit/glob/grep",
+				"Easy to audit and update"
+			],
+			"confidence": 0.95,
+			"evidence": ["AITOOLS-001 AC-004: security.ts validates all paths against PROJECT_ROOT"]
+		},
+		"loom-full-cycle-delegation": {
+			"id": "loom-full-cycle-delegation",
+			"what": "Use /loom:run for complete feature delivery: ideate → plan → execute → finalize",
+			"when": "User requests a new feature with clear requirements",
+			"how": "Single command delegates to loom-ideator, loom-planner, loom-executor, loom-finalizer sequentially",
+			"why": "Full cycle ensures story is properly tracked, planned, executed, and learnings captured",
+			"benefits": [
+				"Complete feature delivery in one command",
+				"Automatic retrospective and Weave updates",
+				"Clear audit trail with story.json"
+			],
+			"confidence": 0.95,
+			"evidence": ["AIPOC-001 + AITOOLS-001: Both delivered via /loom:run full cycle"]
+		},
+		"incremental-artifact-component-implementation": {
+			"id": "incremental-artifact-component-implementation",
+			"what": "Build UI artifact components one type at a time with consistent patterns",
+			"when": "Implementing multiple related UI components (charts, tables, metrics)",
+			"how": "Create first component as reference, then replicate pattern for each additional type",
+			"why": "Ensures consistent structure, imports, and styling across all artifact renderers",
+			"benefits": [
+				"Pattern consistency across components",
+				"Easy to add new artifact types",
+				"Predictable file structure"
+			],
+			"tradeoffs": [
+				"Initial time investment in establishing pattern",
+				"Must resist urge to prematurely abstract"
+			],
+			"confidence": 0.95,
+			"evidence": ["ARTF-001: 9 artifact components implemented with consistent pattern"]
+		},
+		"artifact-scaffolding-automation-opportunity": {
+			"id": "artifact-scaffolding-automation-opportunity",
+			"what": "After implementing 9+ artifact types, create scaffolding skill for future artifact additions",
+			"when": "Pattern is proven across multiple artifact implementations",
+			"how": "Create skill that generates: type interface, component file, renderer case, system prompt update",
+			"why": "Deterministic scaffolding eliminates manual boilerplate and ensures consistency",
+			"benefits": [
+				"15-20 minutes saved per new artifact type",
+				"100% structural consistency",
+				"No forgotten renderer cases or type exports"
+			],
+			"confidence": 0.85,
+			"evidence": ["ARTF-001: 9 artifact types revealed repeatable 4-step pattern for new types"]
+		},
+		"typescript-conditional-spread-ternary": {
+			"id": "typescript-conditional-spread-ternary",
+			"what": "Use ternary operators for conditional spread in TypeScript objects",
+			"when": "Adding optional properties to objects based on conditions",
+			"how": "Use (condition ? {prop: value} : {}) instead of (condition && {prop: value})",
+			"why": "TypeScript && operator returns boolean false when condition is falsy, causing TS2698 error",
+			"benefits": [
+				"Avoids TS2698 type error",
+				"Cleaner type inference",
+				"No need for type assertions"
+			],
+			"tradeoffs": [
+				"Slightly more verbose than &&",
+				"Less familiar to JavaScript developers"
+			],
+			"confidence": 1.0,
+			"evidence": ["DTXN-001 L-001: Discovered during daily transaction summary implementation"]
+		},
+		"defensive-artifact-rendering": {
+			"id": "defensive-artifact-rendering",
+			"what": "Use defensive coding with fallbacks when rendering AI-generated artifacts",
+			"when": "Building artifact React components that receive AI-generated data",
+			"how": "Provide default values for all optional fields: const suppliers = data.suppliers || []; const currency = data.currency || 'NZD';",
+			"why": "AI-generated data structures may vary or have missing fields - defensive coding provides better UX than rendering nothing",
+			"benefits": [
+				"Component renders even with partial data",
+				"Better user experience",
+				"Graceful degradation"
+			],
+			"tradeoffs": [
+				"May hide data issues",
+				"Extra null checking code"
+			],
+			"confidence": 0.95,
+			"evidence": ["APAY-001 D-001: Chose defensive pattern from department-pnl.tsx over strict type guards"]
+		},
+		"moneyworks-canonical-terminology-in-ui": {
+			"id": "moneyworks-canonical-terminology-in-ui",
+			"what": "Preserve exact MoneyWorks terminology in UI labels (e.g., 'as at' not 'as of')",
+			"when": "Building UI components that display MoneyWorks report data",
+			"how": "Match exact field labels from MoneyWorks reports: 'Accounts Payable as at', 'GST' not 'Tax', aging bucket names",
+			"why": "Maintains canonical DSL purity and matches what users expect from MoneyWorks reports",
+			"benefits": [
+				"Consistent terminology with MoneyWorks",
+				"Users recognize familiar report format",
+				"Preserves DSL integrity"
+			],
+			"tradeoffs": [
+				"May seem non-standard to non-MW users"
+			],
+			"confidence": 1.0,
+			"evidence": ["APAY-001 L-002: Preserved 'as at' terminology from MoneyWorks"]
 		}
 	},
 	"metadata": {
 		"totalWowPatterns": 3,
 		"totalDelegationStrategies": 1,
-		"totalBestPractices": 9,
+		"totalBestPractices": 20,
 		"averageConfidence": 0.94,
 		"lastCompaction": null,
-		"lastUpdated": "2025-11-25T12:00:00.000Z"
+		"lastUpdated": "2025-11-28T16:30:00.000Z"
 	}
 }

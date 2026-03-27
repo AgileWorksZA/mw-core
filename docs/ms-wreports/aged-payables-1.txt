@@ -1,0 +1,15 @@
+Acme Widgets Ltd
+Outstanding Balances for Payables as at Jan:2024/25
+
+Code		Phone		Name	3 months+	2 months	1 month	Current		Total
+BSUPP		123-4545		Beetle Suppliers Limited	 3,897.40	3,128.72	0.00	0.00	916.46	7,026.12
+CANON		9-488-8888		Canon Photocopiers	 0.00	115.73	115.73	0.00	30.20	231.46
+CSUPP		123-8709		Casbah Suppliers Int	 2,417.62	2,121.75	0.00	0.00	592.09	4,539.37
+NEWHER		9-456-7890		Newton Herald	 0.00	425.24	425.24	0.00	110.92	850.48
+NEWPOW		123-7890		Newton Power and Electric	 0.00	113.96	113.96	0.00	29.72	227.92
+NEWSTAT		123-5678		Newton Stationers	 0.00	36.56	0.00	0.00	4.77	36.56
+TCOM				Telecom Raupo	 0.00	169.05	169.05	0.00	44.10	338.10
+NZD Total					 6,315.02	 6,111.01	 823.98	 0.00	 1,728.26	 13,250.01
+Accounts Payable as at Jan:2024/25										 13,250.01
+
+

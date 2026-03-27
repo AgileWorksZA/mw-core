@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "sessions": {
+    "0819bdf0-45ef-4413-ba55-23a720669fed": {
+      "name": "continental-guppy",
+      "created": "2025-11-27T12:33:03.816Z",
+      "source": "startup",
+      "manual": false
+    }
+  }
+}

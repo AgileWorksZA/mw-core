@@ -1,0 +1,8 @@
+{
+  "code": "ARTF",
+  "name": "Artifact Display System",
+  "description": "Professional artifact/report display system for AI chat - split-panel layout with pre-built components for financial reports, charts, tables, and metrics",
+  "storyCount": 1,
+  "stories": ["ARTF-001"],
+  "createdAt": "2025-11-27T15:00:00.000Z"
+}

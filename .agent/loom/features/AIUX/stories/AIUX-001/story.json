@@ -1,0 +1,520 @@
+{
+  "id": "AIUX-001",
+  "title": "AI Chat UX Overhaul & Custom MoneyWorks Tools",
+  "description": "Replace generic Claude Code tools (Read, Write, Bash, Grep, Glob) with purpose-built MoneyWorks tools that directly query the SDK. Fix critical UX issues: non-scrollable chat, poor message formatting, overwhelming tool calls. Add debug logging and observability for tool execution analysis.",
+  "why": "Enable accountants and developers to get MoneyWorks answers in 1-2 tool calls instead of 10+ generic file operations - making the AI assistant actually useful for business queries rather than a noisy code explorer.",
+  "status": "planned",
+  "priority": "high",
+  "estimatedComplexity": "complex",
+  "sessions": [],
+  "hookEvents": [],
+  "tasks": [
+    {
+      "id": "T-001",
+      "storyId": "AIUX-001",
+      "title": "Create MoneyWorks SDK client wrapper for AI tools",
+      "description": "Create a MoneyWorks client singleton in packages/ai/app/lib/moneyworks-client.server.ts that wraps SmartMoneyWorksClient. Should read config from mw-config.json at project root, expose async initialization, and provide methods for tables, schema, query, eval. This is the foundation all MW tools will use.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": [],
+      "acCoverage": ["AC-004", "AC-005", "AC-006", "AC-007", "AC-008"],
+      "files": [
+        "packages/ai/app/lib/moneyworks-client.server.ts"
+      ],
+      "reference": "packages/data/src/client/moneyworks-smart-client.ts",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-002",
+      "storyId": "AIUX-001",
+      "title": "Implement mw_tables tool",
+      "description": "Create packages/ai/app/lib/tools/mw-tables.ts using betaTool pattern. Tool lists all available MoneyWorks tables with field counts. Use SmartMoneyWorksClient.listTables() and getTableInfo(). Return JSON array with {name, fieldCount, description} for each table.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-007"],
+      "files": [
+        "packages/ai/app/lib/tools/mw-tables.ts"
+      ],
+      "reference": "packages/ai/app/lib/tools/read-file.ts",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-003",
+      "storyId": "AIUX-001",
+      "title": "Implement mw_schema tool",
+      "description": "Create packages/ai/app/lib/tools/mw-schema.ts using betaTool pattern. Input: {table: string}. Output: field definitions array with {name, type, description, constraints, position}. Use SmartMoneyWorksClient.getTableInfo() and field discovery. Essential for Claude to understand table structure before querying.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-008"],
+      "files": [
+        "packages/ai/app/lib/tools/mw-schema.ts"
+      ],
+      "reference": "packages/ai/app/lib/tools/read-file.ts",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-004",
+      "storyId": "AIUX-001",
+      "title": "Implement mw_query tool",
+      "description": "Create packages/ai/app/lib/tools/mw-query.ts using betaTool pattern. Input: {table: string, filter?: string, fields?: string[], limit?: number}. Use SmartMoneyWorksClient.smartExport() with filter search expression. Return JSON array of records. This is the primary tool for data retrieval.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-004", "AC-012"],
+      "files": [
+        "packages/ai/app/lib/tools/mw-query.ts"
+      ],
+      "reference": "packages/ai/app/lib/tools/read-file.ts",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-005",
+      "storyId": "AIUX-001",
+      "title": "Implement mw_eval tool",
+      "description": "Create packages/ai/app/lib/tools/mw-eval.ts using betaTool pattern. Input: {expression: string}. Use SmartMoneyWorksClient.evaluate() to run arbitrary MWScript expressions. Return the result string. Include safety warnings in description about expression complexity.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-006"],
+      "files": [
+        "packages/ai/app/lib/tools/mw-eval.ts"
+      ],
+      "reference": "packages/ai/app/lib/tools/bash.ts",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-006",
+      "storyId": "AIUX-001",
+      "title": "Implement mw_report tool",
+      "description": "Create packages/ai/app/lib/tools/mw-report.ts using betaTool pattern. Input: {report: 'trial_balance' | 'aged_receivables' | 'aged_payables' | 'profit_loss' | 'balance_sheet', asOf?: string}. Use MWScript eval with pre-built report expressions. Returns formatted report data.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001", "T-005"],
+      "acCoverage": ["AC-005"],
+      "files": [
+        "packages/ai/app/lib/tools/mw-report.ts"
+      ],
+      "reference": "packages/ai/app/lib/tools/mw-eval.ts",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-007",
+      "storyId": "AIUX-001",
+      "title": "Update tools index to export MW tools only",
+      "description": "Modify packages/ai/app/lib/tools/index.ts to export only the 5 MW tools (mw_tables, mw_schema, mw_query, mw_eval, mw_report). Remove exports and references to generic tools (read-file, write-file, edit-file, bash, glob, grep). Update toolDescriptions constant with MW-specific guidance.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-002", "T-003", "T-004", "T-005", "T-006"],
+      "acCoverage": ["AC-009"],
+      "files": [
+        "packages/ai/app/lib/tools/index.ts"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-008",
+      "storyId": "AIUX-001",
+      "title": "Create tool execution logger with timing",
+      "description": "Create packages/ai/app/lib/tool-logger.server.ts that wraps tool execution with timing, input/output size tracking. Export wrapToolWithLogging() that wraps betaTool run functions. Log to console with format: [Tool:{name}] started | input:{size}bytes | completed in {ms}ms | output:{size}bytes.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-007"],
+      "acCoverage": ["AC-010"],
+      "files": [
+        "packages/ai/app/lib/tool-logger.server.ts"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-009",
+      "storyId": "AIUX-001",
+      "title": "Replace Claude Agent SDK with direct Anthropic API + custom tools",
+      "description": "Refactor packages/ai/app/lib/anthropic.server.ts to use @anthropic-ai/sdk directly with betaTool pattern instead of claude-agent-sdk. Remove query() usage, implement tool loop with messages API. Wire up all MW tools from tools/index.ts. Add session stats tracking (tool calls, tokens).",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-007", "T-008"],
+      "acCoverage": ["AC-010", "AC-012", "AC-013"],
+      "files": [
+        "packages/ai/app/lib/anthropic.server.ts"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-010",
+      "storyId": "AIUX-001",
+      "title": "Update system prompt for MoneyWorks focus",
+      "description": "Update system prompt in anthropic.server.ts to instruct Claude to: 1) Use mw_tables to discover available tables, 2) Use mw_schema to understand table structure, 3) Use mw_query for data retrieval, 4) Use mw_report for standard reports, 5) Use mw_eval only for custom calculations. Emphasize NOT exploring files.",
+      "status": "pending",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-009"],
+      "acCoverage": ["AC-013"],
+      "files": [
+        "packages/ai/app/lib/anthropic.server.ts"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-011",
+      "storyId": "AIUX-001",
+      "title": "Fix scrollable chat container",
+      "description": "Fix packages/ai/app/components/chat/message-list.tsx scroll behavior. The ScrollArea from shadcn/ui needs proper height constraints. Set explicit h-full on parent, use flex-1 overflow-y-auto on scroll container. Ensure auto-scroll works by scrolling the inner element, not ScrollArea.",
+      "status": "pending",
+      "assignedAgent": "frontend-dev",
+      "dependencies": [],
+      "acCoverage": ["AC-001"],
+      "files": [
+        "packages/ai/app/components/chat/message-list.tsx",
+        "packages/ai/app/routes/_index.tsx"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-012",
+      "storyId": "AIUX-001",
+      "title": "Enhance markdown rendering in messages",
+      "description": "Improve packages/ai/app/components/chat/message.tsx markdown rendering. Add syntax highlighting for code blocks using rehype-highlight or similar. Ensure tables render properly with borders. Add proper spacing for lists. Style inline code differently from code blocks.",
+      "status": "pending",
+      "assignedAgent": "frontend-dev",
+      "dependencies": [],
+      "acCoverage": ["AC-002"],
+      "files": [
+        "packages/ai/app/components/chat/message.tsx"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-013",
+      "storyId": "AIUX-001",
+      "title": "Add timing display to tool call component",
+      "description": "Extend packages/ai/app/components/chat/tool-call.tsx to show execution timing. Add durationMs field to ToolCallData interface. Display duration in header next to status badge (e.g., '245ms'). Update ToolCallInfo type in anthropic.server.ts to include timing.",
+      "status": "pending",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-008"],
+      "acCoverage": ["AC-003"],
+      "files": [
+        "packages/ai/app/components/chat/tool-call.tsx",
+        "packages/ai/app/lib/anthropic.server.ts"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-014",
+      "storyId": "AIUX-001",
+      "title": "Improve loading state indicator",
+      "description": "Enhance loading state in packages/ai/app/components/chat/message-list.tsx. Show which tool is currently executing (if available). Add subtle pulse animation to thinking indicator. Ensure UI remains interactive (input not disabled except during submission).",
+      "status": "pending",
+      "assignedAgent": "frontend-dev",
+      "dependencies": [],
+      "acCoverage": ["AC-016"],
+      "files": [
+        "packages/ai/app/components/chat/message-list.tsx",
+        "packages/ai/app/routes/_index.tsx"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-015",
+      "storyId": "AIUX-001",
+      "title": "Add session stats display",
+      "description": "Create packages/ai/app/components/chat/session-stats.tsx component. Display: total tool calls, total input/output tokens, estimated cost ($). Add to CardHeader in _index.tsx. Stats should update after each response. Include small info icon with tooltip explaining cost calculation.",
+      "status": "pending",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-009"],
+      "acCoverage": ["AC-011"],
+      "files": [
+        "packages/ai/app/components/chat/session-stats.tsx",
+        "packages/ai/app/routes/_index.tsx"
+      ],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-016",
+      "storyId": "AIUX-001",
+      "title": "Run TypeScript compilation and fix errors",
+      "description": "Run 'bun run typecheck' from packages/ai directory. Fix all TypeScript errors in new and modified files. Ensure no type errors in: moneyworks-client.server.ts, all mw-*.ts tools, anthropic.server.ts, tool-logger.server.ts, UI components.",
+      "status": "pending",
+      "assignedAgent": "qa",
+      "dependencies": ["T-010", "T-015"],
+      "acCoverage": ["AC-014"],
+      "files": [],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-017",
+      "storyId": "AIUX-001",
+      "title": "Integration test: dev server startup",
+      "description": "Start dev server with 'bun --bun run dev' from packages/ai. Verify: server starts without errors, chat UI loads at root route, no console errors in browser, can type in input field. Document any issues found.",
+      "status": "pending",
+      "assignedAgent": "qa",
+      "dependencies": ["T-016"],
+      "acCoverage": ["AC-015"],
+      "files": [],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    },
+    {
+      "id": "T-018",
+      "storyId": "AIUX-001",
+      "title": "Integration test: MoneyWorks query workflow",
+      "description": "Test query 'list all accounts' end-to-end. Verify: 1) Claude uses mw_tables or mw_query (not file tools), 2) Total tool calls <= 3, 3) Response shows account data, 4) Tool calls display with timing, 5) Session stats update. Test requires MoneyWorks connection.",
+      "status": "pending",
+      "assignedAgent": "qa",
+      "dependencies": ["T-017"],
+      "acCoverage": ["AC-001", "AC-002", "AC-003", "AC-004", "AC-011", "AC-012"],
+      "files": [],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T14:30:00Z",
+      "completedAt": null
+    }
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-001",
+      "storyId": "AIUX-001",
+      "description": "Chat container is scrollable with auto-scroll to latest message on new content",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-002",
+      "storyId": "AIUX-001",
+      "description": "Assistant messages render markdown properly (headers, code blocks, lists, tables)",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-003",
+      "storyId": "AIUX-001",
+      "description": "Tool calls are displayed in collapsible sections showing name, input, output, timing, and status",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-004",
+      "storyId": "AIUX-001",
+      "description": "mw_query tool exists that queries any MoneyWorks table (Account, Transaction, Name, Product, etc.) with optional search filter",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-005",
+      "storyId": "AIUX-001",
+      "description": "mw_report tool generates common MoneyWorks reports (trial balance, aged receivables, P&L) via MWScript eval",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-006",
+      "storyId": "AIUX-001",
+      "description": "mw_eval tool evaluates arbitrary MWScript expressions for custom calculations",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-007",
+      "storyId": "AIUX-001",
+      "description": "mw_tables tool lists all available MoneyWorks tables with field counts",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-008",
+      "storyId": "AIUX-001",
+      "description": "mw_schema tool returns field definitions for a given table (name, type, description, constraints)",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-009",
+      "storyId": "AIUX-001",
+      "description": "Generic Claude Code tools (Read, Write, Bash, Grep, Glob) are removed or disabled",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-010",
+      "storyId": "AIUX-001",
+      "description": "Debug logging captures all tool calls with: name, input summary, output size, duration ms",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-011",
+      "storyId": "AIUX-001",
+      "description": "UI displays session stats: total tool calls, total tokens used, estimated cost",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-012",
+      "storyId": "AIUX-001",
+      "description": "Query 'list all accounts' results in 1-2 tool calls (mw_query or mw_tables + mw_query), not 10+ file operations",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-013",
+      "storyId": "AIUX-001",
+      "description": "System prompt instructs Claude to use MoneyWorks tools for data queries, not file exploration",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-014",
+      "storyId": "AIUX-001",
+      "description": "TypeScript compilation passes with zero errors for all new tool files",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-015",
+      "storyId": "AIUX-001",
+      "description": "Dev server starts successfully and chat UI loads without errors",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    },
+    {
+      "id": "AC-016",
+      "storyId": "AIUX-001",
+      "description": "Loading state shows animated indicator without blocking UI interaction",
+      "testable": true,
+      "tested": false,
+      "evidence": null,
+      "status": "pending"
+    }
+  ],
+  "decisions": [],
+  "learnings": [],
+  "weaveRefs": [
+    "E:anthropic-toolrunner-pattern",
+    "E:betatool-json-schema-pattern",
+    "E:multi-format-export-pattern",
+    "Q:react-radix-type-conflict-painpoint",
+    "Pi:tool-error-string-pattern",
+    "Pi:loom-full-cycle-delegation"
+  ],
+  "fiveWhysAnalysis": {
+    "q1": {
+      "question": "Why does the AI chat need custom MoneyWorks tools?",
+      "answer": "The current generic tools (Read, Write, Bash, Grep, Glob) require Claude to explore the codebase to answer simple accounting questions, resulting in 10+ tool calls for queries that should be instant."
+    },
+    "q2": {
+      "question": "Why is excessive tool calling a problem?",
+      "answer": "Each tool call adds latency (network + execution), consumes tokens (cost), and pollutes the UI with irrelevant technical details that accountants don't understand or need to see."
+    },
+    "q3": {
+      "question": "Why do accountants need a simpler interface?",
+      "answer": "They want to ask 'What's my trial balance?' and get the answer - not watch Claude read package.json, grep for client imports, read the smart client source, then finally query the API."
+    },
+    "q4": {
+      "question": "Why is direct MoneyWorks access better than file exploration?",
+      "answer": "The SmartMoneyWorksClient already has efficient methods for querying tables, running reports, and evaluating expressions. Tools should expose this API directly, not force Claude to rediscover it each session."
+    },
+    "q5": {
+      "question": "What is the fundamental need?",
+      "answer": "Bridge the semantic gap between business questions and MoneyWorks data - let Claude be an accounting assistant, not a code explorer."
+    },
+    "rootCause": "Enable Claude to answer MoneyWorks questions directly via SDK instead of reverse-engineering the codebase each time"
+  },
+  "referenceImplementation": {
+    "path": "packages/ai/app/lib/tools/",
+    "relevance": "Existing betaTool pattern from AITOOLS-001 to replace with MW-specific tools"
+  },
+  "createdAt": "2025-11-27T14:00:00.000Z",
+  "completedAt": null
+}

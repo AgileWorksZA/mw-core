@@ -1,0 +1,81 @@
+Acme Widgets Ltd
+Five Year YTD Profit & Loss Comparison
+
+					Mar:2022/23	Mar:2023/24	Jan:2024/25
+
+
+SALES
+
+4000	Sales		0.00	0.00	0.00	169,376.42	366,285.70
+4100	Repairs		0.00	0.00	0.00	0.00	48,371.29
+4300	Freight Recovered		0.00	0.00	0.00	0.00	0.00
+	Total Sales:		0.00	0.00	0.00	169,376.42	414,656.99
+
+	Percent change from previous year			-	-	-	144.81%
+COST OF SALES
+
+6000	Purchases		0.00	0.00	0.00	85,632.47	90,719.92
+6300	Freight		0.00	0.00	0.00	561.60	1,954.03
+	Total Cost of Sales:		0.00	0.00	0.00	86,194.07	92,673.95
+
+GROSS MARGIN:			0.00	0.00	0.00	83,182.35	321,983.04
+
+	Percent change from previous year			-	-	-	287.08%
+
+OTHER INCOME
+
+5100	Consulting Income		0.00	0.00	0.00	0.00	0.00
+5200	Dividends Received		0.00	0.00	0.00	0.00	0.00
+5210	Interest Received		0.00	0.00	0.00	0.00	822.42
+5300	Other Income		0.00	0.00	0.00	0.00	0.00
+	Total Other income:		0.00	0.00	0.00	0.00	822.42
+
+NET INCOME			0.00	0.00	0.00	83,182.35	322,805.46
+
+EXPENSES
+
+7010	Accounting Fees		0.00	0.00	0.00	0.00	0.00
+7020	Audit Fees		0.00	0.00	0.00	0.00	0.00
+7030	Advertising		0.00	0.00	0.00	12,533.82	188,902.70
+7040	Bank Fees		0.00	0.00	0.00	102.09	427.49
+7050	Cleaning		0.00	0.00	0.00	0.00	0.00
+7060	Client entertainment		0.00	0.00	0.00	64.33	64.33
+7080	Consulting Fees		0.00	0.00	0.00	0.00	0.00
+7090	Computer Expenses		0.00	0.00	0.00	0.00	0.00
+7100	Conferences & Training		0.00	0.00	0.00	220.11	2,680.44
+7110	Equipment Hire		0.00	0.00	0.00	424.95	1,488.99
+7130	General Expenses		0.00	0.00	0.00	0.00	0.00
+7135	General Expenses No GST		0.00	0.00	0.00	0.00	0.00
+7140	Insurance		0.00	0.00	0.00	1,813.70	5,441.10
+7150	Interest Bank		0.00	0.00	0.00	0.00	0.00
+7160	Interest HP		0.00	0.00	0.00	0.00	0.00
+7170	Legal Exps Deductible		0.00	0.00	0.00	0.00	0.00
+7180	Maintenance Plant		0.00	0.00	0.00	855.73	855.73
+7190	Maintenance Property		0.00	0.00	0.00	0.00	0.00
+7200	Phone		0.00	0.00	0.00	1,316.10	4,719.90
+7205	Photocopier		0.00	0.00	0.00	310.70	1,035.69
+7210	Post		0.00	0.00	0.00	0.00	0.00
+7220	Power & Utilities		0.00	0.00	0.00	669.38	2,382.49
+7225	Rates		0.00	0.00	0.00	1,467.40	2,934.80
+7230	Rent		0.00	0.00	0.00	7,061.82	32,099.16
+7240	Stationery		0.00	0.00	0.00	389.72	1,259.54
+7250	Subscriptions		0.00	0.00	0.00	44.02	264.12
+7260	Travel Local		0.00	0.00	0.00	0.00	0.00
+7270	Travel Overseas		0.00	0.00	0.00	0.00	0.00
+7280	Vehicle Expenses		0.00	0.00	0.00	122.54	502.39
+7290	Wages		0.00	0.00	0.00	3,566.25	11,506.25
+7300	Accident Compensation		0.00	0.00	0.00	0.00	0.00
+7500	Depreciation		0.00	0.00	0.00	0.00	0.00
+7510	Loss On Asset Disposal		0.00	0.00	0.00	0.00	0.00
+9900	Currency Gain/Loss		0.00	0.00	0.00	0.00	0.00
+9999	Unallocated		0.00	0.00	0.00	0.00	0.00
+	Total Expense:		0.00	0.00	0.00	30,962.66	256,565.12
+
+PROFIT(LOSS)			0.00	0.00	0.00	52,219.69	66,240.34
+
+	Percent change from previous year			-	-	-	26.85%
+
+
+
+
+

@@ -1,0 +1,335 @@
+{
+  "id": "AIPOC-001",
+  "title": "Build AI Package POC with Anthropic Agent SDK",
+  "description": "Create a new package at packages/ai that provides a React Router 7 web application with Tailwind CSS styling and Anthropic Agent SDK integration. This POC will demonstrate AI agent capabilities with tool use in a chat interface, following the established monorepo conventions.",
+  "why": "Enable developers to interact with Claude through a dedicated AI interface that can leverage tool use capabilities, providing a foundation for intelligent assistance features within the MoneyWorks ecosystem.",
+  "status": "completed",
+  "priority": "high",
+  "estimatedComplexity": "moderate",
+  "sessions": [],
+  "hookEvents": [],
+  "tasks": [
+    {
+      "id": "T-001",
+      "storyId": "AIPOC-001",
+      "title": "Create packages/ai directory structure with package.json",
+      "description": "Initialize the packages/ai directory with a properly configured package.json.",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": [],
+      "acCoverage": ["AC-001", "AC-011"],
+      "files": ["packages/ai/package.json"],
+      "reference": "packages/web/package.json",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-002",
+      "storyId": "AIPOC-001",
+      "title": "Configure Vite with Tailwind CSS v4 and React Router 7",
+      "description": "Create vite.config.ts, react-router.config.ts, and tsconfig.json",
+      "status": "completed",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-003", "AC-009"],
+      "files": ["packages/ai/vite.config.ts", "packages/ai/react-router.config.ts", "packages/ai/tsconfig.json"],
+      "reference": "packages/web/vite.config.ts",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-003",
+      "storyId": "AIPOC-001",
+      "title": "Set up React Router 7 app structure with explicit routes.ts",
+      "description": "Create app directory structure with routes.ts, root.tsx, app.css, and lib/utils.ts",
+      "status": "completed",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-002"],
+      "acCoverage": ["AC-002"],
+      "files": ["packages/ai/app/routes.ts", "packages/ai/app/root.tsx", "packages/ai/app/app.css", "packages/ai/app/lib/utils.ts"],
+      "reference": "packages/web/app/routes.ts",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-004",
+      "storyId": "AIPOC-001",
+      "title": "Install and configure Anthropic Agent SDK",
+      "description": "Create anthropic.server.ts and .env.example",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-004", "AC-010"],
+      "files": ["packages/ai/app/lib/anthropic.server.ts", "packages/ai/.env.example"],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-005",
+      "storyId": "AIPOC-001",
+      "title": "Create UI components for chat interface",
+      "description": "Create button, input, card, scroll-area, and avatar components",
+      "status": "completed",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-003"],
+      "acCoverage": ["AC-005"],
+      "files": ["packages/ai/app/components/ui/button.tsx", "packages/ai/app/components/ui/input.tsx", "packages/ai/app/components/ui/card.tsx", "packages/ai/app/components/ui/scroll-area.tsx", "packages/ai/app/components/ui/avatar.tsx"],
+      "reference": "packages/web/app/components/ui/",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-006",
+      "storyId": "AIPOC-001",
+      "title": "Implement chat message display component",
+      "description": "Create message-list.tsx and message.tsx with markdown support",
+      "status": "completed",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-005"],
+      "acCoverage": ["AC-006"],
+      "files": ["packages/ai/app/components/chat/message-list.tsx", "packages/ai/app/components/chat/message.tsx"],
+      "reference": "packages/web/app/routes/chat.tsx",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-007",
+      "storyId": "AIPOC-001",
+      "title": "Create server action for Anthropic chat with streaming",
+      "description": "Implement action handler with Anthropic SDK streaming",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-004", "T-006"],
+      "acCoverage": ["AC-007"],
+      "files": ["packages/ai/app/routes/_index.tsx"],
+      "reference": "packages/web/app/routes/chat.tsx",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-008",
+      "storyId": "AIPOC-001",
+      "title": "Integrate chat UI with server action",
+      "description": "Complete _index.tsx with Form, useNavigation, optimistic updates",
+      "status": "completed",
+      "assignedAgent": "frontend-dev",
+      "dependencies": ["T-007"],
+      "acCoverage": ["AC-005", "AC-006"],
+      "files": ["packages/ai/app/routes/_index.tsx"],
+      "reference": "packages/web/app/routes/chat.tsx",
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-009",
+      "storyId": "AIPOC-001",
+      "title": "Add root package.json script and run dependencies",
+      "description": "Add 'ai' script to root package.json and run bun install",
+      "status": "completed",
+      "assignedAgent": "backend-dev",
+      "dependencies": ["T-001"],
+      "acCoverage": ["AC-012"],
+      "files": ["package.json"],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:40:00.000Z"
+    },
+    {
+      "id": "T-010",
+      "storyId": "AIPOC-001",
+      "title": "TypeScript verification and dev server validation",
+      "description": "Run typecheck and verify dev server starts on port 5175",
+      "status": "completed",
+      "assignedAgent": "qa",
+      "dependencies": ["T-008", "T-009"],
+      "acCoverage": ["AC-008", "AC-009"],
+      "files": [],
+      "reference": null,
+      "sessionId": null,
+      "transactionId": null,
+      "createdAt": "2025-11-27T00:00:00.000Z",
+      "completedAt": "2025-11-27T06:42:00.000Z"
+    }
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-001",
+      "storyId": "AIPOC-001",
+      "description": "packages/ai directory exists with valid package.json naming @moneyworks/ai",
+      "testable": true,
+      "tested": true,
+      "evidence": "packages/ai/package.json exists with name: '@moneyworks/ai'",
+      "status": "passed"
+    },
+    {
+      "id": "AC-002",
+      "storyId": "AIPOC-001",
+      "description": "React Router 7 configured with explicit route configuration in app/routes.ts",
+      "testable": true,
+      "tested": true,
+      "evidence": "app/routes.ts uses index() with 'satisfies RouteConfig' pattern",
+      "status": "passed"
+    },
+    {
+      "id": "AC-003",
+      "storyId": "AIPOC-001",
+      "description": "Tailwind CSS v4 integrated with @tailwindcss/vite plugin",
+      "testable": true,
+      "tested": true,
+      "evidence": "vite.config.ts imports and uses tailwindcss from @tailwindcss/vite",
+      "status": "passed"
+    },
+    {
+      "id": "AC-004",
+      "storyId": "AIPOC-001",
+      "description": "Anthropic Agent SDK (@anthropic-ai/sdk) installed and configured",
+      "testable": true,
+      "tested": true,
+      "evidence": "package.json includes @anthropic-ai/sdk ^0.39.0, anthropic.server.ts exports client",
+      "status": "passed"
+    },
+    {
+      "id": "AC-005",
+      "storyId": "AIPOC-001",
+      "description": "Chat interface component renders with message input and send button",
+      "testable": true,
+      "tested": true,
+      "evidence": "_index.tsx contains Input and Button components in Form with Send icon",
+      "status": "passed"
+    },
+    {
+      "id": "AC-006",
+      "storyId": "AIPOC-001",
+      "description": "Messages display in scrollable conversation view with user/assistant distinction",
+      "testable": true,
+      "tested": true,
+      "evidence": "message-list.tsx and message.tsx implement ScrollArea with distinct styling (blue for user, gray for assistant)",
+      "status": "passed"
+    },
+    {
+      "id": "AC-007",
+      "storyId": "AIPOC-001",
+      "description": "Server action handles chat requests via Anthropic SDK with streaming support",
+      "testable": true,
+      "tested": true,
+      "evidence": "action() in _index.tsx uses anthropic.messages.stream() with for await loop",
+      "status": "passed"
+    },
+    {
+      "id": "AC-008",
+      "storyId": "AIPOC-001",
+      "description": "TypeScript compilation passes with zero errors (bun run typecheck)",
+      "testable": true,
+      "tested": true,
+      "evidence": "bun run typecheck completes without TypeScript errors (only warnings about missing web1 package)",
+      "status": "passed"
+    },
+    {
+      "id": "AC-009",
+      "storyId": "AIPOC-001",
+      "description": "Dev server starts successfully on unique port (bun run dev)",
+      "testable": true,
+      "tested": true,
+      "evidence": "bun run ai starts server on http://localhost:5175/ successfully",
+      "status": "passed"
+    },
+    {
+      "id": "AC-010",
+      "storyId": "AIPOC-001",
+      "description": "Environment variable ANTHROPIC_API_KEY used for authentication (documented in .env.example)",
+      "testable": true,
+      "tested": true,
+      "evidence": ".env.example contains ANTHROPIC_API_KEY with documentation",
+      "status": "passed"
+    },
+    {
+      "id": "AC-011",
+      "storyId": "AIPOC-001",
+      "description": "Package follows monorepo workspace conventions (workspace:* dependencies where applicable)",
+      "testable": true,
+      "tested": true,
+      "evidence": "package.json uses proper versioning, recognized as workspace package by bun",
+      "status": "passed"
+    },
+    {
+      "id": "AC-012",
+      "storyId": "AIPOC-001",
+      "description": "Root package.json updated with 'ai' script to start the dev server",
+      "testable": true,
+      "tested": true,
+      "evidence": "Root package.json contains 'ai': 'bun --cwd packages/ai dev'",
+      "status": "passed"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-001",
+      "description": "Used native HTML elements for UI components instead of Radix UI primitives to avoid React 18/19 type conflicts",
+      "rationale": "The monorepo has React 18 types at root level which conflict with React 19 types in the AI package. Native elements provide equivalent functionality without type issues.",
+      "alternatives": ["Use Radix UI with type overrides", "Update root React types to 19"],
+      "createdAt": "2025-11-27T06:40:00.000Z"
+    }
+  ],
+  "learnings": [
+    {
+      "id": "L-001",
+      "description": "React 18/19 type conflicts in monorepos with mixed React versions can cause Radix UI component type errors",
+      "category": "technical",
+      "weaveRef": "E:react-type-conflicts-pattern",
+      "createdAt": "2025-11-27T06:40:00.000Z"
+    }
+  ],
+  "weaveRefs": [
+    "E:full-stack-story-pattern",
+    "Q:dev-server-memory-pressure",
+    "E:canonical-dsl-pattern"
+  ],
+  "fiveWhysAnalysis": {
+    "q1": {
+      "question": "Why do we need an AI package?",
+      "answer": "To provide a dedicated interface for interacting with Claude and AI agents in the MoneyWorks context"
+    },
+    "q2": {
+      "question": "Why is a dedicated interface important?",
+      "answer": "To leverage Anthropic Agent SDK's tool use capabilities for intelligent assistance beyond simple chat"
+    },
+    "q3": {
+      "question": "Why do we need tool use capabilities?",
+      "answer": "To enable Claude to perform actions like querying MoneyWorks data, analyzing transactions, and assisting with accounting tasks"
+    },
+    "q4": {
+      "question": "Why is this a POC rather than full implementation?",
+      "answer": "To validate the architecture and integration patterns before building production features"
+    },
+    "q5": {
+      "question": "What is the fundamental need?",
+      "answer": "Enable intelligent, action-capable AI assistance within MoneyWorks to improve developer and user productivity"
+    },
+    "rootCause": "Enable intelligent, action-capable AI assistance within MoneyWorks that can understand context and take actions, moving beyond passive chat to active collaboration"
+  },
+  "referenceImplementation": {
+    "path": "packages/web",
+    "relevance": "React Router 7 + Tailwind CSS structure, routing patterns, component organization"
+  },
+  "createdAt": "2025-11-27T00:00:00.000Z",
+  "completedAt": "2025-11-27T06:42:00.000Z"
+}

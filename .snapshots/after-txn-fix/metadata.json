@@ -1,0 +1,9 @@
+{
+  "label": "after-txn-fix",
+  "timestamp": "2025-11-25T23:30:32.240Z",
+  "tables": [
+    "Transaction",
+    "Detail"
+  ],
+  "totalRecords": 4826
+}

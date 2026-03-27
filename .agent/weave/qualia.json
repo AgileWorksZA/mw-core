@@ -64,6 +64,38 @@
 			"frequency": "when multiple dev servers running",
 			"resolution": "Use static validation (TypeScript compilation, API testing, grep-based validation) instead of browser testing",
 			"evidence": ["AC-026 and AC-027 blocked by exit code 137"]
+		},
+		"react-radix-type-conflict-painpoint": {
+			"id": "react-radix-type-conflict-painpoint",
+			"title": "React 18/19 type conflicts break Radix UI in monorepos",
+			"description": "Monorepo with root React 18 types causes Radix UI primitive components to show type errors in packages using React 19",
+			"severity": "medium",
+			"impact": "Cannot use Radix UI primitives without workarounds, must use native HTML elements",
+			"observedIn": ["AIPOC-001", "packages/ai"],
+			"frequency": "per-new-package in mixed-version monorepos",
+			"resolution": "Use native HTML elements with equivalent functionality (button, input, scroll-area)",
+			"evidence": ["AIPOC-001 D-001: Used native HTML over Radix due to type conflicts"]
+		},
+		"recharts-typescript-optional-props": {
+			"id": "recharts-typescript-optional-props",
+			"title": "Recharts PieLabelRenderProps has optional properties requiring null checks",
+			"description": "Recharts TypeScript types define label render props as optional, requiring explicit null checking even for commonly-used properties like cx, cy, name",
+			"severity": "low",
+			"impact": "Extra null checking code in custom label render functions",
+			"observedIn": ["packages/ai/app/components/artifacts/pie-chart.tsx", "ARTF-001"],
+			"frequency": "per-custom-label-implementation",
+			"resolution": "Use nullish coalescing or early returns when accessing PieLabelRenderProps",
+			"evidence": ["ARTF-001 L-001: Recharts PieLabelRenderProps has optional properties needing null checking"]
+		},
+		"loom-story-path-mismatch": {
+			"id": "loom-story-path-mismatch",
+			"title": "Loom retrospective script looks in wrong path for stories",
+			"description": "story-retrospective.ts expects stories at .claude/loom/stories/{id}.json but actual path is .agent/loom/features/{FEATURE}/stories/{ID}/story.json",
+			"severity": "low",
+			"impact": "Script fails to find story for retrospective generation, requires manual workaround",
+			"observedIn": ["APAY-001 finalization"],
+			"frequency": "every finalization",
+			"resolution": "Update script path or manually generate retrospective"
 		}
 	},
 	"solutions": {
@@ -320,11 +352,11 @@
 	"cognitiveLoad": {},
 	"metadata": {
 		"totalExperiences": 0,
-		"totalPainPoints": 4,
+		"totalPainPoints": 7,
 		"totalSolutions": 3,
 		"totalWorkflows": 4,
-		"totalBestPractices": 8,
+		"totalBestPractices": 9,
 		"totalPatterns": 0,
-		"lastUpdated": "2025-11-25T12:00:00.000Z"
+		"lastUpdated": "2025-11-28T16:30:00.000Z"
 	}
 }

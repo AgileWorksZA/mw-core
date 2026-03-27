@@ -1,0 +1,1477 @@
+{
+  "exportDate": "2025-11-27T13:59:46.759Z",
+  "totalAccounts": 75,
+  "dataFile": "acme.moneyworks",
+  "accounts": [
+    {
+      "code": "2013",
+      "description": "",
+      "type": "1020",
+      "systemType": "16",
+      "group": "CA",
+      "currency": "0",
+      "lastModified": "168",
+      "canonicalInfo": {
+        "accountTypeName": "1020",
+        "accountTypeExplanation": "Unknown account type: 1020",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 16",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1010",
+      "systemType": "3",
+      "group": "CA",
+      "currency": "0",
+      "lastModified": "167",
+      "canonicalInfo": {
+        "accountTypeName": "1010",
+        "accountTypeExplanation": "Unknown account type: 1010",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 3",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2025",
+      "description": "",
+      "type": "1000",
+      "systemType": "16",
+      "group": "CA",
+      "currency": "0",
+      "comments": "100754",
+      "lastModified": "166",
+      "canonicalInfo": {
+        "accountTypeName": "1000",
+        "accountTypeExplanation": "Unknown account type: 1000",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 16",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1400",
+      "systemType": "0",
+      "group": "CA",
+      "currency": "0",
+      "lastModified": "165",
+      "canonicalInfo": {
+        "accountTypeName": "1400",
+        "accountTypeExplanation": "Unknown account type: 1400",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1050",
+      "systemType": "0",
+      "group": "CA",
+      "currency": "0",
+      "lastModified": "164",
+      "canonicalInfo": {
+        "accountTypeName": "1050",
+        "accountTypeExplanation": "Unknown account type: 1050",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1300",
+      "systemType": "0",
+      "group": "CA",
+      "currency": "0",
+      "lastModified": "163",
+      "canonicalInfo": {
+        "accountTypeName": "1300",
+        "accountTypeExplanation": "Unknown account type: 1300",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1500",
+      "systemType": "0",
+      "group": "CA",
+      "currency": "0",
+      "lastModified": "162",
+      "canonicalInfo": {
+        "accountTypeName": "1500",
+        "accountTypeExplanation": "Unknown account type: 1500",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1200",
+      "systemType": "0",
+      "group": "CA",
+      "currency": "0",
+      "lastModified": "161",
+      "canonicalInfo": {
+        "accountTypeName": "1200",
+        "accountTypeExplanation": "Unknown account type: 1200",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "2800",
+      "systemType": "0",
+      "group": "CL",
+      "currency": "0",
+      "lastModified": "160",
+      "canonicalInfo": {
+        "accountTypeName": "2800",
+        "accountTypeExplanation": "Unknown account type: 2800",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "2400",
+      "systemType": "0",
+      "group": "CL",
+      "currency": "0",
+      "lastModified": "159",
+      "canonicalInfo": {
+        "accountTypeName": "2400",
+        "accountTypeExplanation": "Unknown account type: 2400",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "2600",
+      "systemType": "0",
+      "group": "CL",
+      "currency": "0",
+      "lastModified": "158",
+      "canonicalInfo": {
+        "accountTypeName": "2600",
+        "accountTypeExplanation": "Unknown account type: 2600",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "2100",
+      "systemType": "0",
+      "group": "CL",
+      "currency": "0",
+      "lastModified": "157",
+      "canonicalInfo": {
+        "accountTypeName": "2100",
+        "accountTypeExplanation": "Unknown account type: 2100",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "2030",
+      "systemType": "0",
+      "group": "CA",
+      "currency": "0",
+      "lastModified": "156",
+      "canonicalInfo": {
+        "accountTypeName": "2030",
+        "accountTypeExplanation": "Unknown account type: 2030",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "2500",
+      "systemType": "0",
+      "group": "CL",
+      "currency": "0",
+      "lastModified": "155",
+      "canonicalInfo": {
+        "accountTypeName": "2500",
+        "accountTypeExplanation": "Unknown account type: 2500",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "COGS",
+      "type": "6300",
+      "systemType": "0",
+      "group": "CS",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "154",
+      "canonicalInfo": {
+        "accountTypeName": "6300",
+        "accountTypeExplanation": "Unknown account type: 6300",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "COGS",
+      "type": "6000",
+      "systemType": "0",
+      "group": "CS",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "153",
+      "canonicalInfo": {
+        "accountTypeName": "6000",
+        "accountTypeExplanation": "Unknown account type: 6000",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "OTHER",
+      "type": "9900",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "152",
+      "canonicalInfo": {
+        "accountTypeName": "9900",
+        "accountTypeExplanation": "Unknown account type: 9900",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "OTHER",
+      "type": "7510",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "151",
+      "canonicalInfo": {
+        "accountTypeName": "7510",
+        "accountTypeExplanation": "Unknown account type: 7510",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "OTHER",
+      "type": "7500",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "150",
+      "canonicalInfo": {
+        "accountTypeName": "7500",
+        "accountTypeExplanation": "Unknown account type: 7500",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "WAGES",
+      "type": "7290",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "149",
+      "canonicalInfo": {
+        "accountTypeName": "7290",
+        "accountTypeExplanation": "Unknown account type: 7290",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7280",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "148",
+      "canonicalInfo": {
+        "accountTypeName": "7280",
+        "accountTypeExplanation": "Unknown account type: 7280",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7270",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "147",
+      "canonicalInfo": {
+        "accountTypeName": "7270",
+        "accountTypeExplanation": "Unknown account type: 7270",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7260",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "146",
+      "canonicalInfo": {
+        "accountTypeName": "7260",
+        "accountTypeExplanation": "Unknown account type: 7260",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7250",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "145",
+      "canonicalInfo": {
+        "accountTypeName": "7250",
+        "accountTypeExplanation": "Unknown account type: 7250",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7240",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "144",
+      "canonicalInfo": {
+        "accountTypeName": "7240",
+        "accountTypeExplanation": "Unknown account type: 7240",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7230",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "143",
+      "canonicalInfo": {
+        "accountTypeName": "7230",
+        "accountTypeExplanation": "Unknown account type: 7230",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7210",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "142",
+      "canonicalInfo": {
+        "accountTypeName": "7210",
+        "accountTypeExplanation": "Unknown account type: 7210",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7225",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "141",
+      "canonicalInfo": {
+        "accountTypeName": "7225",
+        "accountTypeExplanation": "Unknown account type: 7225",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7220",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "140",
+      "canonicalInfo": {
+        "accountTypeName": "7220",
+        "accountTypeExplanation": "Unknown account type: 7220",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7190",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "139",
+      "canonicalInfo": {
+        "accountTypeName": "7190",
+        "accountTypeExplanation": "Unknown account type: 7190",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7180",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "138",
+      "canonicalInfo": {
+        "accountTypeName": "7180",
+        "accountTypeExplanation": "Unknown account type: 7180",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7170",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "137",
+      "canonicalInfo": {
+        "accountTypeName": "7170",
+        "accountTypeExplanation": "Unknown account type: 7170",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7160",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "136",
+      "canonicalInfo": {
+        "accountTypeName": "7160",
+        "accountTypeExplanation": "Unknown account type: 7160",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7150",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "135",
+      "canonicalInfo": {
+        "accountTypeName": "7150",
+        "accountTypeExplanation": "Unknown account type: 7150",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7140",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "134",
+      "canonicalInfo": {
+        "accountTypeName": "7140",
+        "accountTypeExplanation": "Unknown account type: 7140",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7130",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "133",
+      "canonicalInfo": {
+        "accountTypeName": "7130",
+        "accountTypeExplanation": "Unknown account type: 7130",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7135",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "132",
+      "canonicalInfo": {
+        "accountTypeName": "7135",
+        "accountTypeExplanation": "Unknown account type: 7135",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7110",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "131",
+      "canonicalInfo": {
+        "accountTypeName": "7110",
+        "accountTypeExplanation": "Unknown account type: 7110",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7100",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "130",
+      "canonicalInfo": {
+        "accountTypeName": "7100",
+        "accountTypeExplanation": "Unknown account type: 7100",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7090",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "129",
+      "canonicalInfo": {
+        "accountTypeName": "7090",
+        "accountTypeExplanation": "Unknown account type: 7090",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7080",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "128",
+      "canonicalInfo": {
+        "accountTypeName": "7080",
+        "accountTypeExplanation": "Unknown account type: 7080",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7200",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "127",
+      "canonicalInfo": {
+        "accountTypeName": "7200",
+        "accountTypeExplanation": "Unknown account type: 7200",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "PROMO",
+      "type": "7060",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "126",
+      "canonicalInfo": {
+        "accountTypeName": "7060",
+        "accountTypeExplanation": "Unknown account type: 7060",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7050",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "125",
+      "canonicalInfo": {
+        "accountTypeName": "7050",
+        "accountTypeExplanation": "Unknown account type: 7050",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7040",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "124",
+      "canonicalInfo": {
+        "accountTypeName": "7040",
+        "accountTypeExplanation": "Unknown account type: 7040",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "PROMO",
+      "type": "7030",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "123",
+      "canonicalInfo": {
+        "accountTypeName": "7030",
+        "accountTypeExplanation": "Unknown account type: 7030",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7020",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "122",
+      "canonicalInfo": {
+        "accountTypeName": "7020",
+        "accountTypeExplanation": "Unknown account type: 7020",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7010",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "121",
+      "canonicalInfo": {
+        "accountTypeName": "7010",
+        "accountTypeExplanation": "Unknown account type: 7010",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "WAGES",
+      "type": "7300",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "120",
+      "canonicalInfo": {
+        "accountTypeName": "7300",
+        "accountTypeExplanation": "Unknown account type: 7300",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "9999",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "119",
+      "canonicalInfo": {
+        "accountTypeName": "9999",
+        "accountTypeExplanation": "Unknown account type: 9999",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "ADMIN",
+      "type": "7205",
+      "systemType": "0",
+      "group": "EX",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "118",
+      "canonicalInfo": {
+        "accountTypeName": "7205",
+        "accountTypeExplanation": "Unknown account type: 7205",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1755",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "117",
+      "canonicalInfo": {
+        "accountTypeName": "1755",
+        "accountTypeExplanation": "Unknown account type: 1755",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1750",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "116",
+      "canonicalInfo": {
+        "accountTypeName": "1750",
+        "accountTypeExplanation": "Unknown account type: 1750",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1745",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "115",
+      "canonicalInfo": {
+        "accountTypeName": "1745",
+        "accountTypeExplanation": "Unknown account type: 1745",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1740",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "114",
+      "canonicalInfo": {
+        "accountTypeName": "1740",
+        "accountTypeExplanation": "Unknown account type: 1740",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1735",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "113",
+      "canonicalInfo": {
+        "accountTypeName": "1735",
+        "accountTypeExplanation": "Unknown account type: 1735",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1730",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "112",
+      "canonicalInfo": {
+        "accountTypeName": "1730",
+        "accountTypeExplanation": "Unknown account type: 1730",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1725",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "111",
+      "canonicalInfo": {
+        "accountTypeName": "1725",
+        "accountTypeExplanation": "Unknown account type: 1725",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1720",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "110",
+      "canonicalInfo": {
+        "accountTypeName": "1720",
+        "accountTypeExplanation": "Unknown account type: 1720",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1715",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "109",
+      "canonicalInfo": {
+        "accountTypeName": "1715",
+        "accountTypeExplanation": "Unknown account type: 1715",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "1710",
+      "systemType": "0",
+      "group": "FA",
+      "currency": "0",
+      "lastModified": "108",
+      "canonicalInfo": {
+        "accountTypeName": "1710",
+        "accountTypeExplanation": "Unknown account type: 1710",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "INC",
+      "type": "5300",
+      "systemType": "0",
+      "group": "IN",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "107",
+      "canonicalInfo": {
+        "accountTypeName": "5300",
+        "accountTypeExplanation": "Unknown account type: 5300",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "INC",
+      "type": "5210",
+      "systemType": "0",
+      "group": "IN",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "106",
+      "canonicalInfo": {
+        "accountTypeName": "5210",
+        "accountTypeExplanation": "Unknown account type: 5210",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "INC",
+      "type": "5200",
+      "systemType": "0",
+      "group": "IN",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "105",
+      "canonicalInfo": {
+        "accountTypeName": "5200",
+        "accountTypeExplanation": "Unknown account type: 5200",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "INC",
+      "type": "5100",
+      "systemType": "0",
+      "group": "IN",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "104",
+      "canonicalInfo": {
+        "accountTypeName": "5100",
+        "accountTypeExplanation": "Unknown account type: 5100",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "SALES",
+      "type": "4300",
+      "systemType": "0",
+      "group": "SA",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "103",
+      "canonicalInfo": {
+        "accountTypeName": "4300",
+        "accountTypeExplanation": "Unknown account type: 4300",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "SALES",
+      "type": "4100",
+      "systemType": "0",
+      "group": "SA",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "102",
+      "canonicalInfo": {
+        "accountTypeName": "4100",
+        "accountTypeExplanation": "Unknown account type: 4100",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "SALES",
+      "type": "4000",
+      "systemType": "0",
+      "group": "SA",
+      "currency": "0",
+      "taxCode": "3400",
+      "lastModified": "101",
+      "canonicalInfo": {
+        "accountTypeName": "4000",
+        "accountTypeExplanation": "Unknown account type: 4000",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "3520",
+      "systemType": "0",
+      "group": "SF",
+      "currency": "0",
+      "lastModified": "100",
+      "canonicalInfo": {
+        "accountTypeName": "3520",
+        "accountTypeExplanation": "Unknown account type: 3520",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "3510",
+      "systemType": "0",
+      "group": "SF",
+      "currency": "0",
+      "lastModified": "99",
+      "canonicalInfo": {
+        "accountTypeName": "3510",
+        "accountTypeExplanation": "Unknown account type: 3510",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "3505",
+      "systemType": "0",
+      "group": "SF",
+      "currency": "0",
+      "lastModified": "98",
+      "canonicalInfo": {
+        "accountTypeName": "3505",
+        "accountTypeExplanation": "Unknown account type: 3505",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "3500",
+      "systemType": "0",
+      "group": "SF",
+      "currency": "0",
+      "lastModified": "97",
+      "canonicalInfo": {
+        "accountTypeName": "3500",
+        "accountTypeExplanation": "Unknown account type: 3500",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "3400",
+      "systemType": "0",
+      "group": "SF",
+      "currency": "0",
+      "lastModified": "96",
+      "canonicalInfo": {
+        "accountTypeName": "3400",
+        "accountTypeExplanation": "Unknown account type: 3400",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "3100",
+      "systemType": "0",
+      "group": "SF",
+      "currency": "0",
+      "lastModified": "95",
+      "canonicalInfo": {
+        "accountTypeName": "3100",
+        "accountTypeExplanation": "Unknown account type: 3100",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    },
+    {
+      "code": "2012",
+      "description": "",
+      "type": "3000",
+      "systemType": "0",
+      "group": "SF",
+      "currency": "0",
+      "lastModified": "94",
+      "canonicalInfo": {
+        "accountTypeName": "3000",
+        "accountTypeExplanation": "Unknown account type: 3000",
+        "systemTypeName": "Unknown",
+        "systemTypeExplanation": "Unknown system account type: 0",
+        "financialStatementSection": "Unknown",
+        "normalBalance": "credit",
+        "isBalanceSheetAccount": false,
+        "isIncomeStatementAccount": false
+      }
+    }
+  ]
+}

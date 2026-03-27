@@ -7,7 +7,7 @@
 		{ "path": "./packages/data/tsconfig.json" },
 		{ "path": "./packages/api/tsconfig.json" },
 		{ "path": "./packages/cli/tsconfig.json" },
-		{ "path": "./packages/web1/tsconfig.json" }
+		{ "path": "./packages/ai/tsconfig.json" }
 	],
 	"compilerOptions": {
 		"target": "ES2024"

@@ -1,0 +1,40 @@
+Acme Widgets Ltd
+Outstanding Balances for Payables as at Jan:2024/25
+
+Code		Phone		Name	3 months+	2 months	1 month	Current	GST	Total
+BSUPP		123-4545		Beetle Suppliers Limited
+2500	158	11025	2024-10-28	Beetle Suppliers Limited Goods	3,897.40	0.00	0.00	0.00	508.36	3,897.40
+2500	162	11058	2024-11-28	Beetle Suppliers Limited Goods	0.00	3,128.72	0.00	0.00	408.10	3,128.72
+					 3,897.40	3,128.72	0.00	0.00	916.46	7,026.12
+CANON		9-488-8888		Canon Photocopiers
+2500	167	AP	2024-11-17	Canon Photocopiers Photocopier	0.00	84.38	0.00	0.00	11.01	84.38
+2500	170	116172	2024-11-25	Canon Photocopiers Photocopier Usage	0.00	31.35	0.00	0.00	4.09	31.35
+2500	174	AP	2024-12-17	Canon Photocopiers Photocopier	0.00	0.00	84.38	0.00	11.01	84.38
+2500	171	116172	2024-12-25	Canon Photocopiers Photocopier Usage	0.00	0.00	31.35	0.00	4.09	31.35
+					 0.00	115.73	115.73	0.00	30.20	231.46
+CSUPP		123-8709		Casbah Suppliers Int
+2500	157	22099	2024-10-28	Casbah Suppliers Int Goods	2,417.62	0.00	0.00	0.00	315.34	2,417.62
+2500	163	11056	2024-11-28	Casbah Suppliers Int Goods	0.00	2,121.75	0.00	0.00	276.75	2,121.75
+					 2,417.62	2,121.75	0.00	0.00	592.09	4,539.37
+NEWHER		9-456-7890		Newton Herald
+2500	165	382157	2024-11-07	Newton Herald Advert	0.00	212.62	0.00	0.00	27.73	212.62
+2500	169	394627	2024-11-21	Newton Herald Advert	0.00	212.62	0.00	0.00	27.73	212.62
+2500	176	382157	2024-12-07	Newton Herald Advert	0.00	0.00	212.62	0.00	27.73	212.62
+2500	172	394627	2024-12-21	Newton Herald Advert	0.00	0.00	212.62	0.00	27.73	212.62
+					 0.00	425.24	425.24	0.00	110.92	850.48
+NEWPOW		123-7890		Newton Power and Electric
+2500	166	1308403	2024-11-15	Newton Power Power	0.00	113.96	0.00	0.00	14.86	113.96
+2500	175	1308403	2024-12-15	Newton Power Power	0.00	0.00	113.96	0.00	14.86	113.96
+					 0.00	113.96	113.96	0.00	29.72	227.92
+NEWSTAT		123-5678		Newton Stationers
+2500	164	1652	2024-11-30	Newton Stationers Stationery	0.00	36.56	0.00	0.00	4.77	36.56
+					 0.00	36.56	0.00	0.00	4.77	36.56
+TCOM				Telecom Raupo
+2500	168		2024-11-20	Telecom Newton Phone	0.00	169.05	0.00	0.00	22.05	169.05
+2500	173		2024-12-20	Telecom Newton Phone	0.00	0.00	169.05	0.00	22.05	169.05
+					 0.00	169.05	169.05	0.00	44.10	338.10
+
+NZD Total					 6,315.02	 6,111.01	 823.98	 0.00	 1,728.26	 13,250.01
+Accounts Payable as at Jan:2024/25										 13,250.01
+
+

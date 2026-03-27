@@ -1,0 +1,14 @@
+{
+  "code": "STCK",
+  "name": "Stocktake Report",
+  "description": "Stocktake Report artifact for AI assistant - visual inventory snapshot with stock on hand, low stock warnings, and negative stock alerts",
+  "stories": [
+    {
+      "id": "STCK-001",
+      "title": "Stocktake Report Artifact",
+      "status": "planned"
+    }
+  ],
+  "createdAt": "2025-11-28T10:00:00.000Z",
+  "lastUpdated": "2025-11-28T10:00:00.000Z"
+}

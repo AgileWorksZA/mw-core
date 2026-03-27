@@ -1,0 +1,25 @@
+{
+  "tableName": "Job",
+  "recordCount": 1,
+  "records": [
+    {
+      "_primaryKey": "JOB-TEST-",
+      "Sequencenumber": 0,
+      "LastModifiedTime": 2,
+      "_Timestamp": "2025-11-25 11:48:23",
+      "Code": "JOB-TEST-",
+      "Description": "Test Project 2",
+      "Status": "AUTUMN",
+      "Budget": null,
+      "Contact": "2025-01-31",
+      "Category": "0.000000",
+      "Notes": "0.00",
+      "UserNum": 0,
+      "UserText": "OP",
+      "Custom1": "1",
+      "Custom2": "0",
+      "Colour": null
+    }
+  ],
+  "capturedAt": "2025-11-26T23:31:17.124Z"
+}

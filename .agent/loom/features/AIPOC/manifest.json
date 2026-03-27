@@ -1,0 +1,8 @@
+{
+  "code": "AIPOC",
+  "name": "AI Package POC",
+  "description": "Proof of concept for packages/ai - a React Router 7 app with Anthropic Agent SDK integration for AI chat functionality",
+  "storyCount": 1,
+  "stories": ["AIPOC-001"],
+  "createdAt": "2025-11-27T00:00:00.000Z"
+}
