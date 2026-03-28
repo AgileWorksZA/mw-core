@@ -6,8 +6,8 @@
 
 <div class="grid grid-cols-2 gap-6">
 	<!-- Status -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Status
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -15,7 +15,7 @@
 				<span class="w-20 shrink-0 text-muted-foreground">Status</span>
 				<span>
 					{#if header.status === 'P'}
-						<span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+						<span class="rounded-full bg-positive/10 px-2 py-0.5 text-xs font-medium text-positive">
 							Posted
 						</span>
 					{:else}
@@ -35,8 +35,8 @@
 	</div>
 
 	<!-- Audit Trail -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Audit Trail
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -62,8 +62,8 @@
 	</div>
 
 	<!-- Dates -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Dates
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -85,8 +85,8 @@
 	</div>
 
 	<!-- Type Info -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Classification
 		</h3>
 		<div class="space-y-2 text-sm">

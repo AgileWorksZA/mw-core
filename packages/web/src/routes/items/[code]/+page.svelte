@@ -26,7 +26,7 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
+	<div class="bg-surface-container-lowest px-6 py-4">
 		<div class="flex items-center gap-3">
 			<a href="/items" class="text-muted-foreground hover:text-foreground">
 				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -36,8 +36,8 @@
 			<ColourBadge colour={header.colour} />
 			<div>
 				<div class="flex items-center gap-2">
-					<h1 class="text-xl font-bold">{header.description || header.code}</h1>
-					<span class="rounded bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground">
+					<h1 class="font-headline text-xl font-bold">{header.description || header.code}</h1>
+					<span class="rounded bg-surface-container-low px-2 py-0.5 text-xs font-mono text-muted-foreground">
 						{header.code}
 					</span>
 				</div>
@@ -45,15 +45,15 @@
 					<span class="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
 						{typeLabels[header.type] ?? header.type}
 					</span>
-					{#if flags.weBuy}<span class="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">Buy</span>{/if}
-					{#if flags.weSell}<span class="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">Sell</span>{/if}
-					{#if flags.weStock}<span class="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">Stock</span>{/if}
+					{#if flags.weBuy}<span class="rounded-full bg-surface-container-low px-2 py-0.5 text-xs text-muted-foreground">Buy</span>{/if}
+					{#if flags.weSell}<span class="rounded-full bg-surface-container-low px-2 py-0.5 text-xs text-muted-foreground">Sell</span>{/if}
+					{#if flags.weStock}<span class="rounded-full bg-surface-container-low px-2 py-0.5 text-xs text-muted-foreground">Stock</span>{/if}
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="bg-card px-6">
+	<div class="bg-surface-container-lowest px-6">
 		<TabStrip {tabs} bind:activeTab />
 	</div>
 

@@ -24,37 +24,37 @@
 	}
 
 	function statusDot(status: string): string {
-		return status === 'P' ? 'bg-green-500' : 'bg-amber-500';
+		return status === 'P' ? 'bg-positive' : 'bg-amber-500';
 	}
 </script>
 
 <div class="flex h-full">
 	<!-- Filter sidebar -->
-	<div class="w-48 shrink-0 border-r border-border bg-muted/30 p-3">
-		<h3 class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+	<div class="w-48 shrink-0 bg-surface-container-low p-3">
+		<h3 class="font-headline mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
 			Type
 		</h3>
 		{#each data.typeFilters as filter}
 			<button
-				class="mb-0.5 w-full rounded-md px-2 py-1.5 text-left text-sm transition-colors
+				class="mb-0.5 w-full rounded-xl px-2 py-1.5 text-left text-sm transition-colors
 					{data.currentType === filter.key
 						? 'bg-primary text-primary-foreground font-medium'
-						: 'text-foreground hover:bg-muted'}"
+						: 'text-foreground hover:bg-surface-container-low'}"
 				onclick={() => setFilter(filter.key, data.currentStatus)}
 			>
 				{filter.label}
 			</button>
 		{/each}
 
-		<h3 class="mb-2 mt-4 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+		<h3 class="font-headline mb-2 mt-4 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
 			Status
 		</h3>
 		{#each data.statusFilters as filter}
 			<button
-				class="mb-0.5 w-full rounded-md px-2 py-1.5 text-left text-sm transition-colors
+				class="mb-0.5 w-full rounded-xl px-2 py-1.5 text-left text-sm transition-colors
 					{data.currentStatus === filter.key
 						? 'bg-primary text-primary-foreground font-medium'
-						: 'text-foreground hover:bg-muted'}"
+						: 'text-foreground hover:bg-surface-container-low'}"
 				onclick={() => setFilter(data.currentType, filter.key)}
 			>
 				{filter.label}
@@ -66,21 +66,21 @@
 	<div class="flex flex-1 flex-col p-4">
 		<div class="mb-4 flex items-center justify-between">
 			<div>
-				<h2 class="text-lg font-semibold">Transactions</h2>
+				<h2 class="font-headline text-lg font-semibold">Transactions</h2>
 				<p class="text-sm text-muted-foreground">{data.count} records</p>
 			</div>
 			<input
 				type="search"
 				placeholder="Search transactions..."
 				bind:value={search}
-				class="w-64 rounded-md border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+				class="w-64 rounded-xl bg-surface-container-low px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
 			/>
 		</div>
 
-		<div class="flex-1 overflow-auto rounded-md border border-border">
+		<div class="flex-1 overflow-auto rounded-xl bg-surface-container-lowest">
 			<table class="w-full text-sm">
 				<thead class="sticky top-0">
-					<tr class="border-b border-border bg-muted/50">
+					<tr class="bg-surface-container-lowest">
 						<th class="w-8 px-3 py-2.5"></th>
 						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Type</th>
 						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Our Ref</th>
@@ -94,14 +94,14 @@
 				<tbody>
 					{#each filtered as tx}
 						<tr
-							class="cursor-pointer border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+							class="cursor-pointer transition-colors hover:bg-surface-container-low"
 							onclick={() => goto(`/transactions/${tx.id}`)}
 						>
 							<td class="px-3 py-2 text-center">
 								<span class="inline-block h-2 w-2 rounded-full {statusDot(tx.status)}"></span>
 							</td>
 							<td class="px-3 py-2">
-								<span class="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
+								<span class="rounded bg-surface-container-low px-1.5 py-0.5 text-xs font-mono">
 									{tx.type}
 								</span>
 								<span class="ml-1 text-xs text-muted-foreground">{tx.typeLabel}</span>

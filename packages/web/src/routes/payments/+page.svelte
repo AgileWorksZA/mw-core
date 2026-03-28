@@ -27,7 +27,7 @@
 		<DataTable {columns} rows={data.payments} rowHref={(row) => `/transactions/${row.seq}`} emptyMessage="No payments found">
 			{#snippet cell({ column, row, value })}
 				{#if column.key === 'status'}
-					<span class="inline-block h-2 w-2 rounded-full {value === 'P' ? 'bg-green-500' : 'bg-amber-500'}"></span>
+					<span class="inline-block h-2 w-2 rounded-full {value === 'P' ? 'bg-positive' : 'bg-amber-500'}"></span>
 				{:else if column.key === 'ref'}
 					<a href="/transactions/{row.seq}" class="hover:underline">{value}</a>
 				{:else if column.key === 'gross'}

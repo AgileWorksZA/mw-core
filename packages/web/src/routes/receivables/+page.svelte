@@ -17,7 +17,7 @@
 	]);
 
 	const agingBuckets = $derived([
-		{ label: 'Current', value: summary.aging.current, color: 'bg-green-500' },
+		{ label: 'Current', value: summary.aging.current, color: 'bg-positive' },
 		{ label: '30+ days', value: summary.aging.thirtyPlus, color: 'bg-amber-400' },
 		{ label: '60+ days', value: summary.aging.sixtyPlus, color: 'bg-orange-500' },
 		{ label: '90+ days', value: summary.aging.ninetyPlus, color: 'bg-red-500' }
@@ -38,10 +38,10 @@
 		<AgingBar buckets={agingBuckets} />
 
 		{#if data.invoices.length > 0}
-			<div class="overflow-auto rounded-md border border-border">
+			<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 				<table class="w-full text-sm">
 					<thead class="sticky top-0">
-						<tr class="border-b border-border bg-muted/50">
+						<tr class="bg-surface-container-low">
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Invoice</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Customer</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Date</th>
@@ -53,7 +53,7 @@
 					</thead>
 					<tbody>
 						{#each data.invoices as inv}
-							<tr class="border-b border-border last:border-0 hover:bg-muted/50" class:text-destructive={inv.overdue}>
+							<tr class="hover:bg-surface-container-low transition-colors" class:text-destructive={inv.overdue}>
 								<td class="px-3 py-2 font-mono text-xs">{inv.ref}</td>
 								<td class="px-3 py-2">{inv.name}</td>
 								<td class="px-3 py-2 text-muted-foreground">{inv.date}</td>

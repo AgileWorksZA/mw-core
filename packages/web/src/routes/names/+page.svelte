@@ -34,16 +34,16 @@
 
 <div class="flex h-full">
 	<!-- Filter sidebar -->
-	<div class="w-48 shrink-0 border-r border-border bg-muted/30 p-3">
-		<h3 class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+	<div class="w-48 shrink-0 bg-surface-container-low p-3">
+		<h3 class="font-headline mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
 			Filter
 		</h3>
 		{#each data.filters as filter}
 			<button
-				class="mb-0.5 w-full rounded-md px-2 py-1.5 text-left text-sm transition-colors
+				class="mb-0.5 w-full rounded-xl px-2 py-1.5 text-left text-sm transition-colors
 					{data.currentFilter === filter.key
 						? 'bg-primary text-primary-foreground font-medium'
-						: 'text-foreground hover:bg-muted'}"
+						: 'text-foreground hover:bg-surface-container-low'}"
 				onclick={() => setFilter(filter.key)}
 			>
 				{filter.label}
@@ -56,22 +56,22 @@
 		<!-- Header -->
 		<div class="mb-4 flex items-center justify-between">
 			<div>
-				<h2 class="text-lg font-semibold">Names</h2>
+				<h2 class="font-headline text-lg font-semibold">Names</h2>
 				<p class="text-sm text-muted-foreground">{data.count} records</p>
 			</div>
 			<input
 				type="search"
 				placeholder="Search names..."
 				bind:value={search}
-				class="w-64 rounded-md border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+				class="w-64 rounded-xl bg-surface-container-low px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
 			/>
 		</div>
 
 		<!-- Table -->
-		<div class="flex-1 overflow-auto rounded-md border border-border">
+		<div class="flex-1 overflow-auto rounded-xl bg-surface-container-lowest">
 			<table class="w-full text-sm">
 				<thead class="sticky top-0">
-					<tr class="border-b border-border bg-muted/50">
+					<tr class="bg-surface-container-lowest">
 						<th class="w-8 px-3 py-2.5"></th>
 						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Code</th>
 						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Name</th>
@@ -85,7 +85,7 @@
 				<tbody>
 					{#each filteredNames as name}
 						<tr
-							class="cursor-pointer border-b border-border transition-colors last:border-0 hover:bg-muted/50"
+							class="cursor-pointer transition-colors hover:bg-surface-container-low"
 							onclick={() => goto(`/names/${name.code}`)}
 						>
 							<td class="px-3 py-2 text-center">

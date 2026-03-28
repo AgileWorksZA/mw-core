@@ -21,7 +21,7 @@
 <div class="space-y-4">
 	<!-- View mode toggle -->
 	{#if hasItems}
-		<div class="flex gap-1 rounded-md bg-muted p-1 w-fit">
+		<div class="flex gap-1 rounded-xl bg-surface-container-low p-1 w-fit">
 			<button
 				class="rounded px-3 py-1 text-sm transition-colors
 					{viewMode === 'account' ? 'bg-background shadow-sm font-medium' : 'text-muted-foreground hover:text-foreground'}"
@@ -40,10 +40,10 @@
 	{/if}
 
 	<!-- Line items grid -->
-	<div class="overflow-auto rounded-md border border-border">
+	<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 		<table class="w-full text-sm">
 			<thead>
-				<tr class="border-b border-border bg-muted/50">
+				<tr class="bg-surface-container-low">
 					{#if viewMode === 'account'}
 						<th class="px-3 py-2 text-left font-medium text-muted-foreground">Account</th>
 						<th class="px-3 py-2 text-left font-medium text-muted-foreground">Account Name</th>
@@ -73,7 +73,7 @@
 					</tr>
 				{:else}
 					{#each lineItems as line}
-						<tr class="border-b border-border last:border-0 hover:bg-muted/30">
+						<tr class="hover:bg-surface-container-low">
 							{#if viewMode === 'account'}
 								<td class="px-3 py-2 font-mono text-xs">{line.account}</td>
 								<td class="px-3 py-2 text-muted-foreground">{line.accountDescription}</td>
@@ -117,7 +117,7 @@
 
 	<!-- Totals footer -->
 	<div class="flex justify-end">
-		<div class="w-72 space-y-1 rounded-lg border border-border p-4">
+		<div class="w-72 space-y-1 rounded-xl bg-surface-container-lowest p-4">
 			<div class="flex justify-between text-sm">
 				<span class="text-muted-foreground">Subtotal ({totals.lineCount} lines)</span>
 				<CurrencyDisplay amount={totals.subtotal} />
@@ -126,7 +126,7 @@
 				<span class="text-muted-foreground">Tax</span>
 				<CurrencyDisplay amount={totals.tax} />
 			</div>
-			<div class="flex justify-between border-t border-border pt-1 font-semibold">
+			<div class="flex justify-between border-t border-outline-variant pt-1 font-semibold">
 				<span>Total</span>
 				<CurrencyDisplay amount={totals.gross} />
 			</div>
@@ -135,7 +135,7 @@
 					<span class="text-muted-foreground">Paid</span>
 					<CurrencyDisplay amount={totals.amtPaid} />
 				</div>
-				<div class="flex justify-between border-t border-border pt-1 font-semibold text-destructive">
+				<div class="flex justify-between border-t border-outline-variant pt-1 font-semibold text-destructive">
 					<span>Outstanding</span>
 					<CurrencyDisplay amount={totals.outstanding} />
 				</div>

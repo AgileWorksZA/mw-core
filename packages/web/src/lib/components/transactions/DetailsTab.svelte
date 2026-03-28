@@ -17,8 +17,8 @@
 
 <div class="grid grid-cols-2 gap-6">
 	<!-- References -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			References
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -54,8 +54,8 @@
 	</div>
 
 	<!-- Payment -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Payment
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -83,8 +83,8 @@
 
 	<!-- Description -->
 	{#if header.description}
-		<div class="col-span-2 rounded-lg border border-border p-4">
-			<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+		<div class="col-span-2 rounded-xl bg-surface-container-lowest p-4">
+			<h3 class="font-headline mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 				Description
 			</h3>
 			<p class="whitespace-pre-wrap text-sm">{header.description}</p>
@@ -94,16 +94,16 @@
 	<!-- Addresses -->
 	{#if header.deliveryAddress || header.mailingAddress}
 		{#if header.mailingAddress}
-			<div class="rounded-lg border border-border p-4">
-				<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+			<div class="rounded-xl bg-surface-container-lowest p-4">
+				<h3 class="font-headline mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 					Mailing Address
 				</h3>
 				<p class="whitespace-pre-wrap text-sm">{header.mailingAddress}</p>
 			</div>
 		{/if}
 		{#if header.deliveryAddress}
-			<div class="rounded-lg border border-border p-4">
-				<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+			<div class="rounded-xl bg-surface-container-lowest p-4">
+				<h3 class="font-headline mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 					Delivery Address
 				</h3>
 				<p class="whitespace-pre-wrap text-sm">{header.deliveryAddress}</p>

@@ -49,7 +49,7 @@
 					<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Monthly Sales</h3>
 					<div class="grid grid-cols-6 gap-2">
 						{#each data.monthly as m}
-							<div class="rounded-lg border border-border p-3 text-center">
+							<div class="rounded-xl bg-surface-container-lowest p-3 text-center">
 								<div class="text-xs text-muted-foreground">Period {m.period}</div>
 								<div class="mt-1 font-semibold"><CurrencyDisplay amount={m.value} /></div>
 							</div>
@@ -60,10 +60,10 @@
 
 			<!-- Invoice list -->
 			<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Invoices</h3>
-			<div class="overflow-auto rounded-md border border-border">
+			<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 				<table class="w-full text-sm">
 					<thead class="sticky top-0">
-						<tr class="border-b border-border bg-muted/50">
+						<tr class="bg-surface-container-low">
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Status</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Ref</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Date</th>
@@ -75,9 +75,9 @@
 					</thead>
 					<tbody>
 						{#each data.invoices as inv}
-							<tr class="border-b border-border last:border-0 hover:bg-muted/50">
+							<tr class="hover:bg-surface-container-low transition-colors">
 								<td class="px-3 py-2">
-									<span class="inline-block h-2 w-2 rounded-full {inv.status === 'P' ? 'bg-green-500' : 'bg-amber-500'}"></span>
+									<span class="inline-block h-2 w-2 rounded-full {inv.status === 'P' ? 'bg-positive' : 'bg-amber-500'}"></span>
 								</td>
 								<td class="px-3 py-2 font-mono text-xs">{inv.ref}</td>
 								<td class="px-3 py-2 text-muted-foreground">{inv.date}</td>

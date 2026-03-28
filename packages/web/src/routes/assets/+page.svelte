@@ -20,10 +20,10 @@
 		<SummaryCards {cards} />
 
 		{#if data.assets.length > 0}
-			<div class="overflow-auto rounded-md border border-border">
+			<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 				<table class="w-full text-sm">
 					<thead class="sticky top-0">
-						<tr class="border-b border-border bg-muted/50">
+						<tr class="bg-surface-container-low">
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Code</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Description</th>
 							<th class="px-3 py-2.5 text-right font-medium text-muted-foreground">Cost</th>
@@ -33,25 +33,25 @@
 					</thead>
 					<tbody>
 						{#each data.assets as asset}
-							<tr class="border-b border-border last:border-0 hover:bg-muted/50">
+							<tr class="hover:bg-surface-container-low transition-colors">
 								<td class="px-3 py-2 font-mono text-xs">
 									<a href="/accounts/{asset.code}" class="hover:underline">{asset.code}</a>
 								</td>
 								<td class="px-3 py-2">{asset.description}</td>
 								<td class="px-3 py-2 text-right"><CurrencyDisplay amount={asset.cost} /></td>
 								<td class="px-3 py-2 text-right text-amber-500"><CurrencyDisplay amount={asset.depreciation} /></td>
-								<td class="px-3 py-2 text-right font-semibold" class:text-green-600={asset.bookValue > 0} class:text-destructive={asset.bookValue <= 0}>
+								<td class="px-3 py-2 text-right font-semibold" class:text-positive={asset.bookValue > 0} class:text-destructive={asset.bookValue <= 0}>
 									<CurrencyDisplay amount={asset.bookValue} />
 								</td>
 							</tr>
 						{/each}
 					</tbody>
 					<tfoot>
-						<tr class="bg-muted/30 font-semibold">
+						<tr class="bg-surface-container-low font-semibold">
 							<td class="px-3 py-2" colspan="2">Total</td>
 							<td class="px-3 py-2 text-right"><CurrencyDisplay amount={data.totals.cost} /></td>
 							<td class="px-3 py-2 text-right text-amber-500"><CurrencyDisplay amount={data.totals.depreciation} /></td>
-							<td class="px-3 py-2 text-right text-green-600"><CurrencyDisplay amount={data.totals.bookValue} /></td>
+							<td class="px-3 py-2 text-right text-positive"><CurrencyDisplay amount={data.totals.bookValue} /></td>
 						</tr>
 					</tfoot>
 				</table>

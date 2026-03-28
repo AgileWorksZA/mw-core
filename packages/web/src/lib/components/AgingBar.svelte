@@ -14,8 +14,8 @@
 
 {#if total > 0}
 	<div class="mb-6">
-		<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Aging</h3>
-		<div class="flex h-8 overflow-hidden rounded">
+		<h3 class="mb-2 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Aging</h3>
+		<div class="flex h-8 overflow-hidden rounded-xl">
 			{#each buckets as bucket}
 				{@const pct = (Math.abs(bucket.value) / total) * 100}
 				{#if pct > 0}
@@ -28,7 +28,7 @@
 				<div class="flex items-center gap-1">
 					<span class="h-2 w-2 rounded {bucket.color}"></span>
 					<span class="text-muted-foreground">{bucket.label}</span>
-					<span class="ml-auto font-medium"><CurrencyDisplay amount={bucket.value} /></span>
+					<span class="ml-auto font-medium tabular-nums"><CurrencyDisplay amount={bucket.value} /></span>
 				</div>
 			{/each}
 		</div>

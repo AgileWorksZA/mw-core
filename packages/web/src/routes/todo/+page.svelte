@@ -34,8 +34,8 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
-		<h1 class="text-xl font-bold">To Do</h1>
+	<div class="bg-surface-container-lowest px-6 py-4">
+		<h1 class="font-headline text-xl font-bold">To Do</h1>
 		<p class="text-sm text-muted-foreground">Workflow task board — {data.today}</p>
 	</div>
 
@@ -43,15 +43,15 @@
 		<div class="grid grid-cols-4 gap-6">
 			<!-- Daily -->
 			<div>
-				<h2 class="mb-3 rounded-lg bg-blue-500/10 px-3 py-2 text-center text-xs font-semibold text-blue-600 uppercase tracking-wider">Daily</h2>
+				<h2 class="font-headline mb-3 rounded-xl bg-blue-500/10 px-3 py-2 text-center text-xs font-semibold text-blue-600 uppercase tracking-wider">Daily</h2>
 				<div class="space-y-2">
 					{#each dailyTasks as task}
-						<a href={task.href} class="flex items-center justify-between rounded-lg border border-border p-3 transition-colors hover:bg-muted/50">
+						<a href={task.href} class="flex items-center justify-between rounded-xl bg-surface-container-lowest p-3 transition-colors hover:bg-surface-container-low">
 							<span class="text-sm font-medium">{task.label}</span>
 							{#if task.badge && task.badge > 0}
 								<span class="rounded-full {task.badgeColor} px-2 py-0.5 text-xs font-bold text-white">{task.badge}</span>
 							{:else}
-								<span class="rounded-full bg-green-500 px-2 py-0.5 text-xs font-bold text-white">0</span>
+								<span class="rounded-full bg-positive px-2 py-0.5 text-xs font-bold text-white">0</span>
 							{/if}
 						</a>
 					{/each}
@@ -60,10 +60,10 @@
 
 			<!-- Regular -->
 			<div>
-				<h2 class="mb-3 rounded-lg bg-amber-500/10 px-3 py-2 text-center text-xs font-semibold text-amber-600 uppercase tracking-wider">Regular</h2>
+				<h2 class="font-headline mb-3 rounded-xl bg-amber-500/10 px-3 py-2 text-center text-xs font-semibold text-amber-600 uppercase tracking-wider">Regular</h2>
 				<div class="space-y-2">
 					{#each regularTasks as task}
-						<a href={task.href} class="flex items-center justify-between rounded-lg border border-border p-3 transition-colors hover:bg-muted/50">
+						<a href={task.href} class="flex items-center justify-between rounded-xl bg-surface-container-lowest p-3 transition-colors hover:bg-surface-container-low">
 							<span class="text-sm font-medium">{task.label}</span>
 							<svg class="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 								<polyline points="9,18 15,12 9,6" />
@@ -75,10 +75,10 @@
 
 			<!-- Monthly -->
 			<div>
-				<h2 class="mb-3 rounded-lg bg-purple-500/10 px-3 py-2 text-center text-xs font-semibold text-purple-600 uppercase tracking-wider">Monthly</h2>
+				<h2 class="font-headline mb-3 rounded-xl bg-purple-500/10 px-3 py-2 text-center text-xs font-semibold text-purple-600 uppercase tracking-wider">Monthly</h2>
 				<div class="space-y-2">
 					{#each monthlyTasks as task}
-						<a href={task.href} class="rounded-lg border border-border p-3 block transition-colors hover:bg-muted/50">
+						<a href={task.href} class="rounded-xl bg-surface-container-lowest p-3 block transition-colors hover:bg-surface-container-low">
 							<div class="text-sm font-medium">{task.label}</div>
 							{#if task.status}
 								<div class="mt-0.5 text-xs text-muted-foreground">{task.status}</div>
@@ -90,10 +90,10 @@
 
 			<!-- Reports -->
 			<div>
-				<h2 class="mb-3 rounded-lg bg-green-500/10 px-3 py-2 text-center text-xs font-semibold text-green-600 uppercase tracking-wider">Reports</h2>
+				<h2 class="font-headline mb-3 rounded-xl bg-positive/10 px-3 py-2 text-center text-xs font-semibold text-positive uppercase tracking-wider">Reports</h2>
 				<div class="space-y-2">
 					{#each reportTasks as task}
-						<a href={task.href} class="rounded-lg border border-border p-3 block transition-colors hover:bg-muted/50">
+						<a href={task.href} class="rounded-xl bg-surface-container-lowest p-3 block transition-colors hover:bg-surface-container-low">
 							<div class="text-sm font-medium">{task.label}</div>
 							{#if task.status}
 								<div class="mt-0.5 text-xs text-muted-foreground">{task.status}</div>

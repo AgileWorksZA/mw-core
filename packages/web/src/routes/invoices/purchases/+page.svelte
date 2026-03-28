@@ -36,10 +36,10 @@
 		<SummaryCards {cards} />
 
 		{#if data.invoices.length > 0}
-			<div class="overflow-auto rounded-md border border-border">
+			<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 				<table class="w-full text-sm">
 					<thead class="sticky top-0">
-						<tr class="border-b border-border bg-muted/50">
+						<tr class="bg-surface-container-low">
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground w-8">St</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Invoice</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Supplier</th>
@@ -53,9 +53,9 @@
 					</thead>
 					<tbody>
 						{#each data.invoices as inv}
-							<tr class="border-b border-border last:border-0 hover:bg-muted/50" class:text-destructive={inv.overdue}>
+							<tr class="hover:bg-surface-container-low transition-colors" class:text-destructive={inv.overdue}>
 								<td class="px-3 py-2">
-									<span class="inline-block h-2 w-2 rounded-full {inv.status === 'P' ? 'bg-green-500' : 'bg-amber-500'}"></span>
+									<span class="inline-block h-2 w-2 rounded-full {inv.status === 'P' ? 'bg-positive' : 'bg-amber-500'}"></span>
 								</td>
 								<td class="px-3 py-2 font-mono text-xs"><a href="/transactions/{inv.seq}" class="hover:underline">{inv.ref}</a></td>
 								<td class="px-3 py-2">{inv.name}</td>

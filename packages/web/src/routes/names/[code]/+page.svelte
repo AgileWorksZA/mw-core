@@ -34,7 +34,7 @@
 
 <div class="flex h-full flex-col">
 	<!-- Header bar -->
-	<div class="border-b border-border bg-card px-6 py-4">
+	<div class="bg-surface-container-lowest px-6 py-4">
 		<div class="flex items-center gap-3">
 			<a href="/names" class="text-muted-foreground hover:text-foreground">
 				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -44,8 +44,8 @@
 			<ColourBadge colour={header.colour} />
 			<div>
 				<div class="flex items-center gap-2">
-					<h1 class="text-xl font-bold">{header.name}</h1>
-					<span class="rounded bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground">
+					<h1 class="font-headline text-xl font-bold">{header.name}</h1>
+					<span class="rounded bg-surface-container-low px-2 py-0.5 text-xs font-mono text-muted-foreground">
 						{header.code}
 					</span>
 				</div>
@@ -61,7 +61,7 @@
 	</div>
 
 	<!-- Tabs -->
-	<div class="bg-card px-6">
+	<div class="bg-surface-container-lowest px-6">
 		<TabStrip {tabs} bind:activeTab />
 	</div>
 

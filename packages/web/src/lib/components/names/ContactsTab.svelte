@@ -9,19 +9,19 @@
 
 <div class="grid grid-cols-3 gap-6">
 	<!-- Contact List -->
-	<div class="rounded-lg border border-border">
-		<div class="border-b border-border bg-muted/50 px-3 py-2">
-			<h3 class="text-sm font-semibold text-muted-foreground">
+	<div class="rounded-xl bg-surface-container-lowest">
+		<div class="bg-surface-container-low px-3 py-2 rounded-t-xl">
+			<h3 class="font-headline text-sm font-semibold text-muted-foreground">
 				Contacts ({contacts.length})
 			</h3>
 		</div>
 		{#if contacts.length === 0}
 			<div class="p-4 text-center text-sm text-muted-foreground">No contacts</div>
 		{:else}
-			<div class="divide-y divide-border">
+			<div>
 				{#each contacts as contact, i}
 					<button
-						class="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-muted/50
+						class="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-surface-container-low
 							{i === selectedIndex ? 'bg-primary/5 border-l-2 border-l-primary' : ''}"
 						onclick={() => (selectedIndex = i)}
 					>
@@ -36,9 +36,9 @@
 	</div>
 
 	<!-- Contact Detail -->
-	<div class="col-span-2 rounded-lg border border-border p-4">
+	<div class="col-span-2 rounded-xl bg-surface-container-lowest p-4">
 		{#if selected}
-			<h3 class="mb-4 text-lg font-semibold">{selected.name || 'Unnamed Contact'}</h3>
+			<h3 class="font-headline mb-4 text-lg font-semibold">{selected.name || 'Unnamed Contact'}</h3>
 			<div class="grid grid-cols-2 gap-4 text-sm">
 				{#if selected.salutation}
 					<div>

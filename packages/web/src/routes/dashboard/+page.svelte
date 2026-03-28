@@ -92,22 +92,22 @@
 
 <div class="flex h-full flex-col">
 	<!-- Header -->
-	<div class="border-b border-border bg-card px-6 py-4">
+	<div class="bg-surface-container-lowest px-6 py-4">
 		<div class="flex items-center justify-between">
 			<div>
-				<h1 class="text-xl font-bold">Dashboard</h1>
+				<h1 class="text-xl font-bold font-headline">Dashboard</h1>
 				<p class="text-sm text-muted-foreground">Company Overview — {data.date}</p>
 			</div>
 			<RefreshIndicator enabled={refresh.enabled} refreshing={refresh.refreshing} onToggle={refresh.toggle} onRefresh={refresh.refreshNow} />
 		</div>
 	</div>
 
-	<div class="flex-1 overflow-auto p-6 space-y-8">
+	<div class="flex-1 overflow-auto p-6 space-y-12">
 		<!-- Charts 2x2 Grid -->
 		<div class="grid grid-cols-2 gap-6">
 			<!-- Profit Chart (bar + line) -->
-			<div class="rounded-lg border border-border p-4">
-				<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Profit</h3>
+			<div class="rounded-xl bg-surface-container-lowest p-6">
+				<h3 class="mb-2 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Profit</h3>
 				{#if profitChart.length > 0}
 					<svg viewBox="0 0 {chartW} {chartH}" class="w-full" preserveAspectRatio="xMidYMid meet">
 						<!-- Y axis ticks -->
@@ -153,11 +153,11 @@
 			</div>
 
 			<!-- Current Ratio -->
-			<div class="rounded-lg border border-border p-4">
-				<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Current Ratio</h3>
+			<div class="rounded-xl bg-surface-container-lowest p-6">
+				<h3 class="mb-2 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Current Ratio</h3>
 				<div class="flex items-center justify-center">
 					<div class="text-center">
-						<div class="text-5xl font-bold" class:text-green-500={currentRatio >= 1.5} class:text-amber-500={currentRatio >= 1 && currentRatio < 1.5} class:text-destructive={currentRatio < 1}>
+						<div class="text-5xl font-bold tabular-nums" class:text-positive={currentRatio >= 1.5} class:text-amber-500={currentRatio >= 1 && currentRatio < 1.5} class:text-destructive={currentRatio < 1}>
 							{currentRatio.toFixed(2)}
 						</div>
 						<div class="mt-2 text-sm text-muted-foreground">Current Assets / Current Liabilities</div>
@@ -177,8 +177,8 @@
 			</div>
 
 			<!-- Bank Balances Chart -->
-			<div class="rounded-lg border border-border p-4">
-				<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Bank Balances</h3>
+			<div class="rounded-xl bg-surface-container-lowest p-6">
+				<h3 class="mb-2 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Bank Balances</h3>
 				{#if balances.bankAccounts.length > 0}
 					{@const bW = 320}
 					{@const bH = 160}
@@ -203,9 +203,9 @@
 							<text x={x + bBarW / 2} y={bH - 6} text-anchor="middle" fill="currentColor" opacity="0.5" font-size="8">{bank.code}</text>
 						{/each}
 					</svg>
-					<div class="mt-1 space-y-1">
+					<div class="mt-1 space-y-1 tabular-nums">
 						{#each balances.bankAccounts as bank}
-							<div class="flex justify-between text-xs">
+							<div class="flex justify-between text-xs hover:bg-surface-container-low transition-colors">
 								<span class="text-muted-foreground">{bank.description} ({bank.code})</span>
 								<span class="font-medium" class:text-destructive={bank.balance < 0}><CurrencyDisplay amount={bank.balance} /></span>
 							</div>
@@ -217,8 +217,8 @@
 			</div>
 
 			<!-- Debtors Aging Chart -->
-			<div class="rounded-lg border border-border p-4">
-				<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Debtors</h3>
+			<div class="rounded-xl bg-surface-container-lowest p-6">
+				<h3 class="mb-2 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Debtors</h3>
 				{#if totalDebtors > 0}
 					{@const dW = 320}
 					{@const dH = 160}
@@ -243,7 +243,7 @@
 							<text x={x + dBarW / 2} y={dH - 6} text-anchor="middle" fill="currentColor" opacity="0.5" font-size="8">{bucket.label}</text>
 						{/each}
 					</svg>
-					<div class="mt-2 flex justify-between text-xs">
+					<div class="mt-2 flex justify-between text-xs tabular-nums">
 						<span class="text-muted-foreground">Total Debtors</span>
 						<span class="font-semibold"><CurrencyDisplay amount={totalDebtors} /></span>
 					</div>
@@ -255,13 +255,13 @@
 
 		<!-- Transactions Entered Table -->
 		<div>
-			<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+			<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">
 				Value of Transactions Entered
 			</h2>
-			<div class="overflow-auto rounded-md border border-border">
-				<table class="w-full text-sm">
+			<div class="overflow-auto rounded-xl bg-surface-container-lowest">
+				<table class="w-full text-sm tabular-nums">
 					<thead>
-						<tr class="border-b border-border bg-muted/50">
+						<tr class="bg-surface-container-low">
 							<th class="px-4 py-3 text-left font-medium text-muted-foreground"></th>
 							<th class="px-4 py-3 text-right font-medium text-muted-foreground">Today</th>
 							<th class="px-4 py-3 text-right font-medium text-muted-foreground">Previous 7 Days</th>
@@ -269,31 +269,31 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="border-b border-border">
+						<tr class="hover:bg-surface-container-low transition-colors">
 							<td class="px-4 py-2 font-medium">Sales</td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.today.sales} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.sevenDay.sales} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.thirtyDay.sales} /></td>
 						</tr>
-						<tr class="border-b border-border">
+						<tr class="hover:bg-surface-container-low transition-colors">
 							<td class="px-4 py-2 font-medium">Cost of Sales</td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.today.cogs} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.sevenDay.cogs} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.thirtyDay.cogs} /></td>
 						</tr>
-						<tr class="border-b border-border bg-muted/30">
+						<tr class="bg-surface-container-low">
 							<td class="px-4 py-2 font-semibold">Gross Margin</td>
 							<td class="px-4 py-2 text-right font-semibold"><CurrencyDisplay amount={periods.today.grossMargin} /></td>
 							<td class="px-4 py-2 text-right font-semibold"><CurrencyDisplay amount={periods.sevenDay.grossMargin} /></td>
 							<td class="px-4 py-2 text-right font-semibold"><CurrencyDisplay amount={periods.thirtyDay.grossMargin} /></td>
 						</tr>
-						<tr class="border-b border-border">
+						<tr class="hover:bg-surface-container-low transition-colors">
 							<td class="px-4 py-2 text-muted-foreground">Gross Margin %</td>
 							<td class="px-4 py-2 text-right">{periods.today.marginPct.toFixed(1)}%</td>
 							<td class="px-4 py-2 text-right">{periods.sevenDay.marginPct.toFixed(1)}%</td>
 							<td class="px-4 py-2 text-right">{periods.thirtyDay.marginPct.toFixed(1)}%</td>
 						</tr>
-						<tr>
+						<tr class="hover:bg-surface-container-low transition-colors">
 							<td class="px-4 py-2 text-muted-foreground">Invoices</td>
 							<td class="px-4 py-2 text-right">{periods.today.invoiceCount}</td>
 							<td class="px-4 py-2 text-right">{periods.sevenDay.invoiceCount}</td>
@@ -308,17 +308,17 @@
 		<div class="grid grid-cols-2 gap-6">
 			<!-- Balances -->
 			<div>
-				<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+				<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">
 					Balances
 				</h2>
-				<div class="space-y-3">
-					<div class="rounded-lg border border-border p-4">
+				<div class="space-y-3 tabular-nums">
+					<div class="rounded-xl bg-surface-container-lowest p-4">
 						<div class="flex justify-between">
 							<span class="text-muted-foreground">Receivables</span>
 							<span class="text-lg font-bold"><CurrencyDisplay amount={balances.receivables} /></span>
 						</div>
 					</div>
-					<div class="rounded-lg border border-border p-4">
+					<div class="rounded-xl bg-surface-container-lowest p-4">
 						<div class="flex justify-between">
 							<span class="text-muted-foreground">Payables</span>
 							<span class="text-lg font-bold"><CurrencyDisplay amount={balances.payables} /></span>
@@ -329,10 +329,10 @@
 
 			<!-- Debtors Aging Detail -->
 			<div>
-				<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+				<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">
 					Debtors Aging
 				</h2>
-				<div class="rounded-lg border border-border p-4">
+				<div class="rounded-xl bg-surface-container-lowest p-4 tabular-nums">
 					<div class="space-y-3">
 						<div class="flex justify-between text-sm">
 							<span class="text-muted-foreground">Current</span>
@@ -350,7 +350,7 @@
 							<span class="text-muted-foreground">3+ cycles (90+ days)</span>
 							<CurrencyDisplay amount={debtors.threeOrMore} />
 						</div>
-						<div class="flex justify-between border-t border-border pt-2 font-semibold">
+						<div class="flex justify-between pt-2 font-semibold">
 							<span>Total Debtors</span>
 							<CurrencyDisplay amount={totalDebtors} />
 						</div>
@@ -359,13 +359,13 @@
 					<!-- Stacked bar -->
 					{#if totalDebtors > 0}
 						<div class="mt-4 flex h-8 overflow-hidden rounded">
-							<div class="bg-green-500" style="width: {(debtors.current / totalDebtors) * 100}%" title="Current"></div>
+							<div class="bg-positive" style="width: {(debtors.current / totalDebtors) * 100}%" title="Current"></div>
 							<div class="bg-amber-400" style="width: {(debtors.oneCycle / totalDebtors) * 100}%" title="30+"></div>
 							<div class="bg-orange-500" style="width: {(debtors.twoCycles / totalDebtors) * 100}%" title="60+"></div>
 							<div class="bg-red-500" style="width: {(debtors.threeOrMore / totalDebtors) * 100}%" title="90+"></div>
 						</div>
 						<div class="mt-1 flex justify-between text-xs text-muted-foreground">
-							<span class="flex items-center gap-1"><span class="h-2 w-2 rounded bg-green-500"></span>Current</span>
+							<span class="flex items-center gap-1"><span class="h-2 w-2 rounded bg-positive"></span>Current</span>
 							<span class="flex items-center gap-1"><span class="h-2 w-2 rounded bg-amber-400"></span>30+</span>
 							<span class="flex items-center gap-1"><span class="h-2 w-2 rounded bg-orange-500"></span>60+</span>
 							<span class="flex items-center gap-1"><span class="h-2 w-2 rounded bg-red-500"></span>90+</span>

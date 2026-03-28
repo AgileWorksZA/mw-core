@@ -14,31 +14,31 @@
 
 <div class="grid grid-cols-2 gap-6">
 	<!-- Flags -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Flags</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Flags</h3>
 		<div class="space-y-2 text-sm">
 			<div class="flex items-center gap-2">
-				<span class="inline-block h-2 w-2 rounded-full {flags.weBuy ? 'bg-green-500' : 'bg-muted'}"></span>
+				<span class="inline-block h-2 w-2 rounded-full {flags.weBuy ? 'bg-positive' : 'bg-muted'}"></span>
 				<span class:text-muted-foreground={!flags.weBuy}>We Buy This</span>
 			</div>
 			<div class="flex items-center gap-2">
-				<span class="inline-block h-2 w-2 rounded-full {flags.weSell ? 'bg-green-500' : 'bg-muted'}"></span>
+				<span class="inline-block h-2 w-2 rounded-full {flags.weSell ? 'bg-positive' : 'bg-muted'}"></span>
 				<span class:text-muted-foreground={!flags.weSell}>We Sell It</span>
 			</div>
 			<div class="flex items-center gap-2">
-				<span class="inline-block h-2 w-2 rounded-full {flags.weCount ? 'bg-green-500' : 'bg-muted'}"></span>
+				<span class="inline-block h-2 w-2 rounded-full {flags.weCount ? 'bg-positive' : 'bg-muted'}"></span>
 				<span class:text-muted-foreground={!flags.weCount}>We Count It</span>
 			</div>
 			<div class="flex items-center gap-2">
-				<span class="inline-block h-2 w-2 rounded-full {flags.weStock ? 'bg-green-500' : 'bg-muted'}"></span>
+				<span class="inline-block h-2 w-2 rounded-full {flags.weStock ? 'bg-positive' : 'bg-muted'}"></span>
 				<span class:text-muted-foreground={!flags.weStock}>We Stock It</span>
 			</div>
 		</div>
 	</div>
 
 	<!-- Control Accounts -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Control Accounts</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Control Accounts</h3>
 		<div class="space-y-2 text-sm">
 			<div class="flex gap-2">
 				<span class="w-20 shrink-0 text-muted-foreground">Sales</span>
@@ -65,8 +65,8 @@
 	</div>
 
 	<!-- Categories -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Categories</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Categories</h3>
 		<div class="space-y-2 text-sm">
 			{#if header.category1}<div class="flex gap-2"><span class="w-20 text-muted-foreground">Material</span><span>{header.category1}</span></div>{/if}
 			{#if header.category2}<div class="flex gap-2"><span class="w-20 text-muted-foreground">Size</span><span>{header.category2}</span></div>{/if}
@@ -79,8 +79,8 @@
 	</div>
 
 	<!-- Other -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Other</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Other</h3>
 		<div class="space-y-2 text-sm">
 			{#if header.barcode}
 				<div class="flex gap-2"><span class="w-16 text-muted-foreground">Barcode</span><span class="font-mono">{header.barcode}</span></div>

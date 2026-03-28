@@ -12,10 +12,10 @@
 	} = $props();
 </script>
 
-<div class="border-b border-border bg-card px-6 py-4">
+<div class="bg-surface-container-lowest px-6 py-6">
 	<div class="flex items-center justify-between">
 		<div>
-			<h1 class="text-xl font-bold">{title}</h1>
+			<h1 class="text-xl font-bold font-headline">{title}</h1>
 			{#if subtitle}
 				<p class="text-sm text-muted-foreground">{subtitle}</p>
 			{/if}

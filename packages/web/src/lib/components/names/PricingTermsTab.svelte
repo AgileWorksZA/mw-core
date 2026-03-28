@@ -31,8 +31,8 @@
 
 <div class="grid grid-cols-2 gap-6">
 	<!-- Pricing & Tax -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Pricing & Tax
 		</h3>
 		<div class="space-y-3 text-sm">
@@ -69,15 +69,15 @@
 	</div>
 
 	<!-- Credit Hold -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Credit
 		</h3>
 		<div class="space-y-3 text-sm">
 			<div class="flex justify-between">
 				<span class="text-muted-foreground">Credit Hold</span>
 				<span
-					class={pricing.creditHold ? 'font-semibold text-destructive' : 'text-green-600'}
+					class={pricing.creditHold ? 'font-semibold text-destructive' : 'text-positive'}
 				>
 					{pricing.creditHold ? 'ON HOLD' : 'No'}
 				</span>
@@ -90,8 +90,8 @@
 	</div>
 
 	<!-- Debtor Control -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Debtor Control
 		</h3>
 		<div class="space-y-3 text-sm">
@@ -112,8 +112,8 @@
 	</div>
 
 	<!-- Creditor Control -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Creditor Control
 		</h3>
 		<div class="space-y-3 text-sm">

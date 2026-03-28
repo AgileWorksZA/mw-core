@@ -16,7 +16,7 @@
 	<button
 		onclick={onRefresh}
 		disabled={refreshing}
-		class="rounded p-1 hover:bg-muted transition-colors disabled:opacity-50"
+		class="rounded-xl p-1 hover:bg-surface-container-low transition-colors disabled:opacity-50"
 		title="Refresh now"
 		aria-label="Refresh now"
 	>
@@ -26,7 +26,7 @@
 	</button>
 	<button
 		onclick={onToggle}
-		class="rounded px-1.5 py-0.5 transition-colors {enabled ? 'bg-green-500/10 text-green-600' : 'bg-muted text-muted-foreground'}"
+		class="rounded-xl px-1.5 py-0.5 transition-colors {enabled ? 'bg-positive/10 text-positive' : 'bg-surface-container-low text-muted-foreground'}"
 		title="{enabled ? 'Auto-refresh ON (30s)' : 'Auto-refresh OFF'}"
 	>
 		{enabled ? 'Live' : 'Paused'}

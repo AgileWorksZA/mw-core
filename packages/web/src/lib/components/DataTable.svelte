@@ -46,10 +46,10 @@
 	}
 </script>
 
-<div class="overflow-auto rounded-md border border-border">
+<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 	<table class="w-full text-sm">
 		<thead class={stickyHeader ? 'sticky top-0' : ''}>
-			<tr class="border-b border-border bg-muted/50">
+			<tr class="bg-surface-container-low">
 				{#each columns as col}
 					<th
 						class="px-3 py-2.5 text-left font-medium text-muted-foreground"
@@ -74,7 +74,7 @@
 					{@const href = rowHref?.(row)}
 					{@const extraClass = rowClass?.(row) ?? ''}
 					<tr
-						class="border-b border-border transition-colors last:border-0 hover:bg-muted/50
+						class="transition-colors hover:bg-surface-container-low
 							{href || onRowClick ? 'cursor-pointer' : ''} {extraClass}"
 						onclick={() => onRowClick?.(row)}
 					>

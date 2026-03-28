@@ -11,8 +11,8 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
-		<h1 class="text-xl font-bold">Sales Explorer</h1>
+	<div class="bg-surface-container-lowest px-6 py-4">
+		<h1 class="text-xl font-bold font-headline">Sales Explorer</h1>
 		<p class="text-sm text-muted-foreground">Top customers and products by revenue</p>
 	</div>
 
@@ -20,15 +20,15 @@
 		<div class="grid grid-cols-2 gap-8">
 			<!-- Top Customers -->
 			<div>
-				<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Top Customers</h2>
+				<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Top Customers</h2>
 				<div class="space-y-2">
 					{#each data.topCustomers as cust, i}
-						<div class="rounded-lg border border-border p-3">
+						<div class="rounded-xl bg-surface-container-lowest p-3 hover:bg-surface-container-low transition-colors">
 							<div class="mb-1 flex justify-between text-sm">
 								<span class="truncate font-medium">{cust.name}</span>
-								<span class="ml-2 whitespace-nowrap font-semibold"><CurrencyDisplay amount={cust.revenue} /></span>
+								<span class="ml-2 whitespace-nowrap font-semibold tabular-nums"><CurrencyDisplay amount={cust.revenue} /></span>
 							</div>
-							<div class="h-2 overflow-hidden rounded bg-muted">
+							<div class="h-2 overflow-hidden rounded bg-surface-container-low">
 								<div class="h-full rounded" style="width: {(cust.revenue / customerMax) * 100}%; background: {barColors[i % barColors.length]}"></div>
 							</div>
 						</div>
@@ -41,15 +41,15 @@
 
 			<!-- Top Products -->
 			<div>
-				<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Top Products / Categories</h2>
+				<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Top Products / Categories</h2>
 				<div class="space-y-2">
 					{#each data.topProducts as prod, i}
-						<div class="rounded-lg border border-border p-3">
+						<div class="rounded-xl bg-surface-container-lowest p-3 hover:bg-surface-container-low transition-colors">
 							<div class="mb-1 flex justify-between text-sm">
 								<span class="truncate font-medium">{prod.name}</span>
-								<span class="ml-2 whitespace-nowrap font-semibold"><CurrencyDisplay amount={prod.revenue} /></span>
+								<span class="ml-2 whitespace-nowrap font-semibold tabular-nums"><CurrencyDisplay amount={prod.revenue} /></span>
 							</div>
-							<div class="h-2 overflow-hidden rounded bg-muted">
+							<div class="h-2 overflow-hidden rounded bg-surface-container-low">
 								<div class="h-full rounded" style="width: {(prod.revenue / productMax) * 100}%; background: {barColors[i % barColors.length]}"></div>
 							</div>
 						</div>

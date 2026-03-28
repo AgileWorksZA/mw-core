@@ -15,24 +15,24 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
+	<div class="bg-surface-container-lowest px-6 py-4">
 		<div class="flex items-center justify-between">
 			<div>
-				<h1 class="text-xl font-bold">{data.title}</h1>
+				<h1 class="font-headline text-xl font-bold">{data.title}</h1>
 				<p class="text-sm text-muted-foreground">Generated {new Date().toLocaleDateString()}</p>
 			</div>
-			<a href="/reports" class="rounded-md bg-muted px-3 py-1.5 text-sm hover:bg-muted/80">Back to Reports</a>
+			<a href="/reports" class="rounded-xl bg-surface-container-low px-3 py-1.5 text-sm hover:bg-surface-container-low/80">Back to Reports</a>
 		</div>
 	</div>
 
 	<div class="flex-1 overflow-auto p-6">
 		{#if data.lines.length > 0}
 			<div class="mx-auto max-w-2xl">
-				<div class="overflow-auto rounded-md border border-border">
+				<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 					<table class="w-full text-sm">
 						{#if data.reportId === 'trial-balance'}
 							<thead>
-								<tr class="border-b border-border bg-muted/50">
+								<tr class="bg-surface-container-low">
 									<th class="px-4 py-2.5 text-left font-medium text-muted-foreground">Code</th>
 									<th class="px-4 py-2.5 text-left font-medium text-muted-foreground">Account</th>
 									<th class="px-4 py-2.5 text-right font-medium text-muted-foreground">Debit</th>
@@ -41,14 +41,14 @@
 							</thead>
 							<tbody>
 								{#each data.lines as line}
-									<tr class="border-b border-border last:border-0">
+									<tr class="hover:bg-surface-container-low">
 										<td class="px-4 py-2 font-mono text-xs">{line.code}</td>
 										<td class="px-4 py-2">{line.description}</td>
 										<td class="px-4 py-2 text-right">{line.amount > 0 ? '' : ''}<CurrencyDisplay amount={line.amount > 0 ? line.amount : 0} /></td>
 										<td class="px-4 py-2 text-right"><CurrencyDisplay amount={line.amount < 0 ? Math.abs(line.amount) : 0} /></td>
 									</tr>
 								{/each}
-								<tr class="bg-muted/30 font-bold">
+								<tr class="bg-surface-container-low font-bold">
 									<td class="px-4 py-2.5" colspan="2">Total</td>
 									<td class="px-4 py-2.5 text-right"><CurrencyDisplay amount={data.totals.debit ?? 0} /></td>
 									<td class="px-4 py-2.5 text-right"><CurrencyDisplay amount={data.totals.credit ?? 0} /></td>
@@ -56,7 +56,7 @@
 							</tbody>
 						{:else}
 							<thead>
-								<tr class="border-b border-border bg-muted/50">
+								<tr class="bg-surface-container-low">
 									{#if showCode}
 										<th class="px-4 py-2.5 text-left font-medium text-muted-foreground">Code</th>
 									{/if}
@@ -67,12 +67,12 @@
 							<tbody>
 								{#each data.lines as line}
 									{#if line.description || line.amount}
-										<tr class="border-b border-border last:border-0 {line.bold ? 'bg-muted/30 font-semibold' : ''}">
+										<tr class="hover:bg-surface-container-low {line.bold ? 'bg-surface-container-low font-semibold' : ''}">
 											{#if showCode}
 												<td class="px-4 py-2 font-mono text-xs">{line.code}</td>
 											{/if}
 											<td class="px-4 py-2" style="padding-left: {(line.indent ?? 0) * 20 + 16}px">{line.description}</td>
-											<td class="px-4 py-2 text-right" class:text-green-600={line.amount > 0 && line.bold} class:text-destructive={line.amount < 0}>
+											<td class="px-4 py-2 text-right" class:text-positive={line.amount > 0 && line.bold} class:text-destructive={line.amount < 0}>
 												<CurrencyDisplay amount={line.amount} />
 											</td>
 										</tr>
@@ -81,14 +81,14 @@
 									{/if}
 								{/each}
 								{#if data.totals.total !== undefined}
-									<tr class="bg-muted/30 font-bold">
+									<tr class="bg-surface-container-low font-bold">
 										{#if showCode}<td class="px-4 py-2.5"></td>{/if}
 										<td class="px-4 py-2.5">Total</td>
 										<td class="px-4 py-2.5 text-right"><CurrencyDisplay amount={data.totals.total} /></td>
 									</tr>
 								{/if}
 								{#if data.totals.debit !== undefined && data.reportId !== 'trial-balance'}
-									<tr class="bg-muted/30 font-bold">
+									<tr class="bg-surface-container-low font-bold">
 										{#if showCode}<td class="px-4 py-2.5"></td>{/if}
 										<td class="px-4 py-2.5">Totals (Debit / Credit)</td>
 										<td class="px-4 py-2.5 text-right"><CurrencyDisplay amount={data.totals.debit} /> / <CurrencyDisplay amount={data.totals.credit} /></td>

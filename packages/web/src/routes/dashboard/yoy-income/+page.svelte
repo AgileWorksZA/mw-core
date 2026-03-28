@@ -29,14 +29,14 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
-		<h1 class="text-xl font-bold">Year over Year Income</h1>
+	<div class="bg-surface-container-lowest px-6 py-4">
+		<h1 class="text-xl font-bold font-headline">Year over Year Income</h1>
 		<p class="text-sm text-muted-foreground">Cumulative income comparison by fiscal year</p>
 	</div>
 
 	<div class="flex-1 overflow-auto p-6">
 		{#if data.years.length > 0}
-			<div class="rounded-lg border border-border p-4">
+			<div class="rounded-xl bg-surface-container-lowest p-6">
 				<svg viewBox="0 0 {W} {H}" class="w-full" preserveAspectRatio="xMidYMid meet">
 					<!-- Grid -->
 					{#each [0, 0.25, 0.5, 0.75, 1] as pct}

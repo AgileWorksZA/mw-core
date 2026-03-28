@@ -6,10 +6,10 @@
 	<div class="fixed bottom-4 right-4 z-50 space-y-2">
 		{#each $toasts as toast (toast.id)}
 			<div
-				class="flex items-start gap-3 rounded-lg border px-4 py-3 shadow-lg max-w-sm animate-in
-					{toast.type === 'error' ? 'border-destructive/50 bg-destructive/10 text-destructive' :
-					 toast.type === 'success' ? 'border-green-500/50 bg-green-500/10 text-green-700' :
-					 'border-border bg-card text-foreground'}"
+				class="flex items-start gap-3 rounded-xl px-4 py-3 shadow-md max-w-sm animate-in
+					{toast.type === 'error' ? 'bg-destructive/10 text-destructive' :
+					 toast.type === 'success' ? 'bg-positive/10 text-positive' :
+					 'bg-surface-container-lowest text-foreground'}"
 			>
 				{#if toast.type === 'error'}
 					<svg class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

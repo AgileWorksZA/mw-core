@@ -31,10 +31,10 @@
 	<div class="flex-1 overflow-auto p-6">
 		<SummaryCards {cards} />
 
-		<div class="overflow-auto rounded-md border border-border">
+		<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 			<table class="w-full text-sm">
 				<thead class="sticky top-0">
-					<tr class="border-b border-border bg-muted/50">
+					<tr class="bg-surface-container-low">
 						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Date</th>
 						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Type</th>
 						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Ref</th>
@@ -49,7 +49,7 @@
 						<tr><td colspan="7" class="px-3 py-8 text-center text-muted-foreground">No movements found</td></tr>
 					{:else}
 						{#each movements as m}
-							<tr class="border-b border-border last:border-0 hover:bg-muted/50">
+							<tr class="hover:bg-surface-container-low transition-colors">
 								<td class="px-3 py-2 text-muted-foreground">{m.date}</td>
 								<td class="px-3 py-2">
 									<span class="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">{m.type}</span>
@@ -59,7 +59,7 @@
 								<td class="px-3 py-2">{m.nameCode}</td>
 								<td class="px-3 py-2 max-w-xs truncate">{m.description}</td>
 								<td class="px-3 py-2">
-									<span class="inline-block h-2 w-2 rounded-full {m.status === 'P' ? 'bg-green-500' : 'bg-amber-500'}"></span>
+									<span class="inline-block h-2 w-2 rounded-full {m.status === 'P' ? 'bg-positive' : 'bg-amber-500'}"></span>
 								</td>
 								<td class="px-3 py-2 text-right">
 									<CurrencyDisplay amount={m.gross} />

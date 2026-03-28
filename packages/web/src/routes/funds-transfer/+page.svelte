@@ -2,10 +2,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 	import { showToast, showError } from '$lib/stores/toast';
 	import type { PageData } from './$types';
 
@@ -60,8 +57,8 @@
 	<div class="flex-1 overflow-auto p-6">
 		<div class="mx-auto max-w-lg space-y-6">
 			<div class="space-y-1.5">
-				<Label>From Account</Label>
-				<select bind:value={fromAccount} class="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring">
+				<label class="text-sm font-medium">From Account</label>
+				<select bind:value={fromAccount} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring">
 					<option value="">Select source account...</option>
 					{#each data.bankAccounts as bank}
 						<option value={bank.code} disabled={bank.code === toAccount}>{bank.code}: {bank.description} ({bank.type === 'CC' ? 'Credit Card' : 'Bank'})</option>
@@ -73,14 +70,12 @@
 			</div>
 
 			<div class="flex justify-center">
-				<svg class="h-8 w-8 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" />
-				</svg>
+				<span class="material-symbols-outlined text-3xl text-muted-foreground">arrow_downward</span>
 			</div>
 
 			<div class="space-y-1.5">
-				<Label>To Account</Label>
-				<select bind:value={toAccount} class="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring">
+				<label class="text-sm font-medium">To Account</label>
+				<select bind:value={toAccount} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring">
 					<option value="">Select destination account...</option>
 					{#each data.bankAccounts as bank}
 						<option value={bank.code} disabled={bank.code === fromAccount}>{bank.code}: {bank.description} ({bank.type === 'CC' ? 'Credit Card' : 'Bank'})</option>
@@ -92,63 +87,53 @@
 			</div>
 
 			<div class="space-y-1.5">
-				<Label>Amount</Label>
-				<Input type="number" bind:value={amount} step="0.01" min="0" placeholder="0.00" />
+				<label class="text-sm font-medium">Amount</label>
+				<input type="number" bind:value={amount} step="0.01" min="0" placeholder="0.00" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 			</div>
 
 			<div class="grid grid-cols-2 gap-4">
 				<div class="space-y-1.5">
-					<Label>Date</Label>
-					<Input type="date" bind:value={transferDate} />
+					<label class="text-sm font-medium">Date</label>
+					<input type="date" bind:value={transferDate} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 				</div>
 				<div class="space-y-1.5">
-					<Label>Reference</Label>
-					<Input type="text" bind:value={reference} placeholder="Optional" />
+					<label class="text-sm font-medium">Reference</label>
+					<input type="text" bind:value={reference} placeholder="Optional" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 				</div>
 			</div>
 
 			<div class="space-y-1.5">
-				<Label>Description</Label>
-				<Input type="text" bind:value={description} placeholder="Funds transfer" />
+				<label class="text-sm font-medium">Description</label>
+				<input type="text" bind:value={description} placeholder="Funds transfer" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 			</div>
 
 			{#if isValid}
-				<div class="rounded-lg border border-border bg-muted/30 p-4">
-					<div class="text-sm font-medium text-muted-foreground mb-2">Transfer Preview</div>
+				<div class="rounded-xl bg-surface-container-low p-5">
+					<div class="text-sm font-medium text-muted-foreground mb-3">Transfer Preview</div>
 					<div class="flex items-center justify-between text-sm">
 						<span>{fromBank?.description} ({fromAccount})</span>
-						<span class="font-mono text-destructive">-<CurrencyDisplay amount={amount} /></span>
+						<span class="font-mono text-destructive tabular-nums">-<CurrencyDisplay amount={amount} /></span>
 					</div>
-					<div class="flex items-center justify-between text-sm mt-1">
+					<div class="flex items-center justify-between text-sm mt-2">
 						<span>{toBank?.description} ({toAccount})</span>
-						<span class="font-mono text-green-600">+<CurrencyDisplay amount={amount} /></span>
+						<span class="font-mono text-positive tabular-nums">+<CurrencyDisplay amount={amount} /></span>
 					</div>
 				</div>
 			{/if}
 
-			<Button class="w-full" disabled={!isValid || submitting} onclick={() => { confirmOpen = true; }}>
+			<button
+				onclick={() => { confirmOpen = true; }}
+				disabled={!isValid || submitting}
+				class="w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+			>
 				{submitting ? 'Transferring...' : 'Transfer Funds'}
-			</Button>
+			</button>
 		</div>
 	</div>
 </div>
 
-<AlertDialog.Root bind:open={confirmOpen}>
-	<AlertDialog.Portal>
-		<AlertDialog.Overlay />
-		<AlertDialog.Content>
-			<AlertDialog.Header>
-				<AlertDialog.Title>Confirm Transfer</AlertDialog.Title>
-				<AlertDialog.Description>
-					Transfer <strong><CurrencyDisplay amount={amount} /></strong> from
-					<strong>{fromBank?.description}</strong> to <strong>{toBank?.description}</strong>?
-					This will create a journal entry in MoneyWorks.
-				</AlertDialog.Description>
-			</AlertDialog.Header>
-			<AlertDialog.Footer>
-				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-				<AlertDialog.Action onclick={handleTransfer}>Transfer</AlertDialog.Action>
-			</AlertDialog.Footer>
-		</AlertDialog.Content>
-	</AlertDialog.Portal>
-</AlertDialog.Root>
+<ConfirmDialog bind:open={confirmOpen} title="Confirm Transfer" confirmLabel="Transfer" onConfirm={handleTransfer}>
+	Transfer <strong><CurrencyDisplay amount={amount} /></strong> from
+	<strong>{fromBank?.description}</strong> to <strong>{toBank?.description}</strong>?
+	This will create a journal entry in MoneyWorks.
+</ConfirmDialog>

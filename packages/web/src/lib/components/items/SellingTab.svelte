@@ -22,8 +22,8 @@
 
 <div class="grid grid-cols-2 gap-6">
 	<!-- Pricing -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Selling Price</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Selling Price</h3>
 		<div class="space-y-2 text-sm">
 			{#if selling.useMultiplePrices}
 				{#each priceTiers as tier}
@@ -48,8 +48,8 @@
 	</div>
 
 	<!-- Tax & Discount -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Tax & Discount</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Tax & Discount</h3>
 		<div class="space-y-2 text-sm">
 			{#if selling.sellTaxCode}
 				<div class="flex justify-between">

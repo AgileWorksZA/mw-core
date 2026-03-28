@@ -2,9 +2,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 	import { showToast, showError } from '$lib/stores/toast';
 	import type { PageData } from './$types';
 
@@ -83,7 +81,7 @@
 	<div class="flex-1 overflow-auto p-6">
 		{#if data.creditors.length > 0}
 			<!-- Controls bar -->
-			<div class="mb-4 flex items-center justify-between rounded-lg border border-border bg-muted/30 p-3">
+			<div class="mb-4 flex items-center justify-between rounded-xl bg-surface-container-low p-3">
 				<div class="flex items-center gap-4 text-sm">
 					<span class="text-muted-foreground">Total outstanding: <span class="font-semibold text-foreground"><CurrencyDisplay amount={totalOwed} /></span></span>
 					{#if selected.size > 0}
@@ -91,17 +89,21 @@
 					{/if}
 				</div>
 				<div class="flex items-center gap-2">
-					<Input type="date" bind:value={paymentDate} class="w-36" />
-					<Button size="sm" disabled={!hasSelection || submitting} onclick={() => { confirmOpen = true; }}>
+					<input type="date" bind:value={paymentDate} class="rounded-xl bg-surface-container-low px-3 py-1.5 text-sm border-none" />
+					<button
+						onclick={() => { confirmOpen = true; }}
+						disabled={!hasSelection || submitting}
+						class="rounded-xl bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+					>
 						{submitting ? 'Processing...' : `Process ${selected.size} Payments`}
-					</Button>
+					</button>
 				</div>
 			</div>
 
-			<div class="overflow-auto rounded-md border border-border">
+			<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 				<table class="w-full text-sm">
 					<thead class="sticky top-0">
-						<tr class="border-b border-border bg-muted/50">
+						<tr class="bg-surface-container-low">
 							<th class="px-3 py-2.5 text-center font-medium text-muted-foreground w-10">
 								<input type="checkbox" checked={selected.size === data.creditors.length} onchange={toggleAll} class="h-4 w-4 rounded border-gray-300" />
 							</th>
@@ -113,7 +115,7 @@
 					</thead>
 					<tbody>
 						{#each data.creditors as c}
-							<tr class="border-b border-border last:border-0 hover:bg-muted/50 {selected.has(c.code) ? 'bg-blue-50 dark:bg-blue-950/20' : ''}">
+							<tr class="hover:bg-surface-container-low transition-colors {selected.has(c.code) ? 'bg-blue-50 dark:bg-blue-950/20' : ''}">
 								<td class="px-3 py-2 text-center">
 									<input type="checkbox" checked={selected.has(c.code)} onchange={() => toggleRow(c.code, c.owed)} class="h-4 w-4 rounded border-gray-300" />
 								</td>
@@ -144,21 +146,7 @@
 	</div>
 </div>
 
-<AlertDialog.Root bind:open={confirmOpen}>
-	<AlertDialog.Portal>
-		<AlertDialog.Overlay />
-		<AlertDialog.Content>
-			<AlertDialog.Header>
-				<AlertDialog.Title>Confirm Batch Payments</AlertDialog.Title>
-				<AlertDialog.Description>
-					Process {selected.size} payments totalling <strong><CurrencyDisplay amount={selectedTotal} /></strong>?
-					This will create payment transactions in MoneyWorks.
-				</AlertDialog.Description>
-			</AlertDialog.Header>
-			<AlertDialog.Footer>
-				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-				<AlertDialog.Action onclick={handleSubmit}>Process Payments</AlertDialog.Action>
-			</AlertDialog.Footer>
-		</AlertDialog.Content>
-	</AlertDialog.Portal>
-</AlertDialog.Root>
+<ConfirmDialog bind:open={confirmOpen} title="Confirm Batch Payments" confirmLabel="Process Payments" onConfirm={handleSubmit}>
+	Process {selected.size} payments totalling <strong><CurrencyDisplay amount={selectedTotal} /></strong>?
+	This will create payment transactions in MoneyWorks.
+</ConfirmDialog>

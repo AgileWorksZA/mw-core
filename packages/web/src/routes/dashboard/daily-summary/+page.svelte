@@ -26,16 +26,16 @@
 		<RefreshIndicator enabled={refresh.enabled} refreshing={refresh.refreshing} onToggle={refresh.toggle} onRefresh={refresh.refreshNow} />
 	</PageHeader>
 
-	<div class="flex-1 overflow-auto p-6 space-y-8">
+	<div class="flex-1 overflow-auto p-6 space-y-12">
 		<!-- Section 1: Transactions Entered -->
 		<div>
-			<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+			<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">
 				Value of Transactions Entered
 			</h2>
-			<div class="overflow-auto rounded-md border border-border">
-				<table class="w-full text-sm">
+			<div class="overflow-auto rounded-xl bg-surface-container-lowest">
+				<table class="w-full text-sm tabular-nums">
 					<thead>
-						<tr class="border-b border-border bg-muted/50">
+						<tr class="bg-surface-container-low">
 							<th class="px-4 py-3 text-left font-medium text-muted-foreground"></th>
 							<th class="px-4 py-3 text-right font-medium text-muted-foreground">Today</th>
 							<th class="px-4 py-3 text-right font-medium text-muted-foreground">Previous 7 Days</th>
@@ -43,31 +43,31 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class="border-b border-border">
+						<tr class="hover:bg-surface-container-low transition-colors">
 							<td class="px-4 py-2 font-medium">Sales</td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.today.sales} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.sevenDay.sales} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.thirtyDay.sales} /></td>
 						</tr>
-						<tr class="border-b border-border">
+						<tr class="hover:bg-surface-container-low transition-colors">
 							<td class="px-4 py-2 text-muted-foreground">Less: Cost of Sales</td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.today.cogs} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.sevenDay.cogs} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.thirtyDay.cogs} /></td>
 						</tr>
-						<tr class="border-b border-border bg-muted/30">
+						<tr class="bg-surface-container-low">
 							<td class="px-4 py-2 font-semibold">Gross Margin</td>
 							<td class="px-4 py-2 text-right font-semibold"><CurrencyDisplay amount={periods.today.grossMargin} /></td>
 							<td class="px-4 py-2 text-right font-semibold"><CurrencyDisplay amount={periods.sevenDay.grossMargin} /></td>
 							<td class="px-4 py-2 text-right font-semibold"><CurrencyDisplay amount={periods.thirtyDay.grossMargin} /></td>
 						</tr>
-						<tr class="border-b border-border">
+						<tr class="hover:bg-surface-container-low transition-colors">
 							<td class="px-4 py-2 text-muted-foreground">Gross Margin %</td>
 							<td class="px-4 py-2 text-right">{periods.today.marginPct.toFixed(1)}%</td>
 							<td class="px-4 py-2 text-right">{periods.sevenDay.marginPct.toFixed(1)}%</td>
 							<td class="px-4 py-2 text-right">{periods.thirtyDay.marginPct.toFixed(1)}%</td>
 						</tr>
-						<tr>
+						<tr class="hover:bg-surface-container-low transition-colors">
 							<td class="px-4 py-2 text-muted-foreground">Orders Booked</td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.today.ordersBooked} /></td>
 							<td class="px-4 py-2 text-right"><CurrencyDisplay amount={periods.sevenDay.ordersBooked} /></td>
@@ -80,7 +80,7 @@
 
 		<!-- Section 2: Balances -->
 		<div>
-			<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+			<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">
 				Balances
 			</h2>
 			<SummaryCards cards={balanceCards} />

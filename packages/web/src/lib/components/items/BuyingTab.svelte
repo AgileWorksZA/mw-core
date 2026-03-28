@@ -6,8 +6,8 @@
 </script>
 
 <div class="grid grid-cols-2 gap-6">
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Supplier</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Supplier</h3>
 		<div class="space-y-2 text-sm">
 			<div class="flex gap-2">
 				<span class="w-28 shrink-0 text-muted-foreground">Supplier</span>
@@ -20,8 +20,8 @@
 		</div>
 	</div>
 
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Pricing</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Pricing</h3>
 		<div class="space-y-2 text-sm">
 			<div class="flex justify-between">
 				<span class="text-muted-foreground">Buy Price</span>
@@ -52,8 +52,8 @@
 		</div>
 	</div>
 
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Reorder</h3>
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Reorder</h3>
 		<div class="space-y-2 text-sm">
 			<div class="flex justify-between">
 				<span class="text-muted-foreground">Reorder Level</span>

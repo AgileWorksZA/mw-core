@@ -1,30 +1,62 @@
 @import 'tailwindcss';
 
 @theme {
-	--color-background: hsl(0 0% 100%);
-	--color-foreground: hsl(222.2 84% 4.9%);
-	--color-card: hsl(0 0% 100%);
-	--color-card-foreground: hsl(222.2 84% 4.9%);
-	--color-primary: hsl(221.2 83.2% 53.3%);
-	--color-primary-foreground: hsl(210 40% 98%);
-	--color-secondary: hsl(210 40% 96.1%);
-	--color-secondary-foreground: hsl(222.2 47.4% 11.2%);
-	--color-muted: hsl(210 40% 96.1%);
-	--color-muted-foreground: hsl(215.4 16.3% 46.9%);
-	--color-accent: hsl(210 40% 96.1%);
-	--color-accent-foreground: hsl(222.2 47.4% 11.2%);
-	--color-destructive: hsl(0 84.2% 60.2%);
-	--color-destructive-foreground: hsl(210 40% 98%);
-	--color-border: hsl(214.3 31.8% 91.4%);
-	--color-input: hsl(214.3 31.8% 91.4%);
-	--color-ring: hsl(221.2 83.2% 53.3%);
-	--color-sidebar: hsl(222.2 47.4% 11.2%);
-	--color-sidebar-foreground: hsl(210 40% 98%);
-	--color-sidebar-muted: hsl(217.2 32.6% 17.5%);
-	--color-sidebar-accent: hsl(217.2 32.6% 22%);
-	--radius: 0.5rem;
+	/* ---- Precision Ledger: Surface Hierarchy ---- */
+	--color-surface: #f7f9fb;
+	--color-surface-container-low: #f2f4f6;
+	--color-surface-container: #eceef0;
+	--color-surface-container-high: #e6e8ea;
+	--color-surface-container-highest: #e0e3e5;
+	--color-surface-container-lowest: #ffffff;
 
-	/* MoneyWorks colour palette (indices 0-7) */
+	/* Legacy aliases (existing Tailwind classes keep working) */
+	--color-background: #f7f9fb;
+	--color-foreground: #191c1e;
+	--color-card: #ffffff;
+	--color-card-foreground: #191c1e;
+
+	/* Primary: Deep Navy */
+	--color-primary: #131b2e;
+	--color-primary-foreground: #ffffff;
+	--color-primary-container: #131b2e;
+
+	/* Secondary */
+	--color-secondary: #f2f4f6;
+	--color-secondary-foreground: #191c1e;
+
+	/* Muted */
+	--color-muted: #f2f4f6;
+	--color-muted-foreground: #45464d;
+
+	/* Accent */
+	--color-accent: #e6e8ea;
+	--color-accent-foreground: #191c1e;
+
+	/* Positive: Emerald */
+	--color-positive: #009668;
+	--color-positive-dim: #4edea3;
+	--color-positive-container: #002113;
+
+	/* Error / Destructive */
+	--color-destructive: #ba1a1a;
+	--color-destructive-foreground: #ffffff;
+	--color-error: #ba1a1a;
+	--color-error-container: #ffdad6;
+
+	/* Outline (ghost borders only) */
+	--color-border: #e8edf2;
+	--color-input: #e0e4ea;
+	--color-ring: #131b2e;
+	--color-outline: #76777d;
+	--color-outline-variant: #c6c6cd;
+
+	/* Sidebar: Deep Navy */
+	--color-sidebar: #131b2e;
+	--color-sidebar-foreground: #f7f9fb;
+	--color-sidebar-muted: #1e293b;
+	--color-sidebar-accent: #2a3548;
+
+	/* MoneyWorks colour palette */
 	--color-mw-0: hsl(0 0% 20%);
 	--color-mw-1: hsl(14 100% 57%);
 	--color-mw-2: hsl(48 100% 50%);
@@ -33,14 +65,22 @@
 	--color-mw-5: hsl(270 60% 50%);
 	--color-mw-6: hsl(0 80% 50%);
 	--color-mw-7: hsl(0 0% 50%);
-}
 
-* {
-	border-color: var(--color-border);
+	--radius: 0.75rem;
+
+	/* Typography */
+	--font-headline: 'Manrope', sans-serif;
+	--font-body: 'Inter', sans-serif;
 }
 
 body {
-	background-color: var(--color-background);
+	background-color: var(--color-surface);
 	color: var(--color-foreground);
-	font-family: system-ui, -apple-system, sans-serif;
+	font-family: var(--font-body);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.material-symbols-outlined {
+	font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }

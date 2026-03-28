@@ -24,7 +24,7 @@
 		<DataTable {columns} rows={data.journals} rowHref={(row) => `/transactions/${row.seq}`} emptyMessage="No journal entries found">
 			{#snippet cell({ column, value })}
 				{#if column.key === 'status'}
-					<span class="inline-block h-2 w-2 rounded-full {value === 'P' ? 'bg-green-500' : 'bg-amber-500'}"></span>
+					<span class="inline-block h-2 w-2 rounded-full {value === 'P' ? 'bg-positive' : 'bg-amber-500'}"></span>
 				{:else if column.key === 'ref'}
 					<a href="/transactions/{value}" class="hover:underline">{value}</a>
 				{:else if column.key === 'gross'}

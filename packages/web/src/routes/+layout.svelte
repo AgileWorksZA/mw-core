@@ -10,23 +10,20 @@
 	const showSidebar = $derived(data.isLoggedIn && data.pathname !== '/login');
 	let sidebarOpen = $state(false);
 
-	// Close sidebar on navigation (mobile)
 	$effect(() => {
 		data.pathname;
 		sidebarOpen = false;
 	});
 </script>
 
-<div class="flex h-screen overflow-hidden">
+<div class="flex h-screen overflow-hidden bg-surface">
 	{#if showSidebar}
-		<!-- Desktop sidebar (always visible) -->
 		<div class="hidden md:block">
 			<Sidebar company={data.company} pathname={data.pathname} />
 		</div>
 
-		<!-- Mobile sidebar overlay -->
 		{#if sidebarOpen}
-			<div class="fixed inset-0 z-40 bg-black/50 md:hidden" onclick={() => sidebarOpen = false}></div>
+			<div class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden" onclick={() => sidebarOpen = false}></div>
 			<div class="fixed inset-y-0 left-0 z-50 md:hidden">
 				<Sidebar company={data.company} pathname={data.pathname} />
 			</div>
@@ -35,23 +32,19 @@
 
 	<div class="flex flex-1 flex-col overflow-hidden">
 		{#if showSidebar}
-			<div class="flex items-center justify-between border-b border-border bg-card px-4 py-2">
-				<!-- Hamburger (mobile only) -->
+			<div class="flex items-center justify-between bg-surface-container-lowest px-5 py-3">
 				<button
 					onclick={() => sidebarOpen = !sidebarOpen}
-					class="rounded-md p-1.5 text-muted-foreground hover:bg-muted md:hidden"
+					class="rounded-xl p-2 text-muted-foreground hover:bg-surface-container-low md:hidden"
 					aria-label="Toggle sidebar"
 				>
-					<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-					</svg>
+					<span class="material-symbols-outlined text-xl">menu</span>
 				</button>
-				<!-- Spacer for desktop -->
 				<div class="hidden md:block"></div>
 				<SearchBar />
 			</div>
 		{/if}
-		<main class="flex-1 overflow-auto">
+		<main class="flex-1 overflow-auto bg-surface">
 			{@render children()}
 		</main>
 	</div>

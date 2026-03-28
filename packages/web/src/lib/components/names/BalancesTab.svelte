@@ -26,8 +26,8 @@
 	<!-- Aging Grid -->
 	<div class="grid grid-cols-2 gap-6">
 		<!-- Debtor -->
-		<div class="rounded-lg border border-border p-4">
-			<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Debtor Aging</h3>
+		<div class="rounded-xl bg-surface-container-lowest p-4">
+			<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Debtor Aging</h3>
 			<div class="space-y-2">
 				<div class="flex justify-between text-sm">
 					<span class="text-muted-foreground">3 or more cycles</span>
@@ -45,7 +45,7 @@
 					<span class="text-muted-foreground">Current</span>
 					<CurrencyDisplay amount={balances.debtor.current} />
 				</div>
-				<div class="flex justify-between border-t border-border pt-2 text-sm font-semibold">
+				<div class="flex justify-between border-t border-outline-variant pt-2 text-sm font-semibold">
 					<span>THEY OWE</span>
 					<CurrencyDisplay amount={balances.debtor.theyOwe} />
 				</div>
@@ -53,10 +53,10 @@
 		</div>
 
 		<!-- Creditor -->
-		<div class="rounded-lg border border-border p-4">
-			<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Creditor</h3>
+		<div class="rounded-xl bg-surface-container-lowest p-4">
+			<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Creditor</h3>
 			<div class="space-y-2">
-				<div class="flex justify-between border-t border-border pt-2 text-sm font-semibold">
+				<div class="flex justify-between border-t border-outline-variant pt-2 text-sm font-semibold">
 					<span>WE OWE</span>
 					<CurrencyDisplay amount={balances.creditor.weOwe} />
 				</div>
@@ -71,13 +71,13 @@
 
 	<!-- Transaction History -->
 	<div>
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Transaction History
 		</h3>
-		<div class="overflow-auto rounded-md border border-border">
+		<div class="overflow-auto rounded-xl bg-surface-container-lowest">
 			<table class="w-full text-sm">
 				<thead>
-					<tr class="border-b border-border bg-muted/50">
+					<tr class="bg-surface-container-low">
 						<th class="px-3 py-2 text-left font-medium text-muted-foreground">Status</th>
 						<th class="px-3 py-2 text-left font-medium text-muted-foreground">Type</th>
 						<th class="px-3 py-2 text-left font-medium text-muted-foreground">Our Ref</th>
@@ -95,11 +95,11 @@
 						</tr>
 					{:else}
 						{#each transactions as tx}
-							<tr class="border-b border-border last:border-0 hover:bg-muted/50">
+							<tr class="hover:bg-surface-container-low">
 								<td class="px-3 py-2">
 									<span
 										class="inline-block h-2 w-2 rounded-full
-											{tx.status === 'P' ? 'bg-green-500' : 'bg-amber-500'}"
+											{tx.status === 'P' ? 'bg-positive' : 'bg-amber-500'}"
 									></span>
 								</td>
 								<td class="px-3 py-2 text-muted-foreground">

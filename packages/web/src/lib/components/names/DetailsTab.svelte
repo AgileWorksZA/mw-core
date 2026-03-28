@@ -6,8 +6,8 @@
 
 <div class="grid grid-cols-2 gap-6">
 	<!-- Mailing Address -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Mailing Address
 		</h3>
 		<div class="space-y-1 text-sm">
@@ -21,8 +21,8 @@
 	</div>
 
 	<!-- Delivery Address -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Delivery Address
 		</h3>
 		<div class="space-y-1 text-sm">
@@ -40,8 +40,8 @@
 	</div>
 
 	<!-- Contact Info -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Contact
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -81,8 +81,8 @@
 	</div>
 
 	<!-- Additional Info -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Additional
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -127,8 +127,8 @@
 
 	<!-- Comments -->
 	{#if details.comment}
-		<div class="col-span-2 rounded-lg border border-border p-4">
-			<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+		<div class="col-span-2 rounded-xl bg-surface-container-lowest p-4">
+			<h3 class="font-headline mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 				Comment
 			</h3>
 			<p class="whitespace-pre-wrap text-sm">{details.comment}</p>

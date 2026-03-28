@@ -15,8 +15,8 @@
 
 <div class="grid grid-cols-2 gap-6">
 	<!-- Payment Method -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Payment
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -28,8 +28,8 @@
 	</div>
 
 	<!-- Bank Details -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Bank Details
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -64,8 +64,8 @@
 	</div>
 
 	<!-- Electronic -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Electronic
 		</h3>
 		<div class="space-y-2 text-sm">
@@ -81,8 +81,8 @@
 	</div>
 
 	<!-- Card Details -->
-	<div class="rounded-lg border border-border p-4">
-		<h3 class="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+	<div class="rounded-xl bg-surface-container-lowest p-4">
+		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
 			Card Details
 		</h3>
 		<div class="space-y-2 text-sm">

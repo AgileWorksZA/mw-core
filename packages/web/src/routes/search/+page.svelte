@@ -5,7 +5,7 @@
 
 	const typeColors: Record<string, string> = {
 		name: 'bg-blue-500/10 text-blue-600',
-		account: 'bg-green-500/10 text-green-600',
+		account: 'bg-positive/10 text-positive',
 		item: 'bg-purple-500/10 text-purple-600',
 		transaction: 'bg-orange-500/10 text-orange-600'
 	};
@@ -16,8 +16,8 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
-		<h1 class="text-xl font-bold">Search Results</h1>
+	<div class="bg-surface-container-lowest px-6 py-4">
+		<h1 class="font-headline text-xl font-bold">Search Results</h1>
 		<p class="text-sm text-muted-foreground">
 			{data.results.length} results for "{data.query}"
 			— {data.counts.names} names, {data.counts.accounts} accounts, {data.counts.items} items, {data.counts.transactions} transactions
@@ -28,7 +28,7 @@
 		{#if data.results.length > 0}
 			<div class="space-y-2">
 				{#each data.results as result}
-					<a href={result.href} class="flex items-center gap-3 rounded-lg border border-border p-3 transition-colors hover:bg-muted/50">
+					<a href={result.href} class="flex items-center gap-3 rounded-xl bg-surface-container-lowest p-3 transition-colors hover:bg-surface-container-low">
 						<span class="rounded px-2 py-0.5 text-[10px] font-semibold {typeColors[result.type] || 'bg-muted text-muted-foreground'}">
 							{typeLabels[result.type] || result.type}
 						</span>

@@ -65,8 +65,8 @@
 
 <aside class="flex h-full w-60 flex-col bg-sidebar text-sidebar-foreground">
 	<!-- Brand -->
-	<div class="border-b border-sidebar-muted px-4 py-4">
-		<h1 class="text-lg font-bold">MoneyWorks</h1>
+	<div class="px-4 py-6">
+		<h1 class="text-lg font-bold font-headline">MoneyWorks</h1>
 		{#if company}
 			<p class="mt-0.5 truncate text-xs text-sidebar-foreground/60">{company}</p>
 		{/if}
@@ -79,7 +79,7 @@
 			{#each group.items as item}
 				<a
 					href={item.href}
-					class="mb-0.5 flex items-center gap-2.5 rounded-md px-3 py-1.5 text-sm transition-colors
+					class="mb-0.5 flex items-center gap-2.5 rounded-xl px-3 py-1.5 text-sm transition-colors
 						{isActive(item.href)
 							? 'bg-sidebar-accent text-sidebar-foreground font-medium'
 							: 'text-sidebar-foreground/70 hover:bg-sidebar-muted hover:text-sidebar-foreground'}"
@@ -155,11 +155,11 @@
 	</nav>
 
 	<!-- Logout -->
-	<div class="border-t border-sidebar-muted px-2 py-3">
+	<div class="px-2 py-6">
 		<form method="POST" action="/logout">
 			<button
 				type="submit"
-				class="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm text-sidebar-foreground/70 transition-colors hover:bg-sidebar-muted hover:text-sidebar-foreground"
+				class="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-sidebar-foreground/70 transition-colors hover:bg-sidebar-muted hover:text-sidebar-foreground"
 			>
 				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />

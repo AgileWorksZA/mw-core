@@ -21,7 +21,7 @@
 
 <div class="flex h-full flex-col">
 	<!-- Header bar -->
-	<div class="border-b border-border bg-card px-6 py-4">
+	<div class="bg-surface-container-lowest px-6 py-4">
 		<div class="flex items-center gap-3">
 			<a href="/transactions" class="text-muted-foreground hover:text-foreground">
 				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -34,12 +34,12 @@
 					<span class="rounded bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">
 						{header.type}
 					</span>
-					<h1 class="text-xl font-bold">{header.typeLabel}</h1>
-					<span class="rounded bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground">
+					<h1 class="font-headline text-xl font-bold">{header.typeLabel}</h1>
+					<span class="rounded bg-surface-container-low px-2 py-0.5 text-xs font-mono text-muted-foreground">
 						{header.ourRef}
 					</span>
 					{#if header.status === 'P'}
-						<span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+						<span class="rounded-full bg-positive/10 px-2 py-0.5 text-xs font-medium text-positive">
 							Posted
 						</span>
 					{:else}
@@ -79,7 +79,7 @@
 	</div>
 
 	<!-- Tabs -->
-	<div class="bg-card px-6">
+	<div class="bg-surface-container-lowest px-6">
 		<TabStrip {tabs} bind:activeTab />
 	</div>
 

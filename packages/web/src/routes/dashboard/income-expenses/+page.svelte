@@ -28,27 +28,27 @@
 		<RefreshIndicator enabled={refresh.enabled} refreshing={refresh.refreshing} onToggle={refresh.toggle} onRefresh={refresh.refreshNow} />
 	</PageHeader>
 
-	<div class="flex-1 overflow-auto p-6 space-y-8">
+	<div class="flex-1 overflow-auto p-6 space-y-12">
 		<!-- Summary cards -->
 		<SummaryCards cards={summaryCards} />
 
 		<div class="grid grid-cols-2 gap-8">
 			<!-- Income -->
 			<div>
-				<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Income</h2>
+				<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Income</h2>
 				{#if data.incomeAccounts.length > 0}
 					<div class="space-y-2">
 						{#each data.incomeAccounts as acct}
-							<div class="rounded-lg border border-border p-3">
+							<div class="rounded-xl bg-surface-container-lowest p-3 hover:bg-surface-container-low transition-colors">
 								<div class="mb-1 flex justify-between text-sm">
 									<span class="truncate" title="{acct.code} — {acct.description}">
 										<span class="font-mono text-xs text-muted-foreground">{acct.code}</span>
 										{acct.description}
 									</span>
-									<span class="ml-2 font-semibold whitespace-nowrap"><CurrencyDisplay amount={acct.balance} /></span>
+									<span class="ml-2 font-semibold whitespace-nowrap tabular-nums"><CurrencyDisplay amount={acct.balance} /></span>
 								</div>
-								<div class="h-2 overflow-hidden rounded bg-muted">
-									<div class="h-full rounded bg-green-500" style="width: {(acct.balance / incomeMax) * 100}%"></div>
+								<div class="h-2 overflow-hidden rounded bg-surface-container-low">
+									<div class="h-full rounded bg-positive" style="width: {(acct.balance / incomeMax) * 100}%"></div>
 								</div>
 							</div>
 						{/each}
@@ -60,19 +60,19 @@
 
 			<!-- Expenses -->
 			<div>
-				<h2 class="mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Expenses</h2>
+				<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Expenses</h2>
 				{#if data.expenseAccounts.length > 0}
 					<div class="space-y-2">
 						{#each data.expenseAccounts as acct}
-							<div class="rounded-lg border border-border p-3">
+							<div class="rounded-xl bg-surface-container-lowest p-3 hover:bg-surface-container-low transition-colors">
 								<div class="mb-1 flex justify-between text-sm">
 									<span class="truncate" title="{acct.code} — {acct.description}">
 										<span class="font-mono text-xs text-muted-foreground">{acct.code}</span>
 										{acct.description}
 									</span>
-									<span class="ml-2 font-semibold whitespace-nowrap"><CurrencyDisplay amount={acct.balance} /></span>
+									<span class="ml-2 font-semibold whitespace-nowrap tabular-nums"><CurrencyDisplay amount={acct.balance} /></span>
 								</div>
-								<div class="h-2 overflow-hidden rounded bg-muted">
+								<div class="h-2 overflow-hidden rounded bg-surface-container-low">
 									<div class="h-full rounded bg-red-400" style="width: {(acct.balance / expenseMax) * 100}%"></div>
 								</div>
 							</div>
