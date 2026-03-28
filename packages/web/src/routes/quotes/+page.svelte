@@ -25,7 +25,7 @@
 
 	<div class="flex-1 overflow-auto p-6">
 		<DataTable {columns} rows={data.quotes} rowHref={(row) => `/transactions/${row.seq}`}
-			rowClass={(row) => row.expired ? 'text-amber-600' : ''} emptyMessage="No quotes found">
+			rowClass={(row) => row.expired ? 'text-amber-600 dark:text-amber-400' : ''} emptyMessage="No quotes found">
 			{#snippet cell({ column, row, value })}
 				{#if column.key === 'ref'}
 					<a href="/transactions/{row.seq}" class="hover:underline">{value}</a>

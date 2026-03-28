@@ -43,7 +43,7 @@
 		<div class="grid grid-cols-4 gap-6">
 			<!-- Daily -->
 			<div>
-				<h2 class="font-headline mb-3 rounded-xl bg-blue-500/10 px-3 py-2 text-center text-xs font-semibold text-blue-600 uppercase tracking-wider">Daily</h2>
+				<h2 class="font-headline mb-3 rounded-xl bg-blue-500/10 px-3 py-2 text-center text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Daily</h2>
 				<div class="space-y-2">
 					{#each dailyTasks as task}
 						<a href={task.href} class="flex items-center justify-between rounded-xl bg-surface-container-lowest p-3 transition-colors hover:bg-surface-container-low">
@@ -60,7 +60,7 @@
 
 			<!-- Regular -->
 			<div>
-				<h2 class="font-headline mb-3 rounded-xl bg-amber-500/10 px-3 py-2 text-center text-xs font-semibold text-amber-600 uppercase tracking-wider">Regular</h2>
+				<h2 class="font-headline mb-3 rounded-xl bg-amber-500/10 px-3 py-2 text-center text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Regular</h2>
 				<div class="space-y-2">
 					{#each regularTasks as task}
 						<a href={task.href} class="flex items-center justify-between rounded-xl bg-surface-container-lowest p-3 transition-colors hover:bg-surface-container-low">
@@ -75,7 +75,7 @@
 
 			<!-- Monthly -->
 			<div>
-				<h2 class="font-headline mb-3 rounded-xl bg-purple-500/10 px-3 py-2 text-center text-xs font-semibold text-purple-600 uppercase tracking-wider">Monthly</h2>
+				<h2 class="font-headline mb-3 rounded-xl bg-purple-500/10 px-3 py-2 text-center text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider">Monthly</h2>
 				<div class="space-y-2">
 					{#each monthlyTasks as task}
 						<a href={task.href} class="rounded-xl bg-surface-container-lowest p-3 block transition-colors hover:bg-surface-container-low">

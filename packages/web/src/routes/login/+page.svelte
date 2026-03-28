@@ -1,10 +1,24 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { getTheme, toggleTheme, applyTheme } from '$lib/stores/theme.svelte';
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
+
+	onMount(() => applyTheme());
 </script>
 
-<div class="flex min-h-screen items-center justify-center bg-surface">
+<div class="relative flex min-h-screen items-center justify-center bg-surface">
+	<!-- Dark mode toggle -->
+	<button
+		onclick={toggleTheme}
+		class="absolute right-4 top-4 rounded-xl p-2 text-muted-foreground hover:bg-surface-container-low transition-colors"
+		aria-label="Toggle dark mode"
+	>
+		<span class="material-symbols-outlined text-xl">
+			{getTheme() === 'dark' ? 'light_mode' : 'dark_mode'}
+		</span>
+	</button>
 	<div class="w-full max-w-md rounded-xl bg-card p-8">
 		<div class="mb-6 text-center">
 			<h1 class="font-headline text-2xl font-bold text-foreground">MoneyWorks</h1>

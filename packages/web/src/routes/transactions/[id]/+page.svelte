@@ -43,7 +43,7 @@
 							Posted
 						</span>
 					{:else}
-						<span class="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+						<span class="rounded-full bg-amber-100 dark:bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
 							Unposted
 						</span>
 					{/if}

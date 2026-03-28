@@ -62,10 +62,10 @@
 
 	// Debtors chart
 	const debtorBuckets = $derived([
-		{ label: '3 months+', value: debtors.threeOrMore, color: 'var(--color-destructive)' },
-		{ label: '2 months', value: debtors.twoCycles, color: '#f97316' },
-		{ label: '1 month', value: debtors.oneCycle, color: '#f59e0b' },
-		{ label: 'Current', value: debtors.current, color: '#22c55e' }
+		{ label: '3 months+', value: debtors.threeOrMore, color: 'var(--color-chart-1)' },
+		{ label: '2 months', value: debtors.twoCycles, color: 'var(--color-chart-6)' },
+		{ label: '1 month', value: debtors.oneCycle, color: 'var(--color-chart-3)' },
+		{ label: 'Current', value: debtors.current, color: 'var(--color-chart-4)' }
 	]);
 	const debtorMax = $derived(Math.max(...debtorBuckets.map((b: any) => Math.abs(b.value)), 1));
 
@@ -125,17 +125,17 @@
 							{@const x = pad.left + i * barGap + (barGap - barWidth) / 2}
 							{@const y = profitY(Math.max(m.income, 0))}
 							{@const h = Math.abs(profitY(m.income) - profitY(0))}
-							<rect x={x} y={y} width={barWidth} height={h} fill="#f87171" rx="2" opacity="0.7" />
+							<rect x={x} y={y} width={barWidth} height={h} fill="var(--color-chart-income)" rx="2" opacity="0.7" />
 						{/each}
 						<!-- Expenses line -->
-						<path d={linePath(expenseLine)} fill="none" stroke="#3b82f6" stroke-width="2" />
+						<path d={linePath(expenseLine)} fill="none" stroke="var(--color-chart-expenses)" stroke-width="2" />
 						{#each expenseLine as pt}
-							<circle cx={pt.x} cy={pt.y} r="3" fill="#3b82f6" />
+							<circle cx={pt.x} cy={pt.y} r="3" fill="var(--color-chart-expenses)" />
 						{/each}
 						<!-- Profit line -->
-						<path d={linePath(profitLine)} fill="none" stroke="#eab308" stroke-width="2" />
+						<path d={linePath(profitLine)} fill="none" stroke="var(--color-chart-profit)" stroke-width="2" />
 						{#each profitLine as pt}
-							<circle cx={pt.x} cy={pt.y} r="3" fill="#eab308" />
+							<circle cx={pt.x} cy={pt.y} r="3" fill="var(--color-chart-profit)" />
 						{/each}
 						<!-- X labels -->
 						{#each profitChart as m, i}
@@ -143,9 +143,9 @@
 						{/each}
 					</svg>
 					<div class="mt-2 flex gap-4 text-xs text-muted-foreground">
-						<span class="flex items-center gap-1"><span class="inline-block h-2 w-3 rounded bg-red-400"></span>Income</span>
-						<span class="flex items-center gap-1"><span class="inline-block h-2 w-3 rounded bg-blue-500"></span>Expenses</span>
-						<span class="flex items-center gap-1"><span class="inline-block h-2 w-3 rounded bg-yellow-500"></span>Profit</span>
+						<span class="flex items-center gap-1"><span class="inline-block h-2 w-3 rounded" style="background: var(--color-chart-income)"></span>Income</span>
+						<span class="flex items-center gap-1"><span class="inline-block h-2 w-3 rounded" style="background: var(--color-chart-expenses)"></span>Expenses</span>
+						<span class="flex items-center gap-1"><span class="inline-block h-2 w-3 rounded" style="background: var(--color-chart-profit)"></span>Profit</span>
 					</div>
 				{:else}
 					<div class="flex h-40 items-center justify-center text-muted-foreground text-sm">No data</div>
@@ -199,7 +199,7 @@
 							{@const x = bPad.left + i * bBarGap + (bBarGap - bBarW) / 2}
 							{@const h = (Math.abs(bank.balance) / bankMax) * bPlotH}
 							{@const y = bank.balance >= 0 ? bPad.top + bPlotH - h : bPad.top + bPlotH}
-							<rect x={x} y={y} width={bBarW} height={h} fill={bank.balance >= 0 ? '#3b82f6' : '#ef4444'} rx="2" opacity="0.8" />
+							<rect x={x} y={y} width={bBarW} height={h} fill={bank.balance >= 0 ? 'var(--color-chart-positive)' : 'var(--color-chart-negative)'} rx="2" opacity="0.8" />
 							<text x={x + bBarW / 2} y={bH - 6} text-anchor="middle" fill="currentColor" opacity="0.5" font-size="8">{bank.code}</text>
 						{/each}
 					</svg>

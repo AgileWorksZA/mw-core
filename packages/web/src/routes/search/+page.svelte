@@ -4,10 +4,10 @@
 	let { data }: { data: PageData } = $props();
 
 	const typeColors: Record<string, string> = {
-		name: 'bg-blue-500/10 text-blue-600',
+		name: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
 		account: 'bg-positive/10 text-positive',
-		item: 'bg-purple-500/10 text-purple-600',
-		transaction: 'bg-orange-500/10 text-orange-600'
+		item: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
+		transaction: 'bg-orange-500/10 text-orange-600 dark:text-orange-400'
 	};
 
 	const typeLabels: Record<string, string> = {

@@ -39,7 +39,7 @@
 					{#each data.exports as item}
 						<button class="flex w-full items-center gap-3 rounded-xl bg-surface-container-lowest p-4 text-left transition-colors hover:bg-surface-container-low">
 							<div class="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-500/10">
-								<svg class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+								<svg class="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0-14l-7 7m7-7l7 7" />
 								</svg>
 							</div>

@@ -7,7 +7,12 @@
 	const customerMax = $derived(data.topCustomers.length > 0 ? data.topCustomers[0].revenue : 1);
 	const productMax = $derived(data.topProducts.length > 0 ? data.topProducts[0].revenue : 1);
 
-	const barColors = ['#ef4444', '#3b82f6', '#eab308', '#22c55e', '#8b5cf6', '#f97316', '#06b6d4', '#ec4899', '#84cc16', '#6366f1'];
+	const barColors = [
+		'var(--color-chart-1)', 'var(--color-chart-2)', 'var(--color-chart-3)',
+		'var(--color-chart-4)', 'var(--color-chart-5)', 'var(--color-chart-6)',
+		'var(--color-chart-7)', 'var(--color-chart-8)', 'var(--color-chart-9)',
+		'var(--color-chart-10)'
+	];
 </script>
 
 <div class="flex h-full flex-col">

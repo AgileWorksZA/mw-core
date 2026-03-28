@@ -15,11 +15,11 @@
 	]);
 
 	const categoryColors: Record<string, string> = {
-		'Financial': 'bg-blue-500/10 text-blue-600',
-		'Audit': 'bg-purple-500/10 text-purple-600',
+		'Financial': 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+		'Audit': 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
 		'Budget': 'bg-positive/10 text-positive',
-		'Customer / Supplier': 'bg-orange-500/10 text-orange-600',
-		'Item': 'bg-amber-500/10 text-amber-600'
+		'Customer / Supplier': 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
+		'Item': 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
 	};
 </script>
 
