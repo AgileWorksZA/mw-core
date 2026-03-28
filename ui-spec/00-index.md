@@ -76,3 +76,7 @@ Each spec file covers a discrete feature area of the application. Files are numb
 - [41-show-menu-entities.md](41-show-menu-entities.md) — Complete entity registry from Show menu, Tax Rate detail, Job detail, Account Enquiry detail
 - [44-screen-api-design.md](44-screen-api-design.md) — BFF screen-level API design: bounded context endpoints for each screen, action POSTs, shared lookups
 - [45-data-model-from-api.md](45-data-model-from-api.md) — Real data model from live API: all field names, types, record counts, relationships, sample data
+- [46-transaction-write-operations.md](46-transaction-write-operations.md) — Transaction write API gaps, compound record import, posting/reversing
+
+### Cash & Banking Deep Dive
+- [47-cash-and-banking-deep-dive.md](47-cash-and-banking-deep-dive.md) — Receipt form (with Payment on Invoice allocation), Payment form, Purchase Invoice form, Bank Reconciliation, Journals, Command menu actions, live receipt creation test
