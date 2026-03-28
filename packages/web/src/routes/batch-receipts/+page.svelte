@@ -2,11 +2,13 @@
 	import { invalidateAll } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 	import { showToast, showError } from '$lib/stores/toast';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const totalOwed = $derived(data.debtors.reduce((s, d) => s + d.owed, 0));
+	let confirmOpen = $state(false);
 
 	// Track selection and amounts
 	let selected = $state<Set<string>>(new Set());
@@ -90,7 +92,7 @@
 				<div class="flex items-center gap-2">
 					<input type="date" bind:value={receiptDate} class="rounded border border-input bg-background px-2 py-1 text-sm" />
 					<button
-						onclick={handleSubmit}
+						onclick={() => { confirmOpen = true; }}
 						disabled={!hasSelection || submitting}
 						class="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
 					>
@@ -144,3 +146,8 @@
 		{/if}
 	</div>
 </div>
+
+<ConfirmDialog bind:open={confirmOpen} title="Confirm Batch Receipts" confirmLabel="Process Receipts" onConfirm={handleSubmit}>
+	Process {selected.size} receipts totalling <strong><CurrencyDisplay amount={selectedTotal} /></strong>?
+	This will create receipt transactions in MoneyWorks.
+</ConfirmDialog>
