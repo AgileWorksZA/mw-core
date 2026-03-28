@@ -1,11 +1,18 @@
 <script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import SummaryCards from '$lib/components/SummaryCards.svelte';
+	import RefreshIndicator from '$lib/components/RefreshIndicator.svelte';
+	import { createAutoRefresh } from '$lib/stores/autoRefresh';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const { periods, balances } = data;
+
+	const refresh = createAutoRefresh(30_000);
+	onMount(() => refresh.start());
+	onDestroy(() => refresh.stop());
 
 	const balanceCards = $derived([
 		{ label: 'Bank Balances', value: balances.bank, isCurrency: true },
@@ -15,7 +22,9 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<PageHeader title="Daily Summary" subtitle="Daily Dashboard for {data.date}" />
+	<PageHeader title="Daily Summary" subtitle="Daily Dashboard for {data.date}">
+		<RefreshIndicator enabled={refresh.enabled} refreshing={refresh.refreshing} onToggle={refresh.toggle} onRefresh={refresh.refreshNow} />
+	</PageHeader>
 
 	<div class="flex-1 overflow-auto p-6 space-y-8">
 		<!-- Section 1: Transactions Entered -->

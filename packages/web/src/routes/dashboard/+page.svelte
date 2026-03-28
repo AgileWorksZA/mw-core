@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import RefreshIndicator from '$lib/components/RefreshIndicator.svelte';
+	import { createAutoRefresh } from '$lib/stores/autoRefresh';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const refresh = createAutoRefresh(30_000);
+	onMount(() => refresh.start());
+	onDestroy(() => refresh.stop());
 
 	const { periods, balances, debtors, currentRatio, profitChart } = data;
 	const totalDebtors = $derived(debtors.current + debtors.oneCycle + debtors.twoCycles + debtors.threeOrMore);
@@ -86,8 +93,13 @@
 <div class="flex h-full flex-col">
 	<!-- Header -->
 	<div class="border-b border-border bg-card px-6 py-4">
-		<h1 class="text-xl font-bold">Dashboard</h1>
-		<p class="text-sm text-muted-foreground">Company Overview — {data.date}</p>
+		<div class="flex items-center justify-between">
+			<div>
+				<h1 class="text-xl font-bold">Dashboard</h1>
+				<p class="text-sm text-muted-foreground">Company Overview — {data.date}</p>
+			</div>
+			<RefreshIndicator enabled={refresh.enabled} refreshing={refresh.refreshing} onToggle={refresh.toggle} onRefresh={refresh.refreshNow} />
+		</div>
 	</div>
 
 	<div class="flex-1 overflow-auto p-6 space-y-8">

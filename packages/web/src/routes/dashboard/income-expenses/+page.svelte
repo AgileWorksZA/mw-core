@@ -1,10 +1,17 @@
 <script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import SummaryCards from '$lib/components/SummaryCards.svelte';
+	import RefreshIndicator from '$lib/components/RefreshIndicator.svelte';
+	import { createAutoRefresh } from '$lib/stores/autoRefresh';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const refresh = createAutoRefresh(30_000);
+	onMount(() => refresh.start());
+	onDestroy(() => refresh.stop());
 
 	const incomeMax = $derived(data.incomeAccounts.length > 0 ? data.incomeAccounts[0].balance : 1);
 	const expenseMax = $derived(data.expenseAccounts.length > 0 ? data.expenseAccounts[0].balance : 1);
@@ -17,7 +24,9 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<PageHeader title="Income & Expenses" subtitle="By account — year to date" />
+	<PageHeader title="Income & Expenses" subtitle="By account — year to date">
+		<RefreshIndicator enabled={refresh.enabled} refreshing={refresh.refreshing} onToggle={refresh.toggle} onRefresh={refresh.refreshNow} />
+	</PageHeader>
 
 	<div class="flex-1 overflow-auto p-6 space-y-8">
 		<!-- Summary cards -->
