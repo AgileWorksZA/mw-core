@@ -4,8 +4,11 @@
 	let { data }: { data: PageData } = $props();
 
 	const executableReports = new Set([
-		'trial-balance', 'profit-year', 'balance-sheet', 'aged-receivables',
-		'account-movements', 'customer-sales-month', 'customer-sales-summary', 'accounts-list'
+		'trial-balance', 'profit-year', 'profit-month', 'profit-comparison',
+		'balance-sheet', 'account-movements', 'accounts-list',
+		'aged-receivables', 'aged-payables',
+		'customer-sales-month', 'customer-sales-summary',
+		'ledger-report', 'address-list', 'item-sales', 'backorders-customer'
 	]);
 
 	const categoryColors: Record<string, string> = {
