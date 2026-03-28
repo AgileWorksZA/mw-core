@@ -3,7 +3,10 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const executableReports = new Set(['trial-balance', 'profit-year', 'balance-sheet', 'aged-receivables']);
+	const executableReports = new Set([
+		'trial-balance', 'profit-year', 'balance-sheet', 'aged-receivables',
+		'account-movements', 'customer-sales-month', 'customer-sales-summary', 'accounts-list'
+	]);
 
 	const categoryColors: Record<string, string> = {
 		'Financial': 'bg-blue-500/10 text-blue-600',
