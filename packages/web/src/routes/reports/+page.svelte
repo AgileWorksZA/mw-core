@@ -8,7 +8,10 @@
 		'balance-sheet', 'account-movements', 'accounts-list',
 		'aged-receivables', 'aged-payables',
 		'customer-sales-month', 'customer-sales-summary',
-		'ledger-report', 'address-list', 'item-sales', 'backorders-customer'
+		'ledger-report', 'address-list', 'item-sales',
+		'backorders-customer', 'backorders-product',
+		'transaction-posting', 'budget-year', 'forecast',
+		'customer-sales-item', 'purchases-over-time'
 	]);
 
 	const categoryColors: Record<string, string> = {

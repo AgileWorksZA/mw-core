@@ -1,5 +1,5 @@
 import { apiGet, apiEvalBatch } from '$lib/api/client';
-import type { ApiResponse, AccountRecord, NameRecord, TransactionRecord } from '$lib/api/types';
+import type { ApiResponse, AccountRecord, NameRecord, TransactionRecord, DetailRecord, ProductRecord } from '$lib/api/types';
 import type { PageServerLoad } from './$types';
 
 function parseNum(s: string): number {
@@ -51,6 +51,20 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		return await generateItemSales(token);
 	} else if (reportId === 'backorders-customer') {
 		return await generateBackordersByCustomer(token);
+	} else if (reportId === 'customer-sales-summary') {
+		return await generateCustomerSalesSummary(token);
+	} else if (reportId === 'transaction-posting') {
+		return await generateTransactionPosting(token);
+	} else if (reportId === 'budget-year') {
+		return await generateBudgetYear(token);
+	} else if (reportId === 'forecast') {
+		return await generateForecast(token);
+	} else if (reportId === 'customer-sales-item') {
+		return await generateCustomerSalesByItem(token);
+	} else if (reportId === 'purchases-over-time') {
+		return await generatePurchasesOverTime(token);
+	} else if (reportId === 'backorders-product') {
+		return await generateBackordersByProduct(token);
 	}
 
 	return { reportId, title: 'Report', lines: [], totals: { debit: 0, credit: 0, total: 0 } as Record<string, number> };
@@ -180,7 +194,7 @@ async function generateAccountMovements(token: string, accountCode: string) {
 
 	const txs = txRes.data ?? [];
 	const lines: ReportLine[] = txs.map((t) => ({
-		code: t.Ourref ?? '', description: `${t.Transdate ?? ''} — ${t.Tofrom ?? t.Namecode ?? ''} — ${t.Description ?? ''}`,
+		code: t.Ourref ?? '', description: `${t.Transdate ?? ''} — ${t.Namecode ?? ''} — ${t.Description ?? ''}`,
 		amount: t.Gross ?? 0
 	}));
 
@@ -204,7 +218,7 @@ async function generateCustomerSalesByMonth(token: string) {
 	const customerMap = new Map<string, { name: string; total: number }>();
 	for (const t of txs) {
 		const code = t.Namecode ?? 'Unknown';
-		const name = t.Tofrom ?? code;
+		const name = code;
 		const existing = customerMap.get(code);
 		if (existing) {
 			existing.total += t.Gross ?? 0;
@@ -313,7 +327,7 @@ async function generateLedgerReport(token: string) {
 
 	const lines: ReportLine[] = (txRes.data ?? []).map((t) => ({
 		code: t.Ourref ?? '',
-		description: `${t.Transdate ?? ''} | ${(t.Type ?? '').substring(0, 2)} | ${t.Tofrom ?? t.Namecode ?? ''} — ${t.Description ?? ''}`,
+		description: `${t.Transdate ?? ''} | ${(t.Type ?? '').substring(0, 2)} | ${t.Namecode ?? ''} — ${t.Description ?? ''}`,
 		amount: t.Gross ?? 0
 	}));
 
@@ -330,7 +344,7 @@ async function generateAddressList(token: string) {
 
 	const lines: ReportLine[] = (namesRes.data ?? []).map((n) => ({
 		code: n.Code ?? '',
-		description: `${n.Name ?? ''} — ${n.Phone ?? ''} — ${n.Email ?? ''}`,
+		description: `${n.Name ?? ''} — ${n.Phone ?? ''} — ${n.email ?? ''}`,
 		amount: 0
 	})).sort((a, b) => a.description.localeCompare(b.description));
 
@@ -374,7 +388,7 @@ async function generateBackordersByCustomer(token: string) {
 	const customerMap = new Map<string, { name: string; total: number }>();
 	for (const t of (txRes.data ?? [])) {
 		const code = t.Namecode ?? 'Unknown';
-		const name = t.Tofrom ?? code;
+		const name = code;
 		const existing = customerMap.get(code);
 		if (existing) { existing.total += t.Gross ?? 0; }
 		else { customerMap.set(code, { name, total: t.Gross ?? 0 }); }
@@ -385,4 +399,342 @@ async function generateBackordersByCustomer(token: string) {
 		.sort((a, b) => b.amount - a.amount);
 
 	return { reportId: 'backorders-customer', title: 'Backorders by Customer', lines, totals: { total: lines.reduce((s, l) => s + l.amount, 0) } as Record<string, number> };
+}
+
+async function generateCustomerSalesSummary(token: string) {
+	let txRes: ApiResponse<TransactionRecord[]>;
+	try {
+		txRes = await apiGet<ApiResponse<TransactionRecord[]>>('/tables/transaction', {
+			token, filter: 'left(Type,2)="DI" AND Status="P"', limit: 5000
+		});
+	} catch {
+		return { reportId: 'customer-sales-summary', title: 'Customer Sales Summary', lines: [], totals: {} as Record<string, number> };
+	}
+
+	const customerMap = new Map<string, { name: string; total: number; count: number }>();
+	for (const t of (txRes.data ?? [])) {
+		const code = t.Namecode ?? 'Unknown';
+		const name = code;
+		const existing = customerMap.get(code);
+		if (existing) {
+			existing.total += t.Gross ?? 0;
+			existing.count++;
+		} else {
+			customerMap.set(code, { name, total: t.Gross ?? 0, count: 1 });
+		}
+	}
+
+	const lines: ReportLine[] = Array.from(customerMap.entries())
+		.map(([code, { name, total, count }]) => ({
+			code, description: `${name} (${count} invoices)`, amount: total
+		}))
+		.sort((a, b) => b.amount - a.amount);
+
+	const grandTotal = lines.reduce((s, l) => s + l.amount, 0);
+	return { reportId: 'customer-sales-summary', title: 'Customer Sales Summary', lines, totals: { total: grandTotal } as Record<string, number> };
+}
+
+async function generateTransactionPosting(token: string) {
+	let txRes: ApiResponse<TransactionRecord[]>;
+	try {
+		txRes = await apiGet<ApiResponse<TransactionRecord[]>>('/tables/transaction', {
+			token, filter: 'Status="P"', limit: 1000
+		});
+	} catch {
+		return { reportId: 'transaction-posting', title: 'Transaction Posting Report', lines: [], totals: {} as Record<string, number> };
+	}
+
+	const txs = txRes.data ?? [];
+
+	// Group by type for a journal-style view
+	const typeMap = new Map<string, { count: number; totalDebit: number; totalCredit: number }>();
+	for (const t of txs) {
+		const type = (t.Type ?? 'UNK').substring(0, 3);
+		const existing = typeMap.get(type);
+		const gross = t.Gross ?? 0;
+		if (existing) {
+			existing.count++;
+			if (gross >= 0) existing.totalDebit += gross;
+			else existing.totalCredit += Math.abs(gross);
+		} else {
+			typeMap.set(type, {
+				count: 1,
+				totalDebit: gross >= 0 ? gross : 0,
+				totalCredit: gross < 0 ? Math.abs(gross) : 0
+			});
+		}
+	}
+
+	const typeLabels: Record<string, string> = {
+		DII: 'Sales Invoices', DIC: 'Sales Credit Notes',
+		CII: 'Purchase Invoices', CIC: 'Purchase Credit Notes',
+		REC: 'Receipts', PAY: 'Payments',
+		JNL: 'Journals', SOO: 'Sales Orders', POO: 'Purchase Orders'
+	};
+
+	const lines: ReportLine[] = [];
+	let grandDebit = 0;
+	let grandCredit = 0;
+
+	for (const [type, data] of Array.from(typeMap.entries()).sort((a, b) => a[0].localeCompare(b[0]))) {
+		lines.push({
+			code: type,
+			description: `${typeLabels[type] ?? type} (${data.count} transactions)`,
+			amount: data.totalDebit - data.totalCredit,
+			bold: true
+		});
+		grandDebit += data.totalDebit;
+		grandCredit += data.totalCredit;
+	}
+
+	lines.push({ code: '', description: '', amount: 0 });
+	lines.push({ code: '', description: 'Total Posted Transactions', amount: txs.length, bold: true });
+
+	return { reportId: 'transaction-posting', title: 'Transaction Posting Report', lines, totals: { debit: grandDebit, credit: grandCredit } as Record<string, number> };
+}
+
+async function generateBudgetYear(token: string) {
+	// Get actual figures by account type, then show budget comparison structure
+	const exprs: Record<string, string> = {
+		income: 'GetBalance("Type=\\"IN\\"", Today())',
+		costOfSales: 'GetBalance("Type=\\"CS\\"", Today())',
+		expenses: 'GetBalance("Type=\\"EX\\"", Today())',
+		otherIncome: 'GetBalance("Type=\\"SA\\"", Today())',
+		currentAssets: 'GetBalance("Type=\\"CA\\"", Today())',
+		fixedAssets: 'GetBalance("Type=\\"FA\\"", Today())',
+		liabilities: 'GetBalance("Type=\\"CL\\"", Today())'
+	};
+	const b = await apiEvalBatch(exprs, token);
+
+	const income = Math.abs(parseNum(b.income));
+	const cos = Math.abs(parseNum(b.costOfSales));
+	const expenses = Math.abs(parseNum(b.expenses));
+	const otherIncome = Math.abs(parseNum(b.otherIncome));
+	const ca = parseNum(b.currentAssets);
+	const fa = parseNum(b.fixedAssets);
+	const cl = Math.abs(parseNum(b.liabilities));
+
+	const lines: ReportLine[] = [
+		{ code: '', description: 'Revenue', amount: 0, bold: true },
+		{ code: 'IN', description: 'Income', amount: income, indent: 1 },
+		{ code: 'SA', description: 'Other Income', amount: otherIncome, indent: 1 },
+		{ code: '', description: 'Total Revenue', amount: income + otherIncome, bold: true },
+		{ code: '', description: '', amount: 0 },
+		{ code: '', description: 'Expenditure', amount: 0, bold: true },
+		{ code: 'CS', description: 'Cost of Sales', amount: cos, indent: 1 },
+		{ code: 'EX', description: 'Operating Expenses', amount: expenses, indent: 1 },
+		{ code: '', description: 'Total Expenditure', amount: cos + expenses, bold: true },
+		{ code: '', description: '', amount: 0 },
+		{ code: '', description: 'Net Surplus / (Deficit)', amount: income + otherIncome - cos - expenses, bold: true },
+		{ code: '', description: '', amount: 0 },
+		{ code: '', description: 'Assets & Liabilities', amount: 0, bold: true },
+		{ code: 'CA', description: 'Current Assets', amount: ca, indent: 1 },
+		{ code: 'FA', description: 'Fixed Assets', amount: fa, indent: 1 },
+		{ code: 'CL', description: 'Current Liabilities', amount: cl, indent: 1 },
+		{ code: '', description: 'Net Position', amount: ca + fa - cl, bold: true }
+	];
+
+	return { reportId: 'budget-year', title: 'Financial Year Summary', lines, totals: {} as Record<string, number> };
+}
+
+async function generateForecast(token: string) {
+	// Get current actuals and project remaining months
+	const exprs: Record<string, string> = {
+		income: 'GetBalance("Type=\\"IN\\"", Today())',
+		costOfSales: 'GetBalance("Type=\\"CS\\"", Today())',
+		expenses: 'GetBalance("Type=\\"EX\\"", Today())'
+	};
+	const b = await apiEvalBatch(exprs, token);
+
+	const income = Math.abs(parseNum(b.income));
+	const cos = Math.abs(parseNum(b.costOfSales));
+	const expenses = Math.abs(parseNum(b.expenses));
+	const netProfit = income - cos - expenses;
+
+	// Estimate months elapsed (assume fiscal year = calendar year)
+	const now = new Date();
+	const monthsElapsed = Math.max(1, now.getMonth() + 1);
+	const monthsRemaining = 12 - monthsElapsed;
+
+	const monthlyIncome = income / monthsElapsed;
+	const monthlyCos = cos / monthsElapsed;
+	const monthlyExp = expenses / monthsElapsed;
+
+	const projectedIncome = income + monthlyIncome * monthsRemaining;
+	const projectedCos = cos + monthlyCos * monthsRemaining;
+	const projectedExp = expenses + monthlyExp * monthsRemaining;
+
+	const lines: ReportLine[] = [
+		{ code: '', description: `Year-to-Date (${monthsElapsed} months)`, amount: 0, bold: true },
+		{ code: '', description: 'Income', amount: income, indent: 1 },
+		{ code: '', description: 'Cost of Sales', amount: -cos, indent: 1 },
+		{ code: '', description: 'Expenses', amount: -expenses, indent: 1 },
+		{ code: '', description: 'Net Profit (YTD)', amount: netProfit, bold: true },
+		{ code: '', description: '', amount: 0 },
+		{ code: '', description: `Monthly Average`, amount: 0, bold: true },
+		{ code: '', description: 'Income / month', amount: monthlyIncome, indent: 1 },
+		{ code: '', description: 'Cost of Sales / month', amount: -monthlyCos, indent: 1 },
+		{ code: '', description: 'Expenses / month', amount: -monthlyExp, indent: 1 },
+		{ code: '', description: 'Net Profit / month', amount: (netProfit) / monthsElapsed, bold: true },
+		{ code: '', description: '', amount: 0 },
+		{ code: '', description: `Full Year Projection (${monthsRemaining} months remaining)`, amount: 0, bold: true },
+		{ code: '', description: 'Projected Income', amount: projectedIncome, indent: 1 },
+		{ code: '', description: 'Projected Cost of Sales', amount: -projectedCos, indent: 1 },
+		{ code: '', description: 'Projected Expenses', amount: -projectedExp, indent: 1 },
+		{ code: '', description: 'Projected Net Profit', amount: projectedIncome - projectedCos - projectedExp, bold: true }
+	];
+
+	return { reportId: 'forecast', title: 'Forecast', lines, totals: {} as Record<string, number> };
+}
+
+async function generateCustomerSalesByItem(token: string) {
+	// Use Detail table to get item-level sales breakdown per customer
+	let [detailRes, txRes] = await Promise.all([
+		apiGet<ApiResponse<DetailRecord[]>>('/tables/detail', {
+			token, filter: 'left(TransactionType,2)="DI"', limit: 5000
+		}).catch(() => null),
+		apiGet<ApiResponse<TransactionRecord[]>>('/tables/transaction', {
+			token, filter: 'left(Type,2)="DI" AND Status="P"', limit: 5000
+		}).catch(() => null)
+	]);
+
+	// Build parent-seq -> customer name lookup
+	const txMap = new Map<number, string>();
+	if (txRes?.data) {
+		for (const t of txRes.data) {
+			txMap.set(t.Sequencenumber ?? 0, t.Namecode ?? 'Unknown');
+		}
+	}
+
+	if (detailRes?.data && detailRes.data.length > 0) {
+		// We have detail data — aggregate by customer + item
+		const map = new Map<string, { amount: number }>();
+		for (const d of detailRes.data) {
+			const customer = txMap.get(d.ParentSeq) ?? `#${d.ParentSeq}`;
+			const item = d.StockCode || d.Description || 'Other';
+			const key = `${customer} | ${item}`;
+			const existing = map.get(key);
+			if (existing) existing.amount += d.Gross ?? 0;
+			else map.set(key, { amount: d.Gross ?? 0 });
+		}
+
+		const lines: ReportLine[] = Array.from(map.entries())
+			.map(([desc, { amount }]) => ({ code: '', description: desc, amount }))
+			.sort((a, b) => b.amount - a.amount);
+
+		return { reportId: 'customer-sales-item', title: 'Customer Sales by Item', lines, totals: { total: lines.reduce((s, l) => s + l.amount, 0) } as Record<string, number> };
+	}
+
+	// Fallback: aggregate transactions by customer + description
+	if (txRes?.data) {
+		const map = new Map<string, { amount: number }>();
+		for (const t of txRes.data) {
+			const customer = t.Namecode ?? 'Unknown';
+			const desc = t.Description ?? 'Other';
+			const key = `${customer} | ${desc}`;
+			const existing = map.get(key);
+			if (existing) existing.amount += t.Gross ?? 0;
+			else map.set(key, { amount: t.Gross ?? 0 });
+		}
+
+		const lines: ReportLine[] = Array.from(map.entries())
+			.map(([desc, { amount }]) => ({ code: '', description: desc, amount }))
+			.sort((a, b) => b.amount - a.amount);
+
+		return { reportId: 'customer-sales-item', title: 'Customer Sales by Item', lines, totals: { total: lines.reduce((s, l) => s + l.amount, 0) } as Record<string, number> };
+	}
+
+	return { reportId: 'customer-sales-item', title: 'Customer Sales by Item', lines: [], totals: {} as Record<string, number> };
+}
+
+async function generatePurchasesOverTime(token: string) {
+	let txRes: ApiResponse<TransactionRecord[]>;
+	try {
+		txRes = await apiGet<ApiResponse<TransactionRecord[]>>('/tables/transaction', {
+			token, filter: 'left(Type,2)="CI" AND Status="P"', limit: 5000
+		});
+	} catch {
+		return { reportId: 'purchases-over-time', title: 'Purchases over Time', lines: [], totals: {} as Record<string, number> };
+	}
+
+	const txs = txRes.data ?? [];
+
+	// Group by month (YYYY-MM)
+	const monthMap = new Map<string, { total: number; count: number }>();
+	for (const t of txs) {
+		const date = t.Transdate ?? '';
+		const month = date.length >= 7 ? date.substring(0, 7) : 'Unknown';
+		const existing = monthMap.get(month);
+		if (existing) {
+			existing.total += Math.abs(t.Gross ?? 0);
+			existing.count++;
+		} else {
+			monthMap.set(month, { total: Math.abs(t.Gross ?? 0), count: 1 });
+		}
+	}
+
+	const lines: ReportLine[] = Array.from(monthMap.entries())
+		.sort((a, b) => b[0].localeCompare(a[0]))
+		.map(([month, { total, count }]) => ({
+			code: month, description: `${count} purchase invoices`, amount: total
+		}));
+
+	const grandTotal = lines.reduce((s, l) => s + l.amount, 0);
+	return { reportId: 'purchases-over-time', title: 'Purchases over Time', lines, totals: { total: grandTotal } as Record<string, number> };
+}
+
+async function generateBackordersByProduct(token: string) {
+	// Get sales orders and try detail lines for product breakdown
+	let [detailRes, txRes] = await Promise.all([
+		apiGet<ApiResponse<DetailRecord[]>>('/tables/detail', {
+			token, filter: 'left(TransactionType,2)="SO"', limit: 2000
+		}).catch(() => null),
+		apiGet<ApiResponse<TransactionRecord[]>>('/tables/transaction', {
+			token, filter: 'left(Type,2)="SO"', limit: 500
+		}).catch(() => null)
+	]);
+
+	if (detailRes?.data && detailRes.data.length > 0) {
+		// Aggregate by product code
+		const productMap = new Map<string, { description: string; qty: number; amount: number }>();
+		for (const d of detailRes.data) {
+			const code = d.StockCode || 'NO-CODE';
+			const existing = productMap.get(code);
+			if (existing) {
+				existing.qty += d.StockQty ?? 0;
+				existing.amount += d.Gross ?? 0;
+			} else {
+				productMap.set(code, {
+					description: d.Description ?? code,
+					qty: d.StockQty ?? 0,
+					amount: d.Gross ?? 0
+				});
+			}
+		}
+
+		const lines: ReportLine[] = Array.from(productMap.entries())
+			.map(([code, { description, qty, amount }]) => ({
+				code, description: `${description} (qty: ${qty})`, amount
+			}))
+			.sort((a, b) => b.amount - a.amount);
+
+		return { reportId: 'backorders-product', title: 'Backorders by Product', lines, totals: { total: lines.reduce((s, l) => s + l.amount, 0) } as Record<string, number> };
+	}
+
+	// Fallback: aggregate SO transactions by description
+	if (txRes?.data) {
+		const descMap = new Map<string, number>();
+		for (const t of txRes.data) {
+			const desc = t.Description ?? 'Other';
+			descMap.set(desc, (descMap.get(desc) ?? 0) + (t.Gross ?? 0));
+		}
+
+		const lines: ReportLine[] = Array.from(descMap.entries())
+			.map(([desc, amount]) => ({ code: '', description: desc, amount }))
+			.sort((a, b) => b.amount - a.amount);
+
+		return { reportId: 'backorders-product', title: 'Backorders by Product', lines, totals: { total: lines.reduce((s, l) => s + l.amount, 0) } as Record<string, number> };
+	}
+
+	return { reportId: 'backorders-product', title: 'Backorders by Product', lines: [], totals: {} as Record<string, number> };
 }

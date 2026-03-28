@@ -3,6 +3,15 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const codeColumnReports = new Set([
+		'trial-balance', 'aged-receivables', 'aged-payables',
+		'customer-sales-month', 'customer-sales-summary',
+		'backorders-customer', 'backorders-product',
+		'transaction-posting', 'accounts-list', 'account-movements',
+		'customer-sales-item', 'purchases-over-time', 'budget-year'
+	]);
+	const showCode = $derived(codeColumnReports.has(data.reportId));
 </script>
 
 <div class="flex h-full flex-col">
@@ -48,7 +57,7 @@
 						{:else}
 							<thead>
 								<tr class="border-b border-border bg-muted/50">
-									{#if data.reportId === 'aged-receivables'}
+									{#if showCode}
 										<th class="px-4 py-2.5 text-left font-medium text-muted-foreground">Code</th>
 									{/if}
 									<th class="px-4 py-2.5 text-left font-medium text-muted-foreground">Description</th>
@@ -59,7 +68,7 @@
 								{#each data.lines as line}
 									{#if line.description || line.amount}
 										<tr class="border-b border-border last:border-0 {line.bold ? 'bg-muted/30 font-semibold' : ''}">
-											{#if data.reportId === 'aged-receivables'}
+											{#if showCode}
 												<td class="px-4 py-2 font-mono text-xs">{line.code}</td>
 											{/if}
 											<td class="px-4 py-2" style="padding-left: {(line.indent ?? 0) * 20 + 16}px">{line.description}</td>
@@ -68,14 +77,21 @@
 											</td>
 										</tr>
 									{:else}
-										<tr><td colspan="3" class="py-1"></td></tr>
+										<tr><td colspan="{showCode ? 3 : 2}" class="py-1"></td></tr>
 									{/if}
 								{/each}
 								{#if data.totals.total !== undefined}
 									<tr class="bg-muted/30 font-bold">
-										{#if data.reportId === 'aged-receivables'}<td class="px-4 py-2.5"></td>{/if}
+										{#if showCode}<td class="px-4 py-2.5"></td>{/if}
 										<td class="px-4 py-2.5">Total</td>
 										<td class="px-4 py-2.5 text-right"><CurrencyDisplay amount={data.totals.total} /></td>
+									</tr>
+								{/if}
+								{#if data.totals.debit !== undefined && data.reportId !== 'trial-balance'}
+									<tr class="bg-muted/30 font-bold">
+										{#if showCode}<td class="px-4 py-2.5"></td>{/if}
+										<td class="px-4 py-2.5">Totals (Debit / Credit)</td>
+										<td class="px-4 py-2.5 text-right"><CurrencyDisplay amount={data.totals.debit} /> / <CurrencyDisplay amount={data.totals.credit} /></td>
 									</tr>
 								{/if}
 							</tbody>
