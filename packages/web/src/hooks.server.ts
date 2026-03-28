@@ -46,6 +46,22 @@ export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const token = await ensureToken();
 		event.locals.token = token;
+		// Set the cookie the layout reads for isLoggedIn/sidebar
+		if (!event.cookies.get("mw_token")) {
+			event.cookies.set("mw_token", token, {
+				path: "/",
+				httpOnly: true,
+				secure: process.env["NODE_ENV"] === "production",
+				sameSite: "lax",
+				maxAge: 60 * 60 * 24,
+			});
+			event.cookies.set("mw_company", "Acme Widgets", {
+				path: "/",
+				httpOnly: false,
+				sameSite: "lax",
+				maxAge: 60 * 60 * 24,
+			});
+		}
 	} catch (err) {
 		console.error("MoneyWorks auto-connect failed:", err);
 		event.locals.token = "";
