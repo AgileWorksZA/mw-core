@@ -32,7 +32,7 @@
 		<!-- Summary cards -->
 		<SummaryCards cards={summaryCards} />
 
-		<div class="grid grid-cols-2 gap-8">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 			<!-- Income -->
 			<div>
 				<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Income</h2>

@@ -29,11 +29,11 @@
 		<p class="text-sm text-muted-foreground">{data.totalReports} reports available</p>
 	</div>
 
-	<div class="flex-1 overflow-auto p-6 space-y-8">
+	<div class="flex-1 overflow-auto p-3 md:p-6 space-y-4 md:space-y-8">
 		{#each data.categories as cat}
 			<div>
 				<h2 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">{cat.name}</h2>
-				<div class="grid grid-cols-3 gap-3">
+				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
 					{#each cat.reports as report}
 						{@const isExec = executableReports.has(report.id)}
 						<a

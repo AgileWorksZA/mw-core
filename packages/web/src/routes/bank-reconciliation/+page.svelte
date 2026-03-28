@@ -75,7 +75,7 @@
 			<!-- Phase 2: Reconciliation -->
 			<div class="space-y-6">
 				<!-- Summary panel -->
-				<div class="grid grid-cols-5 gap-4">
+				<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
 					<div class="rounded-xl bg-surface-container-lowest p-3 text-center">
 						<div class="text-xs text-muted-foreground uppercase">Opening Balance</div>
 						<div class="mt-1 font-bold"><CurrencyDisplay amount={openingBalance} /></div>

@@ -10,8 +10,8 @@
 		<p class="text-sm text-muted-foreground">Data import and export operations</p>
 	</div>
 
-	<div class="flex-1 overflow-auto p-6">
-		<div class="grid grid-cols-2 gap-8">
+	<div class="flex-1 overflow-auto p-3 md:p-6">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 			<!-- Import -->
 			<div>
 				<h2 class="font-headline mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Import</h2>

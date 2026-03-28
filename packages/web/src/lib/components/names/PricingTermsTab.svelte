@@ -29,7 +29,7 @@
 	const payAccountInfo = $derived(pricing.payAccount ? findAccount(pricing.payAccount) : undefined);
 </script>
 
-<div class="grid grid-cols-2 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 	<!-- Pricing & Tax -->
 	<div class="rounded-xl bg-surface-container-lowest p-4">
 		<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">

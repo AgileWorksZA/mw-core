@@ -39,8 +39,8 @@
 		<p class="text-sm text-muted-foreground">Workflow task board — {data.today}</p>
 	</div>
 
-	<div class="flex-1 overflow-auto p-6">
-		<div class="grid grid-cols-4 gap-6">
+	<div class="flex-1 overflow-auto p-3 md:p-6">
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
 			<!-- Daily -->
 			<div>
 				<h2 class="font-headline mb-3 rounded-xl bg-blue-500/10 px-3 py-2 text-center text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Daily</h2>

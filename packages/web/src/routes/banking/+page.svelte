@@ -11,14 +11,14 @@
 		<p class="text-sm text-muted-foreground">Bank accounts and recent activity</p>
 	</div>
 
-	<div class="flex-1 overflow-auto p-6 space-y-8">
+	<div class="flex-1 overflow-auto p-3 md:p-6 space-y-4 md:space-y-8">
 		<!-- Bank Accounts -->
 		<div>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="font-headline text-sm font-semibold text-muted-foreground uppercase tracking-wider">Accounts</h2>
 				<div class="text-sm text-muted-foreground">Total: <span class="font-bold text-foreground"><CurrencyDisplay amount={data.totalBalance} /></span></div>
 			</div>
-			<div class="grid grid-cols-3 gap-4">
+			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
 				{#each data.bankAccounts as bank}
 					<a href="/bank-reconciliation?bank={bank.code}" class="rounded-xl bg-surface-container-lowest p-4 transition-colors hover:bg-surface-container-low">
 						<div class="flex items-center justify-between">
@@ -37,7 +37,7 @@
 		</div>
 
 		<!-- Recent Activity -->
-		<div class="grid grid-cols-2 gap-8">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 			<!-- Recent Receipts -->
 			<div>
 				<h2 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Recent Receipts</h2>

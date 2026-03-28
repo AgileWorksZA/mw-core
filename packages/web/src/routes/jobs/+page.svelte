@@ -18,7 +18,7 @@
 				</svg>
 				<h2 class="font-headline mt-4 text-lg font-semibold">Project Costing</h2>
 				<p class="mt-2 text-sm text-muted-foreground">{data.message}</p>
-				<div class="mt-6 grid grid-cols-2 gap-3 text-sm">
+				<div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
 					<div class="rounded-xl bg-surface-container-lowest p-3">
 						<div class="font-medium">Job Timesheet</div>
 						<div class="text-xs text-muted-foreground">Time entry against jobs</div>

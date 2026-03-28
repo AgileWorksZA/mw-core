@@ -18,7 +18,7 @@
 	}
 </script>
 
-<div class="mb-6 grid gap-4" style="grid-template-columns: repeat({cards.length}, minmax(0, 1fr))">
+<div class="summary-cards mb-6 grid grid-cols-2 gap-3 md:gap-4" style="--cols: {cards.length}">
 	{#each cards as card}
 		<div class="rounded-xl bg-surface-container-lowest p-5 text-center">
 			<div class="text-xs font-medium text-muted-foreground uppercase">{card.label}</div>
@@ -32,3 +32,11 @@
 		</div>
 	{/each}
 </div>
+
+<style>
+	@media (min-width: 768px) {
+		.summary-cards {
+			grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+		}
+	}
+</style>

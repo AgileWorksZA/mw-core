@@ -102,9 +102,9 @@
 		</div>
 	</div>
 
-	<div class="flex-1 overflow-auto p-6 space-y-12">
+	<div class="flex-1 overflow-auto p-3 md:p-6 space-y-6 md:space-y-12">
 		<!-- Charts 2x2 Grid -->
-		<div class="grid grid-cols-2 gap-6">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 			<!-- Profit Chart (bar + line) -->
 			<div class="rounded-xl bg-surface-container-lowest p-6">
 				<h3 class="mb-2 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Profit</h3>
@@ -305,7 +305,7 @@
 		</div>
 
 		<!-- Balances & Aging -->
-		<div class="grid grid-cols-2 gap-6">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 			<!-- Balances -->
 			<div>
 				<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">

@@ -7,7 +7,7 @@
 	const selected = $derived(contacts[selectedIndex]);
 </script>
 
-<div class="grid grid-cols-3 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
 	<!-- Contact List -->
 	<div class="rounded-xl bg-surface-container-lowest">
 		<div class="bg-surface-container-low px-3 py-2 rounded-t-xl">
@@ -39,7 +39,7 @@
 	<div class="col-span-2 rounded-xl bg-surface-container-lowest p-4">
 		{#if selected}
 			<h3 class="font-headline mb-4 text-lg font-semibold">{selected.name || 'Unnamed Contact'}</h3>
-			<div class="grid grid-cols-2 gap-4 text-sm">
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-sm">
 				{#if selected.salutation}
 					<div>
 						<span class="text-muted-foreground">Salutation</span>

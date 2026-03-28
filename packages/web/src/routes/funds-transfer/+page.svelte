@@ -91,7 +91,7 @@
 				<input type="number" bind:value={amount} step="0.01" min="0" placeholder="0.00" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 			</div>
 
-			<div class="grid grid-cols-2 gap-4">
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
 				<div class="space-y-1.5">
 					<label class="text-sm font-medium">Date</label>
 					<input type="date" bind:value={transferDate} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />

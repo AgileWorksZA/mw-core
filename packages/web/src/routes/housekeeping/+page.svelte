@@ -11,8 +11,8 @@
 		<p class="text-sm text-muted-foreground">System administration and file statistics</p>
 	</div>
 
-	<div class="flex-1 overflow-auto p-6 space-y-8">
-		<div class="grid grid-cols-2 gap-8">
+	<div class="flex-1 overflow-auto p-3 md:p-6 space-y-4 md:space-y-8">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
 			<!-- Company -->
 			<div>
 				<h2 class="font-headline mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Company</h2>
@@ -23,7 +23,7 @@
 						<div class="mt-3 text-xs text-muted-foreground">MoneyWorks {c.system?.version} — {c.system?.platform}</div>
 					</div>
 				{/if}
-				<div class="mt-4 grid grid-cols-2 gap-2">
+				<div class="mt-4 grid grid-cols-2 gap-2"><!-- OK at cols-2 — small buttons -->
 					<a href="/preferences" class="rounded-xl bg-surface-container-lowest p-3 text-center text-sm hover:bg-surface-container-low">Preferences</a>
 					<a href="/reports" class="rounded-xl bg-surface-container-lowest p-3 text-center text-sm hover:bg-surface-container-low">Reports</a>
 					<a href="/import-export" class="rounded-xl bg-surface-container-lowest p-3 text-center text-sm hover:bg-surface-container-low">Import / Export</a>

@@ -11,12 +11,12 @@
 		<p class="text-sm text-muted-foreground">Company details and settings</p>
 	</div>
 
-	<div class="flex-1 overflow-auto p-6 space-y-8">
+	<div class="flex-1 overflow-auto p-3 md:p-6 space-y-4 md:space-y-8">
 		{#if c}
 			<!-- Company Details -->
 			<div>
 				<h2 class="font-headline mb-4 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Company Details</h2>
-				<div class="grid grid-cols-2 gap-6">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 					<div class="space-y-4">
 						<div class="rounded-xl bg-surface-container-lowest p-4">
 							<div class="text-2xl font-bold">{c.name}</div>

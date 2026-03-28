@@ -57,7 +57,7 @@
 		<!-- Balance Sheet -->
 		<div>
 			<h2 class="mb-4 text-sm font-semibold font-headline text-muted-foreground uppercase tracking-wider">Balance Sheet</h2>
-			<div class="grid grid-cols-2 gap-6">
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 				<div class="rounded-xl bg-surface-container-lowest overflow-auto">
 					<table class="w-full text-sm tabular-nums">
 						<thead><tr class="bg-surface-container-low"><th class="px-4 py-2.5 text-left font-medium text-muted-foreground" colspan="2">Assets</th></tr></thead>
