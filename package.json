@@ -24,10 +24,13 @@
 		"api:build": "bun run build:deps && bun --cwd packages/api build",
 		"web": "bun --cwd packages/web dev",
 		"web:build": "bun --cwd packages/web build",
-		"web:start": "bun --cwd packages/web start"
+		"web:start": "bun --cwd packages/web start",
+		"build": "echo monorepo: use BUILD_CMD override for per-package builds"
 	},
 	"type": "module",
-	"workspaces": ["packages/*"],
+	"workspaces": [
+		"packages/*"
+	],
 	"dependencies": {
 		"@elevenlabs/elevenlabs-js": "^2.25.0",
 		"add": "^2.0.6",
