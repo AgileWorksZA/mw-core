@@ -2,7 +2,10 @@
 	import { invalidateAll } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
+	import { Label } from '$lib/components/ui/label';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { showToast, showError } from '$lib/stores/toast';
 	import type { PageData } from './$types';
 
@@ -57,8 +60,8 @@
 	<div class="flex-1 overflow-auto p-6">
 		<div class="mx-auto max-w-lg space-y-6">
 			<div class="space-y-1.5">
-				<label class="text-sm font-medium">From Account</label>
-				<select bind:value={fromAccount} class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+				<Label>From Account</Label>
+				<select bind:value={fromAccount} class="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring">
 					<option value="">Select source account...</option>
 					{#each data.bankAccounts as bank}
 						<option value={bank.code} disabled={bank.code === toAccount}>{bank.code}: {bank.description} ({bank.type === 'CC' ? 'Credit Card' : 'Bank'})</option>
@@ -76,8 +79,8 @@
 			</div>
 
 			<div class="space-y-1.5">
-				<label class="text-sm font-medium">To Account</label>
-				<select bind:value={toAccount} class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+				<Label>To Account</Label>
+				<select bind:value={toAccount} class="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring">
 					<option value="">Select destination account...</option>
 					{#each data.bankAccounts as bank}
 						<option value={bank.code} disabled={bank.code === fromAccount}>{bank.code}: {bank.description} ({bank.type === 'CC' ? 'Credit Card' : 'Bank'})</option>
@@ -89,24 +92,24 @@
 			</div>
 
 			<div class="space-y-1.5">
-				<label class="text-sm font-medium">Amount</label>
-				<input type="number" bind:value={amount} step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+				<Label>Amount</Label>
+				<Input type="number" bind:value={amount} step="0.01" min="0" placeholder="0.00" />
 			</div>
 
 			<div class="grid grid-cols-2 gap-4">
 				<div class="space-y-1.5">
-					<label class="text-sm font-medium">Date</label>
-					<input type="date" bind:value={transferDate} class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+					<Label>Date</Label>
+					<Input type="date" bind:value={transferDate} />
 				</div>
 				<div class="space-y-1.5">
-					<label class="text-sm font-medium">Reference</label>
-					<input type="text" bind:value={reference} placeholder="Optional" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+					<Label>Reference</Label>
+					<Input type="text" bind:value={reference} placeholder="Optional" />
 				</div>
 			</div>
 
 			<div class="space-y-1.5">
-				<label class="text-sm font-medium">Description</label>
-				<input type="text" bind:value={description} placeholder="Funds transfer" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+				<Label>Description</Label>
+				<Input type="text" bind:value={description} placeholder="Funds transfer" />
 			</div>
 
 			{#if isValid}
@@ -123,19 +126,29 @@
 				</div>
 			{/if}
 
-			<button
-				onclick={() => { confirmOpen = true; }}
-				disabled={!isValid || submitting}
-				class="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-			>
+			<Button class="w-full" disabled={!isValid || submitting} onclick={() => { confirmOpen = true; }}>
 				{submitting ? 'Transferring...' : 'Transfer Funds'}
-			</button>
+			</Button>
 		</div>
 	</div>
 </div>
 
-<ConfirmDialog bind:open={confirmOpen} title="Confirm Transfer" confirmLabel="Transfer" onConfirm={handleTransfer}>
-	Transfer <strong><CurrencyDisplay amount={amount} /></strong> from
-	<strong>{fromBank?.description}</strong> to <strong>{toBank?.description}</strong>?
-	This will create a journal entry in MoneyWorks.
-</ConfirmDialog>
+<AlertDialog.Root bind:open={confirmOpen}>
+	<AlertDialog.Portal>
+		<AlertDialog.Overlay />
+		<AlertDialog.Content>
+			<AlertDialog.Header>
+				<AlertDialog.Title>Confirm Transfer</AlertDialog.Title>
+				<AlertDialog.Description>
+					Transfer <strong><CurrencyDisplay amount={amount} /></strong> from
+					<strong>{fromBank?.description}</strong> to <strong>{toBank?.description}</strong>?
+					This will create a journal entry in MoneyWorks.
+				</AlertDialog.Description>
+			</AlertDialog.Header>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+				<AlertDialog.Action onclick={handleTransfer}>Transfer</AlertDialog.Action>
+			</AlertDialog.Footer>
+		</AlertDialog.Content>
+	</AlertDialog.Portal>
+</AlertDialog.Root>
