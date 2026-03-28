@@ -4,7 +4,7 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import SummaryCards from '$lib/components/SummaryCards.svelte';
 	import RefreshIndicator from '$lib/components/RefreshIndicator.svelte';
-	import { createAutoRefresh } from '$lib/stores/autoRefresh';
+	import { createAutoRefresh } from '$lib/stores/autoRefresh.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

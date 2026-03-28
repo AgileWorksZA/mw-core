@@ -2,7 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
 	import RefreshIndicator from '$lib/components/RefreshIndicator.svelte';
-	import { createAutoRefresh } from '$lib/stores/autoRefresh';
+	import { createAutoRefresh } from '$lib/stores/autoRefresh.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
