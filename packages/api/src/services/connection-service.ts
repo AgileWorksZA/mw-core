@@ -162,6 +162,12 @@ export class ConnectionService {
 			this.decrypt(connection.encrypted_config),
 		) as MoneyWorksConfig;
 
+		// Inject proxy URL for tunnel deployment (Kapable)
+		const proxyBaseUrl = process.env["MW_PROXY_BASE_URL"];
+		if (proxyBaseUrl) {
+			config.proxyBaseUrl = proxyBaseUrl;
+		}
+
 		// Update caches
 		this.tokenCache.set(token, connection.id);
 		this.cache.set(connection.id, config);

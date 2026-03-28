@@ -35,12 +35,14 @@ export function createAuthRoutes() {
 			async ({ body, set }) => {
 				try {
 					// Test the connection first
+					const proxyBaseUrl = process.env["MW_PROXY_BASE_URL"];
 					const config: MoneyWorksConfig = {
 						host: body.host,
 						port: body.port,
 						dataFile: body.dataFile,
 						username: body.username,
 						password: body.password,
+						...(proxyBaseUrl ? { proxyBaseUrl } : {}),
 					};
 
 					if (body.folderName && body.folderPassword) {

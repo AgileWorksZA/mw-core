@@ -55,7 +55,11 @@ export class MoneyWorksRESTClient {
 		const encodedDataFile = this.config.dataFile.replace(/\//g, "%2f");
 		const encodedUsername = encodeURIComponent(this.config.username);
 		const encodedPassword = encodeURIComponent(this.config.password || "");
-		this.baseUrl = `${this.config.protocol}://${this.config.host}:${this.config.port}/REST/${encodedUsername}:${encodedPassword}@${encodedDataFile}`;
+		if (this.config.proxyBaseUrl) {
+			this.baseUrl = `${this.config.proxyBaseUrl}/REST/${encodedUsername}:${encodedPassword}@${encodedDataFile}`;
+		} else {
+			this.baseUrl = `${this.config.protocol}://${this.config.host}:${this.config.port}/REST/${encodedUsername}:${encodedPassword}@${encodedDataFile}`;
+		}
 
 		console.log("[MoneyWorksRESTClient] Base URL:", this.baseUrl);
 

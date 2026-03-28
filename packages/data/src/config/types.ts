@@ -64,6 +64,13 @@ export interface MoneyWorksConfig {
 	 * @default 30000
 	 */
 	timeout?: number;
+	/**
+	 * Override base URL for tunnel/proxy deployment.
+	 * When set, bypasses host:port URL construction.
+	 * @example "https://api.kapable.dev/v1/tunnels/{id}/proxy"
+	 */
+	proxyBaseUrl?: string;
+
 
 	/**
 	 * Enable debug mode
