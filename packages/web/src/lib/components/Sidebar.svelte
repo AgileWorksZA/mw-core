@@ -73,7 +73,7 @@
 	</div>
 
 	<!-- Navigation -->
-	<nav class="flex-1 overflow-auto px-2 py-3">
+	<nav class="flex-1 overflow-auto sidebar-scroll px-2 py-3">
 		{#each groups as group}
 			<div class="mb-1 px-3 pt-3 pb-1 text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest first:pt-0">{group.label}</div>
 			{#each group.items as item}
