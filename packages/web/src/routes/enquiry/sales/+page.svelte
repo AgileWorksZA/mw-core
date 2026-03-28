@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import SummaryCards from '$lib/components/SummaryCards.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -15,31 +17,29 @@
 
 	const totalSales = $derived(data.invoices.reduce((sum, i) => sum + i.gross, 0));
 	const totalOutstanding = $derived(data.invoices.reduce((sum, i) => sum + i.outstanding, 0));
+
+	const summaryCards = $derived([
+		{ label: 'Total Sales', value: totalSales, isCurrency: true },
+		{ label: 'Invoices', value: data.invoices.length },
+		{ label: 'Outstanding', value: totalOutstanding, isCurrency: true, color: (totalOutstanding > 0 ? 'red' : 'default') as 'red' | 'default' }
+	]);
 </script>
 
 <div class="flex h-full flex-col">
 	<!-- Header -->
-	<div class="border-b border-border bg-card px-6 py-4">
-		<div class="flex items-center justify-between">
-			<div>
-				<h1 class="text-xl font-bold">Sales Enquiry</h1>
-				{#if data.customer}
-					<p class="text-sm text-muted-foreground">{data.customer.name} ({data.customer.code})</p>
-				{/if}
-			</div>
-			<form onsubmit={(e) => { e.preventDefault(); search(); }} class="flex gap-2">
-				<input
-					type="text"
-					placeholder="Customer code..."
-					bind:value={nameInput}
-					class="w-48 rounded-md border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-				/>
-				<button type="submit" class="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-					Search
-				</button>
-			</form>
-		</div>
-	</div>
+	<PageHeader title="Sales Enquiry" subtitle={data.customer ? `${data.customer.name} (${data.customer.code})` : ''}>
+		<form onsubmit={(e) => { e.preventDefault(); search(); }} class="flex gap-2">
+			<input
+				type="text"
+				placeholder="Customer code..."
+				bind:value={nameInput}
+				class="w-48 rounded-md border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+			/>
+			<button type="submit" class="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+				Search
+			</button>
+		</form>
+	</PageHeader>
 
 	<div class="flex-1 overflow-auto p-6">
 		{#if !data.customer}
@@ -48,22 +48,7 @@
 			</div>
 		{:else}
 			<!-- Summary -->
-			<div class="mb-6 grid grid-cols-3 gap-4">
-				<div class="rounded-lg border border-border p-4 text-center">
-					<div class="text-xs font-medium text-muted-foreground uppercase">Total Sales</div>
-					<div class="mt-1 text-xl font-bold"><CurrencyDisplay amount={totalSales} /></div>
-				</div>
-				<div class="rounded-lg border border-border p-4 text-center">
-					<div class="text-xs font-medium text-muted-foreground uppercase">Invoices</div>
-					<div class="mt-1 text-2xl font-bold">{data.invoices.length}</div>
-				</div>
-				<div class="rounded-lg border border-border p-4 text-center">
-					<div class="text-xs font-medium text-muted-foreground uppercase">Outstanding</div>
-					<div class="mt-1 text-xl font-bold" class:text-destructive={totalOutstanding > 0}>
-						<CurrencyDisplay amount={totalOutstanding} />
-					</div>
-				</div>
-			</div>
+			<SummaryCards cards={summaryCards} />
 
 			<!-- Monthly breakdown -->
 			{#if data.monthly.length > 0}

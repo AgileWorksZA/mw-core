@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import SummaryCards from '$lib/components/SummaryCards.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -8,51 +10,30 @@
 	function setStatus(s: string) {
 		goto(`/invoices/purchases?status=${s}`, { invalidateAll: true });
 	}
+
+	const cards = $derived([
+		{ label: 'Invoices', value: data.summary.total },
+		{ label: 'Posted', value: data.summary.posted, color: 'green' as const },
+		{ label: 'Unposted', value: data.summary.unposted, color: 'amber' as const },
+		{ label: 'Total Gross', value: data.summary.totalGross, isCurrency: true },
+		{ label: 'Outstanding', value: data.summary.totalOutstanding, isCurrency: true, color: data.summary.totalOutstanding > 0 ? 'red' as const : 'default' as const }
+	]);
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
-		<div class="flex items-center justify-between">
-			<div>
-				<h1 class="text-xl font-bold">Purchase Invoices</h1>
-				<p class="text-sm text-muted-foreground">{data.summary.total} invoices — {data.today}</p>
-			</div>
-			<div class="flex gap-1">
-				{#each [['all', 'All'], ['posted', 'Posted'], ['unposted', 'Unposted']] as [key, label]}
-					<button
-						onclick={() => setStatus(key)}
-						class="rounded-md px-3 py-1.5 text-sm transition-colors {data.status === key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}"
-					>{label}</button>
-				{/each}
-			</div>
+	<PageHeader title="Purchase Invoices" subtitle="{data.summary.total} invoices — {data.today}">
+		<div class="flex gap-1">
+			{#each [['all', 'All'], ['posted', 'Posted'], ['unposted', 'Unposted']] as [key, label]}
+				<button
+					onclick={() => setStatus(key)}
+					class="rounded-md px-3 py-1.5 text-sm transition-colors {data.status === key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}"
+				>{label}</button>
+			{/each}
 		</div>
-	</div>
+	</PageHeader>
 
 	<div class="flex-1 overflow-auto p-6">
-		<div class="mb-6 grid grid-cols-5 gap-4">
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Invoices</div>
-				<div class="mt-1 text-2xl font-bold">{data.summary.total}</div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Posted</div>
-				<div class="mt-1 text-2xl font-bold text-green-600">{data.summary.posted}</div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Unposted</div>
-				<div class="mt-1 text-2xl font-bold text-amber-500">{data.summary.unposted}</div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Total Gross</div>
-				<div class="mt-1 text-xl font-bold"><CurrencyDisplay amount={data.summary.totalGross} /></div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Outstanding</div>
-				<div class="mt-1 text-xl font-bold" class:text-destructive={data.summary.totalOutstanding > 0}>
-					<CurrencyDisplay amount={data.summary.totalOutstanding} />
-				</div>
-			</div>
-		</div>
+		<SummaryCards {cards} />
 
 		{#if data.invoices.length > 0}
 			<div class="overflow-auto rounded-md border border-border">

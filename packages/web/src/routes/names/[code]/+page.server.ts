@@ -56,7 +56,7 @@ export const load: PageServerLoad = async ({ params, locals }): Promise<NameScre
 		});
 	} catch {
 		// Contacts may not exist - gracefully degrade
-		contactsRes = { data: [] } as ApiResponse<ContactRecord[]>;
+		contactsRes = { data: [], metadata: { table: 'contact', format: 'full', count: 0, timestamp: '', requestId: '' } };
 	}
 
 	// Reshape into BFF screen response

@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import { showToast, showError } from '$lib/stores/toast';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -10,17 +13,44 @@
 	let reference = $state('');
 	let description = $state('');
 	let transferDate = $state(new Date().toISOString().split('T')[0]);
+	let submitting = $state(false);
 
 	const fromBank = $derived(data.bankAccounts.find((b) => b.code === fromAccount));
 	const toBank = $derived(data.bankAccounts.find((b) => b.code === toAccount));
 	const isValid = $derived(fromAccount !== '' && toAccount !== '' && fromAccount !== toAccount && amount > 0);
+
+	async function handleTransfer() {
+		if (!isValid || submitting) return;
+		submitting = true;
+		try {
+			const res = await fetch('/funds-transfer', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ fromAccount, toAccount, amount, transferDate, reference, description })
+			});
+			const data = await res.json();
+			if (!res.ok) {
+				showError(data.error || 'Transfer failed');
+				return;
+			}
+			showToast('Funds transfer completed successfully', 'success');
+			// Reset form
+			fromAccount = '';
+			toAccount = '';
+			amount = 0;
+			reference = '';
+			description = '';
+			await invalidateAll();
+		} catch (err: any) {
+			showError(err.message || 'Transfer failed');
+		} finally {
+			submitting = false;
+		}
+	}
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
-		<h1 class="text-xl font-bold">Funds Transfer</h1>
-		<p class="text-sm text-muted-foreground">Transfer between bank accounts</p>
-	</div>
+	<PageHeader title="Funds Transfer" subtitle="Transfer between bank accounts" />
 
 	<div class="flex-1 overflow-auto p-6">
 		<div class="mx-auto max-w-lg space-y-6">
@@ -129,14 +159,14 @@
 				</div>
 			{/if}
 
-			<!-- Submit (read-only for now) -->
+			<!-- Submit -->
 			<button
-				disabled={!isValid}
+				onclick={handleTransfer}
+				disabled={!isValid || submitting}
 				class="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
 			>
-				Transfer Funds
+				{submitting ? 'Transferring...' : 'Transfer Funds'}
 			</button>
-			<p class="text-xs text-center text-muted-foreground">Transfer execution coming soon — form preview only</p>
 		</div>
 	</div>
 </div>

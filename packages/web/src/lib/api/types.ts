@@ -53,6 +53,7 @@ export interface NameRecord {
 	Fax: string;
 	Mobile: string;
 	email: string;
+	Email: string;
 	WebURL: string;
 	Currency: string;
 	CreditLimit: number;
@@ -77,6 +78,7 @@ export interface NameRecord {
 	TheirRef: string;
 	ProductPricing: string;
 	SalesPerson: string;
+	Category: string;
 	Category1: string;
 	Category2: string;
 	Category3: string;
@@ -124,6 +126,7 @@ export interface TransactionRecord {
 	Enterdate: string;
 	Period: number;
 	Namecode: string;
+	Tofrom: string;
 	Description: string;
 	Gross: number;
 	Taxamount: number;
@@ -145,6 +148,7 @@ export interface TransactionRecord {
 	Mailingaddress: string;
 	Flag: string;
 	Amtwrittenoff: number;
+	Recurring: boolean;
 }
 
 /** Detail (line item) record from /tables/detail */
@@ -213,11 +217,17 @@ export interface ProductRecord {
 
 /** Tax rate record from /tables/taxrate */
 export interface TaxRateRecord {
+	Code: string;
 	TaxCode: string;
+	Description: string;
 	Ratename: string;
+	Rate: number;
 	Rate1: number;
 	Rate2: number;
 	Type: number;
+	PaidAccount: string;
+	ReceivedAccount: string;
+	RecAccount: string;
 }
 
 /** Account record from /tables/account */

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import SummaryCards from '$lib/components/SummaryCards.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -8,51 +10,27 @@
 	const txTypeLabels: Record<string, string> = {
 		DI: 'Invoice', CI: 'Bill', CR: 'Receipt', CP: 'Payment', JN: 'Journal', SO: 'Order', PO: 'PO', QU: 'Quote'
 	};
+
+	const cards = $derived([
+		{ label: 'Movements', value: totals.count },
+		{ label: 'Total Debits', value: totals.debits, isCurrency: true },
+		{ label: 'Total Credits', value: totals.credits, isCurrency: true },
+		{ label: 'Net', value: totals.net, isCurrency: true }
+	]);
 </script>
 
 <div class="flex h-full flex-col">
-	<!-- Header -->
-	<div class="border-b border-border bg-card px-6 py-4">
-		<div class="flex items-center gap-3">
-			<a href="/accounts/{account.code}" class="text-muted-foreground hover:text-foreground">
-				<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-				</svg>
-			</a>
-			<div>
-				<h1 class="text-xl font-bold">Account Enquiry</h1>
-				<div class="flex items-center gap-2 text-sm text-muted-foreground">
-					<span class="font-mono">{account.code}</span>
-					<span>{account.description}</span>
-					<span class="rounded bg-muted px-1.5 py-0.5 text-xs">{account.type} {account.typeLabel}</span>
-				</div>
-			</div>
-		</div>
-	</div>
+	<PageHeader title="Account Enquiry" subtitle="{account.code} — {account.description} ({account.type} {account.typeLabel})">
+		<a href="/accounts/{account.code}" class="text-muted-foreground hover:text-foreground">
+			<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+			</svg>
+		</a>
+	</PageHeader>
 
-	<!-- Content -->
 	<div class="flex-1 overflow-auto p-6">
-		<!-- Summary cards -->
-		<div class="mb-6 grid grid-cols-4 gap-4">
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Movements</div>
-				<div class="mt-1 text-2xl font-bold">{totals.count}</div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Total Debits</div>
-				<div class="mt-1 text-xl font-bold"><CurrencyDisplay amount={totals.debits} /></div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Total Credits</div>
-				<div class="mt-1 text-xl font-bold"><CurrencyDisplay amount={totals.credits} /></div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Net</div>
-				<div class="mt-1 text-xl font-bold"><CurrencyDisplay amount={totals.net} /></div>
-			</div>
-		</div>
+		<SummaryCards {cards} />
 
-		<!-- Movements table -->
 		<div class="overflow-auto rounded-md border border-border">
 			<table class="w-full text-sm">
 				<thead class="sticky top-0">

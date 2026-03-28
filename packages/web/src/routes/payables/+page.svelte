@@ -1,85 +1,42 @@
 <script lang="ts">
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import SummaryCards from '$lib/components/SummaryCards.svelte';
+	import AgingBar from '$lib/components/AgingBar.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	const { summary } = data;
-	const totalAging = $derived(summary.aging.current + summary.aging.thirtyPlus + summary.aging.sixtyPlus + summary.aging.ninetyPlus);
+
+	const cards = $derived([
+		{ label: 'Outstanding', value: summary.totalOutstanding, isCurrency: true },
+		{ label: 'Invoices', value: summary.invoiceCount },
+		{ label: 'Overdue', value: summary.overdueCount, color: 'red' as const },
+		{ label: 'Overdue Amount', value: summary.overdueAmount, isCurrency: true, color: 'red' as const }
+	]);
+
+	const agingBuckets = $derived([
+		{ label: 'Current', value: summary.aging.current, color: 'bg-green-500' },
+		{ label: '30+ days', value: summary.aging.thirtyPlus, color: 'bg-amber-400' },
+		{ label: '60+ days', value: summary.aging.sixtyPlus, color: 'bg-orange-500' },
+		{ label: '90+ days', value: summary.aging.ninetyPlus, color: 'bg-red-500' }
+	]);
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
-		<div class="flex items-center justify-between">
-			<div>
-				<h1 class="text-xl font-bold">Payables</h1>
-				<p class="text-sm text-muted-foreground">Outstanding purchase invoices — {data.today}</p>
-			</div>
-			{#if summary.overdueCount > 0}
-				<span class="rounded-full bg-destructive px-3 py-1 text-sm font-medium text-white">
-					{summary.overdueCount} overdue
-				</span>
-			{/if}
-		</div>
-	</div>
+	<PageHeader title="Payables" subtitle="Outstanding purchase invoices — {data.today}">
+		{#if summary.overdueCount > 0}
+			<span class="rounded-full bg-destructive px-3 py-1 text-sm font-medium text-white">
+				{summary.overdueCount} overdue
+			</span>
+		{/if}
+	</PageHeader>
 
 	<div class="flex-1 overflow-auto p-6">
-		<!-- Summary cards -->
-		<div class="mb-6 grid grid-cols-4 gap-4">
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Outstanding</div>
-				<div class="mt-1 text-xl font-bold"><CurrencyDisplay amount={summary.totalOutstanding} /></div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Invoices</div>
-				<div class="mt-1 text-2xl font-bold">{summary.invoiceCount}</div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Overdue</div>
-				<div class="mt-1 text-xl font-bold text-destructive">{summary.overdueCount}</div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Overdue Amount</div>
-				<div class="mt-1 text-xl font-bold text-destructive"><CurrencyDisplay amount={summary.overdueAmount} /></div>
-			</div>
-		</div>
+		<SummaryCards {cards} />
+		<AgingBar buckets={agingBuckets} />
 
-		<!-- Aging bar -->
-		{#if totalAging > 0}
-			<div class="mb-6">
-				<h3 class="mb-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Aging</h3>
-				<div class="flex h-8 overflow-hidden rounded">
-					<div class="bg-green-500" style="width: {(summary.aging.current / totalAging) * 100}%"></div>
-					<div class="bg-amber-400" style="width: {(summary.aging.thirtyPlus / totalAging) * 100}%"></div>
-					<div class="bg-orange-500" style="width: {(summary.aging.sixtyPlus / totalAging) * 100}%"></div>
-					<div class="bg-red-500" style="width: {(summary.aging.ninetyPlus / totalAging) * 100}%"></div>
-				</div>
-				<div class="mt-2 grid grid-cols-4 gap-2 text-xs">
-					<div class="flex items-center gap-1">
-						<span class="h-2 w-2 rounded bg-green-500"></span>
-						<span class="text-muted-foreground">Current</span>
-						<span class="ml-auto font-medium"><CurrencyDisplay amount={summary.aging.current} /></span>
-					</div>
-					<div class="flex items-center gap-1">
-						<span class="h-2 w-2 rounded bg-amber-400"></span>
-						<span class="text-muted-foreground">30+ days</span>
-						<span class="ml-auto font-medium"><CurrencyDisplay amount={summary.aging.thirtyPlus} /></span>
-					</div>
-					<div class="flex items-center gap-1">
-						<span class="h-2 w-2 rounded bg-orange-500"></span>
-						<span class="text-muted-foreground">60+ days</span>
-						<span class="ml-auto font-medium"><CurrencyDisplay amount={summary.aging.sixtyPlus} /></span>
-					</div>
-					<div class="flex items-center gap-1">
-						<span class="h-2 w-2 rounded bg-red-500"></span>
-						<span class="text-muted-foreground">90+ days</span>
-						<span class="ml-auto font-medium"><CurrencyDisplay amount={summary.aging.ninetyPlus} /></span>
-					</div>
-				</div>
-			</div>
-		{/if}
-
-		<!-- Invoice table -->
 		{#if data.invoices.length > 0}
 			<div class="overflow-auto rounded-md border border-border">
 				<table class="w-full text-sm">

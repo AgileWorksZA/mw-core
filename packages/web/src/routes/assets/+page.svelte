@@ -1,34 +1,24 @@
 <script lang="ts">
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import SummaryCards from '$lib/components/SummaryCards.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const cards = $derived([
+		{ label: 'Total Cost', value: data.totals.cost, isCurrency: true },
+		{ label: 'Accumulated Depreciation', value: data.totals.depreciation, isCurrency: true, color: 'amber' as const },
+		{ label: 'Net Book Value', value: data.totals.bookValue, isCurrency: true, color: 'green' as const }
+	]);
 </script>
 
 <div class="flex h-full flex-col">
-	<div class="border-b border-border bg-card px-6 py-4">
-		<h1 class="text-xl font-bold">Fixed Assets</h1>
-		<p class="text-sm text-muted-foreground">Asset register — {data.assets.length} assets</p>
-	</div>
+	<PageHeader title="Fixed Assets" subtitle="Asset register — {data.assets.length} assets" />
 
 	<div class="flex-1 overflow-auto p-6 space-y-6">
-		<!-- Summary -->
-		<div class="grid grid-cols-3 gap-4">
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Total Cost</div>
-				<div class="mt-1 text-xl font-bold"><CurrencyDisplay amount={data.totals.cost} /></div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Accumulated Depreciation</div>
-				<div class="mt-1 text-xl font-bold text-amber-500"><CurrencyDisplay amount={data.totals.depreciation} /></div>
-			</div>
-			<div class="rounded-lg border border-border p-4 text-center">
-				<div class="text-xs font-medium text-muted-foreground uppercase">Net Book Value</div>
-				<div class="mt-1 text-xl font-bold text-green-600"><CurrencyDisplay amount={data.totals.bookValue} /></div>
-			</div>
-		</div>
+		<SummaryCards {cards} />
 
-		<!-- Asset table -->
 		{#if data.assets.length > 0}
 			<div class="overflow-auto rounded-md border border-border">
 				<table class="w-full text-sm">
