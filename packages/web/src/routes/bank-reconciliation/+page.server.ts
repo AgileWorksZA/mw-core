@@ -2,13 +2,18 @@ import { apiGet, apiEvalBatch } from '$lib/api/client';
 import type { ApiResponse, TransactionRecord, AccountRecord } from '$lib/api/types';
 import type { PageServerLoad } from './$types';
 
+// Disable caching — bank balances must be fresh on every load
+export const config = { isr: false };
+
 function parseNum(s: string): number {
 	const n = parseFloat(s);
 	return isNaN(n) ? 0 : n;
 }
 
 function balanceExpr(code: string): string {
-	return `GetBalance("AccountCode=\\"${code}\\"", Today())`;
+	// Use explicit date string to avoid any expression-level caching
+	const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+	return `GetBalance("AccountCode=\\"${code}\\"", "${today}")`;
 }
 
 export const load: PageServerLoad = async ({ locals, url }) => {

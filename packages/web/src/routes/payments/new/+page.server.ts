@@ -31,7 +31,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const balanceExprs: Record<string, string> = {};
 	for (const a of bankRecords) {
-		balanceExprs[a.Code] = `GetBalance("AccountCode=\\"${a.Code}\\"", Today())`;
+		const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+		balanceExprs[a.Code] = `GetBalance("AccountCode=\\"${a.Code}\\"", "${today}")`;
 	}
 	const balances = await apiEvalBatch(balanceExprs, token);
 
@@ -47,11 +48,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 		name: n.Name
 	}));
 
-	const taxCodes = (taxRes.data ?? []).map((t) => ({
-		code: t.Code,
-		description: t.Description ?? t.Ratename ?? '',
-		rate: t.Rate ?? 0
-	}));
+	const taxCodes = (taxRes.data ?? []).map((t: any) => {
+		const rate = t.Rate2 || t.Rate1 || 0;
+		const label = rate > 0 ? `${rate}%` : 'Zero';
+		return { code: t.TaxCode ?? t.Code ?? '', description: label, rate };
+	});
 
 	const accounts = allAccounts.map((a) => ({
 		code: a.Code,

@@ -28,7 +28,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 		period: t.Period ?? 0,
 		gross: t.Gross ?? 0,
 		bank: t.Contra ?? '',
-		status: t.Status ?? ''
+		status: t.Status ?? '',
+		type: 'Payment'
 	}));
 
 	return {

@@ -426,7 +426,7 @@
 												<select bind:value={line.taxCode} class="w-full rounded-lg bg-surface-container-low px-2 py-1 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring">
 													<option value="">None</option>
 													{#each data.taxCodes as tc}
-														<option value={tc.code}>{tc.code}</option>
+														<option value={tc.code}>{tc.code}: {tc.description}</option>
 													{/each}
 												</select>
 											</td>

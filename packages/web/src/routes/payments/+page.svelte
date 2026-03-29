@@ -8,13 +8,15 @@
 
 	const columns = [
 		{ key: 'status', label: 'St', width: '2rem' },
-		{ key: 'ref', label: 'Ref', mono: true },
+		{ key: 'ref', label: 'Reference', mono: true },
 		{ key: 'bank', label: 'Bank', mono: true, class: 'text-muted-foreground' },
+		{ key: 'nameCode', label: 'Name', mono: true, class: 'text-xs' },
 		{ key: 'name', label: 'To' },
 		{ key: 'description', label: 'Description', class: 'text-muted-foreground max-w-xs truncate' },
-		{ key: 'date', label: 'Date', class: 'text-muted-foreground' },
 		{ key: 'period', label: 'Period', align: 'center' as const, class: 'text-muted-foreground' },
-		{ key: 'gross', label: 'Amount', align: 'right' as const }
+		{ key: 'date', label: 'Date', class: 'text-muted-foreground' },
+		{ key: 'gross', label: 'Gross', align: 'right' as const },
+		{ key: 'type', label: 'Type', class: 'text-muted-foreground' }
 	];
 </script>
 
