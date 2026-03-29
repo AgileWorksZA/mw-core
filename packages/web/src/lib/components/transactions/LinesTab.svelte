@@ -24,14 +24,14 @@
 		<div class="flex gap-1 rounded-xl bg-surface-container-low p-1 w-fit">
 			<button
 				class="rounded px-3 py-1 text-sm transition-colors
-					{viewMode === 'account' ? 'bg-background shadow-sm font-medium' : 'text-muted-foreground hover:text-foreground'}"
+					{viewMode === 'account' ? 'bg-surface-container-lowest font-medium' : 'text-muted-foreground hover:text-foreground'}"
 				onclick={() => (viewMode = 'account')}
 			>
 				By Account
 			</button>
 			<button
 				class="rounded px-3 py-1 text-sm transition-colors
-					{viewMode === 'item' ? 'bg-background shadow-sm font-medium' : 'text-muted-foreground hover:text-foreground'}"
+					{viewMode === 'item' ? 'bg-surface-container-lowest font-medium' : 'text-muted-foreground hover:text-foreground'}"
 				onclick={() => (viewMode = 'item')}
 			>
 				By Item
@@ -126,7 +126,7 @@
 				<span class="text-muted-foreground">Tax</span>
 				<CurrencyDisplay amount={totals.tax} />
 			</div>
-			<div class="flex justify-between border-t border-outline-variant pt-1 font-semibold">
+			<div class="flex justify-between rounded bg-surface-container-low px-2 py-1.5 font-semibold">
 				<span>Total</span>
 				<CurrencyDisplay amount={totals.gross} />
 			</div>
@@ -135,7 +135,7 @@
 					<span class="text-muted-foreground">Paid</span>
 					<CurrencyDisplay amount={totals.amtPaid} />
 				</div>
-				<div class="flex justify-between border-t border-outline-variant pt-1 font-semibold text-destructive">
+				<div class="flex justify-between rounded bg-surface-container-low px-2 py-1.5 font-semibold text-destructive">
 					<span>Outstanding</span>
 					<CurrencyDisplay amount={totals.outstanding} />
 				</div>

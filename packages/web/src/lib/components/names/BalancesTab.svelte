@@ -45,7 +45,7 @@
 					<span class="text-muted-foreground">Current</span>
 					<CurrencyDisplay amount={balances.debtor.current} />
 				</div>
-				<div class="flex justify-between border-t border-outline-variant pt-2 text-sm font-semibold">
+				<div class="flex justify-between rounded bg-surface-container-low px-2 py-2 text-sm font-semibold">
 					<span>THEY OWE</span>
 					<CurrencyDisplay amount={balances.debtor.theyOwe} />
 				</div>
@@ -56,7 +56,7 @@
 		<div class="rounded-xl bg-surface-container-lowest p-4">
 			<h3 class="font-headline mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Creditor</h3>
 			<div class="space-y-2">
-				<div class="flex justify-between border-t border-outline-variant pt-2 text-sm font-semibold">
+				<div class="flex justify-between rounded bg-surface-container-low px-2 py-2 text-sm font-semibold">
 					<span>WE OWE</span>
 					<CurrencyDisplay amount={balances.creditor.weOwe} />
 				</div>

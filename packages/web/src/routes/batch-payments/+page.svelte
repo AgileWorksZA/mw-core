@@ -105,7 +105,7 @@
 					<thead class="sticky top-0">
 						<tr class="bg-surface-container-low">
 							<th class="px-3 py-2.5 text-center font-medium text-muted-foreground w-10">
-								<input type="checkbox" checked={selected.size === data.creditors.length} onchange={toggleAll} class="h-4 w-4 rounded border-gray-300" />
+								<input type="checkbox" checked={selected.size === data.creditors.length} onchange={toggleAll} class="h-4 w-4 rounded accent-primary" />
 							</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Code</th>
 							<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Supplier</th>
@@ -117,7 +117,7 @@
 						{#each data.creditors as c}
 							<tr class="hover:bg-surface-container-low transition-colors {selected.has(c.code) ? 'bg-blue-50 dark:bg-blue-950/20' : ''}">
 								<td class="px-3 py-2 text-center">
-									<input type="checkbox" checked={selected.has(c.code)} onchange={() => toggleRow(c.code, c.owed)} class="h-4 w-4 rounded border-gray-300" />
+									<input type="checkbox" checked={selected.has(c.code)} onchange={() => toggleRow(c.code, c.owed)} class="h-4 w-4 rounded accent-primary" />
 								</td>
 								<td class="px-3 py-2 font-mono text-xs">{c.code}</td>
 								<td class="px-3 py-2 font-medium">{c.name}</td>
@@ -131,7 +131,7 @@
 										value={amounts[c.code] || ''}
 										oninput={(e) => { amounts[c.code] = parseFloat(e.currentTarget.value) || 0; }}
 										disabled={!selected.has(c.code)}
-										class="w-28 rounded border border-input bg-background px-2 py-1 text-right text-sm disabled:opacity-40"
+										class="w-28 rounded-xl bg-surface-container-low px-2 py-1 text-right text-sm focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-40"
 										placeholder="0.00"
 									/>
 								</td>

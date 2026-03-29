@@ -22,7 +22,7 @@
 				{#each contacts as contact, i}
 					<button
 						class="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-surface-container-low
-							{i === selectedIndex ? 'bg-primary/5 border-l-2 border-l-primary' : ''}"
+							{i === selectedIndex ? 'bg-primary/10' : ''}"
 						onclick={() => (selectedIndex = i)}
 					>
 						<div class="font-medium">{contact.name || 'Unnamed'}</div>

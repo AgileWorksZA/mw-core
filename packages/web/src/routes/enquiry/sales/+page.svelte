@@ -29,7 +29,7 @@
 	<!-- Header -->
 	<PageHeader title="Sales Enquiry" subtitle={data.customer ? `${data.customer.name} (${data.customer.code})` : ''}>
 		<form onsubmit={(e) => { e.preventDefault(); search(); }} class="flex gap-2">
-			<input type="text" placeholder="Customer code..." bind:value={nameInput} class="w-48 rounded-md border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+			<input type="text" placeholder="Customer code..." bind:value={nameInput} class="w-48 rounded-xl bg-surface-container-low px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
 			<button type="submit" class="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">Search</button>
 		</form>
 	</PageHeader>

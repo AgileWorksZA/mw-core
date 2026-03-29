@@ -145,7 +145,7 @@
 												checked={reconciledSet.has(t.seq)}
 												onclick={(e) => e.stopPropagation()}
 												onchange={() => toggleReconciled(t.seq)}
-												class="h-4 w-4 rounded border-gray-300"
+												class="h-4 w-4 rounded accent-primary"
 											/>
 										</td>
 										<td class="px-3 py-2">

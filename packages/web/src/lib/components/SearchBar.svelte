@@ -43,7 +43,7 @@
 	<div class="fixed inset-0 z-50 bg-black/50" onclick={() => isOpen = false}></div>
 
 	<!-- Dialog -->
-	<div class="fixed left-1/2 top-1/4 z-50 w-full max-w-lg -translate-x-1/2 bg-surface-container-lowest rounded-xl shadow-md">
+	<div class="fixed left-1/2 top-1/4 z-50 w-full max-w-lg -translate-x-1/2 bg-surface-container-lowest rounded-xl ring-1 ring-outline-variant/15">
 		<form onsubmit={(e) => { e.preventDefault(); search(); }} class="flex items-center gap-2 p-3">
 			<svg class="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 				<circle cx="11" cy="11" r="8" />

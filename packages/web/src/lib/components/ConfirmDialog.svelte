@@ -21,7 +21,7 @@
 {#if open}
 	<div class="fixed inset-0 z-50 flex items-center justify-center">
 		<div class="fixed inset-0 bg-black/50" onclick={() => { open = false; }}></div>
-		<div class="relative z-50 w-full max-w-md rounded-xl bg-surface-container-lowest p-6 shadow-md">
+		<div class="relative z-50 w-full max-w-md rounded-xl bg-surface-container-lowest p-6 ring-1 ring-outline-variant/15">
 			<h2 class="text-lg font-semibold font-headline">{title}</h2>
 			<div class="mt-2 text-sm text-muted-foreground">
 				{@render children()}

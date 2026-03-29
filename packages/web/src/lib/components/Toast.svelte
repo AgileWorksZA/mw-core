@@ -6,7 +6,7 @@
 	<div class="fixed bottom-4 right-4 z-50 space-y-2">
 		{#each $toasts as toast (toast.id)}
 			<div
-				class="flex items-start gap-3 rounded-xl px-4 py-3 shadow-md max-w-sm animate-in
+				class="flex items-start gap-3 rounded-xl px-4 py-3 ring-1 ring-outline-variant/15 max-w-sm animate-in
 					{toast.type === 'error' ? 'bg-destructive/10 text-destructive' :
 					 toast.type === 'success' ? 'bg-positive/10 text-positive' :
 					 'bg-surface-container-lowest text-foreground'}"
