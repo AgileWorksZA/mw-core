@@ -60,3 +60,4 @@ package-lock.json
 /.idea/*
 /.claude/logs/
 /.claude-cache/
+packages/web-leptos/target/
