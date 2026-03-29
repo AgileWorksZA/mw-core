@@ -39,6 +39,11 @@
 		{ account: '', description: '', net: 0, taxCode: '', tax: 0, gross: 0 }
 	]);
 
+	// By Item detail lines
+	let itemLines = $state<Array<{ itemCode: string; qty: number; description: string; unitPrice: number; unit: string; discount: number; extension: number; taxCode: string }>>([
+		{ itemCode: '', qty: 0, description: '', unitPrice: 0, unit: '', discount: 0, extension: 0, taxCode: '' }
+	]);
+
 	// Outstanding invoices (loaded when customer selected)
 	let outstandingInvoices = $state<Array<{
 		seq: number; invoice: string; order: string; description: string;
@@ -50,11 +55,17 @@
 	const selectedBank = $derived(data.bankAccounts.find((b) => b.code === bankAccount));
 	const allocationTotal = $derived(outstandingInvoices.reduce((s, inv) => s + (inv.pay || 0), 0));
 	const detailTotal = $derived(detailLines.reduce((s, l) => s + (l.gross || 0), 0));
+	const itemTotal = $derived(itemLines.reduce((s, l) => s + (l.extension || 0), 0));
 	const allocationError = $derived(allocationTotal > amount && amount > 0 ? 'Allocation total exceeds the receipt amount' : '');
+	const hasDetailData = $derived(
+		(activeTab === 'by-account' && detailTotal > 0) ||
+		(activeTab === 'by-item' && itemTotal > 0) ||
+		(isCustomerMode && allocationTotal > 0)
+	);
 	const isValid = $derived(
 		bankAccount !== '' &&
 		amount > 0 &&
-		(isCustomerMode ? nameCode !== '' && allocationTotal > 0 && !allocationError : detailTotal > 0)
+		(isCustomerMode ? nameCode !== '' && allocationTotal > 0 && !allocationError : hasDetailData)
 	);
 
 	// When customer checkbox toggled off, switch tab back
@@ -120,6 +131,33 @@
 		detailLines = [...detailLines];
 	}
 
+	function addItemLine() {
+		itemLines = [...itemLines, { itemCode: '', qty: 0, description: '', unitPrice: 0, unit: '', discount: 0, extension: 0, taxCode: '' }];
+	}
+
+	function removeItemLine(index: number) {
+		itemLines = itemLines.filter((_, i) => i !== index);
+	}
+
+	function onItemSelect(index: number) {
+		const line = itemLines[index];
+		const prod = data.products.find((p) => p.code === line.itemCode);
+		if (prod) {
+			line.description = prod.description;
+			line.unitPrice = prod.sellPrice;
+			line.unit = prod.unit;
+			if (prod.taxCode) line.taxCode = prod.taxCode;
+			recalcItemLine(index);
+		}
+		itemLines = [...itemLines];
+	}
+
+	function recalcItemLine(index: number) {
+		const line = itemLines[index];
+		line.extension = Math.round(line.qty * line.unitPrice * (1 - (line.discount || 0) / 100) * 100) / 100;
+		itemLines = [...itemLines];
+	}
+
 	function autoDistribute() {
 		let remaining = amount;
 		for (let i = 0; i < outstandingInvoices.length; i++) {
@@ -145,8 +183,12 @@
 				}))
 				: [];
 
-			const lines = !isCustomerMode
+			const lines = !isCustomerMode && activeTab === 'by-account'
 				? detailLines.filter((l) => l.account && l.gross > 0)
+				: [];
+
+			const items = !isCustomerMode && activeTab === 'by-item'
+				? itemLines.filter((l) => l.itemCode && l.qty > 0)
 				: [];
 
 			const res = await fetch('/receipts/new', {
@@ -157,7 +199,8 @@
 					bankAccount, amount, transDate, description, paidBy, colour,
 					isCustomerMode,
 					allocations,
-					detailLines: lines
+					detailLines: lines,
+					itemLines: items
 				})
 			});
 			const result = await res.json();
@@ -339,9 +382,73 @@
 						<button onclick={addDetailLine} class="mt-3 text-sm text-primary hover:underline">+ Add line</button>
 
 					{:else if activeTab === 'by-item'}
-						<div class="flex h-24 items-center justify-center text-muted-foreground text-sm">
-							Item-based entry not yet available. Use the By Account tab.
+						<!-- By Item detail lines -->
+						<div class="overflow-auto">
+							<table class="w-full text-sm">
+								<thead>
+									<tr class="bg-surface-container-low">
+										<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Item</th>
+										<th class="px-3 py-2.5 text-right font-medium text-muted-foreground w-16">Qty</th>
+										<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Description</th>
+										<th class="px-3 py-2.5 text-right font-medium text-muted-foreground w-24">Unit Price</th>
+										<th class="px-3 py-2.5 text-center font-medium text-muted-foreground w-12">per</th>
+										<th class="px-3 py-2.5 text-right font-medium text-muted-foreground w-16">Disc.%</th>
+										<th class="px-3 py-2.5 text-right font-medium text-muted-foreground w-24">Extension</th>
+										<th class="px-3 py-2.5 text-left font-medium text-muted-foreground w-24">TC</th>
+										<th class="px-3 py-2.5 w-10"></th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each itemLines as line, i}
+										<tr class="hover:bg-surface-container-low transition-colors">
+											<td class="px-2 py-1.5">
+												<select bind:value={line.itemCode} onchange={() => onItemSelect(i)} class="w-full rounded-lg bg-surface-container-low px-2 py-1 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring">
+													<option value="">Select...</option>
+													{#each data.products as prod}
+														<option value={prod.code}>{prod.code}: {prod.description}</option>
+													{/each}
+												</select>
+											</td>
+											<td class="px-2 py-1.5">
+												<input type="number" bind:value={line.qty} step="1" min="0" onchange={() => recalcItemLine(i)} class="w-16 rounded-lg bg-surface-container-low px-2 py-1 text-right text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
+											</td>
+											<td class="px-2 py-1.5">
+												<input type="text" bind:value={line.description} class="w-full rounded-lg bg-surface-container-low px-2 py-1 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
+											</td>
+											<td class="px-2 py-1.5">
+												<input type="number" bind:value={line.unitPrice} step="0.01" min="0" onchange={() => recalcItemLine(i)} class="w-24 rounded-lg bg-surface-container-low px-2 py-1 text-right text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
+											</td>
+											<td class="px-2 py-1.5 text-center text-xs text-muted-foreground">{line.unit || '-'}</td>
+											<td class="px-2 py-1.5">
+												<input type="number" bind:value={line.discount} step="0.5" min="0" max="100" onchange={() => recalcItemLine(i)} class="w-16 rounded-lg bg-surface-container-low px-2 py-1 text-right text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
+											</td>
+											<td class="px-2 py-1.5 text-right text-sm font-semibold tabular-nums">{line.extension.toFixed(2)}</td>
+											<td class="px-2 py-1.5">
+												<select bind:value={line.taxCode} class="w-full rounded-lg bg-surface-container-low px-2 py-1 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring">
+													<option value="">None</option>
+													{#each data.taxCodes as tc}
+														<option value={tc.code}>{tc.code}</option>
+													{/each}
+												</select>
+											</td>
+											<td class="px-2 py-1.5">
+												{#if itemLines.length > 1}
+													<button onclick={() => removeItemLine(i)} class="text-muted-foreground hover:text-destructive text-xs">&times;</button>
+												{/if}
+											</td>
+										</tr>
+									{/each}
+								</tbody>
+								<tfoot>
+									<tr class="bg-surface-container-low">
+										<td colspan="6" class="px-3 py-2 text-right text-sm font-medium text-muted-foreground">Total</td>
+										<td class="px-3 py-2 text-right text-sm font-bold tabular-nums"><CurrencyDisplay amount={itemTotal} /></td>
+										<td colspan="2"></td>
+									</tr>
+								</tfoot>
+							</table>
 						</div>
+						<button onclick={addItemLine} class="mt-3 text-sm text-primary hover:underline">+ Add item</button>
 
 					{:else if activeTab === 'payment-on-invoice'}
 						<!-- Payment on Invoice allocation grid -->
@@ -425,8 +532,8 @@
 						Allocating <span class="font-semibold text-foreground"><CurrencyDisplay amount={allocationTotal} /></span>
 						of <span class="font-semibold text-foreground"><CurrencyDisplay amount={amount} /></span>
 						against {outstandingInvoices.filter((i) => i.pay > 0).length} invoice(s)
-					{:else if !isCustomerMode && detailTotal > 0}
-						Detail total: <span class="font-semibold text-foreground"><CurrencyDisplay amount={detailTotal} /></span>
+					{:else if !isCustomerMode && (detailTotal > 0 || itemTotal > 0)}
+						Detail total: <span class="font-semibold text-foreground"><CurrencyDisplay amount={activeTab === 'by-item' ? itemTotal : detailTotal} /></span>
 					{/if}
 				</div>
 				<div class="flex gap-2">

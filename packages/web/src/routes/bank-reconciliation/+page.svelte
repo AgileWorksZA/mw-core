@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
 	import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
-	import { showToast } from '$lib/stores/toast';
+	import { showToast, showError } from '$lib/stores/toast';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -45,11 +45,40 @@
 		setupComplete = false;
 	}
 
-	function handleFinish() {
+	let finishing = $state(false);
+
+	async function handleFinish() {
 		confirmFinishOpen = false;
-		showToast(`Bank reconciliation completed. ${reconciledSet.size} transactions reconciled.`, 'success');
-		reconciledSet = new Set();
-		setupComplete = false;
+		if (!isBalanced || finishing) return;
+		finishing = true;
+		try {
+			const res = await fetch('/bank-reconciliation', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					bankCode: data.bankCode,
+					reconciledSeqs: Array.from(reconciledSet),
+					statementDate,
+					closingBalance
+				})
+			});
+			const result = await res.json();
+			if (!res.ok) {
+				showError(result.error || 'Failed to finish reconciliation');
+				return;
+			}
+			const msg = result.failed > 0
+				? `Reconciled ${result.reconciled} transactions (${result.failed} failed)`
+				: `Bank reconciliation completed. ${result.reconciled} transactions reconciled.`;
+			showToast(msg, 'success');
+			reconciledSet = new Set();
+			setupComplete = false;
+			goto('/bank-reconciliation', { invalidateAll: true });
+		} catch (err: any) {
+			showError(err.message || 'Failed to finish reconciliation');
+		} finally {
+			finishing = false;
+		}
 	}
 
 	// Computed reconciliation values

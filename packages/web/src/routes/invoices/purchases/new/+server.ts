@@ -41,15 +41,16 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		detail.push({
 			Account: line.account,
 			Gross: gross,
+			Net: line.net || gross,
+			Tax: line.tax || 0,
 			Description: line.description || '',
-			TaxCode: line.taxCode || ''
+			TaxCode: line.taxCode || 'Z'
 		});
 		totalGross += gross;
 	}
 
 	const record: Record<string, any> = {
 		Type: 'CI',
-		Status: 'P',
 		Transdate: mwDate,
 		Namecode: nameCode,
 		Gross: Math.round(totalGross * 100) / 100,

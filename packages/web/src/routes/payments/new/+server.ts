@@ -8,7 +8,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 
 	const {
 		nameCode, bankAccount, amount, transDate, description,
-		paidBy, colour, isSupplierMode, allocations, detailLines
+		paidBy, colour, isSupplierMode, allocations, detailLines, itemLines
 	} = body as {
 		nameCode: string;
 		bankAccount: string;
@@ -20,6 +20,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		isSupplierMode: boolean;
 		allocations: Array<{ invoice: string; amount: number; seq: number }>;
 		detailLines: Array<{ account: string; description: string; net: number; taxCode: string; tax: number; gross: number }>;
+		itemLines: Array<{ itemCode: string; qty: number; description: string; unitPrice: number; discount: number; taxCode: string }>;
 	};
 
 	if (!bankAccount || !amount || amount <= 0) {
@@ -39,9 +40,28 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		for (const alloc of allocations) {
 			if (alloc.amount <= 0) continue;
 			detail.push({
-				Account: '2000', // Accounts Payable default
+				Account: '2000',
 				Gross: alloc.amount,
+				Net: alloc.amount,
+				Tax: 0,
+				TaxCode: 'Z',
 				Description: `Invoice ${alloc.invoice}`
+			});
+		}
+	} else if (itemLines?.length > 0) {
+		for (const line of itemLines) {
+			if (!line.itemCode || line.qty <= 0) continue;
+			const ext = Math.round(line.qty * line.unitPrice * (1 - (line.discount || 0) / 100) * 100) / 100;
+			detail.push({
+				StockCode: line.itemCode,
+				StockQty: line.qty,
+				UnitPrice: line.unitPrice,
+				Discount: line.discount || 0,
+				Gross: ext,
+				Net: ext,
+				Tax: 0,
+				Description: line.description || '',
+				TaxCode: line.taxCode || 'Z'
 			});
 		}
 	} else if (detailLines?.length > 0) {
@@ -50,15 +70,16 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 			detail.push({
 				Account: line.account,
 				Gross: line.gross || line.net || 0,
+				Net: line.net || line.gross || 0,
+				Tax: line.tax || 0,
 				Description: line.description || '',
-				TaxCode: line.taxCode || ''
+				TaxCode: line.taxCode || 'Z'
 			});
 		}
 	}
 
 	const record: Record<string, any> = {
 		Type: 'CP',
-		Status: 'P',
 		Transdate: mwDate,
 		Gross: amount,
 		Contra: bankAccount,

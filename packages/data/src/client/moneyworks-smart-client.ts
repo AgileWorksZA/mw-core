@@ -278,19 +278,11 @@ export class SmartMoneyWorksClient extends MoneyWorksRESTClient {
 			throw new Error(`Field structure not found for table ${table}`);
 		}
 
-		// Convert records to TSV format with proper field ordering
-		const tsvData = this.recordsToOrderedTSV(records, structure);
+		// Convert records to XML format for MoneyWorks import
+		const xmlData = this.recordsToXML(records, table);
 
-		// Call base import method
-		const baseResult = await this.import(table, [], {
-			mode: options.mode,
-			workItOut: options.workItOut,
-			calculated: options.calculated,
-		});
-
-		// The base import expects raw records, but we need to use TSV
-		// So we'll call the raw import endpoint directly
-		return this.importTSV(table, tsvData, options);
+		// Import XML data directly to MoneyWorks
+		return this.importXML(table, xmlData, options);
 	}
 
 	/**
@@ -419,6 +411,7 @@ export class SmartMoneyWorksClient extends MoneyWorksRESTClient {
 		const encodedPassword = encodeURIComponent(config.password || "");
 		const baseUrl = `${config.protocol || "http"}://${config.host}:${config.port}/REST/${encodedUsername}:${encodedPassword}@${encodedDataFile}`;
 
+		// TSV data includes header row as first line — MoneyWorks reads field names from it
 		const url = `${baseUrl}/import?${params.toString()}`;
 
 		try {
@@ -454,6 +447,108 @@ export class SmartMoneyWorksClient extends MoneyWorksRESTClient {
 							message: "Request timed out",
 							code: "MW_TIMEOUT",
 						},
+					],
+				};
+			}
+			throw error;
+		}
+	}
+
+	/**
+	 * Convert records to XML format for MoneyWorks import.
+	 * MW XML uses lowercase field names, detail subfiles use dotted naming (detail.account),
+	 * and Detail arrays become <subfile name="Detail"><detail>...</detail></subfile> blocks.
+	 */
+	private recordsToXML(records: Record<string, unknown>[], tableName: string): string {
+		const recordTag = tableName.toLowerCase();
+		const lines: string[] = [`<?xml version="1.0"?>`, `<table name="${tableName}">`];
+		for (const record of records) {
+			lines.push(`  <${recordTag}>`);
+			// Collect subfile arrays separately
+			const subfiles: Array<{ name: string; records: Record<string, unknown>[] }> = [];
+			for (const [key, value] of Object.entries(record)) {
+				if (value === null || value === undefined) continue;
+				if (Array.isArray(value)) {
+					subfiles.push({ name: key, records: value as Record<string, unknown>[] });
+					continue;
+				}
+				const lowerKey = key.toLowerCase();
+				const escaped = String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+				lines.push(`    <${lowerKey}>${escaped}</${lowerKey}>`);
+			}
+			// Emit subfiles (Detail lines)
+			for (const sf of subfiles) {
+				const sfName = sf.name.charAt(0).toUpperCase() + sf.name.slice(1);
+				const sfTag = sf.name.toLowerCase();
+				lines.push(`    <subfile name="${sfName}">`);
+				for (const subRec of sf.records) {
+					lines.push(`      <${sfTag}>`);
+					for (const [sk, sv] of Object.entries(subRec)) {
+						if (sv === null || sv === undefined) continue;
+						const fieldName = `${sfTag}.${sk.toLowerCase()}`;
+						const escaped = String(sv).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+						lines.push(`        <${fieldName}>${escaped}</${fieldName}>`);
+					}
+					lines.push(`      </${sfTag}>`);
+				}
+				lines.push(`    </subfile>`);
+			}
+			lines.push(`  </${recordTag}>`);
+		}
+		lines.push('</table>');
+		return lines.join('\n');
+	}
+
+	/**
+	 * Import XML data directly to MoneyWorks
+	 */
+	private async importXML(
+		table: string,
+		xmlData: string,
+		options: ImportOptions = {},
+	): Promise<ImportResult> {
+		const params = new URLSearchParams();
+		if (options.mode) params.append("mode", options.mode);
+		if (options.workItOut) params.append("work_it_out", "true");
+		if (options.calculated) params.append("calculated", "true");
+
+		const config = (this as any).config as MoneyWorksConfig;
+		const encodedDataFile = config.dataFile.replace(/\//g, "%2f");
+		const encodedUsername = encodeURIComponent(config.username);
+		const encodedPassword = encodeURIComponent(config.password || "");
+		const baseUrl = `${config.protocol || "http"}://${config.host}:${config.port}/REST/${encodedUsername}:${encodedPassword}@${encodedDataFile}`;
+		const qs = params.toString();
+		const url = `${baseUrl}/import/${table.toLowerCase()}${qs ? '?' + qs : ''}`;
+
+		try {
+			const response = await fetch(url, {
+				method: "POST",
+				headers: {
+					Accept: "text/plain",
+					"Content-Type": "application/xml",
+				},
+				body: xmlData,
+				signal: AbortSignal.timeout(config.timeout || 30000),
+			});
+
+			const responseText = await response.text();
+
+			if (!response.ok) {
+				return this.parseImportError(responseText, xmlData);
+			}
+
+			return this.parseImportResponse(responseText, xmlData);
+		} catch (error) {
+			if (error instanceof Error && error.name === "AbortError") {
+				return {
+					success: false,
+					processed: 0,
+					created: 0,
+					updated: 0,
+					skipped: 0,
+					errors: 0,
+					errorDetails: [
+						{ recordIndex: -1, message: "Import request timed out" },
 					],
 				};
 			}

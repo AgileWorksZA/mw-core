@@ -1,5 +1,5 @@
 import { apiGet, apiEvalBatch } from '$lib/api/client';
-import type { ApiResponse, AccountRecord, NameRecord, TaxRateRecord } from '$lib/api/types';
+import type { ApiResponse, AccountRecord, NameRecord, TaxRateRecord, ProductRecord } from '$lib/api/types';
 import type { PageServerLoad } from './$types';
 
 function parseNum(s: string): number {
@@ -13,15 +13,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 	let accountsRes: ApiResponse<AccountRecord[]>;
 	let namesRes: ApiResponse<NameRecord[]>;
 	let taxRes: ApiResponse<TaxRateRecord[]>;
+	let productsRes: ApiResponse<ProductRecord[]>;
 
 	try {
-		[accountsRes, namesRes, taxRes] = await Promise.all([
+		[accountsRes, namesRes, taxRes, productsRes] = await Promise.all([
 			apiGet<ApiResponse<AccountRecord[]>>('/tables/account', { token, limit: 500 }),
 			apiGet<ApiResponse<NameRecord[]>>('/tables/name', { token, filter: 'SupplierType>="1"', limit: 500 }),
-			apiGet<ApiResponse<TaxRateRecord[]>>('/tables/taxrate', { token, limit: 100 })
+			apiGet<ApiResponse<TaxRateRecord[]>>('/tables/taxrate', { token, limit: 100 }),
+			apiGet<ApiResponse<ProductRecord[]>>('/tables/product', { token, limit: 500 })
 		]);
 	} catch {
-		return { bankAccounts: [], suppliers: [], taxCodes: [], accounts: [] };
+		return { bankAccounts: [], suppliers: [], taxCodes: [], accounts: [], products: [] };
 	}
 
 	const allAccounts = accountsRes.data ?? [];
@@ -57,5 +59,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 		type: a.Type ?? ''
 	}));
 
-	return { bankAccounts, suppliers, taxCodes, accounts };
+	const products = (productsRes.data ?? []).map((p) => ({
+		code: p.Code,
+		description: p.Description ?? '',
+		sellPrice: p.Sellprice ?? 0,
+		buyPrice: p.Buyprice ?? 0,
+		unit: p.Sellunit ?? '',
+		taxCode: p.Selltaxcodeoverride ?? ''
+	}));
+
+	return { bankAccounts, suppliers, taxCodes, accounts, products };
 };
