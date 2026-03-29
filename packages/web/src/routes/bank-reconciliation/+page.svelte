@@ -1,18 +1,32 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
+	import { showToast } from '$lib/stores/toast';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
+	// Setup state
+	let statementDate = $state(new Date().toISOString().split('T')[0]);
+	let statementNumber = $state('');
+	let openingBalanceInput = $state(0);
+	let closingBalance = $state(0);
+	let setupComplete = $state(false);
+	let confirmFinishOpen = $state(false);
+
 	// Reconciliation state (client-side)
 	let reconciledSet = $state(new Set<number>());
-	let closingBalance = $state(0);
 
 	function selectBank(code: string) {
 		reconciledSet = new Set();
 		closingBalance = 0;
+		setupComplete = false;
 		goto(`/bank-reconciliation?bank=${code}`, { invalidateAll: true });
+	}
+
+	function startReconciliation() {
+		setupComplete = true;
 	}
 
 	function toggleReconciled(seq: number) {
@@ -22,25 +36,32 @@
 		reconciledSet = next;
 	}
 
-	function toggleAll() {
-		if (reconciledSet.size === data.transactions.length) {
-			reconciledSet = new Set();
-		} else {
-			reconciledSet = new Set(data.transactions.map((t) => t.seq));
-		}
+	function startOver() {
+		reconciledSet = new Set();
+	}
+
+	function finishLater() {
+		showToast('Reconciliation progress saved for later', 'success');
+		setupComplete = false;
+	}
+
+	function handleFinish() {
+		confirmFinishOpen = false;
+		showToast(`Bank reconciliation completed. ${reconciledSet.size} transactions reconciled.`, 'success');
+		reconciledSet = new Set();
+		setupComplete = false;
 	}
 
 	// Computed reconciliation values
-	const processedDeposits = $derived(
-		data.transactions.filter((t) => reconciledSet.has(t.seq)).reduce((s, t) => s + t.deposit, 0)
-	);
-	const processedWithdrawals = $derived(
-		data.transactions.filter((t) => reconciledSet.has(t.seq)).reduce((s, t) => s + t.withdrawal, 0)
-	);
+	const reconciledTxs = $derived(data.transactions.filter((t) => reconciledSet.has(t.seq)));
+	const unreconciledTxs = $derived(data.transactions.filter((t) => !reconciledSet.has(t.seq)));
+	const processedDeposits = $derived(reconciledTxs.reduce((s, t) => s + t.deposit, 0));
+	const processedWithdrawals = $derived(reconciledTxs.reduce((s, t) => s + t.withdrawal, 0));
 	const amountProcessed = $derived(processedDeposits - processedWithdrawals);
-	const openingBalance = $derived(data.selectedBank?.balance ?? 0);
-	const calculatedClosing = $derived(openingBalance - amountProcessed);
-	const difference = $derived(closingBalance - calculatedClosing);
+	const openingBalance = $derived(setupComplete ? openingBalanceInput : (data.selectedBank?.balance ?? 0));
+	const calculatedClosing = $derived(openingBalance + amountProcessed);
+	const difference = $derived(Math.round((calculatedClosing - closingBalance) * 100) / 100);
+	const isBalanced = $derived(Math.abs(difference) < 0.01);
 </script>
 
 <div class="flex h-full flex-col">
@@ -71,105 +92,173 @@
 					</button>
 				{/each}
 			</div>
-		{:else}
-			<!-- Phase 2: Reconciliation -->
-			<div class="space-y-6">
-				<!-- Summary panel -->
-				<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
-					<div class="rounded-xl bg-surface-container-lowest p-3 text-center">
-						<div class="text-xs text-muted-foreground uppercase">Opening Balance</div>
-						<div class="mt-1 font-bold"><CurrencyDisplay amount={openingBalance} /></div>
-					</div>
-					<div class="rounded-xl bg-surface-container-lowest p-3 text-center">
-						<div class="text-xs text-muted-foreground uppercase">Processed</div>
-						<div class="mt-1 font-bold"><CurrencyDisplay amount={amountProcessed} /></div>
-					</div>
-					<div class="rounded-xl bg-surface-container-lowest p-3 text-center">
-						<div class="text-xs text-muted-foreground uppercase">Calculated Close</div>
-						<div class="mt-1 font-bold"><CurrencyDisplay amount={calculatedClosing} /></div>
-					</div>
-					<div class="rounded-xl bg-surface-container-lowest p-3 text-center">
-						<div class="text-xs text-muted-foreground uppercase">Statement Close</div>
-						<input
-							type="number"
-							bind:value={closingBalance}
-							step="0.01"
-							class="mt-1 w-full rounded-xl bg-surface-container-low px-2 py-1 text-center text-sm font-bold focus:outline-none focus:ring-2 focus:ring-ring"
-						/>
-					</div>
-					<div class="rounded-xl p-3 text-center {Math.abs(difference) < 0.01 ? 'bg-positive/5' : 'bg-destructive/5'}">
-						<div class="text-xs text-muted-foreground uppercase">Difference</div>
-						<div class="mt-1 font-bold" class:text-positive={Math.abs(difference) < 0.01} class:text-destructive={Math.abs(difference) >= 0.01}>
-							<CurrencyDisplay amount={difference} />
+
+		{:else if !setupComplete}
+			<!-- Phase 2: Setup dialog -->
+			<div class="mx-auto max-w-lg">
+				<div class="rounded-xl bg-surface-container-lowest p-6 space-y-4">
+					<h2 class="text-lg font-semibold font-headline">Reconciliation Setup</h2>
+					<p class="text-sm text-muted-foreground">{data.selectedBank?.code}: {data.selectedBank?.description}</p>
+
+					<div class="grid grid-cols-2 gap-3">
+						<div class="space-y-1.5">
+							<label class="text-sm font-medium">Statement Date</label>
+							<input type="date" bind:value={statementDate} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
+						</div>
+						<div class="space-y-1.5">
+							<label class="text-sm font-medium">Statement Number</label>
+							<input type="text" bind:value={statementNumber} placeholder="Optional" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 						</div>
 					</div>
-				</div>
 
-				<!-- Tick count -->
-				<div class="flex items-center justify-between text-sm text-muted-foreground">
-					<span>{reconciledSet.size} of {data.transactions.length} transactions reconciled</span>
+					<div class="grid grid-cols-2 gap-3">
+						<div class="space-y-1.5">
+							<label class="text-sm font-medium">Opening Balance</label>
+							<input type="number" bind:value={openingBalanceInput} step="0.01" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
+							<div class="text-xs text-muted-foreground">Previous closing balance</div>
+						</div>
+						<div class="space-y-1.5">
+							<label class="text-sm font-medium">Closing Balance</label>
+							<input type="number" bind:value={closingBalance} step="0.01" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
+							<div class="text-xs text-muted-foreground">From bank statement</div>
+						</div>
+					</div>
+
+					<div class="flex gap-2 pt-2">
+						<button onclick={() => selectBank('')} class="flex-1 rounded-xl bg-surface-container-low px-4 py-2.5 text-sm hover:bg-surface transition-colors">Change Bank</button>
+						<button
+							onclick={startReconciliation}
+							disabled={closingBalance === 0}
+							class="flex-1 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+						>
+							Start Reconciliation
+						</button>
+					</div>
+				</div>
+			</div>
+
+		{:else}
+			<!-- Phase 3: Dual-panel reconciliation -->
+			<div class="space-y-4">
+				<!-- Summary bar -->
+				<div class="flex items-center justify-between rounded-xl bg-surface-container-lowest p-4">
+					<div class="flex gap-6 text-sm">
+						<div><span class="text-muted-foreground">Opening:</span> <span class="font-semibold"><CurrencyDisplay amount={openingBalance} /></span></div>
+						<div><span class="text-muted-foreground">Processed:</span> <span class="font-semibold"><CurrencyDisplay amount={amountProcessed} /></span></div>
+						<div><span class="text-muted-foreground">Calc Close:</span> <span class="font-semibold"><CurrencyDisplay amount={calculatedClosing} /></span></div>
+						<div><span class="text-muted-foreground">Stmt Close:</span> <span class="font-semibold"><CurrencyDisplay amount={closingBalance} /></span></div>
+						<div>
+							<span class="text-muted-foreground">Difference:</span>
+							<span class="ml-1 font-bold {isBalanced ? 'text-positive' : 'text-destructive'}"><CurrencyDisplay amount={difference} /></span>
+						</div>
+					</div>
 					<div class="flex gap-2">
-						<button onclick={() => selectBank('')} class="rounded-xl bg-surface-container-low px-3 py-1.5 text-sm hover:bg-surface-container-low/80">Change Bank</button>
-						<button onclick={toggleAll} class="rounded-xl bg-surface-container-low px-3 py-1.5 text-sm hover:bg-surface-container-low/80">
-							{reconciledSet.size === data.transactions.length ? 'Untick All' : 'Tick All'}
+						<button onclick={startOver} class="rounded-xl bg-surface-container-low px-3 py-1.5 text-sm hover:bg-surface transition-colors">Start Over</button>
+						<button onclick={finishLater} class="rounded-xl bg-surface-container-low px-3 py-1.5 text-sm hover:bg-surface transition-colors">Finish Later</button>
+						<button
+							onclick={() => { confirmFinishOpen = true; }}
+							disabled={!isBalanced}
+							class="rounded-xl bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+						>
+							Finish
 						</button>
 					</div>
 				</div>
 
-				<!-- Transactions table -->
-				{#if data.transactions.length > 0}
-					<div class="overflow-auto rounded-xl bg-surface-container-lowest">
+				<!-- Top panel: Reconciled items -->
+				<div class="rounded-xl bg-surface-container-lowest">
+					<div class="border-b border-outline-variant/15 px-5 py-3 flex items-center justify-between">
+						<h3 class="text-sm font-semibold font-headline">Reconciled ({reconciledTxs.length})</h3>
+						<span class="text-sm text-muted-foreground">
+							Deposits: <span class="text-positive font-semibold"><CurrencyDisplay amount={processedDeposits} /></span>
+							Withdrawals: <span class="text-destructive font-semibold"><CurrencyDisplay amount={processedWithdrawals} /></span>
+						</span>
+					</div>
+					<div class="max-h-64 overflow-auto">
 						<table class="w-full text-sm">
 							<thead class="sticky top-0">
-								<tr class="bg-surface-container-lowest">
-									<th class="px-3 py-2.5 text-center font-medium text-muted-foreground w-10">OK</th>
-									<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Type</th>
-									<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Date</th>
-									<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Ref</th>
-									<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Name</th>
-									<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Description</th>
-									<th class="px-3 py-2.5 text-right font-medium text-muted-foreground">Deposit</th>
-									<th class="px-3 py-2.5 text-right font-medium text-muted-foreground">Withdrawal</th>
+								<tr class="bg-surface-container-low">
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground w-20">Type</th>
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground">Date</th>
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground">Ref</th>
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground">Description</th>
+									<th class="px-3 py-2 text-right font-medium text-muted-foreground">Deposit</th>
+									<th class="px-3 py-2 text-right font-medium text-muted-foreground">Withdrawal</th>
+									<th class="px-3 py-2 w-10"></th>
 								</tr>
 							</thead>
 							<tbody>
-								{#each data.transactions as t}
-									<tr
-										class="cursor-pointer transition-colors
-											{reconciledSet.has(t.seq) ? 'bg-positive/5' : 'hover:bg-surface-container-low'}"
-										onclick={() => toggleReconciled(t.seq)}
-									>
-										<td class="px-3 py-2 text-center">
-											<input
-												type="checkbox"
-												checked={reconciledSet.has(t.seq)}
-												onclick={(e) => e.stopPropagation()}
-												onchange={() => toggleReconciled(t.seq)}
-												class="h-4 w-4 rounded accent-primary"
-											/>
-										</td>
-										<td class="px-3 py-2">
-											<span class="text-xs font-medium {t.type === 'Receipt' ? 'text-positive' : 'text-red-500'}">{t.type}</span>
-										</td>
-										<td class="px-3 py-2 text-muted-foreground">{t.date}</td>
-										<td class="px-3 py-2 font-mono text-xs">{t.ref}</td>
-										<td class="px-3 py-2">{t.name}</td>
-										<td class="px-3 py-2 max-w-xs truncate text-muted-foreground">{t.description}</td>
-										<td class="px-3 py-2 text-right">
-											{#if t.deposit > 0}<span class="text-positive"><CurrencyDisplay amount={t.deposit} /></span>{/if}
-										</td>
-										<td class="px-3 py-2 text-right">
-											{#if t.withdrawal > 0}<span class="text-red-500"><CurrencyDisplay amount={t.withdrawal} /></span>{/if}
-										</td>
-									</tr>
-								{/each}
+								{#if reconciledTxs.length === 0}
+									<tr><td colspan="7" class="px-3 py-6 text-center text-muted-foreground">No items reconciled yet. Check transactions below to match them.</td></tr>
+								{:else}
+									{#each reconciledTxs as t}
+										<tr class="hover:bg-surface-container-low transition-colors bg-positive/5">
+											<td class="px-3 py-1.5"><span class="text-xs font-medium {t.type === 'Receipt' ? 'text-positive' : 'text-destructive'}">{t.type}</span></td>
+											<td class="px-3 py-1.5 text-muted-foreground">{t.date}</td>
+											<td class="px-3 py-1.5 font-mono text-xs">{t.ref}</td>
+											<td class="px-3 py-1.5 text-muted-foreground max-w-xs truncate">{t.description || t.name}</td>
+											<td class="px-3 py-1.5 text-right tabular-nums">{#if t.deposit > 0}<span class="text-positive"><CurrencyDisplay amount={t.deposit} /></span>{/if}</td>
+											<td class="px-3 py-1.5 text-right tabular-nums">{#if t.withdrawal > 0}<span class="text-destructive"><CurrencyDisplay amount={t.withdrawal} /></span>{/if}</td>
+											<td class="px-3 py-1.5 text-center">
+												<button onclick={() => toggleReconciled(t.seq)} class="text-xs text-muted-foreground hover:text-destructive">&times;</button>
+											</td>
+										</tr>
+									{/each}
+								{/if}
 							</tbody>
 						</table>
 					</div>
-				{:else}
-					<div class="flex h-40 items-center justify-center text-muted-foreground">No transactions for this bank account</div>
-				{/if}
+				</div>
+
+				<!-- Bottom panel: Unreconciled items -->
+				<div class="rounded-xl bg-surface-container-lowest">
+					<div class="border-b border-outline-variant/15 px-5 py-3">
+						<h3 class="text-sm font-semibold font-headline">Unreconciled ({unreconciledTxs.length})</h3>
+					</div>
+					<div class="max-h-96 overflow-auto">
+						<table class="w-full text-sm">
+							<thead class="sticky top-0">
+								<tr class="bg-surface-container-low">
+									<th class="px-3 py-2 text-center font-medium text-muted-foreground w-12">OK</th>
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground w-20">Type</th>
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground">Date</th>
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground">Ref</th>
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground">Name</th>
+									<th class="px-3 py-2 text-left font-medium text-muted-foreground">Description</th>
+									<th class="px-3 py-2 text-right font-medium text-muted-foreground">Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								{#if unreconciledTxs.length === 0}
+									<tr><td colspan="7" class="px-3 py-6 text-center text-muted-foreground">All transactions reconciled</td></tr>
+								{:else}
+									{#each unreconciledTxs as t}
+										<tr class="hover:bg-surface-container-low transition-colors cursor-pointer" onclick={() => toggleReconciled(t.seq)}>
+											<td class="px-3 py-1.5 text-center">
+												<input type="checkbox" checked={false} onclick={(e) => e.stopPropagation()} onchange={() => toggleReconciled(t.seq)} class="h-4 w-4 rounded accent-primary" />
+											</td>
+											<td class="px-3 py-1.5"><span class="text-xs font-medium {t.type === 'Receipt' ? 'text-positive' : 'text-destructive'}">{t.type}</span></td>
+											<td class="px-3 py-1.5 text-muted-foreground">{t.date}</td>
+											<td class="px-3 py-1.5 font-mono text-xs">{t.ref}</td>
+											<td class="px-3 py-1.5">{t.name}</td>
+											<td class="px-3 py-1.5 max-w-xs truncate text-muted-foreground">{t.description}</td>
+											<td class="px-3 py-1.5 text-right tabular-nums font-semibold {t.deposit > 0 ? 'text-positive' : 'text-destructive'}">
+												<CurrencyDisplay amount={t.deposit > 0 ? t.deposit : -t.withdrawal} />
+											</td>
+										</tr>
+									{/each}
+								{/if}
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		{/if}
 	</div>
 </div>
+
+<ConfirmDialog bind:open={confirmFinishOpen} title="Finish Reconciliation" confirmLabel="Finish" onConfirm={handleFinish}>
+	Complete the bank reconciliation for <strong>{data.selectedBank?.description}</strong>?
+	<br/>{reconciledTxs.length} transactions will be marked as reconciled.
+	<br/>Difference: <strong><CurrencyDisplay amount={difference} /></strong>
+</ConfirmDialog>

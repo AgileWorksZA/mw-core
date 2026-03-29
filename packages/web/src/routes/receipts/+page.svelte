@@ -20,7 +20,10 @@
 
 <div class="flex h-full flex-col">
 	<PageHeader title="Receipts" subtitle="{data.summary.total} receipts">
-		<span class="text-sm text-muted-foreground">Total: <span class="font-semibold"><CurrencyDisplay amount={data.summary.totalGross} /></span></span>
+		<div class="flex items-center gap-3">
+			<span class="text-sm text-muted-foreground">Total: <span class="font-semibold"><CurrencyDisplay amount={data.summary.totalGross} /></span></span>
+			<a href="/receipts/new" class="rounded-xl bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity">New Receipt</a>
+		</div>
 	</PageHeader>
 
 	<div class="flex-1 overflow-auto p-6">
