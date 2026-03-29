@@ -112,6 +112,11 @@
 	--color-chart-negative: #f87171;
 }
 
+/* Prevent white flash before CSS loads */
+html {
+	background-color: var(--color-surface);
+}
+
 body {
 	background-color: var(--color-surface);
 	color: var(--color-foreground);

@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos_router::components::A;
 
 /// A single navigation item in the sidebar.
 #[derive(Clone, Debug)]
@@ -220,9 +221,9 @@ pub fn Sidebar(
                                 }
                             };
                             view! {
-                                <a
+                                <A
                                     href=href
-                                    class=move || {
+                                    attr:class=move || {
                                         if is_active() {
                                             "mb-0.5 flex items-center gap-2.5 rounded-xl px-3 py-1.5 text-sm transition-colors bg-sidebar-accent text-sidebar-foreground font-medium"
                                         } else {
@@ -232,7 +233,7 @@ pub fn Sidebar(
                                 >
                                     <NavIcon icon=icon />
                                     {label}
-                                </a>
+                                </A>
                             }
                         }).collect::<Vec<_>>()}
                     }

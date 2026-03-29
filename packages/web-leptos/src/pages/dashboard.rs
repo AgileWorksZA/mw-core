@@ -178,6 +178,85 @@ pub async fn get_dashboard_data() -> Result<DashboardData, ServerFnError> {
 pub fn DashboardPage() -> impl IntoView {
     let dashboard = Resource::new(|| (), |_| get_dashboard_data());
 
+    // Reactive signals for SSE state
+    let (sse_enabled, set_sse_enabled) = signal(true);
+    let (sse_data, _set_sse_data) = signal::<Option<DashboardData>>(None);
+    // Alias used by hydrate feature below; underscore prefix suppresses unused warning on SSR
+    #[cfg(feature = "hydrate")]
+    let set_sse_data = _set_sse_data;
+    let (refreshing, set_refreshing) = signal(false);
+
+    // Connect to SSE after hydration (client-side only)
+    #[cfg(feature = "hydrate")]
+    {
+        use wasm_bindgen::prelude::*;
+        use wasm_bindgen::JsCast;
+
+        let (es_handle, set_es_handle) = signal::<Option<web_sys::EventSource>>(None);
+
+        // Effect to manage SSE connection based on enabled state
+        Effect::new(move |_| {
+            // Close existing connection if any
+            if let Some(es) = es_handle.get() {
+                es.close();
+                set_es_handle.set(None);
+            }
+
+            if !sse_enabled.get() {
+                return;
+            }
+
+            let es = match web_sys::EventSource::new("/api/sse/dashboard") {
+                Ok(es) => es,
+                Err(_) => return,
+            };
+
+            // Listen for "dashboard" events
+            let on_message = Closure::<dyn Fn(web_sys::MessageEvent)>::new(move |event: web_sys::MessageEvent| {
+                if let Some(data_str) = event.data().as_string() {
+                    if let Ok(data) = serde_json::from_str::<DashboardData>(&data_str) {
+                        set_sse_data.set(Some(data));
+                    }
+                }
+            });
+            es.add_event_listener_with_callback("dashboard", on_message.as_ref().unchecked_ref()).ok();
+            on_message.forget();
+
+            set_es_handle.set(Some(es));
+        });
+    }
+
+    // Derive the display data: prefer SSE data over initial resource data
+    let display_data = move || -> Option<Result<DashboardData, ServerFnError>> {
+        if let Some(sse) = sse_data.get() {
+            Some(Ok(sse))
+        } else {
+            dashboard.get()
+        }
+    };
+
+    let on_toggle = Callback::new(move |_| {
+        set_sse_enabled.update(|v| *v = !*v);
+    });
+
+    let on_refresh = Callback::new(move |_| {
+        set_refreshing.set(true);
+        dashboard.refetch();
+        // Reset refreshing after a short delay (resource will update asynchronously)
+        #[cfg(feature = "hydrate")]
+        {
+            use wasm_bindgen::prelude::*;
+            let cb = Closure::once(move || set_refreshing.set(false));
+            web_sys::window()
+                .unwrap()
+                .set_timeout_with_callback_and_timeout_and_arguments_0(
+                    cb.as_ref().unchecked_ref(),
+                    1000,
+                ).ok();
+            cb.forget();
+        }
+    });
+
     view! {
         <div class="flex h-full flex-col">
             // Header
@@ -188,10 +267,10 @@ pub fn DashboardPage() -> impl IntoView {
                         <p class="text-sm text-muted-foreground">"Company Overview"</p>
                     </div>
                     <RefreshIndicator
-                        enabled=Signal::derive(|| true)
-                        refreshing=Signal::derive(|| false)
-                        on_toggle=Callback::new(|_| {})
-                        on_refresh=Callback::new(|_| {})
+                        enabled=Signal::derive(move || sse_enabled.get())
+                        refreshing=Signal::derive(move || refreshing.get())
+                        on_toggle=on_toggle
+                        on_refresh=on_refresh
                     />
                 </div>
             </div>
@@ -201,7 +280,7 @@ pub fn DashboardPage() -> impl IntoView {
                 <div class="flex h-40 items-center justify-center text-muted-foreground">"Loading..."</div>
             }>
                 {move || {
-                    dashboard.get().map(|result| match result {
+                    display_data().map(|result| match result {
                         Ok(data) => view! { <DashboardContent data=data/> }.into_any(),
                         Err(e) => view! {
                             <div class="p-6 text-destructive">{format!("Error: {e}")}</div>

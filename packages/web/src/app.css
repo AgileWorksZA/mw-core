@@ -158,6 +158,10 @@
 	--color-chart-negative: #f87171;
 }
 
+html {
+	background-color: var(--color-surface);
+}
+
 body {
 	background-color: var(--color-surface);
 	color: var(--color-foreground);

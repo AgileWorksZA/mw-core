@@ -25,7 +25,7 @@ futures = { version = "0.3", optional = true }
 tokio-stream = { version = "0.1", optional = true }
 chrono = { version = "0.4", optional = true }
 gloo-net = { version = "0.6", optional = true }
-web-sys = { version = "0.3", features = ["Storage", "Window", "HtmlElement", "Document", "MediaQueryList"], optional = true }
+web-sys = { version = "0.3", features = ["Storage", "Window", "HtmlElement", "Document", "MediaQueryList", "EventSource", "MessageEvent"], optional = true }
 
 [features]
 hydrate = [
