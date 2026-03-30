@@ -11,8 +11,9 @@
 	let fromAccount = $state('');
 	let toAccount = $state('');
 	let amount = $state(0);
-	let reference = $state('');
+	let reference = $state(`TFR-${Date.now().toString(36).toUpperCase()}`);
 	let description = $state('');
+	let analysis = $state('');
 	let transferDate = $state(new Date().toISOString().split('T')[0]);
 	let submitting = $state(false);
 	let confirmOpen = $state(false);
@@ -61,7 +62,7 @@
 				<select bind:value={fromAccount} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring">
 					<option value="">Select source account...</option>
 					{#each data.bankAccounts as bank}
-						<option value={bank.code} disabled={bank.code === toAccount}>{bank.code}: {bank.description} ({bank.type === 'CC' ? 'Credit Card' : 'Bank'})</option>
+						<option value={bank.code} disabled={bank.code === toAccount}>{bank.code}: {bank.description}: {bank.balance.toLocaleString('en-NZ', { style: 'currency', currency: 'NZD' })}</option>
 					{/each}
 				</select>
 				{#if fromBank}
@@ -78,7 +79,7 @@
 				<select bind:value={toAccount} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring">
 					<option value="">Select destination account...</option>
 					{#each data.bankAccounts as bank}
-						<option value={bank.code} disabled={bank.code === fromAccount}>{bank.code}: {bank.description} ({bank.type === 'CC' ? 'Credit Card' : 'Bank'})</option>
+						<option value={bank.code} disabled={bank.code === fromAccount}>{bank.code}: {bank.description}: {bank.balance.toLocaleString('en-NZ', { style: 'currency', currency: 'NZD' })}</option>
 					{/each}
 				</select>
 				{#if toBank}
@@ -91,14 +92,18 @@
 				<input type="number" bind:value={amount} step="0.01" min="0" placeholder="0.00" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 			</div>
 
-			<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+			<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
 				<div class="space-y-1.5">
 					<label class="text-sm font-medium">Date</label>
 					<input type="date" bind:value={transferDate} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 				</div>
 				<div class="space-y-1.5">
 					<label class="text-sm font-medium">Reference</label>
-					<input type="text" bind:value={reference} placeholder="Optional" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
+					<input type="text" bind:value={reference} class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring font-mono text-xs" />
+				</div>
+				<div class="space-y-1.5">
+					<label class="text-sm font-medium">Analysis</label>
+					<input type="text" bind:value={analysis} placeholder="Optional" class="w-full rounded-xl bg-surface-container-low px-3 py-2 text-sm border-none focus:outline-none focus:ring-2 focus:ring-ring" />
 				</div>
 			</div>
 

@@ -37,6 +37,7 @@
 		{ href: '/jobs', label: 'Jobs', icon: 'box', group: 'Master Data' },
 		{ href: '/enquiry/sales', label: 'Sales Enquiry', icon: 'search', group: 'Enquiries' },
 		{ href: '/enquiry/purchases', label: 'Purchase Enquiry', icon: 'cart', group: 'Enquiries' },
+		{ href: '/statements', label: 'Statements', icon: 'file-text', group: 'Reports & Tools' },
 		{ href: '/reports', label: 'Reports', icon: 'file-text', group: 'Reports & Tools' },
 		{ href: '/todo', label: 'To Do', icon: 'dashboard', group: 'Reports & Tools' },
 		{ href: '/import-export', label: 'Import / Export', icon: 'trending', group: 'Reports & Tools' },
