@@ -18,9 +18,12 @@
 
 <div class="flex h-full flex-col">
 	<PageHeader title="Quotes" subtitle="{data.summary.total} quotes">
-		{#if data.summary.expired > 0}
-			<span class="rounded-full bg-amber-500 px-3 py-1 text-sm font-medium text-white">{data.summary.expired} expired</span>
-		{/if}
+		<div class="flex items-center gap-3">
+			{#if data.summary.expired > 0}
+				<span class="rounded-full bg-amber-500 px-3 py-1 text-sm font-medium text-white">{data.summary.expired} expired</span>
+			{/if}
+			<a href="/quotes/new" class="rounded-xl bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity">New Quote</a>
+		</div>
 	</PageHeader>
 
 	<div class="flex-1 overflow-auto p-6">
