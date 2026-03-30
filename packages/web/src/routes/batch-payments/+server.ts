@@ -7,7 +7,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	const body = await request.json();
 
 	const { payments, bankAccount, paymentDate } = body as {
-		payments: Array<{ code: string; name: string; amount: number }>;
+		payments: Array<{ creditor: string; name: string; amount: number; invoiceNo: string }>;
 		bankAccount: string;
 		paymentDate: string;
 	};
@@ -22,13 +22,17 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	for (const p of payments) {
 		if (p.amount <= 0) continue;
 		records.push({
-			Type: 'PAY',
-			Status: 'P',
+			Type: 'CP',
 			Transdate: mwDate,
-			Namecode: p.code,
+			Namecode: p.creditor,
 			Gross: p.amount,
 			Contra: bankAccount,
-			Description: `Payment to ${p.name}`
+			Description: `Payment to ${p.name}${p.invoiceNo ? ` (${p.invoiceNo})` : ''}`,
+			Detail: [{
+				Account: '2000', Gross: p.amount, Net: p.amount,
+				Tax: 0, TaxCode: 'Z',
+				Description: `Payment to ${p.name}`
+			}]
 		});
 	}
 
@@ -38,9 +42,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 
 	try {
 		const result = await apiPost('/tables/transaction/import', {
-			records,
-			mode: 'insert',
-			validate: true
+			records, mode: 'insert', validate: true
 		}, token);
 		return json({ success: true, count: records.length, result });
 	} catch (err: any) {
