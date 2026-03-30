@@ -25,6 +25,7 @@
 		{ href: '/receipts', label: 'Receipts', icon: 'arrow-down', group: 'Cash & Banking' },
 		{ href: '/payments', label: 'Payments', icon: 'arrow-up', group: 'Cash & Banking' },
 		{ href: '/journals', label: 'Journals', icon: 'file-text', group: 'Cash & Banking' },
+		{ href: '/adjustments', label: 'Adjustments', icon: 'file-text', group: 'Cash & Banking' },
 		{ href: '/funds-transfer', label: 'Funds Transfer', icon: 'trending', group: 'Cash & Banking' },
 		{ href: '/bank-reconciliation', label: 'Bank Rec', icon: 'ledger', group: 'Cash & Banking' },
 		{ href: '/transactions', label: 'All Transactions', icon: 'file-text', group: 'Cash & Banking' },
