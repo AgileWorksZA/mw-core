@@ -35,6 +35,7 @@
 		{ href: '/assets', label: 'Fixed Assets', icon: 'box', group: 'Master Data' },
 		{ href: '/tax-rates', label: 'Tax Rates', icon: 'file-text', group: 'Master Data' },
 		{ href: '/jobs', label: 'Jobs', icon: 'box', group: 'Master Data' },
+		{ href: '/enquiry/account', label: 'Account Enquiry', icon: 'ledger', group: 'Enquiries' },
 		{ href: '/enquiry/sales', label: 'Sales Enquiry', icon: 'search', group: 'Enquiries' },
 		{ href: '/enquiry/purchases', label: 'Purchase Enquiry', icon: 'cart', group: 'Enquiries' },
 		{ href: '/statements', label: 'Statements', icon: 'file-text', group: 'Reports & Tools' },

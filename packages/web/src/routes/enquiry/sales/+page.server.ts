@@ -1,6 +1,5 @@
 import { apiGet } from '$lib/api/client';
 import type { ApiResponse, TransactionRecord, NameRecord } from '$lib/api/types';
-import { TX_TYPE_LABELS } from '$lib/api/types';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
@@ -8,14 +7,14 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const token = locals.token;
 
 	if (!nameCode) {
-		// Return empty state — user needs to select a customer
-		return { nameCode: '', customer: null, invoices: [], monthly: [] };
+		return { nameCode: '', customer: null, invoices: [], monthly: [], orders: [] };
 	}
 
 	let nameRes: ApiResponse<NameRecord[]>;
 	let txRes: ApiResponse<TransactionRecord[]>;
+	let ordersRes: ApiResponse<TransactionRecord[]>;
 	try {
-		[nameRes, txRes] = await Promise.all([
+		[nameRes, txRes, ordersRes] = await Promise.all([
 			apiGet<ApiResponse<NameRecord[]>>('/tables/name', {
 				token,
 				filter: `Code="${nameCode}"`
@@ -24,10 +23,15 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 				token,
 				filter: `left(Type,2)="DI" AND Namecode="${nameCode}"`,
 				limit: 500
+			}),
+			apiGet<ApiResponse<TransactionRecord[]>>('/tables/transaction', {
+				token,
+				filter: `left(Type,2)="SO" AND Namecode="${nameCode}" AND Status<>"P"`,
+				limit: 200
 			})
 		]);
 	} catch {
-		return { nameCode, customer: null, invoices: [], monthly: [] };
+		return { nameCode, customer: null, invoices: [], monthly: [], orders: [] };
 	}
 
 	const customer = nameRes.data[0]
@@ -55,5 +59,15 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		.map(([period, value]) => ({ period, value }))
 		.sort((a, b) => a.period - b.period);
 
-	return { nameCode, customer, invoices, monthly };
+	const orders = ordersRes.data.map((t) => ({
+		ref: t.Ourref ?? '',
+		date: t.Transdate ?? '',
+		description: t.Description ?? '',
+		gross: t.Gross ?? 0,
+		outstanding: (t.Gross ?? 0) - (t.Amtpaid ?? 0),
+		status: t.Status ?? '',
+		type: (t.Type ?? '').substring(0, 2)
+	}));
+
+	return { nameCode, customer, invoices, monthly, orders };
 };
