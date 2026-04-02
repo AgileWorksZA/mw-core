@@ -9,7 +9,7 @@
 
 	let { data, children }: { data: LayoutData; children: any } = $props();
 
-	const showSidebar = $derived(data.isLoggedIn && data.pathname !== '/login');
+	const showSidebar = $derived(data.pathname !== '/login');
 	let sidebarOpen = $state(false);
 
 	onMount(() => applyTheme());
