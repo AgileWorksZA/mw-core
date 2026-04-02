@@ -7,13 +7,14 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const token = locals.token;
 
 	if (!nameCode) {
-		return { nameCode: '', supplier: null, invoices: [], monthly: [] };
+		return { nameCode: '', supplier: null, invoices: [], monthly: [], orders: [] };
 	}
 
 	let nameRes: ApiResponse<NameRecord[]>;
 	let txRes: ApiResponse<TransactionRecord[]>;
+	let ordersRes: ApiResponse<TransactionRecord[]>;
 	try {
-		[nameRes, txRes] = await Promise.all([
+		[nameRes, txRes, ordersRes] = await Promise.all([
 			apiGet<ApiResponse<NameRecord[]>>('/tables/name', {
 				token,
 				filter: `Code="${nameCode}"`
@@ -22,10 +23,15 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 				token,
 				filter: `left(Type,2)="CI" AND Namecode="${nameCode}"`,
 				limit: 500
+			}),
+			apiGet<ApiResponse<TransactionRecord[]>>('/tables/transaction', {
+				token,
+				filter: `left(Type,2)="PO" AND Namecode="${nameCode}" AND Status<>"P"`,
+				limit: 200
 			})
 		]);
 	} catch {
-		return { nameCode, supplier: null, invoices: [], monthly: [] };
+		return { nameCode, supplier: null, invoices: [], monthly: [], orders: [] };
 	}
 
 	const supplier = nameRes.data[0]
@@ -53,5 +59,15 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		.map(([period, value]) => ({ period, value }))
 		.sort((a, b) => a.period - b.period);
 
-	return { nameCode, supplier, invoices, monthly };
+	const orders = ordersRes.data.map((t) => ({
+		ref: t.Ourref ?? '',
+		date: t.Transdate ?? '',
+		description: t.Description ?? '',
+		gross: t.Gross ?? 0,
+		outstanding: (t.Gross ?? 0) - (t.Amtpaid ?? 0),
+		status: t.Status ?? '',
+		type: (t.Type ?? '').substring(0, 2)
+	}));
+
+	return { nameCode, supplier, invoices, monthly, orders };
 };
