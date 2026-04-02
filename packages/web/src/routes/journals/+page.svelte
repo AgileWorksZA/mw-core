@@ -18,7 +18,9 @@
 </script>
 
 <div class="flex h-full flex-col">
-	<PageHeader title="Journals" subtitle="{data.summary.total} entries — {data.summary.posted} posted" />
+	<PageHeader title="Journals" subtitle="{data.summary.total} entries — {data.summary.posted} posted">
+		<a href="/journals/new" class="rounded-xl bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">+ New Journal</a>
+	</PageHeader>
 
 	<div class="flex-1 overflow-auto p-6">
 		<DataTable {columns} rows={data.journals} rowHref={(row) => `/transactions/${row.seq}`} emptyMessage="No journal entries found">
