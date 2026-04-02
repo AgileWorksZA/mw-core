@@ -22,13 +22,16 @@
 
 <div class="flex h-full flex-col">
 	<PageHeader title="Sales Invoices" subtitle="{data.summary.total} invoices — {data.today}">
-		<div class="flex gap-1">
-			{#each [['all', 'All'], ['posted', 'Posted'], ['unposted', 'Unposted']] as [key, label]}
-				<button
-					onclick={() => setStatus(key)}
-					class="rounded-md px-3 py-1.5 text-sm transition-colors {data.status === key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}"
-				>{label}</button>
-			{/each}
+		<div class="flex items-center gap-3">
+			<div class="flex gap-1">
+				{#each [['all', 'All'], ['posted', 'Posted'], ['unposted', 'Unposted']] as [key, label]}
+					<button
+						onclick={() => setStatus(key)}
+						class="rounded-md px-3 py-1.5 text-sm transition-colors {data.status === key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}"
+					>{label}</button>
+				{/each}
+			</div>
+			<a href="/invoices/sales/new" class="rounded-xl bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">+ New Invoice</a>
 		</div>
 	</PageHeader>
 
