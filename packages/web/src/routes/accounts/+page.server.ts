@@ -10,9 +10,13 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 	let response: ApiResponse<AccountRecord[]>;
 	try {
+		const find = url.searchParams.get('find') || '';
+		let composedFilter = filterDef.filter;
+		if (find) composedFilter = composedFilter ? `${composedFilter} AND ${find}` : find;
+
 		response = await apiGet<ApiResponse<AccountRecord[]>>('/tables/account', {
 			token: locals.token,
-			filter: filterDef.filter,
+			filter: composedFilter,
 			format: 'full',
 			limit: 500
 		});

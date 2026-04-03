@@ -16,9 +16,11 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const typeDef = TRANSACTION_TYPE_FILTERS[typeKey] ?? TRANSACTION_TYPE_FILTERS.all;
 	const statusDef = TRANSACTION_STATUS_FILTERS[statusKey] ?? TRANSACTION_STATUS_FILTERS.all;
 
+	const find = url.searchParams.get('find') || '';
 	const filters: string[] = [];
 	if (typeDef.filter) filters.push(typeDef.filter);
 	if (statusDef.filter) filters.push(statusDef.filter);
+	if (find) filters.push(find);
 	const combined = filters.length > 0 ? filters.join(' AND ') : undefined;
 
 	let response: ApiResponse<TransactionRecord[]>;

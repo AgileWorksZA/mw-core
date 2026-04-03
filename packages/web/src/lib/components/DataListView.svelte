@@ -22,6 +22,10 @@
 		activeFind = '',
 		cell,
 		headerActions,
+		/** Snippet rendered above the table (e.g. SummaryCards) */
+		aboveTable,
+		/** Snippet for DataTable tfoot */
+		footer,
 	}: {
 		config: EntityConfig;
 		rows: Record<string, any>[];
@@ -36,6 +40,8 @@
 		activeFind?: string;
 		cell?: Snippet<[{ column: ColumnDef; row: Record<string, any>; value: any }]>;
 		headerActions?: Snippet;
+		aboveTable?: Snippet;
+		footer?: Snippet;
 	} = $props();
 
 	// ── Column visibility (persisted per entity) ──
@@ -49,8 +55,11 @@
 		return [...config.defaultVisible];
 	}
 
+	// Column order follows visibleKeys order (supports drag reordering)
 	const activeColumns = $derived(
-		config.columns.filter(c => visibleKeys.includes(c.key))
+		visibleKeys
+			.map(key => config.columns.find(c => c.key === key))
+			.filter(Boolean) as typeof config.columns
 	);
 
 	// ── Search ──
@@ -273,6 +282,13 @@
 			</div>
 		{/if}
 
+		<!-- Above table (e.g. summary cards) -->
+		{#if aboveTable}
+			<div class="px-4">
+				{@render aboveTable()}
+			</div>
+		{/if}
+
 		<!-- Table -->
 		<div class="flex-1 overflow-auto px-4 pb-4">
 			<DataTable
@@ -282,6 +298,7 @@
 				emptyMessage="No {config.label.toLowerCase()} found"
 				sortable={true}
 				{cell}
+				{footer}
 			/>
 		</div>
 	</div>

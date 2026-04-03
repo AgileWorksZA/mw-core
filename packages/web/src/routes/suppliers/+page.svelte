@@ -23,6 +23,7 @@
 	rows={data.suppliers}
 	title="Suppliers"
 	subtitle="{data.summary.total} suppliers — {data.summary.creditors} creditors"
+	basePath="/suppliers"
 >
 	{#snippet headerActions()}
 		<span class="text-sm text-muted-foreground">

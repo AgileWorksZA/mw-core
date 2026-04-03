@@ -45,6 +45,7 @@
 	{filterGroups}
 	currentFilter={data.currentType}
 	onFilterChange={handleFilterChange}
+	basePath="/transactions"
 >
 	{#snippet cell({ column, row, value })}
 		{#if column.key === 'status'}

@@ -2,13 +2,17 @@ import { apiGet } from '$lib/api/client';
 import type { ApiResponse, NameRecord } from '$lib/api/types';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const token = locals.token;
+	const find = url.searchParams.get('find') || '';
+
+	let baseFilter = 'SupplierType>="1"';
+	if (find) baseFilter += ` AND ${find}`;
 
 	let namesRes: ApiResponse<NameRecord[]>;
 	try {
 		namesRes = await apiGet<ApiResponse<NameRecord[]>>('/tables/name', {
-			token, filter: 'SupplierType>="1"', limit: 500
+			token, filter: baseFilter, limit: 500
 		});
 	} catch {
 		return { suppliers: [], summary: { total: 0, creditors: 0, totalOwed: 0 } };

@@ -32,6 +32,7 @@
 	filters={data.filters}
 	currentFilter={data.currentFilter}
 	onFilterChange={handleFilterChange}
+	basePath="/accounts"
 >
 	{#snippet cell({ column, row, value })}
 		{#if column.key === 'code'}

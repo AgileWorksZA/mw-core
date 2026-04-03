@@ -24,4 +24,5 @@
 	rows={data.taxRates}
 	title="Tax Rates"
 	subtitle="{data.taxRates.length} tax codes configured"
+	basePath="/tax-rates"
 />
