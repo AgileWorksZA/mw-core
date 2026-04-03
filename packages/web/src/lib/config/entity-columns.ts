@@ -192,6 +192,57 @@ export const jobConfig: EntityConfig = {
 	codeField: 'code',
 };
 
+// ─── Assets ──────────────────────────────────────────────────────────
+
+export const assetColumns: ColumnDef[] = [
+	{ key: 'code', label: 'Code', mono: true, width: '120px' },
+	{ key: 'description', label: 'Description', class: 'font-medium' },
+	{ key: 'category', label: 'Category', class: 'text-muted-foreground' },
+	{ key: 'status', label: 'Status', width: '80px' },
+	{ key: 'cost', label: 'Cost', align: 'right', mono: true },
+	{ key: 'accumDepreciation', label: 'Accum Depr.', align: 'right', mono: true },
+	{ key: 'bookValue', label: 'Book Value', align: 'right', mono: true },
+	{ key: 'rate', label: 'Rate %', align: 'right', mono: true },
+	{ key: 'type', label: 'Depr. Type', class: 'text-muted-foreground' },
+	{ key: 'acquiredDate', label: 'Acquired', mono: true },
+	{ key: 'location', label: 'Location', class: 'text-muted-foreground' },
+	{ key: 'department', label: 'Department', class: 'text-muted-foreground' },
+	{ key: 'serialNum', label: 'Serial #', mono: true },
+	{ key: 'qty', label: 'Qty', align: 'right', mono: true },
+	{ key: 'colour', label: 'Colour', align: 'center' },
+];
+
+export const assetConfig: EntityConfig = {
+	label: 'Fixed Assets',
+	table: 'asset',
+	columns: assetColumns,
+	defaultVisible: ['code', 'description', 'category', 'status', 'cost', 'accumDepreciation', 'bookValue', 'rate', 'type', 'acquiredDate'],
+	searchFields: ['code', 'description', 'category', 'location', 'serialNum'],
+	detailHref: '/assets/{code}',
+	codeField: 'code',
+};
+
+// ─── Asset Categories ────────────────────────────────────────────────
+
+export const assetCategoryColumns: ColumnDef[] = [
+	{ key: 'code', label: 'Code', mono: true, width: '100px' },
+	{ key: 'description', label: 'Description', class: 'font-medium' },
+	{ key: 'group', label: 'Group', class: 'text-muted-foreground' },
+	{ key: 'depreciationType', label: 'Type', class: 'text-muted-foreground' },
+	{ key: 'depreciationRate', label: 'Rate %', align: 'right', mono: true },
+	{ key: 'lastDepreciated', label: 'Last Deprecated', mono: true },
+	{ key: 'assetAccount', label: 'Asset Acct', mono: true },
+	{ key: 'depreciationAccount', label: 'Depr. Acct', mono: true },
+];
+
+export const assetCategoryConfig: EntityConfig = {
+	label: 'Asset Categories',
+	table: 'assetcategory',
+	columns: assetCategoryColumns,
+	defaultVisible: ['code', 'description', 'group', 'depreciationType', 'depreciationRate', 'lastDepreciated'],
+	searchFields: ['code', 'description', 'group'],
+};
+
 // ─── Registry ────────────────────────────────────────────────────────
 
 export const ENTITY_CONFIGS: Record<string, EntityConfig> = {
@@ -201,4 +252,6 @@ export const ENTITY_CONFIGS: Record<string, EntityConfig> = {
 	transaction: transactionConfig,
 	taxrate: taxRateConfig,
 	job: jobConfig,
+	asset: assetConfig,
+	assetcategory: assetCategoryConfig,
 };

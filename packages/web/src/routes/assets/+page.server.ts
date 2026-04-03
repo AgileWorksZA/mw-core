@@ -1,74 +1,78 @@
-import { apiGet, apiEvalBatch } from '$lib/api/client';
-import type { ApiResponse, AccountRecord } from '$lib/api/types';
+import { apiGet } from '$lib/api/client';
+import { ASSET_FILTERS, type AssetFilterKey } from '$lib/api/filters';
+import type { ApiResponse } from '$lib/api/types';
 import type { PageServerLoad } from './$types';
 
-function parseNum(s: string): number {
-	const n = parseFloat(s);
-	return isNaN(n) ? 0 : n;
-}
-
-function balanceExpr(code: string): string {
-	return `GetBalance("AccountCode=\\"${code}\\"", Today())`;
-}
-
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const token = locals.token;
+	const filterKey = (url.searchParams.get('filter') || 'all') as AssetFilterKey;
+	const filterDef = ASSET_FILTERS[filterKey] ?? ASSET_FILTERS.all;
+	const find = url.searchParams.get('find') || '';
 
-	let accountsRes: ApiResponse<AccountRecord[]>;
+	let composedFilter = filterDef.filter;
+	if (find) composedFilter = composedFilter ? `${composedFilter} AND ${find}` : find;
+
+	let response: ApiResponse<any[]>;
 	try {
-		accountsRes = await apiGet<ApiResponse<AccountRecord[]>>('/tables/account', { token, limit: 500 });
+		response = await apiGet<ApiResponse<any[]>>('/tables/asset', {
+			token,
+			filter: composedFilter,
+			format: 'full',
+			limit: 500
+		});
 	} catch {
-		return { assets: [], depreciationAccounts: [], totals: { cost: 0, depreciation: 0, bookValue: 0 } };
+		response = { data: [], metadata: { count: 0 } } as any;
 	}
 
-	const accounts = accountsRes.data ?? [];
+	const statusLabels: Record<string, string> = {
+		NEW: 'New', ACT: 'Active', NDP: 'Non-Depr.', OTH: 'Other', DSP: 'Disposed'
+	};
+	const typeLabels: Record<string, string> = { SL: 'Straight Line', DV: 'Diminishing Value' };
 
-	// Fixed asset accounts (Type=FA) and their depreciation contra accounts
-	const faAccounts = accounts.filter((a) => a.Type === 'FA');
-
-	// Get balances for all FA accounts
-	const balanceExprs: Record<string, string> = {};
-	for (const a of faAccounts) {
-		balanceExprs[a.Code] = balanceExpr(a.Code);
-	}
-	const balances = await apiEvalBatch(balanceExprs, token);
-
-	// Build asset list — pair asset accounts with their depreciation contra
-	// Convention: depreciation accounts often have descriptions containing "Accum" or "Deprec"
-	const depreciationCodes = new Set(
-		faAccounts
-			.filter((a) => (a.Description ?? '').toLowerCase().includes('deprec'))
-			.map((a) => a.Code)
-	);
-
-	const assetAccounts = faAccounts.filter((a) => !depreciationCodes.has(a.Code));
-	const depreciationAccounts = faAccounts.filter((a) => depreciationCodes.has(a.Code));
-
-	const assets = assetAccounts.map((a) => {
-		const cost = parseNum(balances[a.Code] || '0');
-		// Find matching depreciation account (often the next sequential code)
-		const depAcct = depreciationAccounts.find((d) =>
-			(d.Description ?? '').toLowerCase().includes((a.Description ?? '').toLowerCase().split(' ')[0])
-		);
-		const depreciation = depAcct ? Math.abs(parseNum(balances[depAcct.Code] || '0')) : 0;
+	const assets = (response.data ?? []).map((a: any) => {
+		const costPerUnit = a.CostPerUnit ?? a.Costperunit ?? 0;
+		const qty = a.Qty ?? 1;
+		const cost = costPerUnit * qty;
+		const accumDepr = a.AccumDepreciation ?? a.Accumdepreciation ?? 0;
 		return {
-			code: a.Code,
+			code: a.Code ?? '',
 			description: a.Description ?? '',
+			category: a.Category ?? '',
+			status: a.Status ?? '',
+			statusLabel: statusLabels[a.Status] ?? a.Status ?? '',
 			cost,
-			depreciation,
-			bookValue: cost - depreciation,
-			depreciationAccount: depAcct?.Code ?? ''
+			accumDepreciation: accumDepr,
+			bookValue: cost - accumDepr,
+			rate: a.Rate ?? 0,
+			type: a.Type ?? '',
+			typeLabel: typeLabels[a.Type] ?? a.Type ?? '',
+			acquiredDate: a.AcquiredDate ?? a.Acquireddate ?? '',
+			lastDepreciated: a.LastDepreciated ?? a.Lastdepreciated ?? '',
+			location: a.Location ?? '',
+			department: a.Department ?? '',
+			serialNum: a.SerialNum ?? a.Serialnum ?? '',
+			qty,
+			colour: a.Colour ?? 0,
+			expectedLife: a.ExpectedLife ?? a.Expectedlife ?? 0,
+			residualValue: a.ResidualValue ?? a.Residualvalue ?? 0,
+			privateUsePercent: a.PrivateUsePercent ?? a.Privateusepercent ?? 0,
+			custom1: a.Custom1 ?? '',
+			custom2: a.Custom2 ?? '',
+			custom3: a.Custom3 ?? '',
+			custom4: a.Custom4 ?? '',
+			comments: a.Comments ?? '',
+			linkedTransaction: a.LinkedTransaction ?? a.Linkedtransaction ?? 0,
 		};
 	});
 
 	const totalCost = assets.reduce((s, a) => s + a.cost, 0);
-	const totalDepreciation = assets.reduce((s, a) => s + a.depreciation, 0);
+	const totalDepr = assets.reduce((s, a) => s + a.accumDepreciation, 0);
 
 	return {
 		assets,
-		depreciationAccounts: depreciationAccounts.map((a) => ({
-			code: a.Code, description: a.Description ?? '', balance: Math.abs(parseNum(balances[a.Code] || '0'))
-		})),
-		totals: { cost: totalCost, depreciation: totalDepreciation, bookValue: totalCost - totalDepreciation }
+		currentFilter: filterKey,
+		filters: Object.entries(ASSET_FILTERS).map(([key, val]) => ({ key, label: val.label })),
+		count: response.metadata?.count ?? assets.length,
+		totals: { cost: totalCost, depreciation: totalDepr, bookValue: totalCost - totalDepr }
 	};
 };

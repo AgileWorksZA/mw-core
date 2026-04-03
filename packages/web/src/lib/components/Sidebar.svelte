@@ -33,6 +33,7 @@
 		{ href: '/items', label: 'Items', icon: 'box', group: 'Master Data' },
 		{ href: '/accounts', label: 'Accounts', icon: 'ledger', group: 'Master Data' },
 		{ href: '/assets', label: 'Fixed Assets', icon: 'box', group: 'Master Data' },
+		{ href: '/asset-categories', label: 'Asset Categories', icon: 'box', group: 'Master Data' },
 		{ href: '/tax-rates', label: 'Tax Rates', icon: 'file-text', group: 'Master Data' },
 		{ href: '/jobs', label: 'Jobs', icon: 'box', group: 'Master Data' },
 		{ href: '/enquiry/account', label: 'Account Enquiry', icon: 'ledger', group: 'Enquiries' },

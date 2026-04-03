@@ -13,6 +13,21 @@
 	const changelog: ChangelogEntry[] = [
 		{
 			date: '2026-04-03',
+			version: '0.10.0',
+			title: 'Fixed Assets Module',
+			items: [
+				{ type: 'new', text: 'Fixed Assets list with status tabs (New/Active/Non-Depr./Other/Disposed)', href: '/assets' },
+				{ type: 'new', text: 'Asset detail view — cost, depreciation, identification, dates, history', href: '/assets' },
+				{ type: 'new', text: 'Asset Categories management with GL account mappings', href: '/asset-categories' },
+				{ type: 'new', text: 'Depreciation Run — calculate and post depreciation journals', href: '/assets/depreciation-run' },
+				{ type: 'new', text: 'Asset Revaluation — adjust book value with journal preview', href: '/assets/revalue' },
+				{ type: 'new', text: 'Asset Disposal — receipt/invoice/journal with gain/loss calculation', href: '/assets/dispose' },
+				{ type: 'new', text: 'Asset Report + Asset Register reports', href: '/reports' },
+				{ type: 'improved', text: 'Assets list now uses proper Asset table instead of GL account hack', href: '/assets' },
+			]
+		},
+		{
+			date: '2026-04-03',
 			version: '0.9.0',
 			title: 'Jobs & Project Costing',
 			items: [

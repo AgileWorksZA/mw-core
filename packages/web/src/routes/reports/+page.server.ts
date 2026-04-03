@@ -47,6 +47,10 @@ const REPORTS: ReportDef[] = [
 	{ id: 'job-resource-summary', name: 'Job Resource Summary', description: 'Resource quantities and costs', category: 'Job Costing' },
 	{ id: 'job-costcentre-summary', name: 'Job Cost Centre Summary', description: 'Outgoings by cost centre', category: 'Job Costing' },
 	{ id: 'job-account-summary', name: 'Job Account Summary', description: 'Outgoings by GL account', category: 'Job Costing' },
+
+	// Fixed Assets
+	{ id: 'asset-report', name: 'Asset Report', description: 'Assets and current values with optional history', category: 'Fixed Assets' },
+	{ id: 'asset-register', name: 'Asset Register', description: 'Opening → acquisitions → depreciation → revaluations → disposals → closing', category: 'Fixed Assets' },
 ];
 
 export const load: PageServerLoad = async () => {

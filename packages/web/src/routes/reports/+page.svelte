@@ -13,7 +13,8 @@
 		'transaction-posting', 'budget-year', 'forecast',
 		'customer-sales-item', 'purchases-over-time',
 		'job-active-list', 'job-detailed', 'job-pl', 'job-pl-summary',
-		'job-resource-summary', 'job-costcentre-summary', 'job-account-summary'
+		'job-resource-summary', 'job-costcentre-summary', 'job-account-summary',
+		'asset-report', 'asset-register'
 	]);
 
 	const categoryColors: Record<string, string> = {
@@ -22,7 +23,8 @@
 		'Budget': 'bg-positive/10 text-positive',
 		'Customer / Supplier': 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
 		'Item': 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-		'Job Costing': 'bg-teal-500/10 text-teal-600 dark:text-teal-400'
+		'Job Costing': 'bg-teal-500/10 text-teal-600 dark:text-teal-400',
+		'Fixed Assets': 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
 	};
 </script>
 

@@ -79,6 +79,10 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		return await generateJobCostCentreSummary(token);
 	} else if (reportId === 'job-account-summary') {
 		return await generateJobAccountSummary(token);
+	} else if (reportId === 'asset-report') {
+		return await generateAssetReport(token);
+	} else if (reportId === 'asset-register') {
+		return await generateAssetRegister(token);
 	}
 
 	return { reportId, title: 'Report', lines: [], totals: { debit: 0, credit: 0, total: 0 } as Record<string, number> };
@@ -887,4 +891,76 @@ async function generateJobAccountSummary(token: string) {
 		.sort((a, b) => b.amount - a.amount);
 	const total = lines.reduce((s, l) => s + l.amount, 0);
 	return { reportId: 'job-account-summary', title: 'Job Account Summary', lines, totals: { total } as Record<string, number> };
+}
+
+// ─── Fixed Asset Reports ─────────────────────────────────────────
+
+async function fetchAssets(token: string, filter?: string) {
+	try {
+		const res = await apiGet<ApiResponse<any[]>>('/tables/asset', { token, filter, limit: 500 });
+		return res.data ?? [];
+	} catch { return []; }
+}
+
+async function generateAssetReport(token: string) {
+	const assets = await fetchAssets(token);
+	const statusLabels: Record<string, string> = { NEW: 'New', ACT: 'Active', NDP: 'Non-Depr.', OTH: 'Other', DSP: 'Disposed' };
+
+	const lines: ReportLine[] = assets.map((a: any) => {
+		const cost = (a.CostPerUnit ?? a.Costperunit ?? 0) * (a.Qty ?? 1);
+		const depr = a.AccumDepreciation ?? a.Accumdepreciation ?? 0;
+		return {
+			code: a.Code ?? '',
+			description: `${a.Description ?? ''} [${statusLabels[a.Status] ?? a.Status}] — Cat: ${a.Category ?? '—'} — Cost: ${cost.toFixed(2)} — Depr: ${depr.toFixed(2)}`,
+			amount: cost - depr,
+		};
+	});
+
+	const totalCost = assets.reduce((s: number, a: any) => s + (a.CostPerUnit ?? a.Costperunit ?? 0) * (a.Qty ?? 1), 0);
+	const totalDepr = assets.reduce((s: number, a: any) => s + (a.AccumDepreciation ?? a.Accumdepreciation ?? 0), 0);
+	return {
+		reportId: 'asset-report', title: 'Asset Report', lines,
+		totals: { cost: totalCost, depreciation: totalDepr, bookValue: totalCost - totalDepr } as Record<string, number>
+	};
+}
+
+async function generateAssetRegister(token: string) {
+	const assets = await fetchAssets(token, 'Status<>"DSP"');
+	const statusLabels: Record<string, string> = { NEW: 'New', ACT: 'Active', NDP: 'Non-Depr.', OTH: 'Other' };
+
+	// Group by category
+	const catMap = new Map<string, any[]>();
+	for (const a of assets) {
+		const cat = a.Category ?? 'Uncategorised';
+		if (!catMap.has(cat)) catMap.set(cat, []);
+		catMap.get(cat)!.push(a);
+	}
+
+	const lines: ReportLine[] = [];
+	let totalCost = 0, totalDepr = 0;
+
+	for (const [cat, catAssets] of catMap) {
+		lines.push({ code: cat, description: `Category: ${cat}`, amount: 0, bold: true });
+		let catCost = 0, catDepr = 0;
+		for (const a of catAssets) {
+			const cost = (a.CostPerUnit ?? a.Costperunit ?? 0) * (a.Qty ?? 1);
+			const depr = a.AccumDepreciation ?? a.Accumdepreciation ?? 0;
+			catCost += cost;
+			catDepr += depr;
+			lines.push({
+				code: a.Code ?? '',
+				description: `${a.Description ?? ''} [${statusLabels[a.Status] ?? a.Status}]`,
+				amount: cost - depr,
+				indent: 1
+			});
+		}
+		totalCost += catCost;
+		totalDepr += catDepr;
+		lines.push({ code: '', description: `  Subtotal ${cat}: Cost ${catCost.toFixed(2)}, Depr ${catDepr.toFixed(2)}`, amount: catCost - catDepr, bold: true, indent: 1 });
+	}
+
+	return {
+		reportId: 'asset-register', title: 'Asset Register', lines,
+		totals: { cost: totalCost, depreciation: totalDepr, bookValue: totalCost - totalDepr } as Record<string, number>
+	};
 }

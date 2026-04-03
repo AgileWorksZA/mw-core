@@ -71,3 +71,15 @@ export const JOB_FILTERS: Record<string, { label: string; filter?: string }> = {
 };
 
 export type JobFilterKey = keyof typeof JOB_FILTERS;
+
+/** MWScript filter expressions for the Assets list */
+export const ASSET_FILTERS: Record<string, { label: string; filter?: string }> = {
+	all: { label: 'All Assets' },
+	new: { label: 'New', filter: 'Status="NEW"' },
+	active: { label: 'Active', filter: 'Status="ACT"' },
+	'non-depreciable': { label: 'Non-Depreciable', filter: 'Status="NDP"' },
+	other: { label: 'Other', filter: 'Status="OTH"' },
+	disposed: { label: 'Disposed', filter: 'Status="DSP"' }
+};
+
+export type AssetFilterKey = keyof typeof ASSET_FILTERS;
