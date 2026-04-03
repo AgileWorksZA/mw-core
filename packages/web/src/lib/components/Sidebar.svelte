@@ -44,6 +44,7 @@
 		{ href: '/import-export', label: 'Import / Export', icon: 'trending', group: 'Reports & Tools' },
 		{ href: '/housekeeping', label: 'Housekeeping', icon: 'dashboard', group: 'Reports & Tools' },
 		{ href: '/preferences', label: 'Preferences', icon: 'dashboard', group: 'Reports & Tools' },
+		{ href: '/changelog', label: 'Changelog', icon: 'file-text', group: 'Reports & Tools' },
 	];
 
 	// Group items for section headers
