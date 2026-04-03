@@ -1,13 +1,65 @@
 import { redirect, type Handle } from "@sveltejs/kit";
+import { env } from "$env/dynamic/private";
 import { apiPostPublic } from "$lib/api/client";
 import type { AuthTokenResponse } from "$lib/api/types";
+import { readFileSync } from "fs";
+import { resolve } from "path";
 
-// MoneyWorks connection from env vars - no login form needed
-const MW_HOST = process.env["MW_HOST"] || "localhost";
-const MW_PORT = Number(process.env["MW_PORT"]) || 6710;
-const MW_DATAFILE = process.env["MW_DATAFILE"] || "";
-const MW_USERNAME = process.env["MW_USERNAME"] || "";
-const MW_PASSWORD = process.env["MW_PASSWORD"] || " ";
+/**
+ * Load MW connection config from env vars or mw-config.json fallback.
+ * Env vars take precedence; mw-config.json is the dev default.
+ */
+function loadMWConfig(): {
+	host: string;
+	port: number;
+	dataFile: string;
+	username: string;
+	password: string;
+} {
+	const host = env.MW_HOST || "";
+	const dataFile = env.MW_DATAFILE || "";
+	const username = env.MW_USERNAME || "";
+
+	// If env vars are set, use them
+	if (dataFile && username) {
+		return {
+			host: host || "localhost",
+			port: Number(env.MW_PORT) || 6710,
+			dataFile,
+			username,
+			password: env.MW_PASSWORD ?? "",
+		};
+	}
+
+	// Fallback: read mw-config.json from repo root
+	const configPaths = [
+		resolve("../../mw-config.json"), // from packages/web
+		resolve("../mw-config.json"),
+		resolve("mw-config.json"),
+	];
+
+	for (const p of configPaths) {
+		try {
+			const raw = readFileSync(p, "utf-8");
+			const cfg = JSON.parse(raw);
+			if (cfg.dataFile && cfg.username) {
+				return {
+					host: cfg.host || "localhost",
+					port: Number(cfg.port) || 6710,
+					dataFile: cfg.dataFile,
+					username: cfg.username,
+					password: cfg.password ?? "",
+				};
+			}
+		} catch {
+			// try next path
+		}
+	}
+
+	return { host: "localhost", port: 6710, dataFile: "", username: "", password: "" };
+}
+
+const mwConfig = loadMWConfig();
 
 // Cache the API token (refreshed on expiry)
 let cachedToken: string | null = null;
@@ -18,16 +70,18 @@ async function ensureToken(): Promise<string> {
 		return cachedToken;
 	}
 
-	if (!MW_DATAFILE || !MW_USERNAME) {
-		throw new Error("MW_DATAFILE and MW_USERNAME env vars required");
+	if (!mwConfig.dataFile || !mwConfig.username) {
+		throw new Error(
+			"MW connection not configured. Set MW_DATAFILE + MW_USERNAME env vars, or create mw-config.json",
+		);
 	}
 
 	const result = await apiPostPublic<AuthTokenResponse>("/auth/token", {
-		host: MW_HOST,
-		port: MW_PORT,
-		dataFile: MW_DATAFILE,
-		username: MW_USERNAME,
-		password: MW_PASSWORD,
+		host: mwConfig.host,
+		port: mwConfig.port,
+		dataFile: mwConfig.dataFile,
+		username: mwConfig.username,
+		password: mwConfig.password,
 	});
 
 	cachedToken = result.accessToken;
@@ -35,27 +89,28 @@ async function ensureToken(): Promise<string> {
 	return cachedToken;
 }
 
-export const handle: Handle = async ({ event, resolve }) => {
+export const handle: Handle = async ({ event, resolve: resolveEvent }) => {
 	// Skip auth for health endpoint
 	if (event.url.pathname === "/health") {
-		return resolve(event);
+		return resolveEvent(event);
 	}
 
-	// Auto-connect using env vars - no login page needed
-	// Kapable auth gate handles user authentication externally
+	// Auto-connect using config - no login page needed
 	try {
 		const token = await ensureToken();
 		event.locals.token = token;
-		// Set the cookie the layout reads for isLoggedIn/sidebar
+		// Set the cookie the layout reads for company name
 		if (!event.cookies.get("mw_token")) {
 			event.cookies.set("mw_token", token, {
 				path: "/",
 				httpOnly: true,
-				secure: process.env["NODE_ENV"] === "production",
+				secure: env.NODE_ENV === "production",
 				sameSite: "lax",
 				maxAge: 60 * 60 * 24,
 			});
-			event.cookies.set("mw_company", "Acme Widgets", {
+			// Extract company name from dataFile (strip .moneyworks extension)
+			const companyName = mwConfig.dataFile.replace(/\.moneyworks$/i, "");
+			event.cookies.set("mw_company", companyName, {
 				path: "/",
 				httpOnly: false,
 				sameSite: "lax",
@@ -72,5 +127,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 		throw redirect(303, "/dashboard");
 	}
 
-	return resolve(event);
+	return resolveEvent(event);
 };
