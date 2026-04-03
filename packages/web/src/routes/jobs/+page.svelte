@@ -1,42 +1,59 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import ColourBadge from '$lib/components/ColourBadge.svelte';
+	import CurrencyDisplay from '$lib/components/CurrencyDisplay.svelte';
+	import DataListView from '$lib/components/DataListView.svelte';
+	import { jobConfig } from '$lib/config/entity-columns';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const statusColors: Record<string, string> = {
+		A: 'bg-positive',
+		C: 'bg-blue-500',
+		H: 'bg-amber-500'
+	};
+
+	function handleFilterChange(key: string) {
+		goto(`/jobs?filter=${key}`, { invalidateAll: true });
+	}
 </script>
 
-<div class="flex h-full flex-col">
-	<div class="bg-surface-container-lowest px-6 py-4">
-		<h1 class="font-headline text-xl font-bold">Jobs</h1>
-		<p class="text-sm text-muted-foreground">Project costing and tracking</p>
-	</div>
-
-	<div class="flex-1 overflow-auto p-6">
-		<div class="mx-auto max-w-lg text-center">
-			<div class="rounded-xl bg-surface-container-lowest p-8">
-				<svg class="mx-auto h-12 w-12 text-muted-foreground/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0" />
-				</svg>
-				<h2 class="font-headline mt-4 text-lg font-semibold">Project Costing</h2>
-				<p class="mt-2 text-sm text-muted-foreground">{data.message}</p>
-				<div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-					<div class="rounded-xl bg-surface-container-lowest p-3">
-						<div class="font-medium">Job Timesheet</div>
-						<div class="text-xs text-muted-foreground">Time entry against jobs</div>
-					</div>
-					<div class="rounded-xl bg-surface-container-lowest p-3">
-						<div class="font-medium">Bill Job</div>
-						<div class="text-xs text-muted-foreground">Invoice unbilled costs</div>
-					</div>
-					<div class="rounded-xl bg-surface-container-lowest p-3">
-						<div class="font-medium">WIP Journal</div>
-						<div class="text-xs text-muted-foreground">Work in progress entries</div>
-					</div>
-					<div class="rounded-xl bg-surface-container-lowest p-3">
-						<div class="font-medium">Job Reports</div>
-						<div class="text-xs text-muted-foreground">Profitability analysis</div>
-					</div>
-				</div>
+<DataListView
+	config={jobConfig}
+	rows={data.jobs}
+	title="Jobs"
+	subtitle="{data.count} jobs"
+	filters={data.filters}
+	currentFilter={data.currentFilter}
+	onFilterChange={handleFilterChange}
+	basePath="/jobs"
+>
+	{#snippet cell({ column, row, value })}
+		{#if column.key === 'code'}
+			<a href="/jobs/{value}" class="font-medium text-primary hover:underline">{value}</a>
+		{:else if column.key === 'colour'}
+			<ColourBadge colour={value} />
+		{:else if column.key === 'status'}
+			<div class="flex items-center gap-1.5">
+				<span class="inline-block h-2 w-2 rounded-full {statusColors[value] ?? 'bg-muted-foreground'}"></span>
+				<span class="text-xs">{row.statusLabel}</span>
 			</div>
-		</div>
-	</div>
-</div>
+		{:else if column.key === 'billing'}
+			{row.billingLabel || '—'}
+		{:else if column.key === 'quotedAmount' || column.key === 'billedToDate' || column.key === 'budget'}
+			{#if value > 0}<CurrencyDisplay amount={value} />{/if}
+		{:else if column.key === 'percentComplete'}
+			{#if value > 0}
+				<div class="flex items-center gap-1.5">
+					<div class="h-1.5 w-16 rounded-full bg-surface-container-low overflow-hidden">
+						<div class="h-full rounded-full bg-primary" style="width: {Math.min(value, 100)}%"></div>
+					</div>
+					<span class="text-xs">{value}%</span>
+				</div>
+			{/if}
+		{:else}
+			{value ?? ''}
+		{/if}
+	{/snippet}
+</DataListView>

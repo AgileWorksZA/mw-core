@@ -61,3 +61,13 @@ export const ACCOUNT_FILTERS: Record<string, { label: string; filter?: string }>
 };
 
 export type AccountFilterKey = keyof typeof ACCOUNT_FILTERS;
+
+/** MWScript filter expressions for the Jobs list */
+export const JOB_FILTERS: Record<string, { label: string; filter?: string }> = {
+	all: { label: 'All Jobs' },
+	active: { label: 'Active', filter: 'Status="A"' },
+	completed: { label: 'Completed', filter: 'Status="C"' },
+	hold: { label: 'On Hold', filter: 'Status="H"' }
+};
+
+export type JobFilterKey = keyof typeof JOB_FILTERS;

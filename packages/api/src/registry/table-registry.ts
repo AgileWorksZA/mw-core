@@ -14,11 +14,11 @@ import { NameController } from "../controllers/name";
 import { ProductController } from "../controllers/product";
 import { TaxRateController } from "../controllers/tax-rate";
 import { TransactionController } from "../controllers/transaction";
+import { JobController } from "../controllers/job";
 
 export class TableRegistry {
 	private tables = new Map<string, TableController>();
 	private upcoming = [
-		"Job",
 		"Category1",
 		"Category2",
 	];
@@ -39,6 +39,7 @@ export class TableRegistry {
 		this.register(new ContactController(this.client));
 		this.register(new TransactionController(this.client));
 		this.register(new DetailController(this.client));
+		this.register(new JobController(this.client));
 	}
 
 	/**

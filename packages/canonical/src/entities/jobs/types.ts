@@ -10,177 +10,196 @@
  * @ai-required Code, Description, Status, Budget
  */
 
-import type { MoneyWorksJobStatus } from "./enums";
+import type {
+	MoneyWorksJobStatus,
+	MoneyWorksJobBilling,
+	MoneyWorksJobSheetStatus,
+} from "./enums";
 
 /**
- * MoneyWorks Job Entity
+ * MoneyWorks Job Entity — Complete field set
  *
- * Jobs are used for job costing - tracking costs and revenue against specific
- * projects, jobs, or cost centers. Products, transactions, and names can be
- * associated with jobs.
- *
- * @ai-critical NEVER translate MoneyWorks field names (Code, Description, Budget)
- * @ai-context Jobs are lookup/reference tables used for categorization
+ * Jobs track costs and revenue against projects. Supports hierarchical
+ * jobs (Project field), two billing modes (Quote/Cost Plus), and full
+ * costing via Job Sheet Items.
  */
 export interface MoneyWorksJob {
-	/**
-	 * The job code - primary identifier
-	 * @moneyworks-field Code
-	 * @moneyworks-type T(15)
-	 * @ai-term ALWAYS use "Code", NEVER "job ID", "project code", or "job number"
-	 * @example "JOB001", "PROJ-2024-001", "MAINT"
-	 */
+	/** Primary identifier (up to 15 chars) */
 	Code: string;
-
-	/**
-	 * The job description/name
-	 * @moneyworks-field Description
-	 * @moneyworks-type T(255)
-	 * @ai-term ALWAYS use "Description", NEVER "name", "title", or "job name"
-	 */
+	/** Job name/summary (255 chars) */
 	Description?: string;
-
-	/**
-	 * Job status - controls whether job can accept new charges
-	 * @moneyworks-field Status
-	 * @moneyworks-type T(1)
-	 * @ai-term ALWAYS use "Status", NEVER "state" or "job status"
-	 * @ai-context A=Active, C=Completed, H=Hold
-	 */
+	/** Full name field (255 chars) — the detailed job name */
+	Name?: string;
+	/** Client debtor code (references Names.Code) */
+	Client?: string;
+	/** Job status: A=Active, C=Completed, H=Hold */
 	Status?: MoneyWorksJobStatus;
-
-	/**
-	 * Budget amount for the job
-	 * @moneyworks-field Budget
-	 * @moneyworks-type N
-	 * @ai-term ALWAYS use "Budget", NEVER "budgeted amount" or "allocated"
-	 */
+	/** Parent job code — enables hierarchical jobs */
+	Project?: string;
+	/** Manager/staff initials */
+	Manager?: string;
+	/** WIP GL account (must be current asset) */
+	WIPAccount?: string;
+	/** Billing mode: Q=Quote, C=Cost Plus */
+	Billing?: MoneyWorksJobBilling;
+	/** Quoted amount (when Billing=Quote) */
+	QuotedAmount?: number;
+	/** Markup percentage (when Billing=Cost Plus) */
+	Markup?: number;
+	/** Total billed to date (auto-updated, read-only) */
+	BilledToDate?: number;
+	/** User-entered completion estimate 0-100 */
+	PercentComplete?: number;
+	/** Budget amount */
 	Budget?: number;
-
-	/**
-	 * Contact/customer associated with the job
-	 * @moneyworks-field Contact
-	 * @moneyworks-type T(11)
-	 * @ai-term ALWAYS use "Contact", NEVER "customer" or "client"
-	 * @ai-context References Names.Code
-	 */
+	/** Project start date (YYYYMMDD) */
+	StartDate?: string;
+	/** Target completion date (YYYYMMDD) */
+	TargetDate?: string;
+	/** Actual finish date (YYYYMMDD) */
+	FinishDate?: string;
+	/** Customer order/PO number */
+	CustomerOrderNo?: string;
+	/** Contact person name */
+	ContactPerson?: string;
+	/** Contact phone number */
+	Phone?: string;
+	/** Legacy contact field (references Names.Code) */
 	Contact?: string;
-
-	/**
-	 * Category for grouping jobs
-	 * @moneyworks-field Category
-	 * @moneyworks-type T(31)
-	 * @ai-term ALWAYS use "Category", NEVER "type" or "classification"
-	 */
+	/** Category for grouping/reporting */
 	Category?: string;
-
-	/**
-	 * Additional notes about the job
-	 * @moneyworks-field Notes
-	 * @moneyworks-type T(1020)
-	 * @ai-term ALWAYS use "Notes", NEVER "comments" or "remarks"
-	 */
+	/** Comments (1020 chars) */
+	Comments?: string;
+	/** Notes field (1020 chars) */
 	Notes?: string;
-
-	/**
-	 * User-defined numeric field
-	 * @moneyworks-field UserNum
-	 * @moneyworks-type N
-	 */
-	UserNum?: number;
-
-	/**
-	 * User-defined text field
-	 * @moneyworks-field UserText
-	 * @moneyworks-type T(255)
-	 */
-	UserText?: string;
-
-	/**
-	 * Custom field 1
-	 * @moneyworks-field Custom1
-	 * @moneyworks-type T(255)
-	 */
+	/** Custom fields */
 	Custom1?: string;
-
-	/**
-	 * Custom field 2
-	 * @moneyworks-field Custom2
-	 * @moneyworks-type T(255)
-	 */
 	Custom2?: string;
-
-	/**
-	 * The colour of the job record
-	 * @moneyworks-field Colour
-	 * @moneyworks-type N
-	 * @ai-term ALWAYS use "Colour" (British spelling), NEVER "color"
-	 */
+	Custom3?: string;
+	Custom4?: string;
+	/** User-defined numeric field */
+	UserNum?: number;
+	/** User-defined text field */
+	UserText?: string;
+	/** Row colour (0-8) */
 	Colour?: number;
-
-	/**
-	 * Date and time record was last modified
-	 * @moneyworks-field LastModifiedTime
-	 * @moneyworks-type S
-	 */
+	/** Last modified timestamp */
 	LastModifiedTime?: string;
 }
 
 /**
- * MoneyWorks Job creation input
- * Only required fields for creating a new job
+ * MoneyWorks Job Sheet Item
  *
- * @ai-instruction When creating jobs, use this interface
+ * Individual cost/charge entries against a job. Created manually (timesheet),
+ * automatically (from posted transactions with job codes), or as budgets.
+ */
+export interface MoneyWorksJobSheetItem {
+	/** Sequence number (auto-assigned) */
+	SequenceNumber?: number;
+	/** Job code this item belongs to */
+	Job: string;
+	/** Date of the entry (YYYYMMDD) */
+	Date: string;
+	/** Quantity */
+	Qty: number;
+	/** Product/Resource code (references Product.Code) */
+	Resource?: string;
+	/** Unit of measure */
+	Unit?: string;
+	/** Cost amount (actual cost) */
+	Cost: number;
+	/** Charge amount (billable amount, may include markup) */
+	Charge: number;
+	/** GL account code */
+	Account?: string;
+	/** Memo/description */
+	Memo?: string;
+	/** Additional comment */
+	Comment?: string;
+	/** Analysis code */
+	Analysis?: string;
+	/** Activity code */
+	ActivityCode?: string;
+	/** Cost centre/department */
+	CostCentre?: string;
+	/** Item status: P=Pending, X=Processed, B=Budget */
+	Status?: MoneyWorksJobSheetStatus;
+	/** Locked flag — true if auto-created from a posted transaction */
+	Locked?: boolean;
+}
+
+/**
+ * Job creation input
  */
 export interface MoneyWorksJobCreateInput {
 	Code: string;
 	Description?: string;
+	Name?: string;
+	Client?: string;
 	Status?: MoneyWorksJobStatus;
+	Project?: string;
+	Manager?: string;
+	WIPAccount?: string;
+	Billing?: MoneyWorksJobBilling;
+	QuotedAmount?: number;
+	Markup?: number;
 	Budget?: number;
-	Contact?: string;
+	StartDate?: string;
+	TargetDate?: string;
+	CustomerOrderNo?: string;
+	ContactPerson?: string;
+	Phone?: string;
 	Category?: string;
-	Notes?: string;
-}
-
-/**
- * MoneyWorks Job update input
- * All fields optional except Code for identification
- *
- * @ai-instruction When updating jobs, use this interface
- */
-export interface MoneyWorksJobUpdateInput {
-	Code: string;
-	Description?: string;
-	Status?: MoneyWorksJobStatus;
-	Budget?: number;
-	Contact?: string;
-	Category?: string;
-	Notes?: string;
-	UserNum?: number;
-	UserText?: string;
+	Comments?: string;
 	Custom1?: string;
 	Custom2?: string;
+	Custom3?: string;
+	Custom4?: string;
 	Colour?: number;
 }
 
 /**
- * MoneyWorks Job filter for search/query operations
- *
- * @ai-instruction When searching jobs, use this interface
+ * Job update input
+ */
+export interface MoneyWorksJobUpdateInput {
+	Code: string;
+	Description?: string;
+	Name?: string;
+	Client?: string;
+	Status?: MoneyWorksJobStatus;
+	Project?: string;
+	Manager?: string;
+	WIPAccount?: string;
+	Billing?: MoneyWorksJobBilling;
+	QuotedAmount?: number;
+	Markup?: number;
+	PercentComplete?: number;
+	Budget?: number;
+	StartDate?: string;
+	TargetDate?: string;
+	FinishDate?: string;
+	CustomerOrderNo?: string;
+	ContactPerson?: string;
+	Phone?: string;
+	Category?: string;
+	Comments?: string;
+	Custom1?: string;
+	Custom2?: string;
+	Custom3?: string;
+	Custom4?: string;
+	UserNum?: number;
+	UserText?: string;
+	Colour?: number;
+}
+
+/**
+ * Job filter for search/query
  */
 export interface MoneyWorksJobFilter {
-	/** Filter by job code */
 	code?: string;
-
-	/** Filter by job status */
 	status?: MoneyWorksJobStatus;
-
-	/** Filter by contact/customer */
-	contact?: string;
-
-	/** Filter by category */
+	client?: string;
 	category?: string;
-
-	/** Search text (searches Code, Description) */
+	project?: string;
 	searchText?: string;
 }
