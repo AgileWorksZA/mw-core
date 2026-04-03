@@ -5,23 +5,39 @@ import type {
 	ProductRecord,
 	TaxRateRecord,
 	AccountRecord,
-	ItemScreenData
+	ItemScreenData,
+	TransactionRecord
 } from '$lib/api/types';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals }): Promise<ItemScreenData> => {
+interface DetailRecord {
+	Sequencenumber: number;
+	Stockcode: string;
+	Description: string;
+	Quantity: number;
+	Unitprice: number;
+	Gross: number;
+	Account: string;
+}
+
+export const load: PageServerLoad = async ({ params, locals }) => {
 	const { code } = params;
 	const token = locals.token;
 
-	let productRes, taxRatesRes, accountsRes;
+	let productRes, taxRatesRes, accountsRes, detailRes;
 	try {
-		[productRes, taxRatesRes, accountsRes] = await Promise.all([
+		[productRes, taxRatesRes, accountsRes, detailRes] = await Promise.all([
 			apiGet<ApiResponse<ProductRecord[]>>('/tables/product', {
 				token,
 				filter: `Code="${code}"`
 			}),
 			apiGet<ApiResponse<TaxRateRecord[]>>('/tables/taxrate', { token }),
-			apiGet<ApiResponse<AccountRecord[]>>('/tables/account', { token })
+			apiGet<ApiResponse<AccountRecord[]>>('/tables/account', { token }),
+			apiGet<ApiResponse<DetailRecord[]>>('/tables/detail', {
+				token,
+				filter: `Stockcode="${code}"`,
+				limit: 200
+			}).catch(() => ({ data: [], metadata: { count: 0 } } as any))
 		]);
 	} catch (err) {
 		if (err instanceof ApiError) {
@@ -110,6 +126,33 @@ export const load: PageServerLoad = async ({ params, locals }): Promise<ItemScre
 				description: a.Description,
 				type: a.Type
 			}))
-		}
+		},
+		// History: detail lines for this product
+		history: ((detailRes?.data as DetailRecord[]) ?? []).map((d: any) => ({
+			id: d.Sequencenumber ?? 0,
+			type: (d.TransType ?? d.Type ?? '').substring(0, 2),
+			ourRef: d.Ourref ?? d.Reference ?? '',
+			date: d.Transdate ?? d.Date ?? '',
+			nameCode: d.Namecode ?? '',
+			description: d.Description ?? '',
+			quantity: d.Quantity ?? 0,
+			unitPrice: d.Unitprice ?? 0,
+			gross: d.Gross ?? 0
+		})),
+		// Costing: derived from product fields
+		costing: {
+			costPrice: p.Costprice ?? 0,
+			stockValue: p.Stockvalue ?? 0,
+			stockOnHand: p.Stockonhand ?? 0,
+			avgCost: (p.Stockonhand ?? 0) > 0 ? (p.Stockvalue ?? 0) / (p.Stockonhand ?? 1) : 0,
+			buyPrice: p.Buyprice ?? 0,
+			sellPrice: p.Sellprice ?? 0,
+			margin: (p.Sellprice ?? 0) - (p.Costprice ?? 0),
+			marginPercent: (p.Sellprice ?? 0) > 0
+				? (((p.Sellprice ?? 0) - (p.Costprice ?? 0)) / (p.Sellprice ?? 1)) * 100
+				: 0
+		},
+		// BOM: empty for now — MW BOM data not exposed via standard table API
+		bom: []
 	};
 };

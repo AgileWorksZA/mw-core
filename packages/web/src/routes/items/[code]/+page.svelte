@@ -5,6 +5,9 @@
 	import BuyingTab from '$lib/components/items/BuyingTab.svelte';
 	import SellingTab from '$lib/components/items/SellingTab.svelte';
 	import InventoryTab from '$lib/components/items/InventoryTab.svelte';
+	import HistoryTab from '$lib/components/items/HistoryTab.svelte';
+	import CostingTab from '$lib/components/items/CostingTab.svelte';
+	import BOMTab from '$lib/components/items/BOMTab.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -13,7 +16,10 @@
 		{ id: 'details', label: 'Details' },
 		{ id: 'buying', label: 'Buying' },
 		{ id: 'selling', label: 'Selling' },
-		{ id: 'inventory', label: 'Inventory' }
+		{ id: 'inventory', label: 'Inventory' },
+		{ id: 'history', label: 'History' },
+		{ id: 'costing', label: 'Costing' },
+		{ id: 'bom', label: 'BOM' }
 	];
 
 	let activeTab = $state('details');
@@ -66,6 +72,12 @@
 			<SellingTab {selling} lookups={data.lookups} />
 		{:else if activeTab === 'inventory'}
 			<InventoryTab {inventory} />
+		{:else if activeTab === 'history'}
+			<HistoryTab transactions={data.history} />
+		{:else if activeTab === 'costing'}
+			<CostingTab costing={data.costing} />
+		{:else if activeTab === 'bom'}
+			<BOMTab components={data.bom} parentCode={header.code} />
 		{/if}
 	</div>
 </div>
