@@ -1,94 +1,50 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import ColourBadge from '$lib/components/ColourBadge.svelte';
+	import DataListView from '$lib/components/DataListView.svelte';
+	import { accountConfig } from '$lib/config/entity-columns';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	let search = $state('');
+	const config = {
+		...accountConfig,
+		defaultVisible: ['code', 'description', 'type', 'group', 'taxCode', 'system', 'colour'],
+		columns: [
+			...accountConfig.columns,
+			{ key: 'group', label: 'Group', class: 'text-muted-foreground' },
+			{ key: 'taxCode', label: 'Tax Code', mono: true },
+			{ key: 'typeLabel', label: 'Type Name', class: 'text-muted-foreground' },
+			{ key: 'colour', label: 'Colour', align: 'center' as const },
+		]
+	};
 
-	const filtered = $derived(
-		search
-			? data.accounts.filter(
-					(a) =>
-						a.code.toLowerCase().includes(search.toLowerCase()) ||
-						a.description.toLowerCase().includes(search.toLowerCase())
-				)
-			: data.accounts
-	);
+	function handleFilterChange(key: string) {
+		goto(`/accounts?filter=${key}`, { invalidateAll: true });
+	}
 </script>
 
-<div class="flex h-full">
-	<!-- Filter sidebar -->
-	<div class="w-48 shrink-0 bg-surface-container-low p-3">
-		<h3 class="font-headline mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Type</h3>
-		{#each data.filters as filter}
-			<button
-				class="mb-0.5 w-full rounded-xl px-2 py-1.5 text-left text-sm transition-colors
-					{data.currentFilter === filter.key
-						? 'bg-primary text-primary-foreground font-medium'
-						: 'text-foreground hover:bg-surface-container-low'}"
-				onclick={() => goto(`/accounts?filter=${filter.key}`, { invalidateAll: true })}
-			>
-				{filter.label}
-			</button>
-		{/each}
-	</div>
-
-	<!-- Main content -->
-	<div class="flex flex-1 flex-col p-4">
-		<div class="mb-4 flex items-center justify-between">
-			<div>
-				<h2 class="font-headline text-lg font-semibold">Chart of Accounts</h2>
-				<p class="text-sm text-muted-foreground">{data.count} accounts</p>
-			</div>
-			<input
-				type="search"
-				placeholder="Search accounts..."
-				bind:value={search}
-				class="w-64 rounded-xl bg-surface-container-low px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-			/>
-		</div>
-
-		<div class="flex-1 overflow-auto rounded-xl bg-surface-container-lowest">
-			<table class="w-full text-sm">
-				<thead class="sticky top-0">
-					<tr class="bg-surface-container-lowest">
-						<th class="w-8 px-3 py-2.5"></th>
-						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Code</th>
-						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Description</th>
-						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Type</th>
-						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Group</th>
-						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">Tax Code</th>
-						<th class="px-3 py-2.5 text-left font-medium text-muted-foreground">System</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each filtered as acct}
-						<tr
-							class="cursor-pointer transition-colors hover:bg-surface-container-low"
-							onclick={() => goto(`/accounts/${acct.code}`)}
-						>
-							<td class="px-3 py-2 text-center">
-								<ColourBadge colour={acct.colour} />
-							</td>
-							<td class="px-3 py-2">
-								<a href="/accounts/{acct.code}" class="font-medium font-mono text-primary hover:underline">
-									{acct.code}
-								</a>
-							</td>
-							<td class="px-3 py-2">{acct.description}</td>
-							<td class="px-3 py-2">
-								<span class="rounded bg-surface-container-low px-1.5 py-0.5 text-xs">{acct.type}</span>
-								<span class="ml-1 text-xs text-muted-foreground">{acct.typeLabel}</span>
-							</td>
-							<td class="px-3 py-2 text-muted-foreground">{acct.group}</td>
-							<td class="px-3 py-2 font-mono text-xs">{acct.taxCode}</td>
-							<td class="px-3 py-2 text-muted-foreground">{acct.system}</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>
+<DataListView
+	{config}
+	rows={data.accounts}
+	title="Chart of Accounts"
+	subtitle="{data.count} accounts"
+	filters={data.filters}
+	currentFilter={data.currentFilter}
+	onFilterChange={handleFilterChange}
+>
+	{#snippet cell({ column, row, value })}
+		{#if column.key === 'code'}
+			<a href="/accounts/{value}" class="font-medium font-mono text-primary hover:underline">{value}</a>
+		{:else if column.key === 'colour'}
+			<ColourBadge colour={value} />
+		{:else if column.key === 'type'}
+			<span class="rounded bg-surface-container-low px-1.5 py-0.5 text-xs">{value}</span>
+			{#if row.typeLabel}
+				<span class="ml-1 text-xs text-muted-foreground">{row.typeLabel}</span>
+			{/if}
+		{:else}
+			{value ?? ''}
+		{/if}
+	{/snippet}
+</DataListView>
