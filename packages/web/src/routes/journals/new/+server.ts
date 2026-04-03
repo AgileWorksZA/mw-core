@@ -34,15 +34,21 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 
 	const mwDate = transDate.replace(/-/g, '');
 
+	// MW journals: each detail line has Gross (positive=debit, negative=credit)
+	// Net = Gross for zero-tax, header Gross = sum of all detail Gross values
 	const detail: Array<Record<string, any>> = [];
+	let headerGross = 0;
 	for (const line of journalLines) {
 		if (!line.account) continue;
-		const net = (line.debit || 0) - (line.credit || 0);
-		if (net === 0) continue;
+		const debit = line.debit || 0;
+		const credit = line.credit || 0;
+		if (debit === 0 && credit === 0) continue;
+		const gross = debit - credit;
+		headerGross += gross;
 		detail.push({
 			Account: line.account,
-			Gross: net,
-			Net: net,
+			Gross: gross,
+			Net: gross,
 			Tax: 0,
 			Description: line.description || '',
 			TaxCode: line.taxCode || 'Z'
@@ -52,7 +58,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	const record: Record<string, any> = {
 		Type: 'JN',
 		Transdate: mwDate,
-		Gross: Math.round(totalDebit * 100) / 100,
+		Gross: headerGross,
 		Description: description || '',
 		Colour: colour || 0,
 		Detail: detail
