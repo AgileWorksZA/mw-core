@@ -38,6 +38,15 @@ const REPORTS: ReportDef[] = [
 	{ id: 'item-sales', name: 'Item Sales', description: 'Sales by item', category: 'Item' },
 	{ id: 'backorders-product', name: 'Backorders by Product', description: 'Outstanding product orders', category: 'Item' },
 	{ id: 'backorders-customer', name: 'Backorders by Customer', description: 'Outstanding orders by customer', category: 'Item' },
+
+	// Job Costing
+	{ id: 'job-active-list', name: 'Active Job List', description: 'Summary of all active jobs', category: 'Job Costing' },
+	{ id: 'job-detailed', name: 'Job Detailed', description: 'Full job history with subtotals', category: 'Job Costing' },
+	{ id: 'job-pl', name: 'Job P&L', description: 'Income vs expenditure per job', category: 'Job Costing' },
+	{ id: 'job-pl-summary', name: 'Job P&L Summary', description: 'Totals only per job', category: 'Job Costing' },
+	{ id: 'job-resource-summary', name: 'Job Resource Summary', description: 'Resource quantities and costs', category: 'Job Costing' },
+	{ id: 'job-costcentre-summary', name: 'Job Cost Centre Summary', description: 'Outgoings by cost centre', category: 'Job Costing' },
+	{ id: 'job-account-summary', name: 'Job Account Summary', description: 'Outgoings by GL account', category: 'Job Costing' },
 ];
 
 export const load: PageServerLoad = async () => {

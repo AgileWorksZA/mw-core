@@ -24,6 +24,7 @@
 				{ type: 'new', text: 'Items: History tab — transaction history per product', href: '/items' },
 				{ type: 'new', text: 'Items: Costing tab — cost analysis, margins, stock valuation', href: '/items' },
 				{ type: 'new', text: 'Items: BOM tab — bill of materials components', href: '/items' },
+				{ type: 'new', text: '7 Job Reports — Active List, Detailed, P&L, P&L Summary, Resource, Cost Centre, Account', href: '/reports' },
 			]
 		},
 		{

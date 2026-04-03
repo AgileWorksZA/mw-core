@@ -123,6 +123,7 @@ export { AccountRepository } from "./repositories/account.repository";
 export { ContactRepository } from "./repositories/contact.repository";
 export { TransactionRepository } from "./repositories/transaction.repository";
 export { DetailRepository } from "./repositories/detail.repository";
+export { JobRepository } from "./repositories/job.repository";
 
 /**
  * Create a MoneyWorks client with repositories from a connection object

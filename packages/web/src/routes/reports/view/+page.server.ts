@@ -65,6 +65,20 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		return await generatePurchasesOverTime(token);
 	} else if (reportId === 'backorders-product') {
 		return await generateBackordersByProduct(token);
+	} else if (reportId === 'job-active-list') {
+		return await generateJobActiveList(token);
+	} else if (reportId === 'job-detailed') {
+		return await generateJobDetailed(token);
+	} else if (reportId === 'job-pl') {
+		return await generateJobPL(token);
+	} else if (reportId === 'job-pl-summary') {
+		return await generateJobPLSummary(token);
+	} else if (reportId === 'job-resource-summary') {
+		return await generateJobResourceSummary(token);
+	} else if (reportId === 'job-costcentre-summary') {
+		return await generateJobCostCentreSummary(token);
+	} else if (reportId === 'job-account-summary') {
+		return await generateJobAccountSummary(token);
 	}
 
 	return { reportId, title: 'Report', lines: [], totals: { debit: 0, credit: 0, total: 0 } as Record<string, number> };
@@ -737,4 +751,140 @@ async function generateBackordersByProduct(token: string) {
 	}
 
 	return { reportId: 'backorders-product', title: 'Backorders by Product', lines: [], totals: {} as Record<string, number> };
+}
+
+// ─── Job Costing Reports ─────────────────────────────────────────
+
+async function fetchJobs(token: string, filter?: string) {
+	try {
+		const res = await apiGet<ApiResponse<any[]>>('/tables/job', { token, filter, limit: 500 });
+		return res.data ?? [];
+	} catch { return []; }
+}
+
+async function fetchJobSheetItems(token: string, filter?: string) {
+	try {
+		const res = await apiGet<ApiResponse<any[]>>('/tables/jobsheetitem', { token, filter, limit: 2000 });
+		return res.data ?? [];
+	} catch { return []; }
+}
+
+async function generateJobActiveList(token: string) {
+	const jobs = await fetchJobs(token, 'Status="A"');
+	const billingLabels: Record<string, string> = { Q: 'Quote', C: 'Cost Plus' };
+	const lines: ReportLine[] = jobs.map((j: any) => ({
+		code: j.Code ?? '',
+		description: `${j.Name || j.Description || ''} — Client: ${j.Client || '—'} — ${billingLabels[j.Billing] ?? '—'} — ${j.PercentComplete ?? 0}% complete`,
+		amount: j.BilledToDate ?? 0,
+	}));
+	const total = lines.reduce((s, l) => s + l.amount, 0);
+	return { reportId: 'job-active-list', title: 'Active Job List', lines, totals: { total } as Record<string, number> };
+}
+
+async function generateJobDetailed(token: string) {
+	const jobs = await fetchJobs(token);
+	const items = await fetchJobSheetItems(token);
+
+	const lines: ReportLine[] = [];
+	for (const j of jobs) {
+		const code = j.Code ?? '';
+		lines.push({ code, description: j.Name || j.Description || '', amount: 0, bold: true });
+		const jobItems = items.filter((i: any) => i.Job === code);
+		for (const item of jobItems) {
+			lines.push({
+				code: '',
+				description: `  ${item.Date ?? ''} — ${item.Resource ?? item.Stockcode ?? ''} — ${item.Memo ?? item.Description ?? ''}`,
+				amount: item.Cost ?? 0,
+				indent: 1
+			});
+		}
+		const subtotal = jobItems.reduce((s: number, i: any) => s + (i.Cost ?? 0), 0);
+		if (jobItems.length > 0) {
+			lines.push({ code: '', description: `  Subtotal: ${code}`, amount: subtotal, bold: true, indent: 1 });
+		}
+	}
+	const total = items.reduce((s: number, i: any) => s + (i.Cost ?? 0), 0);
+	return { reportId: 'job-detailed', title: 'Job Detailed', lines, totals: { total } as Record<string, number> };
+}
+
+async function generateJobPL(token: string) {
+	const jobs = await fetchJobs(token);
+	const items = await fetchJobSheetItems(token, 'Status<>"B"');
+
+	const lines: ReportLine[] = [];
+	let totalIncome = 0, totalExpense = 0;
+	for (const j of jobs) {
+		const code = j.Code ?? '';
+		const jobItems = items.filter((i: any) => i.Job === code);
+		const income = j.BilledToDate ?? 0;
+		const expense = jobItems.reduce((s: number, i: any) => s + (i.Cost ?? 0), 0);
+		const profit = income - expense;
+		totalIncome += income;
+		totalExpense += expense;
+		lines.push({ code, description: `${j.Name || j.Description || ''} — Income: ${income.toFixed(2)} — Expense: ${expense.toFixed(2)}`, amount: profit });
+	}
+	return { reportId: 'job-pl', title: 'Job P&L', lines, totals: { income: totalIncome, expense: totalExpense, profit: totalIncome - totalExpense } as Record<string, number> };
+}
+
+async function generateJobPLSummary(token: string) {
+	const jobs = await fetchJobs(token);
+	const items = await fetchJobSheetItems(token, 'Status<>"B"');
+
+	let totalIncome = 0, totalExpense = 0;
+	const lines: ReportLine[] = [];
+	for (const j of jobs) {
+		const code = j.Code ?? '';
+		const income = j.BilledToDate ?? 0;
+		const expense = items.filter((i: any) => i.Job === code).reduce((s: number, i: any) => s + (i.Cost ?? 0), 0);
+		totalIncome += income;
+		totalExpense += expense;
+		lines.push({ code, description: j.Name || j.Description || '', amount: income - expense });
+	}
+	return { reportId: 'job-pl-summary', title: 'Job P&L Summary', lines, totals: { income: totalIncome, expense: totalExpense, profit: totalIncome - totalExpense } as Record<string, number> };
+}
+
+async function generateJobResourceSummary(token: string) {
+	const items = await fetchJobSheetItems(token, 'Status<>"B"');
+	const resourceMap = new Map<string, { qty: number; cost: number; charge: number }>();
+	for (const item of items) {
+		const res = item.Resource ?? item.Stockcode ?? 'Unassigned';
+		const existing = resourceMap.get(res) ?? { qty: 0, cost: 0, charge: 0 };
+		existing.qty += item.Qty ?? item.Quantity ?? 0;
+		existing.cost += item.Cost ?? 0;
+		existing.charge += item.Charge ?? 0;
+		resourceMap.set(res, existing);
+	}
+	const lines: ReportLine[] = Array.from(resourceMap.entries())
+		.map(([resource, data]) => ({ code: resource, description: `Qty: ${data.qty} — Charge: ${data.charge.toFixed(2)}`, amount: data.cost }))
+		.sort((a, b) => b.amount - a.amount);
+	const total = lines.reduce((s, l) => s + l.amount, 0);
+	return { reportId: 'job-resource-summary', title: 'Job Resource Summary', lines, totals: { total } as Record<string, number> };
+}
+
+async function generateJobCostCentreSummary(token: string) {
+	const items = await fetchJobSheetItems(token, 'Status<>"B"');
+	const ccMap = new Map<string, number>();
+	for (const item of items) {
+		const cc = item.CostCentre ?? 'Unassigned';
+		ccMap.set(cc, (ccMap.get(cc) ?? 0) + (item.Cost ?? 0));
+	}
+	const lines: ReportLine[] = Array.from(ccMap.entries())
+		.map(([cc, cost]) => ({ code: cc, description: cc, amount: cost }))
+		.sort((a, b) => b.amount - a.amount);
+	const total = lines.reduce((s, l) => s + l.amount, 0);
+	return { reportId: 'job-costcentre-summary', title: 'Job Cost Centre Summary', lines, totals: { total } as Record<string, number> };
+}
+
+async function generateJobAccountSummary(token: string) {
+	const items = await fetchJobSheetItems(token, 'Status<>"B"');
+	const acctMap = new Map<string, number>();
+	for (const item of items) {
+		const acct = item.Account ?? 'Unassigned';
+		acctMap.set(acct, (acctMap.get(acct) ?? 0) + (item.Cost ?? 0));
+	}
+	const lines: ReportLine[] = Array.from(acctMap.entries())
+		.map(([acct, cost]) => ({ code: acct, description: acct, amount: cost }))
+		.sort((a, b) => b.amount - a.amount);
+	const total = lines.reduce((s, l) => s + l.amount, 0);
+	return { reportId: 'job-account-summary', title: 'Job Account Summary', lines, totals: { total } as Record<string, number> };
 }

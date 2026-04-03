@@ -11,7 +11,9 @@
 		'ledger-report', 'address-list', 'item-sales',
 		'backorders-customer', 'backorders-product',
 		'transaction-posting', 'budget-year', 'forecast',
-		'customer-sales-item', 'purchases-over-time'
+		'customer-sales-item', 'purchases-over-time',
+		'job-active-list', 'job-detailed', 'job-pl', 'job-pl-summary',
+		'job-resource-summary', 'job-costcentre-summary', 'job-account-summary'
 	]);
 
 	const categoryColors: Record<string, string> = {
@@ -19,7 +21,8 @@
 		'Audit': 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
 		'Budget': 'bg-positive/10 text-positive',
 		'Customer / Supplier': 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-		'Item': 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+		'Item': 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+		'Job Costing': 'bg-teal-500/10 text-teal-600 dark:text-teal-400'
 	};
 </script>
 
