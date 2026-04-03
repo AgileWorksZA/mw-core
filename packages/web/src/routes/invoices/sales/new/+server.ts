@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { apiPost } from '$lib/api/client';
+import { handleImportError } from '$lib/api/import-result';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ locals, request }) => {
@@ -47,6 +48,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		if (gross === 0) continue;
 		const net = gross - (line.tax || 0);
 		detail.push({
+			Account: '4000',
 			StockCode: line.stockCode || '',
 			Description: line.description || '',
 			StockQty: line.qty || 0,
@@ -63,6 +65,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		Type: 'DI',
 		Transdate: mwDate,
 		Namecode: nameCode,
+		Contra: '1500',
 		Gross: Math.round(totalGross * 100) / 100,
 		Description: description || '',
 		Colour: colour || 0,
@@ -83,6 +86,6 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		}, token);
 		return json({ success: true, result });
 	} catch (err: any) {
-		return json({ error: err.message || 'Failed to create sales invoice' }, { status: 500 });
+		return handleImportError(err, 'sales invoice');
 	}
 };

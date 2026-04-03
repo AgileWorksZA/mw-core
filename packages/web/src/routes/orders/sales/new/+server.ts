@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { apiPost } from '$lib/api/client';
+import { handleImportError } from '$lib/api/import-result';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ locals, request }) => {
@@ -73,6 +74,6 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		}, token);
 		return json({ success: true, result });
 	} catch (err: any) {
-		return json({ error: err.message || 'Failed to create order' }, { status: 500 });
+		return handleImportError(err, 'order');
 	}
 };
