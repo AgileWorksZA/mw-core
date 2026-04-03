@@ -9,6 +9,7 @@
 		format?: (value: any, row: Record<string, any>) => string;
 		class?: string | ((value: any, row: Record<string, any>) => string);
 		mono?: boolean;
+		sortable?: boolean;
 	}
 
 	let {
@@ -19,6 +20,7 @@
 		rowClass,
 		emptyMessage = 'No records found',
 		stickyHeader = true,
+		sortable = false,
 		cell,
 		footer
 	}: {
@@ -29,9 +31,34 @@
 		rowClass?: (row: Record<string, any>) => string;
 		emptyMessage?: string;
 		stickyHeader?: boolean;
+		sortable?: boolean;
 		cell?: Snippet<[{ column: Column; row: Record<string, any>; value: any }]>;
 		footer?: Snippet;
 	} = $props();
+
+	// ── Sorting ──
+	let sortKey = $state('');
+	let sortDir = $state<'asc' | 'desc'>('asc');
+
+	function toggleSort(key: string) {
+		if (sortKey === key) {
+			sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+		} else {
+			sortKey = key;
+			sortDir = 'asc';
+		}
+	}
+
+	const sortedRows = $derived(() => {
+		if (!sortable || !sortKey) return rows;
+		const dir = sortDir === 'asc' ? 1 : -1;
+		return [...rows].sort((a, b) => {
+			const av = a[sortKey] ?? '';
+			const bv = b[sortKey] ?? '';
+			if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * dir;
+			return String(av).localeCompare(String(bv)) * dir;
+		});
+	});
 
 	function getCellClass(col: Column, row: Record<string, any>): string {
 		if (!col.class) return '';
@@ -44,6 +71,12 @@
 		if (col.format) return col.format(val, row);
 		return val ?? '';
 	}
+
+	function isColumnSortable(col: Column): boolean {
+		if (!sortable) return false;
+		if (col.sortable === false) return false;
+		return !!col.label; // Don't sort empty-label columns (like status dots)
+	}
 </script>
 
 <div class="overflow-auto rounded-xl bg-surface-container-lowest">
@@ -52,25 +85,30 @@
 			<tr class="bg-surface-container-low">
 				{#each columns as col}
 					<th
-						class="px-3 py-2.5 text-left font-medium text-muted-foreground"
+						class="px-3 py-2.5 text-left font-medium text-muted-foreground
+							{isColumnSortable(col) ? 'cursor-pointer select-none hover:text-foreground transition-colors' : ''}"
 						class:text-right={col.align === 'right'}
 						class:text-center={col.align === 'center'}
 						style={col.width ? `width: ${col.width}` : ''}
+						onclick={() => isColumnSortable(col) && toggleSort(col.key)}
 					>
 						{col.label}
+						{#if sortable && sortKey === col.key}
+							<span class="ml-1 text-xs">{sortDir === 'asc' ? '▲' : '▼'}</span>
+						{/if}
 					</th>
 				{/each}
 			</tr>
 		</thead>
 		<tbody>
-			{#if rows.length === 0}
+			{#if sortedRows().length === 0}
 				<tr>
 					<td colspan={columns.length} class="px-3 py-8 text-center text-muted-foreground">
 						{emptyMessage}
 					</td>
 				</tr>
 			{:else}
-				{#each rows as row}
+				{#each sortedRows() as row}
 					{@const href = rowHref?.(row)}
 					{@const extraClass = rowClass?.(row) ?? ''}
 					<tr

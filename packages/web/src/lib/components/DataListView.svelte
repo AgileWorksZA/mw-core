@@ -16,6 +16,10 @@
 		currentFilter = 'all',
 		filterGroups,
 		onFilterChange,
+		/** Base path for URL-based advanced find (e.g. '/customers') */
+		basePath,
+		/** Current server-side find expression (from URL) */
+		activeFind = '',
 		cell,
 		headerActions,
 	}: {
@@ -25,8 +29,11 @@
 		subtitle?: string;
 		filters?: Array<{ key: string; label: string }>;
 		currentFilter?: string;
-		filterGroups?: Array<{ label: string; filters: Array<{ key: string; label: string }> }>;
+		/** Multiple filter groups (e.g. Type + Status for transactions) */
+		filterGroups?: Array<{ label: string; active?: string; filters: Array<{ key: string; label: string }> }>;
 		onFilterChange?: (filterKey: string) => void;
+		basePath?: string;
+		activeFind?: string;
 		cell?: Snippet<[{ column: ColumnDef; row: Record<string, any>; value: any }]>;
 		headerActions?: Snippet;
 	} = $props();
@@ -48,7 +55,7 @@
 
 	// ── Search ──
 	let search = $state('');
-	let advancedFilter = $state('');
+	let advancedFilter = $state(activeFind);
 	let showAdvancedFind = $state(false);
 
 	const filteredRows = $derived(() => {
@@ -131,9 +138,15 @@
 
 	function handleAdvancedApply(filter: string) {
 		advancedFilter = filter;
-		// If the filter is non-empty, navigate with filter param for server-side filtering
-		if (filter && onFilterChange) {
-			// Server-side advanced filtering could be added here
+		// Navigate with find= URL param for server-side filtering
+		if (basePath) {
+			const url = new URL(window.location.href);
+			if (filter) {
+				url.searchParams.set('find', filter);
+			} else {
+				url.searchParams.delete('find');
+			}
+			goto(url.pathname + url.search, { invalidateAll: true });
 		}
 	}
 
@@ -156,7 +169,7 @@
 					{#each group.filters as filter}
 						<button
 							class="mb-0.5 w-full rounded-xl px-2 py-1.5 text-left text-sm transition-colors
-								{currentFilter === filter.key
+								{(group.active ?? currentFilter) === filter.key
 									? 'bg-primary text-primary-foreground font-medium'
 									: 'text-foreground hover:bg-surface-container-low'}"
 							onclick={() => onFilterChange?.(filter.key)}
@@ -267,6 +280,7 @@
 				rows={filteredRows()}
 				rowHref={config.detailHref ? rowHref : undefined}
 				emptyMessage="No {config.label.toLowerCase()} found"
+				sortable={true}
 				{cell}
 			/>
 		</div>

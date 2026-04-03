@@ -7,11 +7,15 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const filterKey = (url.searchParams.get('filter') || 'all') as ItemFilterKey;
 	const filterDef = ITEM_FILTERS[filterKey] ?? ITEM_FILTERS.all;
 
+	const find = url.searchParams.get('find') || '';
+	let composedFilter = filterDef.filter;
+	if (find) composedFilter = composedFilter ? `${composedFilter} AND ${find}` : find;
+
 	let response: ApiResponse<ProductRecord[]>;
 	try {
 		response = await apiGet<ApiResponse<ProductRecord[]>>('/tables/product', {
 			token: locals.token,
-			filter: filterDef.filter,
+			filter: composedFilter,
 			format: 'full',
 			limit: 500
 		});
